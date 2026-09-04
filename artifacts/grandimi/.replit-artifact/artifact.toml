@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Grandimi"
+description = "Internal verification tool for a deterministic Khamis–Roche adult-height estimation engine, with documented coefficient provenance and validation warnings."
+version = "1.0.0"
+id = "artifacts/grandimi"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25840
+
+[services.development]
+run = "pnpm --filter @workspace/grandimi run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/grandimi", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/grandimi/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25840"
+BASE_PATH = "/"

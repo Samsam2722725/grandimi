@@ -1,6 +1,6 @@
-# [Project name]
+# Grandimi
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Outil interne de vérification du moteur déterministe d’estimation de taille adulte Khamis–Roche.
 
 ## Run & Operate
 
@@ -22,15 +22,20 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/grandimi/src/domain/growth/` — moteur indépendant de React, conversions, âge, validations et coefficients.
+- `artifacts/grandimi/src/pages/prediction-lab.tsx` — page interne de vérification.
+- `artifacts/grandimi/docs/PREDICTION_ENGINE.md` — sources, limites, décisions et contrôles.
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Le calcul ne dépend d’aucun service externe, LLM, base de données ou appel réseau.
+- Les coefficients sont stockés comme une table immuable de 28 lignes par sexe.
+- Les âges intermédiaires utilisent une interpolation linéaire explicite, décision propre à Grandimi.
+- Les valeurs sont converties en unités impériales pour la régression, sans arrondi intermédiaire.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+La page `/prediction-lab` permet de contrôler les entrées et sorties du moteur Khamis–Roche, avec fourchette contextuelle, coefficients, avertissements et limites scientifiques.
 
 ## User preferences
 

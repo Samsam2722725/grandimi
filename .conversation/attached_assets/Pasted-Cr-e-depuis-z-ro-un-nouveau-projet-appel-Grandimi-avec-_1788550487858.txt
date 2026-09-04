@@ -1,0 +1,373 @@
+Crée depuis zéro un nouveau projet appelé **Grandimi** avec React, TypeScript et Vite.
+
+Agis comme un développeur senior spécialisé en TypeScript, tests automatisés et moteurs statistiques.
+
+## Mission unique de cette étape
+
+Construire, documenter, vérifier et auditer uniquement le moteur d’estimation de taille adulte de Grandimi.
+
+Ne construis pas encore :
+
+* l’onboarding final ;
+* le design final ;
+* le programme quotidien ;
+* le coach IA ;
+* la communauté ;
+* les comptes ;
+* Supabase ;
+* Stripe ;
+* le paiement ;
+* le paywall ;
+* les animations.
+
+À la fin de cette mission, arrête-toi.
+
+## Méthode statistique
+
+Utilise la méthode **Khamis–Roche**, publiée en 1994 et corrigée en 1995.
+
+Sources principales :
+
+* https://pubmed.ncbi.nlm.nih.gov/7936860/
+* https://publications.aap.org/pediatrics/article/94/4/504/59488/Predicting-Adult-Stature-Without-Using-Skeletal
+* https://publications.aap.org/pediatrics/article/95/3/457/59792/ERRATUM
+
+La formule générale est :
+
+`taille adulte en pouces = B0 + B1 × taille actuelle en pouces + B2 × poids en livres + B3 × taille parentale moyenne en pouces`
+
+Les coefficients changent selon le sexe et l’âge, tous les 0,5 an entre 4 et 17,5 ans.
+
+La taille parentale moyenne est :
+
+`(taille du père + taille de la mère) / 2`
+
+Ne pas ajouter ou retirer 13 cm : le sexe est déjà pris en compte par les coefficients Khamis–Roche.
+
+## Données autorisées dans le calcul
+
+Le moteur utilise uniquement :
+
+* sexe utilisé par le modèle : `male` ou `female` ;
+* date de naissance ;
+* date de mesure ;
+* taille actuelle en centimètres ;
+* poids actuel en kilogrammes ;
+* taille du père biologique ;
+* taille de la mère biologique.
+
+L’origine, la pointure, l’acné, la pilosité, le sommeil, le sport et la taille rêvée ne doivent pas influencer la prédiction.
+
+Aucun LLM ou appel à une intelligence artificielle ne doit intervenir dans le calcul.
+
+## Exactitude des coefficients
+
+Implémente :
+
+* 28 lignes masculines ;
+* 28 lignes féminines ;
+* une ligne tous les 0,5 an ;
+* de 4,0 à 17,5 ans ;
+* quatre coefficients par ligne : `B0`, `B1`, `B2`, `B3`.
+
+N’invente aucun coefficient.
+
+La table doit tenir compte de l’erratum de 1995.
+
+Pour chaque source utilisée pour reproduire la table, documente :
+
+* son nom ;
+* son URL directe ;
+* sa date de consultation ;
+* si elle utilise bien l’erratum ;
+* les éventuelles différences trouvées.
+
+Compare automatiquement :
+
+* 56 lignes ;
+* 224 coefficients.
+
+Si la publication primaire complète n’est pas accessible, écris honnêtement :
+
+**Table reproduite depuis des sources secondaires concordantes, mais non vérifiée directement contre le document primaire.**
+
+Ne prétends jamais avoir effectué une vérification qui n’a pas réellement été réalisée.
+
+## Architecture
+
+Crée un domaine indépendant de React, avec une organisation équivalente à :
+
+* `src/domain/growth/types.ts`
+* `src/domain/growth/conversions.ts`
+* `src/domain/growth/age.ts`
+* `src/domain/growth/errors.ts`
+* `src/domain/growth/khamisRocheCoefficients.ts`
+* `src/domain/growth/predictAdultHeight.ts`
+* `src/domain/growth/index.ts`
+* `src/domain/growth/__tests__/growth.test.ts`
+* `docs/PREDICTION_ENGINE.md`
+
+Le moteur doit être :
+
+* déterministe ;
+* sans base de données ;
+* sans API externe ;
+* sans appel réseau ;
+* sans LLM ;
+* indépendant de l’interface ;
+* réutilisable plus tard côté serveur ;
+* entièrement testable.
+
+Utilise TypeScript strict. Évite `any`, les nombres magiques et la duplication.
+
+## Calcul de l’âge
+
+Crée :
+
+`calculateDecimalAge(dateOfBirth, measurementDate)`
+
+Le calcul doit considérer la date complète et fonctionner correctement :
+
+* avant l’anniversaire ;
+* le jour de l’anniversaire ;
+* après l’anniversaire ;
+* pendant les années bissextiles.
+
+Refuse :
+
+* date invalide ;
+* date de mesure antérieure à la naissance ;
+* âge inférieur à 4 ans ;
+* âge supérieur à 17,5 ans.
+
+N’extrapole jamais en dehors de cette plage.
+
+## Âges intermédiaires
+
+Pour un âge situé exactement sur une ligne de la table, utilise cette ligne.
+
+Pour un âge situé entre deux lignes, effectue une interpolation linéaire des quatre coefficients.
+
+Documente que cette interpolation est une décision d’implémentation de Grandimi et non une exigence explicitement imposée par l’étude originale.
+
+Retourne les deux âges utilisés et le facteur d’interpolation.
+
+## Conversions
+
+Crée des fonctions pures :
+
+* `cmToInches`
+* `inchesToCm`
+* `kgToPounds`
+
+Effectue :
+
+1. conversion des tailles en pouces ;
+2. conversion du poids en livres ;
+3. calcul Khamis–Roche en unités impériales ;
+4. conversion du résultat en centimètres.
+
+N’effectue aucun arrondi intermédiaire.
+
+Arrondis seulement la valeur finale affichable à 0,1 cm.
+
+## Validation
+
+Refuse explicitement :
+
+* valeur manquante ;
+* valeur non numérique ;
+* `NaN` ;
+* valeur infinie ;
+* valeur négative ;
+* donnée située en dehors des limites.
+
+Limites initiales :
+
+* taille actuelle : 80 à 220 cm ;
+* poids actuel : 10 à 200 kg ;
+* taille de chaque parent : 120 à 230 cm.
+
+Ne remplace jamais une taille parentale inconnue par une moyenne de population.
+
+## Résultat
+
+Retourne au minimum :
+
+* taille adulte centrale en centimètres ;
+* taille adulte centrale en pouces ;
+* âge décimal ;
+* taille parentale moyenne ;
+* méthode utilisée ;
+* version de la méthode ;
+* coefficients utilisés ;
+* lignes d’âge utilisées ;
+* facteur d’interpolation ;
+* fourchette contextuelle ;
+* avertissements ;
+* limites scientifiques.
+
+Présente la fourchette comme :
+
+**Fourchette contextuelle fondée sur l’erreur moyenne observée dans l’échantillon original.**
+
+Ne l’appelle pas « intervalle de confiance individuel ».
+
+Ne dis jamais :
+
+* « 98 % de précision » ;
+* « résultat garanti » ;
+* « taille certaine ».
+
+## Avertissements obligatoires
+
+Chaque résultat doit préciser que :
+
+* c’est une estimation statistique ;
+* ce n’est pas un diagnostic médical ;
+* la méthode n’utilise pas l’âge osseux ;
+* une puberté précoce ou tardive peut réduire sa fiabilité ;
+* l’étude originale portait sur des enfants blancs américains en bonne santé ;
+* son utilisation sur d’autres populations est une extrapolation ;
+* des mesures imprécises modifient le résultat ;
+* aucun mode de vie ne garantit une taille particulière.
+
+## Page interne de test
+
+Crée une page simple :
+
+`/prediction-lab`
+
+Afficher clairement :
+
+**Outil interne de vérification — pas encore le produit final**
+
+Ajouter uniquement les champs indispensables :
+
+* sexe ;
+* date de naissance ;
+* date de mesure ;
+* taille actuelle ;
+* poids ;
+* taille du père ;
+* taille de la mère.
+
+Afficher :
+
+* résultat central ;
+* fourchette contextuelle ;
+* âge décimal ;
+* moyenne parentale ;
+* coefficients ;
+* avertissements ;
+* erreurs de validation.
+
+Aucun travail graphique important n’est nécessaire.
+
+## Tests obligatoires
+
+Teste :
+
+1. conversions centimètres/pouces ;
+2. conversions kilogrammes/livres ;
+3. âge avant anniversaire ;
+4. âge le jour de l’anniversaire ;
+5. année bissextile ;
+6. ligne d’âge exacte ;
+7. interpolation ;
+8. limite de 4 ans ;
+9. limite de 17,5 ans ;
+10. refus hors plage ;
+11. donnée parentale manquante ;
+12. valeur non numérique ;
+13. absence d’arrondi intermédiaire ;
+14. reproductibilité ;
+15. structure complète des 56 lignes ;
+16. absence d’âge manquant ;
+17. absence d’âge dupliqué ;
+18. absence de coefficient `NaN` ou infini.
+
+Cas de référence obligatoire :
+
+* garçon ;
+* âge exact de 10 ans ;
+* taille : 140 cm ;
+* poids : 35 kg ;
+* mère : 165 cm ;
+* père : 178 cm ;
+* résultat attendu : environ **178,9 cm**.
+
+Les coefficients corrigés publiquement rapportés pour ce contrôle sont approximativement :
+
+* `B0 = -11.038`
+* `B1 = 0.97135`
+* `B2 = -0.039981`
+* `B3 = 0.45932`
+
+Ajoute deux autres cas indépendants et indique leurs sources.
+
+## Procédure en cas de problème
+
+Ne modifie pas le code au hasard.
+
+Pour chaque écart supérieur à 0,5 cm :
+
+1. formule au moins trois hypothèses ;
+2. classe-les par probabilité ;
+3. définis comment les tester ;
+4. teste-les une par une ;
+5. identifie la cause confirmée ;
+6. corrige uniquement la cause ;
+7. relance tous les tests ;
+8. documente le résultat.
+
+Vérifie notamment :
+
+* erreur d’unité ;
+* mauvais coefficient ;
+* erratum absent ;
+* mauvais calcul de l’âge ;
+* arrondi prématuré ;
+* mauvaise moyenne parentale ;
+* différence d’interpolation.
+
+## Audit final
+
+Exécute réellement :
+
+* lint ;
+* typecheck ;
+* tests unitaires ;
+* build ;
+* ouverture de `/prediction-lab` ;
+* calcul du cas à 178,9 cm ;
+* test d’un âge invalide ;
+* vérification de la console ;
+* vérification de l’absence d’appel réseau ;
+* vérification sur une largeur de 390 px.
+
+Crée `docs/PREDICTION_ENGINE.md` avec toutes les preuves et décisions.
+
+## Décision finale
+
+Termine ton rapport par une seule décision :
+
+**ÉTAPE 1 VALIDÉE**
+
+ou
+
+**ÉTAPE 1 NON VALIDÉE**
+
+L’étape est validée seulement si :
+
+* les 56 lignes sont présentes ;
+* les 224 coefficients ont été contrôlés ;
+* l’erratum est appliqué ;
+* tous les tests passent ;
+* le résultat de référence est reproductible ;
+* le calcul fonctionne réellement dans le navigateur ;
+* aucune erreur console n’existe ;
+* aucun appel réseau n’est nécessaire ;
+* la documentation est complète.
+
+Arrête-toi ensuite. Ne commence aucune autre fonctionnalité.
