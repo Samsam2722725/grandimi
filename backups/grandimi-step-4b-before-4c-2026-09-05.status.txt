@@ -1,0 +1,3 @@
+?? artifacts/grandimi/src/domain/tracking/
+?? attached_assets/Pasted--GRANDIMI-TAPE-4C-UNIQUEMENT-EX-CUTION-QUOTIDIENNE-DU-P_1788607538962.txt
+?? backups/

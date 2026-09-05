@@ -1,0 +1,596 @@
+# GRANDIMI — ÉTAPE 4C UNIQUEMENT
+
+## EXÉCUTION QUOTIDIENNE DU PROGRAMME
+
+Tu travailles sur le projet Grandimi existant.
+
+Les étapes suivantes sont validées :
+
+* moteur Khamis–Roche ;
+* onboarding ;
+* rapport déterministe ;
+* programme personnalisé de 7 jours et 21 actions ;
+* personnalisation facultative OpenAI ;
+* 79 tests réussis.
+
+## Objectif de cette étape
+
+Transformer le programme actuellement consultable en une expérience réellement utilisable chaque jour.
+
+L’utilisateur doit pouvoir :
+
+1. commencer son programme ;
+2. voir les trois actions du jour ;
+3. valider une action réalisée ;
+4. remplacer une action inadaptée ;
+5. passer une action sans mentir sur sa réalisation ;
+6. voir sa progression ;
+7. fermer le navigateur et retrouver son programme plus tard ;
+8. avancer progressivement jusqu’au septième jour.
+
+Cette étape doit rendre fonctionnelle la boucle principale :
+
+**ouvrir Grandimi → accomplir les actions du jour → voir sa progression → revenir le lendemain.**
+
+---
+
+# 1. PÉRIMÈTRE STRICT
+
+Implémente uniquement l’étape 4C.
+
+Ne modifie pas :
+
+* le moteur Khamis–Roche ;
+* les coefficients ;
+* les résultats numériques ;
+* l’onboarding ;
+* les règles de construction du rapport ;
+* les 30 actions validées ;
+* les 21 actions du programme généré ;
+* le contrat OpenAI ;
+* les textes IA déjà générés.
+
+Ne développe pas encore :
+
+* Stripe ;
+* paywall ;
+* abonnement ;
+* Supabase ;
+* compte utilisateur ;
+* communauté ;
+* chat avec un coach IA ;
+* notifications ;
+* emails ;
+* application mobile native ;
+* programme de plus de sept jours ;
+* nouveau design global.
+
+Ne lance aucun appel OpenAI pour valider, remplacer ou suivre une action.
+
+---
+
+# 2. AUDIT AVANT MODIFICATION
+
+Avant d’écrire du code, inspecte :
+
+* `src/domain/program/`
+* `src/domain/ai/`
+* `src/pages/program.tsx`
+* `src/pages/result-preview.tsx`
+* `src/App.tsx`
+* la gestion actuelle de `sessionStorage`
+* les scripts de test
+* les tests navigateur existants
+
+Présente un plan technique court.
+
+Préserve les 79 tests existants.
+
+---
+
+# 3. DÉMARRAGE DU PROGRAMME
+
+Sur `/program`, ajouter un bouton principal :
+
+**Commencer mon jour 1**
+
+Au clic :
+
+1. revalider le programme ;
+2. vérifier qu’il contient exactement sept jours ;
+3. vérifier que chaque journée contient exactement trois catégories ;
+4. créer une instance locale de suivi ;
+5. enregistrer cette instance dans `localStorage` ;
+6. naviguer vers `/today`.
+
+Avant le bouton, afficher discrètement :
+
+**Ta progression sera conservée sur cet appareil pendant ton programme.**
+
+Ne pas enregistrer dans `localStorage` :
+
+* les tailles parentales ;
+* la date de naissance ;
+* le poids ;
+* les réponses brutes de développement ;
+* l’objet complet de l’onboarding ;
+* la clé OpenAI ;
+* une réponse serveur brute.
+
+Conserver uniquement les informations nécessaires au programme et à son suivi.
+
+Si une instance du même programme existe déjà, afficher :
+
+**Continuer mon programme**
+
+Ne jamais réinitialiser silencieusement une progression existante.
+
+---
+
+# 4. NOUVELLE ROUTE `/today`
+
+Créer une page mobile-first `/today`.
+
+Elle doit afficher :
+
+* « Jour X sur 7 » ;
+* la priorité principale du programme ;
+* le message personnalisé du jour s’il existe ;
+* sinon un texte déterministe ;
+* la progression de la journée, par exemple « 1 action sur 3 réalisée » ;
+* les trois actions du jour ;
+* un aperçu simple des sept jours ;
+* l’accès au programme complet ;
+* une option pour supprimer et recommencer le programme.
+
+Chaque action doit afficher :
+
+* catégorie ;
+* titre ;
+* consigne ;
+* durée ;
+* moment conseillé ;
+* raison personnalisée ;
+* critère précis de réalisation ;
+* statut actuel.
+
+Conserver le style actuel de Grandimi. Ne réalise pas une refonte visuelle générale.
+
+---
+
+# 5. ÉTATS D’UNE ACTION
+
+Créer des statuts stricts :
+
+```ts
+type ActionStatus =
+  | "pending"
+  | "completed"
+  | "skipped";
+```
+
+Une action remplacée reste `pending` jusqu’à ce qu’elle soit réalisée ou passée.
+
+## Bouton « Fait »
+
+Lorsqu’il est activé :
+
+* passer l’action à `completed` ;
+* enregistrer l’heure de validation ;
+* mettre immédiatement à jour la progression ;
+* empêcher toute validation en double ;
+* remplacer le bouton par un état clair « Fait ».
+
+Ajouter une commande discrète « Annuler » permettant de corriger une erreur.
+
+L’annulation :
+
+* remet l’action à `pending` ;
+* supprime son heure de validation ;
+* met à jour les statistiques.
+
+## Bouton « Remplacer »
+
+Ouvrir une boîte de dialogue ou feuille mobile accessible.
+
+Demander une raison structurée :
+
+* je manque de temps ;
+* je n’ai pas le matériel ou l’espace ;
+* je ressens une gêne physique ;
+* cette action ne correspond pas à ma situation ;
+* j’ai déjà réalisé quelque chose de similaire ;
+* autre raison sans texte libre.
+
+Ne pas demander de texte libre pendant cette étape.
+
+Après la raison, proposer une alternative appartenant obligatoirement :
+
+* à la même catégorie ;
+* aux alternatives validées de l’action ;
+* au catalogue local de l’étape 4A.
+
+Afficher l’alternative avant confirmation.
+
+Boutons :
+
+* **Utiliser cette alternative**
+* **Voir une autre alternative**
+* **Garder mon action**
+* **Passer pour aujourd’hui**
+
+Les alternatives doivent être parcourues de manière déterministe, sans hasard.
+
+Une action déjà proposée pendant la journée ne doit pas être proposée une seconde fois avant d’avoir parcouru toutes les alternatives valides.
+
+Le remplacement ne doit jamais :
+
+* ajouter une quatrième action ;
+* changer la catégorie ;
+* modifier les autres journées ;
+* appeler OpenAI ;
+* modifier la prédiction ;
+* inventer une nouvelle action.
+
+## « Passer pour aujourd’hui »
+
+Ce choix met l’action à `skipped`.
+
+Afficher clairement la différence entre :
+
+* action réalisée ;
+* action passée.
+
+Une action passée ne doit jamais être comptée comme réalisée.
+
+Permettre également d’annuler ce choix.
+
+---
+
+# 6. PROGRESSION DE LA JOURNÉE
+
+Afficher séparément :
+
+* nombre d’actions réalisées ;
+* nombre d’actions passées ;
+* nombre d’actions restantes.
+
+Exemples :
+
+* « 2 actions réalisées, 1 restante »
+* « 2 actions réalisées, 1 passée »
+
+Une journée est considérée comme traitée lorsque ses trois actions sont soit :
+
+* `completed` ;
+* soit `skipped`.
+
+Cependant, les statistiques doivent toujours distinguer les deux états.
+
+Lorsque les trois actions sont traitées, afficher un récapitulatif :
+
+* actions réalisées ;
+* actions passées ;
+* message de fin de journée ;
+* progression globale ;
+* prochain jour disponible.
+
+Ne pas afficher « journée parfaitement réussie » si une action a été passée.
+
+---
+
+# 7. AVANCEMENT ENTRE LES JOURS
+
+Le jour 1 est disponible immédiatement.
+
+L’utilisateur ne doit pas pouvoir effectuer plusieurs journées du programme pendant la même date locale.
+
+Après avoir traité le jour actuel :
+
+* afficher que le prochain jour sera disponible le lendemain ;
+* conserver l’accès en lecture aux jours déjà traités ;
+* empêcher la validation des actions futures.
+
+Si l’utilisateur ne revient pas pendant plusieurs jours :
+
+* ne pas supprimer son programme ;
+* ne pas le punir ;
+* ne pas sauter automatiquement plusieurs journées ;
+* reprendre au prochain jour du programme non traité.
+
+Exemple :
+
+* jour 1 terminé lundi ;
+* utilisateur absent mardi et mercredi ;
+* retour jeudi ;
+* le jour 2 devient disponible.
+
+Utiliser une date civile locale au format `YYYY-MM-DD`.
+
+Ne pas calculer la journée uniquement avec un timestamp UTC, afin d’éviter un changement de jour incorrect selon le fuseau horaire.
+
+Isoler la gestion du temps derrière une fonction injectable pour pouvoir la tester sans modifier l’horloge du système.
+
+---
+
+# 8. STRUCTURE DE DONNÉES
+
+Créer un domaine dédié, par exemple :
+
+```text
+src/domain/tracking/
+```
+
+Créer des types semblables à :
+
+```ts
+type ReplacementReason =
+  | "not_enough_time"
+  | "no_equipment_or_space"
+  | "physical_discomfort"
+  | "not_suitable"
+  | "already_did_similar"
+  | "other";
+
+type TrackedAction = {
+  originalActionId: string;
+  currentActionId: string;
+  category: string;
+  status: ActionStatus;
+  completedAt: string | null;
+  skippedAt: string | null;
+  replacementHistory: Array<{
+    previousActionId: string;
+    replacementActionId: string;
+    reason: ReplacementReason;
+    replacedAt: string;
+  }>;
+};
+
+type TrackedDay = {
+  dayNumber: number;
+  unlockedOn: string | null;
+  treatedOn: string | null;
+  actions: TrackedAction[];
+};
+
+type ProgramRun = {
+  schemaVersion: number;
+  programId: string;
+  programVersion: string;
+  startedOn: string;
+  currentDayNumber: number;
+  lastActivityOn: string;
+  days: TrackedDay[];
+};
+```
+
+Adapte les noms aux types existants.
+
+Créer des fonctions pures pour :
+
+* initialiser le suivi ;
+* charger et valider une progression ;
+* terminer une action ;
+* annuler une validation ;
+* remplacer une action ;
+* passer une action ;
+* annuler un passage ;
+* déterminer si une journée est traitée ;
+* calculer les statistiques ;
+* déterminer le jour disponible ;
+* détecter une progression obsolète ou corrompue.
+
+Aucun composant React ne doit contenir directement les règles métier importantes.
+
+---
+
+# 9. STOCKAGE LOCAL DURABLE
+
+Utiliser un stockage versionné, par exemple :
+
+```text
+grandimi:program-run:v1
+```
+
+Toutes les données chargées depuis `localStorage` doivent être validées à l’exécution.
+
+Si les données sont :
+
+* mal formées ;
+* incompatibles avec la version ;
+* associées à un autre programme ;
+* associées à une action inconnue ;
+* associées à une mauvaise catégorie ;
+* composées de plus ou moins de sept jours ;
+* composées de plus ou moins de trois actions par jour ;
+* falsifiées ;
+
+elles doivent être refusées.
+
+Ne jamais afficher `NaN`, une page blanche ou une erreur technique.
+
+En cas de progression invalide :
+
+1. supprimer seulement la progression corrompue ;
+2. conserver le programme valide lorsqu’il est encore disponible ;
+3. proposer de recommencer le suivi ;
+4. rediriger vers `/program` si nécessaire.
+
+Ajouter une confirmation avant toute suppression manuelle.
+
+---
+
+# 10. PROGRAMME TERMINÉ
+
+Après le traitement du jour 7, afficher une page ou un état final sur `/today` :
+
+**Programme de 7 jours terminé**
+
+Afficher :
+
+* nombre total d’actions réalisées ;
+* nombre d’actions passées ;
+* nombre de journées terminées ;
+* catégories les plus régulièrement réalisées ;
+* message final déterministe ou encouragement IA déjà enregistré ;
+* bouton « Revoir mon programme ».
+
+Ne pas produire une nouvelle estimation de taille.
+
+Ne pas affirmer que l’utilisateur a grandi.
+
+Ne pas générer automatiquement un nouveau programme.
+
+Ajouter un bouton :
+
+**Créer un nouveau programme**
+
+Pendant cette étape, ce bouton doit ouvrir une confirmation puis renvoyer vers le récapitulatif ou l’onboarding. Il ne doit pas créer un programme silencieusement.
+
+---
+
+# 11. ACCESSIBILITÉ
+
+Vérifier :
+
+* utilisation complète au clavier ;
+* focus visible ;
+* boîte de remplacement avec focus piégé ;
+* fermeture avec Échap ;
+* retour correct du focus vers le bouton d’origine ;
+* labels accessibles ;
+* statuts non communiqués uniquement par une couleur ;
+* annonces accessibles lorsque la progression change ;
+* boutons tactiles suffisamment grands ;
+* aucun débordement à 390 px.
+
+---
+
+# 12. TESTS OBLIGATOIRES
+
+Préserver les 79 tests existants.
+
+Ajouter au minimum les tests suivants :
+
+1. initialisation d’un programme valide ;
+2. refus d’un programme invalide ;
+3. exactement sept jours ;
+4. exactement trois actions par jour ;
+5. validation d’une action ;
+6. validation répétée sans doublon ;
+7. annulation d’une validation ;
+8. remplacement dans la même catégorie ;
+9. refus d’une alternative d’une autre catégorie ;
+10. historique de remplacement conservé ;
+11. alternatives parcourues sans répétition prématurée ;
+12. passage d’une action ;
+13. une action passée n’est pas comptée comme réalisée ;
+14. annulation du passage ;
+15. journée traitée avec trois actions réalisées ;
+16. journée traitée avec réalisation et passage ;
+17. journée incomplète si une action reste en attente ;
+18. jour suivant bloqué le même jour civil ;
+19. jour suivant disponible le lendemain ;
+20. reprise correcte après plusieurs jours d’absence ;
+21. aucune journée automatiquement sautée ;
+22. dates locales correctement gérées ;
+23. persistance après actualisation ;
+24. persistance après fermeture et nouvelle ouverture ;
+25. refus d’une progression corrompue ;
+26. refus d’une action inconnue ;
+27. refus d’un identifiant de programme différent ;
+28. migration ou refus propre d’une mauvaise version ;
+29. suppression confirmée ;
+30. statistiques finales exactes ;
+31. fin du jour 7 ;
+32. aucune modification du moteur ;
+33. aucune modification du programme original ;
+34. aucun appel OpenAI pendant le suivi ;
+35. fonctionnement lorsque la personnalisation IA est absente ;
+36. fonctionnement lorsque le serveur est indisponible ;
+37. navigation clavier ;
+38. boîte de remplacement accessible ;
+39. responsive à 390 × 844 px ;
+40. aucune erreur console.
+
+Pour les tests temporels, utiliser une horloge injectée. Ne jamais attendre réellement le lendemain.
+
+---
+
+# 13. PARCOURS NAVIGATEUR
+
+Vérifier réellement :
+
+1. onboarding de démonstration ;
+2. rapport ;
+3. création du programme ;
+4. démarrage du jour 1 ;
+5. validation d’une action ;
+6. annulation ;
+7. remplacement d’une deuxième action ;
+8. validation de l’alternative ;
+9. passage de la troisième action ;
+10. récapitulatif de journée ;
+11. actualisation ;
+12. fermeture et nouvelle ouverture simulée ;
+13. progression toujours présente ;
+14. jour suivant bloqué le même jour ;
+15. jour 2 disponible avec une horloge de test ;
+16. progression jusqu’au jour 7 avec l’horloge injectée ;
+17. écran final ;
+18. suppression avec confirmation ;
+19. clavier ;
+20. mobile 390 × 844 px ;
+21. console ;
+22. réseau.
+
+Le suivi local ne doit déclencher aucune requête réseau.
+
+---
+
+# 14. AUDIT FINAL
+
+Après l’implémentation, réalise une revue de code senior.
+
+Vérifie notamment :
+
+* aucune modification de Khamis–Roche ;
+* aucune modification des 21 actions originales ;
+* aucune action étrangère au catalogue ;
+* aucun appel OpenAI supplémentaire ;
+* distinction exacte entre « réalisé » et « passé » ;
+* impossibilité de valider deux fois ;
+* impossibilité de faire plusieurs jours dans la même date ;
+* reprise après absence ;
+* persistance locale ;
+* corruption correctement gérée ;
+* accessibilité ;
+* responsive ;
+* absence de fuite de données ;
+* absence d’erreur console.
+
+Corrige les problèmes trouvés.
+
+Fournis ensuite :
+
+* fichiers créés ;
+* fichiers modifiés ;
+* architecture du suivi ;
+* structure enregistrée ;
+* données volontairement non enregistrées ;
+* fonctionnement de « Fait » ;
+* fonctionnement de « Remplacer » ;
+* fonctionnement de « Passer » ;
+* règles de déblocage des jours ;
+* statistiques finales ;
+* nombre total de tests ;
+* parcours navigateur vérifiés ;
+* problèmes découverts et corrigés ;
+* éventuels problèmes restants.
+
+Termine exactement par :
+
+**ÉTAPE 4C TERMINÉE — EN ATTENTE DE VALIDATION**
+
+Arrête-toi après cette étape.
