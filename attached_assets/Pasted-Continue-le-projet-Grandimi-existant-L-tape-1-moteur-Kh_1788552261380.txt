@@ -1,0 +1,602 @@
+Continue le projet **Grandimi** existant.
+
+L’étape 1 — moteur Khamis–Roche — est terminée. Ne modifie pas sa formule ou ses coefficients sauf si un test révèle un véritable problème.
+
+## Mission unique : étape 2
+
+Construire l’onboarding commercial mobile-first de Grandimi et le connecter au moteur existant.
+
+À la fin, un utilisateur doit pouvoir :
+
+1. commencer l’analyse ;
+2. répondre aux questions ;
+3. vérifier ses réponses ;
+4. lancer le calcul ;
+5. voir un résultat provisoire réellement produit par le moteur.
+
+Ne développe pas encore :
+
+* programme quotidien ;
+* coach IA ;
+* communauté ;
+* compte utilisateur ;
+* Supabase ;
+* Stripe ;
+* paywall ;
+* abonnement ;
+* design final complet.
+
+## Positionnement
+
+Grandimi ne doit pas ressembler à un laboratoire scientifique.
+
+La promesse visible est :
+
+**Découvre jusqu’où ta croissance pourrait aller.**
+
+Sous-titre :
+
+**Obtiens une estimation personnalisée de ta taille adulte et découvre bientôt comment mettre toutes les chances de ton côté.**
+
+Bouton :
+
+**Découvrir mon potentiel**
+
+Les explications scientifiques détaillées doivent rester accessibles, mais discrètes.
+
+Ne pas afficher toutes les limites sur chaque écran.
+
+## Structure générale
+
+Créer une route publique :
+
+`/`
+
+Créer le parcours :
+
+`/onboarding`
+
+Créer un résultat provisoire :
+
+`/result-preview`
+
+Conserver la route technique :
+
+`/prediction-lab`
+
+La route `/prediction-lab` ne doit pas apparaître dans la navigation publique.
+
+## Expérience générale
+
+* Mobile-first.
+* Une question principale par écran.
+* Barre de progression.
+* Bouton Retour.
+* Bouton Continuer.
+* Réponse conservée lorsqu’on revient en arrière.
+* Bouton Continuer désactivé si une réponse obligatoire est invalide.
+* Questions sensibles facultatives clairement indiquées.
+* Transitions discrètes.
+* Aucun long paragraphe scientifique au milieu du parcours.
+* Aucun pourcentage de précision inventé.
+* Aucun résultat fictif.
+* Aucun faux chargement prétendant analyser des données non utilisées.
+
+## Écran 1 — Sexe utilisé par le calcul
+
+Question :
+
+**Quel sexe doit être utilisé pour ton estimation de croissance ?**
+
+Choix :
+
+* Garçon
+* Fille
+
+Microtexte accessible avec une icône d’information :
+
+« Le modèle utilise des coefficients différents selon les courbes de croissance masculines et féminines. »
+
+Valeur technique :
+
+* garçon → `male`
+* fille → `female`
+
+Cette information est obligatoire pour le moteur actuel.
+
+## Écran 2 — Date de naissance
+
+Question :
+
+**Quelle est ta date de naissance ?**
+
+Utiliser un véritable champ de date.
+
+Calculer l’âge avec la fonction existante du domaine croissance.
+
+Le parcours doit refuser une estimation en dehors de 4 à 17,5 ans.
+
+Message :
+
+« La méthode actuellement utilisée par Grandimi couvre les âges de 4 à 17 ans et demi. »
+
+Ne pas recréer une deuxième fonction de calcul de l’âge.
+
+## Écran 3 — Taille actuelle
+
+Question :
+
+**Quelle est ta taille aujourd’hui ?**
+
+* unité : cm ;
+* accepter `170`, `170.5` et `170,5` ;
+* limites identiques au moteur ;
+* date de mesure configurée par défaut à aujourd’hui ;
+* possibilité de modifier la date.
+
+Conseil discret :
+
+« Pour un résultat plus cohérent, mesure-toi pieds nus, droit contre un mur. »
+
+## Écran 4 — Poids actuel
+
+Question :
+
+**Quel est ton poids actuel ?**
+
+* unité : kg ;
+* accepter le point ou la virgule ;
+* limites identiques au moteur.
+
+Microtexte :
+
+« Cette donnée est utilisée uniquement dans le calcul statistique. »
+
+## Écran 5 — Taille du père biologique
+
+Question :
+
+**Quelle est la taille de ton père biologique ?**
+
+* unité : cm ;
+* limites identiques au moteur ;
+* accepter le point ou la virgule.
+
+Microtexte :
+
+« Si possible, utilise une mesure plutôt qu’une estimation. »
+
+Pour cette première version, la donnée est obligatoire. Ne la remplace jamais par une moyenne de population.
+
+## Écran 6 — Taille de la mère biologique
+
+Question :
+
+**Quelle est la taille de ta mère biologique ?**
+
+Mêmes règles que pour le père.
+
+## Écran 7 — Ancienne mesure facultative
+
+Titre :
+
+**As-tu une ancienne mesure de ta taille ?**
+
+Choix :
+
+* Oui
+* Non
+
+Si oui, demander :
+
+* ancienne taille en cm ;
+* date de cette ancienne mesure.
+
+Cette information ne doit pas modifier le résultat Khamis–Roche actuel.
+
+Elle sert uniquement à calculer une vitesse de croissance observée :
+
+`différence de taille / différence de temps`
+
+Ne calcule une vitesse annuelle que si les deux mesures sont espacées d’au moins 90 jours.
+
+Si l’ancienne taille est supérieure à la taille actuelle, afficher un avertissement, mais permettre la correction.
+
+## Écran 8 — Taille souhaitée
+
+Question :
+
+**Quelle taille aimerais-tu atteindre ?**
+
+* unité : cm ;
+* facultatif ;
+* limites : 120 à 230 cm.
+
+Sous-texte :
+
+« Ton objectif nous aidera à personnaliser ton expérience. Il ne modifie pas le calcul statistique. »
+
+Cette donnée est classée `goal_only`.
+
+## Écran 9 — Sport
+
+Question :
+
+**Combien de séances de sport fais-tu habituellement par semaine ?**
+
+Choix :
+
+* Aucune
+* 1 à 2
+* 3 à 4
+* 5 ou plus
+
+Cette réponse servira au futur programme, pas à la prédiction.
+
+## Écran 10 — Sommeil
+
+Question :
+
+**Combien d’heures dors-tu généralement par nuit ?**
+
+Choix rapides :
+
+* Moins de 6 heures
+* 6 à 7 heures
+* 7 à 8 heures
+* 8 à 9 heures
+* Plus de 9 heures
+
+Ajouter facultativement :
+
+* heure habituelle du coucher ;
+* heure habituelle du réveil.
+
+Cette réponse servira au futur programme, pas à la prédiction.
+
+## Écran 11 — Habitudes
+
+Question :
+
+**Qu’est-ce qui pourrait actuellement limiter ta routine ?**
+
+Réponses multiples :
+
+* Je me couche à des heures irrégulières
+* J’utilise beaucoup les écrans le soir
+* Je saute parfois des repas
+* Je bouge peu
+* Je ne bois pas assez d’eau
+* Rien de particulier
+* Je ne sais pas
+
+Ne pas employer l’expression « mauvaises habitudes » directement contre l’utilisateur.
+
+Ces réponses serviront plus tard à personnaliser le programme.
+
+## Écran 12 — Développement physique
+
+Cet écran est facultatif.
+
+Titre :
+
+**Où en est ton développement physique ?**
+
+Sous-texte :
+
+« Ces repères peuvent nous aider à mieux comprendre ton contexte de croissance. Tu peux passer cette étape. »
+
+### Si `male`
+
+Afficher :
+
+**Ta voix a-t-elle changé ?**
+
+* Pas encore
+* Elle commence à changer
+* Oui, clairement
+* Je ne sais pas
+
+**As-tu de la pilosité sur le visage ?**
+
+* Aucune
+* Légère
+* Modérée
+* Développée
+* Je préfère ne pas répondre
+
+**As-tu de la pilosité sous les bras ?**
+
+* Aucune
+* Légère
+* Développée
+* Je préfère ne pas répondre
+
+### Si `female`
+
+Afficher :
+
+**As-tu déjà eu tes premières règles ?**
+
+* Non
+* Oui
+* Je préfère ne pas répondre
+
+Si oui, demander facultativement :
+
+**Environ quand ont-elles commencé ?**
+
+Ne pas exiger une date exacte.
+
+Afficher également :
+
+**As-tu de la pilosité sous les bras ?**
+
+* Aucune
+* Légère
+* Développée
+* Je préfère ne pas répondre
+
+### Pour les deux parcours
+
+Demander facultativement :
+
+**Comment décrirais-tu ton acné actuellement ?**
+
+* Aucune
+* Légère
+* Modérée
+* Importante
+* Je préfère ne pas répondre
+
+Ces réponses sont classées `maturity_context`.
+
+Elles ne doivent pas modifier les coefficients Khamis–Roche ni ajouter arbitrairement des centimètres.
+
+Ne conclus pas automatiquement un stade médical de puberté.
+
+## Écran 13 — Récapitulatif
+
+Afficher les réponses dans quatre sections :
+
+### Calcul
+
+* sexe utilisé ;
+* âge ;
+* taille ;
+* poids ;
+* taille du père ;
+* taille de la mère.
+
+### Suivi
+
+* ancienne taille ;
+* ancienne date ;
+* vitesse de croissance si disponible.
+
+### Objectif
+
+* taille souhaitée.
+
+### Mode de vie
+
+* sport ;
+* sommeil ;
+* habitudes ;
+* réponses facultatives sur le développement.
+
+Ajouter un bouton **Modifier** pour chaque section.
+
+Bouton principal :
+
+**Calculer mon potentiel**
+
+Empêcher les doubles validations.
+
+## Séparation obligatoire des données
+
+Créer un type central `OnboardingData`.
+
+Classer les champs :
+
+* `prediction_required`
+* `tracking`
+* `goal_only`
+* `routine`
+* `maturity_context`
+
+Créer une fonction explicite :
+
+`toPredictionInput(onboardingData)`
+
+Cette fonction doit sélectionner uniquement :
+
+* sexe ;
+* date de naissance ;
+* date de mesure ;
+* taille actuelle ;
+* poids ;
+* taille du père ;
+* taille de la mère.
+
+Il doit être techniquement impossible que :
+
+* la taille rêvée ;
+* le sommeil ;
+* le sport ;
+* les habitudes ;
+* la pilosité ;
+* l’acné ;
+* les premières règles ;
+* la voix
+
+modifient le résultat Khamis–Roche.
+
+## Résultat provisoire
+
+Après validation, utiliser réellement le moteur existant et ouvrir :
+
+`/result-preview`
+
+Afficher en priorité :
+
+### Ta taille adulte estimée
+
+Valeur centrale en grand, par exemple :
+
+**178,9 cm**
+
+### Ton potentiel haut estimé
+
+Utiliser la limite haute contextuelle déjà retournée par le moteur.
+
+### Ta croissance restante estimée
+
+Calculer :
+
+`taille adulte centrale - taille actuelle`
+
+Afficher également le potentiel restant jusqu’à la borne haute.
+
+Ne jamais afficher une croissance restante négative. Utiliser au minimum zéro.
+
+Si une ancienne mesure valide existe, afficher séparément :
+
+**Évolution observée**
+
+avec la croissance annuelle calculée.
+
+Ne pas utiliser cette vitesse pour modifier la prédiction actuelle.
+
+## Comparaison avec l’objectif
+
+Si la taille souhaitée se trouve dans la fourchette :
+
+« Ton objectif se situe dans la zone actuellement estimée. »
+
+Si elle dépasse la fourchette :
+
+« Ton objectif est supérieur à la zone actuellement estimée. Grandimi pourra t’aider à optimiser les facteurs contrôlables, sans pouvoir garantir une taille précise. »
+
+Ne jamais humilier l’utilisateur ou qualifier sa taille de mauvaise.
+
+## Présentation des limites
+
+Sous le résultat principal, afficher seulement :
+
+« Estimation statistique, pas une garantie individuelle. »
+
+Ajouter un accordéon fermé par défaut :
+
+**Comment ce résultat est-il calculé ?**
+
+Placer dans cet accordéon :
+
+* méthode Khamis–Roche ;
+* données utilisées ;
+* fourchette ;
+* population d’origine ;
+* absence d’âge osseux ;
+* autres limites déjà retournées par le moteur.
+
+Ne pas afficher toutes ces limites avant le résultat.
+
+## Conservation des réponses
+
+Pour cette étape :
+
+* utiliser `sessionStorage` ;
+* aucune base de données ;
+* aucun compte ;
+* aucun appel API ;
+* aucun envoi des réponses ;
+* bouton « Recommencer » avec confirmation ;
+* supprimer les données après confirmation.
+
+## Direction visuelle provisoire
+
+Il ne s’agit pas encore du design final, mais l’expérience doit être propre :
+
+* mobile-first ;
+* fond clair ;
+* texte presque noir ;
+* accent orange Grandimi ;
+* une carte ou question dominante ;
+* grands boutons ;
+* progression visible ;
+* aucune silhouette humaine générique ;
+* aucun faux graphique ;
+* aucun chiffre de précision inventé ;
+* aucune copie exacte de Taller.
+
+## Tests obligatoires
+
+Tester :
+
+1. parcours garçon complet ;
+2. parcours fille complet ;
+3. branche masculine correcte ;
+4. branche féminine correcte ;
+5. calcul de référence à environ 178,9 cm ;
+6. navigation Retour/Continuer ;
+7. modification depuis le récapitulatif ;
+8. valeurs avec virgule ;
+9. âge hors limites ;
+10. ancienne mesure facultative ;
+11. ancienne mesure trop récente ;
+12. conservation après actualisation ;
+13. suppression avec « Recommencer » ;
+14. absence de double validation ;
+15. absence d’appel réseau ;
+16. affichage mobile à 390 px ;
+17. navigation clavier ;
+18. résultat inchangé lorsque seules les réponses de mode de vie changent ;
+19. résultat inchangé lorsque seule la taille rêvée change ;
+20. résultat inchangé lorsque seules les réponses de développement changent.
+
+## Audit obligatoire
+
+Après l’implémentation :
+
+* lint ;
+* typecheck ;
+* tests ;
+* build ;
+* test réel du parcours complet dans le navigateur ;
+* contrôle de la console ;
+* contrôle mobile ;
+* contrôle de l’absence d’appel réseau.
+
+Vérifie particulièrement que les données supplémentaires ne contaminent pas le moteur statistique.
+
+En cas de problème :
+
+1. formule au moins trois hypothèses ;
+2. teste-les ;
+3. identifie la cause ;
+4. corrige ;
+5. relance tous les tests.
+
+## Rapport final
+
+Indique :
+
+* fichiers créés et modifiés ;
+* écrans fonctionnels ;
+* tests exécutés ;
+* résultat de chaque test ;
+* problèmes détectés ;
+* corrections effectuées ;
+* données réellement utilisées par le moteur ;
+* données conservées uniquement pour les futures personnalisations ;
+* éléments encore non implémentés.
+
+Termine par :
+
+**ÉTAPE 2 VALIDÉE**
+
+ou
+
+**ÉTAPE 2 NON VALIDÉE**
+
+Arrête-toi ensuite. Ne commence pas le programme quotidien, le paiement ou les comptes.

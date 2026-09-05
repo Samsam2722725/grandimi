@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -61,7 +61,7 @@
   --chart-5: 183 29% 18%;
   --app-font-sans: Arial, ui-sans-serif, sans-serif;
   --app-font-serif: Georgia, serif;
-  --app-font-mono: 'Courier New', ui-monospace, monospace;
+  --app-font-mono: "Courier New", ui-monospace, monospace;
   --radius: 0.75rem;
   --sidebar: 183 29% 18%;
   --sidebar-foreground: 42 38% 95%;
@@ -116,23 +116,45 @@
 }
 
 @layer base {
-  * { @apply border-border; }
-  html { background: hsl(var(--background)); }
+  * {
+    @apply border-border;
+  }
+  html {
+    background: hsl(var(--background));
+  }
   body {
     @apply font-sans antialiased bg-background text-foreground;
     margin: 0;
     min-width: 320px;
   }
-  button, input { font: inherit; }
-  ::selection { background: hsl(var(--accent) / 0.28); }
+  button,
+  input {
+    font: inherit;
+  }
+  ::selection {
+    background: hsl(var(--accent) / 0.28);
+  }
 }
 
 @layer utilities {
-  .font-display { font-family: var(--app-font-serif); }
-  .font-mono-ui { font-family: var(--app-font-mono); }
+  .font-display {
+    font-family: var(--app-font-serif);
+  }
+  .font-mono-ui {
+    font-family: var(--app-font-mono);
+  }
   .paper-grid {
-    background-image: linear-gradient(hsl(var(--foreground) / 0.035) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground) / 0.035) 1px, transparent 1px);
+    background-image:
+      linear-gradient(hsl(var(--foreground) / 0.035) 1px, transparent 1px),
+      linear-gradient(
+        90deg,
+        hsl(var(--foreground) / 0.035) 1px,
+        transparent 1px
+      );
     background-size: 28px 28px;
   }
-  .focus-ring:focus-visible { outline: 3px solid hsl(var(--ring) / 0.35); outline-offset: 3px; }
+  .focus-ring:focus-visible {
+    outline: 3px solid hsl(var(--ring) / 0.35);
+    outline-offset: 3px;
+  }
 }

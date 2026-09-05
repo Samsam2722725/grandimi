@@ -8,7 +8,7 @@
     "build": "vite build --config vite.config.ts",
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint": "prettier --check src/domain/growth src/lib/verification-engine.ts src/pages/prediction-lab.tsx",
+    "lint": "prettier --check src/domain/growth src/domain/onboarding src/lib/verification-engine.ts src/pages/landing.tsx src/pages/onboarding.tsx src/pages/prediction-lab.tsx src/pages/result-preview.tsx src/components/public-shell.tsx src/components/onboarding-progress.tsx",
     "test": "PORT=3000 BASE_PATH=/ vitest run"
   },
   "devDependencies": {
