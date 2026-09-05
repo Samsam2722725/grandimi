@@ -1,0 +1,1 @@
+- [Browser validation](browser-validation.md) — validate onboarding keyboard paths through explicit focusable controls, not only hidden native inputs.

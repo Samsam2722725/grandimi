@@ -1171,6 +1171,15 @@ export default function Onboarding() {
                 : "button-onboarding-continue"
             }
             onClick={handleContinue}
+            onKeyDown={(event) => {
+              if (
+                (event.key === "Enter" || event.key === " ") &&
+                !event.defaultPrevented
+              ) {
+                event.preventDefault();
+                handleContinue();
+              }
+            }}
             disabled={isSubmitting}
             className="focus-ring group inline-flex h-13 w-full items-center justify-center gap-2 rounded-full bg-primary px-6 text-[15px] font-semibold text-primary-foreground shadow-[0_10px_24px_hsl(var(--primary)/0.16)] transition-transform hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-70 sm:w-auto"
           >
