@@ -16,6 +16,9 @@
   },
   "references": [
     {
+      "path": "../../lib/grandimi-ai-contract"
+    },
+    {
       "path": "../../lib/api-client-react"
     }
   ]

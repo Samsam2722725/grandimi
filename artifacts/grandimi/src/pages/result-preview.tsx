@@ -5,7 +5,7 @@ import {
   Sparkles,
   Check,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   BrandMark,
@@ -18,6 +18,7 @@ import {
   ONBOARDING_STORAGE_KEY,
   RESULT_STORAGE_KEY,
   toPredictionInput,
+  type OnboardingData,
 } from "@/domain/onboarding";
 import {
   buildGrowthReport,
@@ -30,6 +31,10 @@ import {
   PROGRAM_STORAGE_KEY,
   validateProgram,
 } from "@/domain/program";
+import {
+  buildAIPersonalizationContext,
+  useAIPersonalization,
+} from "@/domain/ai";
 import { runVerification } from "@/lib/verification-engine";
 
 function formatHeight(value: number) {
@@ -47,6 +52,9 @@ function formatDate(value: string): string {
 export default function ResultPreview() {
   const [, setLocation] = useLocation();
   const [report, setReport] = useState<GrowthReport | null>(null);
+  const [onboardingData, setOnboardingData] = useState<OnboardingData | null>(
+    null,
+  );
 
   useEffect(() => {
     const storedResult = sessionStorage.getItem(RESULT_STORAGE_KEY);
@@ -75,11 +83,28 @@ export default function ResultPreview() {
         verification.result,
       );
       setReport(generatedReport);
+      setOnboardingData(onboardingData);
     } catch {
       sessionStorage.removeItem(RESULT_STORAGE_KEY);
       setLocation("/onboarding");
     }
   }, [setLocation]);
+
+  const previewProgram = useMemo(
+    () =>
+      report && onboardingData
+        ? buildSevenDayProgram(onboardingData, report)
+        : null,
+    [report, onboardingData],
+  );
+  const aiContext = useMemo(
+    () =>
+      report && onboardingData && previewProgram
+        ? buildAIPersonalizationContext(onboardingData, report, previewProgram)
+        : null,
+    [report, onboardingData, previewProgram],
+  );
+  const ai = useAIPersonalization(aiContext, previewProgram);
 
   if (!report) {
     return null;
@@ -103,6 +128,12 @@ export default function ResultPreview() {
             Voici la lecture de tes informations par notre modèle. Elle donne un
             repère, pas une destination écrite à l’avance.
           </p>
+          <PersonalizationStatus ai={ai} />
+          {ai.copy && (
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-foreground">
+              {ai.copy.reportHeadline}
+            </p>
+          )}
         </div>
 
         <section
@@ -138,6 +169,11 @@ export default function ResultPreview() {
               {report.methodVersion}) et les données que tu as renseignées. Elle
               peut évoluer avec le temps et ne décrit pas toute ton histoire.
             </p>
+            {ai.copy && (
+              <p className="mt-4 max-w-xl text-sm leading-6 text-foreground/80">
+                {ai.copy.profileSummary}
+              </p>
+            )}
             <p
               data-testid="text-result-disclaimer"
               className="mt-4 text-sm font-semibold text-foreground"
@@ -280,6 +316,11 @@ export default function ResultPreview() {
                 >
                   {report.goalComparison.message}
                 </p>
+                {ai.copy && (
+                  <p className="mt-3 text-sm leading-6 text-foreground/80">
+                    {ai.copy.goalMessage}
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -350,6 +391,11 @@ export default function ResultPreview() {
             <h2 className="text-xl font-display font-semibold mb-4 px-2">
               Tes priorités personnalisées
             </h2>
+            {ai.copy && (
+              <p className="mb-4 px-2 text-sm leading-6 text-muted-foreground">
+                {ai.copy.keyInsight}
+              </p>
+            )}
             <div className="grid gap-4 sm:grid-cols-3">
               {report.priorities.map((p) => (
                 <div
@@ -571,4 +617,34 @@ export default function ResultPreview() {
       <PublicFooter />
     </main>
   );
+}
+
+function PersonalizationStatus({
+  ai,
+}: {
+  ai: ReturnType<typeof useAIPersonalization>;
+}) {
+  if (ai.copy)
+    return (
+      <p className="mt-4 text-xs font-medium text-primary">
+        Analyse personnalisée
+      </p>
+    );
+  if (ai.loading)
+    return (
+      <p className="mt-4 text-xs text-muted-foreground" role="status">
+        Personnalisation en cours…
+      </p>
+    );
+  if (ai.error)
+    return (
+      <button
+        type="button"
+        onClick={ai.retry}
+        className="mt-4 text-xs font-medium text-primary underline underline-offset-4 focus-ring rounded-sm"
+      >
+        Réessayer la personnalisation
+      </button>
+    );
+  return null;
 }

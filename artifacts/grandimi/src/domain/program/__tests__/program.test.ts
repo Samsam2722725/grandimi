@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { ACTION_TITLES } from "@workspace/grandimi-ai-contract";
 import {
   createInitialOnboardingData,
   toPredictionInput,
@@ -15,6 +16,17 @@ import {
   sleepGuidanceForAge,
   validateProgram,
 } from "../index";
+
+it("keeps the trusted AI action-title map exactly aligned with the local catalog", () => {
+  expect(Object.isFrozen(ACTION_TITLES)).toBe(true);
+  expect(Object.keys(ACTION_TITLES)).toHaveLength(30);
+  expect(ACTION_CATALOG).toHaveLength(30);
+  expect(
+    Object.fromEntries(
+      ACTION_CATALOG.map((action) => [action.id, action.title]),
+    ),
+  ).toEqual(ACTION_TITLES);
+});
 
 function fixture(): {
   data: OnboardingData;

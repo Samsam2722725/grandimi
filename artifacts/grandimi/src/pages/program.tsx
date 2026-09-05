@@ -13,7 +13,7 @@ import {
   CheckCircle2,
   Target,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, Link } from "wouter";
 import { PublicHeader, PublicFooter } from "@/components/public-shell";
 import {
@@ -37,6 +37,12 @@ import {
   type SevenDayProgram,
   type ProgramAction,
 } from "@/domain/program";
+import type { OnboardingData } from "@/domain/onboarding";
+import type { GrowthReport } from "@/domain/report";
+import {
+  buildAIPersonalizationContext,
+  useAIPersonalization,
+} from "@/domain/ai";
 
 const CATEGORY_META = {
   sleep: { label: "Sommeil", icon: Moon },
@@ -140,6 +146,10 @@ function ActionCard({ action }: { action: ProgramAction }) {
 export default function Program() {
   const [, setLocation] = useLocation();
   const [program, setProgram] = useState<SevenDayProgram | null>(null);
+  const [report, setReport] = useState<GrowthReport | null>(null);
+  const [onboardingData, setOnboardingData] = useState<OnboardingData | null>(
+    null,
+  );
 
   useEffect(() => {
     const documentTitle = document.title;
@@ -177,6 +187,8 @@ export default function Program() {
         onboardingData,
         verification.result,
       );
+      setReport(generatedReport);
+      setOnboardingData(onboardingData);
       const expectedProgram = buildSevenDayProgram(
         onboardingData,
         generatedReport,
@@ -205,6 +217,15 @@ export default function Program() {
     }
   }, [setLocation]);
 
+  const aiContext = useMemo(
+    () =>
+      program && report && onboardingData
+        ? buildAIPersonalizationContext(onboardingData, report, program)
+        : null,
+    [program, report, onboardingData],
+  );
+  const ai = useAIPersonalization(aiContext, program);
+
   if (!program) {
     return null;
   }
@@ -229,6 +250,7 @@ export default function Program() {
           >
             {program.profileSummary}
           </p>
+          <PersonalizationStatus ai={ai} />
         </div>
 
         <section className="mx-auto mt-12 max-w-3xl">
@@ -246,6 +268,16 @@ export default function Program() {
             </span>
           </div>
         </section>
+        {ai.copy && (
+          <section className="mx-auto mt-5 max-w-3xl rounded-[24px] border border-primary/20 bg-primary/5 p-6">
+            <p className="text-xs font-medium text-primary">
+              Analyse personnalisée
+            </p>
+            <p className="mt-2 text-sm leading-6 text-foreground">
+              {ai.copy.weeklyMission}
+            </p>
+          </section>
+        )}
 
         <div className="mx-auto max-w-3xl mt-16 space-y-16">
           {program.days.map((day) => (
@@ -258,6 +290,15 @@ export default function Program() {
                 <p className="text-muted-foreground text-sm mt-2">
                   {day.focus}
                 </p>
+                {ai.copy && (
+                  <p className="mt-3 text-sm leading-6 text-foreground/80">
+                    {
+                      ai.copy.dayMessages.find(
+                        (message) => message.dayNumber === day.dayNumber,
+                      )?.message
+                    }
+                  </p>
+                )}
               </div>
               <div className="space-y-6">
                 {day.actions.map((action) => (
@@ -267,6 +308,11 @@ export default function Program() {
             </section>
           ))}
         </div>
+        {ai.copy && (
+          <p className="mx-auto mt-12 max-w-3xl text-center text-sm leading-6 text-muted-foreground">
+            {ai.copy.finalEncouragement}
+          </p>
+        )}
 
         <details
           data-testid="disclosure-sources"
@@ -313,4 +359,34 @@ export default function Program() {
       <PublicFooter />
     </main>
   );
+}
+
+function PersonalizationStatus({
+  ai,
+}: {
+  ai: ReturnType<typeof useAIPersonalization>;
+}) {
+  if (ai.copy)
+    return (
+      <p className="mt-4 text-xs font-medium text-primary">
+        Analyse personnalisée
+      </p>
+    );
+  if (ai.loading)
+    return (
+      <p className="mt-4 text-xs text-muted-foreground" role="status">
+        Personnalisation en cours…
+      </p>
+    );
+  if (ai.error)
+    return (
+      <button
+        type="button"
+        onClick={ai.retry}
+        className="mt-4 text-xs font-medium text-primary underline underline-offset-4 focus-ring rounded-sm"
+      >
+        Réessayer la personnalisation
+      </button>
+    );
+  return null;
 }
