@@ -8,6 +8,7 @@ import NotFound from "@/pages/not-found";
 import Onboarding from "@/pages/onboarding";
 import PredictionLab from "@/pages/prediction-lab";
 import ResultPreview from "@/pages/result-preview";
+import Program from "@/pages/program";
 import { Route, Switch, useLocation, Router as WouterRouter } from "wouter";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ function Router() {
         <Route path="/" component={Landing} />
         <Route path="/onboarding" component={Onboarding} />
         <Route path="/result-preview" component={ResultPreview} />
+        <Route path="/program" component={Program} />
         <Route path="/prediction-lab" component={PredictionLab} />
         <Route component={NotFound} />
       </Switch>

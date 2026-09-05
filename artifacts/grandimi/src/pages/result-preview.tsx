@@ -3,10 +3,9 @@ import {
   ChevronDown,
   RotateCcw,
   Sparkles,
-  X,
   Check,
 } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   BrandMark,
@@ -26,6 +25,11 @@ import {
   verificationResultsMatch,
   type GrowthReport,
 } from "@/domain/report";
+import {
+  buildSevenDayProgram,
+  PROGRAM_STORAGE_KEY,
+  validateProgram,
+} from "@/domain/program";
 import { runVerification } from "@/lib/verification-engine";
 
 function formatHeight(value: number) {
@@ -40,76 +44,9 @@ function formatDate(value: string): string {
     : new Intl.DateTimeFormat("fr-FR", { dateStyle: "medium" }).format(date);
 }
 
-function ProgramDialog({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-
-    if (open && !dialog.open) {
-      dialog.showModal();
-    } else if (!open && dialog.open) {
-      dialog.close();
-    }
-  }, [open]);
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-
-    const handleCancel = () => onClose();
-    dialog.addEventListener("cancel", handleCancel);
-    return () => dialog.removeEventListener("cancel", handleCancel);
-  }, [onClose]);
-
-  return (
-    <dialog
-      ref={dialogRef}
-      data-testid="dialog-program"
-      className="backdrop:bg-background/80 backdrop:backdrop-blur-sm rounded-[24px] border border-border/80 bg-card p-0 shadow-2xl shadow-black/10 sm:max-w-md w-full m-auto open:animate-in open:fade-in open:zoom-in-95"
-    >
-      <div className="p-6 sm:p-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-2xl font-bold">Ton programme</h2>
-          <button
-            type="button"
-            data-testid="button-close-dialog"
-            onClick={onClose}
-            className="rounded-full p-2 hover:bg-muted text-muted-foreground transition-colors focus-ring"
-            aria-label="Fermer"
-          >
-            <X size={20} />
-          </button>
-        </div>
-        <div className="space-y-4 text-muted-foreground text-sm leading-6 mb-8">
-          <p data-testid="text-dialog-content">
-            Le programme personnalisé sera construit à l’étape suivante.
-          </p>
-        </div>
-        <button
-          type="button"
-          data-testid="button-confirm-dialog"
-          onClick={onClose}
-          className="w-full h-12 rounded-2xl bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 focus-ring"
-        >
-          J'ai compris
-        </button>
-      </div>
-    </dialog>
-  );
-}
-
 export default function ResultPreview() {
   const [, setLocation] = useLocation();
   const [report, setReport] = useState<GrowthReport | null>(null);
-  const [programDialogOpen, setProgramDialogOpen] = useState(false);
 
   useEffect(() => {
     const storedResult = sessionStorage.getItem(RESULT_STORAGE_KEY);
@@ -505,7 +442,55 @@ export default function ResultPreview() {
               <button
                 type="button"
                 data-testid="button-discover-program"
-                onClick={() => setProgramDialogOpen(true)}
+                onClick={() => {
+                  try {
+                    const storedResult =
+                      sessionStorage.getItem(RESULT_STORAGE_KEY);
+                    const storedOnboarding = sessionStorage.getItem(
+                      ONBOARDING_STORAGE_KEY,
+                    );
+                    if (!storedResult || !storedOnboarding) {
+                      throw new Error("Session absente.");
+                    }
+                    const parsedResult: unknown = JSON.parse(storedResult);
+                    if (!isVerificationResult(parsedResult)) {
+                      throw new Error("Résultat invalide.");
+                    }
+                    const currentData = loadOnboardingData();
+                    const verification = runVerification(
+                      toPredictionInput(currentData),
+                    );
+                    if (
+                      !verification.ok ||
+                      !verificationResultsMatch(
+                        parsedResult,
+                        verification.result,
+                      )
+                    ) {
+                      throw new Error("Session incohérente.");
+                    }
+                    const currentReport = buildGrowthReport(
+                      currentData,
+                      verification.result,
+                    );
+                    const program = buildSevenDayProgram(
+                      currentData,
+                      currentReport,
+                    );
+                    if (!validateProgram(program)) {
+                      throw new Error("Programme invalide.");
+                    }
+                    sessionStorage.setItem(
+                      PROGRAM_STORAGE_KEY,
+                      JSON.stringify(program),
+                    );
+                    setLocation("/program");
+                  } catch {
+                    sessionStorage.removeItem(PROGRAM_STORAGE_KEY);
+                    sessionStorage.removeItem(RESULT_STORAGE_KEY);
+                    setLocation("/onboarding");
+                  }
+                }}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-background px-6 py-3.5 text-sm font-semibold text-primary transition-transform hover:scale-105 focus-ring"
               >
                 Créer mon programme de 7 jours <ArrowRight size={16} />
@@ -583,10 +568,6 @@ export default function ResultPreview() {
         </div>
       </div>
 
-      <ProgramDialog
-        open={programDialogOpen}
-        onClose={() => setProgramDialogOpen(false)}
-      />
       <PublicFooter />
     </main>
   );
