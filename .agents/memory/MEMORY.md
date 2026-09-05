@@ -1,1 +1,2 @@
 - [Browser validation](browser-validation.md) — validate onboarding keyboard paths through explicit focusable controls, not only hidden native inputs.
+- [Report session integrity](report-session-integrity.md) — validate stored results and cross-check them against a fresh deterministic recomputation.

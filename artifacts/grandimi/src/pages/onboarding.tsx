@@ -361,7 +361,9 @@ export default function Onboarding() {
   const [, setLocation] = useLocation();
   const [data, setData] = useState<OnboardingData>(createInitialOnboardingData);
   const [hydrated, setHydrated] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0);
+  const [stepIndex, setStepIndex] = useState(() =>
+    window.location.hash === "#summary" ? TOTAL_STEPS - 1 : 0,
+  );
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 

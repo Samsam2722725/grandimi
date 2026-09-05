@@ -11,7 +11,8 @@ export type SportFrequency = "none" | "one_two" | "three_four" | "five_plus";
 export type SleepDuration =
   "under_six" | "six_seven" | "seven_eight" | "eight_nine" | "over_nine";
 export type VoiceChange = "not_yet" | "starting" | "clear" | "unknown";
-export type HairGrowth = "none" | "light" | "developed" | "moderate";
+export type HairGrowth =
+  "none" | "light" | "developed" | "moderate" | "prefer_not";
 export type AcneLevel =
   "none" | "light" | "moderate" | "important" | "prefer_not";
 export type PeriodStatus = "no" | "yes" | "prefer_not";
