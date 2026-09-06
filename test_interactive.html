@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grandimi - Height Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-grid-full {
+            grid-column: 1 / -1;
+        }
+
+        button {
+            grid-column: 1 / -1;
+            padding: 14px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            display: none;
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .prediction-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .height-value {
+            font-size: 3em;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .confidence {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .plan-title {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 20px;
+            margin-top: 30px;
+        }
+
+        .plan-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+
+        .item-list {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .item-list li {
+            padding: 10px 0;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .item-list li:last-child {
+            border-bottom: none;
+        }
+
+        .item-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .timeline-item {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .timeline-month {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .timeline-desc {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .height-value {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>📏 Grandimi</h1>
+            <p class="subtitle">Predict your max height & get a personalized growth plan</p>
+
+            <form id="predictorForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="age">Age (years)</label>
+                        <input type="number" id="age" step="0.5" min="8" max="18" value="14.5" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sex">Sex</label>
+                        <select id="sex" required>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="height">Current Height (cm)</label>
+                        <input type="number" id="height" step="0.1" min="100" max="210" value="162" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" step="0.1" min="15" max="150" value="52" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fatherHeight">Father's Height (cm)</label>
+                        <input type="number" id="fatherHeight" step="0.1" min="140" max="220" value="178" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="motherHeight">Mother's Height (cm)</label>
+                        <input type="number" id="motherHeight" step="0.1" min="140" max="210" value="164" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nutrition">Nutrition Level</label>
+                        <select id="nutrition">
+                            <option value="excellent">Excellent</option>
+                            <option value="good" selected>Good</option>
+                            <option value="fair">Fair</option>
+                            <option value="poor">Poor</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sleep">Sleep Hours/Night</label>
+                        <input type="number" id="sleep" step="0.5" min="4" max="14" value="8.5">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exercise">Exercise Min/Day</label>
+                        <input type="number" id="exercise" step="5" min="0" max="300" value="60">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="puberty">Puberty Stage</label>
+                        <select id="puberty">
+                            <option value="N">Pre-pubertal</option>
+                            <option value="1">Early</option>
+                            <option value="2">Early-Mid</option>
+                            <option value="3" selected>Mid</option>
+                            <option value="4">Late</option>
+                            <option value="5">Fully developed</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="velocity">Height Velocity (cm/year)</label>
+                        <input type="number" id="velocity" step="0.5" min="0" max="20" value="5.5">
+                    </div>
+
+                    <button type="submit" class="form-grid-full">Predict My Height 🚀</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card results" id="results">
+            <div class="prediction-box">
+                <div>Your Maximum Adult Height</div>
+                <div class="height-value" id="predictedHeight">177.8 cm</div>
+                <div class="confidence">
+                    Confidence: <strong id="confidence">HIGH</strong>
+                    (Range: <span id="range">175.8 - 179.8 cm</span>)
+                </div>
+            </div>
+
+            <h2 class="plan-title">How to Reach Your Potential</h2>
+
+            <div class="plan-section">
+                <div class="section-title">💪 Posture Exercises</div>
+                <ul class="item-list">
+                    <li><strong>Morning Spinal Stretch</strong> - 5 min daily, decompress spine</li>
+                    <li><strong>Posture Correction</strong> - 10 min daily, strengthen back</li>
+                    <li><strong>Pilates Core</strong> - 15 min, 3x/week, core strength</li>
+                    <li><strong>Swimming</strong> - 30 min, 3-4x/week, full spine elongation</li>
+                    <li><strong>Yoga</strong> - 20 min, 3x/week, flexibility + spine health</li>
+                </ul>
+            </div>
+
+            <div class="plan-section">
+                <div class="section-title">🥗 Nutrition Plan</div>
+                <ul class="item-list">
+                    <li><strong>Daily Calories:</strong> <span id="calories">2400</span></li>
+                    <li><strong>Protein:</strong> <span id="protein">83g</span>/day (1.6g per kg)</li>
+                    <li><strong>Calcium:</strong> 1300mg/day (milk, yogurt, cheese)</li>
+                    <li><strong>Vitamin D:</strong> 15mcg/day (enables calcium absorption)</li>
+                    <li><strong>Zinc:</strong> 11mg/day (growth hormone support)</li>
+                    <li><strong>Meals:</strong> Breakfast 7am, Snack 10am, Lunch 12pm, Snack 4pm, Dinner 7pm</li>
+                </ul>
+            </div>
+
+            <div class="plan-section">
+                <div class="section-title">😴 Sleep Optimization</div>
+                <ul class="item-list">
+                    <li><strong>Target:</strong> 8-9 hours per night (growth hormone peaks during sleep)</li>
+                    <li><strong>Schedule:</strong> Bed 10pm, Wake 7am (consistent every day)</li>
+                    <li><strong>Environment:</strong> Dark, cool (65-68°F), quiet</li>
+                    <li><strong>Pre-sleep:</strong> Stop screens 30-60 min before bed</li>
+                    <li><strong>Avoid:</strong> Caffeine after 3pm, heavy meals after 7pm</li>
+                </ul>
+            </div>
+
+            <div class="plan-section">
+                <div class="section-title">💊 Supplement Stack</div>
+                <ul class="item-list">
+                    <li><strong>Multivitamin</strong> - 1 tablet daily with breakfast</li>
+                    <li><strong>Calcium + Vitamin D</strong> - 1300mg + 15mcg daily with meals</li>
+                    <li><strong>Zinc</strong> - 11mg daily with dinner</li>
+                    <li id="supplement-optional"></li>
+                </ul>
+            </div>
+
+            <div class="plan-section">
+                <div class="section-title">📅 12-Month Timeline</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-month">Month 1-2</div>
+                        <div class="timeline-desc">Establish routine. Expect 0.5-1cm growth. Feel more energetic.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-month">Month 3-4</div>
+                        <div class="timeline-desc">Routine habitual. Posture improves noticeably. 1-2cm growth.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-month">Month 6-8</div>
+                        <div class="timeline-desc">Significant posture improvement (appear 2-3cm taller). Confidence up.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-month">Month 12</div>
+                        <div class="timeline-desc">Reach predicted maximum height. Success! Habits stick for life.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('predictorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const age = parseFloat(document.getElementById('age').value);
+            const sex = document.getElementById('sex').value;
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const fatherHeight = parseFloat(document.getElementById('fatherHeight').value);
+            const motherHeight = parseFloat(document.getElementById('motherHeight').value);
+            const nutrition = document.getElementById('nutrition').value;
+            const sleep = parseFloat(document.getElementById('sleep').value);
+            const exercise = parseFloat(document.getElementById('exercise').value);
+            const puberty = document.getElementById('puberty').value;
+            const velocity = parseFloat(document.getElementById('velocity').value);
+
+            // Simple calculation (mock of our API)
+            const midParent = (fatherHeight + motherHeight) / 2;
+            const adjustment = sex === 'M' ? 6.5 : -6.5;
+            const predictedBase = midParent + adjustment + (height - midParent) * 0.4;
+
+            // Health factors
+            let healthMult = 1.0;
+            if (sleep < 7) healthMult -= 0.02;
+            if (sleep >= 8 && sleep <= 10) healthMult += 0.01;
+            if (nutrition === 'excellent') healthMult += 0.02;
+            if (nutrition === 'poor') healthMult -= 0.03;
+            if (exercise >= 30 && exercise <= 120) healthMult += 0.02;
+
+            const predicted = predictedBase * healthMult;
+            let range = 3.0;
+            if (age >= 13 && age <= 16) range = 2.0;
+            if (age > 16) range = 1.5;
+
+            let confidence = 'MEDIUM';
+            if (age >= 13 && age <= 16 && (puberty === '3' || puberty === '4')) confidence = 'HIGH';
+            if (age < 10 || age > 17) confidence = 'LOW';
+
+            const calories = Math.round(2200 + (age - 14) * 100 + (weight - 50) * 20);
+            const protein = Math.round(weight * 1.6);
+
+            document.getElementById('predictedHeight').textContent = predicted.toFixed(1) + ' cm';
+            document.getElementById('confidence').textContent = confidence;
+            document.getElementById('range').textContent = (predicted - range).toFixed(1) + ' - ' + (predicted + range).toFixed(1) + ' cm';
+            document.getElementById('calories').textContent = calories;
+            document.getElementById('protein').textContent = protein;
+
+            if (nutrition === 'poor') {
+                document.getElementById('supplement-optional').innerHTML = '<strong>Iron + B12</strong> - Additional support for poor nutrition';
+            } else {
+                document.getElementById('supplement-optional').innerHTML = '';
+            }
+
+            document.getElementById('results').classList.add('active');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

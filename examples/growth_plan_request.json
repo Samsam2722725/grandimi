@@ -1,0 +1,13 @@
+{
+  "age": 14.5,
+  "sex": "M",
+  "current_height_cm": 162.0,
+  "predicted_height_cm": 177.8,
+  "weight_kg": 52.0,
+  "bmi": 19.8,
+  "nutrition_level": "good",
+  "sleep_hours_per_night": 8.5,
+  "exercise_min_per_day": 45,
+  "puberty_stage": "Mid puberty (Tanner 3)",
+  "height_velocity_cm": 5.5
+}
