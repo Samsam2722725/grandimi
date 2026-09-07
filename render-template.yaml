@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: grandimi-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    port: 8080
+    autoDeploy: true
+    
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: SUPABASE_URL
+        value: https://btujpubexjueauevwphw.supabase.co
+      - key: SUPABASE_KEY
+        value: sb_publishable_MB6V8HyhyvWVRubqGxElVg_sLjSJL5V
+      - key: WHOP_PRODUCT_SLUG
+        value: text-aa
+      - key: WHOP_BUSINESS_ID
+        value: biz_nqh5U5JaSMUVS7
+
