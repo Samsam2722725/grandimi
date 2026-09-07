@@ -1,0 +1,504 @@
+# GRANDIMI — ÉTAPE 4B UNIQUEMENT
+
+## PERSONNALISATION DES TEXTES AVEC OPENAI
+
+Tu travailles sur le projet Grandimi existant.
+
+L’étape 4A est validée :
+
+* moteur Khamis–Roche fonctionnel ;
+* onboarding fonctionnel ;
+* rapport personnalisé déterministe ;
+* programme déterministe de 7 jours ;
+* 7 journées et 21 actions validées ;
+* bibliothèque locale de 30 actions ;
+* 53 tests réussis.
+
+## Règle absolue de périmètre
+
+Implémente uniquement l’étape 4B.
+
+Ne reconstruis pas le projet.
+Ne modifie pas les coefficients Khamis–Roche.
+Ne modifie pas le calcul de taille.
+Ne modifie pas les bornes basse et haute.
+Ne remplace pas le catalogue d’actions.
+Ne développe pas encore le suivi quotidien, les boutons « Fait » ou « Remplacer », le paiement, les comptes, Supabase, Stripe, une communauté ou un chat.
+
+Le rôle de l’IA est uniquement de rendre l’expérience plus personnelle, claire, motivante et premium.
+
+L’IA ne calcule jamais la taille adulte.
+
+---
+
+# 1. AUDIT AVANT MODIFICATION
+
+Commence par examiner :
+
+* `src/domain/growth/`
+* `src/domain/onboarding/`
+* `src/domain/report/`
+* `src/domain/program/`
+* `src/pages/result-preview.tsx`
+* `src/pages/program.tsx`
+* le système de routes ;
+* le stockage dans `sessionStorage` ;
+* les commandes de tests, lint, typecheck et build.
+
+Présente un plan technique court avant de modifier le code.
+
+Préserve les 53 tests existants.
+
+---
+
+# 2. OBJECTIF PRODUIT
+
+Après la génération déterministe du rapport et du programme, une seule requête OpenAI doit créer des textes personnalisés à partir du profil déjà analysé.
+
+L’IA peut produire uniquement :
+
+1. une accroche personnalisée pour le rapport ;
+2. un résumé du profil ;
+3. un enseignement principal ;
+4. un message relatif à l’objectif personnel ;
+5. une mission générale pour les sept jours ;
+6. un court message de coach pour chacune des sept journées ;
+7. un message final d’encouragement.
+
+Ces textes doivent donner l’impression que Grandimi comprend réellement le profil de l’utilisateur.
+
+Ils doivent rester courts, concrets, naturels et adaptés à un écran mobile.
+
+---
+
+# 3. CE QUE L’IA NE PEUT JAMAIS FAIRE
+
+L’IA ne doit jamais :
+
+* calculer ou modifier une estimation de taille ;
+* modifier la zone estimée ;
+* modifier la croissance restante ;
+* promettre des centimètres ;
+* inventer un pourcentage de précision ;
+* affirmer qu’une habitude fera grandir l’utilisateur ;
+* diagnostiquer une maladie ou un retard de croissance ;
+* recommander des hormones, médicaments ou compléments ;
+* inventer une nouvelle action ;
+* modifier une consigne du catalogue ;
+* modifier la durée, la catégorie ou le critère de réalisation d’une action ;
+* supprimer ou ajouter des journées ;
+* supprimer ou ajouter des actions ;
+* utiliser une recherche Internet ou un outil externe ;
+* présenter un contenu comme un avis médical.
+
+Les chiffres de taille sont toujours affichés directement par l’application depuis le moteur déterministe.
+
+L’IA ne reçoit aucun champ lui permettant de renvoyer ou de remplacer ces chiffres.
+
+---
+
+# 4. ARCHITECTURE SERVEUR
+
+La clé OpenAI ne doit jamais être utilisée dans React ou envoyée au navigateur.
+
+Ajouter une couche serveur minimale compatible avec le projet React, TypeScript et Vite existant.
+
+Créer :
+
+* un endpoint `POST /api/ai/personalize` ;
+* un endpoint léger `GET /api/ai/status`.
+
+`GET /api/ai/status` doit seulement répondre si la personnalisation est disponible :
+
+```json
+{
+  "available": true
+}
+```
+
+Il ne doit jamais exposer :
+
+* la clé ;
+* sa longueur ;
+* son préfixe ;
+* le nom d’un secret ;
+* une configuration sensible.
+
+Utiliser le SDK JavaScript officiel OpenAI et la Responses API.
+
+Utiliser `OPENAI_API_KEY` depuis les secrets Replit.
+
+Prévoir également `OPENAI_MODEL` comme variable facultative côté serveur.
+
+Si `OPENAI_MODEL` est absent, choisir un modèle OpenAI actuel, économique et compatible avec la Responses API et les Structured Outputs. Documenter ce choix sans l’inscrire partout dans le code.
+
+Configurer la requête avec :
+
+* sortie structurée stricte ;
+* validation Zod ;
+* `store: false` ;
+* aucun outil ;
+* aucune recherche Web ;
+* température ou niveau de variation faible ;
+* limite de sortie raisonnable ;
+* délai maximal côté serveur.
+
+---
+
+# 5. DONNÉES AUTORISÉES
+
+Créer un type dédié, par exemple :
+
+```ts
+type AIPersonalizationContext = {
+  ageGroup: string;
+  sex: "male" | "female" | "prefer_not";
+  goalPosition: "below_range" | "within_range" | "above_range" | "unknown";
+  sleepProfile: {
+    status: "insufficient" | "appropriate" | "unknown";
+    screensAtNight: boolean;
+    irregularSchedule: boolean;
+  };
+  activityProfile: {
+    level: "low" | "regular" | "frequent";
+    recoveryNeeded: boolean;
+  };
+  nutritionProfile: {
+    skipsMeals: boolean;
+    hydrationIssue: boolean;
+  };
+  developmentSummary: string | null;
+  primaryPriority: string;
+  secondaryPriorities: string[];
+  programDays: Array<{
+    dayNumber: number;
+    actionIds: string[];
+    actionTitles: string[];
+  }>;
+};
+```
+
+Adapte ce type aux types réels du projet si nécessaire.
+
+Construire ce contexte à partir des domaines existants.
+
+Ne jamais envoyer à OpenAI :
+
+* le nom de l’utilisateur ;
+* sa date de naissance exacte ;
+* sa date de mesure exacte ;
+* la taille exacte du père ;
+* la taille exacte de la mère ;
+* les réponses brutes détaillées sur la puberté ;
+* l’objet complet de l’onboarding ;
+* le contenu de `sessionStorage` ;
+* des informations techniques du navigateur ;
+* une adresse IP dans le payload ;
+* des identifiants inutiles.
+
+Le backend doit valider le payload reçu avec Zod.
+
+Limiter la taille maximale du corps HTTP.
+
+Ne journaliser ni le profil envoyé ni la réponse personnalisée en production.
+
+---
+
+# 6. FORMAT STRICT DE LA RÉPONSE
+
+Créer un schéma Zod strict correspondant exactement à cette structure :
+
+```ts
+type AIPersonalizedCopy = {
+  reportHeadline: string;
+  profileSummary: string;
+  keyInsight: string;
+  goalMessage: string;
+  weeklyMission: string;
+  dayMessages: Array<{
+    dayNumber: number;
+    message: string;
+  }>;
+  finalEncouragement: string;
+};
+```
+
+Contraintes :
+
+* `reportHeadline` : 140 caractères maximum ;
+* `profileSummary` : 500 caractères maximum ;
+* `keyInsight` : 300 caractères maximum ;
+* `goalMessage` : 300 caractères maximum ;
+* `weeklyMission` : 300 caractères maximum ;
+* `dayMessages` : exactement 7 éléments ;
+* chaque `dayNumber` doit correspondre exactement à un jour de 1 à 7 ;
+* chaque message quotidien : 220 caractères maximum ;
+* `finalEncouragement` : 200 caractères maximum ;
+* aucun champ supplémentaire ;
+* aucune valeur vide ;
+* aucun Markdown ;
+* aucune URL ;
+* aucun contenu HTML.
+
+La réponse doit être validée côté serveur avant d’être transmise au navigateur.
+
+---
+
+# 7. INSTRUCTIONS SYSTÈME POUR LE MODÈLE
+
+Le prompt système doit définir clairement que le modèle est le rédacteur personnalisé de Grandimi.
+
+Ton attendu :
+
+* français naturel ;
+* direct ;
+* motivant ;
+* rassurant sans être infantilisant ;
+* commercialement engageant ;
+* concret ;
+* jamais médical ;
+* jamais culpabilisant ;
+* jamais trompeur ;
+* pas de banalités génériques ;
+* pas de répétitions ;
+* pas de promesse de résultat physique.
+
+Chaque message quotidien doit être cohérent avec les actions déterministes du jour.
+
+Le modèle peut expliquer pourquoi ces actions correspondent au profil, mais ne peut pas les remplacer ou en inventer.
+
+Le message sur l’objectif doit respecter `goalPosition` :
+
+* `below_range` : objectif prudent et atteignable par rapport à la zone affichée ;
+* `within_range` : objectif situé dans la zone statistique ;
+* `above_range` : objectif ambitieux, avec un message motivant mais honnête ;
+* `unknown` : aucun objectif précis n’a été fourni.
+
+Ne jamais envoyer les valeurs numériques de la prédiction au modèle.
+
+---
+
+# 8. FILTRE DE SÉCURITÉ APRÈS GÉNÉRATION
+
+Même après la validation Zod, contrôler les textes produits.
+
+Refuser la génération si elle contient des formulations interdites, notamment :
+
+* « garanti » ;
+* « garantie » ;
+* « tu vas gagner » ;
+* « centimètre » ou « cm » associés à un gain ;
+* un pourcentage de précision ;
+* « hormone » ;
+* « médicament » ;
+* « complément » ;
+* « supplément » ;
+* « traitement » ;
+* « diagnostic » ;
+* une affirmation médicale ;
+* une nouvelle action absente du programme.
+
+En cas de contenu refusé, ne pas afficher une réponse partielle.
+
+Utiliser immédiatement le contenu déterministe de secours.
+
+---
+
+# 9. FALLBACK OBLIGATOIRE
+
+L’application doit continuer à fonctionner parfaitement si :
+
+* `OPENAI_API_KEY` est absente ;
+* OpenAI refuse la requête ;
+* l’API est indisponible ;
+* le délai est dépassé ;
+* la réponse n’est pas du JSON valide ;
+* le schéma est incorrect ;
+* une politique de sécurité est violée ;
+* la connexion est coupée.
+
+Dans tous ces cas :
+
+* ne pas casser `/result-preview` ;
+* ne pas casser `/program` ;
+* conserver les textes déterministes actuels ;
+* afficher éventuellement un bouton discret « Réessayer la personnalisation » ;
+* ne jamais afficher une erreur technique brute à l’utilisateur ;
+* ne jamais prétendre que l’IA a fonctionné si aucun appel réel n’a réussi.
+
+Aucun faux délai et aucune fausse réponse IA.
+
+---
+
+# 10. CACHE ET COÛT
+
+Enregistrer la personnalisation valide dans `sessionStorage`.
+
+La clé du cache doit être liée à l’identifiant ou à l’empreinte complète du programme.
+
+Règles :
+
+* un même programme réutilise sa personnalisation ;
+* une actualisation ne déclenche pas une nouvelle requête ;
+* revenir du programme vers le rapport ne déclenche pas une nouvelle requête ;
+* modifier une réponse invalide l’ancienne personnalisation ;
+* un nouveau programme entraîne une nouvelle personnalisation ;
+* une réponse invalide ne doit jamais être mise en cache ;
+* aucun appel automatique en boucle ;
+* une seule tentative automatique par programme ;
+* une nouvelle tentative est permise uniquement après une erreur et une action explicite de l’utilisateur.
+
+Ajouter une limitation simple côté serveur pour éviter les appels répétés abusifs.
+
+---
+
+# 11. INTÉGRATION DANS L’INTERFACE
+
+## `/result-preview`
+
+Lorsque la personnalisation est disponible, afficher :
+
+* `reportHeadline` près du début du rapport ;
+* `profileSummary` dans la présentation du profil ;
+* `keyInsight` dans la section des priorités ;
+* `goalMessage` près de l’objectif personnel.
+
+Les valeurs numériques restent celles du moteur et ne proviennent jamais de l’IA.
+
+## `/program`
+
+Lorsque la personnalisation est disponible, afficher :
+
+* `weeklyMission` au début du programme ;
+* le message correspondant à chaque journée ;
+* `finalEncouragement` à la fin du programme.
+
+Ajouter un petit libellé compréhensible comme :
+
+« Analyse personnalisée »
+
+Ne pas utiliser des termes techniques comme :
+
+* JSON ;
+* endpoint ;
+* OpenAI ;
+* LLM ;
+* prompt ;
+* modèle.
+
+Pendant la requête, afficher un vrai état de chargement discret, sans bloquer l’accès au contenu déterministe.
+
+L’utilisateur doit toujours pouvoir lire son rapport et son programme pendant la personnalisation.
+
+Conserver l’accessibilité clavier, le responsive mobile et les routes existantes.
+
+---
+
+# 12. TESTS OBLIGATOIRES
+
+Ne fais aucun appel réel à OpenAI dans les tests automatisés.
+
+Mocke le client OpenAI.
+
+Conserver les 53 tests existants et ajouter au minimum les tests suivants :
+
+1. payload valide accepté ;
+2. payload invalide refusé ;
+3. réponse structurée valide acceptée ;
+4. réponse JSON invalide refusée ;
+5. réponse avec champs supplémentaires refusée ;
+6. réponse avec moins ou plus de sept messages refusée ;
+7. jours manquants ou dupliqués refusés ;
+8. texte trop long refusé ;
+9. contenu interdit refusé ;
+10. clé absente → fallback déterministe ;
+11. erreur OpenAI → fallback déterministe ;
+12. timeout → fallback déterministe ;
+13. refus du modèle → fallback déterministe ;
+14. même programme → aucune deuxième requête ;
+15. programme modifié → cache invalidé ;
+16. actualisation → personnalisation réutilisée ;
+17. la clé n’est jamais envoyée au navigateur ;
+18. le payload ne contient pas les dates exactes ;
+19. le payload ne contient pas les tailles parentales ;
+20. le payload ne contient pas les réponses brutes de développement ;
+21. l’IA ne peut modifier ni la prédiction ni le programme ;
+22. les sept messages correspondent aux sept jours ;
+23. `/result-preview` fonctionne sans serveur OpenAI ;
+24. `/program` fonctionne sans serveur OpenAI ;
+25. navigation clavier ;
+26. affichage mobile à 390 px ;
+27. aucune erreur console applicative.
+
+Exécuter :
+
+* lint ;
+* typecheck ;
+* tous les tests ;
+* build de production ;
+* parcours navigateur complet ;
+* contrôle du réseau ;
+* contrôle de la console.
+
+Si une clé OpenAI réelle est disponible dans Replit Secrets, effectuer un seul test réel avec un profil de démonstration non personnel.
+
+Si aucune clé n’est disponible, l’indiquer honnêtement dans le rapport final. Ne jamais simuler un succès réel.
+
+---
+
+# 13. DOCUMENTATION
+
+Créer une documentation courte expliquant :
+
+* l’architecture client/serveur ;
+* les variables Replit nécessaires ;
+* la protection de la clé ;
+* les données envoyées ;
+* les données volontairement exclues ;
+* le schéma de réponse ;
+* le cache ;
+* le fallback ;
+* les limites de coût ;
+* les tests réalisés.
+
+Ne jamais écrire la valeur d’un secret dans la documentation.
+
+---
+
+# 14. AUDIT FINAL
+
+Après l’implémentation, réalise une revue de code senior.
+
+Vérifie particulièrement :
+
+* aucune modification du moteur Khamis–Roche ;
+* aucun chiffre produit par l’IA ;
+* aucune action inventée ;
+* aucune clé dans le frontend ou le dépôt ;
+* aucun log de données personnelles ;
+* aucune nouvelle requête après actualisation ;
+* fallback fonctionnel ;
+* absence de régression sur les 53 tests ;
+* accessibilité ;
+* responsive mobile ;
+* erreurs réseau ;
+* erreurs console.
+
+Corrige les problèmes trouvés, puis fournis :
+
+* les fichiers créés ;
+* les fichiers modifiés ;
+* l’architecture mise en place ;
+* le modèle réellement configuré ;
+* les données réellement envoyées ;
+* les données exclues ;
+* le nombre total de tests ;
+* les scénarios navigateur vérifiés ;
+* si un appel OpenAI réel a été testé ou non ;
+* les éventuels problèmes restants.
+
+Termine exactement par :
+
+**ÉTAPE 4B TERMINÉE — EN ATTENTE DE VALIDATION**
+
+Arrête-toi après cette étape.

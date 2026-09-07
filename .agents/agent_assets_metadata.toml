@@ -1,0 +1,16 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "l_fR8OvSABaT5aa-8hTJE"
+uri = "file://backups/grandimi-step-4b-before-4c-2026-09-05.tar.gz"
+type = "unspecified"
+title = "Sauvegarde Grandimi — Étape 4B et état partiel 4C"
+description = "Archive du code Grandimi actuel, incluant l’Étape 4B et les fichiers partiels présents avant la reprise de l’Étape 4C. Les dépendances générées, builds, logs et secrets sont exclus."
+logical_id = "1003d45f-9d8a-4b26-a1c0-09a9fa2e1a29"
+content_hash = "sha256:efd2e4ae768c5327adbe7477d6dd8fecf84d937080f84ee654f83415ce973523"
+size = 281968
+mtime_ms = 1788613901583
+storage_uri = "gcs://replit-rams-assets-archer/rams/assets/repl:5df764bf-77c8-4954-b52d-64230cc97a3c/1003d45f-9d8a-4b26-a1c0-09a9fa2e1a29/d8e5df51-689e-47b4-90b0-345186d3994b"
+storage_version_token = "1788613907607416"
+content_type = "application/octet-stream"

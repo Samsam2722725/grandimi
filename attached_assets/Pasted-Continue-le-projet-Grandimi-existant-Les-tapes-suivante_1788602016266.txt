@@ -1,0 +1,486 @@
+Continue le projet Grandimi existant.
+
+Les étapes suivantes sont déjà validées :
+
+* moteur Khamis–Roche ;
+* onboarding garçon et fille ;
+* récapitulatif ;
+* connexion réelle entre l’onboarding et le moteur ;
+* résultat provisoire.
+
+## Mission unique : étape 3
+
+Transformer `/result-preview` en un véritable **rapport personnalisé Grandimi** suffisamment clair et précieux pour devenir plus tard la partie payante du produit.
+
+Ne crée pas encore :
+
+* programme de 7 jours ;
+* tâches quotidiennes ;
+* coach IA ;
+* communauté ;
+* Supabase ;
+* compte utilisateur ;
+* Stripe ;
+* paywall ;
+* abonnement.
+
+Ne modifie pas la table Khamis–Roche, la formule ou les coefficients.
+
+## Objectif utilisateur
+
+En arrivant sur le résultat, l’utilisateur doit comprendre immédiatement :
+
+1. quelle est sa taille adulte estimée ;
+2. quel est le haut de sa zone estimée ;
+3. combien de croissance semble encore possible ;
+4. où se situe sa taille souhaitée ;
+5. quels aspects de sa routine méritent son attention ;
+6. ce qui sera traité dans son futur programme personnalisé.
+
+Le résultat doit être commercialement attractif sans promettre une taille garantie.
+
+## Route
+
+Conserver :
+
+`/result-preview`
+
+Ne pas créer une nouvelle architecture de navigation inutile.
+
+Si aucune donnée d’onboarding valide n’est disponible dans `sessionStorage`, rediriger vers `/onboarding`.
+
+Ne jamais afficher un résultat générique ou fictif.
+
+## Hiérarchie du rapport
+
+### Section 1 — Résultat principal
+
+Titre :
+
+**Ton potentiel de croissance**
+
+Afficher en très grand :
+
+**Ta taille adulte estimée**
+
+Puis la valeur réelle retournée par le moteur, par exemple :
+
+**178,9 cm**
+
+Afficher ensuite :
+
+**Zone estimée : 173,6 à 184,2 cm**
+
+La zone provient exclusivement des bornes déjà retournées par le moteur.
+
+Sous la valeur, afficher une seule phrase discrète :
+
+**Estimation statistique, pas une garantie individuelle.**
+
+Ne pas afficher immédiatement toutes les limites scientifiques.
+
+## Section 2 — Potentiel haut
+
+Créer une carte visuellement importante :
+
+**Ton potentiel haut estimé**
+
+Afficher la borne haute existante, par exemple :
+
+**184,2 cm**
+
+Ajouter :
+
+« Il s’agit du haut de la zone estimée, pas d’une taille garantie. »
+
+Ne jamais utiliser :
+
+* taille maximale garantie ;
+* taille certaine ;
+* potentiel génétique exact ;
+* 98 % de précision.
+
+## Section 3 — Croissance restante
+
+Calculer :
+
+`croissanceRestanteCentrale = max(0, tailleAdulteEstimee - tailleActuelle)`
+
+`croissanceRestanteHaute = max(0, borneHaute - tailleActuelle)`
+
+Afficher :
+
+**Croissance restante estimée**
+
+Exemple :
+
+**Environ 8,9 cm selon l’estimation centrale**
+
+Puis :
+
+**Jusqu’à 14,2 cm vers le haut de la zone estimée**
+
+Ces valeurs doivent être calculées à partir du véritable résultat.
+
+Ne jamais dire que le programme fera gagner cette quantité de centimètres.
+
+Si la valeur calculée est nulle, afficher :
+
+« L’estimation actuelle suggère que l’essentiel de ta croissance staturale pourrait déjà être atteint. »
+
+Ne jamais afficher une valeur négative.
+
+## Section 4 — Objectif personnel
+
+Si l’utilisateur a indiqué une taille souhaitée, afficher :
+
+**Ton objectif**
+
+Puis sa taille rêvée.
+
+Créer trois cas :
+
+### Objectif dans la zone
+
+« Ton objectif se situe dans ta zone actuellement estimée. »
+
+### Objectif supérieur à la zone
+
+« Ton objectif dépasse la zone actuellement estimée. Grandimi peut t’aider à optimiser les facteurs contrôlables, sans garantir une taille précise. »
+
+### Objectif inférieur à la zone
+
+« Ton estimation centrale est déjà supérieure à l’objectif indiqué. »
+
+Ne jamais modifier la prédiction pour la rapprocher artificiellement de la taille rêvée.
+
+## Section 5 — Données utilisées
+
+Afficher une carte :
+
+**Ton estimation repose sur 6 facteurs**
+
+Lister simplement :
+
+* âge ;
+* sexe utilisé par le modèle ;
+* taille actuelle ;
+* poids actuel ;
+* taille du père ;
+* taille de la mère.
+
+Si une ancienne mesure a été renseignée, ajouter séparément :
+
+**Historique de croissance disponible**
+
+Afficher :
+
+* ancienne taille ;
+* date ;
+* évolution totale ;
+* vitesse annuelle seulement si les mesures sont espacées d’au moins 90 jours.
+
+Préciser que cette vitesse n’a pas modifié le résultat Khamis–Roche actuel.
+
+## Section 6 — Priorités personnalisées
+
+Créer une fonction déterministe indépendante de React, par exemple :
+
+`buildProfileInsights(onboardingData)`
+
+Elle doit produire au maximum trois priorités personnalisées.
+
+Ces priorités ne changent jamais la taille calculée.
+
+### Priorité sommeil
+
+Sélectionner si l’utilisateur indique :
+
+* moins de 8 heures ;
+* horaires irréguliers ;
+* beaucoup d’écrans le soir.
+
+Titre possible :
+
+**Régulariser ton sommeil**
+
+Texte :
+
+« Tes réponses montrent que le sommeil pourrait être l’un des premiers éléments à structurer dans ton programme. »
+
+### Priorité activité
+
+Sélectionner si l’utilisateur indique :
+
+* aucune séance ;
+* faible activité ;
+* souhait de bouger davantage.
+
+Titre :
+
+**Construire une activité régulière**
+
+Texte :
+
+« Ton futur programme commencera par des actions simples et progressives adaptées à ton niveau actuel. »
+
+### Priorité alimentation et hydratation
+
+Sélectionner si l’utilisateur indique :
+
+* repas sautés ;
+* manque d’eau ;
+* habitudes alimentaires irrégulières.
+
+Titre :
+
+**Stabiliser ton alimentation**
+
+Texte :
+
+« Ton programme proposera des repères simples pour améliorer la régularité de tes repas et de ton hydratation. »
+
+### Profil sans difficulté déclarée
+
+Si aucune difficulté n’est détectée, afficher :
+
+**Tu disposes déjà d’une base régulière**
+
+Texte :
+
+« Ton programme cherchera surtout à maintenir cette régularité et à suivre ton évolution. »
+
+Ne donne pas encore les actions détaillées du programme.
+
+Ne promets jamais que l’amélioration d’une habitude ajoutera un nombre précis de centimètres.
+
+## Section 7 — Repères de développement déclarés
+
+Si l’utilisateur a répondu aux questions facultatives, créer une section :
+
+**Tes repères de développement**
+
+Afficher uniquement un résumé neutre des réponses fournies :
+
+* évolution de la voix ;
+* pilosité faciale ;
+* pilosité sous les bras ;
+* premières règles si concerné ;
+* acné.
+
+Ne calcule pas de stade médical de puberté.
+
+Ne déduis pas une taille supplémentaire.
+
+Ne dis pas que la croissance est terminée uniquement à partir de ces réponses.
+
+Texte discret :
+
+« Ces repères donnent du contexte à ton suivi mais ne modifient pas actuellement le calcul statistique. »
+
+Si aucune réponse n’a été fournie, masquer entièrement cette section.
+
+## Section 8 — Ce que tu peux influencer
+
+Créer deux colonnes ou deux cartes.
+
+### Principalement non contrôlable
+
+* génétique ;
+* taille des parents ;
+* rythme naturel de maturation.
+
+### Habitudes que tu peux structurer
+
+* sommeil ;
+* activité physique ;
+* alimentation régulière ;
+* suivi des mesures ;
+* posture et mobilité.
+
+Texte :
+
+« Ces habitudes ne garantissent pas une taille précise. Elles servent à soutenir une routine saine et à éviter de négliger les facteurs contrôlables. »
+
+## Section 9 — Prochaine valeur du produit
+
+En bas du rapport, afficher une carte attractive :
+
+**Ton programme personnalisé arrive ensuite**
+
+Contenu :
+
+* trois actions par jour ;
+* sommeil ;
+* activité et mobilité ;
+* alimentation ;
+* progression sur 7 jours ;
+* adaptation à tes habitudes.
+
+Bouton visible mais non connecté à un paiement :
+
+**Créer mon programme de 7 jours**
+
+Pour cette étape, le bouton ouvre seulement une petite fenêtre ou une section indiquant :
+
+« Le programme personnalisé sera construit à l’étape suivante. »
+
+Il ne doit pas être cassé et ne doit pas lancer Stripe.
+
+## Méthode détaillée
+
+Ajouter un accordéon fermé par défaut :
+
+**Comment Grandimi calcule cette estimation ?**
+
+Déplacer dans cet accordéon :
+
+* méthode Khamis–Roche ;
+* données utilisées ;
+* absence d’âge osseux ;
+* explication de la zone estimée ;
+* population de l’étude originale ;
+* limites déjà produites par le moteur.
+
+Le rapport doit rester confiant et lisible lorsque l’accordéon est fermé.
+
+## Navigation
+
+Ajouter :
+
+* bouton **Modifier mes réponses** → retour au récapitulatif ;
+* bouton discret **Recommencer** avec confirmation ;
+* bouton **Créer mon programme de 7 jours** ;
+* aucun lien public vers `/prediction-lab`.
+
+Lorsque l’utilisateur retourne modifier une réponse puis recalcule, le rapport doit être immédiatement actualisé.
+
+## Architecture
+
+Créer un domaine séparé pour le rapport, par exemple :
+
+* `src/domain/report/types.ts`
+* `src/domain/report/buildGrowthReport.ts`
+* `src/domain/report/buildProfileInsights.ts`
+* `src/domain/report/index.ts`
+* tests associés.
+
+Le composant React ne doit pas contenir toute la logique métier.
+
+Créer un objet `GrowthReport` contenant au minimum :
+
+* résultat central ;
+* borne basse ;
+* borne haute ;
+* croissance restante centrale ;
+* croissance restante haute ;
+* comparaison avec l’objectif ;
+* historique disponible ;
+* vitesse observée éventuelle ;
+* priorités personnalisées ;
+* repères facultatifs ;
+* données utilisées ;
+* limites.
+
+Aucun `any` évitable.
+
+## Règle de séparation
+
+Les réponses sur :
+
+* sommeil ;
+* sport ;
+* alimentation ;
+* taille souhaitée ;
+* voix ;
+* pilosité ;
+* règles ;
+* acné
+
+peuvent modifier les textes et les priorités du rapport.
+
+Elles ne doivent jamais modifier :
+
+* la taille adulte centrale ;
+* la borne basse ;
+* la borne haute ;
+* les coefficients Khamis–Roche.
+
+## Tests obligatoires
+
+Tester :
+
+1. rapport garçon ;
+2. rapport fille ;
+3. résultat de référence à 178,9 cm ;
+4. calcul de croissance restante centrale ;
+5. calcul de croissance restante haute ;
+6. impossibilité d’obtenir une croissance négative ;
+7. objectif dans la zone ;
+8. objectif supérieur à la zone ;
+9. objectif inférieur à la zone ;
+10. ancienne mesure valide ;
+11. mesure espacée de moins de 90 jours ;
+12. priorité sommeil ;
+13. priorité activité ;
+14. priorité alimentation ;
+15. profil sans difficulté ;
+16. maximum de trois priorités ;
+17. réponses facultatives masquées si absentes ;
+18. redirection si aucune session valide ;
+19. modification des réponses ;
+20. suppression avec Recommencer ;
+21. changement des habitudes modifiant les priorités mais pas la taille ;
+22. changement de la taille rêvée modifiant la comparaison mais pas la taille ;
+23. changement des repères de développement ne modifiant jamais la taille ;
+24. affichage mobile à 390 px ;
+25. navigation clavier ;
+26. accordéon accessible.
+
+## Audit final
+
+Effectuer :
+
+* lint ;
+* typecheck ;
+* tests ;
+* build ;
+* parcours navigateur complet ;
+* contrôle de la console ;
+* contrôle du réseau ;
+* vérification mobile à 390 px ;
+* vérification du résultat garçon ;
+* vérification du résultat fille ;
+* modification d’une réponse puis recalcul ;
+* vérification des trois types de priorités.
+
+Si un problème apparaît :
+
+1. formuler plusieurs hypothèses ;
+2. tester les hypothèses ;
+3. identifier la cause ;
+4. corriger uniquement la cause ;
+5. relancer tous les contrôles.
+
+## Rapport final
+
+Indiquer :
+
+* fichiers créés et modifiés ;
+* sections du rapport terminées ;
+* résultats numériques testés ;
+* règles de personnalisation ;
+* tests exécutés ;
+* problèmes découverts ;
+* corrections réalisées ;
+* éléments volontairement non implémentés.
+
+Terminer par :
+
+**ÉTAPE 3 VALIDÉE**
+
+ou
+
+**ÉTAPE 3 NON VALIDÉE**
+
+Arrête-toi après cette étape. Ne commence pas le programme quotidien, Stripe, Supabase ou les comptes.

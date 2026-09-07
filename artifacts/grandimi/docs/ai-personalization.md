@@ -1,0 +1,13 @@
+# Personnalisation des textes
+
+Le frontend construit, après les calculs déterministes, un `AIPersonalizationContext` minimal dans `src/domain/ai`. Il appelle exclusivement `POST /api/ai/personalize` via le client généré `@workspace/api-client-react`; le navigateur ne connaît jamais la clé. Le serveur peut être configuré avec `OPENAI_API_KEY` directement ou avec l'environnement de l'intégration Replit AI gérée. `OPENAI_MODEL` est facultatif; le défaut documenté est `gpt-5.4-mini`.
+
+Le contexte autorisé contient uniquement : tranche d'âge, sexe, position qualitative de l'objectif, indicateurs de routine (sommeil, écrans, régularité, activité, récupération, repas, hydratation), résumé de développement générique, priorités et les identifiants locaux des actions des sept jours. Les titres ne viennent jamais du navigateur : le serveur les résout dans la table immuable partagée après validation. Sont exclus : dates, tailles et poids exacts, tailles parentales, prédictions, données utilisées par le rapport, réponses détaillées de développement, onboarding complet, stockage de session, métadonnées navigateur, IP et identifiants non nécessaires.
+
+`@workspace/grandimi-ai-contract` est le contrat Zod d'exécution autoritaire, partagé par le frontend et le serveur : objet strict, texte brut non vide et borné, sept messages uniques pour les jours 1–7, trois actions locales (sommeil, activité, nutrition) par jour et aucun champ additionnel. Les types Zod générés depuis OpenAPI restent des aides de transport : Orval ne préserve pas tous les raffinements inter-champs ni la stricte fermeture des objets.
+
+Le serveur revalide aussi l'ancrage : chaque message quotidien doit citer textuellement un titre d'action du même jour. Il refuse les recommandations ou impératifs d'action dans tous les champs, ainsi que les promesses de croissance et tout contenu médical. Toute réponse de secours, erreur ou réponse invalide est traitée comme absence de copie; les textes déterministes restent affichés.
+
+Une copie valide est conservée dans `sessionStorage` par identifiant complet et version de programme. Un marqueur limite à une tentative automatique par programme, tandis qu'une promesse partagée évite les doubles requêtes pendant la navigation. Les échecs ne sont jamais mis en cache et ne sont relancés que par le bouton utilisateur. Ces mécanismes réduisent coût et débit; le serveur doit également limiter les requêtes. Ne journaliser ni contexte ni réponse en production.
+
+Les tests doivent moquer `personalizeAi` (aucun appel OpenAI réel) et couvrir confidentialité du payload, schémas stricts, cache, tentative unique, promesse partagée, relance explicite, correspondance des sept jours et invariance du rapport/programme déterministes.

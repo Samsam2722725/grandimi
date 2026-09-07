@@ -1,0 +1,401 @@
+Continue dans le projet Grandimi existant. Ne crée pas un nouveau projet et ne recommence pas l’application.
+
+Nous réalisons uniquement l’ÉTAPE 4A : construire le véritable programme personnalisé Grandimi de 7 jours.
+
+CONTEXTE ACTUEL
+
+Les étapes suivantes sont déjà validées :
+
+* moteur Khamis–Roche ;
+* onboarding complet ;
+* récapitulatif ;
+* rapport personnalisé sur `/result-preview` ;
+* 39 tests réussis ;
+* validation des sessions ;
+* affichage mobile ;
+* navigation clavier.
+
+Commence par inspecter l’architecture, les types et les tests existants. Préserve toutes les fonctionnalités déjà validées.
+
+OBJECTIF PRODUIT
+
+Quand l’utilisateur appuie sur « Créer mon programme de 7 jours » depuis `/result-preview`, il doit accéder à un vrai programme personnalisé construit à partir de ses réponses.
+
+Le programme doit aider l’utilisateur à améliorer les habitudes qui soutiennent une croissance normale :
+
+* sommeil ;
+* activité physique et récupération ;
+* alimentation et hydratation.
+
+Chaque journée doit contenir exactement trois actions :
+
+1. une action sommeil ;
+2. une action activité/récupération ;
+3. une action alimentation/hydratation.
+
+À cette étape :
+
+* aucun LLM ;
+* aucun appel API ;
+* aucun paiement ;
+* aucun compte ;
+* aucune base de données ;
+* aucun bouton « Fait » ou « Remplacer » fonctionnel ;
+* aucun coach conversationnel.
+
+L’objectif est d’abord de construire une bibliothèque fiable et un générateur déterministe. Le LLM sera connecté à l’étape suivante pour reformuler et adapter ces actions sans pouvoir en inventer de nouvelles.
+
+SOURCES AUTORISÉES
+
+Construire la bibliothèque à partir de ces sources :
+
+Sommeil :
+
+https://pmc.ncbi.nlm.nih.gov/articles/PMC5078711/
+
+Activité physique :
+
+https://www.who.int/initiatives/behealthy/physical-activity
+
+Alimentation :
+
+https://www.who.int/news-room/fact-sheets/detail/healthy-diet
+
+Chaque action doit référencer au moins un identifiant de source présent dans un catalogue local.
+
+Ne jamais récupérer ces sources au moment de l’utilisation. Conserver les références et les contenus nécessaires localement.
+
+ARCHITECTURE
+
+Créer un domaine indépendant de React, par exemple :
+
+* `src/domain/program/types.ts`
+* `src/domain/program/actionCatalog.ts`
+* `src/domain/program/buildSevenDayProgram.ts`
+* `src/domain/program/selectActions.ts`
+* `src/domain/program/validateProgram.ts`
+* `src/domain/program/sources.ts`
+* `src/domain/program/index.ts`
+* `src/domain/program/__tests__/program.test.ts`
+
+Le générateur doit être une fonction pure et déterministe :
+
+`buildSevenDayProgram(onboardingData, growthReport)`
+
+Les mêmes réponses doivent toujours produire exactement le même programme.
+
+TYPES À PRÉVOIR
+
+Créer notamment :
+
+`ProgramCategory`
+
+* `sleep`
+* `activity`
+* `nutrition`
+
+`ProgramAction`
+
+* `id`
+* `category`
+* `title`
+* `instruction`
+* `reason`
+* `durationMinutes`
+* `timeOfDay`
+* `difficulty`
+* `completionCriteria`
+* `sourceIds`
+* `alternativeActionIds`
+* `personalizationReasons`
+
+`ProgramDay`
+
+* `dayNumber`
+* `title`
+* `focus`
+* `actions`
+
+`SevenDayProgram`
+
+* `id`
+* `createdAt`
+* `profileSummary`
+* `primaryPriority`
+* `secondaryPriorities`
+* `days`
+* `sourceIds`
+* `version`
+
+BIBLIOTHÈQUE D’ACTIONS
+
+Créer suffisamment d’actions pour que les programmes soient réellement différents selon les réponses.
+
+Chaque catégorie doit contenir au minimum :
+
+* 10 actions principales ;
+* 2 ou 3 alternatives compatibles pour chaque type d’action ;
+* plusieurs niveaux de difficulté ;
+* des actions adaptées aux utilisateurs déjà réguliers ;
+* des actions simples pour les utilisateurs peu actifs.
+
+Les actions doivent être concrètes et vérifiables.
+
+Mauvais exemple :
+
+« Dors mieux. »
+
+Bon exemple :
+
+« Pose ton téléphone hors du lit 30 minutes avant ton heure habituelle de coucher. »
+
+Mauvais exemple :
+
+« Mange sainement. »
+
+Bon exemple :
+
+« Ajoute aujourd’hui une source de protéines et un fruit ou un légume à l’un de tes repas. »
+
+Ne pas prescrire :
+
+* médicaments ;
+* hormones ;
+* compléments alimentaires ;
+* vitamines ou minéraux à dosage médical ;
+* régimes amaigrissants ;
+* calories personnalisées ;
+* jeûne ;
+* exercices prétendant allonger les os ;
+* entraînements dangereux ;
+* traitement d’une maladie.
+
+RÈGLES SOMMEIL
+
+Utiliser l’âge pour sélectionner le repère approprié :
+
+* 3–5 ans : 10 à 13 heures par 24 heures ;
+* 6–12 ans : 9 à 12 heures ;
+* 13–18 ans : 8 à 10 heures.
+
+Adapter les actions selon :
+
+* durée déclarée ;
+* régularité des horaires ;
+* écrans avant le coucher ;
+* difficulté éventuelle déjà déclarée.
+
+Si le sommeil est insuffisant, il devient généralement la priorité principale.
+
+Si le sommeil est déjà adapté, proposer des actions de maintien et de régularité plutôt que de déclarer un problème inexistant.
+
+Ne jamais recommander de rester au lit excessivement.
+
+RÈGLES ACTIVITÉ ET RÉCUPÉRATION
+
+Utiliser comme repère :
+
+* environ 60 minutes d’activité physique modérée à soutenue par jour pour les 5–17 ans ;
+* activités renforçant muscles et os au moins trois jours par semaine.
+
+Adapter selon :
+
+* nombre d’entraînements déclarés ;
+* niveau d’activité ;
+* éventuelle fatigue ;
+* habitudes actuelles.
+
+Si l’utilisateur ne fait presque aucune activité :
+
+* commencer progressivement ;
+* proposer marche dynamique, mouvements simples ou activité choisie ;
+* éviter un programme trop intense.
+
+Si l’utilisateur s’entraîne déjà fréquemment :
+
+* ne pas ajouter automatiquement davantage d’entraînement ;
+* privilégier récupération, mobilité légère, régularité et journée moins intense lorsque nécessaire.
+
+La posture peut être présentée comme améliorant l’alignement ou la manière de se tenir, jamais comme un moyen d’allonger les os.
+
+RÈGLES ALIMENTATION ET HYDRATATION
+
+Adapter les actions selon :
+
+* repas sautés ;
+* hydratation insuffisante ;
+* diversité alimentaire ;
+* réponses disponibles dans l’onboarding.
+
+Les actions doivent favoriser :
+
+* régularité des repas ;
+* diversité ;
+* sources alimentaires de protéines ;
+* fruits et légumes ;
+* eau ;
+* alimentation suffisante et équilibrée.
+
+Ne pas inventer un besoin individuel précis en litres, calories, protéines, calcium ou vitamines si les données nécessaires ne sont pas disponibles.
+
+Si aucune difficulté n’est déclarée, proposer des actions de maintien plutôt que créer artificiellement un problème.
+
+PERSONNALISATION
+
+Le programme doit utiliser les priorités déjà identifiées dans le rapport.
+
+Exemples :
+
+* sommeil court + écrans → actions progressives sur le coucher et les écrans ;
+* aucune activité → démarrage progressif ;
+* entraînement fréquent → récupération et régularité ;
+* repas sautés → priorité à un repas régulier ;
+* hydratation insuffisante → actions liées à l’eau ;
+* profil déjà régulier → programme de consolidation.
+
+La priorité principale doit être visible dans le résumé du programme et revenir de manière cohérente pendant la semaine.
+
+Les sept journées doivent suivre une progression :
+
+* Jour 1 : démarrage et action la plus simple ;
+* Jour 2 : environnement et préparation ;
+* Jour 3 : première consolidation ;
+* Jour 4 : régularité ;
+* Jour 5 : approfondissement ;
+* Jour 6 : défi réaliste ;
+* Jour 7 : bilan et préparation de la suite.
+
+Ne pas simplement copier les trois mêmes textes pendant sept jours.
+
+PAGE PROGRAMME
+
+Créer une route `/program`.
+
+Elle doit afficher :
+
+* « Ton programme Grandimi de 7 jours » ;
+* un résumé court du profil ;
+* la priorité principale ;
+* les sept journées ;
+* trois actions par journée ;
+* la catégorie de chaque action ;
+* la durée estimée ;
+* le moment conseillé ;
+* la consigne ;
+* la raison personnalisée ;
+* un critère clair permettant de savoir si l’action a été réalisée ;
+* les sources dans une section repliable ;
+* un bouton pour retourner au rapport.
+
+Le bouton existant « Créer mon programme de 7 jours » doit maintenant :
+
+1. valider la session ;
+2. construire le programme ;
+3. enregistrer le programme dans `sessionStorage` ;
+4. naviguer vers `/program`.
+
+Ne pas utiliser de faux temps de chargement.
+
+Si les données sont absentes, invalides ou corrompues, rediriger proprement vers `/onboarding`.
+
+Si les réponses changent, recalculer le programme au lieu de conserver un ancien programme incompatible.
+
+L’interface doit rester cohérente avec le style actuel. Ne réalise pas encore une refonte visuelle générale.
+
+CONTENU COMMERCIAL
+
+Employer un ton positif, motivant, direct et personnel.
+
+Le produit doit présenter les actions comme une manière de :
+
+* construire une routine favorable ;
+* améliorer la régularité ;
+* protéger son potentiel ;
+* suivre ses habitudes ;
+* préparer la prochaine mesure.
+
+Interdire dans la bibliothèque les formulations suivantes :
+
+* « gagne X cm grâce à cette action » ;
+* « augmente ta taille de X cm » ;
+* « résultat garanti » ;
+* « cet exercice te fera grandir » ;
+* toute promesse médicale ou chiffrée attribuée à une action.
+
+MESURE DE LA TAILLE
+
+Ne pas demander une mesure quotidienne.
+
+Le Jour 1 peut expliquer brièvement comment réaliser une mesure propre et reproductible, mais la prochaine vraie comparaison doit être prévue beaucoup plus tard.
+
+Ne pas interpréter quelques jours d’utilisation comme une modification de la taille.
+
+TESTS OBLIGATOIRES
+
+Conserver les 39 tests existants et ajouter des tests vérifiant que :
+
+* le programme contient exactement 7 jours ;
+* chaque jour contient exactement 3 actions ;
+* chaque jour possède une action de chaque catégorie ;
+* les mêmes entrées donnent le même programme ;
+* un profil avec sommeil insuffisant reçoit une priorité sommeil ;
+* un profil peu actif reçoit un démarrage progressif ;
+* un profil très actif ne reçoit pas une surcharge automatique ;
+* un profil sautant des repas reçoit une priorité adaptée ;
+* un profil régulier reçoit un programme de maintien ;
+* les sept jours ne répètent pas exactement les mêmes actions ;
+* toutes les actions possèdent des sources valides ;
+* toutes les alternatives référencées existent ;
+* aucune action interdite n’apparaît ;
+* aucune donnée du programme ne modifie le résultat Khamis–Roche ;
+* une session invalide est refusée ;
+* une modification des réponses reconstruit le programme ;
+* aucun appel réseau runtime n’est effectué.
+
+VÉRIFICATION RÉELLE
+
+Exécuter :
+
+* lint ;
+* typecheck ;
+* tous les tests ;
+* build de production ;
+* parcours complet onboarding → rapport → programme ;
+* plusieurs profils réellement différents ;
+* rafraîchissement de `/program` ;
+* retour au rapport ;
+* session corrompue ;
+* navigation clavier ;
+* affichage à 390 px ;
+* contrôle de la console ;
+* contrôle du réseau.
+
+AUDIT FINAL
+
+Effectuer une revue de code senior portant sur :
+
+* déterminisme ;
+* séparation domaine/interface ;
+* sécurité des contenus ;
+* absence de promesses interdites ;
+* personnalisation réelle ;
+* absence de duplication excessive ;
+* accessibilité ;
+* sessions corrompues ;
+* maintien de toutes les fonctionnalités précédentes.
+
+À la fin, fournir :
+
+* la liste des fichiers créés ou modifiés ;
+* les règles de personnalisation ;
+* plusieurs exemples de profils et de programmes obtenus ;
+* les sources utilisées ;
+* les tests exécutés ;
+* les éventuels problèmes découverts et corrigés ;
+* ce qui reste volontairement non implémenté.
+
+Arrête-toi ensuite. Ne commence pas l’intégration OpenAI, le suivi quotidien ou le paiement.
+
+Termine obligatoirement par :
+
+ÉTAPE 4A TERMINÉE — EN ATTENTE DE VALIDATION

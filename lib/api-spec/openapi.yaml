@@ -1,0 +1,209 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: ai
+    description: Privacy-safe AI personalization operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /ai/status:
+    get:
+      operationId: getAiStatus
+      tags: [ai]
+      summary: AI personalization availability
+      responses:
+        "200":
+          description: Availability status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AIAvailability"
+  /ai/personalize:
+    post:
+      operationId: personalizeAi
+      tags: [ai]
+      summary: Generate privacy-safe personalized copy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AIPersonalizationContext"
+      responses:
+        "200":
+          description: Personalization outcome
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AIPersonalizationOutcome"
+        "400":
+          description: Invalid privacy-safe context
+        "429":
+          description: Too many requests
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+      additionalProperties: false
+    AIAvailability:
+      type: object
+      additionalProperties: false
+      required: [available]
+      properties:
+        available:
+          type: boolean
+    AISleepProfile:
+      type: object
+      additionalProperties: false
+      required: [status, screensAtNight, irregularSchedule]
+      properties:
+        status: { type: string, enum: [insufficient, appropriate, unknown] }
+        screensAtNight: { type: boolean }
+        irregularSchedule: { type: boolean }
+    AIActivityProfile:
+      type: object
+      additionalProperties: false
+      required: [level, recoveryNeeded]
+      properties:
+        level: { type: string, enum: [low, regular, frequent] }
+        recoveryNeeded: { type: boolean }
+    AINutritionProfile:
+      type: object
+      additionalProperties: false
+      required: [skipsMeals, hydrationIssue]
+      properties:
+        skipsMeals: { type: boolean }
+        hydrationIssue: { type: boolean }
+    AIProgramDay:
+      type: object
+      additionalProperties: false
+      required: [dayNumber, actionIds]
+      properties:
+        dayNumber: { type: number, minimum: 1, maximum: 7, multipleOf: 1 }
+        actionIds:
+          type: array
+          minItems: 3
+          maxItems: 3
+          items:
+            type: string
+            pattern: "^(sleep|activity|nutrition)-(?:[1-9]|10)$"
+    AIPersonalizationContext:
+      type: object
+      additionalProperties: false
+      required:
+        [
+          ageGroup,
+          sex,
+          goalPosition,
+          sleepProfile,
+          activityProfile,
+          nutritionProfile,
+          developmentSummary,
+          primaryPriority,
+          secondaryPriorities,
+          programDays,
+        ]
+      properties:
+        ageGroup:
+          type: string
+          enum:
+            [
+              "3-5 ans",
+              "6-12 ans",
+              "13-17 ans",
+              "18 ans ou plus",
+              "âge non précisé",
+            ]
+        sex: { type: string, enum: [male, female, prefer_not] }
+        goalPosition:
+          {
+            type: string,
+            enum: [below_range, within_range, above_range, unknown],
+          }
+        sleepProfile: { $ref: "#/components/schemas/AISleepProfile" }
+        activityProfile: { $ref: "#/components/schemas/AIActivityProfile" }
+        nutritionProfile: { $ref: "#/components/schemas/AINutritionProfile" }
+        developmentSummary: { type: [string, "null"], maxLength: 300 }
+        primaryPriority: { type: string, minLength: 1, maxLength: 200 }
+        secondaryPriorities:
+          type: array
+          maxItems: 5
+          items: { type: string, minLength: 1, maxLength: 200 }
+        programDays:
+          type: array
+          minItems: 7
+          maxItems: 7
+          items: { $ref: "#/components/schemas/AIProgramDay" }
+    AIDayMessage:
+      type: object
+      additionalProperties: false
+      required: [dayNumber, message]
+      properties:
+        dayNumber: { type: number, minimum: 1, maximum: 7, multipleOf: 1 }
+        message: { type: string, minLength: 1, maxLength: 220 }
+    AIPersonalizedCopy:
+      type: object
+      additionalProperties: false
+      required:
+        [
+          reportHeadline,
+          profileSummary,
+          keyInsight,
+          goalMessage,
+          weeklyMission,
+          dayMessages,
+          finalEncouragement,
+        ]
+      properties:
+        reportHeadline: { type: string, minLength: 1, maxLength: 140 }
+        profileSummary: { type: string, minLength: 1, maxLength: 500 }
+        keyInsight: { type: string, minLength: 1, maxLength: 300 }
+        goalMessage: { type: string, minLength: 1, maxLength: 300 }
+        weeklyMission: { type: string, minLength: 1, maxLength: 300 }
+        dayMessages:
+          type: array
+          minItems: 7
+          maxItems: 7
+          items: { $ref: "#/components/schemas/AIDayMessage" }
+        finalEncouragement: { type: string, minLength: 1, maxLength: 200 }
+    AIPersonalizationOutcome:
+      oneOf:
+        - type: object
+          additionalProperties: false
+          required: [status, copy]
+          properties:
+            status: { const: personalized }
+            copy: { $ref: "#/components/schemas/AIPersonalizedCopy" }
+        - type: object
+          additionalProperties: false
+          required: [status, copy]
+          properties:
+            status: { const: fallback }
+            copy: { type: "null" }
+      discriminator:
+        propertyName: status
