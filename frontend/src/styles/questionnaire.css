@@ -1,0 +1,249 @@
+/* ============================================
+   QUESTIONNAIRE — carte blanche sur canvas lavande
+   ============================================ */
+
+/* Centré verticalement : le formulaire est court, il était collé en
+   haut avec un grand vide dessous. `justify-content: center` le pose
+   optiquement au milieu tout en laissant le scroll si ça déborde. */
+.questionnaire {
+  min-height: 100vh;
+  background-color: var(--surface-page-canvas);
+  padding: var(--spacing-40) var(--spacing-20);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.questionnaire-header {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto var(--spacing-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+/* Le header est en flex-column : sans ceci le bouton s'étire sur
+   toute la largeur et son libellé paraît centré, alors que le titre,
+   la progression et les champs sont tous alignés à gauche. */
+.questionnaire-header .btn-tertiary {
+  align-self: flex-start;
+  padding-left: 0;
+}
+
+/* ---------- Progression ---------- */
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+/* Aligné à gauche, comme le titre de la question : l'œil suit un seul
+   axe pendant les 5 étapes au lieu de sauter du centre à la gauche. */
+.progress-text {
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-slate);
+  text-align: left;
+}
+
+/* Le rail était blanc sur papier crème : quasi invisible, donc on ne
+   voyait pas la progression restante. */
+.progress-bar {
+  height: 8px;
+  background-color: var(--color-sand);
+  border-radius: var(--radius-tags);
+  overflow: hidden;
+}
+
+/* Orange PROFOND, pas l'orange vif. Deux raisons :
+   - contraste : l'orange vif sur le rail sable ne donne que 2.31,
+     sous le seuil de 3 exigé pour un élément graphique. Ici : 3.95.
+   - cohérence : l'orange vif est réservé aux ACTIONS. Une barre de
+     progression est un indicateur, pas un bouton. */
+.progress-fill {
+  height: 100%;
+  background-color: var(--color-indigo-bloom);
+  border-radius: var(--radius-tags);
+  transition: width var(--duration-normal) var(--easing);
+}
+
+/* ---------- Carte ---------- */
+
+/* Un filet 1px : sans lui, la carte blanche flottait sans contour sur
+   le papier crème. Toujours pas d'ombre d'élévation. */
+.questionnaire-content {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  background-color: var(--color-paper-white);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-40);
+}
+
+/* Aligné à gauche comme la landing. Un titre centré au-dessus de
+   champs alignés à gauche casse l'axe de lecture. */
+.questionnaire-content h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  font-weight: var(--font-weight-semibold);
+  text-align: left;
+  margin-bottom: var(--spacing-32);
+}
+
+/* ---------- Étapes ---------- */
+
+.form-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+  margin-bottom: var(--spacing-32);
+  animation: fadeIn var(--duration-normal) var(--easing);
+}
+
+.form-hint {
+  font-size: var(--text-body);
+  color: var(--color-canopy-green);
+  background-color: var(--color-mint-wash);
+  padding: var(--spacing-20);
+  border-radius: var(--radius-cards-sm);
+  margin: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  margin-bottom: 0;
+}
+
+/* ---------- Radio / cases : cartes pastel cliquables ---------- */
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+/* Trois états bien distincts. Avant, il n'existait AUCUN style pour
+   l'option cochée : une réponse choisie était identique à une réponse
+   non choisie, au petit point natif près. Au repos la carte est calme
+   (fond papier) — un fond pastel plein donnait l'impression que tout
+   était déjà sélectionné. */
+.radio-label,
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  cursor: pointer;
+  font-size: var(--text-body);
+  color: var(--color-canopy-green);
+  padding: var(--spacing-16) var(--spacing-20);
+  background-color: var(--color-paper-white);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-cards-sm);
+  min-height: 44px;
+  transition: background-color var(--duration-normal) var(--easing),
+              border-color var(--duration-normal) var(--easing);
+}
+
+.radio-label:hover,
+.checkbox-label:hover {
+  background-color: var(--color-cloud-gray);
+  border-color: var(--color-ash);
+}
+
+/* Sélection : bordure orange + fond teinté. Doit toujours dominer
+   le survol, sinon on ne sait plus ce qu'on a choisi. */
+.radio-label:has(input:checked),
+.checkbox-label:has(input:checked) {
+  background-color: var(--color-peach-wash);
+  border-color: var(--color-coral-pulse);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Le focus clavier doit rester visible par-dessus tout le reste. */
+.radio-label:has(input:focus-visible),
+.checkbox-label:has(input:focus-visible) {
+  outline: 2px solid var(--color-indigo-bloom);
+  outline-offset: 2px;
+}
+
+.radio-label input[type="radio"],
+.checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--color-coral-pulse);
+  flex-shrink: 0;
+  box-shadow: none;
+}
+
+/* ---------- Récapitulatif ---------- */
+
+.review-box {
+  background-color: var(--color-lilac-wash);
+  padding: var(--spacing-32);
+  border-radius: var(--radius-cards);
+}
+
+.review-box h3 {
+  font-size: var(--text-heading-sm);
+  color: var(--color-indigo-bloom);
+  margin-bottom: var(--spacing-24);
+}
+
+.review-items {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-24);
+}
+
+@media (min-width: 640px) {
+  .review-items { grid-template-columns: repeat(3, 1fr); }
+}
+
+.review-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.review-item span {
+  font-size: var(--text-caption);
+  color: var(--color-aubergine);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: var(--font-weight-semibold);
+}
+
+.review-item strong {
+  font-size: var(--text-subheading);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-indigo-bloom);
+}
+
+/* ---------- Navigation ---------- */
+
+.form-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-12);
+  margin-top: var(--spacing-32);
+  padding-top: var(--spacing-24);
+  border-top: 1px solid var(--border-hairline);
+}
+
+.form-navigation > * { flex: 1 1 180px; }
+
+.questionnaire-content .alert { margin-bottom: var(--spacing-20); }
+
+@media (max-width: 700px) {
+  .questionnaire { padding: var(--spacing-24) var(--spacing-16); }
+  .questionnaire-content { padding: var(--spacing-32) var(--spacing-24); }
+  .review-items { grid-template-columns: 1fr; gap: var(--spacing-16); }
+}

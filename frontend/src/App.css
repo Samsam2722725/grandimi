@@ -1,0 +1,5 @@
+/* App root styles */
+.app {
+  min-height: 100vh;
+  background-color: var(--surface-page-canvas);
+}

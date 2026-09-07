@@ -1,0 +1,187 @@
+@import 'tailwindcss';
+
+/* Le design system est importé DANS @layer base — c'est structurel.
+   Il définit des sélecteurs d'élément (p, h1-h4, label, input, button).
+   Chargé hors couche, chacun battait l'utilitaire Tailwind équivalent,
+   car le CSS non layerisé prime sur tout le CSS layerisé :
+     `p { font-size: 16px }` écrasait `text-[clamp(44px,7vw,68px)]`,
+     et le chiffre de l'estimation s'affichait à 16px au lieu de 51px.
+   Dans @layer base, les utilitaires (@layer utilities) l'emportent,
+   tandis que les pages sans Tailwind gardent le style de base. */
+@import './styles/design-system-v2.css' layer(base);
+
+/* ============================================
+   PONT TAILWIND ↔ DESIGN SYSTEM
+   ============================================
+   La source de vérité reste styles/design-system-v2.css.
+   Ici on ne fait que REBRANCHER ces variables sur les noms
+   que Tailwind (et les composants shadcn) attendent.
+
+   Conséquence : changer une couleur se fait à UN seul endroit
+   (design-system-v2.css) et se propage au CSS écrit à la main
+   ET aux classes Tailwind. Ne pas coder de hex ici.
+   ============================================ */
+
+@theme {
+  /* --- Polices --- */
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Fraunces', 'Times New Roman', Georgia, serif;
+
+  /* --- Tokens shadcn (utilisés par les composants importés) --- */
+  --color-background: var(--surface-page-canvas);
+  --color-foreground: var(--color-ink-black);
+
+  --color-card: var(--surface-card);
+  --color-card-foreground: var(--color-ink-black);
+
+  --color-popover: var(--surface-card);
+  --color-popover-foreground: var(--color-ink-black);
+
+  /* primary = l'orange. Réservé aux actions.
+     Le texte dessus est de l'encre (blanc sur cet orange échoue AA). */
+  --color-primary: var(--color-coral-pulse);
+  --color-primary-foreground: var(--color-on-brand);
+
+  --color-secondary: var(--color-sand);
+  --color-secondary-foreground: var(--color-ink-black);
+
+  --color-muted: var(--color-cloud-gray);
+  --color-muted-foreground: var(--color-slate);
+
+  --color-accent: var(--color-peach-wash);
+  --color-accent-foreground: var(--color-ink-black);
+
+  --color-destructive: var(--color-indigo-bloom);
+  --color-destructive-foreground: var(--color-paper-white);
+
+  --color-border: var(--color-frost-gray);
+  --color-input: var(--color-frost-gray);
+  --color-ring: var(--color-coral-pulse);
+
+  /* --- Alias lisibles pour le code applicatif --- */
+  --color-ink: var(--color-ink-black);
+  --color-paper: var(--surface-page-canvas);
+  --color-brand: var(--color-coral-pulse);
+  --color-brand-deep: var(--color-indigo-bloom);
+  /* Pas d'alias pour --color-brand-display : il porte déjà ce nom dans
+     le design system, et le réaliaser ici créerait une auto-référence.
+     Il s'utilise directement : text-[color:var(--color-brand-display)] */
+  --color-sand: var(--color-sand);
+  --color-cream: var(--color-cream);
+  --color-peach: var(--color-peach-wash);
+
+  /* --- Rayons alignés sur le design system --- */
+  --radius-cards: 24px;
+  --radius-pill: 9999px;
+
+  /* --- Animations --- */
+  --animate-marquee: marquee var(--duration, 34s) linear infinite;
+  --animate-marquee-vertical: marquee-vertical var(--duration, 34s) linear infinite;
+  --animate-rise: rise 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap, 1rem)));
+    }
+  }
+
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap, 1rem)));
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+}
+
+/* ============================================
+   ENTRÉES — au-dessus de la ligne de flottaison
+   ============================================
+   Règle : le contenu du hero n'est JAMAIS masqué par défaut.
+
+   Les animations JS (framer-motion) dépendent de requestAnimationFrame.
+   Si rAF est bridé — onglet ouvert en arrière-plan, économie d'énergie,
+   navigateurs intégrés TikTok/Instagram d'où vient notre trafic — la
+   boucle se fige et le contenu reste bloqué à mi-opacité, définitivement.
+   Mesuré : 0 tick rAF/s dans un panneau masqué, hero figé à 39 %.
+
+   Ici l'état de repos est `opacity: 1`. L'animation n'est qu'un bonus,
+   et `backwards` (et non `both`) garantit qu'on retombe toujours sur
+   l'état visible une fois terminée.
+   ============================================ */
+
+@layer components {
+  .rise {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .rise {
+      animation: rise 620ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    }
+  }
+}
+
+/* ============================================
+   BASE
+   ============================================ */
+
+/* Le reset DOIT rester dans @layer base. Hors couche, un sélecteur `*`
+   écrase tous les utilitaires Tailwind (qui vivent dans
+   @layer utilities), car le CSS non layerisé prime sur le layerisé. */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color-scheme: light;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

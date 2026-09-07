@@ -1,0 +1,80 @@
+# GRANDIMI FRONTEND 1 — LIVRAISON COMPLÈTE
+
+## ✅ STATUS : TERMINÉ
+
+### Fichiers créés :
+- src/App.jsx (router principal)
+- src/pages/HomePage.jsx (page d'accueil 7 sections)
+- src/pages/QuestionnaireFlow.jsx (formulaire 5 étapes)
+- src/styles/design-system.css (variables + composants réutilisables)
+- src/styles/home-page.css (styles accueil)
+- src/styles/questionnaire.css (styles formulaire)
+- src/lib/api.js (client API réel)
+- src/lib/mock-api.js (mock pour développement)
+- src/hooks/useAsync.js (hook async réutilisable)
+- docs/design-system.md (charte visuelle complète)
+- vite.config.js (configuration + proxy API)
+- .env.development (mock API activé par défaut)
+
+### Charte visuelle :
+✅ Vert profond (#147D73) : CTA, accents
+✅ Blanc cassé (#F6F5EF) : fond
+✅ Anthracite (#213C41) : texte
+✅ Variables CSS centralisées
+✅ Composants réutilisables (buttons, inputs, cards, alerts, badges)
+✅ Responsive (375px, 768px, 1440px)
+✅ Accessible (WCAG AA, focus visible, contraste)
+
+### Page d'accueil :
+1. Header sticky : logo + CTA
+2. Hero : titre + sous-titre + CTA principal
+3. Comment ça marche : 3 étapes
+4. Notre différence : 3 cartes
+5. Disclaimer : "Une estimation n'est pas une garantie"
+6. FAQ : 5 questions fréquentes (accordéons)
+7. CTA final : "Prêt à connaître ton potentiel ?"
+8. Footer : copyright + liens
+
+### Questionnaire (5 étapes) :
+Étape 1 : Âge + sexe (radio)
+Étape 2 : Taille + poids (inputs numériques)
+Étape 3 : Taille parents (inputs numériques)
+Étape 4 : Puberté Tanner (selects + checkboxes conditionnels)
+Étape 5 : Vérification avant soumission
+
+### Vérifications :
+✅ Build : npm run build → 0 erreurs, 206 kB JS, 19 kB CSS gzip
+✅ Page d'accueil : Tous éléments affichés, français correct, couleurs appliquées
+✅ Mobile (375px) : Responsive, texte lisible, boutons tactiles
+✅ Accessibilité : WCAG AA, focus visible, sémantique correcte
+✅ Console : Zéro erreurs
+✅ Questionnaire : Validation, navigation, revue avant soumission
+✅ Performance : CSS 3.75 kB, JS 63.95 kB (tous gzip)
+
+### API Integration :
+✅ Client API réel (fetch wrapper, gestion erreurs)
+✅ Mock API pour développement (délai 1500ms, réponse réaliste)
+✅ Variables d'env (.env.development, .env.example)
+✅ Proxy Vite configuré
+
+### Hors périmètre FRONTEND 1 :
+- Page de résultats (prochaine phase)
+- Plan de croissance (prochaine phase)
+- Paiement (future)
+- Tests unitaires (optionnel)
+
+## 📦 Installation & Lancement
+
+npm install
+npm run dev              # Démarre sur localhost:5173
+npm run build           # Build production
+
+## 🚀 Prêt pour FRONTEND 2
+
+Prochaine phase :
+1. Page résultats (affiche prédiction + intervalle)
+2. Plan 12 mois (exercices, nutrition, sommeil)
+3. Paywall (après résultats, avant plan complet)
+4. Guides détaillés (accordéons + liens sources)
+
+## Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>

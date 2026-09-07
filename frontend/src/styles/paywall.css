@@ -1,0 +1,292 @@
+/* ============================================
+   PAYWALL — offres en cartes pastel
+   ============================================ */
+
+.paywall-page {
+  min-height: 100vh;
+  background-color: var(--surface-page-canvas);
+  padding-bottom: var(--spacing-80);
+}
+
+.paywall-header {
+  position: relative;
+  background-color: var(--color-canopy-green);
+  padding: var(--spacing-40) var(--spacing-20) var(--spacing-64);
+  text-align: center;
+}
+
+.paywall-header button {
+  position: absolute;
+  top: var(--spacing-20);
+  left: var(--spacing-16);
+  color: var(--color-mint-wash);
+}
+
+.paywall-header button:hover { background-color: rgba(255, 255, 255, 0.12); }
+
+.paywall-header h1 {
+  color: var(--color-paper-white);
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-heading-lg);
+  letter-spacing: var(--tracking-heading-lg);
+  margin: var(--spacing-32) 0 var(--spacing-12);
+}
+
+.paywall-header .subtitle {
+  color: var(--color-mint-wash);
+  font-size: var(--text-body-lg);
+  margin: 0;
+}
+
+/* ---------- Offres ---------- */
+
+.plans-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-24);
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-48) var(--spacing-20);
+  align-items: stretch;
+}
+
+@media (min-width: 900px) {
+  .plans-container { grid-template-columns: repeat(3, 1fr); }
+}
+
+.plan-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-32);
+  border-radius: var(--radius-cards);
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color var(--duration-normal) var(--easing);
+}
+
+.plans-container .plan-card:nth-child(1) { background-color: var(--color-sage-wash); }
+.plans-container .plan-card:nth-child(2) { background-color: var(--color-peach-wash); }
+.plans-container .plan-card:nth-child(3) { background-color: var(--color-sky-wash); }
+
+/* L'état sélectionné doit toujours dominer visuellement le survol.
+   Avant : survol = orange vif, sélection = encre — une carte survolée
+   paraissait plus « choisie » que la carte réellement choisie. */
+.plan-card:hover { border-color: var(--color-ash); }
+
+.plan-card.selected,
+.plan-card.selected:hover {
+  border-color: var(--color-coral-pulse);
+  background-color: var(--color-paper-white);
+}
+
+.popular-badge {
+  position: absolute;
+  top: calc(var(--spacing-12) * -1);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--spacing-4) var(--spacing-16);
+  background-color: var(--color-canopy-green);
+  color: var(--color-paper-white);
+  border-radius: var(--radius-tags);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.plan-card h2 {
+  font-size: var(--text-heading-sm);
+  letter-spacing: normal;
+  color: var(--color-canopy-green);
+  margin: 0 0 var(--spacing-20);
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-8);
+  margin-bottom: var(--spacing-24);
+}
+
+.amount {
+  font-size: var(--text-heading-lg);
+  line-height: 1;
+  letter-spacing: var(--tracking-heading-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-canopy-green);
+}
+
+.duration {
+  color: var(--color-graphite);
+  font-size: var(--text-body-sm);
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--spacing-24);
+  flex-grow: 1;
+}
+
+.features li {
+  display: flex;
+  gap: var(--spacing-12);
+  padding: var(--spacing-8) 0;
+  font-size: var(--text-body);
+  color: var(--color-graphite);
+}
+
+.features .check {
+  color: var(--color-canopy-green);
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
+}
+
+/* ---------- Paiement ---------- */
+
+.payment-section {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-20) var(--spacing-48);
+}
+
+.payment-box {
+  background-color: var(--color-paper-white);
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-40) var(--spacing-32);
+}
+
+.payment-box h2 {
+  font-size: var(--text-heading);
+  letter-spacing: var(--tracking-heading);
+  margin: 0 0 var(--spacing-24);
+}
+
+.order-summary {
+  background-color: var(--color-cream);
+  border-radius: var(--radius-cards-sm);
+  padding: var(--spacing-24);
+  margin-bottom: var(--spacing-32);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: var(--spacing-8) 0;
+  font-size: var(--text-body);
+  color: var(--color-graphite);
+}
+
+.summary-row.total {
+  border-top: 1px solid var(--border-mid);
+  padding-top: var(--spacing-16);
+  margin-top: var(--spacing-16);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-canopy-green);
+}
+
+.summary-row .amount {
+  font-size: var(--text-heading-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.payment-form { margin-bottom: var(--spacing-24); }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-20);
+}
+
+.security-note {
+  text-align: center;
+  font-size: var(--text-body-sm);
+  color: var(--color-graphite);
+  padding: var(--spacing-20) 0;
+  border-top: 1px solid var(--border-hairline);
+  border-bottom: 1px solid var(--border-hairline);
+  margin-bottom: var(--spacing-24);
+}
+
+.security-note span { margin-right: var(--spacing-8); }
+
+.legal-text {
+  font-size: var(--text-body-sm);
+  color: var(--color-graphite);
+  text-align: center;
+  margin: var(--spacing-20) 0 0;
+}
+
+.legal-text a { color: var(--color-indigo-bloom); }
+
+/* ---------- FAQ ---------- */
+
+.paywall-faq {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-20) var(--spacing-48);
+}
+
+.paywall-faq h2 {
+  text-align: center;
+  font-size: var(--text-heading);
+  letter-spacing: var(--tracking-heading);
+  margin-bottom: var(--spacing-32);
+}
+
+.faq-items {
+  background-color: var(--color-paper-white);
+  border-radius: var(--radius-cards);
+  padding: 0 var(--spacing-32);
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border-hairline);
+  cursor: pointer;
+}
+
+.faq-item:last-child { border-bottom: none; }
+
+.faq-item summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-24);
+  padding: var(--spacing-24) 0;
+  font-size: var(--text-subheading);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-canopy-green);
+  user-select: none;
+  list-style: none;
+  min-height: 44px;
+}
+
+.faq-item summary::-webkit-details-marker { display: none; }
+
+.faq-item summary::after {
+  content: '+';
+  font-size: var(--text-heading-sm);
+  line-height: 1;
+  color: var(--color-canopy-green);
+  transition: transform var(--duration-normal) var(--easing);
+}
+
+.faq-item[open] summary::after { transform: rotate(45deg); }
+
+.faq-item p {
+  padding-bottom: var(--spacing-24);
+  color: var(--color-graphite);
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .paywall-header { padding: var(--spacing-32) var(--spacing-16) var(--spacing-48); }
+  .plans-container { padding: var(--spacing-32) var(--spacing-16); }
+  .plan-card { padding: var(--spacing-24); }
+  .payment-box { padding: var(--spacing-32) var(--spacing-24); }
+  .faq-items { padding: 0 var(--spacing-24); }
+  .form-row { grid-template-columns: 1fr; }
+}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"grandimi/internal/api"
+	"grandimi/internal/db"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,11 @@ import (
 
 func main() {
 	godotenv.Load()
+
+	// Initialize Supabase
+	if err := db.Init(); err != nil {
+		panic("Failed to init Supabase: " + err.Error())
+	}
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -38,6 +44,11 @@ func main() {
 	router.GET("/api/v1/exercise-guide", api.GetExerciseGuide)
 	router.GET("/api/v1/nutrition-guide", api.GetNutritionGuide)
 	router.GET("/api/v1/sleep-optimization", api.GetSleepOptimization)
+
+	// Payment & Subscription
+	router.POST("/api/v1/checkout", api.GetCheckout)
+	router.POST("/webhooks/whop", api.WhopWebhook)
+	router.GET("/api/v1/check-premium", api.CheckPremium)
 
 	router.Run(":" + port)
 }

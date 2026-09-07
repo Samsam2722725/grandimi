@@ -1,0 +1,663 @@
+/* ============================================
+   GRANDIMI — « éditorial clair, encre chaude, un seul orange »
+   Direction Geviti. Papier crème, encre presque noire,
+   un unique accent orange qui ne sert qu'à l'action.
+
+   Règles dures :
+   - 2 polices max : Fraunces (display) + DM Sans (texte/UI).
+   - L'orange est réservé aux CTA et aux mots surlignés.
+     Jamais décoratif, jamais en aplat de fond large.
+   - Pas d'ombre d'élévation : la profondeur vient du papier,
+     des filets 1px et des aplats de teinte chaude.
+
+   NOTE : les noms de variables sont conservés depuis la v1
+   (canopy-green, coral-pulse, mint-wash…) pour que les pages
+   existantes se re-skinnent sans réécriture. Seules les
+   VALEURS changent. Ne pas renommer sans repasser sur les pages.
+   ============================================ */
+
+:root {
+  /* ---------- Couleurs de marque ----------
+     Tous les ratios ci-dessous sont mesurés, pas estimés.
+     Référence de fond : le papier --surface-page-canvas #fbf7f2. */
+
+  /* L'encre : un noir chaud, jamais #000 (trop dur sur papier). 17.4:1 */
+  --color-canopy-green: #17120e;
+
+  /* L'accent unique — FOND de bouton uniquement.
+     Le texte posé dessus est de l'encre, pas du blanc :
+     blanc sur cet orange = 3.1:1 (échoue AA), encre = 5.96:1 (passe).
+     C'est aussi plus éditorial que le blanc sur orange. */
+  --color-coral-pulse: #ff5a1f;
+  --color-on-brand: #17120e;
+
+  /* Orange TEXTE. L'orange vif ne passe pas en texte (2.9:1),
+     celui-ci oui : 4.99:1. Utiliser partout où l'orange est une
+     couleur de police et non un fond. */
+  --color-indigo-bloom: #c23c0b;
+  --color-leaf-bright: #c23c0b;
+
+  /* Orange GRAND TEXTE uniquement (≥ 24px, ou ≥ 18.7px en gras).
+     3.50:1 — au-dessus du seuil de 3 exigé pour le grand texte, mais
+     SOUS les 4.5 du texte courant. Ne jamais l'utiliser en taille de
+     paragraphe : réservé aux mots surlignés dans les gros titres. */
+  --color-brand-display: #ee4a0e;
+
+  --color-deep-teal: #2a2019;
+  --color-orchid-tint: #f7d9c6;
+  --color-sky-signal: #c23c0b;
+  --color-aubergine: #3b2c22;
+
+  /* ---------- Neutres chauds ---------- */
+  --color-ink-black: #17120e;
+  --color-paper-white: #ffffff;
+  --color-ash: #9a8e81;      /* 3.00:1 — placeholders, bordures */
+  --color-slate: #756a5f;    /* 4.94:1 — texte méta, passe AA */
+  --color-graphite: #4a4038;
+  --color-charcoal: #332c26;
+  --color-frost-gray: #e6ddd2;
+  --color-cloud-gray: #f4eee6;
+
+  /* ---------- Teintes de carte : QUATRE, pas plus ----------
+     Ces teintes servent à DIFFÉRENCIER des cartes voisines (via
+     :nth-child dans paywall/growth-plan). Le plus grand groupe en
+     compte 4 (les stat-cards) : c'est donc le minimum viable, et on
+     s'y tient. Sept teintes diluaient l'identité sans rien apporter.
+
+     Deux règles avant d'y toucher :
+     1. Écart ≥ 22 unités RGB entre deux teintes d'un même groupe —
+        une version précédente les avait ramenées à 4-21 d'écart et
+        les 3 cartes de prix s'affichaient identiques.
+     2. L'encre doit passer AA dessus (13.8:1 au pire aujourd'hui). */
+  --color-lavender-mist: #fbf7f2;  /* papier — fond de page  */
+  --color-peach-wash: #ffd9bd;     /* 1 · abricot */
+  --color-cream: #fbf1c9;          /* 2 · beurre  */
+  --color-sage-wash: #d7e7d3;      /* 3 · sauge   */
+  --color-sky-wash: #cfe1ec;       /* 4 · bleu    */
+
+  /* Neutres de surface — PAS des teintes de carte.
+     Ne pas les entrer dans une rotation :nth-child. */
+  --color-sand: #ebdcc6;           /* bordures, aplats calmes  */
+  --color-mint-wash: #f7e6db;      /* texte clair sur bande encre */
+  --color-lilac-wash: var(--color-sky-wash);  /* alias rétro-compat */
+
+  /* ---------- Surfaces ---------- */
+  --surface-page-canvas: var(--color-lavender-mist);
+  --surface-card: var(--color-paper-white);
+  --surface-pastel: var(--color-mint-wash);
+  --surface-dark: var(--color-canopy-green);
+
+  /* ---------- Rôles sémantiques ---------- */
+  --text-primary: var(--color-ink-black);
+  --text-secondary: var(--color-graphite);
+  --text-meta: var(--color-slate);
+  --text-on-dark: var(--color-paper-white);
+  --text-on-dark-soft: var(--color-mint-wash);
+  --border-hairline: var(--color-frost-gray);
+  --border-mid: var(--color-ash);
+  --border-strong: var(--color-ink-black);
+
+  /* ---------- Typographie ---------- */
+  /* DM Sans : tout le texte courant, l'UI, les boutons. */
+  --font-dm-sans: 'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Fraunces : uniquement les grands titres. C'est ce qui donne
+     le ton éditorial — ne pas l'utiliser sous 24px. */
+  --font-display: 'Fraunces', 'Times New Roman', Georgia, serif;
+
+  --text-caption: 12px;      --leading-caption: 1.2;
+  --text-body-sm: 14px;      --leading-body-sm: 1.38;
+  --text-body: 16px;         --leading-body: 1.38;
+  --text-body-lg: 18px;      --leading-body-lg: 1.4;
+  --text-subheading: 20px;   --leading-subheading: 1.33;
+  --text-heading-sm: 24px;   --leading-heading-sm: 1.3;
+  --text-heading: 32px;      --leading-heading: 1.2;   --tracking-heading: -0.019em;
+  --text-heading-lg: 48px;   --leading-heading-lg: 1.14; --tracking-heading-lg: -0.019em;
+  --text-display: 72px;      --leading-display: 1.05;  --tracking-display: -0.028em;
+  --text-display-xl: 116px;  --leading-display-xl: 0.89;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ---------- Espacements (base 4px) ---------- */
+  --spacing-4: 4px;    --spacing-8: 8px;    --spacing-12: 12px;
+  --spacing-16: 16px;  --spacing-20: 20px;  --spacing-24: 24px;
+  --spacing-32: 32px;  --spacing-40: 40px;  --spacing-48: 48px;
+  --spacing-56: 56px;  --spacing-64: 64px;  --spacing-80: 80px;
+  --spacing-120: 120px;
+
+  /* ---------- Mise en page ---------- */
+  --page-max-width: 1280px;
+  --section-gap: 64px;
+  --card-padding: 24px;
+  --element-gap: 8px;
+
+  /* ---------- Rayons ---------- */
+  --radius-tags: 9999px;
+  --radius-cards: 24px;
+  --radius-cards-sm: 16px;
+  --radius-icons: 8px;
+  --radius-buttons: 40px;
+
+  /* ---------- Ombre (usage rare : champs uniquement) ---------- */
+  --shadow-subtle: rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+  /* ---------- Mouvement ---------- */
+  --duration-fast: 150ms;
+  --duration-normal: 220ms;
+  --easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+
+/* PAS de reset universel ici.
+   Ce fichier est chargé hors des couches Tailwind (@layer). Or une
+   règle NON layerisée l'emporte sur TOUTES les règles layerisées —
+   un `* { padding: 0 }` ici annulait donc silencieusement chaque
+   utilitaire `p-*` / `m-*` de Tailwind sur tout le site (le hero
+   se retrouvait collé au bord gauche malgré `px-8`).
+   Le reset vit désormais dans index.css, dans @layer base. */
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-dm-sans);
+  font-feature-settings: "ss03";
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  background-color: var(--surface-page-canvas);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   TYPOGRAPHIE
+   ============================================ */
+
+h1, h2, h3, h4 {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-canopy-green);
+}
+
+/* Fraunces sur les tailles display uniquement (>= 24px).
+   En dessous, DM Sans reste plus lisible. */
+.display-xl, h1, .display, h2, h3 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+}
+
+h4 { font-family: var(--font-dm-sans); }
+
+.display-xl {
+  font-size: var(--text-display-xl);
+  line-height: var(--leading-display-xl);
+  letter-spacing: var(--tracking-display);
+}
+
+h1, .display {
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  margin-bottom: var(--spacing-24);
+}
+
+h2 {
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-heading-lg);
+  letter-spacing: var(--tracking-heading-lg);
+  margin-bottom: var(--spacing-24);
+}
+
+h3 {
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-12);
+}
+
+h4 {
+  font-size: var(--text-subheading);
+  line-height: var(--leading-subheading);
+  margin-bottom: var(--spacing-8);
+}
+
+p {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-16);
+}
+
+.lead {
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body-lg);
+}
+
+/* Mot surligné dans un titre — remplace tout accent typographique.
+   Une seule police dans le système : jamais de seconde famille. */
+.hl { color: var(--color-leaf-bright); }
+.hl-indigo { color: var(--color-indigo-bloom); }
+
+.text-meta { color: var(--text-meta); font-size: var(--text-body-sm); }
+
+/* ============================================
+   BOUTONS — pilule 40px, jamais d'ombre
+   ============================================ */
+
+button {
+  font-family: var(--font-dm-sans);
+  font-feature-settings: "ss03";
+  cursor: pointer;
+  border: none;
+  transition: background-color var(--duration-normal) var(--easing),
+              color var(--duration-normal) var(--easing),
+              border-color var(--duration-normal) var(--easing);
+}
+
+button:focus-visible,
+a:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--color-indigo-bloom);
+  outline-offset: 2px;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-tertiary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-8);
+  border-radius: var(--radius-buttons);
+  white-space: nowrap;
+  min-height: 44px;
+}
+
+/* Orange — réservé aux actions principales. Jamais décoratif.
+   Texte en encre et non en blanc : cf. --color-on-brand. */
+.btn-primary {
+  background-color: var(--color-coral-pulse);
+  color: var(--color-on-brand);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--spacing-12) var(--spacing-24);
+}
+
+.btn-primary:hover:not(:disabled) { background-color: #ff7a45; }
+
+/* Un bouton désactivé à opacity .5 sur de l'orange se lit comme un
+   bouton cassé. On le neutralise en gris plein : l'état « pas encore
+   disponible » doit être calme, pas délavé. */
+.btn-primary:disabled {
+  background-color: var(--color-frost-gray);
+  color: var(--color-slate);
+  cursor: not-allowed;
+}
+
+/* Jumeau systématique du bouton corail. */
+.btn-secondary {
+  background: transparent;
+  color: var(--color-ink-black);
+  border: 1px solid var(--color-ink-black);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-12) var(--spacing-24);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: rgba(23, 18, 14, 0.06);
+}
+
+.btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-tertiary {
+  background: transparent;
+  color: var(--color-canopy-green);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-8) var(--spacing-16);
+}
+
+.btn-tertiary:hover { background-color: rgba(23, 18, 14, 0.06); }
+
+/* Sur bande vert foncé : le ghost passe en blanc. */
+.on-dark .btn-secondary,
+.hero .btn-secondary,
+.cta-band .btn-secondary {
+  color: var(--color-paper-white);
+  border-color: var(--color-paper-white);
+}
+
+.on-dark .btn-secondary:hover:not(:disabled),
+.hero .btn-secondary:hover:not(:disabled),
+.cta-band .btn-secondary:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.on-dark .btn-tertiary,
+.hero .btn-tertiary,
+.cta-band .btn-tertiary { color: var(--color-mint-wash); }
+
+.on-dark .btn-tertiary:hover,
+.hero .btn-tertiary:hover,
+.cta-band .btn-tertiary:hover { background-color: rgba(255, 255, 255, 0.12); }
+
+.btn-full { width: 100%; }
+
+.btn-large {
+  font-size: var(--text-body);
+  padding: var(--spacing-16) var(--spacing-32);
+  min-height: 52px;
+}
+
+/* Groupe CTA : le corail ne va jamais seul. */
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-12);
+  align-items: center;
+}
+
+/* ============================================
+   FORMULAIRES
+   ============================================ */
+
+input,
+select,
+textarea {
+  width: 100%;
+  font-family: var(--font-dm-sans);
+  font-feature-settings: "ss03";
+  font-size: var(--text-body);
+  color: var(--text-primary);
+  background-color: var(--color-paper-white);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-cards-sm);
+  padding: var(--spacing-12) var(--spacing-16);
+  box-shadow: var(--shadow-subtle);
+  transition: border-color var(--duration-normal) var(--easing);
+}
+
+input::placeholder,
+textarea::placeholder { color: var(--color-ash); }
+
+input:hover:not(:disabled),
+select:hover:not(:disabled),
+textarea:hover:not(:disabled) { border-color: var(--color-graphite); }
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-indigo-bloom);
+  box-shadow: 0 0 0 2px rgba(255, 90, 31, 0.22);
+}
+
+input:disabled, select:disabled { opacity: 0.6; cursor: not-allowed; }
+
+label {
+  display: block;
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-canopy-green);
+  margin-bottom: var(--spacing-8);
+}
+
+.form-group { margin-bottom: var(--spacing-24); }
+
+.form-helper {
+  font-size: var(--text-body-sm);
+  color: var(--text-meta);
+  margin-top: var(--spacing-4);
+}
+
+/* ============================================
+   CARTES — plates, sans ombre, coins doux
+   ============================================ */
+
+.card {
+  background-color: var(--surface-card);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+}
+
+/* Rotation pastel : mint, sage, sky, cream, lilac, peach. */
+.card-pastel {
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-32);
+}
+
+.pastel-mint   { background-color: var(--color-mint-wash); }
+.pastel-sage   { background-color: var(--color-sage-wash); }
+.pastel-sky    { background-color: var(--color-sky-wash); }
+.pastel-cream  { background-color: var(--color-cream); }
+.pastel-lilac  { background-color: var(--color-lilac-wash); }
+.pastel-peach  { background-color: var(--color-peach-wash); }
+
+.card-product {
+  background-color: var(--color-paper-white);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-cards-sm);
+  padding: var(--card-padding);
+}
+
+/* ============================================
+   BANDES DE SECTION — la profondeur vient de la couleur
+   ============================================ */
+
+.band-dark {
+  background-color: var(--color-canopy-green);
+  color: var(--text-on-dark);
+}
+
+.band-dark h1,
+.band-dark h2,
+.band-dark h3 { color: var(--text-on-dark); }
+
+.band-dark p { color: var(--text-on-dark-soft); }
+
+.band-white { background-color: var(--color-paper-white); }
+.band-lavender { background-color: var(--color-lavender-mist); }
+
+.band-indigo {
+  background-color: var(--color-indigo-bloom);
+  color: var(--text-on-dark);
+}
+
+.band-indigo h1,
+.band-indigo h2,
+.band-indigo h3 { color: var(--text-on-dark); }
+
+.band-indigo p { color: rgba(255, 255, 255, 0.82); }
+
+/* ============================================
+   CONTENEURS & SECTIONS
+   ============================================ */
+
+.container {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding-left: var(--spacing-80);
+  padding-right: var(--spacing-80);
+}
+
+.container-sm {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-left: var(--spacing-24);
+  padding-right: var(--spacing-24);
+}
+
+.section { padding: var(--spacing-80) 0; }
+
+.section-heading {
+  max-width: 760px;
+  margin: 0 auto var(--spacing-48);
+  text-align: center;
+}
+
+.section-heading p { color: var(--text-secondary); margin: 0; }
+
+/* ============================================
+   PUCES & ÉTIQUETTES
+   ============================================ */
+
+.badge,
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4) var(--spacing-12);
+  border-radius: var(--radius-tags);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  background-color: var(--color-mint-wash);
+  color: var(--color-canopy-green);
+}
+
+/* ============================================
+   ALERTES — jamais la couleur seule : icône + mot repère
+   ============================================ */
+
+.alert {
+  display: flex;
+  gap: var(--spacing-16);
+  align-items: flex-start;
+  padding: var(--spacing-24);
+  border-radius: var(--radius-cards-sm);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  margin-bottom: var(--spacing-24);
+  color: var(--color-canopy-green);
+}
+
+.alert p { color: inherit; margin: 0; }
+
+.alert-warning { background-color: var(--color-peach-wash); }
+.alert-success { background-color: var(--color-mint-wash); }
+.alert-info    { background-color: var(--color-sky-wash); }
+
+.alert-error {
+  background-color: var(--color-peach-wash);
+  color: #9c2a0c;
+}
+
+.alert-icon { flex-shrink: 0; font-weight: var(--font-weight-bold); }
+
+/* ============================================
+   CHARGEMENT — icône unique de l'app
+   Voir components/Spinner.jsx. Ne pas en créer d'autre.
+   ============================================ */
+
+.spinner {
+  display: inline-block;
+  border-style: solid;
+  border-color: currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+  flex-shrink: 0;
+}
+
+.spinner-inline {
+  width: 16px; height: 16px; border-width: 2px;
+  opacity: 0.9;
+}
+
+.spinner-page {
+  width: 36px; height: 36px; border-width: 3px;
+  color: var(--color-canopy-green);
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: var(--spacing-24);
+  padding: var(--spacing-24);
+}
+
+.loading-container p {
+  font-size: var(--text-subheading);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+  :root {
+    --text-display: 56px;
+    --text-heading-lg: 40px;
+    --text-heading: 28px;
+    --spacing-80: 56px;
+  }
+
+  .container {
+    padding-left: var(--spacing-40);
+    padding-right: var(--spacing-40);
+  }
+}
+
+@media (max-width: 700px) {
+  :root {
+    --text-display: 40px;
+    --text-heading-lg: 30px;
+    --text-heading: 24px;
+    --text-subheading: 18px;
+    --spacing-80: 48px;
+    --section-gap: 40px;
+  }
+
+  .container {
+    padding-left: var(--spacing-20);
+    padding-right: var(--spacing-20);
+  }
+
+  .card-pastel { padding: var(--spacing-24); }
+
+  .btn-group > * { width: 100%; }
+}
+
+/* ============================================
+   ACCESSIBILITÉ
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

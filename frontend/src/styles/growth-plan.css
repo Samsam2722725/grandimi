@@ -1,0 +1,448 @@
+/* ============================================
+   PLAN DE CROISSANCE — bandes et cartes pastel
+   ============================================ */
+
+.growth-plan-page {
+  min-height: 100vh;
+  background-color: var(--surface-page-canvas);
+  padding-bottom: var(--spacing-80);
+}
+
+/* ---------- En-tête ---------- */
+
+.plan-header {
+  position: relative;
+  background-color: var(--color-canopy-green);
+  padding: var(--spacing-40) var(--spacing-20) var(--spacing-64);
+  text-align: center;
+}
+
+.plan-header button {
+  position: absolute;
+  top: var(--spacing-20);
+  left: var(--spacing-16);
+  color: var(--color-mint-wash);
+}
+
+.plan-header button:hover { background-color: rgba(255, 255, 255, 0.12); }
+
+.plan-header h1 {
+  color: var(--color-paper-white);
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-heading-lg);
+  letter-spacing: var(--tracking-heading-lg);
+  margin: var(--spacing-32) 0 var(--spacing-12);
+}
+
+.plan-header .subtitle {
+  color: var(--color-mint-wash);
+  font-size: var(--text-body-lg);
+  margin: 0;
+}
+
+/* ---------- Onglets ---------- */
+
+.plan-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background-color: var(--color-paper-white);
+  overflow-x: auto;
+}
+
+@media (min-width: 640px) {
+  .plan-tabs { grid-template-columns: repeat(5, 1fr); }
+}
+
+.tab {
+  padding: var(--spacing-20) var(--spacing-16);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-graphite);
+  white-space: nowrap;
+  min-height: 44px;
+}
+
+.tab:hover { color: var(--color-canopy-green); }
+
+.tab.active {
+  color: var(--color-canopy-green);
+  border-bottom-color: var(--color-leaf-bright);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ---------- Contenu ---------- */
+
+.plan-content {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-48) var(--spacing-20);
+}
+
+.tab-content { animation: fadeIn var(--duration-normal) var(--easing); }
+
+.section-title {
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-32);
+}
+
+/* ---------- Motivation ---------- */
+
+.motivation-box {
+  background-color: var(--color-lilac-wash);
+  padding: var(--spacing-32);
+  border-radius: var(--radius-cards);
+  margin-bottom: var(--spacing-48);
+}
+
+.motivation-text {
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  color: var(--color-indigo-bloom);
+  margin: 0;
+}
+
+/* ---------- Statistiques ---------- */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-24);
+  margin-bottom: var(--spacing-48);
+}
+
+@media (min-width: 900px) {
+  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.stat-card {
+  padding: var(--spacing-32);
+  border-radius: var(--radius-cards);
+  text-align: center;
+}
+
+/* Les 4 teintes de carte, une par stat — jamais deux fois la même
+   dans un groupe (cf. design-system-v2.css). */
+.stats-grid .stat-card:nth-child(1) { background-color: var(--color-sage-wash); }
+.stats-grid .stat-card:nth-child(2) { background-color: var(--color-sky-wash); }
+.stats-grid .stat-card:nth-child(3) { background-color: var(--color-cream); }
+.stats-grid .stat-card:nth-child(4) { background-color: var(--color-peach-wash); }
+
+.stat-card h3 {
+  font-size: var(--text-caption);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-graphite);
+  margin-bottom: var(--spacing-12);
+}
+
+.stat-value {
+  font-size: var(--text-heading-lg);
+  line-height: 1;
+  letter-spacing: var(--tracking-heading-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-canopy-green);
+  margin-bottom: var(--spacing-8);
+}
+
+.stat-note {
+  font-size: var(--text-body-sm);
+  color: var(--color-graphite);
+  margin: 0;
+}
+
+/* ---------- Timeline ---------- */
+
+.timeline-container { position: relative; padding: var(--spacing-16) 0; }
+
+.timeline-container::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--color-sand);
+}
+
+@media (min-width: 900px) {
+  .timeline-container::before { left: 50%; transform: translateX(-50%); }
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: var(--spacing-24);
+  margin-bottom: var(--spacing-48);
+  position: relative;
+}
+
+@media (min-width: 900px) {
+  .timeline-item {
+    grid-template-columns: 1fr 40px 1fr;
+    align-items: start;
+  }
+
+  .timeline-marker { grid-area: 1 / 2; }
+  .timeline-content { grid-area: 1 / 3; }
+  .timeline-item:nth-child(even) .timeline-content { grid-area: 1 / 1; }
+}
+
+.timeline-marker { display: flex; align-items: center; justify-content: center; }
+
+.timeline-circle {
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-tags);
+  background-color: var(--color-canopy-green);
+  color: var(--color-paper-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+}
+
+.timeline-content {
+  background-color: var(--color-paper-white);
+  padding: var(--spacing-24);
+  border-radius: var(--radius-cards);
+}
+
+.timeline-content h3 {
+  font-size: var(--text-subheading);
+  letter-spacing: normal;
+  font-weight: var(--font-weight-semibold);
+  margin: 0 0 var(--spacing-4);
+}
+
+.growth-metric {
+  font-size: var(--text-body-sm);
+  color: var(--color-canopy-green);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-16);
+}
+
+/* ---------- Listes ---------- */
+
+.action-list,
+.tips-list { list-style: none; padding: 0; margin: 0; }
+
+.action-list li,
+.tips-list li {
+  position: relative;
+  padding: var(--spacing-8) 0 var(--spacing-8) var(--spacing-24);
+  color: var(--color-graphite);
+  font-size: var(--text-body);
+}
+
+.action-list li::before,
+.tips-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-leaf-bright);
+  font-weight: var(--font-weight-bold);
+}
+
+.tips-list li { border-bottom: 1px solid var(--border-hairline); }
+.tips-list li:last-child { border-bottom: none; }
+
+/* ---------- Grille de cartes ---------- */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-24);
+  margin-bottom: var(--spacing-48);
+}
+
+@media (min-width: 900px) {
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.card-grid .card:nth-child(odd) { background-color: var(--color-sage-wash); }
+.card-grid .card:nth-child(even) { background-color: var(--color-sky-wash); }
+
+.exercise-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+  padding: var(--spacing-32);
+  border-radius: var(--radius-cards);
+}
+
+.exercise-card h3 {
+  font-size: var(--text-subheading);
+  letter-spacing: normal;
+  margin: 0;
+}
+
+.exercise-meta { display: flex; gap: var(--spacing-8); flex-wrap: wrap; }
+
+/* ---------- Nutrition & sommeil ---------- */
+
+.nutrition-targets {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-24);
+  margin-bottom: var(--spacing-32);
+}
+
+@media (min-width: 900px) {
+  .nutrition-targets { grid-template-columns: repeat(4, 1fr); }
+}
+
+.target-item,
+.schedule-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-24);
+  background-color: var(--color-paper-white);
+  border-radius: var(--radius-cards);
+}
+
+.target-item .label,
+.schedule-item .label {
+  font-size: var(--text-caption);
+  color: var(--color-graphite);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: var(--font-weight-semibold);
+}
+
+.target-item .value,
+.schedule-item .time {
+  font-size: var(--text-heading);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-heading);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-canopy-green);
+}
+
+.sleep-schedule {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-24);
+  margin-bottom: var(--spacing-48);
+}
+
+.schedule-item { text-align: center; }
+
+.sleep-tips h3 {
+  font-size: var(--text-subheading);
+  letter-spacing: normal;
+  margin-bottom: var(--spacing-16);
+}
+
+/* ---------- Suppléments ---------- */
+
+.supplements-section {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-32) var(--spacing-20);
+}
+
+.supplements-section h2 {
+  font-size: var(--text-heading);
+  letter-spacing: var(--tracking-heading);
+  margin: 0 0 var(--spacing-32);
+}
+
+.supplements-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-24);
+}
+
+@media (min-width: 900px) {
+  .supplements-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.supplements-grid .card:nth-child(1) { background-color: var(--color-cream); }
+.supplements-grid .card:nth-child(2) { background-color: var(--color-lilac-wash); }
+.supplements-grid .card:nth-child(3) { background-color: var(--color-peach-wash); }
+
+.supplement-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  padding: var(--spacing-32);
+  border-radius: var(--radius-cards);
+}
+
+.supplement-card h3 {
+  font-size: var(--text-subheading);
+  letter-spacing: normal;
+  margin: 0;
+}
+
+.supplement-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  font-size: var(--text-body-sm);
+  color: var(--color-graphite);
+}
+
+/* ---------- CTA final ---------- */
+
+.final-cta {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-24) var(--spacing-20);
+}
+
+.cta-box {
+  background-color: var(--color-canopy-green);
+  color: var(--color-paper-white);
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-64) var(--spacing-40);
+  text-align: center;
+}
+
+.cta-box h2 {
+  color: var(--color-paper-white);
+  font-size: var(--text-heading);
+  margin-bottom: var(--spacing-16);
+}
+
+.cta-box p { color: var(--color-mint-wash); margin-bottom: var(--spacing-32); }
+
+.cta-box .btn-group { justify-content: center; }
+
+/* ---------- Erreur ---------- */
+/* Le chargement utilise .loading-container du design system. */
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: var(--spacing-24);
+  padding: var(--spacing-24);
+}
+
+@media (max-width: 700px) {
+  .plan-header { padding: var(--spacing-32) var(--spacing-16) var(--spacing-48); }
+  .plan-content { padding: var(--spacing-32) var(--spacing-16); }
+  .sleep-schedule { grid-template-columns: 1fr; }
+  .motivation-box,
+  .stat-card,
+  .exercise-card,
+  .supplement-card { padding: var(--spacing-24); }
+  .cta-box { padding: var(--spacing-40) var(--spacing-24); }
+}

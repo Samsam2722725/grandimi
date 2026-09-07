@@ -1,0 +1,37 @@
+/**
+ * Mock API pour développement sans serveur Go
+ * À remplacer par apiClient.js en production
+ */
+
+export const mockPredictHeight = async (data) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // Simulation du calcul Khamis-Roche
+      const midParentHeight = (data.father_height_cm + data.mother_height_cm) / 2;
+      const adjustment = data.sex === 'M' ? 6.5 : -6.5;
+      const estimatedAdultHeight = midParentHeight + adjustment;
+
+      // Intervalle de confiance basé sur l'âge
+      const confidenceRange = 4 + (18 - data.age) * 0.3;
+
+      resolve({
+        predicted_height_cm: Math.round(estimatedAdultHeight * 10) / 10,
+        confidence_range: {
+          min: Math.round((estimatedAdultHeight - confidenceRange) * 10) / 10,
+          max: Math.round((estimatedAdultHeight + confidenceRange) * 10) / 10,
+        },
+        confidence_level:
+          data.age > 16
+            ? 'high'
+            : data.age > 14
+              ? 'medium'
+              : 'low',
+        puberty_stage: 'moderate',
+        model_used: 'Khamis-Roche v2 (Mock)',
+        message: 'Prédiction générée en mode développement',
+      });
+    }, 1500); // Simule un délai réseau
+  });
+};
+
+export default { mockPredictHeight };

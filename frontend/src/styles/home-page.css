@@ -1,0 +1,291 @@
+/* ============================================
+   PAGE D'ACCUEIL — bandes de couleur alternées
+   vert foncé → blanc → lavande → pastel → vert foncé
+   ============================================ */
+
+.home-page {
+  min-height: 100vh;
+  background-color: var(--surface-page-canvas);
+}
+
+/* ---------- Barre de navigation blanche ---------- */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-paper-white);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-24);
+  padding-top: var(--spacing-20);
+  padding-bottom: var(--spacing-20);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  font-size: var(--text-subheading);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-canopy-green);
+  letter-spacing: -0.019em;
+}
+
+.logo svg { color: var(--color-canopy-green); }
+
+.logo-text { display: inline; }
+
+/* Bouton de nav : plus petit que les CTA de hero. */
+.btn-nav {
+  background-color: var(--color-paper-white);
+  font-size: var(--text-body-sm);
+  padding: var(--spacing-8) var(--spacing-20);
+  min-height: 44px;
+}
+
+/* ---------- Hero : bande vert canopée pleine largeur ---------- */
+
+.hero {
+  background-color: var(--color-canopy-green);
+  padding: var(--spacing-80) 0 var(--spacing-120);
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-24);
+  max-width: 860px;
+}
+
+.hero-title {
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-paper-white);
+  margin: 0;
+}
+
+.hero-subtitle {
+  color: var(--color-mint-wash);
+  max-width: 520px;
+  margin: 0;
+}
+
+/* ---------- Comment ça marche : bande blanche ---------- */
+
+.how-it-works {
+  background-color: var(--color-paper-white);
+  padding: var(--spacing-80) 0;
+}
+
+.how-it-works h2,
+.difference h2,
+.faq h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-48);
+}
+
+.steps,
+.difference-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-24);
+}
+
+@media (min-width: 640px) {
+  .steps,
+  .difference-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1000px) {
+  .steps,
+  .difference-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Cartes pastel : jamais blanches ni grises. Rotation gérée ici
+   pour que le JSX reste propre. */
+.step,
+.difference-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--spacing-32);
+  border-radius: var(--radius-cards);
+}
+
+.steps .step:nth-child(1) { background-color: var(--color-mint-wash); }
+.steps .step:nth-child(2) { background-color: var(--color-sage-wash); }
+.steps .step:nth-child(3) { background-color: var(--color-sky-wash); }
+
+.difference-grid .difference-card:nth-child(1) { background-color: var(--color-cream); }
+.difference-grid .difference-card:nth-child(2) { background-color: var(--color-lilac-wash); }
+.difference-grid .difference-card:nth-child(3) { background-color: var(--color-peach-wash); }
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-tags);
+  background-color: var(--color-canopy-green);
+  color: var(--color-paper-white);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-24);
+}
+
+.step h3,
+.difference-card h3 {
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-canopy-green);
+  margin-bottom: var(--spacing-12);
+}
+
+.step p,
+.difference-card p {
+  color: var(--color-graphite);
+  margin: 0;
+}
+
+.difference-icon {
+  font-size: 24px;
+  line-height: 1;
+  margin-bottom: var(--spacing-20);
+}
+
+/* ---------- Notre différence : bande lavande ---------- */
+
+.difference {
+  background-color: var(--color-lavender-mist);
+  padding: var(--spacing-80) 0;
+}
+
+/* ---------- Avertissement ---------- */
+
+.disclaimer {
+  background-color: var(--color-paper-white);
+  padding: var(--spacing-64) 0;
+}
+
+.disclaimer .alert {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ---------- FAQ : bande blanche ---------- */
+
+.faq {
+  background-color: var(--color-paper-white);
+  padding: var(--spacing-80) 0;
+}
+
+.faq-list {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border-hairline);
+  cursor: pointer;
+}
+
+.faq-item:last-child { border-bottom: none; }
+
+.faq-item summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-24);
+  padding: var(--spacing-24) 0;
+  font-size: var(--text-subheading);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-canopy-green);
+  user-select: none;
+  list-style: none;
+  min-height: 44px;
+}
+
+.faq-item summary::-webkit-details-marker { display: none; }
+
+.faq-item summary::after {
+  content: '+';
+  font-size: var(--text-heading-sm);
+  line-height: 1;
+  color: var(--color-canopy-green);
+  transition: transform var(--duration-normal) var(--easing);
+}
+
+.faq-item[open] summary::after { transform: rotate(45deg); }
+
+.faq-item p {
+  padding-bottom: var(--spacing-24);
+  color: var(--color-graphite);
+  margin: 0;
+  max-width: 68ch;
+}
+
+/* ---------- CTA final : retour au vert canopée ---------- */
+
+.cta-final {
+  background-color: var(--color-canopy-green);
+  padding: var(--spacing-80) 0;
+  text-align: center;
+}
+
+.cta-final h2 {
+  color: var(--color-paper-white);
+  margin-bottom: var(--spacing-32);
+}
+
+.cta-final .btn-group { justify-content: center; }
+
+/* ---------- Pied de page ---------- */
+
+.footer {
+  background-color: var(--color-canopy-green);
+  padding: var(--spacing-48) 0 var(--spacing-64);
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.footer p {
+  color: var(--color-mint-wash);
+  font-size: var(--text-body-sm);
+  margin: 0 0 var(--spacing-8);
+}
+
+.footer-pending {
+  color: var(--color-ash);
+  font-size: var(--text-body-sm);
+  margin: 0;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 700px) {
+  .header-content {
+    padding-top: var(--spacing-12);
+    padding-bottom: var(--spacing-12);
+  }
+
+  .hero { padding: var(--spacing-56) 0 var(--spacing-64); }
+
+  .how-it-works,
+  .difference,
+  .faq,
+  .cta-final { padding: var(--spacing-56) 0; }
+
+  .step,
+  .difference-card { padding: var(--spacing-24); }
+}
