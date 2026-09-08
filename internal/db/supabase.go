@@ -12,14 +12,19 @@ import (
 var DB *sql.DB
 
 func Init() error {
-	url := os.Getenv("SUPABASE_URL")
-	key := os.Getenv("SUPABASE_KEY")
-
-	if url == "" || key == "" {
-		return fmt.Errorf("SUPABASE_URL and SUPABASE_KEY must be set")
+	// DATABASE_URL est la connection string Postgres complète fournie
+	// par Supabase (Project Settings > Database > Connection string).
+	// On l'utilise telle quelle plutôt que de la reconstruire depuis
+	// SUPABASE_URL/SUPABASE_KEY : ces deux-là sont prévus pour le SDK
+	// JS Supabase (REST + anon key), pas pour une connexion psql
+	// directe, et la reconstruction précédente tronquait l'hôte au
+	// mauvais endroit (url[8:len(url)-8]) au lieu d'en retirer juste
+	// le préfixe "https://".
+	connStr := os.Getenv("DATABASE_URL")
+	if connStr == "" {
+		return fmt.Errorf("DATABASE_URL must be set")
 	}
 
-	connStr := fmt.Sprintf("postgres://postgres:%s@db.%s/postgres?sslmode=require", key, url[8:len(url)-8])
 	var err error
 	DB, err = sql.Open("postgres", connStr)
 	if err != nil {

@@ -13,7 +13,7 @@ func main() {
 	godotenv.Load()
 
 	// Initialize Supabase (optional - only if env vars are set)
-	if os.Getenv("SUPABASE_URL") != "" && os.Getenv("SUPABASE_KEY") != "" {
+	if os.Getenv("DATABASE_URL") != "" {
 		if err := db.Init(); err != nil {
 			panic("Failed to init Supabase: " + err.Error())
 		}
