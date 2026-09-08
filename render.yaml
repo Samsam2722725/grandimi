@@ -1,14 +1,9 @@
-version: 1
-type: docker
-plan: free
-envVars:
-  - key: PORT
-    value: 8080
-  - key: SUPABASE_URL
-    value: https://btujpubexjueauevwphw.supabase.co
-  - key: SUPABASE_KEY
-    value: sb_publishable_MB6V8HyhyvWVRubqGxElVg_sLjSJL5V
-  - key: WHOP_PRODUCT_SLUG
-    value: text-aa
-  - key: WHOP_BUSINESS_ID
-    value: biz_nqh5U5JaSMUVS7
+services:
+  - type: web
+    name: grandimi-frontend
+    runtime: node
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && npm run preview
+    envVars:
+      - key: NODE_ENV
+        value: production

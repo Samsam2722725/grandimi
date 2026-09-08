@@ -1,0 +1,35 @@
+name: Deploy Backend to Railway
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'cmd/**'
+      - 'internal/**'
+      - 'go.mod'
+      - 'go.sum'
+      - 'Dockerfile'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Login to Railway
+        run: |
+          curl -s -X POST https://api.railway.app/graphql \
+            -H "Content-Type: application/json" \
+            -d '{
+              "query": "mutation { railwayLogin(email: \"${{ secrets.RAILWAY_EMAIL }}\", password: \"${{ secrets.RAILWAY_PASSWORD }}\") { token } }"
+            }'
+      
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          npx -y railway up --service grandimi-backend
+
+      - name: Notify Success
+        run: echo "✅ Backend deployed to Railway!"
+
