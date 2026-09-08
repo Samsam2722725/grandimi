@@ -386,8 +386,6 @@ func generateTimeline(req GrowthPlanRequest) Timeline {
 
 // calculateAdditionalGrowth estimates additional growth possible
 func calculateAdditionalGrowth(req GrowthPlanRequest) float64 {
-	gap := req.PredictedHeight - req.CurrentHeight
-
 	// Factors that can add 1-3cm beyond prediction
 	additional := 1.0 // Base: optimized posture adds ~1cm appearance
 

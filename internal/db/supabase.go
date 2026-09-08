@@ -2,13 +2,14 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"os"
 
-	"github.com/supabase-community/supabase-go"
+	_ "github.com/lib/pq"
 )
 
-var Client *supabase.Client
+var DB *sql.DB
 
 func Init() error {
 	url := os.Getenv("SUPABASE_URL")
@@ -18,13 +19,14 @@ func Init() error {
 		return fmt.Errorf("SUPABASE_URL and SUPABASE_KEY must be set")
 	}
 
-	client, err := supabase.NewClient(url, key, nil)
+	connStr := fmt.Sprintf("postgres://postgres:%s@db.%s/postgres?sslmode=require", key, url[8:len(url)-8])
+	var err error
+	DB, err = sql.Open("postgres", connStr)
 	if err != nil {
 		return err
 	}
 
-	Client = client
-	return nil
+	return DB.PingContext(context.Background())
 }
 
 // User types
@@ -66,95 +68,72 @@ type Subscription struct {
 
 // GetOrCreateUser - get user by email, create if not exists
 func GetOrCreateUser(email string) (*User, error) {
-	var users []User
-	err := Client.DB.From("users").Select("*").Eq("email", email).ExecuteTo(context.Background(), &users)
+	var user User
+	err := DB.QueryRowContext(context.Background(),
+		"SELECT id, email, is_premium, whop_customer_id, whop_subscription_id, consent_parental, created_at FROM users WHERE email = $1",
+		email).Scan(&user.ID, &user.Email, &user.IsPremium, &user.WhopCustomerID, &user.WhopSubscriptionID, &user.ConsentParental, &user.CreatedAt)
 
-	if err == nil && len(users) > 0 {
-		return &users[0], nil
+	if err == nil {
+		return &user, nil
 	}
 
-	// Create new user
-	newUser := User{
-		Email:     email,
-		IsPremium: false,
-	}
-
-	var created []User
-	err = Client.DB.From("users").Insert([]User{newUser}, false, "", "", "").ExecuteTo(context.Background(), &created)
+	_, err = DB.ExecContext(context.Background(),
+		"INSERT INTO users (email, is_premium) VALUES ($1, $2)",
+		email, false)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(created) > 0 {
-		return &created[0], nil
-	}
-
-	return nil, fmt.Errorf("failed to create user")
+	return GetOrCreateUser(email)
 }
 
-// UpdateUserPremium - set user as premium
-// GetUserByID - récupère un utilisateur par son id.
-// Retourne (nil, nil) si l'utilisateur n'existe pas : l'appelant doit
-// distinguer « inconnu » d'une véritable erreur de base.
+// GetUserByID - récupère un utilisateur par son id
 func GetUserByID(userID string) (*User, error) {
-	var users []User
-	err := Client.DB.From("users").Select("*").Eq("id", userID).ExecuteTo(context.Background(), &users)
-	if err != nil {
-		return nil, err
-	}
+	var user User
+	err := DB.QueryRowContext(context.Background(),
+		"SELECT id, email, is_premium, whop_customer_id, whop_subscription_id, consent_parental, created_at FROM users WHERE id = $1",
+		userID).Scan(&user.ID, &user.Email, &user.IsPremium, &user.WhopCustomerID, &user.WhopSubscriptionID, &user.ConsentParental, &user.CreatedAt)
 
-	if len(users) == 0 {
+	if err == sql.ErrNoRows {
 		return nil, nil
 	}
+	if err != nil {
+		return nil, err
+	}
 
-	return &users[0], nil
+	return &user, nil
 }
 
-// SetUserPremium - active ou désactive le premium.
-// Nécessaire pour traiter subscription.cancelled : sans ça, un abonné
-// résilié gardait l'accès indéfiniment.
+// SetUserPremium - active ou désactive le premium
 func SetUserPremium(userID string, isPremium bool) error {
-	_, err := Client.DB.From("users").
-		Update(map[string]interface{}{
-			"is_premium": isPremium,
-		}, "", "").
-		Eq("id", userID).
-		Execute(context.Background())
-
+	_, err := DB.ExecContext(context.Background(),
+		"UPDATE users SET is_premium = $1 WHERE id = $2",
+		isPremium, userID)
 	return err
 }
 
+// UpdateUserPremium - update user premium info
 func UpdateUserPremium(userID string, whopCustomerID string, whopSubscriptionID string) error {
-	_, err := Client.DB.From("users").
-		Update(map[string]interface{}{
-			"is_premium":            true,
-			"whop_customer_id":      whopCustomerID,
-			"whop_subscription_id":  whopSubscriptionID,
-		}, "", "").
-		Eq("id", userID).
-		Execute(context.Background())
-
+	_, err := DB.ExecContext(context.Background(),
+		"UPDATE users SET is_premium = $1, whop_customer_id = $2, whop_subscription_id = $3 WHERE id = $4",
+		true, whopCustomerID, whopSubscriptionID, userID)
 	return err
 }
 
 // SavePrediction - save prediction to database
 func SavePrediction(prediction Prediction) error {
-	_, err := Client.DB.From("predictions").
-		Insert([]Prediction{prediction}, false, "", "", "").
-		Execute(context.Background())
+	_, err := DB.ExecContext(context.Background(),
+		"INSERT INTO predictions (user_id, age, sex, height_cm, weight_kg, father_height_cm, mother_height_cm, predicted_height, confidence_level, confidence_min, confidence_max) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+		prediction.UserID, prediction.Age, prediction.Sex, prediction.HeightCm, prediction.WeightKg,
+		prediction.FatherHeightCm, prediction.MotherHeightCm, prediction.PredictedHeight,
+		prediction.ConfidenceLevel, prediction.ConfidenceMin, prediction.ConfidenceMax)
 	return err
 }
 
 // CreateSubscription - create subscription record
 func CreateSubscription(userID string, whopSubscriptionID string) error {
-	sub := Subscription{
-		UserID:             userID,
-		WhopSubscriptionID: whopSubscriptionID,
-		Status:             "active",
-	}
-
-	_, err := Client.DB.From("subscriptions").
-		Insert([]Subscription{sub}, false, "", "", "").
-		Execute(context.Background())
+	_, err := DB.ExecContext(context.Background(),
+		"INSERT INTO subscriptions (user_id, whop_subscription_id, status) VALUES ($1, $2, $3)",
+		userID, whopSubscriptionID, "active")
 	return err
 }

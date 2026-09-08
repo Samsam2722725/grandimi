@@ -366,8 +366,6 @@ func getCoefficientsV2(age float64, sex string) Coefficients {
 
 // getEthnicCoefficients - Ethnic-specific growth coefficients
 func getEthnicCoefficients(age float64, sex string, ethnic EthnicBackground) Coefficients {
-	ageInt := int(age)
-
 	// Population-specific adjustment factors
 	// Based on WHO growth studies and ethnic research
 	adjustments := map[EthnicBackground]float64{
