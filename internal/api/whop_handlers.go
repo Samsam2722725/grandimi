@@ -64,9 +64,13 @@ func GetCheckout(c *gin.Context) {
 		return
 	}
 
-	// Get or create user
+	// Get or create user.
+	// L'erreur réelle part dans les logs du serveur, jamais au client :
+	// diagnostiquer un 500 sans trace exige sinon un déploiement dédié
+	// juste pour voir le message.
 	user, err := db.GetOrCreateUser(req.Email)
 	if err != nil {
+		fmt.Printf("[checkout] GetOrCreateUser(%q): %v\n", req.Email, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user"})
 		return
 	}
@@ -122,6 +126,7 @@ func WhopWebhook(c *gin.Context) {
 	if payload.Type == "membership.activated" {
 		user, err := db.GetOrCreateUser(payload.Data.User.Email)
 		if err != nil {
+			fmt.Printf("[whop] membership.activated GetOrCreateUser(%q): %v\n", payload.Data.User.Email, err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user"})
 			return
 		}
@@ -129,6 +134,7 @@ func WhopWebhook(c *gin.Context) {
 		// Update user as premium
 		err = db.UpdateUserPremium(user.ID, payload.Data.User.ID, payload.Data.ID)
 		if err != nil {
+			fmt.Printf("[whop] UpdateUserPremium(%s): %v\n", user.ID, err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update user"})
 			return
 		}
@@ -136,6 +142,7 @@ func WhopWebhook(c *gin.Context) {
 		// Create subscription record
 		err = db.CreateSubscription(user.ID, payload.Data.ID)
 		if err != nil {
+			fmt.Printf("[whop] CreateSubscription(%s): %v\n", user.ID, err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create subscription"})
 			return
 		}
@@ -152,12 +159,14 @@ func WhopWebhook(c *gin.Context) {
 	if payload.Type == "membership.deactivated" {
 		user, err := db.GetOrCreateUser(payload.Data.User.Email)
 		if err != nil {
+			fmt.Printf("[whop] membership.deactivated GetOrCreateUser(%q): %v\n", payload.Data.User.Email, err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user"})
 			return
 		}
 
 		// Sans ceci, un abonné résilié conservait l'accès premium à vie.
 		if err := db.SetUserPremium(user.ID, false); err != nil {
+			fmt.Printf("[whop] SetUserPremium(%s, false): %v\n", user.ID, err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to revoke premium"})
 			return
 		}
@@ -240,6 +249,7 @@ func CheckPremium(c *gin.Context) {
 
 	user, err := db.GetUserByID(userID)
 	if err != nil {
+		fmt.Printf("[check-premium] GetUserByID(%q): %v\n", userID, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to read user"})
 		return
 	}

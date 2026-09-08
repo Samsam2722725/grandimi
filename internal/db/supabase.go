@@ -71,14 +71,29 @@ type Subscription struct {
 	UpdatedAt          string `json:"updated_at"`
 }
 
-// selectUserSQL caste created_at en text : User.CreatedAt est une
-// string, mais la colonne est timestamptz. Sans ce cast, lib/pq
-// renvoie une erreur de Scan (time.Time -> *string) sur CHAQUE lecture
-// — y compris juste après un INSERT réussi. GetOrCreateUser confondait
-// alors cette erreur de type avec "la ligne n'existe pas" et retentait
-// un INSERT sur un email déjà présent, échouant sur la contrainte
-// unique au lieu de retourner l'utilisateur qui venait d'être créé.
-const selectUserSQL = "SELECT id, email, is_premium, whop_customer_id, whop_subscription_id, consent_parental, created_at::text FROM users WHERE "
+// selectUserSQL adapte chaque colonne au type Go correspondant, car
+// les champs de User sont tous non-nullables (string / bool) :
+//
+//   - created_at::text : la colonne est timestamptz, lib/pq la rend en
+//     time.Time et refuse de la scanner dans un *string.
+//   - COALESCE sur le reste : l'INSERT de GetOrCreateUser ne renseigne
+//     que email et is_premium, donc whop_customer_id et
+//     whop_subscription_id valent NULL sur toute ligne fraîchement
+//     créée — et scanner NULL dans un *string échoue.
+//
+// Sans ces conversions, le SELECT échouait sur CHAQUE lecture, y
+// compris juste après un INSERT réussi. GetOrCreateUser prenait cette
+// erreur pour un "la ligne n'existe pas" et retentait l'INSERT, qui
+// violait alors la contrainte unique sur email.
+const selectUserSQL = `SELECT
+	id,
+	email,
+	COALESCE(is_premium, false),
+	COALESCE(whop_customer_id, ''),
+	COALESCE(whop_subscription_id, ''),
+	COALESCE(consent_parental, false),
+	COALESCE(created_at::text, '')
+FROM users WHERE `
 
 // GetOrCreateUser - get user by email, create if not exists
 func GetOrCreateUser(email string) (*User, error) {
