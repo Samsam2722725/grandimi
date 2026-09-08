@@ -12,9 +12,11 @@ import (
 func main() {
 	godotenv.Load()
 
-	// Initialize Supabase
-	if err := db.Init(); err != nil {
-		panic("Failed to init Supabase: " + err.Error())
+	// Initialize Supabase (optional - only if env vars are set)
+	if os.Getenv("SUPABASE_URL") != "" && os.Getenv("SUPABASE_KEY") != "" {
+		if err := db.Init(); err != nil {
+			panic("Failed to init Supabase: " + err.Error())
+		}
 	}
 
 	port := os.Getenv("PORT")
