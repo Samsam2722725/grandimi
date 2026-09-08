@@ -75,21 +75,21 @@ func GetCheckout(c *gin.Context) {
 		return
 	}
 
-	// Slug du produit Whop, via l'environnement.
-	// Il était codé en dur à "text-aa" — un placeholder qui aurait
-	// envoyé chaque client vers un produit inexistant. On échoue
-	// bruyamment plutôt que de rediriger vers une page morte.
-	productSlug := os.Getenv("WHOP_PRODUCT_SLUG")
-	if productSlug == "" {
+	// ID du PLAN Whop (pas du produit) : /checkout attend un
+	// "plan_XXXX", qui est ce que l'API Whop renvoie dans purchase_url.
+	// Y mettre un slug de produit rend une page d'erreur Whop, pas un
+	// paiement — c'est ce qui se passait avec "text-aa".
+	planID := os.Getenv("WHOP_PLAN_ID")
+	if planID == "" {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "WHOP_PRODUCT_SLUG is not configured",
+			"error": "WHOP_PLAN_ID is not configured",
 		})
 		return
 	}
 
 	checkoutURL := fmt.Sprintf(
 		"https://whop.com/checkout/%s?customer_email=%s",
-		productSlug,
+		planID,
 		url.QueryEscape(req.Email),
 	)
 
