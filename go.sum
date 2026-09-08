@@ -1,7 +1,7 @@
 github.com/gin-gonic/gin v1.9.1 h1:4idEAncQnU5cB7BeXkJgdtciV7YpyHba2rbWbq7THY=
 github.com/gin-gonic/gin v1.9.1/go.mod h1:hPrL7YrpYKXt5YId3xUVrCisDpdFnsqNQjHskI3woI=
 github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
-github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa49BEAfY6uI=
+github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/supabase-community/supabase-go v0.0.3 h1:mGm6yt2+L3jE5u88zOODzRsyq3wq0jafjaXUEyw+U1A=
 github.com/supabase-community/supabase-go v0.0.3/go.mod h1:qrV3gAYT8qrNIZhbK1wIEfZJlrDR+c/gZPXHT+eEE=
 github.com/lib/pq v1.10.9 h1:YXG7RB+JIjhP29X+OtkiDnNstAom0QlUg1Fs7bnucE=
