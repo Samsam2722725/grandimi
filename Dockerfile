@@ -4,7 +4,7 @@ FROM golang:1.22-alpine AS builder
 WORKDIR /app
 
 COPY go.mod ./
-RUN go mod download && go mod tidy
+RUN go mod tidy && go mod download
 
 COPY . .
 
