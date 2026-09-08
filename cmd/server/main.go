@@ -52,6 +52,21 @@ func main() {
 	router.POST("/webhooks/whop", api.WhopWebhook)
 	router.GET("/api/v1/check-premium", api.CheckPremium)
 
+	// Admin Panel (protected by ADMIN_TOKEN)
+	admin := router.Group("/api/admin")
+	admin.Use(api.AdminAuthMiddleware())
+	{
+		admin.GET("/stats", api.AdminStats)
+		admin.GET("/users", api.AdminUsers)
+		admin.GET("/subscriptions", api.AdminSubscriptions)
+		admin.GET("/webhooks", api.AdminWebhookLogs)
+		admin.GET("/user/:id", api.UserDetail)
+		admin.POST("/user/grant-premium", api.AdminGrantPremium)
+		admin.POST("/user/revoke-premium", api.AdminRevokePremium)
+		admin.DELETE("/user/:id", api.AdminDeleteUser)
+		admin.POST("/webhook/simulate", api.AdminWebhookSimulator)
+	}
+
 	router.Run(":" + port)
 }
 

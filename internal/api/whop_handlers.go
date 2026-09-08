@@ -122,11 +122,19 @@ func WhopWebhook(c *gin.Context) {
 		return
 	}
 
+	// Log webhook for audit trail
+	payloadMap := map[string]interface{}{
+		"type": payload.Type,
+		"data": payload.Data,
+	}
+	db.LogWebhook(payload.Type, payload.Data.User.Email, payloadMap, "received")
+
 	// Handle membership.activated (paiement confirmé)
 	if payload.Type == "membership.activated" {
 		user, err := db.GetOrCreateUser(payload.Data.User.Email)
 		if err != nil {
 			fmt.Printf("[whop] membership.activated GetOrCreateUser(%q): %v\n", payload.Data.User.Email, err)
+			db.LogWebhook(payload.Type, payload.Data.User.Email, payloadMap, "failed")
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user"})
 			return
 		}

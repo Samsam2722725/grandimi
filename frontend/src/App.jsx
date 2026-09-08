@@ -10,6 +10,7 @@ import ResultsPage from './pages/ResultsPage';
 import PaywallPage from './pages/PaywallPage';
 import GrowthPlanPage from './pages/GrowthPlanPage';
 import AuthPage from './pages/AuthPage';
+import AdminPage from './pages/AdminPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -100,6 +101,14 @@ function App() {
     setFormData(null);
   };
 
+  // Check for admin panel access via URL parameter
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('admin')) {
+      setCurrentPage('admin');
+    }
+  }, []);
+
   return (
     <div className="app">
       {/* Public pages */}
@@ -143,6 +152,9 @@ function App() {
           onBackHome={handleBackHome}
         />
       )}
+
+      {/* Admin Panel */}
+      {currentPage === 'admin' && <AdminPage />}
     </div>
   );
 }
