@@ -2,8 +2,5 @@ module grandimi
 
 go 1.22
 
-require (
-	github.com/gin-gonic/gin v1.9.1
-	github.com/joho/godotenv v1.5.1
-	github.com/supabase-community/supabase-go v0.0.0-20230801185507-b5c45a961d97
-)
+require github.com/gin-gonic/gin v1.9.1
+require github.com/lib/pq v1.10.9
