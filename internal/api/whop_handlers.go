@@ -67,7 +67,7 @@ func GetCheckout(c *gin.Context) {
 	// Get or create user
 	user, err := db.GetOrCreateUser(req.Email)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user: " + err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user"})
 		return
 	}
 

@@ -71,15 +71,27 @@ type Subscription struct {
 	UpdatedAt          string `json:"updated_at"`
 }
 
+// selectUserSQL caste created_at en text : User.CreatedAt est une
+// string, mais la colonne est timestamptz. Sans ce cast, lib/pq
+// renvoie une erreur de Scan (time.Time -> *string) sur CHAQUE lecture
+// — y compris juste après un INSERT réussi. GetOrCreateUser confondait
+// alors cette erreur de type avec "la ligne n'existe pas" et retentait
+// un INSERT sur un email déjà présent, échouant sur la contrainte
+// unique au lieu de retourner l'utilisateur qui venait d'être créé.
+const selectUserSQL = "SELECT id, email, is_premium, whop_customer_id, whop_subscription_id, consent_parental, created_at::text FROM users WHERE "
+
 // GetOrCreateUser - get user by email, create if not exists
 func GetOrCreateUser(email string) (*User, error) {
 	var user User
 	err := DB.QueryRowContext(context.Background(),
-		"SELECT id, email, is_premium, whop_customer_id, whop_subscription_id, consent_parental, created_at FROM users WHERE email = $1",
-		email).Scan(&user.ID, &user.Email, &user.IsPremium, &user.WhopCustomerID, &user.WhopSubscriptionID, &user.ConsentParental, &user.CreatedAt)
+		selectUserSQL+"email = $1", email,
+	).Scan(&user.ID, &user.Email, &user.IsPremium, &user.WhopCustomerID, &user.WhopSubscriptionID, &user.ConsentParental, &user.CreatedAt)
 
 	if err == nil {
 		return &user, nil
+	}
+	if err != sql.ErrNoRows {
+		return nil, err
 	}
 
 	_, err = DB.ExecContext(context.Background(),
@@ -96,8 +108,8 @@ func GetOrCreateUser(email string) (*User, error) {
 func GetUserByID(userID string) (*User, error) {
 	var user User
 	err := DB.QueryRowContext(context.Background(),
-		"SELECT id, email, is_premium, whop_customer_id, whop_subscription_id, consent_parental, created_at FROM users WHERE id = $1",
-		userID).Scan(&user.ID, &user.Email, &user.IsPremium, &user.WhopCustomerID, &user.WhopSubscriptionID, &user.ConsentParental, &user.CreatedAt)
+		selectUserSQL+"id = $1", userID,
+	).Scan(&user.ID, &user.Email, &user.IsPremium, &user.WhopCustomerID, &user.WhopSubscriptionID, &user.ConsentParental, &user.CreatedAt)
 
 	if err == sql.ErrNoRows {
 		return nil, nil
