@@ -11,6 +11,7 @@ import ResultsPage from './pages/ResultsPage';
 import PaywallPage from './pages/PaywallPage';
 import GrowthPlanPage from './pages/GrowthPlanPage';
 import AuthPage from './pages/AuthPage';
+import CompleteAccountPage from './pages/CompleteAccountPage';
 import AdminPage from './pages/AdminPage';
 
 function App() {
@@ -118,14 +119,9 @@ function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
-    // Après paiement Whop, rediriger vers login
+    // Après paiement Whop, créer compte
     if (params.has('checkout_status') && params.get('checkout_status') === 'success') {
-      const receiptId = params.get('receipt_id');
-      const message = 'Paiement réussi! Veuillez vous connecter avec votre email pour accéder à votre plan.';
-      alert(message);
-      setCurrentPage('auth-results');
-      // Nettoyer l'URL
-      window.history.replaceState({}, document.title, window.location.pathname);
+      setCurrentPage('complete-account');
     }
   }, []);
 
@@ -154,6 +150,11 @@ function App() {
       {/* Auth pages */}
       {currentPage === 'auth-results' && (
         <AuthPage onAuthComplete={handleAuthComplete} />
+      )}
+
+      {/* Complete account after payment */}
+      {currentPage === 'complete-account' && (
+        <CompleteAccountPage onAuthComplete={handleAuthComplete} />
       )}
 
       {/* Results (visible after auth) */}
