@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Spinner from '../components/Spinner';
+import apiClient from '../lib/api';
 import '../styles/auth-page.css';
 
 function AuthPage({ onAuthComplete }) {
@@ -16,23 +17,26 @@ function AuthPage({ onAuthComplete }) {
     setError('');
 
     try {
-      // Simulated auth - would call real backend
       if (mode === 'login') {
         if (!email || !password) throw new Error('Email et mot de passe requis');
-        // Simulate login
-        localStorage.setItem('user', JSON.stringify({ email, role: 'user' }));
-        localStorage.setItem('token', 'fake-jwt-token-' + Date.now());
+
+        // Login réel
+        const response = await apiClient.login({ email, password });
+        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('token', response.token);
       } else if (mode === 'signup') {
-        if (!name || !email || !password) throw new Error('Tous les champs requis');
-        // Simulate signup
-        localStorage.setItem('user', JSON.stringify({ email, name, role: 'user' }));
-        localStorage.setItem('token', 'fake-jwt-token-' + Date.now());
+        if (!email || !password) throw new Error('Email et mot de passe requis');
+
+        // Signup réel
+        const response = await apiClient.signup({ email, password });
+        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('token', response.token);
       }
 
       setLoading(false);
       onAuthComplete();
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Erreur lors de l\'authentification');
       setLoading(false);
     }
   };
@@ -112,21 +116,9 @@ function AuthPage({ onAuthComplete }) {
                 )}
 
                 <div className="form-group">
-                  <label htmlFor="name">Prénom</label>
+                  <label htmlFor="email-signup">Email</label>
                   <input
-                    id="name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Ton prénom"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    id="email"
+                    id="email-signup"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -136,9 +128,9 @@ function AuthPage({ onAuthComplete }) {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="password">Mot de passe</label>
+                  <label htmlFor="password-signup">Mot de passe</label>
                   <input
-                    id="password"
+                    id="password-signup"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}

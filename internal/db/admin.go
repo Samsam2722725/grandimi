@@ -183,6 +183,21 @@ func RevokePremium(userID string) error {
 	return err
 }
 
+// UpdateUserPassword stores password hash for user
+func UpdateUserPassword(userID string, passwordHash string) error {
+	_, err := DB.ExecContext(context.Background(),
+		`UPDATE users SET password_hash = $1 WHERE id = $2`, passwordHash, userID)
+	return err
+}
+
+// GetUserPassword retrieves password hash for user
+func GetUserPassword(userID string) (string, error) {
+	var passwordHash string
+	err := DB.QueryRowContext(context.Background(),
+		`SELECT COALESCE(password_hash, '') FROM users WHERE id = $1`, userID).Scan(&passwordHash)
+	return passwordHash, err
+}
+
 // GetUserPredictions returns all predictions for a user
 func GetUserPredictions(userID string) ([]Prediction, error) {
 	rows, err := DB.QueryContext(context.Background(),

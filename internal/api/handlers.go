@@ -190,7 +190,7 @@ type SignupRequest struct {
 	Password string `json:"password" binding:"required,min=8"`
 }
 
-// Signup creates a new user account
+// Signup creates a new user account with password
 func Signup(c *gin.Context) {
 	var req SignupRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -206,9 +206,65 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	// TODO: Hash password and store securely
-	// For now, just generate a simple token
-	token := fmt.Sprintf("token_%s_%d", user.ID, time.Now().Unix())
+	// Hash password and store it
+	passwordHash := HashPassword(req.Password)
+	err = db.UpdateUserPassword(user.ID, passwordHash)
+	if err != nil {
+		fmt.Printf("[signup] UpdateUserPassword(%s): %v\n", user.ID, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to set password"})
+		return
+	}
+
+	// Generate token
+	token := GenerateToken(user.ID)
+
+	c.JSON(http.StatusOK, gin.H{
+		"user": gin.H{
+			"id":    user.ID,
+			"email": user.Email,
+		},
+		"token": token,
+	})
+}
+
+// LoginRequest - Login with email and password
+type LoginRequest struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required"`
+}
+
+// Login authenticates user with email and password
+func Login(c *gin.Context) {
+	var req LoginRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Get user by email
+	user, err := db.GetOrCreateUser(req.Email)
+	if err != nil {
+		fmt.Printf("[login] GetOrCreateUser(%q): %v\n", req.Email, err)
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid email or password"})
+		return
+	}
+
+	// Get user with password hash
+	userWithPassword, err := db.GetUserPassword(user.ID)
+	if err != nil {
+		fmt.Printf("[login] GetUserPassword(%s): %v\n", user.ID, err)
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid email or password"})
+		return
+	}
+
+	// Verify password
+	if !VerifyPassword(req.Password, userWithPassword) {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid email or password"})
+		return
+	}
+
+	// Generate token
+	token := GenerateToken(user.ID)
 
 	c.JSON(http.StatusOK, gin.H{
 		"user": gin.H{

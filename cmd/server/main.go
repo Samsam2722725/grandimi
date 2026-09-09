@@ -49,6 +49,7 @@ func main() {
 
 	// Auth
 	router.POST("/api/v1/auth/signup", api.Signup)
+	router.POST("/api/v1/auth/login", api.Login)
 
 	// Payment & Subscription
 	router.POST("/api/v1/checkout", api.GetCheckout)
