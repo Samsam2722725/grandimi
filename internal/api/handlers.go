@@ -197,25 +197,57 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	// Get or create user
-	user, err := db.GetOrCreateUser(req.Email)
+	user, err := db.GetUserByEmail(req.Email)
 	if err != nil {
-		fmt.Printf("[signup] GetOrCreateUser(%q): %v\n", req.Email, err)
+		fmt.Printf("[signup] GetUserByEmail(%q): %v\n", req.Email, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create user"})
 		return
 	}
 
-	// Hash password and store it
-	passwordHash := HashPassword(req.Password)
-	err = db.UpdateUserPassword(user.ID, passwordHash)
+	/* Un compte déjà protégé par un mot de passe n'est jamais réécrit.
+	   Auparavant Signup posait le mot de passe sans rien vérifier : comme
+	   le questionnaire crée un compte pour chaque adresse saisie, il
+	   suffisait de « s'inscrire » avec l'adresse d'un tiers pour prendre
+	   son compte, abonnement compris. */
+	if user != nil {
+		hashExistant, err := db.GetUserPassword(user.ID)
+		if err != nil {
+			fmt.Printf("[signup] GetUserPassword(%s): %v\n", user.ID, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create user"})
+			return
+		}
+		if hashExistant != "" {
+			c.JSON(http.StatusConflict, gin.H{"error": "un compte existe déjà pour cette adresse"})
+			return
+		}
+	} else {
+		user, err = db.GetOrCreateUser(req.Email)
+		if err != nil {
+			fmt.Printf("[signup] GetOrCreateUser(%q): %v\n", req.Email, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create user"})
+			return
+		}
+	}
+
+	passwordHash, err := HashPassword(req.Password)
 	if err != nil {
+		fmt.Printf("[signup] HashPassword: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to set password"})
+		return
+	}
+
+	if err := db.UpdateUserPassword(user.ID, passwordHash); err != nil {
 		fmt.Printf("[signup] UpdateUserPassword(%s): %v\n", user.ID, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to set password"})
 		return
 	}
 
-	// Generate token
-	token := GenerateToken(user.ID)
+	token, err := GenerateToken(user.ID)
+	if err != nil {
+		journaliserSecretManquant("signup", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to open session"})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"user": gin.H{
@@ -240,30 +272,37 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// Get user by email
-	user, err := db.GetOrCreateUser(req.Email)
+	/* Recherche stricte : GetOrCreateUser créait un compte à chaque
+	   tentative sur une adresse inconnue. */
+	user, err := db.GetUserByEmail(req.Email)
 	if err != nil {
-		fmt.Printf("[login] GetOrCreateUser(%q): %v\n", req.Email, err)
+		fmt.Printf("[login] GetUserByEmail(%q): %v\n", req.Email, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "erreur interne"})
+		return
+	}
+	if user == nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid email or password"})
 		return
 	}
 
-	// Get user with password hash
-	userWithPassword, err := db.GetUserPassword(user.ID)
+	hashEnregistre, err := db.GetUserPassword(user.ID)
 	if err != nil {
 		fmt.Printf("[login] GetUserPassword(%s): %v\n", user.ID, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "erreur interne"})
+		return
+	}
+
+	if !VerifyPassword(req.Password, hashEnregistre) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid email or password"})
 		return
 	}
 
-	// Verify password
-	if !VerifyPassword(req.Password, userWithPassword) {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid email or password"})
+	token, err := GenerateToken(user.ID)
+	if err != nil {
+		journaliserSecretManquant("login", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to open session"})
 		return
 	}
-
-	// Generate token
-	token := GenerateToken(user.ID)
 
 	c.JSON(http.StatusOK, gin.H{
 		"user": gin.H{
@@ -276,22 +315,15 @@ func Login(c *gin.Context) {
 
 // GetPredictionsByEmail récupère les prédictions d'un utilisateur par email
 func GetPredictionsByEmail(c *gin.Context) {
-	email := c.Query("email")
-	if email == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "email required"})
-		return
-	}
+	/* L'identifiant vient de la session, jamais de la requête.
+	   Cette route acceptait un ?email= arbitraire et renvoyait, sans
+	   aucune authentification, l'âge, le sexe, la taille et le poids de
+	   l'enfant ainsi que la taille de ses deux parents. */
+	userID := c.GetString("userID")
 
-	user, err := db.GetOrCreateUser(email)
+	predictions, err := db.GetUserPredictions(userID)
 	if err != nil {
-		fmt.Printf("[predictions] GetOrCreateUser(%q): %v\n", email, err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user"})
-		return
-	}
-
-	predictions, err := db.GetUserPredictions(user.ID)
-	if err != nil {
-		fmt.Printf("[predictions] GetUserPredictions(%s): %v\n", user.ID, err)
+		fmt.Printf("[predictions] GetUserPredictions(%s): %v\n", userID, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get predictions"})
 		return
 	}

@@ -10,11 +10,19 @@ class APIClient {
     this.baseURL = baseURL;
   }
 
+  /**
+   * Le token de session est joint automatiquement : les routes qui
+   * portent des données personnelles répondent désormais sur le compte
+   * authentifié et non sur un identifiant passé dans l'URL.
+   */
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
+    const token = localStorage.getItem('token');
+
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...options.headers,
       },
       ...options,
@@ -95,8 +103,8 @@ class APIClient {
    * Ne jamais se fier au localStorage pour ça — il est modifiable par
    * l'utilisateur en deux clics dans la console.
    */
-  async checkPremium(userId) {
-    return this.request(`/api/v1/check-premium?user_id=${encodeURIComponent(userId)}`);
+  async checkPremium() {
+    return this.request('/api/v1/check-premium');
   }
 
   // ---------- Auth ----------
@@ -122,10 +130,11 @@ class APIClient {
   }
 
   /**
-   * Récupère les prédictions d'un utilisateur par son email
+   * Prédictions du compte connecté. L'ancienne signature prenait un
+   * email et exposait les mesures de n'importe quel enfant.
    */
-  async getPredictionsByEmail(email) {
-    return this.request(`/api/user/predictions?email=${encodeURIComponent(email)}`);
+  async getMyPredictions() {
+    return this.request('/api/user/predictions');
   }
 }
 

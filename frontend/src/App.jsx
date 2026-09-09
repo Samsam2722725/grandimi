@@ -67,7 +67,7 @@ function App() {
 
     let annule = false;
     apiClient
-      .checkPremium(user.id)
+      .checkPremium()
       .then((res) => {
         if (!annule) setIsPaid(Boolean(res.is_premium));
       })

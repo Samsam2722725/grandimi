@@ -307,11 +307,9 @@ func VerifyWhopSignature(webhookID, webhookTimestamp, webhookSignature string, b
 // Retournait `is_premium: false` en dur : un client qui venait de payer
 // était donc traité comme non-abonné, et le plan restait inaccessible.
 func CheckPremium(c *gin.Context) {
-	userID := c.Query("user_id")
-	if userID == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user_id required"})
-		return
-	}
+	// Statut de l'appelant uniquement : le ?user_id= d'avant permettait
+	// d'interroger l'abonnement de n'importe quel compte.
+	userID := c.GetString("userID")
 
 	user, err := db.GetUserByID(userID)
 	if err != nil {

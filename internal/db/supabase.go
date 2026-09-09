@@ -119,6 +119,27 @@ func GetOrCreateUser(email string) (*User, error) {
 	return GetOrCreateUser(email)
 }
 
+// GetUserByEmail cherche un utilisateur sans jamais le créer.
+//
+// Renvoie (nil, nil) si l'adresse est inconnue. Login et Signup doivent
+// passer par ici : avec GetOrCreateUser, chaque tentative de connexion
+// sur une adresse inexistante créait un compte, ce qui polluait la base
+// et permettait d'énumérer les adresses connues.
+func GetUserByEmail(email string) (*User, error) {
+	var user User
+	err := DB.QueryRowContext(context.Background(),
+		selectUserSQL+"email = $1", email,
+	).Scan(&user.ID, &user.Email, &user.IsPremium, &user.WhopCustomerID, &user.WhopSubscriptionID, &user.ConsentParental, &user.CreatedAt)
+
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 // GetUserByID - récupère un utilisateur par son id
 func GetUserByID(userID string) (*User, error) {
 	var user User

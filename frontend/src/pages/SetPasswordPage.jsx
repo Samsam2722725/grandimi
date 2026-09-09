@@ -55,7 +55,7 @@ function SetPasswordPage({ onAuthComplete }) {
       localStorage.setItem('token', response.token);
 
       // Charger les prédictions depuis le backend
-      const predictions = await apiClient.getPredictionsByEmail(email);
+      const predictions = await apiClient.getMyPredictions();
       if (predictions && predictions.length > 0) {
         const latestPrediction = predictions[0];
         localStorage.setItem('predictionData', JSON.stringify({

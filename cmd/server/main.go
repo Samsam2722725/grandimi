@@ -52,10 +52,22 @@ func main() {
 	router.POST("/api/v1/auth/login", api.Login)
 
 	// Payment & Subscription
+	//
+	// /checkout reste public : le parent qui règle depuis le lien partagé
+	// n'a pas de compte, et la route ne renvoie qu'une URL Whop.
 	router.POST("/api/v1/checkout", api.GetCheckout)
+	// Le webhook n'est pas protégé par session mais par signature Whop.
 	router.POST("/webhooks/whop", api.WhopWebhook)
-	router.GET("/api/v1/check-premium", api.CheckPremium)
-	router.GET("/api/user/predictions", api.GetPredictionsByEmail)
+
+	/* Routes portant des données personnelles : session obligatoire.
+	   Elles répondaient auparavant à un ?user_id= ou ?email= arbitraire,
+	   sans authentification. */
+	prive := router.Group("/")
+	prive.Use(api.AuthMiddleware())
+	{
+		prive.GET("/api/v1/check-premium", api.CheckPremium)
+		prive.GET("/api/user/predictions", api.GetPredictionsByEmail)
+	}
 
 	// Admin Panel (protected by ADMIN_TOKEN)
 	admin := router.Group("/api/admin")
@@ -75,9 +87,22 @@ func main() {
 	router.Run(":" + port)
 }
 
+// originesAutorisees : seuls ces sites peuvent appeler l'API depuis un
+// navigateur. Le "*" précédent laissait n'importe quelle page du web
+// interroger les routes de données.
+var originesAutorisees = map[string]bool{
+	"https://grandimi.com":     true,
+	"https://www.grandimi.com": true,
+	"http://localhost:5173":    true, // vite dev
+	"http://localhost:4173":    true, // vite preview
+}
+
 func corsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		if origine := c.GetHeader("Origin"); originesAutorisees[origine] {
+			c.Writer.Header().Set("Access-Control-Allow-Origin", origine)
+			c.Writer.Header().Set("Vary", "Origin")
+		}
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")

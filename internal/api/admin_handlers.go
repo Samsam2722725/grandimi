@@ -1,6 +1,7 @@
 package api
 
 import (
+	"crypto/hmac"
 	"encoding/json"
 	"fmt"
 	"grandimi/internal/db"
@@ -17,10 +18,12 @@ func AdminAuthMiddleware() gin.HandlerFunc {
 		token := c.GetHeader("Authorization")
 		expectedToken := os.Getenv("ADMIN_TOKEN")
 
-		fmt.Printf("[DEBUG] Auth check: token='%s', expectedToken='%s', match=%v\n",
-			token, expectedToken, token == "Bearer "+expectedToken)
+		/* Le Printf de débogage qui se trouvait ici écrivait ADMIN_TOKEN
+		   en clair dans les logs Render à chaque requête admin : le secret
+		   se lisait dans l'historique de la console. */
 
-		if expectedToken == "" || token != "Bearer "+expectedToken {
+		if expectedToken == "" ||
+			!hmac.Equal([]byte(token), []byte("Bearer "+expectedToken)) {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid or missing admin token"})
 			c.Abort()
 			return
