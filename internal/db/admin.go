@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"time"
 )
 
@@ -167,7 +166,7 @@ func DeleteUser(userID string) error {
 		return err
 	}
 
-	return tx.Commit().Err()
+	return tx.Commit()
 }
 
 // GrantPremium marks a user as premium
