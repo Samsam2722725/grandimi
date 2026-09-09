@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"strings"
 
 	_ "github.com/lib/pq"
 )
@@ -96,7 +97,19 @@ const selectUserSQL = `SELECT
 FROM users WHERE `
 
 // GetOrCreateUser - get user by email, create if not exists
+// normaliserEmail rend une adresse comparable à elle-même.
+//
+// Sans ça, "Samuel.Garbil@gmail.com" et "samuel.garbil@gmail.com"
+// créent deux comptes distincts pour la même personne : c'est arrivé en
+// production, et seul l'un des deux portait l'abonnement — se connecter
+// avec la mauvaise casse revenait à perdre son accès payant.
+func normaliserEmail(email string) string {
+	return strings.ToLower(strings.TrimSpace(email))
+}
+
 func GetOrCreateUser(email string) (*User, error) {
+	email = normaliserEmail(email)
+
 	var user User
 	err := DB.QueryRowContext(context.Background(),
 		selectUserSQL+"email = $1", email,
@@ -128,7 +141,7 @@ func GetOrCreateUser(email string) (*User, error) {
 func GetUserByEmail(email string) (*User, error) {
 	var user User
 	err := DB.QueryRowContext(context.Background(),
-		selectUserSQL+"email = $1", email,
+		selectUserSQL+"email = $1", normaliserEmail(email),
 	).Scan(&user.ID, &user.Email, &user.IsPremium, &user.WhopCustomerID, &user.WhopSubscriptionID, &user.ConsentParental, &user.CreatedAt)
 
 	if err == sql.ErrNoRows {
