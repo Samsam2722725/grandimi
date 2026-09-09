@@ -47,10 +47,14 @@ func main() {
 	router.GET("/api/v1/nutrition-guide", api.GetNutritionGuide)
 	router.GET("/api/v1/sleep-optimization", api.GetSleepOptimization)
 
+	// Auth
+	router.POST("/api/v1/auth/signup", api.Signup)
+
 	// Payment & Subscription
 	router.POST("/api/v1/checkout", api.GetCheckout)
 	router.POST("/webhooks/whop", api.WhopWebhook)
 	router.GET("/api/v1/check-premium", api.CheckPremium)
+	router.GET("/api/user/predictions", api.GetPredictionsByEmail)
 
 	// Admin Panel (protected by ADMIN_TOKEN)
 	admin := router.Group("/api/admin")

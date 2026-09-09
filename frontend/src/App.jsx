@@ -11,7 +11,7 @@ import ResultsPage from './pages/ResultsPage';
 import PaywallPage from './pages/PaywallPage';
 import GrowthPlanPage from './pages/GrowthPlanPage';
 import AuthPage from './pages/AuthPage';
-import CompleteAccountPage from './pages/CompleteAccountPage';
+import SetPasswordPage from './pages/SetPasswordPage';
 import AdminPage from './pages/AdminPage';
 
 function App() {
@@ -86,6 +86,10 @@ function App() {
   const handlePredictionComplete = (data) => {
     setPredictionData(data);
     localStorage.setItem('predictionData', JSON.stringify(data));
+    // Sauvegarder l'email du questionnaire pour la paywall
+    if (data.email) {
+      localStorage.setItem('userEmail', data.email);
+    }
 
     /* Le resultat s'affiche SANS compte.
        La landing promet "Estimation gratuite - sans compte" et "aucun
@@ -128,34 +132,18 @@ function App() {
     setFormData(null);
   };
 
-  // Check for Whop payment return - auto create account
+  // Check for Whop payment return - redirect to set password
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
     if (params.has('checkout_status') && params.get('checkout_status') === 'success') {
+      // Sauvegarder email pour SetPasswordPage
       const email = params.get('customer_email');
       if (email) {
-        // Auto-create account with random password
-        const randomPassword = Math.random().toString(36).slice(-12);
-
-        apiClient
-          .signup({ email, password: randomPassword })
-          .then((res) => {
-            localStorage.setItem('user', JSON.stringify(res.user));
-            localStorage.setItem('token', res.token);
-            setIsAuthenticated(true);
-            setIsPaid(true);
-            setCurrentPage('plan');
-            // Nettoyer l'URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-          })
-          .catch((err) => {
-            console.error('Failed to create account:', err);
-            // Si échec, rediriger vers login normal
-            setCurrentPage('auth-results');
-            window.history.replaceState({}, document.title, window.location.pathname);
-          });
+        localStorage.setItem('userEmail', email);
       }
+      setCurrentPage('set-password');
+      // Garder les paramètres URL pour SetPasswordPage
     }
   }, []);
 
@@ -186,9 +174,9 @@ function App() {
         <AuthPage onAuthComplete={handleAuthComplete} />
       )}
 
-      {/* Complete account after payment */}
-      {currentPage === 'complete-account' && (
-        <CompleteAccountPage onAuthComplete={handleAuthComplete} />
+      {/* Set password after payment */}
+      {currentPage === 'set-password' && (
+        <SetPasswordPage onAuthComplete={handleAuthComplete} />
       )}
 
       {/* Results (visible after auth) */}

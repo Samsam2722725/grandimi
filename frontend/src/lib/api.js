@@ -92,6 +92,25 @@ class APIClient {
   async checkPremium(userId) {
     return this.request(`/api/v1/check-premium?user_id=${encodeURIComponent(userId)}`);
   }
+
+  // ---------- Auth ----------
+
+  /**
+   * Crée un compte utilisateur avec email et mot de passe
+   */
+  async signup({ email, password }) {
+    return this.request('/api/v1/auth/signup', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+  }
+
+  /**
+   * Récupère les prédictions d'un utilisateur par son email
+   */
+  async getPredictionsByEmail(email) {
+    return this.request(`/api/user/predictions?email=${encodeURIComponent(email)}`);
+  }
 }
 
 export const apiClient = new APIClient();

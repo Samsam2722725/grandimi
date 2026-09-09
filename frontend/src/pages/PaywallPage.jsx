@@ -20,7 +20,9 @@ const FORMULE = {
 };
 
 function PaywallPage({ onBackHome }) {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(() => {
+    return localStorage.getItem('userEmail') || '';
+  });
   const [loading, setLoading] = useState(false);
   const [erreur, setErreur] = useState(null);
 
@@ -104,10 +106,11 @@ function PaywallPage({ onBackHome }) {
               autoComplete="email"
               placeholder="ton@email.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              disabled
+              readOnly
             />
             <p className="form-helper">
-              Il sert à retrouver ton abonnement. Aucune donnée bancaire ne transite
+              Email du questionnaire (non modifiable). Aucune donnée bancaire ne transite
               par Grandimi.
             </p>
           </div>

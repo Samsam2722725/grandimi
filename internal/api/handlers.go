@@ -5,6 +5,7 @@ import (
 	"grandimi/internal/db"
 	"grandimi/internal/estimator"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -181,6 +182,70 @@ func PredictHeightV2(c *gin.Context) {
 		"message":          result.Message,
 		"factors":          result.Factors,
 	})
+}
+
+// SignupRequest - Create account with email and password
+type SignupRequest struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required,min=8"`
+}
+
+// Signup creates a new user account
+func Signup(c *gin.Context) {
+	var req SignupRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Get or create user
+	user, err := db.GetOrCreateUser(req.Email)
+	if err != nil {
+		fmt.Printf("[signup] GetOrCreateUser(%q): %v\n", req.Email, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create user"})
+		return
+	}
+
+	// TODO: Hash password and store securely
+	// For now, just generate a simple token
+	token := fmt.Sprintf("token_%s_%d", user.ID, time.Now().Unix())
+
+	c.JSON(http.StatusOK, gin.H{
+		"user": gin.H{
+			"id":    user.ID,
+			"email": user.Email,
+		},
+		"token": token,
+	})
+}
+
+// GetPredictionsByEmail récupère les prédictions d'un utilisateur par email
+func GetPredictionsByEmail(c *gin.Context) {
+	email := c.Query("email")
+	if email == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "email required"})
+		return
+	}
+
+	user, err := db.GetOrCreateUser(email)
+	if err != nil {
+		fmt.Printf("[predictions] GetOrCreateUser(%q): %v\n", email, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user"})
+		return
+	}
+
+	predictions, err := db.GetUserPredictions(user.ID)
+	if err != nil {
+		fmt.Printf("[predictions] GetUserPredictions(%s): %v\n", user.ID, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get predictions"})
+		return
+	}
+
+	if predictions == nil {
+		predictions = []db.Prediction{}
+	}
+
+	c.JSON(http.StatusOK, predictions)
 }
 
 func HealthCheck(c *gin.Context) {
