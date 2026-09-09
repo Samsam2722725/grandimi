@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
    à nouveau ici le remettrait hors couche. */
 import './App.css';
 import apiClient from './lib/api';
+import { capturePageview } from './lib/analytics';
 import HomePage from './pages/HomePage';
 import QuestionnaireFlow from './pages/QuestionnaireFlow';
 import ResultsPage from './pages/ResultsPage';
@@ -18,6 +19,12 @@ function App() {
   const [formData, setFormData] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
+
+  // Une vue par écran : l'URL ne change jamais dans cette SPA,
+  // donc PostHog ne peut pas la déduire tout seul.
+  useEffect(() => {
+    capturePageview(currentPage);
+  }, [currentPage]);
 
   // Vérifie la session au montage.
   //

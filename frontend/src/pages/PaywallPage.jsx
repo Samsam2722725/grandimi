@@ -21,12 +21,11 @@ const FORMULE = {
 
 function PaywallPage({ onBackHome }) {
   const [email, setEmail] = useState('');
-  const [adulte, setAdulte] = useState(false);
   const [loading, setLoading] = useState(false);
   const [erreur, setErreur] = useState(null);
 
   const emailValide = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const peutPayer = emailValide && adulte && !loading;
+  const peutPayer = emailValide && !loading;
 
   /**
    * Redirige vers la page de paiement hébergée par Whop.
@@ -112,18 +111,6 @@ function PaywallPage({ onBackHome }) {
               par Grandimi.
             </p>
           </div>
-
-          {/* Un mineur ne peut pas souscrire seul un abonnement
-              (art. 1146 s. Code civil) : la souscription doit être le
-              fait d'un adulte. */}
-          <label className="checkbox-label">
-            <input
-              type="checkbox"
-              checked={adulte}
-              onChange={(e) => setAdulte(e.target.checked)}
-            />
-            Je suis majeur·e, ou un parent qui souscrit pour son enfant.
-          </label>
 
           {erreur && (
             <div className="alert alert-error" role="alert">
