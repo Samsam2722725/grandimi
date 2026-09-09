@@ -114,6 +114,21 @@ function App() {
     setFormData(null);
   };
 
+  // Check for Whop payment return
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    // Après paiement Whop, rediriger vers login
+    if (params.has('checkout_status') && params.get('checkout_status') === 'success') {
+      const receiptId = params.get('receipt_id');
+      const message = 'Paiement réussi! Veuillez vous connecter avec votre email pour accéder à votre plan.';
+      alert(message);
+      setCurrentPage('auth-results');
+      // Nettoyer l'URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
   // Check for admin panel access via URL parameter
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
