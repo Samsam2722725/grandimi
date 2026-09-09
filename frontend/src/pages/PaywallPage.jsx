@@ -176,14 +176,6 @@ function PaywallPage({ onBackHome }) {
               plan personnalisé sur 12 mois est payant.
             </p>
           </details>
-
-          <details className="faq-item">
-            <summary>J'ai moins de 18 ans, puis-je m'abonner ?</summary>
-            <p>
-              Pas seul : la souscription doit être faite par un parent ou un adulte
-              responsable. Tu peux en revanche utiliser l'estimation gratuite.
-            </p>
-          </details>
         </div>
       </section>
     </div>
