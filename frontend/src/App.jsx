@@ -27,6 +27,18 @@ function App() {
     capturePageview(currentPage);
   }, [currentPage]);
 
+  // Récupère les données de prédiction sauvegardées
+  useEffect(() => {
+    const savedPredictionData = localStorage.getItem('predictionData');
+    if (savedPredictionData) {
+      try {
+        setPredictionData(JSON.parse(savedPredictionData));
+      } catch {
+        localStorage.removeItem('predictionData');
+      }
+    }
+  }, []);
+
   // Vérifie la session au montage.
   //
   // L'accès premium est demandé AU SERVEUR, jamais déduit du
@@ -73,6 +85,7 @@ function App() {
 
   const handlePredictionComplete = (data) => {
     setPredictionData(data);
+    localStorage.setItem('predictionData', JSON.stringify(data));
 
     /* Le resultat s'affiche SANS compte.
        La landing promet "Estimation gratuite - sans compte" et "aucun
@@ -115,13 +128,34 @@ function App() {
     setFormData(null);
   };
 
-  // Check for Whop payment return
+  // Check for Whop payment return - auto create account
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
-    // Après paiement Whop, créer compte
     if (params.has('checkout_status') && params.get('checkout_status') === 'success') {
-      setCurrentPage('complete-account');
+      const email = params.get('customer_email');
+      if (email) {
+        // Auto-create account with random password
+        const randomPassword = Math.random().toString(36).slice(-12);
+
+        apiClient
+          .signup({ email, password: randomPassword })
+          .then((res) => {
+            localStorage.setItem('user', JSON.stringify(res.user));
+            localStorage.setItem('token', res.token);
+            setIsAuthenticated(true);
+            setIsPaid(true);
+            setCurrentPage('plan');
+            // Nettoyer l'URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+          })
+          .catch((err) => {
+            console.error('Failed to create account:', err);
+            // Si échec, rediriger vers login normal
+            setCurrentPage('auth-results');
+            window.history.replaceState({}, document.title, window.location.pathname);
+          });
+      }
     }
   }, []);
 
