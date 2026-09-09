@@ -66,7 +66,13 @@ function App() {
   const handlePredictionComplete = (data) => {
     setPredictionData(data);
 
-    setCurrentPage(isAuthenticated ? 'results' : 'auth-results');
+    /* Le resultat s'affiche SANS compte.
+       La landing promet "Estimation gratuite - sans compte" et "aucun
+       resultat floute" ; envoyer l'utilisateur sur un mur de connexion
+       juste apres les 5 etapes contredisait la promesse au moment precis
+       ou il attend sa reponse. Le compte n'est demande que plus loin,
+       pour acceder au plan payant. */
+    setCurrentPage('results');
   };
 
   const handleViewPlan = () => {

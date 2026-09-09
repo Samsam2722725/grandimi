@@ -10,6 +10,17 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
   }
 
   const { predicted_height_cm, confidence_range, confidence_level, message } = predictionData;
+
+  /* La marge se lit sur la LARGEUR de l'intervalle, pas sur l'ecart au
+     maximum. L'ancien calcul (max - estimation) devenait negatif des que
+     l'estimation sortait de sa fourchette, et affichait litteralement
+     "±-39.4 cm" a l'utilisateur. */
+  const largeur = Math.max(0, confidence_range.max - confidence_range.min);
+  const margeCm = Math.round((largeur / 2) * 10) / 10;
+  const positionRepere = largeur === 0
+    ? 50
+    : Math.min(100, Math.max(0,
+        ((predicted_height_cm - confidence_range.min) / largeur) * 100));
   const growth_potential = predicted_height_cm - (predictionData.current_height || 170);
 
   return (
@@ -51,7 +62,9 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
                 <div
                   className="range-indicator"
                   style={{
-                    left: `${((predicted_height_cm - confidence_range.min) / (confidence_range.max - confidence_range.min)) * 100}%`
+                    /* Borne 0-100 : si le point estime sortait de son
+                       intervalle, le repere partait hors de la barre. */
+                    left: `${positionRepere}%`
                   }}
                 />
               </div>
@@ -62,7 +75,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             </div>
           </div>
           <p className="range-explanation">
-            Cette estimation a une précision de ±{Math.round((confidence_range.max - predicted_height_cm) * 10) / 10} cm.
+            Cette estimation a une précision de ±{margeCm} cm.
             Plus tu es proche de ta taille adulte, plus c'est précis.
           </p>
         </section>

@@ -10,7 +10,12 @@ import {
   Sparkles,
 } from 'lucide-react'
 
-import CircularSplitRoll from '@/components/ui/circular-split-roll'
+import { lazy, Suspense } from 'react'
+
+/* GSAP (~70 kB) ne sert qu'a ce carrousel, situe tres bas dans la page.
+   Le charger dans le bundle initial retardait l'affichage du hero sur
+   mobile, ou l'ecran reste blanc tant que le JS n'est pas monte. */
+const CircularSplitRoll = lazy(() => import('@/components/ui/circular-split-roll'))
 import { FaqSection } from '@/components/ui/faq-section'
 import TestimonialMarquee from '@/components/ui/testimonial-marquee'
 
@@ -150,7 +155,13 @@ function HomePage({ onStartQuestionnaire }) {
   return (
     <div className="min-h-screen bg-[color:var(--surface-page-canvas)] font-sans">
       {/* ============ EN-TÊTE ============ */}
-      <header className="sticky top-0 z-50 border-b border-[color:var(--color-frost-gray)]/70 bg-[color:var(--surface-page-canvas)]/85 backdrop-blur-md">
+      {/* Fond opaque, sans backdrop-blur.
+          Un header sticky semi-transparent avec backdrop-filter cree des
+          artefacts de compositing sur certains GPU : au changement de
+          sens de scroll, le header et le haut du hero restaient figes en
+          semi-transparence par-dessus le contenu suivant. Le fond plein
+          supprime la cause. */}
+      <header className="sticky top-0 z-50 border-b border-[color:var(--color-frost-gray)] bg-[color:var(--surface-page-canvas)]">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
           <a href="#" className="flex items-center gap-2.5 text-ink">
             <span className="flex size-8 items-center justify-center rounded-full bg-brand">
@@ -317,7 +328,9 @@ function HomePage({ onStartQuestionnaire }) {
           </div>
         </section>
 
-        <CircularSplitRoll items={PILIERS} radius={480} cardSize={210} sectionHeight={90} />
+        <Suspense fallback={<div className="min-h-[40vh]" aria-hidden="true" />}>
+          <CircularSplitRoll items={PILIERS} radius={480} cardSize={210} sectionHeight={90} />
+        </Suspense>
 
         {/* ============ NOTRE DIFFÉRENCE ============
             Deux colonnes, titre collant à gauche. Volontairement

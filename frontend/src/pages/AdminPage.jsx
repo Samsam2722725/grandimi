@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import '../styles/admin.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 export default function AdminPage() {
-  const [searchParams] = useSearchParams();
-  const adminToken = searchParams.get('token');
+  /* Pas de react-router ici : l'app navigue par etat dans App.jsx et
+     n'a aucun Router monte. useSearchParams() aurait leve
+     "must be used within a Router" meme la dependance installee.
+     URLSearchParams est deja le procede utilise par App.jsx. */
+  const adminToken = new URLSearchParams(window.location.search).get('token');
 
   const [activeTab, setActiveTab] = useState('dashboard');
   const [stats, setStats] = useState(null);

@@ -15,29 +15,18 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     weight_kg: '',
     father_height_cm: '',
     mother_height_cm: '',
-    puberty_signs: {
-      pubic_hair: '',
-      breast_develop: '',
-      genitalia: '',
-      axillary_hair: '',
-      menarche: false,
-    },
+    /* Les stades de Tanner (pilosite pubienne, developpement genital)
+       ont ete retires : ce sont des donnees de sante sensibles au sens
+       du RGPD, collectees sur des mineurs, en auto-evaluation et sans
+       consentement parental. La vitesse de croissance sur 12 mois est
+       un proxy non intrusif, egalement utilise dans la litterature. */
+    height_velocity_cm: '',
   });
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
-    }));
-  };
-
-  const handlePubertyChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      puberty_signs: {
-        ...prev.puberty_signs,
-        [field]: value,
-      },
     }));
   };
 
@@ -67,7 +56,9 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           weight_kg: parseFloat(formData.weight_kg),
           father_height_cm: parseFloat(formData.father_height_cm),
           mother_height_cm: parseFloat(formData.mother_height_cm),
-          puberty_signs: formData.puberty_signs,
+          height_velocity_cm: formData.height_velocity_cm
+            ? parseFloat(formData.height_velocity_cm)
+            : 0,
           nutrition_level: 'good',
           sleep_hours_per_night: 8,
           exercise_min_per_day: 30,
@@ -94,7 +85,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     'Âge et sexe',
     'Mesures actuelles',
     'Taille des parents',
-    'Signaux de puberté',
+    'Ta croissance récente',
     'Vérification',
   ];
 
@@ -246,77 +237,40 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
             </div>
           )}
 
-          {/* Step 3: Puberty signs */}
+          {/* Step 3 : croissance recente.
+              Remplace les stades de Tanner (pilosite pubienne,
+              developpement genital), qui faisaient auto-evaluer a des
+              mineurs des donnees de sante sensibles, sans consentement
+              parental et avant meme d'avoir vu un resultat. La vitesse
+              de croissance donne une information comparable sur la
+              croissance restante, sans rien demander d'intime. */}
           {step === 3 && (
             <div className="form-step">
               <p className="form-hint">
-                Indique ton stade de puberté (1 = début, 5 = complètement développé)
+                Cette question affine la précision de l’estimation. Si tu ne sais pas,
+                laisse vide : on élargira simplement la fourchette.
               </p>
 
               <div className="form-group">
-                <label htmlFor="pubic_hair">Poils pubiens</label>
-                <select
-                  id="pubic_hair"
-                  value={formData.puberty_signs.pubic_hair}
-                  onChange={(e) => handlePubertyChange('pubic_hair', e.target.value)}
-                >
-                  <option value="">Sélectionne...</option>
-                  <option value="1">1 - Aucun</option>
-                  <option value="2">2 - Fin, léger</option>
-                  <option value="3">3 - Modéré, frisé</option>
-                  <option value="4">4 - Épais, bouclé</option>
-                  <option value="5">5 - Adulte complet</option>
-                </select>
+                <label htmlFor="height_velocity_cm">
+                  Combien de centimètres as-tu pris depuis l’an dernier ?
+                </label>
+                <input
+                  id="height_velocity_cm"
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  max="25"
+                  step="0.5"
+                  placeholder="ex : 6"
+                  value={formData.height_velocity_cm}
+                  onChange={(e) => handleInputChange('height_velocity_cm', e.target.value)}
+                />
+                <p className="form-helper">
+                  Une estimation suffit. Compare avec une vieille photo, une toise, ou
+                  demande à tes parents.
+                </p>
               </div>
-
-              {formData.sex === 'F' && (
-                <div className="form-group">
-                  <label htmlFor="breast">Développement des seins</label>
-                  <select
-                    id="breast"
-                    value={formData.puberty_signs.breast_develop}
-                    onChange={(e) => handlePubertyChange('breast_develop', e.target.value)}
-                  >
-                    <option value="">Sélectionne...</option>
-                    <option value="1">1 - Pas développé</option>
-                    <option value="2">2 - Début du développement</option>
-                    <option value="3">3 - Développement modéré</option>
-                    <option value="4">4 - Presque adulte</option>
-                    <option value="5">5 - Adulte complet</option>
-                  </select>
-                </div>
-              )}
-
-              {formData.sex === 'M' && (
-                <div className="form-group">
-                  <label htmlFor="genitalia">Développement génital</label>
-                  <select
-                    id="genitalia"
-                    value={formData.puberty_signs.genitalia}
-                    onChange={(e) => handlePubertyChange('genitalia', e.target.value)}
-                  >
-                    <option value="">Sélectionne...</option>
-                    <option value="1">1 - Enfant</option>
-                    <option value="2">2 - Début du développement</option>
-                    <option value="3">3 - Développement modéré</option>
-                    <option value="4">4 - Presque adulte</option>
-                    <option value="5">5 - Adulte complet</option>
-                  </select>
-                </div>
-              )}
-
-              {formData.sex === 'F' && (
-                <div className="form-group">
-                  <label className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      checked={formData.puberty_signs.menarche}
-                      onChange={(e) => handlePubertyChange('menarche', e.target.checked)}
-                    />
-                    J'ai eu mes premières règles
-                  </label>
-                </div>
-              )}
             </div>
           )}
 

@@ -73,39 +73,72 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 		bmi = req.WeightKG / ((req.HeightCM / 100) * (req.HeightCM / 100))
 	}
 
-	// Ensemble: combine 3 prediction methods
+	// Les trois modeles lineaires restent calcules pour diagnostic, mais
+	// ne servent PLUS de predicteurs : leurs coefficients ne forment pas
+	// un jeu calibre.
+	//
+	// Mesure sur un garcon de 14 ans, 165 cm, 50 kg, parents 178/164 :
+	//   pred1 Khamis-Roche  = 218.5 cm
+	//   pred2 ethnique      = 218.5 cm (meme formule)
+	//   pred3 velocite      = 167.5 cm (suppose qu un ado de 14 ans
+	//                         devrait deja mesurer sa taille adulte)
+	//   ensemble x puberte  = ~219.9 cm affiche a l utilisateur
+	//
+	// Recalibrer ces coefficients demande de vraies tables de reference
+	// (Khamis-Roche publie, ou age osseux). Tant qu on ne les a pas, on
+	// n invente pas de chiffres : on utilise une methode documentee.
 	pred1 := predictKhamisRocheV2(req, bmi)
 	pred2 := predictEthnicAdjusted(req, bmi)
 	pred3 := predictGrowthVelocity(req, bmi)
 
-	// Weighted ensemble (40-30-30)
-	ensembleHeight := (pred1.height*0.40 + pred2.height*0.30 + pred3.height*0.30)
+	resp.Factors["_diag_khamis_roche"] = pred1.height
+	resp.Factors["_diag_ethnic_adjusted"] = pred2.height
+	resp.Factors["_diag_growth_velocity"] = pred3.height
 
-	// Apply health/lifestyle factors
+	// ANCRE : methode mi-parentale (Tanner).
+	// Taille cible = moyenne des parents +6.5 cm (garcon) / -6.5 cm (fille).
+	// Methode de reference en pediatrie, verifiable, et coherente avec la
+	// promesse du produit : on explique d ou vient le chiffre.
+	midParentTarget := (req.FatherHeightCM + req.MotherHeightCM) / 2
+	if req.Sex == MALE {
+		midParentTarget += 6.5
+	} else {
+		midParentTarget -= 6.5
+	}
+
+	// Les facteurs de mode de vie modulent la cible dans une fourchette
+	// etroite (calculateHealthFactor reste borne autour de 1.0). Ils ne
+	// peuvent pas deplacer l estimation de plusieurs dizaines de cm.
 	healthMultiplier := calculateHealthFactor(req)
-	finalHeight := ensembleHeight * healthMultiplier
+	finalHeight := midParentTarget * healthMultiplier
 
-	// Store factors for transparency
-	resp.Factors["khamis_roche"] = pred1.height
-	resp.Factors["ethnic_adjusted"] = pred2.height
-	resp.Factors["growth_velocity"] = pred3.height
+	// Plus de stadification de Tanner : le champ n est plus collecte.
+	// La croissance restante est estimee via HeightVelocityCM, qui agit
+	// sur la LARGEUR de l intervalle (cf. calculateV2Confidence) et non
+	// sur le point estime — etre plus avance en puberte ne rend pas plus
+	// grand, cela rend seulement la prediction plus sure.
+	pubertyStage := describeGrowthPhase(req.Age, req.HeightVelocityCM)
+
+	resp.Factors["mid_parent_target"] = midParentTarget
 	resp.Factors["health_multiplier"] = healthMultiplier
-	resp.Factors["ensemble_prediction"] = ensembleHeight
 	resp.Factors["final_prediction"] = finalHeight
 
-	// Confidence based on data richness
-	confidenceLevel, confidenceRange := calculateV2Confidence(
-		req, pred1.confidence, pred2.confidence, pred3.confidence,
+	// La fourchette est calculee APRES tous les multiplicateurs, et
+	// CENTREE sur la prediction finale.
+	//
+	// Avant, elle etait calculee avant l'ajustement pubertaire et centree
+	// sur la taille mi-parentale brute, sans jamais regarder la valeur
+	// predite : on affichait "219.9 cm" avec un intervalle "174.5-180.5",
+	// soit un point estime hors de son propre intervalle.
+	confidenceLevel, confidenceRange := calculateV2Confidence(req, finalHeight,
+		pred1.confidence, pred2.confidence, pred3.confidence,
 	)
-
-	pubertyMultiplier, pubertyStage := getPubertyAdjustment(req.Sex, req.PubertySigns)
-	finalHeight *= pubertyMultiplier
 
 	resp.PredictedHeightCM = math.Round(finalHeight*10) / 10
 	resp.ConfidenceRange = confidenceRange
 	resp.ConfidenceLevel = confidenceLevel
 	resp.PubertyStage = pubertyStage
-	resp.ModelUsed = "Ensemble (Khamis-Roche + Ethnic + Velocity)"
+	resp.ModelUsed = "Taille mi-parentale (Tanner) + facteurs de mode de vie"
 	resp.Message = "Height prediction successful (v2 ML-enhanced)"
 
 	return resp
@@ -288,49 +321,81 @@ func calculateHealthFactor(req HeightPredictionV2Request) float64 {
 		factor *= 0.96 // Growth catch-up varies
 	}
 
-	return math.Max(factor, 0.92) // Don't penalize too much
+	// Borne HAUTE autant que basse.
+	//
+	// Sans plafond, le cumul des bonus atteignait 1.072, soit +12.7 cm
+	// ajoutes a la cible genetique : un mode de vie sain ne fait pas
+	// depasser son potentiel, il aide a l atteindre. Le plafond a 1.02
+	// laisse un gain visible (~+3.5 cm) sans promettre l impossible.
+	return math.Min(math.Max(factor, 0.92), 1.02)
 }
 
 func calculateV2Confidence(
 	req HeightPredictionV2Request,
+	predictedHeight float64,
 	conf1, conf2, conf3 float64,
 ) (string, [2]float64) {
-	// Average confidence from 3 models
-	avgConfidence := (conf1 + conf2 + conf3) / 3
+	// conf1/conf2/conf3 viennent des modeles lineaires devenus purement
+	// diagnostiques : ils ne renseignent plus la fiabilite du resultat.
+	// La marge depend donc de ce qui la determine reellement, c est-a-dire
+	// la quantite de croissance qu il reste a parcourir.
+	_ = conf1
+	_ = conf2
+	_ = conf3
 
-	// Boost confidence if we have rich data
-	if req.HeightVelocityCM > 0 && req.BMI > 0 && req.SleepHoursPerNight > 0 {
-		avgConfidence += 0.03 // Rich data = more confident
+	// La methode mi-parentale a une dispersion d environ +/-8.5 cm a 95 %.
+	// On part de la et on resserre a mesure que la croissance se termine.
+	rangeMargin := 6.5
+
+	// La vitesse de croissance remplace le stade de Tanner comme
+	// indicateur de croissance restante : elle porte la meme information
+	// utile sans demander a un mineur d auto-evaluer sa pilosite pubienne
+	// ou son developpement genital (donnee de sante sensible au RGPD).
+	//
+	// Beaucoup de croissance recente = pic pubertaire en cours = plus
+	// d incertitude. Croissance quasi nulle = taille presque finale.
+	if req.HeightVelocityCM > 0 {
+		switch {
+		case req.HeightVelocityCM >= 6.0:
+			rangeMargin *= 1.15 // pic de croissance : issue moins previsible
+		case req.HeightVelocityCM <= 2.0:
+			rangeMargin *= 0.70 // croissance qui s arrete : estimation sure
+		}
+	} else {
+		// Donnee non renseignee : on elargit plutot que de faire semblant
+		// d etre precis. La question est facultative cote questionnaire.
+		rangeMargin *= 1.10
+	}
+
+	if req.Age > 16 {
+		rangeMargin *= 0.8
+	} else if req.Age < 10 {
+		rangeMargin *= 1.2
+	}
+
+	// Borne annoncee sur le site : +/-3 a +/-6 cm selon l age.
+	if rangeMargin < 3.0 {
+		rangeMargin = 3.0
+	}
+	if rangeMargin > 8.5 {
+		rangeMargin = 8.5
 	}
 
 	confidenceLevel := "low"
-	rangeMargin := 4.5
-
-	if avgConfidence > 0.95 {
+	if rangeMargin <= 4.0 {
 		confidenceLevel = "high"
-		rangeMargin = 2.0
-	} else if avgConfidence > 0.88 {
+	} else if rangeMargin <= 5.5 {
 		confidenceLevel = "medium"
-		rangeMargin = 3.0
 	}
 
-	// Adjust range based on age
-	if req.Age > 16 {
-		rangeMargin *= 0.8 // Tighter range for near-adults
-	} else if req.Age < 10 {
-		rangeMargin *= 1.2 // Wider range for very young
-	}
-
-	// Calculate final range (we'll adjust after puberty adjustment)
-	// For now use a baseline
-	baseHeight := (req.FatherHeightCM + req.MotherHeightCM) / 2
-	if req.Sex == MALE {
-		baseHeight += 6.5
-	}
-
+	// L'intervalle encadre la valeur reellement affichee.
+	//
+	// L'ancienne version le centrait sur la taille mi-parentale et
+	// oubliait le "else" du cas feminin : pour une fille la fourchette
+	// etait decalee de +6.5 cm par rapport a sa propre reference.
 	return confidenceLevel, [2]float64{
-		baseHeight - rangeMargin,
-		baseHeight + rangeMargin,
+		math.Round((predictedHeight-rangeMargin)*10) / 10,
+		math.Round((predictedHeight+rangeMargin)*10) / 10,
 	}
 }
 
@@ -388,4 +453,24 @@ func getEthnicCoefficients(age float64, sex string, ethnic EthnicBackground) Coe
 	}
 
 	return adjusted
+}
+
+
+// describeGrowthPhase - libelle lisible de la phase de croissance,
+// deduit de l age et de la vitesse. Remplace la stadification de Tanner,
+// qui exigeait des reponses intimes pour un gain d information faible.
+func describeGrowthPhase(age float64, velocityCM float64) string {
+	if velocityCM <= 0 {
+		return "Non renseigne"
+	}
+	switch {
+	case velocityCM >= 6.0:
+		return "Pic de croissance"
+	case velocityCM >= 3.0:
+		return "Croissance active"
+	case age >= 16:
+		return "Croissance terminee ou presque"
+	default:
+		return "Croissance lente"
+	}
 }

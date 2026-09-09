@@ -17,6 +17,9 @@ func AdminAuthMiddleware() gin.HandlerFunc {
 		token := c.GetHeader("Authorization")
 		expectedToken := os.Getenv("ADMIN_TOKEN")
 
+		fmt.Printf("[DEBUG] Auth check: token='%s', expectedToken='%s', match=%v\n",
+			token, expectedToken, token == "Bearer "+expectedToken)
+
 		if expectedToken == "" || token != "Bearer "+expectedToken {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid or missing admin token"})
 			c.Abort()
