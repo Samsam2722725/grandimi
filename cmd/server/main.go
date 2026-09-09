@@ -4,6 +4,7 @@ import (
 	"grandimi/internal/api"
 	"grandimi/internal/db"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -39,7 +40,9 @@ func main() {
 	router.POST("/api/v1/predict-height", api.PredictHeight)
 
 	// V2 API (ML-Enhanced with ethnic/health factors)
-	router.POST("/api/v2/predict-height", api.PredictHeightV2)
+	// Chaque appel crée un compte et une prédiction en base : plafonné
+	// pour qu'on ne puisse pas la remplir depuis une boucle.
+	router.POST("/api/v2/predict-height", api.RateLimit(30, time.Hour), api.PredictHeightV2)
 
 	// Maximize Potential - Growth Plans
 	router.POST("/api/v1/growth-plan", api.GetGrowthPlan)
@@ -47,9 +50,15 @@ func main() {
 	router.GET("/api/v1/nutrition-guide", api.GetNutritionGuide)
 	router.GET("/api/v1/sleep-optimization", api.GetSleepOptimization)
 
-	// Auth
-	router.POST("/api/v1/auth/signup", api.Signup)
-	router.POST("/api/v1/auth/login", api.Login)
+	/* Auth — débit limité : sans plafond, un mot de passe se teste en
+	   force brute sur /login, et /signup permet de sonder quelles
+	   adresses ont déjà un compte (le 409 les trahit). */
+	auth := router.Group("/api/v1/auth")
+	auth.Use(api.RateLimit(10, 15*time.Minute))
+	{
+		auth.POST("/signup", api.Signup)
+		auth.POST("/login", api.Login)
+	}
 
 	// Payment & Subscription
 	//
