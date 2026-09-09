@@ -25,3 +25,7 @@ dist-ssr
 
 .vercel
 .env*
+# Versionné : ne contient que des VITE_*, donc déjà inlinés dans le
+# bundle public. L'ignorer faisait disparaître PostHog du build sans
+# aucune erreur dès qu'on rebuildait ailleurs.
+!.env.production
