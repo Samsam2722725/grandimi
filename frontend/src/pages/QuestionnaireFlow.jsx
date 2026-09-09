@@ -9,6 +9,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
+    email: '',
     age: '',
     sex: '',
     height_cm: '',
@@ -82,7 +83,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
   };
 
   const stepTitles = [
-    'Âge et sexe',
+    'Email et infos de base',
     'Mesures actuelles',
     'Taille des parents',
     'Ta croissance récente',
@@ -119,9 +120,22 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         )}
 
         <form onSubmit={handleSubmit}>
-          {/* Step 0: Age and Sex */}
+          {/* Step 0: Email, Age and Sex */}
           {step === 0 && (
             <div className="form-step">
+              <div className="form-group">
+                <label htmlFor="email">Ton email</label>
+                <input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  placeholder="toi@example.com"
+                  required
+                />
+                <p className="form-helper">Tu en auras besoin pour accéder à ton plan personnalisé</p>
+              </div>
+
               <div className="form-group">
                 <label htmlFor="age">Quel est ton âge ? (années)</label>
                 <input
@@ -326,7 +340,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 className="btn-primary"
                 onClick={handleNextStep}
                 disabled={
-                  (step === 0 && (!formData.age || !formData.sex)) ||
+                  (step === 0 && (!formData.email || !formData.age || !formData.sex)) ||
                   (step === 1 && (!formData.height_cm || !formData.weight_kg)) ||
                   (step === 2 && (!formData.father_height_cm || !formData.mother_height_cm))
                 }

@@ -1,6 +1,8 @@
 package api
 
 import (
+	"fmt"
+	"grandimi/internal/db"
 	"grandimi/internal/estimator"
 	"net/http"
 
@@ -24,6 +26,7 @@ type PredictHeightRequest struct {
 }
 
 type PredictHeightV2Request struct {
+	Email              string  `json:"email" binding:"required,email"`
 	Age                float64 `json:"age" binding:"required,gt=8,lt=18"`
 	Sex                string  `json:"sex" binding:"required,oneof=M F"`
 	HeightCM           float64 `json:"height_cm" binding:"required,gt=100,lt=210"`
@@ -137,7 +140,36 @@ func PredictHeightV2(c *gin.Context) {
 
 	result := estimator.PredictHeightV2(estimatorReq)
 
+	// Get or create user by email
+	user, err := db.GetOrCreateUser(req.Email)
+	if err != nil {
+		fmt.Printf("[predict] GetOrCreateUser(%q): %v\n", req.Email, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user"})
+		return
+	}
+
+	// Save prediction to database
+	pred, err := db.SavePrediction(user.ID, &db.Prediction{
+		Age:             req.Age,
+		Sex:             req.Sex,
+		HeightCm:        req.HeightCM,
+		WeightKg:        req.WeightKG,
+		FatherHeightCm:  req.FatherHeightCM,
+		MotherHeightCm:  req.MotherHeightCM,
+		PredictedHeight: result.PredictedHeightCM,
+		ConfidenceLevel: result.ConfidenceLevel,
+		ConfidenceMin:   result.ConfidenceRange[0],
+		ConfidenceMax:   result.ConfidenceRange[1],
+	})
+	if err != nil {
+		fmt.Printf("[predict] SavePrediction(%s): %v\n", user.ID, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save prediction"})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
+		"user_id":            user.ID,
+		"prediction_id":      pred.ID,
 		"predicted_height_cm": result.PredictedHeightCM,
 		"confidence_range": gin.H{
 			"min": result.ConfidenceRange[0],
