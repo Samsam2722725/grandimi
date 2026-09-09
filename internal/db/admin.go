@@ -49,7 +49,15 @@ func ListAllUsers() ([]User, error) {
 // ListAllSubscriptions returns all subscription records
 func ListAllSubscriptions() ([]Subscription, error) {
 	rows, err := DB.QueryContext(context.Background(),
-		`SELECT id, user_id, whop_subscription_id, status, created_at, expires_at, updated_at
+		/* CreateSubscription n'insère que user_id, whop_subscription_id et
+		   status : expires_at et updated_at restent donc NULL, et lib/pq
+		   refuse de scanner un NULL dans une string Go. Toute lecture de
+		   la table échouait, ce qui rendait la page Abonnements du panneau
+		   admin inutilisable. Même correctif que pour selectUserSQL. */
+		`SELECT id, user_id, whop_subscription_id, status,
+		        COALESCE(created_at::text, ''),
+		        COALESCE(expires_at::text, ''),
+		        COALESCE(updated_at::text, '')
 		 FROM subscriptions ORDER BY created_at DESC`)
 	if err != nil {
 		return nil, err
@@ -81,7 +89,10 @@ func LogWebhook(eventType, userEmail string, payload map[string]interface{}, sta
 // GetWebhookLogs returns recent webhook logs (limit 100)
 func GetWebhookLogs() ([]WebhookLog, error) {
 	rows, err := DB.QueryContext(context.Background(),
-		`SELECT id, event_type, user_email, payload, status, created_at
+		// created_at est un timestamptz : lib/pq le rend en time.Time et
+		// refuse de le scanner dans une string Go, d'où le cast explicite.
+		`SELECT id, event_type, user_email, payload, status,
+		        COALESCE(created_at::text, '')
 		 FROM webhook_logs
 		 ORDER BY created_at DESC
 		 LIMIT 100`)
