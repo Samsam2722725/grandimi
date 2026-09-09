@@ -13,6 +13,7 @@ import GrowthPlanPage from './pages/GrowthPlanPage';
 import AuthPage from './pages/AuthPage';
 import SetPasswordPage from './pages/SetPasswordPage';
 import AdminPage from './pages/AdminPage';
+import ParentPage from './pages/ParentPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -20,6 +21,8 @@ function App() {
   const [formData, setFormData] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
+  // Compte enfant à créditer quand un parent arrive par le lien partagé.
+  const [parentChildUserId, setParentChildUserId] = useState(null);
 
   // Une vue par écran : l'URL ne change jamais dans cette SPA,
   // donc PostHog ne peut pas la déduire tout seul.
@@ -91,6 +94,17 @@ function App() {
       localStorage.setItem('userEmail', data.email);
     }
 
+    /* L'id du compte créé par la prédiction sert à construire le lien de
+       paiement destiné au parent. Il n'était nulle part : `user` n'est
+       écrit qu'à la connexion, or on arrive ici sans compte. */
+    if (data.user_id) {
+      const utilisateur = JSON.parse(localStorage.getItem('user') || '{}');
+      localStorage.setItem(
+        'user',
+        JSON.stringify({ ...utilisateur, id: data.user_id, email: data.email }),
+      );
+    }
+
     /* Le resultat s'affiche SANS compte.
        La landing promet "Estimation gratuite - sans compte" et "aucun
        resultat floute" ; envoyer l'utilisateur sur un mur de connexion
@@ -159,6 +173,18 @@ function App() {
     }
   }, []);
 
+  /* Lien de paiement partagé par l'enfant : ?parent=<id du compte enfant>.
+     Le parent n'a ni compte ni questionnaire, cet écran doit donc
+     s'afficher sans dépendre de predictionData ni d'une session. */
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const idEnfant = params.get('parent');
+    if (idEnfant) {
+      setParentChildUserId(idEnfant);
+      setCurrentPage('parent');
+    }
+  }, []);
+
   return (
     <div className="app">
       {/* Public pages */}
@@ -213,6 +239,11 @@ function App() {
           predictionData={predictionData}
           onBackHome={handleBackHome}
         />
+      )}
+
+      {/* Paiement par un parent, via le lien partagé */}
+      {currentPage === 'parent' && (
+        <ParentPage childUserId={parentChildUserId} />
       )}
 
       {/* Admin Panel */}

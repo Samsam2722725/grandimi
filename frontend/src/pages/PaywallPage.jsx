@@ -25,6 +25,34 @@ function PaywallPage({ onBackHome }) {
   });
   const [loading, setLoading] = useState(false);
   const [erreur, setErreur] = useState(null);
+  const [lienParentVisible, setLienParentVisible] = useState(false);
+  const [lienCopie, setLienCopie] = useState(false);
+
+  /* Lien à transmettre au parent. Il porte l'id du compte enfant pour
+     que le webhook Whop crédite ce compte-là et non celui du payeur.
+     L'id est écrit au moment de la prédiction (cf. App.jsx). */
+  const idEnfant = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('user') || '{}').id || '';
+    } catch {
+      return '';
+    }
+  })();
+  const lienParent = idEnfant
+    ? `${window.location.origin}/?parent=${encodeURIComponent(idEnfant)}`
+    : '';
+
+  const copierLien = async () => {
+    try {
+      await navigator.clipboard.writeText(lienParent);
+      setLienCopie(true);
+      setTimeout(() => setLienCopie(false), 2500);
+    } catch {
+      // Presse-papiers refusé (permission, http) : le champ reste
+      // sélectionnable à la main, on n'affiche pas d'erreur bloquante.
+      setLienCopie(false);
+    }
+  };
 
   const emailValide = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const peutPayer = emailValide && !loading;
@@ -136,6 +164,37 @@ function PaywallPage({ onBackHome }) {
               `S'abonner — ${FORMULE.prix} €/mois`
             )}
           </button>
+
+          {lienParent && (
+            <div className="lien-parent">
+              <button
+                type="button"
+                className="btn-secondary btn-full"
+                onClick={() => setLienParentVisible((visible) => !visible)}
+              >
+                Faire payer par un parent
+              </button>
+
+              {lienParentVisible && (
+                <div className="lien-parent-contenu">
+                  <p>
+                    Envoie ce lien à ton parent. Il y trouvera l'explication et pourra
+                    régler depuis son e-mail — ton accès s'ouvrira ici, sur ce compte.
+                  </p>
+                  <input
+                    type="text"
+                    readOnly
+                    value={lienParent}
+                    onFocus={(evenement) => evenement.target.select()}
+                    aria-label="Lien à envoyer à un parent"
+                  />
+                  <button type="button" className="btn-tertiary" onClick={copierLien}>
+                    {lienCopie ? '✓ Lien copié' : 'Copier le lien'}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="security-note">
             <span>🔒</span> Paiement traité par Whop. Grandimi ne voit ni ne stocke ta

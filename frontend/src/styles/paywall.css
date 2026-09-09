@@ -201,6 +201,31 @@
   gap: var(--spacing-20);
 }
 
+/* ---------- Paiement par un parent ---------- */
+
+.lien-parent {
+  margin-bottom: var(--spacing-24);
+}
+
+.lien-parent-contenu {
+  margin-top: var(--spacing-16);
+  padding: var(--spacing-20);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-cards-sm);
+}
+
+.lien-parent-contenu p {
+  margin: 0 0 var(--spacing-16);
+  font-size: var(--text-body-sm);
+  color: var(--color-graphite);
+}
+
+.lien-parent-contenu input {
+  width: 100%;
+  margin-bottom: var(--spacing-8);
+  font-size: var(--text-body-sm);
+}
+
 .security-note {
   text-align: center;
   font-size: var(--text-body-sm);

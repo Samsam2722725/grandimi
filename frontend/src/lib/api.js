@@ -77,10 +77,16 @@ class APIClient {
    * { checkout_url }. C'est lui qui connaît le produit Whop : le
    * frontend ne doit jamais construire cette URL lui-même.
    */
-  async createCheckout({ email, userId }) {
+  /**
+   * `childUserId` n'est renseigné que dans le parcours parent : l'email
+   * est alors celui du parent, mais l'accès doit aller au compte de
+   * l'enfant. Le backend le transmet à Whop en metadata et le webhook
+   * s'en sert pour choisir le bénéficiaire.
+   */
+  async createCheckout({ email, userId, childUserId }) {
     return this.request('/api/v1/checkout', {
       method: 'POST',
-      body: JSON.stringify({ email, user_id: userId }),
+      body: JSON.stringify({ email, user_id: userId, child_user_id: childUserId }),
     });
   }
 

@@ -19,9 +19,14 @@ import (
 )
 
 // CheckoutRequest - user requests checkout link
+//
+// ChildUserID sert au paiement par un parent : l'email est alors celui
+// du parent (c'est lui le client Whop), mais l'accès doit atterrir sur
+// le compte de l'enfant, dont l'ID voyage jusqu'au webhook.
 type CheckoutRequest struct {
-	Email string `json:"email"`
-	UserID string `json:"user_id"`
+	Email       string `json:"email"`
+	UserID      string `json:"user_id"`
+	ChildUserID string `json:"child_user_id"`
 }
 
 // CheckoutResponse - returns Whop checkout URL
@@ -48,7 +53,47 @@ type WhopWebhookPayload struct {
 			ID string `json:"id"`
 		} `json:"product"`
 		Status string `json:"status"`
+		// Renseigné quand le checkout a été ouvert depuis le lien de
+		// partage parent : porte child_user_id. Typé en interface{} car
+		// Whop peut renvoyer autre chose que des chaînes ; un
+		// map[string]string ferait échouer tout le webhook sur une
+		// valeur numérique.
+		Metadata map[string]interface{} `json:"metadata"`
 	} `json:"data"`
+}
+
+// metadataTexte lit une clé de metadata en tolérant les types non-chaîne.
+func metadataTexte(metadata map[string]interface{}, cle string) string {
+	valeur, ok := metadata[cle]
+	if !ok || valeur == nil {
+		return ""
+	}
+	if texte, ok := valeur.(string); ok {
+		return strings.TrimSpace(texte)
+	}
+	return strings.TrimSpace(fmt.Sprintf("%v", valeur))
+}
+
+// resoudreBeneficiaire dit à quel compte appliquer l'abonnement.
+//
+// Le payeur n'est pas toujours le bénéficiaire : quand un parent règle
+// depuis le lien de partage, data.user.email est celui du parent alors
+// que l'accès doit aller au compte de l'enfant. child_user_id tranche.
+//
+// En l'absence de metadata — Whop ne le transmet pas, ou paiement
+// classique par l'utilisateur lui-même — on retombe sur l'email du
+// payeur, c'est-à-dire le comportement d'avant.
+func resoudreBeneficiaire(payload WhopWebhookPayload) (*db.User, error) {
+	if id := metadataTexte(payload.Data.Metadata, "child_user_id"); id != "" {
+		enfant, err := db.GetUserByID(id)
+		if err == nil && enfant != nil {
+			return enfant, nil
+		}
+		// ID inconnu : on préfère rattacher le paiement au payeur
+		// plutôt que de le perdre. La trace permet de rattraper à la main.
+		fmt.Printf("[whop] child_user_id %q introuvable, repli sur l'email du payeur: %v\n", id, err)
+	}
+	return db.GetOrCreateUser(payload.Data.User.Email)
 }
 
 // GetCheckout - generates Whop checkout URL
@@ -93,6 +138,19 @@ func GetCheckout(c *gin.Context) {
 		url.QueryEscape(req.Email),
 	)
 
+	// Paiement par un parent : on vérifie que le compte enfant existe
+	// avant de lancer le paiement. Sans ce contrôle, un ID erroné ne se
+	// verrait qu'au webhook, une fois le parent débité.
+	if req.ChildUserID != "" {
+		enfant, err := db.GetUserByID(req.ChildUserID)
+		if err != nil || enfant == nil {
+			fmt.Printf("[checkout] compte enfant introuvable (%q): %v\n", req.ChildUserID, err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": "unknown child account"})
+			return
+		}
+		checkoutURL += "&metadata[child_user_id]=" + url.QueryEscape(req.ChildUserID)
+	}
+
 	c.JSON(http.StatusOK, CheckoutResponse{
 		CheckoutURL: checkoutURL,
 		Message:     fmt.Sprintf("Checkout for user %s", user.ID),
@@ -131,9 +189,9 @@ func WhopWebhook(c *gin.Context) {
 
 	// Handle membership.activated (paiement confirmé)
 	if payload.Type == "membership.activated" {
-		user, err := db.GetOrCreateUser(payload.Data.User.Email)
+		user, err := resoudreBeneficiaire(payload)
 		if err != nil {
-			fmt.Printf("[whop] membership.activated GetOrCreateUser(%q): %v\n", payload.Data.User.Email, err)
+			fmt.Printf("[whop] membership.activated resoudreBeneficiaire(%q): %v\n", payload.Data.User.Email, err)
 			db.LogWebhook(payload.Type, payload.Data.User.Email, payloadMap, "failed")
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user"})
 			return
@@ -165,9 +223,9 @@ func WhopWebhook(c *gin.Context) {
 
 	// Handle membership.deactivated (annulation, expiration, échec de paiement)
 	if payload.Type == "membership.deactivated" {
-		user, err := db.GetOrCreateUser(payload.Data.User.Email)
+		user, err := resoudreBeneficiaire(payload)
 		if err != nil {
-			fmt.Printf("[whop] membership.deactivated GetOrCreateUser(%q): %v\n", payload.Data.User.Email, err)
+			fmt.Printf("[whop] membership.deactivated resoudreBeneficiaire(%q): %v\n", payload.Data.User.Email, err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user"})
 			return
 		}

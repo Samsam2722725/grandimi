@@ -51,6 +51,11 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       let result;
       if (useRealAPI) {
         result = await apiClient.predictHeightV2({
+          // Obligatoire côté serveur (binding "required,email") : c'est
+          // la clé qui rattache la prédiction à un compte. Sans lui,
+          // /api/v2/predict-height répond 400 et le questionnaire ne
+          // peut pas aboutir.
+          email: formData.email,
           age: parseFloat(formData.age),
           sex: formData.sex,
           height_cm: parseFloat(formData.height_cm),
@@ -75,7 +80,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         });
       }
 
-      onPredictionComplete(result);
+      /* La réponse du serveur ne réémet pas l'email : on le rattache ici,
+         sinon la paywall et l'écran parent n'ont plus de quoi identifier
+         le compte. */
+      onPredictionComplete({ ...result, email: formData.email });
     } catch (err) {
       setError(err.message);
       setLoading(false);
