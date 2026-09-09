@@ -153,13 +153,18 @@ func UpdateUserPremium(userID string, whopCustomerID string, whopSubscriptionID 
 }
 
 // SavePrediction - save prediction to database
-func SavePrediction(prediction Prediction) error {
-	_, err := DB.ExecContext(context.Background(),
-		"INSERT INTO predictions (user_id, age, sex, height_cm, weight_kg, father_height_cm, mother_height_cm, predicted_height, confidence_level, confidence_min, confidence_max) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+func SavePrediction(userID string, prediction *Prediction) (*Prediction, error) {
+	prediction.UserID = userID
+	err := DB.QueryRowContext(context.Background(),
+		"INSERT INTO predictions (user_id, age, sex, height_cm, weight_kg, father_height_cm, mother_height_cm, predicted_height, confidence_level, confidence_min, confidence_max) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id",
 		prediction.UserID, prediction.Age, prediction.Sex, prediction.HeightCm, prediction.WeightKg,
 		prediction.FatherHeightCm, prediction.MotherHeightCm, prediction.PredictedHeight,
-		prediction.ConfidenceLevel, prediction.ConfidenceMin, prediction.ConfidenceMax)
-	return err
+		prediction.ConfidenceLevel, prediction.ConfidenceMin, prediction.ConfidenceMax).
+		Scan(&prediction.ID)
+	if err != nil {
+		return nil, err
+	}
+	return prediction, nil
 }
 
 // CreateSubscription - create subscription record
