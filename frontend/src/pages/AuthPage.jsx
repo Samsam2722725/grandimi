@@ -24,6 +24,22 @@ function AuthPage({ onAuthComplete }) {
         const response = await apiClient.login({ email, password });
         localStorage.setItem('user', JSON.stringify(response.user));
         localStorage.setItem('token', response.token);
+
+        // Charger les prédictions depuis le backend
+        const predictions = await apiClient.getPredictionsByEmail(email);
+        if (predictions && predictions.length > 0) {
+          const latestPrediction = predictions[0];
+          localStorage.setItem('predictionData', JSON.stringify({
+            predicted_height_cm: latestPrediction.predicted_height,
+            confidence_range: {
+              min: latestPrediction.confidence_min,
+              max: latestPrediction.confidence_max,
+            },
+            confidence_level: latestPrediction.confidence_level,
+            current_height: latestPrediction.height_cm,
+            email: email,
+          }));
+        }
       } else if (mode === 'signup') {
         if (!email || !password) throw new Error('Email et mot de passe requis');
 

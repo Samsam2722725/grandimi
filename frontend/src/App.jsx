@@ -132,6 +132,10 @@ function App() {
     setFormData(null);
   };
 
+  const handleLogin = () => {
+    setCurrentPage('auth');
+  };
+
   // Check for Whop payment return - redirect to set password
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -159,7 +163,10 @@ function App() {
     <div className="app">
       {/* Public pages */}
       {currentPage === 'home' && (
-        <HomePage onStartQuestionnaire={handleStartQuestionnaire} />
+        <HomePage
+          onStartQuestionnaire={handleStartQuestionnaire}
+          onLogin={handleLogin}
+        />
       )}
 
       {currentPage === 'questionnaire' && (
@@ -170,6 +177,10 @@ function App() {
       )}
 
       {/* Auth pages */}
+      {currentPage === 'auth' && (
+        <AuthPage onAuthComplete={handleAuthComplete} />
+      )}
+
       {currentPage === 'auth-results' && (
         <AuthPage onAuthComplete={handleAuthComplete} />
       )}

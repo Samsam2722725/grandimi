@@ -151,7 +151,7 @@ const FAQ = [
   },
 ]
 
-function HomePage({ onStartQuestionnaire }) {
+function HomePage({ onStartQuestionnaire, onLogin }) {
   return (
     <div className="min-h-screen bg-[color:var(--surface-page-canvas)] font-sans">
       {/* ============ EN-TÊTE ============ */}
@@ -175,14 +175,24 @@ function HomePage({ onStartQuestionnaire }) {
             </span>
           </a>
 
-          <button
-            type="button"
-            onClick={onStartQuestionnaire}
-            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-brand px-5 text-sm font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
-          >
-            Estimer ma taille
-            <ArrowRight className="size-4" aria-hidden="true" />
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onLogin}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-ink px-5 text-sm font-semibold text-ink transition-colors hover:bg-ink/6"
+            >
+              Se connecter
+            </button>
+
+            <button
+              type="button"
+              onClick={onStartQuestionnaire}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-brand px-5 text-sm font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
+            >
+              Estimer ma taille
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </button>
+          </div>
         </div>
       </header>
 
