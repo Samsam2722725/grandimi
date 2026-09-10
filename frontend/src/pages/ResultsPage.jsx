@@ -21,7 +21,11 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
     ? 50
     : Math.min(100, Math.max(0,
         ((predicted_height_cm - confidence_range.min) / largeur) * 100));
-  const growth_potential = predicted_height_cm - (predictionData.current_height || 170);
+  /* Le repli sur 170 cm fabriquait un chiffre : le champ lu n'existait pas,
+     si bien qu'un adolescent de 183 cm se voyait annoncer "+16,2 cm" de
+     croissance restante. Sans la taille saisie, on n'affiche rien. */
+  const tailleActuelle = predictionData.current_height_cm;
+  const growth_potential = tailleActuelle ? predicted_height_cm - tailleActuelle : 0;
 
   return (
     <div className="results-page">
