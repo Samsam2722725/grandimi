@@ -99,6 +99,22 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </section>
         )}
 
+        {/* Placé juste après la fenêtre de croissance : plus bas, il fallait
+            dépasser les mentions légales et le bloc dépliant pour le voir. */}
+        <section className="cta-section">
+          <div className="cta-box">
+            <h2>Prêt à maximiser ta croissance ?</h2>
+            <p>
+              Un plan personnalisé qui te dit quoi faire chaque jour — sommeil, nutrition,
+              exercices — et qui change à chaque mois d’abonnement.
+            </p>
+            <button className="btn-primary btn-large" onClick={onViewPlan}>
+              Voir mon plan de croissance →
+            </button>
+            <p className="cta-price">9,99 €/mois · résiliable à tout moment · 14 jours pour changer d’avis</p>
+          </div>
+        </section>
+
         {/* Disclaimer */}
         <section className="disclaimer-section">
           <div className="alert alert-warning">
@@ -165,18 +181,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           )}
         </section>
 
-        {/* Call to action */}
-        <section className="cta-section">
-          <div className="cta-box">
-            <h2>Prêt à maximiser ta croissance ?</h2>
-            <p>
-              Découvre un plan personnalisé adapté à tes habitudes, avec des exercices, nutrition et sommeil optimisés.
-            </p>
-            <button className="btn-primary btn-large" onClick={onViewPlan}>
-              Voir mon plan de croissance →
-            </button>
-          </div>
-        </section>
       </section>
     </div>
   );

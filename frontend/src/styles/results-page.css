@@ -255,6 +255,15 @@
   margin-bottom: var(--spacing-32);
 }
 
+/* Le tarif suit le bouton : le decouvrir seulement sur l'ecran de
+   paiement fait abandonner. */
+.cta-box .cta-price {
+  margin-top: var(--spacing-16);
+  margin-bottom: 0;
+  font-size: 0.875rem;
+  opacity: 0.85;
+}
+
 .cta-box .btn-group { justify-content: center; }
 
 .cta-box .btn-secondary {
