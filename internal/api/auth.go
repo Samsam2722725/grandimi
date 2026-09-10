@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"grandimi/internal/db"
 	"net/http"
 	"os"
 	"strconv"
@@ -150,6 +151,31 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		c.Set("userID", userID)
+		c.Next()
+	}
+}
+
+// PremiumMiddleware protège ce qui est vendu. À monter derrière
+// AuthMiddleware, qui pose l'identifiant de l'appelant.
+//
+// Sans lui, le plan de croissance facturé 9,99 €/mois s'obtenait par un
+// simple POST anonyme sur /api/v1/growth-plan.
+func PremiumMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		user, err := db.GetUserByID(c.GetString("userID"))
+		if err != nil {
+			fmt.Printf("[premium] GetUserByID: %v\n", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "statut d'abonnement illisible"})
+			c.Abort()
+			return
+		}
+
+		if user == nil || !user.IsPremium {
+			c.JSON(http.StatusPaymentRequired, gin.H{"error": "abonnement requis"})
+			c.Abort()
+			return
+		}
+
 		c.Next()
 	}
 }

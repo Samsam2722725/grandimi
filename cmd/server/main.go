@@ -44,11 +44,17 @@ func main() {
 	// pour qu'on ne puisse pas la remplir depuis une boucle.
 	router.POST("/api/v2/predict-height", api.RateLimit(30, time.Hour), api.PredictHeightV2)
 
-	// Maximize Potential - Growth Plans
-	router.POST("/api/v1/growth-plan", api.GetGrowthPlan)
-	router.GET("/api/v1/exercise-guide", api.GetExerciseGuide)
-	router.GET("/api/v1/nutrition-guide", api.GetNutritionGuide)
-	router.GET("/api/v1/sleep-optimization", api.GetSleepOptimization)
+	/* Le plan de croissance et les guides sont ce que paie l'abonnement.
+	   Servis en accès libre, ils s'obtenaient par un POST anonyme : le
+	   produit facturé 9,99 €/mois était récupérable sans payer. */
+	paye := router.Group("/api/v1")
+	paye.Use(api.AuthMiddleware(), api.PremiumMiddleware())
+	{
+		paye.POST("/growth-plan", api.GetGrowthPlan)
+		paye.GET("/exercise-guide", api.GetExerciseGuide)
+		paye.GET("/nutrition-guide", api.GetNutritionGuide)
+		paye.GET("/sleep-optimization", api.GetSleepOptimization)
+	}
 
 	/* Auth — débit limité : sans plafond, un mot de passe se teste en
 	   force brute sur /login, et /signup permet de sonder quelles
