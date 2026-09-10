@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://grandimi.com/sitemap.xml
+
+# Disallow crawlers from accessing sensitive paths
+Disallow: /admin
+Disallow: /api

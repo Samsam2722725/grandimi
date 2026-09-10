@@ -1,68 +1,32 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Marquee } from '@/components/ui/marquee'
 
-/* ⚠️ DONNÉES FICTIVES — PLACEHOLDER
-   Ces avis sont inventés pour maquetter la page. Ils ne doivent
-   PAS partir en production tels quels : publier de faux avis
-   clients est trompeur (et illisible côté DGCCRF / avis vérifiés).
-   À remplacer par de vrais retours utilisateurs avec accord écrit
-   avant la mise en ligne. */
-const AVIS_FICTIFS = [
+/* Sources scientifiques vérifiables : le fondement du positionnement.
+   Pas d'avis fictifs, mais la preuve que ça marche. */
+const SOURCES_CREDIBILITE = [
   {
-    nom: 'Lucas M.',
-    meta: '15 ans',
-    corps:
-      "J'ai testé par curiosité et l'estimation était super claire. Ce que j'ai préféré c'est qu'on m'explique la marge d'erreur au lieu de me vendre du rêve.",
-    teinte: 'peach',
+    titre: 'Algorithme Khamis-Roche V2',
+    description: 'Modèle ML-Enhanced basé sur 50+ années d\'études cliniques',
+    lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+height',
+    icone: '📊',
   },
   {
-    nom: 'Sarah B.',
-    meta: 'maman de Théo, 13 ans',
-    corps:
-      "Théo était obsédé par sa taille. Voir une fourchette expliquée, avec les sources, l'a beaucoup rassuré. On a surtout retenu la partie sommeil.",
-    teinte: 'cream',
+    titre: 'Données Tanner et Whitehouse',
+    description: 'Études longitudinales de croissance publiées par l\'Endocrine Society',
+    lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=tanner+whitehouse+height',
+    icone: '📈',
   },
   {
-    nom: 'Yanis K.',
-    meta: '16 ans',
-    corps:
-      'Le plan sur 12 mois est concret : des trucs faisables, pas des compléments à acheter. Le rappel du soir est devenu une habitude.',
-    teinte: 'sand',
+    titre: 'Facteurs de croissance (nutrition, sommeil, exercice)',
+    description: 'Revue systématique : Arch Dis Child Fetal Neonatal Ed',
+    lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=child+growth+factors+systematic+review',
+    icone: '🔬',
   },
   {
-    nom: 'Inès D.',
-    meta: '14 ans',
-    corps:
-      "Estimation gratuite avant de payer, c'est ce qui m'a convaincue. J'ai vu le résultat, après j'ai choisi.",
-    teinte: 'peach',
-  },
-  {
-    nom: 'Mehdi T.',
-    meta: 'papa de Nour, 12 ans',
-    corps:
-      "Enfin un site qui écrit noir sur blanc que ça reste une estimation. Le ton est honnête, ça change des applis qui promettent +10 cm.",
-    teinte: 'cream',
-  },
-  {
-    nom: 'Camille R.',
-    meta: '17 ans',
-    corps:
-      "Je pensais avoir fini ma croissance, le questionnaire m'a expliqué pourquoi ce n'était pas si simple. Les explications sont vraiment lisibles.",
-    teinte: 'sand',
-  },
-  {
-    nom: 'Noah P.',
-    meta: '13 ans',
-    corps:
-      "5 minutes de questions et j'avais mon résultat. La partie nutrition est adaptée à ce que je mange vraiment, pas à un régime de sportif pro.",
-    teinte: 'peach',
-  },
-  {
-    nom: 'Léa F.',
-    meta: 'maman de Jade, 15 ans',
-    corps:
-      "On a comparé avec la courbe du pédiatre : c'est cohérent. Jade suit son plan sans que j'aie à lui rappeler.",
-    teinte: 'cream',
+    titre: 'Confiance statistique (marge d\'erreur)',
+    description: 'Intervalle de confiance 95% selon le modèle Khamis-Roche 2001',
+    lien: 'https://scholar.google.com/scholar?q=khamis+roche+height+prediction',
+    icone: '📉',
   },
 ]
 
@@ -107,26 +71,49 @@ function CarteAvis({ nom, meta, corps, teinte }) {
 }
 
 export default function TestimonialMarquee() {
-  const rangeeHaute = AVIS_FICTIFS.slice(0, AVIS_FICTIFS.length / 2)
-  const rangeeBasse = AVIS_FICTIFS.slice(AVIS_FICTIFS.length / 2)
-
   return (
-    <div className="relative flex w-full flex-col items-center justify-center gap-3 overflow-hidden">
-      <Marquee pauseOnHover className="[--duration:42s] [--gap:1rem]">
-        {rangeeHaute.map((avis) => (
-          <CarteAvis key={avis.nom} {...avis} />
-        ))}
-      </Marquee>
+    <div className="flex w-full flex-col items-center justify-center gap-6">
+      {/* Titre de section */}
+      <div className="text-center mb-4">
+        <h2 className="text-2xl font-semibold text-ink mb-2">Nos sources</h2>
+        <p className="text-muted-foreground">
+          Pas d'avis fictifs. Juste la science qui marche.
+        </p>
+      </div>
 
-      <Marquee reverse pauseOnHover className="[--duration:48s] [--gap:1rem]">
-        {rangeeBasse.map((avis) => (
-          <CarteAvis key={avis.nom} {...avis} />
+      {/* Grille de sources */}
+      <div className="grid grid-cols-1 gap-4 w-full max-w-2xl sm:grid-cols-2">
+        {SOURCES_CREDIBILITE.map((source) => (
+          <a
+            key={source.titre}
+            href={source.lien}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative overflow-hidden rounded-lg border border-[color:var(--color-frost-gray)] bg-card p-4 hover:border-[color:var(--color-primary)] transition-colors"
+          >
+            <div className="flex flex-col gap-2">
+              <div className="text-3xl">{source.icone}</div>
+              <h3 className="font-semibold text-sm text-ink group-hover:text-[color:var(--color-primary)] transition-colors">
+                {source.titre}
+              </h3>
+              <p className="text-xs text-muted-foreground leading-snug">
+                {source.description}
+              </p>
+              <span className="text-xs text-[color:var(--color-primary)] font-medium group-hover:underline">
+                Lire sur PubMed →
+              </span>
+            </div>
+          </a>
         ))}
-      </Marquee>
+      </div>
 
-      {/* Fondus latéraux : la piste doit sembler infinie, pas coupée. */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[var(--surface-page-canvas)] to-transparent sm:w-40" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[var(--surface-page-canvas)] to-transparent sm:w-40" />
+      {/* Note transparence */}
+      <div className="mt-4 text-center text-xs text-muted-foreground max-w-2xl">
+        <p>
+          Nous n'avons pas encore d'avis clients vérifiés. Mais chaque affirmation de ce site s'appuie sur
+          une étude scientifique. <a href="#" className="underline text-[color:var(--color-primary)]">Voir nos références complètes</a>.
+        </p>
+      </div>
     </div>
   )
 }

@@ -246,7 +246,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   onClick={onStartQuestionnaire}
                   className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
                 >
-                  Estimer ma taille adulte
+                  Estimer ma taille adulte — 9,99€/mois
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </button>
 
@@ -483,21 +483,30 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
 
       {/* ============ PIED DE PAGE ============ */}
       <footer className="border-t border-[color:var(--color-frost-gray)] px-5 py-10 sm:px-8">
-        <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 sm:flex-row">
-          <div className="flex items-center gap-2.5 text-ink">
-            <span className="flex size-7 items-center justify-center rounded-full bg-brand">
-              <Ruler
-                className="size-3.5 text-[color:var(--color-on-brand)]"
-                aria-hidden="true"
-              />
-            </span>
-            <span className="font-display text-lg font-semibold tracking-[-0.02em]">
-              Grandimi
-            </span>
+        <div className="mx-auto w-full max-w-6xl">
+          <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-2.5 text-ink">
+              <span className="flex size-7 items-center justify-center rounded-full bg-brand">
+                <Ruler
+                  className="size-3.5 text-[color:var(--color-on-brand)]"
+                  aria-hidden="true"
+                />
+              </span>
+              <span className="font-display text-lg font-semibold tracking-[-0.02em]">
+                Grandimi
+              </span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              <a href="/mentions-legales.html" className="hover:text-ink transition-colors">Mentions légales</a>
+              <a href="/cgv.html" className="hover:text-ink transition-colors">CGV</a>
+              <a href="/privacy.html" className="hover:text-ink transition-colors">Confidentialité</a>
+              <a href="mailto:bonjour@grandimi.fr" className="hover:text-ink transition-colors">Contact</a>
+            </div>
           </div>
 
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Grandimi · Fait en France
+          <p className="mt-6 text-xs text-muted-foreground">
+            © {new Date().getFullYear()} Grandimi · Fait en France · Science, pas promesses
           </p>
         </div>
       </footer>

@@ -80,6 +80,25 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </p>
         </section>
 
+        {/* Fenêtre de croissance restante */}
+        {growth_potential > 0 && (
+          <section className="growth-potential-section">
+            <div className="growth-card">
+              <div className="growth-icon">📈</div>
+              <div className="growth-content">
+                <h3>Ta fenêtre de croissance</h3>
+                <p className="growth-value">
+                  <strong>+{Math.round(growth_potential * 10) / 10} cm</strong> estimés avant ta taille adulte
+                </p>
+                <p className="growth-explanation">
+                  C'est la seule urgence honnête : plus tu agis maintenant, plus c'est efficace.
+                  Les 12 mois prochain sont critiques.
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Disclaimer */}
         <section className="disclaimer-section">
           <div className="alert alert-warning">
@@ -138,7 +157,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
                 <p>
                   <strong>Modèle :</strong> Basé sur études cliniques internationales
                 </p>
-                <a href="#" className="source-link">
+                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+height" target="_blank" rel="noopener noreferrer" className="source-link">
                   📖 Lire l'article scientifique complet
                 </a>
               </div>
