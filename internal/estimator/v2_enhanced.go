@@ -112,6 +112,15 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	healthMultiplier := calculateHealthFactor(req)
 	finalHeight := midParentTarget * healthMultiplier
 
+	// La methode mi-parentale ne regarde que la taille des parents, jamais
+	// celle deja atteinte par l enfant. Elle annoncait donc 180,5 cm a un
+	// adolescent qui mesurait deja 183 cm — une taille adulte inferieure a
+	// sa taille actuelle. On ne retrecit pas a l adolescence : la taille
+	// deja atteinte est un plancher, pas une variable.
+	if finalHeight < req.HeightCM {
+		finalHeight = req.HeightCM
+	}
+
 	// Plus de stadification de Tanner : le champ n est plus collecte.
 	// La croissance restante est estimee via HeightVelocityCM, qui agit
 	// sur la LARGEUR de l intervalle (cf. calculateV2Confidence) et non
@@ -393,8 +402,16 @@ func calculateV2Confidence(
 	// L'ancienne version le centrait sur la taille mi-parentale et
 	// oubliait le "else" du cas feminin : pour une fille la fourchette
 	// etait decalee de +6.5 cm par rapport a sa propre reference.
+	// Meme plancher que la prediction : afficher une borne basse sous la
+	// taille actuelle revient a annoncer a l adolescent qu il pourrait
+	// rapetisser, ce qui detruit la credibilite de tout le resultat.
+	borneBasse := math.Round((predictedHeight-rangeMargin)*10) / 10
+	if borneBasse < req.HeightCM {
+		borneBasse = math.Round(req.HeightCM*10) / 10
+	}
+
 	return confidenceLevel, [2]float64{
-		math.Round((predictedHeight-rangeMargin)*10) / 10,
+		borneBasse,
 		math.Round((predictedHeight+rangeMargin)*10) / 10,
 	}
 }
