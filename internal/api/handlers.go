@@ -10,10 +10,10 @@ import (
 )
 
 type PredictHeightRequest struct {
-	Age            float64 `json:"age" binding:"required,gt=8,lt=18"`
+	Age            float64 `json:"age" binding:"required,gt=8,lte=25"`
 	Sex            string  `json:"sex" binding:"required,oneof=M F"`
 	HeightCM       float64 `json:"height_cm" binding:"required,gt=100,lt=210"`
-	WeightKG       float64 `json:"weight_kg" binding:"required,gt=15,lt=150"`
+	WeightKG       float64 `json:"weight_kg" binding:"required,gt=15,lte=200"`
 	FatherHeightCM float64 `json:"father_height_cm" binding:"required,gt=140,lt=220"`
 	MotherHeightCM float64 `json:"mother_height_cm" binding:"required,gt=140,lt=210"`
 	PubertySigns   struct {
@@ -27,10 +27,10 @@ type PredictHeightRequest struct {
 
 type PredictHeightV2Request struct {
 	Email              string  `json:"email" binding:"required,email"`
-	Age                float64 `json:"age" binding:"required,gt=8,lt=18"`
+	Age                float64 `json:"age" binding:"required,gt=8,lte=25"`
 	Sex                string  `json:"sex" binding:"required,oneof=M F"`
 	HeightCM           float64 `json:"height_cm" binding:"required,gt=100,lt=210"`
-	WeightKG           float64 `json:"weight_kg" binding:"required,gt=15,lt=150"`
+	WeightKG           float64 `json:"weight_kg" binding:"required,gt=15,lte=200"`
 	FatherHeightCM     float64 `json:"father_height_cm" binding:"required,gt=140,lt=220"`
 	MotherHeightCM     float64 `json:"mother_height_cm" binding:"required,gt=140,lt=210"`
 	BMI                float64 `json:"bmi"`                      // Optional, calculated if not provided
