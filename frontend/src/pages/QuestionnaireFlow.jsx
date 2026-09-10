@@ -80,10 +80,18 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         });
       }
 
-      /* La réponse du serveur ne réémet pas l'email : on le rattache ici,
-         sinon la paywall et l'écran parent n'ont plus de quoi identifier
-         le compte. */
-      onPredictionComplete({ ...result, email: formData.email });
+      /* La réponse du serveur ne réémet ni l'email ni les mesures saisies :
+         on les rattache ici. Sans l'email, la paywall et l'écran parent
+         n'identifient plus le compte ; sans les mesures, le plan de
+         croissance n'a rien à personnaliser. */
+      onPredictionComplete({
+        ...result,
+        email: formData.email,
+        age: parseFloat(formData.age),
+        sex: formData.sex,
+        current_height_cm: parseFloat(formData.height_cm),
+        weight_kg: parseFloat(formData.weight_kg),
+      });
     } catch (err) {
       setError(err.message);
       setLoading(false);

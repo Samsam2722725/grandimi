@@ -2,75 +2,41 @@ import { useState, useEffect } from 'react';
 import Spinner from '../components/Spinner';
 import '../styles/growth-plan.css';
 import apiClient from '../lib/api';
-import { mockPredictHeight } from '../lib/mock-api';
 
-function GrowthPlanPage({ formData, predictionData, onBackHome }) {
+function GrowthPlanPage({ predictionData, onBackHome }) {
   const [plan, setPlan] = useState(null);
+  const [monthlyPlan, setMonthlyPlan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Fetch growth plan on mount
   useEffect(() => {
     const fetchPlan = async () => {
       try {
         setLoading(true);
-        // For demo: use mock data if no real API
-        const mockPlanData = {
-          plan: {
-            timeline: [
-              {
-                month: 1,
-                expected_growth_mm: 5,
-                focus: 'Établir routine d\'exercice',
-                actions: ['Commencer hanging routine', 'Optimiser sommeil', 'Augmenter calcium']
-              },
-              {
-                month: 3,
-                expected_growth_mm: 8,
-                focus: 'Nutrition optimale',
-                actions: ['Ajouter protéines', 'Vérifier vitamin D', 'Hydratation 2.5L/jour']
-              },
-              {
-                month: 6,
-                expected_growth_mm: 15,
-                focus: 'Croissance maximale',
-                actions: ['Routine établie', 'Contrôle médical', 'Ajuster selon besoins']
-              },
-              {
-                month: 12,
-                expected_growth_mm: 25,
-                focus: 'Évaluation finale',
-                actions: ['Mesurer progrès', 'Planifier suite', 'Consolider habitudes']
-              }
-            ],
-            expected_growth: 2.5,
-            posture_exercises: [
-              { name: 'Spinal Elongation', duration: '10 min', frequency: 'Daily' },
-              { name: 'Wall Angels', duration: '3 min', frequency: 'Daily' },
-              { name: 'Hanging Protocol', duration: '15 min', frequency: '5x/week' }
-            ],
-            nutrition: {
-              daily_calories: 2200,
-              protein_g: 100,
-              calcium_mg: 1300,
-              vitamin_d_mcg: 15
-            },
-            sleep: {
-              hours: 8,
-              bedtime: '22:00',
-              waketime: '07:00'
-            },
-            supplements: [
-              { name: 'Calcium + Vitamin D', dosage: '1000mg + 800 IU', frequency: 'Daily' },
-              { name: 'Zinc', dosage: '11mg', frequency: 'Daily' },
-              { name: 'Magnesium', dosage: '200mg', frequency: 'Evening' }
-            ],
-            motivation: 'Tu as le potentiel de grandir naturellement. Ce plan te montre comment optimiser chaque facteur.'
-          }
-        };
 
-        setPlan(mockPlanData.plan);
+        // Le contenu dépend du mois d'abonnement en cours : chaque mois
+        // payé donne un plan différent. Si le statut est illisible, on
+        // sert le premier mois plutôt que de bloquer l'accès.
+        let mois = 1;
+        try {
+          const statut = await apiClient.checkPremium();
+          if (statut?.subscription_month > 0) mois = statut.subscription_month;
+        } catch {
+          mois = 1;
+        }
+
+        const data = await apiClient.getGrowthPlan({
+          age: predictionData.age,
+          sex: predictionData.sex,
+          current_height_cm: predictionData.current_height_cm,
+          predicted_height_cm: predictionData.predicted_height_cm,
+          weight_kg: predictionData.weight_kg,
+          month: mois,
+        });
+
+        setPlan(data.plan);
+        setMonthlyPlan(data.monthly_plan);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -79,7 +45,7 @@ function GrowthPlanPage({ formData, predictionData, onBackHome }) {
     };
 
     fetchPlan();
-  }, []);
+  }, [predictionData]);
 
   if (loading) {
     return (
@@ -115,7 +81,11 @@ function GrowthPlanPage({ formData, predictionData, onBackHome }) {
           ← Accueil
         </button>
         <h1>Ton plan de croissance personnalisé</h1>
-        <p className="subtitle">Ton plan du mois : quoi faire chaque jour pour maximiser ton potentiel</p>
+        <p className="subtitle">
+          {monthlyPlan
+            ? `Mois ${monthlyPlan.month} · ${monthlyPlan.focus} — quoi faire chaque jour`
+            : 'Quoi faire chaque jour pour maximiser ton potentiel'}
+        </p>
       </header>
 
       {/* Tabs */}
@@ -127,10 +97,10 @@ function GrowthPlanPage({ formData, predictionData, onBackHome }) {
           Aperçu
         </button>
         <button
-          className={`tab ${activeTab === 'timeline' ? 'active' : ''}`}
-          onClick={() => setActiveTab('timeline')}
+          className={`tab ${activeTab === 'mois' ? 'active' : ''}`}
+          onClick={() => setActiveTab('mois')}
         >
-          Timeline
+          Ce mois-ci
         </button>
         <button
           className={`tab ${activeTab === 'exercises' ? 'active' : ''}`}
@@ -194,28 +164,56 @@ function GrowthPlanPage({ formData, predictionData, onBackHome }) {
           </section>
         )}
 
-        {/* Timeline Tab */}
-        {activeTab === 'timeline' && (
+        {activeTab === 'mois' && monthlyPlan && (
           <section className="tab-content">
+            <div className="section-title">
+              Mois {monthlyPlan.month} — {monthlyPlan.focus}
+            </div>
+            <p className="motivation-text">{monthlyPlan.why_this_month}</p>
+
+            <div className="alert alert-info" style={{ margin: '20px 0' }}>
+              <div>
+                <strong>Ton objectif du mois :</strong> {monthlyPlan.month_target}
+              </div>
+            </div>
+
+            <div className="section-title">Ta journée type</div>
             <div className="timeline-container">
-              {plan.timeline.map((phase, idx) => (
+              {monthlyPlan.daily_routine.map((bloc, idx) => (
                 <div key={idx} className="timeline-item">
                   <div className="timeline-marker">
-                    <div className="timeline-circle">{phase.month}m</div>
+                    <div className="timeline-circle">{bloc.moment}</div>
                   </div>
                   <div className="timeline-content">
-                    <h3>{phase.focus}</h3>
-                    <p className="growth-metric">
-                      Croissance attendue : <strong>+{phase.expected_growth_mm}mm</strong>
-                    </p>
+                    <h3>{bloc.heure}</h3>
+                    {bloc.duree_min > 0 && (
+                      <p className="growth-metric">
+                        <strong>{bloc.duree_min} min</strong>
+                      </p>
+                    )}
                     <ul className="action-list">
-                      {phase.actions.map((action, i) => (
+                      {bloc.actions.map((action, i) => (
                         <li key={i}>{action}</li>
                       ))}
                     </ul>
                   </div>
                 </div>
               ))}
+            </div>
+
+            <div className="section-title">Semaine par semaine</div>
+            <ul className="action-list">
+              {monthlyPlan.weekly_goals.map((objectif, idx) => (
+                <li key={idx}>{objectif}</li>
+              ))}
+            </ul>
+
+            <div className="alert alert-info" style={{ marginTop: '24px' }}>
+              <div>
+                Mesure-toi à la fin du mois : ton prochain plan en dépend.
+                <br />
+                <strong>{monthlyPlan.next_month_preview}</strong>
+              </div>
             </div>
           </section>
         )}
@@ -229,7 +227,7 @@ function GrowthPlanPage({ formData, predictionData, onBackHome }) {
                 <div key={idx} className="exercise-card card">
                   <h3>{exercise.name}</h3>
                   <div className="exercise-meta">
-                    <span className="badge">{exercise.duration}</span>
+                    <span className="badge">{exercise.duration_min} min</span>
                     <span className="badge">{exercise.frequency}</span>
                   </div>
                   <button className="btn-tertiary">

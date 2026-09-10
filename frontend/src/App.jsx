@@ -18,7 +18,6 @@ import ParentPage from './pages/ParentPage';
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [predictionData, setPredictionData] = useState(null);
-  const [formData, setFormData] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
   // Compte enfant à créditer quand un parent arrive par le lien partagé.
@@ -143,7 +142,6 @@ function App() {
   const handleBackHome = () => {
     setCurrentPage('home');
     setPredictionData(null);
-    setFormData(null);
   };
 
   const handleLogin = () => {
@@ -234,11 +232,7 @@ function App() {
 
       {/* Growth Plan (after payment) */}
       {currentPage === 'plan' && predictionData && isPaid && (
-        <GrowthPlanPage
-          formData={formData}
-          predictionData={predictionData}
-          onBackHome={handleBackHome}
-        />
+        <GrowthPlanPage predictionData={predictionData} onBackHome={handleBackHome} />
       )}
 
       {/* Paiement par un parent, via le lien partagé */}
