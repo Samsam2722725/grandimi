@@ -126,6 +126,12 @@ function App() {
     setCurrentPage('results');
   };
 
+  const handlePaymentComplete = () => {
+    setIsAuthenticated(true);
+    setIsPaid(true);
+    setCurrentPage('plan');
+  };
+
   /* handlePaymentComplete a été retiré : accorder le premium depuis le
      client était précisément la faille. C'est désormais le webhook Whop
      qui met à jour is_premium en base, et checkPremium qui fait foi. */
@@ -211,7 +217,7 @@ function App() {
 
       {/* Set password after payment */}
       {currentPage === 'set-password' && (
-        <SetPasswordPage onAuthComplete={handleAuthComplete} />
+        <SetPasswordPage onAuthComplete={handlePaymentComplete} />
       )}
 
       {/* Results (visible after auth) */}
