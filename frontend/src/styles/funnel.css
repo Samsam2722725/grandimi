@@ -1,0 +1,681 @@
+/* ============================================
+   TUNNEL — surface sombre, une décision par écran
+   ============================================
+   Pourquoi une palette sombre ICI et nulle part ailleurs :
+
+   La landing vend, et vend en clair — papier crème, encre chaude, marge
+   d'erreur affichée. C'est la promesse de transparence de Grandimi, et elle
+   se lit mieux sur du papier que sur du noir.
+
+   Le questionnaire ne vend rien : il fait saisir huit mesures. Sa seule
+   qualité est de ne rien mettre d'autre à l'écran. Un fond quasi noir efface
+   tout ce qui n'est pas la question du moment, la molette et le bouton — il
+   n'y a plus de bandeau, plus de carte voisine, plus de couleur à interpréter.
+   C'est la même raison qui fait les salles de cinéma noires.
+
+   L'accent reste l'orange de la marque, pas un violet emprunté : la structure
+   est reprise de l'inspiration, l'identité non. Mesuré sur #0a0a0a,
+   #ff5a1f donne 6.35:1 — il passe AA en texte comme en fond de bouton
+   (l'encre posée dessus reste à 5.96:1, cf. design-system-v2.css).
+   ============================================ */
+
+.funnel,
+.interstitial,
+.night {
+  /* Ces variables ne sont volontairement PAS dans :root : elles ne doivent
+     valoir que sur les surfaces sombres. Redéfinir --surface-page-canvas
+     globalement retournerait la landing et l'admin par effet de bord.
+     `.night` est le porte-jetons partagé : le résultat et la paywall
+     l'utilisent sans hériter de la mise en page du tunnel. */
+  --funnel-bg: #0a0a0a;
+  --funnel-surface: #141414;
+  --funnel-surface-high: #1c1c1c;
+  --funnel-line: #2a2a2a;
+  --funnel-text: #ffffff;
+  --funnel-muted: #9a9a9a;
+  --funnel-accent: #ff5a1f;
+  --funnel-on-accent: #17120e;
+}
+
+/* ---------- Neutralisation du style de base ----------
+   design-system-v2.css est chargé dans @layer base et fixe des couleurs
+   d'ÉLÉMENT pensées pour le papier crème : `p { color: #4a4038 }` et
+   `h1-h4 { color: #17120e }`. Sur fond noir, ces deux règles rendaient les
+   titres presque invisibles et le chiffre du résultat brun foncé.
+
+   On les neutralise ici une fois pour toutes, plutôt que de reposer une
+   couleur sur chaque nouveau composant sombre — c'est exactement le genre
+   d'oubli qui ne se voit qu'en production. */
+/* `:where()` partout : la règle doit annuler le style de base SANS jamais
+   battre une classe. Écrite en `.night p`, elle l'emportait sur
+   `.results-growth` (même spécificité, déclarée avant) et repeignait en blanc
+   un chiffre volontairement orange. À spécificité nulle, la moindre classe
+   reprend la main. */
+:where(.night, .funnel, .interstitial) :where(h1, h2, h3, h4) {
+  color: var(--funnel-text);
+  font-family: var(--font-dm-sans);
+  letter-spacing: -0.02em;
+}
+
+:where(.night, .funnel, .interstitial) :where(p) {
+  color: inherit;
+  /* Les écarts sont donnés par les `gap` des conteneurs flex : une marge
+     basse implicite les décalait tous d'un cran. */
+  margin-bottom: 0;
+}
+
+.funnel {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  /* dvh et non vh : sur mobile, la barre d'URL rétractable fait mentir vh de
+     ~60px et le bouton d'action se retrouvait sous le pli. */
+  height: 100dvh;
+  background: var(--funnel-bg);
+  color: var(--funnel-text);
+  font-family: var(--font-dm-sans);
+}
+
+/* ---------- En-tête : retour · progression · réserve ---------- */
+
+.funnel-header {
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  flex-shrink: 0;
+}
+
+.funnel-back {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: var(--funnel-surface-high);
+  color: var(--funnel-text);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.funnel-back:hover {
+  background: #262626;
+}
+
+.funnel-back:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+}
+
+.funnel-progress {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--funnel-line);
+  overflow: hidden;
+}
+
+.funnel-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--funnel-accent);
+  /* La barre avance en douceur : un saut sec donne l'impression d'un écran
+     rechargé plutôt que d'une étape franchie. */
+  transition: width 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.funnel-header-spacer {
+  display: block;
+  width: 48px;
+}
+
+/* ---------- Corps ---------- */
+
+.funnel-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 24px 8px;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Le titre porte la question, en une ou deux lignes. Pas de sur-titre, pas de
+   numéro d'étape en toutes lettres : la barre du haut le dit déjà. */
+.funnel-title {
+  font-family: var(--font-dm-sans);
+  font-size: clamp(28px, 8vw, 36px);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  color: var(--funnel-text);
+  margin: 8px 0 0;
+  text-wrap: balance;
+}
+
+/* Le sous-titre justifie la question. C'est lui qui fait accepter de donner
+   la taille de ses parents : sans raison affichée, c'est une intrusion. */
+.funnel-subtitle {
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--funnel-muted);
+  margin: 12px 0 0;
+  max-width: 42ch;
+}
+
+.funnel-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* `safe` est indispensable : avec un simple `center`, un contenu plus haut
+     que la zone déborde des DEUX côtés et le haut devient inatteignable au
+     défilement — le récapitulatif perdait ses deux premières lignes. */
+  justify-content: safe center;
+  gap: 20px;
+  /* La réserve du bas laisse la dernière ligne sortir du dégradé du pied. */
+  padding: 28px 0 44px;
+}
+
+/* ---------- Pied : une seule action, toujours au même endroit ---------- */
+
+.funnel-footer {
+  flex-shrink: 0;
+  padding: 12px 24px calc(20px + env(safe-area-inset-bottom, 0px));
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* Dégradé vers le fond : le contenu qui défile s'efface sous le bouton au
+     lieu de le toucher franchement. */
+  background: linear-gradient(to top, var(--funnel-bg) 62%, transparent);
+}
+
+.funnel-cta {
+  width: 100%;
+  min-height: 60px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  font-family: var(--font-dm-sans);
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  /* La lueur est ce qui décolle le bouton du noir. Sans elle, un aplat orange
+     sur fond noir paraît collé au bas de l'écran. */
+  box-shadow: 0 8px 32px rgba(255, 90, 31, 0.28);
+  transition:
+    transform 0.12s ease,
+    opacity 0.15s ease;
+}
+
+.funnel-cta:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+.funnel-cta:disabled {
+  opacity: 0.34;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.funnel-cta:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+/* Action secondaire : texte seul, jamais un second bouton plein. Deux boutons
+   pleins côte à côte obligent à lire pour choisir. */
+.funnel-link {
+  align-self: center;
+  border: 0;
+  background: none;
+  color: var(--funnel-muted);
+  font-size: 15px;
+  font-family: inherit;
+  padding: 8px 12px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.funnel-link:hover {
+  color: var(--funnel-text);
+}
+
+/* ---------- Molette ---------- */
+
+.wheel {
+  position: relative;
+  width: 100%;
+}
+
+.wheel-scroller {
+  position: relative;
+  /* Au-dessus de la pilule de sélection, qui est peinte dessous. Sans cet
+     empilement explicite, la pilule (déclarée après dans le DOM) recouvrait
+     les chiffres. */
+  z-index: 1;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* Les extrémités s'effacent : c'est ce qui fait lire un cylindre plutôt
+     qu'une liste tronquée par un bord net. */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 24%,
+    #000 76%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 24%,
+    #000 76%,
+    transparent 100%
+  );
+}
+
+.wheel-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.wheel-scroller:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 4px;
+  border-radius: 20px;
+}
+
+.wheel-item {
+  scroll-snap-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--funnel-text);
+  transition:
+    opacity 0.12s linear,
+    transform 0.12s linear;
+}
+
+.wheel-item.is-active {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.wheel-selection {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(240px, 70%);
+  border-radius: 999px;
+  background: var(--funnel-surface-high);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---------- Bascule segmentée ---------- */
+
+.segmented {
+  display: inline-flex;
+  align-self: center;
+  padding: 4px;
+  gap: 4px;
+  border-radius: 999px;
+  background: var(--funnel-surface);
+}
+
+.segmented-option {
+  border: 0;
+  background: none;
+  color: var(--funnel-muted);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 22px;
+  min-height: 44px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.segmented-option.is-selected {
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+}
+
+.segmented-option:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Carte de choix ---------- */
+
+.choice-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 20px;
+  border: 1.5px solid var(--funnel-line);
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.choice-card:hover {
+  border-color: #3d3d3d;
+}
+
+.choice-card.is-selected {
+  border-color: var(--funnel-accent);
+  background: rgba(255, 90, 31, 0.09);
+}
+
+.choice-card:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+}
+
+.choice-card-icon {
+  font-size: 26px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.choice-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.choice-card-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.choice-card-hint {
+  font-size: 14px;
+  color: var(--funnel-muted);
+  line-height: 1.35;
+}
+
+.choice-card-radio {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 2px solid var(--funnel-line);
+  flex-shrink: 0;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.choice-card.is-selected .choice-card-radio {
+  border-color: var(--funnel-accent);
+  /* Le point central est peint par une ombre interne : pas de pseudo-élément
+     à positionner, et le cercle reste parfaitement concentrique. */
+  box-shadow: inset 0 0 0 5px var(--funnel-accent);
+}
+
+/* ---------- Champ texte (e-mail) ---------- */
+
+.funnel-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.funnel-field input {
+  width: 100%;
+  min-height: 60px;
+  padding: 0 22px;
+  border-radius: 18px;
+  border: 1.5px solid var(--funnel-line);
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  font-family: inherit;
+  /* 16px minimum : en dessous, iOS zoome sur le champ à la mise au point et
+     l'utilisateur se retrouve avec une page décadrée. */
+  font-size: 17px;
+}
+
+.funnel-field input::placeholder {
+  color: #5f5f5f;
+}
+
+.funnel-field input:focus {
+  outline: none;
+  border-color: var(--funnel-accent);
+}
+
+.funnel-help {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--funnel-muted);
+  margin: 0;
+}
+
+/* ---------- Récapitulatif ---------- */
+
+.funnel-review {
+  border-radius: 24px;
+  background: var(--funnel-surface);
+  padding: 8px 20px;
+}
+
+.funnel-review-row {
+  display: grid;
+  /* Libellé souple, valeur au plus juste, bouton en colonne fixe : les trois
+     colonnes s'alignent d'une ligne à l'autre au lieu de danser avec la
+     longueur des valeurs. */
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--funnel-line);
+}
+
+.funnel-review-row:last-child {
+  border-bottom: 0;
+}
+
+.funnel-review-row dt {
+  color: var(--funnel-muted);
+  font-size: 15px;
+}
+
+.funnel-review-row dd {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  /* Une adresse e-mail longue coupe au lieu d'écraser le bouton. */
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+/* Bouton de correction : rejoindre l'écran concerné plutôt que de re-parcourir
+   tout le tunnel avec le retour. */
+.funnel-review-edit {
+  border: 0;
+  background: var(--funnel-surface-high);
+  color: var(--funnel-muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.funnel-review-edit:hover {
+  color: var(--funnel-text);
+  background: #2e2e2e;
+}
+
+.funnel-review-edit:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+}
+
+.funnel-error {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 90, 31, 0.4);
+  background: rgba(255, 90, 31, 0.1);
+  color: #ffb59a;
+  padding: 14px 18px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+/* ---------- Écran de respiration ---------- */
+
+.interstitial {
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  background: var(--funnel-bg);
+  color: var(--funnel-text);
+  font-family: var(--font-dm-sans);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  padding: 32px 28px calc(32px + env(safe-area-inset-bottom, 0px));
+  text-align: center;
+}
+
+.interstitial-text {
+  font-size: clamp(22px, 6vw, 28px);
+  line-height: 1.38;
+  font-weight: 600;
+  max-width: 22ch;
+  margin: 0;
+  text-wrap: balance;
+  animation: interstitial-in 0.7s ease-out both;
+}
+
+.interstitial-action {
+  width: 100%;
+  max-width: 480px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out;
+  /* Inerte tant qu'invisible : sans ça, un tap au hasard pendant le fondu
+     saute l'écran avant même que la phrase soit lisible. */
+  pointer-events: none;
+}
+
+.interstitial-action.is-ready {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+@keyframes interstitial-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Mouvement réduit ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .funnel-progress-fill,
+  .wheel-item,
+  .interstitial-action {
+    transition: none;
+  }
+
+  .interstitial-text {
+    animation: none;
+  }
+}
+
+/* ---------- Groupes de choix ---------- */
+
+.funnel-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---------- Écran-chiffre ---------- */
+
+/* Un seul chiffre, aucune carte autour. C'est la mise en scène qui fait
+   retenir l'information : la même phrase dans un paragraphe se saute. */
+.funnel-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.funnel-figure-number {
+  font-size: clamp(48px, 14vw, 72px);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--funnel-text);
+}
+
+/* L'annotation manuscrite tranche avec la grille typographique : elle se lit
+   comme une note ajoutée à la main, pas comme un argument marketing de plus. */
+.funnel-figure-note {
+  color: var(--funnel-accent);
+  margin-left: 6px;
+}
+
+/* Texte réservé aux technologies d'assistance : retiré du flux visuel sans
+   être retiré de l'arbre d'accessibilité (display:none l'en sortirait). */
+.funnel .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

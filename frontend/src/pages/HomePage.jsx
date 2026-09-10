@@ -10,12 +10,13 @@ import {
   Sparkles,
 } from 'lucide-react'
 
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 
 /* GSAP (~70 kB) ne sert qu'a ce carrousel, situe tres bas dans la page.
    Le charger dans le bundle initial retardait l'affichage du hero sur
    mobile, ou l'ecran reste blanc tant que le JS n'est pas monte. */
 const CircularSplitRoll = lazy(() => import('@/components/ui/circular-split-roll'))
+import { HandwritingText } from '@/components/ui/handwriting-text'
 import { FaqSection } from '@/components/ui/faq-section'
 import TestimonialMarquee from '@/components/ui/testimonial-marquee'
 
@@ -152,6 +153,31 @@ const FAQ = [
 ]
 
 function HomePage({ onStartQuestionnaire, onLogin }) {
+  /* Barre d'action collante sur mobile.
+     Passé le hero, il n'existait plus aucun moyen de lancer le questionnaire
+     sans remonter : le bouton de l'en-tête est réduit sur petit écran et le
+     reste de la page est long. Une barre basse remet l'action sous le pouce
+     pendant toute la lecture — c'est le motif qui fait la différence sur les
+     tunnels mobiles.
+
+     IntersectionObserver plutôt qu'un écouteur de scroll : pas de calcul à
+     chaque frame, et le seuil suit le bouton même si la hauteur du hero
+     change. */
+  const sentinelleRef = useRef(null)
+  const [barreVisible, setBarreVisible] = useState(false)
+
+  useEffect(() => {
+    const cible = sentinelleRef.current
+    if (!cible || typeof IntersectionObserver === 'undefined') return undefined
+
+    const observateur = new IntersectionObserver(
+      ([entree]) => setBarreVisible(!entree.isIntersecting && entree.boundingClientRect.top < 0),
+      { threshold: 0 },
+    )
+    observateur.observe(cible)
+    return () => observateur.disconnect()
+  }, [])
+
   return (
     <div className="min-h-screen bg-[color:var(--surface-page-canvas)] font-sans">
       {/* ============ EN-TÊTE ============ */}
@@ -163,23 +189,27 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           supprime la cause. */}
       <header className="sticky top-0 z-50 border-b border-[color:var(--color-frost-gray)] bg-[color:var(--surface-page-canvas)]">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
-          <a href="#" className="flex items-center gap-2.5 text-ink">
+          <a href="#" className="flex min-w-0 items-center gap-2.5 text-ink">
             <span className="flex size-8 items-center justify-center rounded-full bg-brand">
               <Ruler
                 className="size-4 text-[color:var(--color-on-brand)]"
                 aria-hidden="true"
               />
             </span>
-            <span className="font-display text-xl font-semibold tracking-[-0.02em]">
+            <span className="truncate font-display text-xl font-semibold tracking-[-0.02em]">
               Grandimi
             </span>
           </a>
 
-          <div className="flex items-center gap-3">
+          {/* Sous 640px, les deux boutons pleins ne tenaient pas : la barre
+              débordait de 10px et « Se connecter » passait par-dessus le
+              logotype. On dégraisse au lieu de rétrécir la cible tactile —
+              les 44px de hauteur sont conservés partout. */}
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <button
               type="button"
               onClick={onLogin}
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-ink px-5 text-sm font-semibold text-ink transition-colors hover:bg-ink/6"
+              className="inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-sm font-semibold whitespace-nowrap text-ink transition-colors hover:bg-ink/6 sm:border sm:border-ink sm:px-5"
             >
               Se connecter
             </button>
@@ -187,10 +217,11 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             <button
               type="button"
               onClick={onStartQuestionnaire}
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-brand px-5 text-sm font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
+              className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:px-5"
             >
-              Estimer ma taille
-              <ArrowRight className="size-4" aria-hidden="true" />
+              <span className="sm:hidden">Estimer</span>
+              <span className="hidden sm:inline">Estimer ma taille</span>
+              <ArrowRight className="hidden size-4 sm:block" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -225,7 +256,18 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 style={{ animationDelay: '80ms' }}
               >
                 Quelle taille vas-tu vraiment{' '}
-                <span className="text-[color:var(--color-brand-display)]">atteindre</span> ?
+                {/* Le mot est tracé au stylo plutôt que posé en couleur : c'est
+                    la promesse du site — une estimation écrite à la main pour
+                    toi — et ça donne au titre un point de fixation que le
+                    surlignage orange n'obtenait pas. Si la police distante ne
+                    répond pas, le composant retombe sur du texte simple. */}
+                <HandwritingText
+                  text="atteindre"
+                  height="0.92em"
+                  strokeWidth={1.4}
+                  className="align-baseline text-[color:var(--color-brand-display)]"
+                />{' '}
+                ?
               </h1>
 
               <p
@@ -265,6 +307,10 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               >
                 Gratuit · résultat immédiat · aucune carte bancaire
               </p>
+
+              {/* Sentinelle : tant qu'elle est à l'écran, le bouton du hero
+                  est visible et la barre du bas reste masquée. */}
+              <div ref={sentinelleRef} aria-hidden="true" className="h-px w-full" />
             </div>
 
             {/* --- Colonne visuelle : le moment magique, au-dessus du fold --- */}
@@ -482,7 +528,10 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
       </main>
 
       {/* ============ PIED DE PAGE ============ */}
-      <footer className="border-t border-[color:var(--color-frost-gray)] px-5 py-10 sm:px-8">
+      {/* Réserve basse permanente sur mobile : la barre d'action se pose
+          par-dessus le pied de page, et les liens légaux doivent rester
+          cliquables une fois arrivé en bas. */}
+      <footer className="border-t border-[color:var(--color-frost-gray)] px-5 pt-10 pb-28 sm:px-8 md:pb-10">
         <div className="mx-auto w-full max-w-6xl">
           <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-center">
             <div className="flex items-center gap-2.5 text-ink">
@@ -510,6 +559,31 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           </p>
         </div>
       </footer>
+
+      {/* ============ BARRE D'ACTION MOBILE ============
+          Masquée dès `md` : au-delà, le bouton de l'en-tête reste visible et
+          une seconde action permanente ne ferait que manger l'écran.
+          `translate-y` plutôt que `display` : la barre glisse au lieu
+          d'apparaître d'un coup, et l'élément reste dans l'arbre pour ne pas
+          téléporter le focus. */}
+      <div
+        className={`fixed inset-x-0 bottom-0 z-50 border-t border-[color:var(--color-frost-gray)] bg-[color:var(--surface-page-canvas)] px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom,0px))] transition-transform duration-300 ease-out md:hidden ${
+          barreVisible ? 'translate-y-0' : 'translate-y-full'
+        }`}
+        // Hors écran, la barre ne doit pas être atteignable au clavier ni
+        // annoncée : sinon Tab part sur un bouton que personne ne voit.
+        aria-hidden={!barreVisible}
+        {...(barreVisible ? {} : { inert: '' })}
+      >
+        <button
+          type="button"
+          onClick={onStartQuestionnaire}
+          className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-6 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
+        >
+          Estimer ma taille — gratuit
+          <ArrowRight className="size-4" aria-hidden="true" />
+        </button>
+      </div>
     </div>
   )
 }

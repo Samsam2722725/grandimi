@@ -1,244 +1,264 @@
-import { useState } from 'react';
-import Spinner from '../components/Spinner';
-import apiClient from '../lib/api';
-import '../styles/paywall.css';
+import { useState } from 'react'
+import { ArrowLeft, Check, Lock } from 'lucide-react'
+
+import Spinner from '../components/Spinner'
+import apiClient from '../lib/api'
+import '../styles/funnel.css'
+/* Feuille dédiée, et non paywall.css : cette dernière habille encore
+   ParentPage (page claire, destinée à un adulte arrivé par lien partagé) et
+   partage des noms de classe avec elle. La remplacer cassait cet écran. */
+import '../styles/paywall-night.css'
 
 /* Formule unique à 9,99 €/mois.
-   Le backend n'expose qu'un seul produit Whop (productSlug codé en dur
-   dans whop_handlers.go) : proposer 3 formules ici enverrait les trois
-   vers le même paiement. Une formule = une vérité. */
+   Le backend n'expose qu'un seul produit Whop (productSlug codé en dur dans
+   whop_handlers.go) : afficher deux formules côte à côte, comme le font les
+   applis concurrentes, enverrait les deux vers le même paiement. On garde donc
+   une seule carte — et pas de badge « meilleure offre », qui n'a aucun sens
+   sans offre à comparer. */
 const FORMULE = {
   nom: 'Plan de croissance',
   prix: '9,99',
   periode: '/mois',
   avantages: [
-    'Ton plan personnalisé du mois : quoi faire chaque jour',
-    'Les 5 guides : exercices, nutrition, sommeil',
+    'Ton plan du mois : quoi faire chaque jour',
+    'Sommeil, nutrition, exercices — les trois leviers, détaillés',
     'Suivi des progrès et re-mesure mensuelle',
     'Résiliable en ligne à tout moment',
   ],
-};
+}
+
+const PILIERS = [
+  { emoji: '😴', titre: 'Sommeil', detail: 'Heures cibles, routine du soir' },
+  { emoji: '🥗', titre: 'Nutrition', detail: 'Protéines, calcium, vitamine D' },
+  { emoji: '🏃', titre: 'Exercices', detail: 'Étirements, sauts, posture' },
+]
 
 function PaywallPage({ onBackHome }) {
-  const [email, setEmail] = useState(() => {
-    return localStorage.getItem('userEmail') || '';
-  });
-  const [loading, setLoading] = useState(false);
-  const [erreur, setErreur] = useState(null);
-  const [lienParentVisible, setLienParentVisible] = useState(false);
-  const [lienCopie, setLienCopie] = useState(false);
+  const [email] = useState(() => localStorage.getItem('userEmail') || '')
+  const [loading, setLoading] = useState(false)
+  const [erreur, setErreur] = useState(null)
+  const [lienParentVisible, setLienParentVisible] = useState(false)
+  const [lienCopie, setLienCopie] = useState(false)
 
-  /* Lien à transmettre au parent. Il porte l'id du compte enfant pour
-     que le webhook Whop crédite ce compte-là et non celui du payeur.
-     L'id est écrit au moment de la prédiction (cf. App.jsx). */
+  /* Lien à transmettre au parent. Il porte l'id du compte enfant pour que le
+     webhook Whop crédite ce compte-là et non celui du payeur. L'id est écrit
+     au moment de la prédiction (cf. App.jsx). */
   const idEnfant = (() => {
     try {
-      return JSON.parse(localStorage.getItem('user') || '{}').id || '';
+      return JSON.parse(localStorage.getItem('user') || '{}').id || ''
     } catch {
-      return '';
+      return ''
     }
-  })();
+  })()
   const lienParent = idEnfant
     ? `${window.location.origin}/?parent=${encodeURIComponent(idEnfant)}`
-    : '';
+    : ''
 
   const copierLien = async () => {
     try {
-      await navigator.clipboard.writeText(lienParent);
-      setLienCopie(true);
-      setTimeout(() => setLienCopie(false), 2500);
+      await navigator.clipboard.writeText(lienParent)
+      setLienCopie(true)
+      setTimeout(() => setLienCopie(false), 2500)
     } catch {
       // Presse-papiers refusé (permission, http) : le champ reste
       // sélectionnable à la main, on n'affiche pas d'erreur bloquante.
-      setLienCopie(false);
+      setLienCopie(false)
     }
-  };
+  }
 
-  const emailValide = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const peutPayer = emailValide && !loading;
+  const emailValide = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
   /**
    * Redirige vers la page de paiement hébergée par Whop.
    *
-   * Le frontend ne voit JAMAIS de données bancaires : c'est Whop qui
-   * les collecte sur son propre domaine. La version précédente affichait
-   * des champs « numéro de carte » et « CVC » en clair — une violation
-   * PCI-DSS — et validait le paiement avec un setTimeout de 2 s, ce qui
-   * offrait le premium à quiconque cliquait.
+   * Le frontend ne voit JAMAIS de données bancaires : c'est Whop qui les
+   * collecte sur son propre domaine. Une version précédente affichait des
+   * champs « numéro de carte » et « CVC » en clair — une violation PCI-DSS —
+   * et validait le paiement avec un setTimeout de 2 s, ce qui offrait le
+   * premium à quiconque cliquait.
    *
-   * L'accès n'est PAS accordé ici : il l'est par le webhook Whop côté
-   * serveur, après paiement réel.
+   * L'accès n'est PAS accordé ici : il l'est par le webhook Whop côté serveur,
+   * après paiement réel.
    */
   const lancerPaiement = async () => {
-    setErreur(null);
-    setLoading(true);
+    setErreur(null)
+    setLoading(true)
 
     try {
-      const utilisateur = JSON.parse(localStorage.getItem('user') || '{}');
+      const utilisateur = JSON.parse(localStorage.getItem('user') || '{}')
       const { checkout_url: checkoutURL } = await apiClient.createCheckout({
         email,
         userId: utilisateur.id,
-      });
+      })
 
       if (!checkoutURL) {
-        throw new Error("Le serveur n'a pas renvoyé d'URL de paiement.");
+        throw new Error("Le serveur n'a pas renvoyé d'URL de paiement.")
       }
 
-      // On garde l'e-mail pour pouvoir vérifier le statut au retour.
-      localStorage.setItem('user', JSON.stringify({ ...utilisateur, email }));
-
-      window.location.href = checkoutURL;
+      localStorage.setItem('user', JSON.stringify({ ...utilisateur, email }))
+      window.location.href = checkoutURL
     } catch (err) {
       setErreur(
         err.message || "Impossible d'ouvrir la page de paiement. Réessaie dans un instant.",
-      );
-      setLoading(false);
+      )
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="paywall-page">
-      <header className="paywall-header">
-        <button className="btn-tertiary" onClick={onBackHome}>
-          ← Retour
+    <div className="night paywall">
+      <header className="paywall-top">
+        <button
+          type="button"
+          className="funnel-back"
+          onClick={onBackHome}
+          aria-label="Revenir en arrière"
+        >
+          <ArrowLeft size={20} aria-hidden="true" />
         </button>
-        <h1>Débloquer ton plan complet</h1>
-        <p className="subtitle">
-          Ton estimation reste gratuite. Le plan mensuel, lui, est payant.
-        </p>
       </header>
 
-      <section className="payment-section">
-        <div className="payment-box">
-          <h2>{FORMULE.nom}</h2>
+      <main className="paywall-scroll">
+        <h1 className="paywall-title">Débloquer ton plan complet</h1>
+        <p className="paywall-subtitle">
+          Ton estimation reste gratuite, pour toujours. Seul le plan mensuel est payant.
+        </p>
 
-          <div className="price">
-            <span className="amount">{FORMULE.prix} €</span>
-            <span className="duration">{FORMULE.periode}</span>
+        {/* Carte d'offre : bordure accentuée et prix en display. C'est le seul
+            élément coloré de la page — rien d'autre ne doit capter le regard ici. */}
+        <section className="paywall-offer" aria-labelledby="paywall-offer-title">
+          <div className="paywall-offer-head">
+            <h2 id="paywall-offer-title">{FORMULE.nom}</h2>
+            <p className="paywall-price">
+              <span>{FORMULE.prix} €</span>
+              {FORMULE.periode}
+            </p>
           </div>
 
-          <ul className="features">
+          <ul className="paywall-features">
             {FORMULE.avantages.map((avantage) => (
               <li key={avantage}>
-                <span className="check">✓</span>
-                {avantage}
+                <Check size={18} aria-hidden="true" />
+                <span>{avantage}</span>
               </li>
             ))}
           </ul>
+        </section>
 
-          <div className="form-group">
-            <label htmlFor="email-paiement">E-mail</label>
-            <input
-              id="email-paiement"
-              type="email"
-              autoComplete="email"
-              placeholder="ton@email.com"
-              value={email}
-              disabled
-              readOnly
-            />
-            <p className="form-helper">
-              Email du questionnaire (non modifiable). Aucune donnée bancaire ne transite
-              par Grandimi.
-            </p>
+        <section className="paywall-pillars" aria-label="Ce que contient le plan">
+          <h2 className="paywall-section-title">Voici ce que tu obtiens</h2>
+          <div className="paywall-pillar-grid">
+            {PILIERS.map((pilier) => (
+              <div className="paywall-pillar" key={pilier.titre}>
+                <span aria-hidden="true">{pilier.emoji}</span>
+                <strong>{pilier.titre}</strong>
+                <em>{pilier.detail}</em>
+              </div>
+            ))}
           </div>
+        </section>
 
-          {erreur && (
-            <div className="alert alert-error" role="alert">
-              <span className="alert-icon">!</span>
-              <p>{erreur}</p>
-            </div>
-          )}
-
-          <button
-            className="btn-primary btn-full btn-large"
-            onClick={lancerPaiement}
-            disabled={!peutPayer}
-          >
-            {loading ? (
-              <>
-                <Spinner />
-                Redirection…
-              </>
-            ) : (
-              `S'abonner — ${FORMULE.prix} €/mois`
-            )}
-          </button>
-
-          {lienParent && (
-            <div className="lien-parent">
-              <button
-                type="button"
-                className="btn-secondary btn-full"
-                onClick={() => setLienParentVisible((visible) => !visible)}
-              >
-                Faire payer par un parent
-              </button>
-
-              {lienParentVisible && (
-                <div className="lien-parent-contenu">
-                  <p>
-                    Envoie ce lien à ton parent. Il y trouvera l'explication et pourra
-                    régler depuis son e-mail — ton accès s'ouvrira ici, sur ce compte.
-                  </p>
-                  <input
-                    type="text"
-                    readOnly
-                    value={lienParent}
-                    onFocus={(evenement) => evenement.target.select()}
-                    aria-label="Lien à envoyer à un parent"
-                  />
-                  <button type="button" className="btn-tertiary" onClick={copierLien}>
-                    {lienCopie ? '✓ Lien copié' : 'Copier le lien'}
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          <div className="security-note">
-            <span>🔒</span> Paiement traité par Whop. Grandimi ne voit ni ne stocke ta
-            carte.
-          </div>
-
-          <p className="legal-text">
-            En continuant, tu acceptes nos <a href="#terms">Conditions d'utilisation</a> et
-            notre <a href="#privacy">Politique de confidentialité</a>. Résiliable en ligne
-            à tout moment.
+        {email && (
+          <p className="paywall-account">
+            Compte : <strong>{email}</strong>
+            <br />
+            C’est l’adresse du questionnaire — l’accès s’ouvrira sur ce compte.
           </p>
-        </div>
-      </section>
+        )}
 
-      <section className="paywall-faq">
-        <h2>Questions fréquentes</h2>
-        <div className="faq-items">
-          <details className="faq-item">
+        {erreur && (
+          <p className="funnel-error" role="alert">
+            {erreur}
+          </p>
+        )}
+
+        {lienParent && (
+          <section className="paywall-parent">
+            <button
+              type="button"
+              className="paywall-parent-toggle"
+              onClick={() => setLienParentVisible((visible) => !visible)}
+              aria-expanded={lienParentVisible}
+            >
+              Faire payer par un parent
+            </button>
+
+            {lienParentVisible && (
+              <div className="paywall-parent-body">
+                <p>
+                  Envoie ce lien à ton parent. Il y trouvera l’explication et pourra
+                  régler depuis son e-mail — ton accès s’ouvrira ici, sur ce compte.
+                </p>
+                <input
+                  type="text"
+                  readOnly
+                  value={lienParent}
+                  onFocus={(evenement) => evenement.target.select()}
+                  aria-label="Lien à envoyer à un parent"
+                />
+                <button type="button" className="funnel-link" onClick={copierLien}>
+                  {lienCopie ? '✓ Lien copié' : 'Copier le lien'}
+                </button>
+              </div>
+            )}
+          </section>
+        )}
+
+        <p className="paywall-security">
+          <Lock size={15} aria-hidden="true" />
+          Paiement traité par Whop. Grandimi ne voit ni ne stocke ta carte.
+        </p>
+
+        <section className="paywall-faq">
+          <details>
             <summary>Puis-je annuler mon abonnement ?</summary>
             <p>
-              Oui, en ligne et à tout moment, depuis ton espace Whop. L'accès reste actif
-              jusqu'à la fin de la période déjà payée.
+              Oui, en ligne et à tout moment, depuis ton espace Whop. L’accès reste
+              actif jusqu’à la fin de la période déjà payée.
             </p>
           </details>
-
-          <details className="faq-item">
+          <details>
+            <summary>L’estimation est-elle vraiment gratuite ?</summary>
+            <p>
+              Oui. Le questionnaire et ton estimation de taille adulte le restent. Seul
+              le plan personnalisé mensuel est payant.
+            </p>
+          </details>
+          <details>
             <summary>Qui traite le paiement ?</summary>
             <p>
               Whop. Tu es redirigé vers sa page sécurisée : tes données bancaires ne
               passent jamais par Grandimi, et nous ne les stockons pas.
             </p>
           </details>
+        </section>
 
-          <details className="faq-item">
-            <summary>L'estimation est-elle vraiment gratuite ?</summary>
-            <p>
-              Oui. Le questionnaire et ton estimation de taille adulte le restent. Seul le
-              plan personnalisé mensuel est payant.
-            </p>
-          </details>
-        </div>
-      </section>
+        <p className="paywall-legal">
+          En continuant, tu acceptes nos <a href="/cgv.html">conditions d’utilisation</a>{' '}
+          et notre <a href="/privacy.html">politique de confidentialité</a>. Résiliable
+          en ligne à tout moment.
+        </p>
+      </main>
+
+      <footer className="funnel-footer">
+        <button
+          type="button"
+          className="funnel-cta"
+          onClick={lancerPaiement}
+          disabled={!emailValide || loading}
+        >
+          {loading ? (
+            <>
+              <Spinner />
+              Redirection…
+            </>
+          ) : (
+            `S’abonner — ${FORMULE.prix} €/mois`
+          )}
+        </button>
+      </footer>
     </div>
-  );
+  )
 }
 
-export default PaywallPage;
+export default PaywallPage
