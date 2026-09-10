@@ -115,7 +115,7 @@ function GrowthPlanPage({ formData, predictionData, onBackHome }) {
           ← Accueil
         </button>
         <h1>Ton plan de croissance personnalisé</h1>
-        <p className="subtitle">12 mois pour maximiser ton potentiel de croissance</p>
+        <p className="subtitle">Ton plan du mois : quoi faire chaque jour pour maximiser ton potentiel</p>
       </header>
 
       {/* Tabs */}
@@ -320,8 +320,8 @@ function GrowthPlanPage({ formData, predictionData, onBackHome }) {
         <div className="cta-box">
           <h2>Prêt à commencer ?</h2>
           <p>
-            Ce plan te guide sur 12 mois. Consistency is key.
-            Mesure ta taille chaque mois et adapte selon tes progrès.
+            Ce plan couvre le mois qui vient. La régularité fait tout le résultat.
+            Mesure-toi à la fin du mois : ton prochain plan sera adapté à tes progrès.
           </p>
           <button className="btn-primary btn-large" onClick={onBackHome}>
             ✓ Commencer mon parcours

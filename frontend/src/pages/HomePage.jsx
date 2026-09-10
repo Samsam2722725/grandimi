@@ -91,8 +91,8 @@ const ETAPES = [
   {
     num: '03',
     icone: Sparkles,
-    titre: 'Plan sur 12 mois',
-    texte: 'Sommeil, nutrition, sport : des actions concrètes adaptées à ton quotidien.',
+    titre: 'Un plan chaque mois',
+    texte: 'Ce que tu fais aujourd’hui, cette semaine, ce mois-ci. Un nouveau plan à chaque mois d’abonnement.',
     teinte: 'var(--color-sage-wash)',
   },
 ]
@@ -132,7 +132,7 @@ const FAQ = [
   {
     question: 'Faut-il payer pour voir mon estimation ?',
     answer:
-      'Non. Le questionnaire et l’estimation de ta taille adulte sont gratuits et visibles immédiatement. Seul le plan de croissance personnalisé sur 12 mois est payant.',
+      'Non. Le questionnaire et l’estimation de ta taille adulte sont gratuits et visibles immédiatement. Seul le plan de croissance personnalisé est payant : 9,99 €/mois, avec un nouveau plan chaque mois, résiliable quand tu veux.',
   },
   {
     question: 'Mes données sont-elles conservées ?',
@@ -233,8 +233,8 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 style={{ animationDelay: '160ms' }}
               >
                 Réponds à quelques questions et découvre ton estimation de taille adulte —
-                avec sa marge d’erreur, expliquée. Puis un plan sur 12 mois pour atteindre
-                ton potentiel.
+                avec sa marge d’erreur, expliquée. Puis, si tu veux aller plus loin, un plan
+                personnalisé qui te dit quoi faire chaque jour, renouvelé chaque mois.
               </p>
 
               <div
@@ -246,7 +246,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   onClick={onStartQuestionnaire}
                   className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
                 >
-                  Estimer ma taille adulte — 9,99€/mois
+                  Estimer ma taille adulte — gratuit
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </button>
 

@@ -2,12 +2,19 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Sans HTTPS, l'origine http:// n'est pas autorisee par le CORS de l'API :
+      // toutes les requetes echouent en NetworkError. Redirection avant tout rendu.
+      if (location.protocol === 'http:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+        location.replace('https://' + location.host + location.pathname + location.search + location.hash);
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#fbf7f2" />
     <meta
       name="description"
-      content="Grandimi estime ta taille adulte à partir de tes mesures et de celles de tes parents, puis te propose un plan de croissance sur 12 mois."
+      content="Grandimi estime ta taille adulte à partir de tes mesures et de celles de tes parents, puis te propose un plan de croissance personnalisé, renouvelé chaque mois."
     />
     <title>Grandimi — Estime ta taille adulte</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />

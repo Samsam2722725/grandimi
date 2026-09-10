@@ -17,7 +17,7 @@ import '../styles/paywall.css';
 const FORMULE = {
   prix: '9,99',
   avantages: [
-    'Un plan de croissance personnalisé sur 12 mois',
+    'Un plan de croissance personnalisé, renouvelé chaque mois',
     'Les 5 guides : exercices, nutrition, sommeil',
     'Suivi des progrès et re-mesure chaque mois',
     'Résiliable en ligne à tout moment',
@@ -75,8 +75,9 @@ function ParentPage({ childUserId }) {
             de sa taille adulte, avec sa marge d'erreur. Cette partie est et reste gratuite.
           </p>
           <p>
-            Ce qui est payant, c'est la suite : un plan sur 12 mois pour l'aider à atteindre
-            son potentiel — sommeil, alimentation, activité physique.
+            Ce qui est payant, c'est la suite : un plan mensuel pour l'aider à atteindre
+            son potentiel — sommeil, alimentation, activité physique. Un nouveau plan
+            adapté à sa progression lui est remis à chaque mois d'abonnement.
           </p>
 
           <h2>Ce que contient l'abonnement</h2>
@@ -177,7 +178,7 @@ function ParentPage({ childUserId }) {
           <details className="faq-item">
             <summary>Que devient l'estimation si je ne paie pas ?</summary>
             <p>
-              Elle reste accessible et gratuite. Seul le plan sur 12 mois est concerné par
+              Elle reste accessible et gratuite. Seul le plan mensuel est concerné par
               l'abonnement.
             </p>
           </details>

@@ -92,7 +92,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
                 </p>
                 <p className="growth-explanation">
                   C'est la seule urgence honnête : plus tu agis maintenant, plus c'est efficace.
-                  Les 12 mois prochain sont critiques.
+                  Les 12 prochains mois sont critiques.
                 </p>
               </div>
             </div>

@@ -12,7 +12,7 @@ const FORMULE = {
   prix: '9,99',
   periode: '/mois',
   avantages: [
-    'Ton plan personnalisé sur 12 mois',
+    'Ton plan personnalisé du mois : quoi faire chaque jour',
     'Les 5 guides : exercices, nutrition, sommeil',
     'Suivi des progrès et re-mesure mensuelle',
     'Résiliable en ligne à tout moment',
@@ -104,7 +104,7 @@ function PaywallPage({ onBackHome }) {
         </button>
         <h1>Débloquer ton plan complet</h1>
         <p className="subtitle">
-          Ton estimation reste gratuite. Le plan sur 12 mois, lui, est payant.
+          Ton estimation reste gratuite. Le plan mensuel, lui, est payant.
         </p>
       </header>
 
@@ -232,7 +232,7 @@ function PaywallPage({ onBackHome }) {
             <summary>L'estimation est-elle vraiment gratuite ?</summary>
             <p>
               Oui. Le questionnaire et ton estimation de taille adulte le restent. Seul le
-              plan personnalisé sur 12 mois est payant.
+              plan personnalisé mensuel est payant.
             </p>
           </details>
         </div>
