@@ -417,7 +417,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             description: 'On répond sous 48 h, par un humain.',
             buttonText: 'Nous écrire',
             onContact: () => {
-              window.location.href = 'mailto:bonjour@grandimi.fr'
+              window.location.href = 'mailto:grandimi14@gmail.com'
             },
           }}
         />
@@ -501,7 +501,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               <a href="/mentions-legales.html" className="hover:text-ink transition-colors">Mentions légales</a>
               <a href="/cgv.html" className="hover:text-ink transition-colors">CGV</a>
               <a href="/privacy.html" className="hover:text-ink transition-colors">Confidentialité</a>
-              <a href="mailto:bonjour@grandimi.fr" className="hover:text-ink transition-colors">Contact</a>
+              <a href="mailto:grandimi14@gmail.com" className="hover:text-ink transition-colors">Contact</a>
             </div>
           </div>
 
