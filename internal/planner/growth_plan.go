@@ -5,79 +5,83 @@ import (
 	"math"
 )
 
+// Sans tags, Go sérialise en PascalCase et le frontend, qui lit du
+// snake_case, ne trouve rien. Les noms ci-dessous sont ceux que
+// GrowthPlanPage consomme : les changer casse l'affichage du plan.
+
 type GrowthPlan struct {
-	UserID            string
-	PostureExercises  []Exercise
-	NutritionPlan     NutritionPlan
-	SleepOptimization SleepPlan
-	SupplementStack   []Supplement
-	DailyHabits       []Habit
-	Timeline          Timeline
-	ExpectedGrowth    float64 // cm additional growth possible
-	Motivation        string
+	UserID            string        `json:"user_id"`
+	PostureExercises  []Exercise    `json:"posture_exercises"`
+	NutritionPlan     NutritionPlan `json:"nutrition"`
+	SleepOptimization SleepPlan     `json:"sleep"`
+	SupplementStack   []Supplement  `json:"supplements"`
+	DailyHabits       []Habit       `json:"daily_habits"`
+	Timeline          Timeline      `json:"timeline"`
+	ExpectedGrowth    float64       `json:"expected_growth"` // cm additional growth possible
+	Motivation        string        `json:"motivation"`
 }
 
 type Exercise struct {
-	Name        string
-	Description string
-	Duration    int    // minutes
-	Frequency   string // daily, 3x/week, etc
-	Difficulty  string // easy, medium, hard
-	Impact      string // posture, spine elongation, core strength
-	Routine     string // Morning, Evening, Anytime
-	Video       string // Link to form video
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Duration    int    `json:"duration_min"`
+	Frequency   string `json:"frequency"`
+	Difficulty  string `json:"difficulty"`
+	Impact      string `json:"impact"`
+	Routine     string `json:"routine"`
+	Video       string `json:"video"`
 }
 
 type NutritionPlan struct {
-	DailyCalories      int
-	ProteinGrams       int
-	CalciumMg          int
-	VitaminDmcg        int
-	ZincMg             int
-	MagnesiumMg        int
-	MealsPerDay        int
-	MealTiming         []string // "breakfast 7am", "snack 10am", etc
-	FoodsToEat         []string
-	FoodsToAvoid       []string
-	SampleDayMeals     []string
-	Hydration          string // "2-3 liters/day"
+	DailyCalories  int      `json:"daily_calories"`
+	ProteinGrams   int      `json:"protein_g"`
+	CalciumMg      int      `json:"calcium_mg"`
+	VitaminDmcg    int      `json:"vitamin_d_mcg"`
+	ZincMg         int      `json:"zinc_mg"`
+	MagnesiumMg    int      `json:"magnesium_mg"`
+	MealsPerDay    int      `json:"meals_per_day"`
+	MealTiming     []string `json:"meal_timing"`
+	FoodsToEat     []string `json:"foods_to_eat"`
+	FoodsToAvoid   []string `json:"foods_to_avoid"`
+	SampleDayMeals []string `json:"sample_day_meals"`
+	Hydration      string   `json:"hydration"`
 }
 
 type SleepPlan struct {
-	TargetHours      int
-	BedTime          string // "10pm"
-	WakeTime         string // "7am"
-	Consistency      string // Same time every day
-	Growth           string // "Human growth hormone peaks 1-2h after sleep onset"
-	PreSleepRoutine  []string
-	Environment      []string // dark, cool, quiet
-	AvoidBefore      []string // caffeine, screens, exercise
+	TargetHours     int      `json:"hours"`
+	BedTime         string   `json:"bedtime"`
+	WakeTime        string   `json:"waketime"`
+	Consistency     string   `json:"consistency"`
+	Growth          string   `json:"growth"`
+	PreSleepRoutine []string `json:"pre_sleep_routine"`
+	Environment     []string `json:"environment"`
+	AvoidBefore     []string `json:"avoid_before"`
 }
 
 type Supplement struct {
-	Name            string
-	Dosage          string
-	Frequency       string // daily, etc
-	BestTakingTime  string // with meals, before bed, etc
-	Purpose         string // calcium for bone growth, etc
-	ResearchSupport string // "proven", "promising", "under research"
-	Safety          string // "safe for age", "consult doctor"
+	Name            string `json:"name"`
+	Dosage          string `json:"dosage"`
+	Frequency       string `json:"frequency"`
+	BestTakingTime  string `json:"best_taking_time"`
+	Purpose         string `json:"purpose"`
+	ResearchSupport string `json:"research_support"`
+	Safety          string `json:"safety"`
 }
 
 type Habit struct {
-	Name        string
-	Description string
-	Frequency   string
-	Difficulty  string // easy, medium, hard
-	Benefit     string
-	TimePerDay  int    // minutes
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Frequency   string `json:"frequency"`
+	Difficulty  string `json:"difficulty"`
+	Benefit     string `json:"benefit"`
+	TimePerDay  int    `json:"time_per_day_min"`
 }
 
 type Timeline struct {
-	Month1 string
-	Month3 string
-	Month6 string
-	Month12 string
+	Month1  string `json:"month_1"`
+	Month3  string `json:"month_3"`
+	Month6  string `json:"month_6"`
+	Month12 string `json:"month_12"`
 }
 
 type GrowthPlanRequest struct {

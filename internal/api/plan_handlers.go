@@ -19,16 +19,19 @@ type GetGrowthPlanRequest struct {
 	ExerciseMin    float64 `json:"exercise_min_per_day"`
 	PubertyStage   string  `json:"puberty_stage"`
 	HeightVelocity float64 `json:"height_velocity_cm"`
+	// Mois d'abonnement en cours. Absent ou 0 vaut le premier mois.
+	Month int `json:"month"`
 }
 
 type GrowthPlanResponse struct {
-	Plan             interface{} `json:"plan"`
-	ExpectedGrowth   float64     `json:"expected_growth_cm"`
-	Motivation       string      `json:"motivation"`
-	PostureCount     int         `json:"posture_exercises_count"`
-	SupplementCount  int         `json:"supplements_count"`
-	DailyHabitsCount int         `json:"daily_habits_count"`
-	Message          string      `json:"message"`
+	Plan             interface{}         `json:"plan"`
+	MonthlyPlan      planner.MonthlyPlan `json:"monthly_plan"`
+	ExpectedGrowth   float64             `json:"expected_growth_cm"`
+	Motivation       string              `json:"motivation"`
+	PostureCount     int                 `json:"posture_exercises_count"`
+	SupplementCount  int                 `json:"supplements_count"`
+	DailyHabitsCount int                 `json:"daily_habits_count"`
+	Message          string              `json:"message"`
 }
 
 // GetGrowthPlan generates a personalized growth maximization plan
@@ -72,8 +75,14 @@ func GetGrowthPlan(c *gin.Context) {
 
 	growthPlan := planner.GeneratePersonalizedPlan(plannerReq)
 
+	mois := req.Month
+	if mois < 1 {
+		mois = 1
+	}
+
 	resp := GrowthPlanResponse{
 		Plan:             growthPlan,
+		MonthlyPlan:      planner.GenerateMonthlyPlan(plannerReq, mois),
 		ExpectedGrowth:   growthPlan.ExpectedGrowth,
 		Motivation:       growthPlan.Motivation,
 		PostureCount:     len(growthPlan.PostureExercises),

@@ -324,7 +324,24 @@ func CheckPremium(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"user_id":    user.ID,
-		"is_premium": user.IsPremium,
+		"user_id":            user.ID,
+		"is_premium":         user.IsPremium,
+		"subscription_month": moisAbonnement(user.CreatedAt),
 	})
+}
+
+// Le plan livré dépend du mois d'abonnement en cours. Faute de date de
+// souscription en base, on part de la création du compte : les deux
+// coïncident pour un client qui paie dans la foulée de son estimation.
+func moisAbonnement(creeLe string) int {
+	debut, err := time.Parse(time.RFC3339, creeLe)
+	if err != nil {
+		return 1
+	}
+
+	mois := int(time.Since(debut).Hours()/(24*30)) + 1
+	if mois < 1 {
+		return 1
+	}
+	return mois
 }
