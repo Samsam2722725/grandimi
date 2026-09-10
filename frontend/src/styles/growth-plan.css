@@ -446,3 +446,210 @@
   .supplement-card { padding: var(--spacing-24); }
   .cta-box { padding: var(--spacing-40) var(--spacing-24); }
 }
+
+/* ============================================
+   SKIN SOMBRE DU PLAN
+   ============================================
+   Le plan arrive après le résultat et la paywall, tous deux sur fond noir :
+   y revenir en papier crème produisait un flash blanc au milieu du parcours
+   payant. On ne réécrit pas la feuille claire pour autant — elle reste la
+   base, ces règles la recouvrent quand la racine porte `.night`.
+
+   Spécificité 0,2,0 (`.night.growth-plan-page`) contre 0,1,0 pour les règles
+   claires ci-dessus : l'ordre de déclaration n'entre pas en jeu, ces
+   sélecteurs gagnent quoi qu'il arrive.
+   ============================================ */
+
+.night.growth-plan-page {
+  background: var(--funnel-bg);
+  color: var(--funnel-text);
+  font-family: var(--font-dm-sans);
+  min-height: 100vh;
+}
+
+.night.growth-plan-page :is(h1, h2, h3) {
+  color: var(--funnel-text);
+  font-family: var(--font-dm-sans);
+}
+
+.night.growth-plan-page :is(p, li) {
+  color: var(--funnel-muted);
+}
+
+.night.growth-plan-page .subtitle {
+  color: var(--funnel-muted);
+}
+
+.night.growth-plan-page .btn-tertiary {
+  color: var(--funnel-muted);
+  background: none;
+  border: 0;
+}
+
+/* ---------- Onglets en pilules ---------- */
+
+/* Cinq onglets ne tiennent pas sur 390px : la barre défile horizontalement
+   au lieu de replier les libellés sur deux lignes. La barre de défilement est
+   masquée — le débordement se lit à la pilule coupée au bord. */
+.night.growth-plan-page .plan-header {
+  background: var(--funnel-bg);
+  /* Aligné à gauche comme le tunnel, le résultat et la paywall : sur ce
+     parcours, tous les titres partent du même axe. */
+  text-align: left;
+  padding: 20px 20px 24px;
+}
+
+.night.growth-plan-page .plan-header button {
+  position: static;
+  padding-left: 0;
+  margin-bottom: 12px;
+}
+
+.night.growth-plan-page .plan-header h1 {
+  font-size: clamp(26px, 7.5vw, 34px);
+  line-height: 1.14;
+  margin: 0 0 10px;
+}
+
+.night.growth-plan-page .plan-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 20px 12px;
+  border: 0;
+  /* Opaque, car la barre est `sticky` : en transparent, le contenu défilait
+     visiblement derrière les pilules. */
+  background: var(--funnel-bg);
+  /* Pas de scroll-snap ici : `snap-align: start` sur la première pilule
+     annulait la réserve de gauche et collait l'onglet au bord de l'écran. */
+}
+
+.night.growth-plan-page .plan-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.night.growth-plan-page .plan-tabs .tab {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--funnel-surface);
+  color: var(--funnel-muted);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+/* Inversion complète sur l'onglet actif — fond plein, texte encre. C'est le
+   seul repère de position quand la barre défile. */
+.night.growth-plan-page .plan-tabs .tab.active {
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+}
+
+.night.growth-plan-page .plan-tabs .tab:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Cartes ---------- */
+
+.night.growth-plan-page :is(.card, .stat-card, .exercise-card, .supplement-card, .motivation-box, .timeline-content, .schedule-item, .target-item, .sleep-tips, .cta-box) {
+  background: var(--funnel-surface);
+  border-color: var(--funnel-line);
+  border-radius: 20px;
+  box-shadow: none;
+  color: var(--funnel-text);
+}
+
+.night.growth-plan-page .stat-value {
+  color: var(--funnel-text);
+  font-variant-numeric: tabular-nums;
+  /* La taille de la feuille claire (48px) est calibrée pour une carte pleine
+     largeur : dans une grille à deux colonnes sur 390px, « 6.2 cm » passait à
+     la ligne entre le nombre et son unité. */
+  font-size: clamp(26px, 7vw, 34px);
+  letter-spacing: -0.02em;
+}
+
+.night.growth-plan-page .stat-note {
+  color: var(--funnel-muted);
+}
+
+.night.growth-plan-page .section-title {
+  color: var(--funnel-text);
+}
+
+.night.growth-plan-page .motivation-text {
+  color: var(--funnel-text);
+}
+
+/* ---------- Frise de la journée ---------- */
+
+.night.growth-plan-page .timeline-circle {
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  border-color: var(--funnel-bg);
+}
+
+.night.growth-plan-page .timeline-item::before,
+.night.growth-plan-page .timeline-container::before {
+  background: var(--funnel-line);
+}
+
+/* ---------- Étiquettes et valeurs ---------- */
+
+.night.growth-plan-page .badge {
+  background: rgba(255, 90, 31, 0.14);
+  color: var(--funnel-accent);
+}
+
+.night.growth-plan-page :is(.label, .dosage, .frequency, .exercise-meta, .time) {
+  color: var(--funnel-muted);
+}
+
+.night.growth-plan-page :is(.value, .growth-metric strong) {
+  color: var(--funnel-text);
+}
+
+/* ---------- Encadrés d'information ---------- */
+
+.night.growth-plan-page .alert {
+  background: var(--funnel-surface);
+  border: 1px solid var(--funnel-line);
+  color: var(--funnel-muted);
+  border-radius: 16px;
+}
+
+.night.growth-plan-page .alert strong {
+  color: var(--funnel-text);
+}
+
+.night.growth-plan-page .alert-error {
+  border-color: rgba(255, 90, 31, 0.4);
+  background: rgba(255, 90, 31, 0.1);
+  color: #ffb59a;
+}
+
+/* ---------- Boutons ---------- */
+
+.night.growth-plan-page .btn-primary {
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  border-radius: 999px;
+  box-shadow: 0 8px 32px rgba(255, 90, 31, 0.28);
+}
+
+.night.growth-plan-page .btn-secondary {
+  background: none;
+  border: 1px solid var(--funnel-line);
+  color: var(--funnel-text);
+  border-radius: 999px;
+}

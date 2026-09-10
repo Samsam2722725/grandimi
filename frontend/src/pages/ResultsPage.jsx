@@ -1,193 +1,208 @@
-import { useState } from 'react';
-import Spinner from '../components/Spinner';
-import '../styles/results-page.css';
+import { useState } from 'react'
+import { ArrowLeft } from 'lucide-react'
+
+import { HandwritingText } from '@/components/ui/handwriting-text'
+import { SpecialText } from '@/components/ui/special-text'
+
+import Spinner from '../components/Spinner'
+import '../styles/funnel.css'
+import '../styles/results-page.css'
+
+/* ============================================================
+   RÉSULTAT — un seul chiffre, et sa marge à côté
+   ============================================================
+   L'écran arrive juste après 14 écrans sombres : il reste sombre. Repasser au
+   papier crème ici produisait un flash blanc au moment précis où l'utilisateur
+   fixe l'écran pour lire son chiffre.
+
+   Le chiffre est mis en scène comme le fait la concurrence — display géant,
+   annotation manuscrite — mais l'annotation dit « ± 4 cm », pas « 98,5 % de
+   précision ». C'est la même grammaire visuelle au service de l'inverse :
+   ces applis cachent l'incertitude, Grandimi la met au même niveau typographique
+   que le résultat. Retirer ce contraste reviendrait à retirer l'argument.
+
+   Tout le contenu de fond (limites, sources, avertissement) est conservé tel
+   quel : c'est ce qui distingue le produit, pas un remplissage à alléger.
+   ============================================================ */
 
 function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
-  const [showLimitations, setShowLimitations] = useState(false);
+  const [limitesVisibles, setLimitesVisibles] = useState(false)
 
   if (!predictionData) {
-    return <Spinner size="page" label="Chargement de tes résultats..." />;
+    return <Spinner size="page" label="Chargement de tes résultats..." />
   }
 
-  const { predicted_height_cm, confidence_range, confidence_level, message } = predictionData;
+  const { predicted_height_cm, confidence_range, confidence_level } = predictionData
 
-  /* La marge se lit sur la LARGEUR de l'intervalle, pas sur l'ecart au
-     maximum. L'ancien calcul (max - estimation) devenait negatif des que
-     l'estimation sortait de sa fourchette, et affichait litteralement
-     "±-39.4 cm" a l'utilisateur. */
-  const largeur = Math.max(0, confidence_range.max - confidence_range.min);
-  const margeCm = Math.round((largeur / 2) * 10) / 10;
-  const positionRepere = largeur === 0
-    ? 50
-    : Math.min(100, Math.max(0,
-        ((predicted_height_cm - confidence_range.min) / largeur) * 100));
+  /* La marge se lit sur la LARGEUR de l'intervalle, pas sur l'écart au
+     maximum. L'ancien calcul (max - estimation) devenait négatif dès que
+     l'estimation sortait de sa fourchette, et affichait littéralement
+     « ±-39.4 cm » à l'utilisateur. */
+  const largeur = Math.max(0, confidence_range.max - confidence_range.min)
+  const margeCm = Math.round((largeur / 2) * 10) / 10
+  const positionRepere =
+    largeur === 0
+      ? 50
+      : Math.min(
+          100,
+          Math.max(0, ((predicted_height_cm - confidence_range.min) / largeur) * 100),
+        )
+
   /* Le repli sur 170 cm fabriquait un chiffre : le champ lu n'existait pas,
-     si bien qu'un adolescent de 183 cm se voyait annoncer "+16,2 cm" de
+     si bien qu'un adolescent de 183 cm se voyait annoncer « +16,2 cm » de
      croissance restante. Sans la taille saisie, on n'affiche rien. */
-  const tailleActuelle = predictionData.current_height_cm;
-  const growth_potential = tailleActuelle ? predicted_height_cm - tailleActuelle : 0;
+  const tailleActuelle = predictionData.current_height_cm
+  const margeRestante = tailleActuelle ? predicted_height_cm - tailleActuelle : 0
+
+  const libelleConfiance =
+    { high: 'Élevée', medium: 'Moyenne' }[confidence_level] || 'Faible'
 
   return (
-    <div className="results-page">
-      {/* Header */}
-      <header className="results-header">
-        <button className="btn-tertiary" onClick={onBackHome}>
-          ← Retour
+    <div className="night results">
+      <header className="results-top">
+        <button
+          type="button"
+          className="funnel-back"
+          onClick={onBackHome}
+          aria-label="Revenir à l’accueil"
+        >
+          <ArrowLeft size={20} aria-hidden="true" />
         </button>
       </header>
 
-      {/* Main result box */}
-      <section className="results-container">
-        <div className="result-hero">
-          <h1>Ta taille adulte estimée</h1>
+      <main className="results-scroll">
+        <section className="results-hero">
+          <p className="results-eyebrow">Ta taille adulte estimée</p>
 
-          {/* Big number */}
-          <div className="predicted-height">
-            <div className="height-number">{predicted_height_cm}</div>
-            <div className="height-unit">cm</div>
-          </div>
+          <p className="results-number">
+            <SpecialText className="results-number-value">
+              {String(predicted_height_cm)}
+            </SpecialText>
+            <span className="results-number-unit">cm</span>
+          </p>
 
-          {/* Confidence level */}
-          <div className={`confidence-badge confidence-${confidence_level}`}>
-            Confiance : {confidence_level === 'high' ? 'Élevée' : confidence_level === 'medium' ? 'Moyenne' : 'Faible'}
-          </div>
-        </div>
+          {/* L'annotation manuscrite met la marge au même rang visuel que le
+              résultat. C'est volontairement l'endroit le plus voyant de la page
+              après le chiffre lui-même. */}
+          <span className="results-margin">
+            <HandwritingText text={`± ${margeCm} cm`} height="2rem" />
+          </span>
 
-        {/* Confidence range */}
-        <section className="confidence-section">
-          <h2>Intervalle de confiance</h2>
-          <div className="range-display">
-            <div className="range-min">
-              <span className="label">Min</span>
-              <span className="value">{confidence_range.min} cm</span>
-            </div>
-            <div className="range-visual">
-              <div className="range-bar">
-                <div
-                  className="range-indicator"
-                  style={{
-                    /* Borne 0-100 : si le point estime sortait de son
-                       intervalle, le repere partait hors de la barre. */
-                    left: `${positionRepere}%`
-                  }}
-                />
-              </div>
-            </div>
-            <div className="range-max">
-              <span className="label">Max</span>
-              <span className="value">{confidence_range.max} cm</span>
-            </div>
-          </div>
-          <p className="range-explanation">
-            Cette estimation a une précision de ±{margeCm} cm.
-            Plus tu es proche de ta taille adulte, plus c'est précis.
+          <p className="results-confidence">
+            Fiabilité de l’estimation : <strong>{libelleConfiance.toLowerCase()}</strong>
           </p>
         </section>
 
-        {/* Fenêtre de croissance restante */}
-        {growth_potential > 0 && (
-          <section className="growth-potential-section">
-            <div className="growth-card">
-              <div className="growth-icon">📈</div>
-              <div className="growth-content">
-                <h3>Ta fenêtre de croissance</h3>
-                <p className="growth-value">
-                  <strong>+{Math.round(growth_potential * 10) / 10} cm</strong> estimés avant ta taille adulte
-                </p>
-                <p className="growth-explanation">
-                  C'est la seule urgence honnête : plus tu agis maintenant, plus c'est efficace.
-                  Les 12 prochains mois sont critiques.
-                </p>
-              </div>
+        <section className="night-card">
+          <h2 className="night-card-title">Ta fourchette</h2>
+          <div className="results-range">
+            <div className="results-range-bar">
+              <span className="results-range-marker" style={{ left: `${positionRepere}%` }} />
             </div>
+            <div className="results-range-legend">
+              <span>{confidence_range.min} cm</span>
+              <span>{confidence_range.max} cm</span>
+            </div>
+          </div>
+          <p className="night-card-text">
+            Ta taille adulte a de fortes chances de tomber quelque part dans cette
+            fourchette. Plus tu approches de la fin de ta croissance, plus elle se
+            resserre.
+          </p>
+        </section>
+
+        {margeRestante > 0 && (
+          <section className="night-card">
+            <h2 className="night-card-title">Ta fenêtre de croissance</h2>
+            <p className="results-growth">
+              +{Math.round(margeRestante * 10) / 10} cm
+              <span> encore possibles</span>
+            </p>
+            <p className="night-card-text">
+              C’est la seule urgence honnête : plus tu agis tôt dans cette fenêtre,
+              plus l’effet est réel. Une fois les cartilages fermés, plus rien ne
+              rattrape ce qui n’a pas été fait.
+            </p>
           </section>
         )}
 
-        {/* Placé juste après la fenêtre de croissance : plus bas, il fallait
-            dépasser les mentions légales et le bloc dépliant pour le voir. */}
-        <section className="cta-section">
-          <div className="cta-box">
-            <h2>Prêt à maximiser ta croissance ?</h2>
-            <p>
-              Un plan personnalisé qui te dit quoi faire chaque jour — sommeil, nutrition,
-              exercices — et qui change à chaque mois d’abonnement.
-            </p>
-            <button className="btn-primary btn-large" onClick={onViewPlan}>
-              Voir mon plan de croissance →
-            </button>
-            <p className="cta-price">9,99 €/mois · résiliable à tout moment · 14 jours pour changer d’avis</p>
-          </div>
+        <section className="night-card results-offer">
+          <h2 className="night-card-title">Et maintenant ?</h2>
+          <p className="night-card-text">
+            Le plan de croissance te dit quoi faire chaque jour — sommeil, nutrition,
+            exercices — et change à chaque mois d’abonnement.
+          </p>
+          <p className="results-price">9,99 €/mois · résiliable à tout moment</p>
         </section>
 
-        {/* Disclaimer */}
-        <section className="disclaimer-section">
-          <div className="alert alert-warning">
-            <span className="alert-icon">⚠️</span>
-            <div>
-              <strong>Important :</strong> Une estimation n'est pas une garantie de croissance.
-              Elle est basée sur des modèles statistiques et facteurs actuels.
-              La croissance dépend aussi de la génétique, la santé, et des facteurs non mesurables.
-            </div>
-          </div>
+        <section className="night-card night-card--quiet">
+          <p className="night-card-text">
+            <strong>Une estimation n’est pas une garantie.</strong> Elle repose sur des
+            modèles statistiques et sur les données que tu as saisies. La croissance
+            dépend aussi de la génétique, de la santé et de facteurs non mesurables.
+          </p>
         </section>
 
-        {/* Limitations */}
-        <section className="limitations-section">
+        <section className="results-limits">
           <button
-            className="btn-secondary"
-            onClick={() => setShowLimitations(!showLimitations)}
+            type="button"
+            className="results-limits-toggle"
+            onClick={() => setLimitesVisibles((visible) => !visible)}
+            aria-expanded={limitesVisibles}
           >
-            {showLimitations ? '▼ Masquer les limites' : '▶ Voir les limites'}
+            {limitesVisibles ? 'Masquer les limites' : 'Voir les limites de ce calcul'}
           </button>
 
-          {showLimitations && (
-            <div className="limitations-content">
+          {limitesVisibles && (
+            <div className="results-limits-body">
               <h3>Limites de cette estimation</h3>
-              <ul className="limitations-list">
+              <ul>
                 <li>
-                  <strong>Imprécision à l'adolescence :</strong>{' '}
-                  Avant 16 ans, l'estimation peut varier de ±6cm. Après 16 ans, elle se précise (±3cm).
+                  <strong>Imprécision à l’adolescence :</strong> avant 16 ans,
+                  l’estimation peut varier de ±6 cm. Après 16 ans, elle se précise (±3 cm).
                 </li>
                 <li>
-                  <strong>Facteurs non mesurés :</strong>{' '}
-                  Hormones, nutrition, sommeil, exercice — tous affectent la croissance mais ne sont pas toujours prévisibles.
+                  <strong>Facteurs non mesurés :</strong> hormones, maladies, traitements —
+                  tous affectent la croissance sans être prévisibles ici.
                 </li>
                 <li>
-                  <strong>Données parentales :</strong>{' '}
-                  La taille des parents est déclarative. Si imprécise, l'estimation l'est aussi.
+                  <strong>Données parentales :</strong> la taille des parents est
+                  déclarative. Si elle est imprécise, l’estimation l’est aussi.
                 </li>
                 <li>
-                  <strong>Maladies chroniques :</strong>{' '}
-                  Certaines conditions peuvent affecter la croissance de façon non prédictible par le modèle.
-                </li>
-                <li>
-                  <strong>Variation ethnique :</strong>{' '}
-                  Le modèle V2 inclut des ajustements, mais reste basé sur données occidentales.
+                  <strong>Variation ethnique :</strong> le modèle inclut des ajustements,
+                  mais reste construit sur des données majoritairement occidentales.
                 </li>
               </ul>
 
-              <h3>Sources & méthodologie</h3>
-              <div className="sources">
-                <p>
-                  <strong>Algorithme :</strong> Khamis-Roche v2 (ML-Enhanced)
-                </p>
-                <p>
-                  <strong>Précision moyenne :</strong> ±3 à ±6 cm selon l'âge
-                </p>
-                <p>
-                  <strong>Modèle :</strong> Basé sur études cliniques internationales
-                </p>
-                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+height" target="_blank" rel="noopener noreferrer" className="source-link">
-                  📖 Lire l'article scientifique complet
-                </a>
-              </div>
+              <h3>Sources &amp; méthodologie</h3>
+              <p>
+                <strong>Algorithme :</strong> Khamis-Roche v2 (enrichi)
+                <br />
+                <strong>Précision moyenne :</strong> ±3 à ±6 cm selon l’âge
+              </p>
+              <a
+                href="https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+height"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Lire les publications scientifiques
+              </a>
             </div>
           )}
         </section>
+      </main>
 
-      </section>
+      <footer className="funnel-footer">
+        <button type="button" className="funnel-cta" onClick={onViewPlan}>
+          Voir mon plan de croissance
+        </button>
+        <button type="button" className="funnel-link" onClick={onBackHome}>
+          Plus tard
+        </button>
+      </footer>
     </div>
-  );
+  )
 }
 
-export default ResultsPage;
+export default ResultsPage

@@ -1,0 +1,297 @@
+/* ============================================
+   PAYWALL — surface sombre, une seule offre
+   ============================================
+   Tout est scopé sous `.paywall` : `paywall.css` habille toujours ParentPage
+   et partage des noms (.paywall-faq, .price…). Sans ce préfixe, modifier l'un
+   déforme l'autre.
+
+   Les jetons (--funnel-*) viennent de funnel.css via la classe `.night`.
+   ============================================ */
+
+.paywall {
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--funnel-bg);
+  color: var(--funnel-text);
+  font-family: var(--font-dm-sans);
+}
+
+.paywall .paywall-top {
+  flex-shrink: 0;
+  padding: 14px 20px;
+}
+
+.paywall .paywall-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px 24px 56px;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.paywall .paywall-title {
+  font-size: clamp(28px, 8vw, 36px);
+  line-height: 1.12;
+  font-weight: 700;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.paywall .paywall-subtitle {
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--funnel-muted);
+  margin: -8px 0 0;
+}
+
+/* ---------- Carte d'offre ---------- */
+
+/* Une seule carte, mais traitée comme la carte « sélectionnée » des tunnels à
+   deux formules : bordure accentuée et fond teinté. L'utilisateur reconnaît
+   le motif « voici l'offre retenue » sans avoir à comparer quoi que ce soit. */
+.paywall .paywall-offer {
+  border: 1.5px solid var(--funnel-accent);
+  background: rgba(255, 90, 31, 0.07);
+  border-radius: 24px;
+  padding: 22px;
+}
+
+.paywall .paywall-offer-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.paywall .paywall-offer-head h2 {
+  font-size: 19px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.paywall .paywall-price {
+  margin: 0;
+  font-size: 15px;
+  color: var(--funnel-muted);
+  white-space: nowrap;
+}
+
+.paywall .paywall-price span {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--funnel-text);
+  margin-right: 2px;
+}
+
+.paywall .paywall-features {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.paywall .paywall-features li {
+  display: grid;
+  /* L'icône a sa propre colonne : une puce en `inline` désaligne la deuxième
+     ligne de chaque avantage sur le texte du dessus. */
+  grid-template-columns: 18px 1fr;
+  gap: 12px;
+  align-items: start;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--funnel-text);
+}
+
+.paywall .paywall-features svg {
+  color: var(--funnel-accent);
+  margin-top: 2px;
+}
+
+/* ---------- Piliers ---------- */
+
+.paywall .paywall-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+
+.paywall .paywall-pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 380px) {
+  .paywall .paywall-pillar-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.paywall .paywall-pillar {
+  background: var(--funnel-surface);
+  border-radius: 18px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+}
+
+.paywall .paywall-pillar span {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.paywall .paywall-pillar strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.paywall .paywall-pillar em {
+  font-style: normal;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--funnel-muted);
+}
+
+/* ---------- Compte, sécurité, mentions ---------- */
+
+.paywall .paywall-account {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--funnel-muted);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.paywall .paywall-account strong {
+  color: var(--funnel-text);
+  font-weight: 600;
+}
+
+.paywall .paywall-security {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--funnel-muted);
+  margin: 0;
+}
+
+.paywall .paywall-legal {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6f6f6f;
+  margin: 0;
+}
+
+.paywall .paywall-legal a {
+  color: var(--funnel-muted);
+  text-underline-offset: 3px;
+}
+
+/* ---------- Paiement par un parent ---------- */
+
+.paywall .paywall-parent-toggle {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 999px;
+  background: none;
+  color: var(--funnel-text);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.paywall .paywall-parent-toggle:hover {
+  border-color: #3d3d3d;
+}
+
+.paywall .paywall-parent-body {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--funnel-muted);
+}
+
+.paywall .paywall-parent-body input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1px solid var(--funnel-line);
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  font-family: inherit;
+  font-size: 15px;
+}
+
+/* ---------- FAQ ---------- */
+
+.paywall .paywall-faq {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.paywall .paywall-faq details {
+  border-bottom: 1px solid var(--funnel-line);
+}
+
+.paywall .paywall-faq summary {
+  padding: 18px 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.paywall .paywall-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Chevron dessiné en CSS : pas d'icône à charger, et il tourne à l'ouverture
+   pour signaler l'état sans texte supplémentaire. */
+.paywall .paywall-faq summary::after {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--funnel-muted);
+  border-bottom: 2px solid var(--funnel-muted);
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+
+.paywall .paywall-faq details[open] summary::after {
+  transform: rotate(-135deg);
+}
+
+.paywall .paywall-faq details p {
+  padding: 0 0 18px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--funnel-muted);
+}

@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import Spinner from '../components/Spinner';
+/* funnel.css porte les jetons `--funnel-*` sur la classe `.night` : sans lui,
+   le skin sombre plus bas dans growth-plan.css n'a aucune valeur à résoudre. */
+import '../styles/funnel.css';
 import '../styles/growth-plan.css';
 import apiClient from '../lib/api';
 
@@ -49,7 +52,7 @@ function GrowthPlanPage({ predictionData, onBackHome }) {
 
   if (loading) {
     return (
-      <div className="growth-plan-page">
+      <div className="night growth-plan-page">
         <Spinner size="page" label="Création de ton plan personnalisé..." />
       </div>
     );
@@ -57,7 +60,7 @@ function GrowthPlanPage({ predictionData, onBackHome }) {
 
   if (error) {
     return (
-      <div className="growth-plan-page">
+      <div className="night growth-plan-page">
         <div className="error-container">
           <div className="alert alert-error">
             <span className="alert-icon">✕</span>
@@ -74,7 +77,7 @@ function GrowthPlanPage({ predictionData, onBackHome }) {
   if (!plan) return null;
 
   return (
-    <div className="growth-plan-page">
+    <div className="night growth-plan-page">
       {/* Header */}
       <header className="plan-header">
         <button className="btn-tertiary" onClick={onBackHome}>
@@ -89,7 +92,7 @@ function GrowthPlanPage({ predictionData, onBackHome }) {
       </header>
 
       {/* Tabs */}
-      <nav className="plan-tabs">
+      <nav className="plan-tabs" aria-label="Sections du plan">
         <button
           className={`tab ${activeTab === 'overview' ? 'active' : ''}`}
           onClick={() => setActiveTab('overview')}
