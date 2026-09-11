@@ -77,6 +77,12 @@ func main() {
 	// /checkout reste public : le parent qui règle depuis le lien partagé
 	// n'a pas de compte, et la route ne renvoie qu'une URL Whop.
 	router.POST("/api/v1/checkout", api.GetCheckout)
+	/* Ces deux routes n'exigent pas de session, volontairement : elles
+	   servent précisément à des appareils qui n'en ont pas encore une —
+	   le payeur qui revient de Whop, et l'enfant qui découvre que
+	   quelqu'un d'autre a payé pour lui depuis un autre appareil. */
+	router.GET("/api/v1/checkout-status", api.GetCheckoutStatus)
+	router.GET("/api/v1/child-status", api.GetChildStatus)
 	// Le webhook n'est pas protégé par session mais par signature Whop.
 	router.POST("/webhooks/whop", api.WhopWebhook)
 

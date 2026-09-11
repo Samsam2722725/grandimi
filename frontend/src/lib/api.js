@@ -107,6 +107,24 @@ class APIClient {
     return this.request('/api/v1/check-premium');
   }
 
+  /**
+   * Dit si le dernier paiement de cette adresse était un paiement cadeau
+   * (pour le compte d'un enfant) plutôt que pour son propre compte.
+   * Appelé juste après le retour de Whop, avant toute création de compte.
+   */
+  async getCheckoutStatus(email) {
+    return this.request(`/api/v1/checkout-status?email=${encodeURIComponent(email)}`);
+  }
+
+  /**
+   * État premium/mot de passe d'un compte à partir de son seul id, sans
+   * session. Permet à l'appareil de l'enfant de découvrir qu'un parent a
+   * payé pour lui depuis un autre appareil.
+   */
+  async getChildStatus(id) {
+    return this.request(`/api/v1/child-status?id=${encodeURIComponent(id)}`);
+  }
+
   // ---------- Auth ----------
 
   /**

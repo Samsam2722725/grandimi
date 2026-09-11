@@ -248,6 +248,52 @@ func WhopWebhook(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "received"})
 }
 
+// GetCheckoutStatus dit si le dernier paiement de cette adresse était un
+// paiement cadeau (pour le compte d'un enfant) plutôt qu'un paiement pour
+// son propre compte. Le frontend l'appelle juste après le retour de Whop,
+// avant de pousser qui que ce soit vers "Créez votre mot de passe" — un
+// parent qui vient de payer pour son enfant ne doit surtout pas se
+// retrouver avec un compte fantôme, non premium, ouvert à sa propre
+// adresse pendant que l'accès a été appliqué ailleurs.
+func GetCheckoutStatus(c *gin.Context) {
+	email := c.Query("email")
+	if email == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "email required"})
+		return
+	}
+
+	childID, err := db.GetGiftChildID(email)
+	if err != nil {
+		fmt.Printf("[checkout-status] GetGiftChildID(%q): %v\n", email, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to check status"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"gift": childID != ""})
+}
+
+// GetChildStatus renvoie l'état premium/mot de passe d'un compte à partir
+// de son seul id, sans authentification requise — volontairement, car
+// c'est précisément ce qui permet à l'appareil de l'enfant de découvrir,
+// une fois qu'un parent a payé depuis un autre appareil, qu'il peut
+// maintenant créer son mot de passe et accéder à son plan.
+func GetChildStatus(c *gin.Context) {
+	id := c.Query("id")
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id required"})
+		return
+	}
+
+	isPremium, hasPassword, err := db.GetPublicStatus(id)
+	if err != nil {
+		fmt.Printf("[child-status] GetPublicStatus(%q): %v\n", id, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to check status"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"is_premium": isPremium, "has_password": hasPassword})
+}
+
 // VerifyWhopSignature - vérifie la signature du webhook selon le
 // format "Standard Webhooks" utilisé par Whop :
 //   - message signé = "{webhook-id}.{webhook-timestamp}.{raw body}"

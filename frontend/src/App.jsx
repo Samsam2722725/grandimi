@@ -14,6 +14,7 @@ import AuthPage from './pages/AuthPage';
 import SetPasswordPage from './pages/SetPasswordPage';
 import AdminPage from './pages/AdminPage';
 import ParentPage from './pages/ParentPage';
+import GiftConfirmedPage from './pages/GiftConfirmedPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -123,6 +124,14 @@ function App() {
 
   const handleAuthComplete = () => {
     setIsAuthenticated(true);
+    /* Sans ceci, isPaid restait figé à sa valeur d'avant connexion : un
+       enfant qui crée son mot de passe à la main (plutôt que via la
+       redirection automatique après paiement) semblait non-premium et
+       retombait sur la paywall, alors que son compte l'était déjà. */
+    apiClient
+      .checkPremium()
+      .then((res) => setIsPaid(Boolean(res.is_premium)))
+      .catch(() => {});
     setCurrentPage('results');
   };
 
@@ -154,19 +163,70 @@ function App() {
     setCurrentPage('auth');
   };
 
-  // Check for Whop payment return - redirect to set password
+  /* Retour de paiement Whop. customer_email est TOUJOURS celui du payeur —
+     pour un parent réglant depuis le lien partagé, c'est SA propre adresse,
+     alors que l'accès a été appliqué au compte de l'enfant. Sans cette
+     vérification, on poussait n'importe quel payeur vers "Créez votre mot
+     de passe" à sa propre adresse : un compte fantôme, jamais premium,
+     pendant que le compte réellement crédité ne recevait jamais la
+     moindre invite à se connecter. */
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
     if (params.has('checkout_status') && params.get('checkout_status') === 'success') {
-      // Sauvegarder email pour SetPasswordPage
       const email = params.get('customer_email');
-      if (email) {
-        localStorage.setItem('userEmail', email);
+      if (!email) {
+        setCurrentPage('set-password');
+        return;
       }
-      setCurrentPage('set-password');
-      // Garder les paramètres URL pour SetPasswordPage
+
+      apiClient
+        .getCheckoutStatus(email)
+        .then((res) => {
+          if (res.gift) {
+            setCurrentPage('gift-confirmed');
+          } else {
+            localStorage.setItem('userEmail', email);
+            setCurrentPage('set-password');
+          }
+        })
+        .catch(() => {
+          // Statut illisible : on ne bloque pas un vrai payeur derrière
+          // une panne réseau, quitte à risquer (rarement) un compte
+          // fantôme plutôt qu'un paiement sans suite du tout.
+          localStorage.setItem('userEmail', email);
+          setCurrentPage('set-password');
+        });
     }
+  }, []);
+
+  /* Parcours enfant, second appareil : un parent a pu payer depuis SON
+     propre téléphone, jamais celui de l'enfant. C'est donc l'appareil de
+     l'enfant — qui a gardé l'id de son compte depuis le questionnaire
+     gratuit — qui doit découvrir tout seul que l'accès est prêt et qu'il
+     ne lui reste qu'à choisir un mot de passe pour l'utiliser. */
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('checkout_status') || params.has('admin') || params.has('parent')) {
+      return;
+    }
+
+    let idConnu;
+    try {
+      idConnu = JSON.parse(localStorage.getItem('user') || '{}').id;
+    } catch {
+      idConnu = null;
+    }
+    if (!idConnu || localStorage.getItem('token')) return;
+
+    apiClient
+      .getChildStatus(idConnu)
+      .then((res) => {
+        if (res.is_premium && !res.has_password) {
+          setCurrentPage('set-password');
+        }
+      })
+      .catch(() => {});
   }, []);
 
   // Check for admin panel access via URL parameter
@@ -218,6 +278,12 @@ function App() {
       {/* Set password after payment */}
       {currentPage === 'set-password' && (
         <SetPasswordPage onAuthComplete={handlePaymentComplete} />
+      )}
+
+      {/* Paiement cadeau confirmé : le payeur n'est pas le bénéficiaire,
+          aucun compte n'est créé ici. */}
+      {currentPage === 'gift-confirmed' && (
+        <GiftConfirmedPage onBackHome={handleBackHome} />
       )}
 
       {/* Results (visible after auth) */}
