@@ -5,6 +5,7 @@ import (
 	"grandimi/internal/db"
 	"grandimi/internal/estimator"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -336,9 +337,24 @@ func GetPredictionsByEmail(c *gin.Context) {
 }
 
 func HealthCheck(c *gin.Context) {
+	/* Le commit déployé : sans lui, rien ne permet de savoir si un
+	   correctif pousse sur main tourne vraiment en production — Render
+	   garde la version précédente en ligne quand un build échoue, donc
+	   l'API répond "ok" avec l'ancien code et l'échec passe inaperçu.
+	   RENDER_GIT_COMMIT est fourni par Render ; hors Render la variable
+	   est absente et le champ vaut "inconnu". */
+	commit := os.Getenv("RENDER_GIT_COMMIT")
+	if commit == "" {
+		commit = "inconnu"
+	}
+	if len(commit) > 7 {
+		commit = commit[:7]
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"status": "ok",
 		"app":    "Grandimi Height Estimator API",
 		"models": []string{"v1 (Khamis-Roche)", "v2 (ML-Enhanced)"},
+		"commit": commit,
 	})
 }
