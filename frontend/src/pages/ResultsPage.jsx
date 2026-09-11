@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
 
+import { GrowthTrajectoryChart } from '@/components/ui/growth-chart'
 import { HandwritingText } from '@/components/ui/handwriting-text'
 import { SpecialText } from '@/components/ui/special-text'
 
@@ -93,23 +94,39 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </p>
         </section>
 
-        <section className="night-card">
-          <h2 className="night-card-title">Ta fourchette</h2>
-          <div className="results-range">
-            <div className="results-range-bar">
-              <span className="results-range-marker" style={{ left: `${positionRepere}%` }} />
+        {/* La courbe remplace l'ancienne barre horizontale : elle porte la même
+            fourchette PLUS la dimension temps, qui est justement l'argument du
+            plan (« la fenêtre se referme »). Deux figures disant la même chose
+            se seraient concurrencées. */}
+        {tailleActuelle ? (
+          <section className="night-card">
+            <h2 className="night-card-title">Ta trajectoire</h2>
+            <GrowthTrajectoryChart
+              ageNow={predictionData.age}
+              heightNow={tailleActuelle}
+              predicted={predicted_height_cm}
+              rangeMin={confidence_range.min}
+              rangeMax={confidence_range.max}
+              sex={predictionData.sex}
+            />
+          </section>
+        ) : (
+          <section className="night-card">
+            <h2 className="night-card-title">Ta fourchette</h2>
+            <div className="results-range">
+              <div className="results-range-bar">
+                <span className="results-range-marker" style={{ left: `${positionRepere}%` }} />
+              </div>
+              <div className="results-range-legend">
+                <span>{confidence_range.min} cm</span>
+                <span>{confidence_range.max} cm</span>
+              </div>
             </div>
-            <div className="results-range-legend">
-              <span>{confidence_range.min} cm</span>
-              <span>{confidence_range.max} cm</span>
-            </div>
-          </div>
-          <p className="night-card-text">
-            Ta taille adulte a de fortes chances de tomber quelque part dans cette
-            fourchette. Plus tu approches de la fin de ta croissance, plus elle se
-            resserre.
-          </p>
-        </section>
+            <p className="night-card-text">
+              Ta taille adulte a de fortes chances de tomber dans cette fourchette.
+            </p>
+          </section>
+        )}
 
         {margeRestante > 0 && (
           <section className="night-card">
