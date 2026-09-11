@@ -1,0 +1,68 @@
+name: Vérifier le site
+
+# Ce dépôt n'a pas besoin de workflow pour déployer :
+#   - le backend est reconstruit par Render à chaque push (grandimi-api.onrender.com) ;
+#   - le site est servi par GitHub Pages depuis le dossier docs/ (grandimi.com).
+# Les deux workflows qui occupaient cette place annonçaient un déploiement
+# Railway et une URL Vercel qui n'existent plus : un feu vert mensonger.
+# Ce qui manque vraiment, c'est un garde-fou sur ce qui casse pour de bon.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+      - 'docs/**'
+      - '.github/workflows/verifier-le-site.yml'
+  pull_request:
+    paths:
+      - 'frontend/**'
+      - 'docs/**'
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      # 1. Le code source se construit-il encore ? Une erreur ici veut dire
+      #    qu'on ne pourrait plus publier de correctif.
+      - name: Construire le front
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+
+      # 2. Le site publié est-il cohérent ? Si docs/index.html réclame un
+      #    fichier absent de docs/assets/, grandimi.com affiche une page
+      #    blanche : le navigateur n'a plus rien à exécuter. C'est le seul
+      #    incident capable de tout éteindre sans qu'aucun test ne bronche.
+      - name: Vérifier que le site publié ne réclame aucun fichier absent
+        run: |
+          manquants=0
+          for ref in $(grep -oE 'assets/[a-zA-Z0-9._-]+' docs/index.html | sort -u); do
+            if [ -f "docs/$ref" ]; then
+              echo "OK      $ref"
+            else
+              echo "MANQUE  $ref"
+              manquants=$((manquants + 1))
+            fi
+          done
+          if [ "$manquants" -ne 0 ]; then
+            echo "::error::$manquants fichier(s) réclamé(s) par docs/index.html sont absents de docs/ : grandimi.com afficherait une page blanche."
+            exit 1
+          fi
+
+      # 3. Le domaine tient à ce fichier. Publier docs/ sans lui rend
+      #    grandimi.com inaccessible le temps de s'en apercevoir.
+      - name: Vérifier que le CNAME du domaine est toujours là
+        run: |
+          if [ "$(tr -d '[:space:]' < docs/CNAME)" != "grandimi.com" ]; then
+            echo "::error::docs/CNAME ne contient plus grandimi.com — le domaine personnalisé serait perdu."
+            exit 1
+          fi
+          echo "OK      docs/CNAME -> grandimi.com"

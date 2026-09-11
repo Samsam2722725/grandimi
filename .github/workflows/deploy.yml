@@ -1,24 +1,31 @@
-name: Deploy Grandimi
+# DÉSACTIVÉ — ce workflow annonçait un succès qu'il ne vérifiait pas.
+#
+# Il n'exécutait que deux « echo » : « ✅ Railway receives the push and
+# auto-deploys » puis « ✅ All systems deployed! », et affichait une URL
+# Vercel (frontend-57k8xlnul-…vercel.app) qui n'héberge plus rien. Il
+# passait donc au vert à chaque push, y compris quand rien n'était
+# déployé — le pire signal possible.
+#
+# La réalité du déploiement aujourd'hui :
+#   - backend : Render reconstruit à chaque push -> grandimi-api.onrender.com
+#   - site    : GitHub Pages sert le dossier docs/ -> grandimi.com
+# Aucun des deux n'a besoin de ce fichier.
+#
+# Les vraies vérifications sont dans verifier-le-site.yml.
+# Ce fichier ne se déclenche plus que manuellement, et peut être supprimé.
+
+name: Deploy Grandimi (désactivé)
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  explication:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Deploy Backend to Railway
+      - name: Ce workflow ne déploie rien
         run: |
-          echo "🚀 Deploying Backend..."
-          # Simulate deployment (Railway auto-deploys via GitHub integration)
-          echo "✅ Railway receives the push and auto-deploys"
-
-      - name: Verify Deployment
-        run: |
-          echo "✅ All systems deployed!"
-          echo "Frontend: https://frontend-57k8xlnul-samuelgarbil-3776s-projects.vercel.app"
-          echo "Backend: Check Railway dashboard for URL"
-
+          echo "Ce workflow est conservé pour l'historique uniquement."
+          echo "Backend : déployé par Render à chaque push sur main."
+          echo "Site    : servi par GitHub Pages depuis docs/."
+          echo "Vérifications réelles : .github/workflows/verifier-le-site.yml"

@@ -1,35 +1,27 @@
-name: Deploy Backend to Railway
+# DÉSACTIVÉ — ce workflow visait une infrastructure qui n'est plus utilisée.
+#
+# Il tentait de se connecter à Railway avec une mutation GraphQL
+# (railwayLogin(email:, password:)) qui n'existe pas dans l'API Railway,
+# en y envoyant RAILWAY_EMAIL et RAILWAY_PASSWORD, puis lançait
+# « railway up » sur un service grandimi-backend absent. Il échouait donc
+# à chaque push touchant cmd/, internal/, go.mod ou le Dockerfile, et ces
+# croix rouges masquaient les échecs qui comptent.
+#
+# Le backend est aujourd'hui hébergé par Render, qui se reconstruit seul à
+# chaque push sur main (grandimi-api.onrender.com). Rien à déclencher ici.
+#
+# Ce fichier ne se déclenche plus que manuellement, et peut être supprimé.
+
+name: Deploy Backend (désactivé)
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'cmd/**'
-      - 'internal/**'
-      - 'go.mod'
-      - 'go.sum'
-      - 'Dockerfile'
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  explication:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Login to Railway
+      - name: Ce workflow ne déploie rien
         run: |
-          curl -s -X POST https://api.railway.app/graphql \
-            -H "Content-Type: application/json" \
-            -d '{
-              "query": "mutation { railwayLogin(email: \"${{ secrets.RAILWAY_EMAIL }}\", password: \"${{ secrets.RAILWAY_PASSWORD }}\") { token } }"
-            }'
-      
-      - name: Deploy to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          npx -y railway up --service grandimi-backend
-
-      - name: Notify Success
-        run: echo "✅ Backend deployed to Railway!"
-
+          echo "Le backend est déployé par Render, pas par ce workflow."
+          echo "Render reconstruit automatiquement à chaque push sur main."
