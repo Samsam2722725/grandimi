@@ -132,7 +132,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             Le plan de croissance te dit quoi faire chaque jour — sommeil, nutrition,
             exercices — et change à chaque mois d’abonnement.
           </p>
-          <p className="results-price">9,99 €/mois · résiliable à tout moment</p>
+          <p className="results-price">À partir de 4,99 €/mois · résiliable à tout moment</p>
         </section>
 
         <section className="night-card night-card--quiet">

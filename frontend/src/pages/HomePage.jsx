@@ -133,7 +133,7 @@ const FAQ = [
   {
     question: 'Faut-il payer pour voir mon estimation ?',
     answer:
-      'Non. Le questionnaire et l’estimation de ta taille adulte sont gratuits et visibles immédiatement. Seul le plan de croissance personnalisé est payant : 9,99 €/mois, avec un nouveau plan chaque mois, résiliable quand tu veux.',
+      'Non. Le questionnaire et l’estimation de ta taille adulte sont gratuits et visibles immédiatement. Seul le plan de croissance personnalisé est payant : 4,99 €/mois ou 29,99 €/an (soit près de 50 % d’économie), avec un nouveau plan chaque mois, résiliable quand tu veux.',
   },
   {
     question: 'Mes données sont-elles conservées ?',

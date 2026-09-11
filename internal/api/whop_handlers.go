@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"grandimi/internal/billing"
 	"grandimi/internal/db"
 	"io"
 	"net/http"
@@ -23,10 +24,15 @@ import (
 // ChildUserID sert au paiement par un parent : l'email est alors celui
 // du parent (c'est lui le client Whop), mais l'accès doit atterrir sur
 // le compte de l'enfant, dont l'ID voyage jusqu'au webhook.
+//
+// Plan choisit l'offre ("monthly"/"annual"), jamais un montant : le prix
+// réellement facturé est décidé par le plan Whop associé côté serveur.
+// Vide = "monthly", pour ne pas casser un appel qui ne le fournirait pas.
 type CheckoutRequest struct {
 	Email       string `json:"email"`
 	UserID      string `json:"user_id"`
 	ChildUserID string `json:"child_user_id"`
+	Plan        string `json:"plan"`
 }
 
 // CheckoutResponse - returns Whop checkout URL
@@ -52,7 +58,23 @@ type WhopWebhookPayload struct {
 		Product struct {
 			ID string `json:"id"`
 		} `json:"product"`
+		// Le plan (pas le produit) dit quelle offre a été achetée :
+		// c'est comparé à WHOP_PLAN_ID_MONTHLY/WHOP_PLAN_ID_ANNUAL pour
+		// savoir si l'abonnement enregistré est mensuel ou annuel.
+		Plan struct {
+			ID string `json:"id"`
+		} `json:"plan"`
 		Status string `json:"status"`
+		// Date du prochain prélèvement, fournie par Whop (ISO 8601).
+		RenewalPeriodEnd string `json:"renewal_period_end"`
+		// Lien hébergé par Whop pour gérer/résilier l'abonnement,
+		// affiché tel quel dans "Mon compte".
+		ManageURL string `json:"manage_url"`
+		// Portés par membership.cancel_at_period_end_changed : synchronise
+		// "Mon compte" que la résiliation vienne de notre bouton ou du
+		// portail Whop lui-même.
+		CancelAtPeriodEnd bool   `json:"cancel_at_period_end"`
+		CanceledAt        string `json:"canceled_at"`
 		// Renseigné quand le checkout a été ouvert depuis le lien de
 		// partage parent : porte child_user_id. Typé en interface{} car
 		// Whop peut renvoyer autre chose que des chaînes ; un
@@ -60,6 +82,34 @@ type WhopWebhookPayload struct {
 		// valeur numérique.
 		Metadata map[string]interface{} `json:"metadata"`
 	} `json:"data"`
+}
+
+// resoudreTypePlan compare l'id de plan reçu du webhook aux deux plans
+// Whop configurés. Un id inconnu (config pas encore posée, ou nouveau
+// plan créé côté Whop sans mise à jour ici) retombe sur "monthly" plutôt
+// que d'échouer le webhook : mieux vaut créditer un mauvais libellé de
+// plan qu'un client qui a payé et reste sans accès.
+func resoudreTypePlan(whopPlanID string) string {
+	if whopPlanID != "" && whopPlanID == os.Getenv("WHOP_PLAN_ID_ANNUAL") {
+		return string(billing.Annual)
+	}
+	return string(billing.Monthly)
+}
+
+// resoudrePeriodeFin lit renewal_period_end ; à défaut (champ absent
+// selon la version d'API, ou format inattendu), calcule une date
+// raisonnable à partir du plan résolu plutôt que de laisser la colonne
+// vide — "Mon compte" doit toujours pouvoir afficher une date.
+func resoudrePeriodeFin(renewalPeriodEnd, planType string) time.Time {
+	if renewalPeriodEnd != "" {
+		if t, err := time.Parse(time.RFC3339, renewalPeriodEnd); err == nil {
+			return t
+		}
+	}
+	if planType == string(billing.Annual) {
+		return time.Now().AddDate(1, 0, 0)
+	}
+	return time.Now().AddDate(0, 1, 0)
 }
 
 // metadataTexte lit une clé de metadata en tolérant les types non-chaîne.
@@ -120,14 +170,27 @@ func GetCheckout(c *gin.Context) {
 		return
 	}
 
+	// L'offre est choisie par clé ("monthly"/"annual"), jamais par
+	// montant : un client ne peut obtenir qu'un des deux plans Whop
+	// préconfigurés ici, jamais un prix arbitraire.
+	cleOffre := req.Plan
+	if cleOffre == "" {
+		cleOffre = string(billing.Monthly)
+	}
+	offre, ok := billing.Get(cleOffre)
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "unknown plan"})
+		return
+	}
+
 	// ID du PLAN Whop (pas du produit) : /checkout attend un
 	// "plan_XXXX", qui est ce que l'API Whop renvoie dans purchase_url.
 	// Y mettre un slug de produit rend une page d'erreur Whop, pas un
 	// paiement — c'est ce qui se passait avec "text-aa".
-	planID := os.Getenv("WHOP_PLAN_ID")
+	planID := os.Getenv(offre.WhopPlanIDEnv)
 	if planID == "" {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "WHOP_PLAN_ID is not configured",
+			"error": fmt.Sprintf("%s is not configured", offre.WhopPlanIDEnv),
 		})
 		return
 	}
@@ -213,11 +276,41 @@ func WhopWebhook(c *gin.Context) {
 			return
 		}
 
+		// Quel plan, jusqu'à quand, et où le gérer : sans ça "Mon compte"
+		// n'aurait ni le libellé de l'offre ni la date du prochain
+		// paiement à afficher. Une erreur ici ne doit pas faire échouer
+		// le webhook — l'accès est déjà accordé au-dessus, le pire cas
+		// est un "Mon compte" incomplet, pas un client débité sans accès.
+		typePlan := resoudreTypePlan(payload.Data.Plan.ID)
+		finPeriode := resoudrePeriodeFin(payload.Data.RenewalPeriodEnd, typePlan)
+		if err := db.UpdateSubscriptionFromWebhook(payload.Data.ID, typePlan, finPeriode, payload.Data.ManageURL); err != nil {
+			fmt.Printf("[whop] UpdateSubscriptionFromWebhook(%s): %v\n", payload.Data.ID, err)
+		}
+
 		c.JSON(http.StatusOK, gin.H{
 			"status": "success",
 			"user_id": user.ID,
 			"message": "subscription activated",
 		})
+		return
+	}
+
+	// Synchronise la résiliation quel que soit son origine : notre bouton
+	// "Résilier" (après confirmation de l'API Whop) ou le portail Whop
+	// lui-même, que le client peut atteindre directement via manage_url.
+	// Sans ce cas, un client résiliant depuis Whop verrait "Mon compte"
+	// continuer à afficher un abonnement actif jusqu'à expiration réelle.
+	if payload.Type == "membership.cancel_at_period_end_changed" {
+		var canceledAt *time.Time
+		if payload.Data.CanceledAt != "" {
+			if t, err := time.Parse(time.RFC3339, payload.Data.CanceledAt); err == nil {
+				canceledAt = &t
+			}
+		}
+		if err := db.SetCancelAtPeriodEnd(payload.Data.ID, payload.Data.CancelAtPeriodEnd, canceledAt); err != nil {
+			fmt.Printf("[whop] SetCancelAtPeriodEnd(%s): %v\n", payload.Data.ID, err)
+		}
+		c.JSON(http.StatusOK, gin.H{"status": "received"})
 		return
 	}
 

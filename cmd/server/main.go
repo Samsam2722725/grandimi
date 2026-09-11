@@ -86,6 +86,11 @@ func main() {
 	// Le webhook n'est pas protégé par session mais par signature Whop.
 	router.POST("/webhooks/whop", api.WhopWebhook)
 
+	/* Tarifs publics : lus par la paywall, le lien parent et "Mon compte"
+	   pour ne jamais afficher un montant différent de celui réellement
+	   envoyé à Whop. */
+	router.GET("/api/v1/plans", api.GetPlans)
+
 	/* Routes portant des données personnelles : session obligatoire.
 	   Elles répondaient auparavant à un ?user_id= ou ?email= arbitraire,
 	   sans authentification. */
@@ -94,6 +99,11 @@ func main() {
 	{
 		prive.GET("/api/v1/check-premium", api.CheckPremium)
 		prive.GET("/api/user/predictions", api.GetPredictionsByEmail)
+
+		// "Mon compte -> Abonnement" : offre en cours, prochaine date de
+		// paiement, bouton de résiliation.
+		prive.GET("/api/v1/subscription", api.GetSubscription)
+		prive.POST("/api/v1/subscription/cancel", api.CancelSubscription)
 	}
 
 	// Admin Panel (protected by ADMIN_TOKEN)

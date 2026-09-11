@@ -16,7 +16,7 @@ function dateDuJour(decalageJours = 0) {
   return `${d.getFullYear()}-${mois}-${jour}`;
 }
 
-function GrowthPlanPage({ predictionData, onBackHome }) {
+function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
   const [plan, setPlan] = useState(null);
   const [monthlyPlan, setMonthlyPlan] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -167,6 +167,11 @@ function GrowthPlanPage({ predictionData, onBackHome }) {
         <button className="btn-tertiary" onClick={onBackHome}>
           ← Accueil
         </button>
+        {onGoToAccount && (
+          <button className="btn-tertiary" onClick={onGoToAccount} style={{ float: 'right' }}>
+            Mon compte
+          </button>
+        )}
         <h1>Ton plan de croissance personnalisé</h1>
         <p className="subtitle">
           {monthlyPlan

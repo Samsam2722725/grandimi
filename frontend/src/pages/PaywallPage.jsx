@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ArrowLeft, Check, Lock } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
@@ -9,23 +9,28 @@ import '../styles/funnel.css'
    partage des noms de classe avec elle. La remplacer cassait cet écran. */
 import '../styles/paywall-night.css'
 
-/* Formule unique à 9,99 €/mois.
-   Le backend n'expose qu'un seul produit Whop (productSlug codé en dur dans
-   whop_handlers.go) : afficher deux formules côte à côte, comme le font les
-   applis concurrentes, enverrait les deux vers le même paiement. On garde donc
-   une seule carte — et pas de badge « meilleure offre », qui n'a aucun sens
-   sans offre à comparer. */
-const FORMULE = {
-  nom: 'Plan de croissance',
-  prix: '9,99',
-  periode: '/mois',
-  avantages: [
-    'Ton plan du mois : quoi faire chaque jour',
-    'Sommeil, nutrition, exercices — les trois leviers, détaillés',
-    'Suivi des progrès et re-mesure mensuelle',
-    'Résiliable en ligne à tout moment',
-  ],
+/* Deux offres, mêmes fonctionnalités : seul le rythme de facturation
+   change. Les montants sont ceux affichés par défaut ; getPlans() les
+   confirme au chargement, mais QUEL QUE SOIT ce qu'affiche cet écran, le
+   montant réellement prélevé est décidé par le plan Whop choisi côté
+   serveur (POST /api/v1/checkout avec plan: "monthly"|"annual") — jamais
+   par une valeur envoyée depuis ce composant. */
+const PLANS_PAR_DEFAUT = {
+  monthly: { key: 'monthly', label: 'Mensuel', price_eur: 4.99, interval: 'month' },
+  annual: { key: 'annual', label: 'Annuel', price_eur: 29.99, interval: 'year' },
 }
+
+const AVANTAGES = [
+  'Ton plan du mois : quoi faire chaque jour',
+  'Sommeil, nutrition, exercices — les trois leviers, détaillés',
+  'Suivi des progrès et re-mesure mensuelle',
+  'Résiliable en ligne à tout moment',
+]
+
+// 12 mensualités à 4,99 € : le seul repère auquel comparer l'annuel.
+// Jamais présenté comme un ancien prix, seulement comme le calcul qui
+// justifie "économisez".
+const COUT_DOUZE_MENSUALITES = 12 * PLANS_PAR_DEFAUT.monthly.price_eur
 
 const PILIERS = [
   { emoji: '😴', titre: 'Sommeil', detail: 'Heures cibles, routine du soir' },
@@ -39,6 +44,32 @@ function PaywallPage({ onBackHome }) {
   const [erreur, setErreur] = useState(null)
   const [lienParentVisible, setLienParentVisible] = useState(false)
   const [lienCopie, setLienCopie] = useState(false)
+  const [planChoisi, setPlanChoisi] = useState('monthly')
+  const [plans, setPlans] = useState(PLANS_PAR_DEFAUT)
+
+  /* Les montants par défaut sont déjà corrects ; cet appel ne fait que
+     les confirmer. S'il échoue (réseau, backend pas encore redéployé),
+     l'écran reste utilisable avec les valeurs par défaut plutôt que de
+     bloquer l'affichage du prix sur une page de paiement. */
+  useEffect(() => {
+    let annule = false
+    apiClient
+      .getPlans()
+      .then((res) => {
+        if (annule || !Array.isArray(res.plans)) return
+        const parClef = {}
+        for (const p of res.plans) parClef[p.key] = p
+        setPlans((precedent) => ({ ...precedent, ...parClef }))
+      })
+      .catch(() => {})
+    return () => {
+      annule = true
+    }
+  }, [])
+
+  const offre = plans[planChoisi]
+  const economieAnnuelle = COUT_DOUZE_MENSUALITES - plans.annual.price_eur
+  const pourcentageEconomie = Math.round((economieAnnuelle / COUT_DOUZE_MENSUALITES) * 100)
 
   /* Lien à transmettre au parent. Il porte l'id du compte enfant pour que le
      webhook Whop crédite ce compte-là et non celui du payeur. L'id est écrit
@@ -89,6 +120,7 @@ function PaywallPage({ onBackHome }) {
       const { checkout_url: checkoutURL } = await apiClient.createCheckout({
         email,
         userId: utilisateur.id,
+        plan: planChoisi,
       })
 
       if (!checkoutURL) {
@@ -125,18 +157,51 @@ function PaywallPage({ onBackHome }) {
         </p>
 
         {/* Carte d'offre : bordure accentuée et prix en display. C'est le seul
-            élément coloré de la page — rien d'autre ne doit capter le regard ici. */}
+            élément coloré de la page — rien d'autre ne doit capter le regard ici.
+            Les deux offres partagent la même liste de fonctionnalités, affichée
+            une seule fois : seul le rythme de facturation change. */}
         <section className="paywall-offer" aria-labelledby="paywall-offer-title">
+          <div
+            className="paywall-plan-toggle"
+            role="radiogroup"
+            aria-label="Choisir la formule"
+          >
+            <button
+              type="button"
+              role="radio"
+              aria-checked={planChoisi === 'monthly'}
+              className={`paywall-plan-option ${planChoisi === 'monthly' ? 'active' : ''}`}
+              onClick={() => setPlanChoisi('monthly')}
+            >
+              Mensuel
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={planChoisi === 'annual'}
+              className={`paywall-plan-option ${planChoisi === 'annual' ? 'active' : ''}`}
+              onClick={() => setPlanChoisi('annual')}
+            >
+              Annuel
+            </button>
+          </div>
+
           <div className="paywall-offer-head">
-            <h2 id="paywall-offer-title">{FORMULE.nom}</h2>
+            <h2 id="paywall-offer-title">Plan de croissance</h2>
             <p className="paywall-price">
-              <span>{FORMULE.prix} €</span>
-              {FORMULE.periode}
+              <span>{offre.price_eur.toFixed(2).replace('.', ',')} €</span>
+              {offre.interval === 'year' ? '/an' : '/mois'}
             </p>
+            {planChoisi === 'annual' && (
+              <p className="paywall-savings">
+                Économisez près de {pourcentageEconomie} % par rapport à 12 mensualités à{' '}
+                {plans.monthly.price_eur.toFixed(2).replace('.', ',')} €.
+              </p>
+            )}
           </div>
 
           <ul className="paywall-features">
-            {FORMULE.avantages.map((avantage) => (
+            {AVANTAGES.map((avantage) => (
               <li key={avantage}>
                 <Check size={18} aria-hidden="true" />
                 <span>{avantage}</span>
@@ -253,7 +318,9 @@ function PaywallPage({ onBackHome }) {
               Redirection…
             </>
           ) : (
-            `S’abonner — ${FORMULE.prix} €/mois`
+            `S’abonner — ${offre.price_eur.toFixed(2).replace('.', ',')} €${
+              offre.interval === 'year' ? '/an' : '/mois'
+            }`
           )}
         </button>
       </footer>

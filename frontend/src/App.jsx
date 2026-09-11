@@ -15,6 +15,7 @@ import SetPasswordPage from './pages/SetPasswordPage';
 import AdminPage from './pages/AdminPage';
 import ParentPage from './pages/ParentPage';
 import GiftConfirmedPage from './pages/GiftConfirmedPage';
+import AccountPage from './pages/AccountPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -120,6 +121,10 @@ function App() {
     } else {
       setCurrentPage('plan');
     }
+  };
+
+  const handleGoToAccount = () => {
+    setCurrentPage('account');
   };
 
   const handleAuthComplete = () => {
@@ -304,7 +309,16 @@ function App() {
 
       {/* Growth Plan (after payment) */}
       {currentPage === 'plan' && predictionData && isPaid && (
-        <GrowthPlanPage predictionData={predictionData} onBackHome={handleBackHome} />
+        <GrowthPlanPage
+          predictionData={predictionData}
+          onBackHome={handleBackHome}
+          onGoToAccount={handleGoToAccount}
+        />
+      )}
+
+      {/* Mon compte -> Abonnement : offre en cours, prochain paiement, résiliation. */}
+      {currentPage === 'account' && isAuthenticated && (
+        <AccountPage onBackHome={handleBackHome} />
       )}
 
       {/* Paiement par un parent, via le lien partagé */}

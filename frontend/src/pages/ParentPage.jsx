@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Spinner from '../components/Spinner';
 import apiClient from '../lib/api';
 import '../styles/paywall.css';
@@ -14,20 +14,47 @@ import '../styles/paywall.css';
    accessible à qui possède le lien, l'y exposer permettrait de lire
    l'adresse d'un mineur à partir d'un simple identifiant. */
 
-const FORMULE = {
-  prix: '9,99',
-  avantages: [
-    'Un plan de croissance personnalisé, renouvelé chaque mois',
-    'Les 5 guides : exercices, nutrition, sommeil',
-    'Suivi des progrès et re-mesure chaque mois',
-    'Résiliable en ligne à tout moment',
-  ],
+const AVANTAGES = [
+  'Un plan de croissance personnalisé, renouvelé chaque mois',
+  'Les 5 guides : exercices, nutrition, sommeil',
+  'Suivi des progrès et re-mesure chaque mois',
+  'Résiliable en ligne à tout moment',
+];
+
+/* Mêmes deux offres que la paywall enfant, mêmes valeurs par défaut :
+   getPlans() ne fait que les confirmer, le montant réel restant décidé
+   par le plan Whop choisi côté serveur. */
+const PLANS_PAR_DEFAUT = {
+  monthly: { key: 'monthly', label: 'Mensuel', price_eur: 4.99, interval: 'month' },
+  annual: { key: 'annual', label: 'Annuel', price_eur: 29.99, interval: 'year' },
 };
+const COUT_DOUZE_MENSUALITES = 12 * PLANS_PAR_DEFAUT.monthly.price_eur;
 
 function ParentPage({ childUserId }) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [erreur, setErreur] = useState(null);
+  const [planChoisi, setPlanChoisi] = useState('monthly');
+  const [plans, setPlans] = useState(PLANS_PAR_DEFAUT);
+
+  useEffect(() => {
+    let annule = false;
+    apiClient
+      .getPlans()
+      .then((res) => {
+        if (annule || !Array.isArray(res.plans)) return;
+        const parClef = {};
+        for (const p of res.plans) parClef[p.key] = p;
+        setPlans((precedent) => ({ ...precedent, ...parClef }));
+      })
+      .catch(() => {});
+    return () => {
+      annule = true;
+    };
+  }, []);
+
+  const economieAnnuelle = COUT_DOUZE_MENSUALITES - plans.annual.price_eur;
+  const pourcentageEconomie = Math.round((economieAnnuelle / COUT_DOUZE_MENSUALITES) * 100);
 
   const emailValide = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const peutPayer = emailValide && !loading;
@@ -40,6 +67,7 @@ function ParentPage({ childUserId }) {
       const { checkout_url: checkoutURL } = await apiClient.createCheckout({
         email,
         childUserId,
+        plan: planChoisi,
       });
 
       if (!checkoutURL) {
@@ -75,14 +103,15 @@ function ParentPage({ childUserId }) {
             de sa taille adulte, avec sa marge d'erreur. Cette partie est et reste gratuite.
           </p>
           <p>
-            Ce qui est payant, c'est la suite : un plan mensuel pour l'aider à atteindre
+            Ce qui est payant, c'est la suite : un accompagnement pour l'aider à atteindre
             son potentiel — sommeil, alimentation, activité physique. Un nouveau plan
-            adapté à sa progression lui est remis à chaque mois d'abonnement.
+            adapté à sa progression lui est remis chaque mois, que l'abonnement soit
+            réglé mensuellement ou en une fois pour l'année.
           </p>
 
           <h2>Ce que contient l'abonnement</h2>
           <ul className="features">
-            {FORMULE.avantages.map((avantage) => (
+            {AVANTAGES.map((avantage) => (
               <li key={avantage}>
                 <span className="check">✓</span>
                 {avantage}
@@ -90,9 +119,40 @@ function ParentPage({ childUserId }) {
             ))}
           </ul>
 
-          <div className="price">
-            <span className="amount">{FORMULE.prix} €</span>
-            <span className="duration">/mois</span>
+          <h2>Choisissez la formule</h2>
+          <div className="plans-container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-16)' }}>
+            <div
+              className={`plan-card ${planChoisi === 'monthly' ? 'selected' : ''}`}
+              onClick={() => setPlanChoisi('monthly')}
+              role="radio"
+              aria-checked={planChoisi === 'monthly'}
+              tabIndex={0}
+            >
+              <h2>Mensuel</h2>
+              <div className="price">
+                <span className="amount">{plans.monthly.price_eur.toFixed(2).replace('.', ',')} €</span>
+                <span className="duration">/mois</span>
+              </div>
+            </div>
+
+            <div
+              className={`plan-card ${planChoisi === 'annual' ? 'selected' : ''}`}
+              onClick={() => setPlanChoisi('annual')}
+              role="radio"
+              aria-checked={planChoisi === 'annual'}
+              tabIndex={0}
+            >
+              {planChoisi === 'annual' && <span className="popular-badge">Choisi</span>}
+              <h2>Annuel</h2>
+              <div className="price">
+                <span className="amount">{plans.annual.price_eur.toFixed(2).replace('.', ',')} €</span>
+                <span className="duration">/an</span>
+              </div>
+              <p style={{ fontSize: 'var(--text-caption)', color: 'var(--color-canopy-green)', fontWeight: 600, margin: 0 }}>
+                Économisez près de {pourcentageEconomie} % par rapport à 12 mensualités à{' '}
+                {plans.monthly.price_eur.toFixed(2).replace('.', ',')} €.
+              </p>
+            </div>
           </div>
 
           <div className="form-group">
@@ -129,7 +189,9 @@ function ParentPage({ childUserId }) {
                 Redirection…
               </>
             ) : (
-              `Régler l'abonnement — ${FORMULE.prix} €/mois`
+              `Régler l'abonnement — ${plans[planChoisi].price_eur.toFixed(2).replace('.', ',')} €${
+                plans[planChoisi].interval === 'year' ? '/an' : '/mois'
+              }`
             )}
           </button>
 
@@ -178,8 +240,8 @@ function ParentPage({ childUserId }) {
           <details className="faq-item">
             <summary>Que devient l'estimation si je ne paie pas ?</summary>
             <p>
-              Elle reste accessible et gratuite. Seul le plan mensuel est concerné par
-              l'abonnement.
+              Elle reste accessible et gratuite. Seul l'accompagnement (mensuel ou annuel)
+              est concerné par l'abonnement.
             </p>
           </details>
         </div>

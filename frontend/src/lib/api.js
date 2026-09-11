@@ -90,12 +90,30 @@ class APIClient {
    * est alors celui du parent, mais l'accès doit aller au compte de
    * l'enfant. Le backend le transmet à Whop en metadata et le webhook
    * s'en sert pour choisir le bénéficiaire.
+   *
+   * `plan` choisit l'offre ("monthly"/"annual") : le montant réellement
+   * facturé est décidé côté serveur par le plan Whop associé, jamais
+   * par une valeur envoyée ici.
    */
-  async createCheckout({ email, userId, childUserId }) {
+  async createCheckout({ email, userId, childUserId, plan }) {
     return this.request('/api/v1/checkout', {
       method: 'POST',
-      body: JSON.stringify({ email, user_id: userId, child_user_id: childUserId }),
+      body: JSON.stringify({
+        email,
+        user_id: userId,
+        child_user_id: childUserId,
+        plan,
+      }),
     });
+  }
+
+  /**
+   * Tarifs publics — source unique pour toutes les pages. Éviter que la
+   * paywall, le lien parent et "Mon compte" affichent chacun leur propre
+   * copie du prix, avec le risque qu'ils divergent un jour.
+   */
+  async getPlans() {
+    return this.request('/api/v1/plans');
   }
 
   /**
@@ -174,6 +192,21 @@ class APIClient {
   /** Nombre de tâches cochées par jour sur les N derniers jours. */
   async getTaskHistory(days = 30) {
     return this.request(`/api/v1/tasks/history?days=${days}`);
+  }
+
+  // ---------- Mon compte / Abonnement ----------
+
+  /** Offre en cours, prochaine date de paiement, état de résiliation. */
+  async getSubscription() {
+    return this.request('/api/v1/subscription');
+  }
+
+  /**
+   * Résilie l'abonnement. L'accès reste actif jusqu'à la fin de la
+   * période déjà payée — ce n'est jamais une coupure immédiate.
+   */
+  async cancelSubscription() {
+    return this.request('/api/v1/subscription/cancel', { method: 'POST' });
   }
 }
 
