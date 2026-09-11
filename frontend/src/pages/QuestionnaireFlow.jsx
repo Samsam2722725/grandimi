@@ -606,8 +606,12 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       sous: 'Aucune prédiction de taille n’est exacte. On affiche la fourchette au lieu de la cacher.',
     },
     email: {
-      titre: 'Où t’envoyer ton estimation ?',
-      sous: 'Le résultat s’affiche tout de suite après — l’e-mail sert à le retrouver.',
+      /* « Où t'envoyer ton estimation ? » promettait un e-mail. Aucun
+         n'est envoyé : il n'existe aucune brique d'envoi dans le
+         backend. On attendait donc un message qui n'arrive jamais.
+         Le titre dit maintenant à quoi l'adresse sert réellement. */
+      titre: 'Ton adresse e-mail',
+      sous: 'Elle ne sert qu’à retrouver ton compte plus tard. Ton résultat s’affiche à l’écran juste après, tout de suite.',
     },
     recapitulatif: {
       titre: 'On vérifie avant de calculer',

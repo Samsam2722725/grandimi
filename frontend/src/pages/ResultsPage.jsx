@@ -214,17 +214,18 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </p>
         </section>
 
+        {/* Le « +X cm » n'est plus répété ici : il est déjà le plus gros
+            chiffre de l'écran, deux sections plus haut. L'afficher une
+            seconde fois en grand donnait l'impression de radoter, et
+            noyait la seule information que ce bloc apporte vraiment —
+            que cette fenêtre se referme. */}
         {margeRestante > 0 && (
           <section className="night-card">
-            <h2 className="night-card-title">Ta fenêtre de croissance</h2>
-            <p className="results-growth">
-              +{Math.round(margeRestante * 10) / 10} cm
-              <span> encore possibles</span>
-            </p>
+            <h2 className="night-card-title">Pourquoi maintenant</h2>
             <p className="night-card-text">
-              C’est la seule urgence honnête : plus tu agis tôt dans cette fenêtre,
-              plus l’effet est réel. Une fois les cartilages fermés, plus rien ne
-              rattrape ce qui n’a pas été fait.
+              Ces centimètres ne resteront pas disponibles indéfiniment. Plus tu agis
+              tôt, plus l’effet est réel : une fois les cartilages de croissance
+              fermés, plus rien ne rattrape ce qui n’a pas été fait.
             </p>
           </section>
         )}
