@@ -64,13 +64,14 @@ function AccountPage({ onBackHome }) {
       setAbonnement((precedent) => precedent && { ...precedent, cancel_at_period_end: true });
       setConfirmationOuverte(false);
     } catch (err) {
-      // Message explicite plutôt que générique : si WHOP_API_KEY n'est
-      // pas configuré, le backend renvoie une raison précise, pas un
-      // 500 muet — l'utilisateur (ou l'équipe support) doit pouvoir la
-      // lire telle quelle.
-      setResiliationErreur(
-        err.message || 'La résiliation a échoué. Réessaie dans un instant.',
-      );
+      // Message explicite plutôt que générique, et surtout jamais un cul-de-sac :
+      // quand le backend joint une adresse de résiliation en libre-service
+      // (résiliation automatique pas encore branchée), elle est affichée en
+      // lien cliquable pour que le client puisse partir par lui-même.
+      setResiliationErreur({
+        texte: err.message || 'La résiliation a échoué. Réessaie dans un instant.',
+        lien: err.details?.self_serve_url || null,
+      });
     } finally {
       setResiliationEnCours(false);
     }
@@ -151,7 +152,20 @@ function AccountPage({ onBackHome }) {
             {resiliationErreur && (
               <div className="alert alert-error" role="alert">
                 <span className="alert-icon">!</span>
-                <p>{resiliationErreur}</p>
+                <div>
+                  <p>{resiliationErreur.texte}</p>
+                  {resiliationErreur.lien && (
+                    <p>
+                      <a
+                        href={resiliationErreur.lien}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Résilier depuis mon compte Whop
+                      </a>
+                    </p>
+                  )}
+                </div>
               </div>
             )}
 

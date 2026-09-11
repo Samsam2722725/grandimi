@@ -30,7 +30,13 @@ class APIClient {
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ error: 'Unknown error' }));
-      throw new Error(error.error || `API Error: ${response.status}`);
+      /* Le corps d'erreur porte parfois plus que du texte : la
+         résiliation renvoie une adresse de secours. Ne garder que
+         error.error effaçait cette issue avant qu'elle atteigne l'écran. */
+      const echec = new Error(error.error || `API Error: ${response.status}`);
+      echec.status = response.status;
+      echec.details = error;
+      throw echec;
     }
 
     return response.json();
