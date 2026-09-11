@@ -10,6 +10,15 @@ function SetPasswordPage({ onAuthComplete }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  /* Le champ e-mail était verrouillé en toutes circonstances, y compris
+     quand aucune adresse n'avait été retrouvée : le client venait de
+     payer et se retrouvait devant un champ vide, impossible à remplir,
+     sans aucune issue. Ce n'est pas un cas tordu — Whop ne renvoie pas
+     customer_email de lui-même, et le localStorage est vide dès que le
+     paiement s'est fait sur un autre appareil que le questionnaire.
+     Le champ ne se verrouille donc plus que si l'adresse est connue. */
+  const [emailConnu, setEmailConnu] = useState(false);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const emailFromWhop = params.get('customer_email');
@@ -17,8 +26,10 @@ function SetPasswordPage({ onAuthComplete }) {
 
     if (emailFromWhop) {
       setEmail(emailFromWhop);
+      setEmailConnu(true);
     } else if (savedEmail) {
       setEmail(savedEmail);
+      setEmailConnu(true);
     }
   }, []);
 
@@ -107,10 +118,19 @@ function SetPasswordPage({ onAuthComplete }) {
                 id="email"
                 type="email"
                 value={email}
-                disabled
-                className="input-disabled"
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={emailConnu}
+                readOnly={emailConnu}
+                required
+                autoComplete="email"
+                placeholder={emailConnu ? undefined : 'celle utilisée pour le paiement'}
+                className={emailConnu ? 'input-disabled' : undefined}
               />
-              <p className="form-helper">Email du paiement (non modifiable)</p>
+              <p className="form-helper">
+                {emailConnu
+                  ? 'Email du paiement (non modifiable)'
+                  : 'Saisis l’adresse avec laquelle tu viens de payer.'}
+              </p>
             </div>
 
             <div className="form-group">

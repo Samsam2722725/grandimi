@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
    à nouveau ici le remettrait hors couche. */
 import './App.css';
 import apiClient from './lib/api';
+import Spinner from './components/Spinner';
 import { capturePageview } from './lib/analytics';
 import HomePage from './pages/HomePage';
 import QuestionnaireFlow from './pages/QuestionnaireFlow';
@@ -17,8 +18,42 @@ import ParentPage from './pages/ParentPage';
 import GiftConfirmedPage from './pages/GiftConfirmedPage';
 import AccountPage from './pages/AccountPage';
 
+/* Reconnaît un retour de paiement Whop.
+
+   L'adresse de retour se règle dans le tableau de bord Whop (« Redirect
+   after checkout »), pas dans ce dépôt : rien ici ne peut garantir sa
+   forme. Whop ajoute son propre `status=success`, alors que ce code
+   n'acceptait que `checkout_status=success`. Un retour configuré
+   simplement sur https://grandimi.com/ arrivait donc avec le seul
+   `status=success` : le client venait de payer, atterrissait sur la page
+   d'accueil comme un visiteur, et ne voyait jamais l'écran qui lui donne
+   accès à ce qu'il a acheté.
+
+   Les deux formes sont désormais reconnues. */
+function retourDePaiementReussi(params) {
+  return (
+    params.get('checkout_status') === 'success' || params.get('status') === 'success'
+  );
+}
+
+/* Un retour de paiement ne doit pas être confondu avec une visite
+   ordinaire par les effets qui suivent. */
+function estUnRetourDePaiement(params) {
+  return params.has('checkout_status') || params.has('status');
+}
+
 function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  /* Un client qui revient de Whop voyait la page d'accueil marchande le
+     temps que la vérification d'achat réponde — soit jusqu'à une minute
+     quand l'API dort (offre gratuite Render). Il venait de payer et on
+     lui revendait le produit, sans rien indiquer. Cet écran d'attente
+     est choisi dès le premier rendu, avant toute peinture, pour qu'il
+     n'y ait pas non plus de clignotement. */
+  const [currentPage, setCurrentPage] = useState(() =>
+    retourDePaiementReussi(new URLSearchParams(window.location.search))
+      ? 'paiement'
+      : 'home',
+  );
   const [predictionData, setPredictionData] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
@@ -178,30 +213,44 @@ function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
-    if (params.has('checkout_status') && params.get('checkout_status') === 'success') {
+    if (retourDePaiementReussi(params)) {
       const email = params.get('customer_email');
       if (!email) {
         setCurrentPage('set-password');
         return;
       }
 
+      /* fetch() n'a pas de délai maximum : une requête restée en suspens
+         ne déclenche ni .then ni .catch, et laisserait le payeur devant
+         l'écran d'attente sans fin. Passé quinze secondes, on applique
+         la même issue que le .catch ci-dessous. Le minuteur est annulé
+         dès qu'une réponse arrive, pour ne pas écraser le cas cadeau —
+         où l'adresse du payeur n'est justement pas celle du compte. */
+      const versMotDePasse = () => {
+        localStorage.setItem('userEmail', email);
+        setCurrentPage('set-password');
+      };
+      const secours = setTimeout(versMotDePasse, 15000);
+
       apiClient
         .getCheckoutStatus(email)
         .then((res) => {
+          clearTimeout(secours);
           if (res.gift) {
             setCurrentPage('gift-confirmed');
           } else {
-            localStorage.setItem('userEmail', email);
-            setCurrentPage('set-password');
+            versMotDePasse();
           }
         })
         .catch(() => {
           // Statut illisible : on ne bloque pas un vrai payeur derrière
           // une panne réseau, quitte à risquer (rarement) un compte
           // fantôme plutôt qu'un paiement sans suite du tout.
-          localStorage.setItem('userEmail', email);
-          setCurrentPage('set-password');
+          clearTimeout(secours);
+          versMotDePasse();
         });
+
+      return () => clearTimeout(secours);
     }
   }, []);
 
@@ -212,7 +261,7 @@ function App() {
      ne lui reste qu'à choisir un mot de passe pour l'utiliser. */
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.has('checkout_status') || params.has('admin') || params.has('parent')) {
+    if (estUnRetourDePaiement(params) || params.has('admin') || params.has('parent')) {
       return;
     }
 
@@ -256,6 +305,12 @@ function App() {
 
   return (
     <div className="app">
+      {currentPage === 'paiement' && (
+        <div className="account-page">
+          <Spinner size="page" label="Paiement confirmé — on prépare ton accès..." />
+        </div>
+      )}
+
       {/* Public pages */}
       {currentPage === 'home' && (
         <HomePage
