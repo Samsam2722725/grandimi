@@ -5,8 +5,8 @@ import { Marquee } from '@/components/ui/marquee'
    Pas d'avis fictifs, mais la preuve que ça marche. */
 const SOURCES_CREDIBILITE = [
   {
-    titre: 'Algorithme Khamis-Roche V2',
-    description: 'Modèle ML-Enhanced basé sur 50+ années d\'études cliniques',
+    titre: 'Taille cible mi-parentale',
+    description: 'Méthode de Tanner, référence en pédiatrie pour estimer la taille adulte',
     lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+height',
     icone: '📊',
   },
@@ -24,7 +24,7 @@ const SOURCES_CREDIBILITE = [
   },
   {
     titre: 'Confiance statistique (marge d\'erreur)',
-    description: 'Intervalle de confiance 95% selon le modèle Khamis-Roche 2001',
+    description: 'Dispersion connue de la méthode mi-parentale, affichée avec chaque résultat',
     lien: 'https://scholar.google.com/scholar?q=khamis+roche+height+prediction',
     icone: '📉',
   },

@@ -81,7 +81,7 @@ const PILIERS = [
 /* Le pendant honnête d'un bandeau de logos : les références réellement
    utilisées par le calcul, pas des marques partenaires qui n'existent pas. */
 const SOURCES = [
-  { nom: 'Khamis-Roche', detail: 'Méthode de prédiction de taille adulte (1994)' },
+  { nom: 'Tanner', detail: 'Taille cible mi-parentale, méthode de référence en pédiatrie' },
   { nom: 'PubMed', detail: 'Littérature clinique citée dans les guides' },
   { nom: 'OMS', detail: 'Courbes de croissance de référence' },
   { nom: 'AAP', detail: 'Recommandations de sommeil de l’American Academy of Pediatrics' },

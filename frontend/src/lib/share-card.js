@@ -202,7 +202,7 @@ export async function genererCarteResultat({
   ctx.font = `400 28px ${POLICE}`
   const mention = decouper(
     ctx,
-    'Estimation statistique (Khamis-Roche), pas une garantie. La marge est affichée.',
+    'Estimation statistique (taille cible mi-parentale), pas une garantie. La marge est affichée.',
     L - marge * 2,
   )
   for (const ligne of mention) {

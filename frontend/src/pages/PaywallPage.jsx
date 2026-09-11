@@ -25,7 +25,12 @@ import '../styles/paywall-night.css'
    formule reste donc inactive tant que le produit n'existe pas : la bascule
    est `VITE_WHOP_ONETIME_ENABLED=true`, et `id` est envoyé au backend dès
    maintenant pour qu'il n'y ait rien à changer ici le jour venu.
-   Cf. docs/BRIEF-BACKEND.md, point 1.
+
+   ⚠ NE PAS ACTIVER CE DRAPEAU AVANT QUE LE BACKEND LISE `plan`.
+   Le serveur ignore ce champ aujourd'hui et sert toujours le produit mensuel :
+   activer la bascule maintenant ferait souscrire un abonnement de 9,99 €/mois
+   à quelqu'un qui a cliqué « 29,99 € une seule fois ». C'est une erreur de
+   facturation, et sur des mineurs. Cf. BRIEF-BACKEND.md, point 1.
    ============================================================ */
 const FORMULES = [
   {

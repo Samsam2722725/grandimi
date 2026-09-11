@@ -286,7 +286,8 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
               <h3>Sources &amp; méthodologie</h3>
               <p>
-                <strong>Algorithme :</strong> Khamis-Roche v2 (enrichi)
+                <strong>Méthode :</strong> taille cible mi-parentale (Tanner), ajustée
+                par tes habitudes sur la croissance qu’il te reste
                 <br />
                 <strong>Précision moyenne :</strong> ±3 à ±6 cm selon l’âge
               </p>

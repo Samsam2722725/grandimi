@@ -1,6 +1,16 @@
 # 📏 Grandimi - Height Prediction API
 
-Backend Go pour prédire la taille adulte maximale des enfants/jeunes basé sur l'algorithme **Khamis-Roche**.
+Backend Go pour estimer la taille adulte des enfants et adolescents.
+
+**Méthode : taille cible mi-parentale (Tanner)**, ajustée par les habitudes
+déclarées — sommeil, nutrition, activité — appliquées à la croissance restante,
+sans jamais dépasser la cible génétique.
+
+> Une table de coefficients présentée comme « Khamis-Roche » a été retirée du
+> moteur : elle double-comptait la taille de l'enfant et celle des parents et
+> rendait jusqu'à 229 cm. Recalibrer un vrai Khamis-Roche demande les tables
+> publiées ou l'âge osseux ; tant qu'on ne les a pas, on utilise une méthode
+> documentée et vérifiable.
 
 ## 🚀 Démarrage rapide
 
@@ -98,7 +108,7 @@ grandimi/
 └── Dockerfile
 ```
 
-## 📊 Algorithme Khamis-Roche
+## 📊 Méthode de calcul
 
 Formule déterministe qui utilise :
 - **Données de l'enfant** : âge, sexe, taille, poids

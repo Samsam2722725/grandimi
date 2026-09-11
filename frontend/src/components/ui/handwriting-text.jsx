@@ -51,6 +51,27 @@ function loadOpentype() {
       const script = document.createElement('script')
       script.src = OPENTYPE_CDN
       script.async = true
+      /* `crossorigin` est un prerequis de `integrity` : sans lui, le
+         navigateur ignore le controle et charge le script quand meme.
+
+         SECURITE — A COMPLETER. Ce script tiers s execute sur l origine qui
+         detient le jeton de session en localStorage, et le site n a pas de CSP.
+         La version est epinglee sur une release npm immuable, donc l attaque
+         suppose la compromission de jsDelivr lui-meme : risque faible, mais
+         non nul et facile a fermer.
+
+         Pour poser l empreinte (impossible depuis l environnement de
+         developpement actuel, le proxy sortant bloque le CDN) :
+
+           curl -sL https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js \
+             | openssl dgst -sha384 -binary | openssl base64 -A
+
+         puis decommenter la ligne ci-dessous avec la valeur obtenue :
+         script.integrity = 'sha384-<empreinte>'
+
+         Ne pas inventer la valeur : une empreinte fausse fait echouer le
+         chargement en silence, et le composant retombe sur du texte simple. */
+      script.crossOrigin = 'anonymous'
       script.onload = () => {
         if (window.opentype) resolve(window.opentype)
         else reject(new Error('opentype.js chargé mais rien exposé'))
