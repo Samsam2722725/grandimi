@@ -87,9 +87,9 @@ func GetSubscription(c *gin.Context) {
 //     avec le scope membership:cancel (+ member:email:read,
 //     member:basic:read, exigés par le même endpoint).
 //  2. Poser cette clé sur Render, variable d'environnement WHOP_API_KEY.
-// Tant que ce n'est pas fait, cette route répond 503 avec un message
-// explicite plutôt que de simuler une résiliation qui n'aurait aucun
-// effet réel sur la facturation.
+// Tant que ce n'est pas fait, cette route répond 503 en renvoyant le
+// chemin de résiliation en libre-service de Whop, plutôt que de simuler
+// une résiliation qui n'aurait aucun effet réel sur la facturation.
 func CancelSubscription(c *gin.Context) {
 	userID := c.GetString("userID")
 
@@ -110,8 +110,15 @@ func CancelSubscription(c *gin.Context) {
 
 	apiKey := os.Getenv("WHOP_API_KEY")
 	if apiKey == "" {
+		/* Le nom de la variable manquante appartient aux journaux, pas au
+		   client : lui afficher "WHOP_API_KEY is not configured" le laisse
+		   sans solution devant un bouton mort. Whop laisse le membre
+		   résilier lui-même et lui envoie l'e-mail de confirmation, donc
+		   il existe une vraie sortie à lui indiquer. */
+		fmt.Printf("[subscription] annulation impossible pour %s : WHOP_API_KEY absente\n", userID)
 		c.JSON(http.StatusServiceUnavailable, gin.H{
-			"error": "cancellation is not connected yet: WHOP_API_KEY is not configured",
+			"error":          "La résiliation automatique n'est pas encore active ici. Tu peux résilier toi-même depuis le compte Whop qui a servi au paiement : ton accès reste actif jusqu'à la fin de la période déjà payée.",
+			"self_serve_url": "https://whop.com/@me/settings/orders/",
 		})
 		return
 	}
