@@ -79,7 +79,7 @@ function SetPasswordPage({ onAuthComplete }) {
   };
 
   return (
-    <div className="auth-page">
+    <div className="auth-page auth-night">
       <div className="auth-container">
         <div className="auth-logo">
           <svg width="40" height="40" viewBox="0 0 32 32" fill="none">

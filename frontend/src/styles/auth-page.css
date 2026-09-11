@@ -85,3 +85,71 @@
 @media (max-width: 700px) {
   .auth-card { padding: var(--spacing-32) var(--spacing-24); }
 }
+
+/* ============================================
+   VARIANTE SOMBRE
+   ============================================
+   Ces deux écrans sont DANS le parcours : on arrive sur SetPasswordPage
+   directement après le paiement, écran suivant la paywall noire. Une carte
+   blanche pleine largeur à cet endroit produit un flash au pire moment.
+
+   La classe `theme-night` n'est pas utilisée ici : elle repeint
+   `--color-canopy-green` en blanc, or c'est précisément la couleur de fond de
+   `.auth-page`. On surcharge donc les quelques règles concernées, avec la
+   spécificité qu'il faut (0,2,0) pour passer devant celles du dessus.
+   ============================================ */
+
+.auth-night.auth-page {
+  background-color: #0a0a0a;
+}
+
+.auth-night .auth-logo {
+  color: #ffffff;
+}
+
+.auth-night .auth-logo svg {
+  color: #ff5a1f;
+}
+
+.auth-night .auth-card {
+  background-color: #141414;
+}
+
+.auth-night .auth-card h1 {
+  color: #ffffff;
+}
+
+.auth-night :is(.auth-card .subtitle, .auth-footer, .auth-footer p) {
+  color: #9a9a9a;
+}
+
+.auth-night .auth-footer {
+  border-top-color: #262626;
+}
+
+.auth-night .auth-footer .btn-tertiary {
+  color: #ff7a45;
+}
+
+.auth-night :is(label, .form-group label) {
+  color: #ffffff;
+}
+
+.auth-night .form-helper {
+  color: #9a9a9a;
+}
+
+.auth-night input {
+  background-color: #1c1c1c;
+  border-color: #2a2a2a;
+  color: #ffffff;
+}
+
+.auth-night input::placeholder {
+  color: #5f5f5f;
+}
+
+.auth-night input:focus {
+  border-color: #ff5a1f;
+  outline: none;
+}

@@ -1,0 +1,164 @@
+/* ============================================
+   THÈME SOMBRE DE LA VITRINE
+   ============================================
+   Ce fichier ne redéfinit AUCUNE mise en page : il ne change que les valeurs
+   des variables du design system, à l'intérieur de `.theme-night`.
+
+   Pourquoi ça marche sans toucher au balisage : les classes de la landing
+   passent toutes par les variables — `bg-[color:var(--surface-card)]`,
+   `text-ink` (aliasé sur `--color-ink-black`), `text-[color:var(--text-secondary)]`.
+   Une variable CSS se résout au moment du rendu, dans le contexte de l'élément :
+   redéfinie sur un ancêtre, toute la sous-arborescence bascule. Réécrire 600
+   lignes de classes pour obtenir le même résultat aurait été du travail pur et
+   simple en double, avec une occasion d'erreur par ligne.
+
+   Ce qui NE bascule pas, volontairement :
+   - `--color-coral-pulse` (l'orange des boutons) et `--color-on-brand` (l'encre
+     posée dessus). Le couple est déjà mesuré à 5,96:1, il n'a aucune raison de
+     changer.
+   - `--color-paper-white`, qui sert de texte sur bande sombre. C'est
+     `--surface-card` qu'on redéfinit, pas le blanc lui-même.
+
+   Tous les ratios ci-dessous sont mesurés sur le fond #0a0a0a.
+   ============================================ */
+
+.theme-night {
+  /* ---------- Surfaces ---------- */
+  --surface-page-canvas: #0a0a0a;
+  --surface-card: #141414;
+  --surface-pastel: #171717;
+  /* Redéfini explicitement : sa source (--color-canopy-green) devient blanche
+     ci-dessous, et une bande « sombre » blanche avec du texte blanc dessus,
+     c'est un bloc invisible. */
+  --surface-dark: #1a1a1a;
+
+  /* ---------- Encre ---------- */
+  --color-canopy-green: #ffffff; /* titres h1-h4 (règle de base) — 19.3:1 */
+  --color-ink-black: #ffffff;    /* `text-ink` */
+  --text-primary: #ffffff;
+  --text-secondary: #b8b8b8;     /* 11.2:1 — texte courant */
+  --text-meta: #9a9a9a;          /* 7.3:1  — légendes */
+  --color-slate: #9a9a9a;
+  --color-graphite: #b8b8b8;
+  --color-charcoal: #d4d4d4;
+  --color-ash: #6f6f6f;          /* 3.6:1 — bordures et placeholders SEULEMENT */
+  --color-deep-teal: #d4d4d4;
+  --color-aubergine: #b8b8b8;
+  --color-mint-wash: #b8b8b8;    /* texte adouci sur bande sombre */
+
+  /* ---------- Orange ----------
+     L'orange TEXTE du thème clair (#c23c0b) tombe à 1,9:1 sur du noir : il
+     devient illisible. Il est remonté ici, pas simplement repris. */
+  --color-indigo-bloom: #ff7a45; /* 7.6:1 — orange de texte courant */
+  --color-leaf-bright: #ff7a45;
+  --color-sky-signal: #ff7a45;
+  --color-brand-display: #ff5a1f; /* 6.3:1 — mots surlignés dans les gros titres */
+
+  /* ---------- Filets et aplats neutres ---------- */
+  --color-frost-gray: #262626;
+  --color-cloud-gray: #171717;
+  --color-sand: #2a2a2a;
+  --border-hairline: #262626;
+  --border-mid: #3d3d3d;
+  --border-strong: #ffffff;
+
+  /* ---------- Teintes de carte ----------
+     Mêmes familles chromatiques qu'en clair, ramenées à des surfaces sombres
+     teintées. L'écart entre deux teintes voisines reste lisible, et le blanc
+     posé dessus tient au-dessus de 14:1 partout. */
+  --color-lavender-mist: #0a0a0a;
+  --color-peach-wash: #211710;  /* 1 · abricot */
+  --color-cream: #1e1b13;       /* 2 · beurre  */
+  --color-sage-wash: #131e16;   /* 3 · sauge   */
+  --color-sky-wash: #121a21;    /* 4 · bleu    */
+  --color-orchid-tint: #211710;
+  --color-lilac-wash: #121a21;
+
+  /* ---------- Alias @theme : à redéclarer en VALEURS LITTÉRALES ----------
+     Piège de fond, et il ne se voit qu'à l'écran. Tailwind compile
+     `--color-ink: var(--color-ink-black)` dans `:root`. Or une propriété
+     personnalisée est substituée dans le contexte où elle est DÉCLARÉE, pas
+     où elle est utilisée : `--color-ink` est donc figée sur la valeur que
+     `--color-ink-black` a sur `:root` — le noir du thème clair. Redéfinir la
+     source plus bas dans l'arbre ne la rattrape jamais.
+
+     Conséquence observée : tout ce qui passe par une variable DIRECTE
+     (`bg-[color:var(--surface-card)]`) basculait bien en sombre, tandis que
+     `text-ink`, `border-ink` et `text-muted-foreground` restaient noirs sur
+     noir — logotype invisible, bouton secondaire invisible, chiffre du hero
+     illisible.
+
+     D'où cette seconde liste : les mêmes rôles, en valeurs écrites en clair. */
+  --color-ink: #ffffff;
+  --color-paper: #0a0a0a;
+  --color-background: #0a0a0a;
+  --color-foreground: #ffffff;
+  --color-card: #141414;
+  --color-card-foreground: #ffffff;
+  --color-popover: #141414;
+  --color-popover-foreground: #ffffff;
+  --color-secondary: #2a2a2a;
+  --color-secondary-foreground: #ffffff;
+  --color-muted: #171717;
+  --color-muted-foreground: #9a9a9a;
+  --color-accent: #2a1a12;
+  --color-accent-foreground: #ffffff;
+  --color-border: #262626;
+  --color-input: #262626;
+  --color-brand-deep: #ff7a45;
+  --color-destructive: #ff7a45;
+  --color-destructive-foreground: #17120e;
+  /* `--color-primary` / `--color-ring` gardent l'orange, et
+     `--color-primary-foreground` l'encre posée dessus : ce couple est
+     déjà mesuré et n'a pas de raison de bouger sur fond sombre. */
+
+  /* ---------- Jetons partagés avec les surfaces applicatives ----------
+     Les figures (growth-chart) et leur habillage (.chart-legend,
+     .chart-caption) sont écrits contre les `--funnel-*` de funnel.css. On les
+     redéclare ici pour que le même composant serve sur la vitrine comme dans
+     l'app, sans variante. */
+  --funnel-bg: #0a0a0a;
+  --funnel-surface: #141414;
+  --funnel-surface-high: #1c1c1c;
+  --funnel-line: #262626;
+  --funnel-text: #ffffff;
+  --funnel-muted: #9a9a9a;
+  --funnel-accent: #ff5a1f;
+  --funnel-on-accent: #17120e;
+
+  background-color: var(--surface-page-canvas);
+  /* Indispensable, et ce n'est pas de la redondance : `body { color: … }` du
+     design system se résout dans le contexte de `body`, donc sur les valeurs
+     CLAIRES — cette classe est posée sur un div à l'intérieur. Tout ce qui
+     n'a pas de couleur explicite (légendes de figures, `figcaption`, `li`)
+     héritait donc de l'encre du thème clair : noir sur noir. */
+  color: var(--text-primary);
+  color-scheme: dark;
+}
+
+/* Le sélecteur de couleur natif des `<details>`, des scrollbars et des
+   contrôles de formulaire suit `color-scheme`. Sans lui, un navigateur en
+   thème clair peint des scrollbars blanches dans une page noire. */
+.theme-night ::selection {
+  background: var(--color-coral-pulse);
+  color: var(--color-on-brand);
+}
+
+/* ---------- Dégradé de titre ----------
+   Le blanc pur sur toute la hauteur d'un titre de 72px fait un pavé
+   éblouissant. Le dégradé rend la deuxième ligne légèrement plus douce, comme
+   un éclairage venant du haut. `background-clip: text` exige une couleur de
+   texte transparente — d'où le repli : si la découpe n'est pas supportée, on
+   retombe sur `color` et rien ne disparaît. */
+.night-title-gradient {
+  color: var(--color-ink-black);
+  background: linear-gradient(180deg, #ffffff 30%, #8e8e8e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .night-title-gradient {
+    color: transparent;
+  }
+}

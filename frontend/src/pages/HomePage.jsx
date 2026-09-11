@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import {
   ArrowRight,
   BookOpenCheck,
+  Check,
   Eye,
   Moon,
   Ruler,
@@ -18,6 +19,9 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 const CircularSplitRoll = lazy(() => import('@/components/ui/circular-split-roll'))
 import { HandwritingText } from '@/components/ui/handwriting-text'
 import { FaqSection } from '@/components/ui/faq-section'
+import { FluidParticlesBackground } from '@/components/ui/fluid-particles-background'
+import { PotentialComparisonChart } from '@/components/ui/growth-chart'
+import '../styles/theme-night.css'
 import TestimonialMarquee from '@/components/ui/testimonial-marquee'
 
 /* Piliers du plan de croissance. Les photos passent par Unsplash ;
@@ -74,6 +78,27 @@ const PILIERS = [
   },
 ]
 
+/* Le pendant honnête d'un bandeau de logos : les références réellement
+   utilisées par le calcul, pas des marques partenaires qui n'existent pas. */
+const SOURCES = [
+  { nom: 'Khamis-Roche', detail: 'Méthode de prédiction de taille adulte (1994)' },
+  { nom: 'PubMed', detail: 'Littérature clinique citée dans les guides' },
+  { nom: 'OMS', detail: 'Courbes de croissance de référence' },
+  { nom: 'AAP', detail: 'Recommandations de sommeil de l’American Academy of Pediatrics' },
+  { nom: 'ANSES', detail: 'Repères nutritionnels français' },
+]
+
+/* Quatre chiffres VÉRIFIABLES sur le site même. Pas de compteur d'utilisateurs
+   en temps réel, pas de « 21 298 personnes aujourd'hui » : un chiffre qu'on ne
+   peut pas prouver coûte plus cher qu'il ne rapporte sur un produit dont
+   l'argument est justement l'honnêteté. */
+const CHIFFRES = [
+  { valeur: '±3–6 cm', label: 'la marge réelle du modèle, affichée avec chaque résultat' },
+  { valeur: '0 €', label: 'pour le questionnaire et l’estimation, sans compte' },
+  { valeur: '~2 min', label: 'de questions, une réponse par écran' },
+  { valeur: '3', label: 'leviers suivis chaque jour : sommeil, nutrition, activité' },
+]
+
 const ETAPES = [
   {
     num: '01',
@@ -123,7 +148,7 @@ const FAQ = [
   {
     question: 'Est-ce que Grandimi peut me faire grandir plus ?',
     answer:
-      'Non, et personne ne le peut. Ta taille adulte est déterminée à environ 80 % par la génétique. Ce qui se joue, c’est le reste : un sommeil suffisant, une alimentation correcte et une activité physique régulière permettent d’atteindre ton potentiel plutôt que de rester en dessous. C’est exactement ce que le plan cible.',
+      'Personne ne peut te faire dépasser ton potentiel génétique — ni nous, ni un complément, ni un programme. Mais beaucoup d’ados finissent en dessous du leur : nuits trop courtes, apports insuffisants, au moment précis où l’os peut encore s’allonger. Ces centimètres-là se jouent vraiment, et c’est exactement ce que le plan cible. Pas un de plus.',
   },
   {
     question: 'À quel point l’estimation est-elle fiable ?',
@@ -179,7 +204,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[color:var(--surface-page-canvas)] font-sans">
+    <div className="theme-night min-h-screen bg-[color:var(--surface-page-canvas)] font-sans">
       {/* ============ EN-TÊTE ============ */}
       {/* Fond opaque, sans backdrop-blur.
           Un header sticky semi-transparent avec backdrop-filter cree des
@@ -234,10 +259,24 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             le moment magique (la carte résultat) sous la ligne de
             flottaison. Ici il est visible tout de suite.
             Entrées en CSS (.rise) et non en JS : cf. index.css. */}
-        <section className="relative overflow-hidden px-5 pt-12 pb-16 sm:px-8 lg:pt-20">
+        <FluidParticlesBackground
+          className="border-b border-[color:var(--color-frost-gray)]"
+          /* Réglages resserrés par rapport aux valeurs par défaut du
+             composant : une densité plus faible et une trace qui s'efface
+             deux fois plus vite. Au réglage d'origine, les points laissaient
+             de longs filaments et le fond se lisait comme une texture de
+             cheveux plutôt que comme une poussière. */
+          density={1 / 2600}
+          maxParticles={900}
+          trail="rgba(10, 10, 10, 0.30)"
+          particleSize={{ min: 0.4, max: 1.5 }}
+        >
+        <section className="relative px-5 pt-12 pb-16 sm:px-8 lg:pt-20">
+          {/* Halo orange derrière le titre. Sur noir il remplace l'ombre
+              portée : c'est lui qui détache le hero du reste de la page. */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -top-32 -right-32 -z-10 size-[520px] rounded-full bg-[color:var(--color-peach-wash)] opacity-60 blur-3xl"
+            className="pointer-events-none absolute -top-40 -right-24 -z-10 size-[560px] rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.13] blur-[120px]"
           />
 
           <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-12 lg:gap-10">
@@ -252,7 +291,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               </span>
 
               <h1
-                className="rise mt-6 font-display text-[clamp(40px,6.2vw,72px)] leading-[1.02] font-medium tracking-[-0.035em] text-balance text-ink"
+                className="rise night-title-gradient mt-6 font-display text-[clamp(40px,6.2vw,72px)] leading-[1.02] font-medium tracking-[-0.035em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
                 Quelle taille vas-tu vraiment{' '}
@@ -274,9 +313,10 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 className="rise mt-6 max-w-xl text-[clamp(16px,2.2vw,19px)] leading-[1.55] text-pretty text-[color:var(--text-secondary)]"
                 style={{ animationDelay: '160ms' }}
               >
-                Réponds à quelques questions et découvre ton estimation de taille adulte —
-                avec sa marge d’erreur, expliquée. Puis, si tu veux aller plus loin, un plan
-                personnalisé qui te dit quoi faire chaque jour, renouvelé chaque mois.
+                Ta taille adulte est déjà en grande partie écrite. Ce qui ne l’est pas :
+                est-ce que tu vas l’atteindre. Réponds à quelques questions, vois ton
+                estimation et les centimètres qu’il te reste — gratuitement, marge d’erreur
+                affichée.
               </p>
 
               <div
@@ -321,6 +361,86 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               <div className="origin-center transition-transform duration-500 ease-out lg:[transform:rotateY(-7deg)_rotateX(3deg)] lg:hover:[transform:rotateY(0deg)_rotateX(0deg)]">
                 <ApercuResultat />
               </div>
+            </div>
+          </div>
+        </section>
+        </FluidParticlesBackground>
+
+        {/* ============ SUR QUOI ON S'APPUIE ============
+            L'équivalent honnête du bandeau de logos partenaires : ici ce ne
+            sont pas des clients ni des outils, mais les sources du calcul.
+            Sur ce marché, c'est le seul « ils nous font confiance » qu'on
+            puisse écrire sans mentir. */}
+        <section className="border-b border-[color:var(--color-frost-gray)] px-5 py-10 sm:px-8">
+          <div className="mx-auto w-full max-w-6xl">
+            <p className="text-center text-[11px] font-semibold tracking-[0.18em] text-[color:var(--text-meta)] uppercase">
+              Ce sur quoi le calcul s’appuie
+            </p>
+            <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-center">
+              {SOURCES.map((source) => (
+                <li
+                  key={source.nom}
+                  className="text-lg font-semibold tracking-[-0.01em] text-[color:var(--text-secondary)]"
+                  title={source.detail}
+                >
+                  {source.nom}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* ============ CHIFFRES ============ */}
+        <section className="px-5 py-14 sm:px-8">
+          <dl className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-y-10 border-b border-[color:var(--color-frost-gray)] pb-14 lg:grid-cols-4 lg:gap-y-0">
+            {CHIFFRES.map((chiffre, i) => (
+              <div
+                key={chiffre.label}
+                className={`px-2 sm:px-6 ${
+                  /* Filets verticaux entre colonnes, jamais avant la première
+                     ni sur la première de chaque rangée en mobile. */
+                  i % 2 === 1 ? 'border-l border-[color:var(--color-frost-gray)]' : ''
+                } ${i > 0 ? 'lg:border-l lg:border-[color:var(--color-frost-gray)]' : 'lg:border-l-0'}`}
+              >
+                <dd className="font-display text-[clamp(30px,5vw,44px)] leading-none font-medium tracking-[-0.03em] text-ink">
+                  {chiffre.valeur}
+                </dd>
+                <dt className="mt-3 text-sm leading-[1.45] text-[color:var(--text-secondary)]">
+                  {chiffre.label}
+                </dt>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        {/* ============ CE QUI SE JOUE (figure) ============ */}
+        <section className="px-5 pb-20 sm:px-8">
+          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            <div>
+              <span className="text-[11px] font-semibold tracking-[0.18em] text-[color:var(--color-indigo-bloom)] uppercase">
+                Ce qui se joue vraiment
+              </span>
+              <h2 className="mt-5 font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
+                Ta génétique fixe le plafond. Tes habitudes décident si tu le touches.
+              </h2>
+              <p className="mt-5 max-w-lg text-base leading-[1.55] text-[color:var(--text-secondary)]">
+                Environ 80 % de ta taille adulte est écrite dans tes gènes. Le reste —
+                sommeil, apports, activité — ne s’ajoute pas au plafond : il détermine si
+                tu l’atteins ou si tu t’arrêtes en dessous. C’est tout l’écart entre les
+                deux courbes, et c’est le seul terrain où un plan sert à quelque chose.
+              </p>
+              <button
+                type="button"
+                onClick={onStartQuestionnaire}
+                className="mt-8 inline-flex min-h-13 items-center gap-2 rounded-full border border-ink px-7 text-base font-medium text-ink transition-colors hover:bg-ink/10"
+              >
+                Voir où j’en suis
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </button>
+            </div>
+
+            <div className="rounded-[26px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6 sm:p-8">
+              <PotentialComparisonChart />
             </div>
           </div>
         </section>
@@ -453,6 +573,113 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           <TestimonialMarquee />
         </section>
 
+        {/* ============ PRIX ============
+            Le prix n'apparaissait nulle part sur la landing : il fallait aller
+            le chercher dans une réponse de FAQ. Un tarif qu'on ne trouve pas se
+            lit comme un tarif qu'on cache, et ça se paie au moment de la
+            paywall — c'est là que le visiteur découvrait le chiffre. */}
+        <section id="prix" className="px-5 py-20 sm:px-8">
+          <div className="mx-auto w-full max-w-5xl">
+            <div className="mb-12 text-center">
+              <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
+                Un prix, écrit en entier
+              </h2>
+              <p className="mx-auto mt-4 max-w-xl text-base text-[color:var(--text-secondary)]">
+                Pas de période d’essai qui se transforme en abonnement, pas de palier
+                surprise. Deux choses, deux statuts.
+              </p>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-2">
+              {/* Gratuit — volontairement à gauche et sans accent : c'est
+                  l'offre qu'on assume de laisser gagner si elle suffit. */}
+              <div className="flex flex-col rounded-[26px] border border-[color:var(--color-frost-gray)] p-8">
+                <h3 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
+                  L’estimation
+                </h3>
+                <p className="mt-4 flex items-baseline gap-2">
+                  <span className="font-display text-[44px] leading-none font-medium tracking-[-0.03em] text-ink">
+                    0 €
+                  </span>
+                  <span className="text-sm text-[color:var(--text-meta)]">pour toujours</span>
+                </p>
+                <ul className="mt-7 flex flex-col gap-3">
+                  {[
+                    'Ta taille adulte estimée, tout de suite',
+                    'La fourchette et la marge, affichées',
+                    'Ta courbe de croissance',
+                    'Sans compte, sans carte bancaire',
+                  ].map((item) => (
+                    <li key={item} className="flex gap-3 text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">
+                      <Check className="mt-0.5 size-4 shrink-0 text-[color:var(--text-meta)]" aria-hidden="true" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                {/* `mt-auto` sur l'enveloppe, pas sur le bouton : les deux
+                    cartes n'ont pas le même nombre de lignes, et sans ça le
+                    bouton de gauche flottait à mi-hauteur avec du vide dessous
+                    pendant que celui de droite touchait le bas. */}
+                <div className="mt-auto pt-8">
+                  <button
+                    type="button"
+                    onClick={onStartQuestionnaire}
+                    className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full border border-ink px-6 text-base font-medium text-ink transition-colors hover:bg-ink/10"
+                  >
+                    Commencer
+                  </button>
+                </div>
+              </div>
+
+              {/* Payant — bordure orange, comme la carte retenue de la paywall.
+                  Le visiteur retrouve exactement le même objet plus tard. */}
+              <div className="relative flex flex-col rounded-[26px] border border-[color:var(--color-coral-pulse)] bg-[color:var(--color-peach-wash)] p-8">
+                <span className="absolute -top-3 left-8 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-[color:var(--color-on-brand)]">
+                  Le plan
+                </span>
+                <h3 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
+                  Le plan de croissance
+                </h3>
+                <p className="mt-4 flex items-baseline gap-2">
+                  <span className="font-display text-[44px] leading-none font-medium tracking-[-0.03em] text-ink">
+                    4,99 €
+                  </span>
+                  <span className="text-sm text-[color:var(--text-secondary)]">
+                    /mois, ou 29,99 €/an
+                  </span>
+                </p>
+                <ul className="mt-7 flex flex-col gap-3">
+                  {[
+                    'Quoi faire chaque jour, sur 30 jours',
+                    'Sommeil, nutrition, exercices — détaillés',
+                    'Un plan différent à chaque mois d’abonnement',
+                    'Re-mesure mensuelle et suivi',
+                    'Résiliable en ligne, à tout moment',
+                  ].map((item) => (
+                    <li key={item} className="flex gap-3 text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">
+                      <Check className="mt-0.5 size-4 shrink-0 text-[color:var(--color-indigo-bloom)]" aria-hidden="true" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-auto pt-8">
+                  <button
+                    type="button"
+                    onClick={onStartQuestionnaire}
+                    className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-6 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
+                  >
+                    Voir mon estimation d’abord
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </button>
+                  <p className="mt-4 text-center text-[13px] text-[color:var(--text-meta)]">
+                    Le plan n’est proposé qu’après ton résultat gratuit.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ============ FAQ ============ */}
         <FaqSection
           title="Les questions qu’on nous pose"
@@ -475,7 +702,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.55 }}
-            className="mx-auto w-full max-w-6xl overflow-hidden rounded-[32px] bg-[color:var(--color-canopy-green)] px-6 py-16 text-center sm:px-12"
+            className="mx-auto w-full max-w-6xl overflow-hidden rounded-[32px] bg-[color:var(--surface-dark)] px-6 py-16 text-center sm:px-12"
           >
             <h2 className="mx-auto max-w-3xl font-display text-[clamp(30px,5vw,52px)] leading-[1.06] font-medium tracking-[-0.03em] text-white">
               Ton estimation t’attend.

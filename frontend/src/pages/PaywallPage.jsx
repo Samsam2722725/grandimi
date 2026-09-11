@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { ArrowLeft, Check, Lock } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
@@ -14,7 +14,14 @@ import '../styles/paywall-night.css'
    confirme au chargement, mais QUEL QUE SOIT ce qu'affiche cet écran, le
    montant réellement prélevé est décidé par le plan Whop choisi côté
    serveur (POST /api/v1/checkout avec plan: "monthly"|"annual") — jamais
-   par une valeur envoyée depuis ce composant. */
+   par une valeur envoyée depuis ce composant.
+
+   Un paiement unique (sans abonnement) a été proposé dans une revue
+   séparée du tunnel comme second produit Whop — cf. l'ancien
+   docs/BRIEF-BACKEND.md, point 1. Non repris ici : il change le montant
+   annuel voulu (29,99 € devient alors un prix à vie, pas un prix par an)
+   et n'a pas de second produit Whop configuré. À traiter comme une
+   décision produit séparée, pas un détail d'implémentation. */
 const PLANS_PAR_DEFAUT = {
   monthly: { key: 'monthly', label: 'Mensuel', price_eur: 4.99, interval: 'month' },
   annual: { key: 'annual', label: 'Annuel', price_eur: 29.99, interval: 'year' },
@@ -44,6 +51,7 @@ function PaywallPage({ onBackHome }) {
   const [erreur, setErreur] = useState(null)
   const [lienParentVisible, setLienParentVisible] = useState(false)
   const [lienCopie, setLienCopie] = useState(false)
+  const blocParentRef = useRef(null)
   const [planChoisi, setPlanChoisi] = useState('monthly')
   const [plans, setPlans] = useState(PLANS_PAR_DEFAUT)
 
@@ -153,7 +161,7 @@ function PaywallPage({ onBackHome }) {
       <main className="paywall-scroll">
         <h1 className="paywall-title">Débloquer ton plan complet</h1>
         <p className="paywall-subtitle">
-          Ton estimation reste gratuite, pour toujours. Seul le plan mensuel est payant.
+          Ton estimation reste gratuite, pour toujours. Seul le plan de croissance est payant.
         </p>
 
         {/* Carte d'offre : bordure accentuée et prix en display. C'est le seul
@@ -237,22 +245,18 @@ function PaywallPage({ onBackHome }) {
           </p>
         )}
 
+        {/* Un seul contrôle pour ce bloc : le bouton du pied de page. Deux
+            boutons ouvrant la même chose, l'un en bas l'autre au milieu,
+            c'était une commande de trop. */}
         {lienParent && (
-          <section className="paywall-parent">
-            <button
-              type="button"
-              className="paywall-parent-toggle"
-              onClick={() => setLienParentVisible((visible) => !visible)}
-              aria-expanded={lienParentVisible}
-            >
-              Faire payer par un parent
-            </button>
-
+          <section className="paywall-parent" ref={blocParentRef}>
             {lienParentVisible && (
               <div className="paywall-parent-body">
+                <h2 className="paywall-section-title">Faire payer par un parent</h2>
                 <p>
-                  Envoie ce lien à ton parent. Il y trouvera l’explication et pourra
-                  régler depuis son e-mail — ton accès s’ouvrira ici, sur ce compte.
+                  Envoie ce lien à ton parent. Il y trouvera l’explication, le prix et
+                  la mention que Grandimi n’est pas un dispositif médical — et il pourra
+                  régler depuis son e-mail. Ton accès s’ouvrira ici, sur ce compte.
                 </p>
                 <input
                   type="text"
@@ -286,7 +290,7 @@ function PaywallPage({ onBackHome }) {
             <summary>L’estimation est-elle vraiment gratuite ?</summary>
             <p>
               Oui. Le questionnaire et ton estimation de taille adulte le restent. Seul
-              le plan personnalisé mensuel est payant.
+              le plan personnalisé (mensuel ou annuel) est payant.
             </p>
           </details>
           <details>
@@ -323,6 +327,26 @@ function PaywallPage({ onBackHome }) {
             }`
           )}
         </button>
+
+        {/* Deuxième action de plein droit, pas un lien replié au milieu de la
+            page. L'utilisateur type a 14 ans et pas de carte bancaire : lui
+            faire chercher ce chemin, c'est le perdre. Contour et non aplat —
+            la hiérarchie reste lisible. */}
+        {lienParent && (
+          <button
+            type="button"
+            className="paywall-parent-cta"
+            onClick={() => {
+              setLienParentVisible(true)
+              blocParentRef.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+              })
+            }}
+          >
+            Je n’ai pas de carte — faire payer par un parent
+          </button>
+        )}
       </footer>
     </div>
   )

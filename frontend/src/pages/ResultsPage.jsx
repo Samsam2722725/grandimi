@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Share2 } from 'lucide-react'
 
+import { GrowthTrajectoryChart, ageFinCroissance } from '@/components/ui/growth-chart'
 import { HandwritingText } from '@/components/ui/handwriting-text'
 import { SpecialText } from '@/components/ui/special-text'
 
 import Spinner from '../components/Spinner'
+import { genererCarteResultat, partagerCarte } from '../lib/share-card'
 import '../styles/funnel.css'
 import '../styles/results-page.css'
 
@@ -25,8 +27,15 @@ import '../styles/results-page.css'
    quel : c'est ce qui distingue le produit, pas un remplissage à alléger.
    ============================================================ */
 
+/* Séparateur décimal français. Le backend renvoie des nombres JS — « 176.5 »
+   s'affichait avec un point sur toute la page, et la carte partageable, elle,
+   écrivait déjà « 176,5 ». Deux typographies pour la même valeur sur le même
+   écran, c'est le genre de détail qui fait amateur. */
+const fr = (valeur) => String(valeur).replace('.', ',')
+
 function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
   const [limitesVisibles, setLimitesVisibles] = useState(false)
+  const [etatPartage, setEtatPartage] = useState('pret')
 
   if (!predictionData) {
     return <Spinner size="page" label="Chargement de tes résultats..." />
@@ -57,6 +66,31 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
   const libelleConfiance =
     { high: 'Élevée', medium: 'Moyenne' }[confidence_level] || 'Faible'
 
+  const ageFin = ageFinCroissance(predictionData.age, predictionData.sex)
+
+  const partager = async () => {
+    setEtatPartage('generation')
+    try {
+      const image = await genererCarteResultat({
+        predicted: predicted_height_cm,
+        rangeMin: confidence_range.min,
+        rangeMax: confidence_range.max,
+        margeCm,
+        croissanceRestante: margeRestante,
+        ageFin,
+      })
+      const issue = await partagerCarte(
+        image,
+        `Ma taille adulte estimée : ${fr(predicted_height_cm)} cm (± ${fr(margeCm)} cm).`,
+      )
+      setEtatPartage(issue === 'telechargement' ? 'telecharge' : 'pret')
+    } catch {
+      // Canvas indisponible, mémoire, navigateur exotique : on le dit, on ne
+      // laisse pas un bouton qui ne répond à rien.
+      setEtatPartage('erreur')
+    }
+  }
+
   return (
     <div className="night results">
       <header className="results-top">
@@ -71,43 +105,118 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
       </header>
 
       <main className="results-scroll">
-        <section className="results-hero">
-          <p className="results-eyebrow">Ta taille adulte estimée</p>
+        {/* Ce qui occupe la plus grande typographie de l'écran, c'est ce dont
+            on se souvient. La taille adulte est un état de fait sur lequel on
+            ne peut rien ; les centimètres restants sont la seule quantité que
+            l'utilisateur peut encore influencer, et la seule qui diminue avec
+            le temps. C'est donc elle qui prend la place, quand elle existe.
 
-          <p className="results-number">
-            <SpecialText className="results-number-value">
-              {String(predicted_height_cm)}
-            </SpecialText>
-            <span className="results-number-unit">cm</span>
-          </p>
+            Formulée « attendus » et non « possibles » : c'est l'estimation
+            centrale du modèle, pas une borne haute. */}
+        {margeRestante > 0 ? (
+          <section className="results-hero">
+            <p className="results-eyebrow">Il te reste encore</p>
 
-          {/* L'annotation manuscrite met la marge au même rang visuel que le
-              résultat. C'est volontairement l'endroit le plus voyant de la page
-              après le chiffre lui-même. */}
-          <span className="results-margin">
-            <HandwritingText text={`± ${margeCm} cm`} height="2rem" />
-          </span>
+            <p className="results-number results-number--accent">
+              <SpecialText className="results-number-value">
+                {`+${fr(Math.round(margeRestante * 10) / 10)}`}
+              </SpecialText>
+              <span className="results-number-unit">cm</span>
+            </p>
 
-          <p className="results-confidence">
-            Fiabilité de l’estimation : <strong>{libelleConfiance.toLowerCase()}</strong>
-          </p>
-        </section>
+            <p className="results-hero-sub">
+              attendus d’ici tes {fr(ageFin)} ans, si tout se passe normalement.
+            </p>
 
-        <section className="night-card">
-          <h2 className="night-card-title">Ta fourchette</h2>
-          <div className="results-range">
-            <div className="results-range-bar">
-              <span className="results-range-marker" style={{ left: `${positionRepere}%` }} />
+            <p className="results-hero-line">
+              Taille adulte estimée : <strong>{fr(predicted_height_cm)} cm</strong>
+              <span className="results-margin-inline">
+                <HandwritingText text={`± ${fr(margeCm)} cm`} height="1.6rem" />
+              </span>
+            </p>
+
+            <p className="results-confidence">
+              Fiabilité de l’estimation : <strong>{libelleConfiance.toLowerCase()}</strong>
+            </p>
+          </section>
+        ) : (
+          /* Croissance terminée, ou estimation sous la taille saisie : il n'y a
+             pas de marge à mettre en avant, et en inventer une serait mentir.
+             On revient au résultat brut. */
+          <section className="results-hero">
+            <p className="results-eyebrow">Ta taille adulte estimée</p>
+
+            <p className="results-number">
+              <SpecialText className="results-number-value">
+                {fr(predicted_height_cm)}
+              </SpecialText>
+              <span className="results-number-unit">cm</span>
+            </p>
+
+            <span className="results-margin">
+              <HandwritingText text={`± ${fr(margeCm)} cm`} height="2rem" />
+            </span>
+
+            <p className="results-confidence">
+              Fiabilité de l’estimation : <strong>{libelleConfiance.toLowerCase()}</strong>
+            </p>
+          </section>
+        )}
+
+        {/* La courbe remplace l'ancienne barre horizontale : elle porte la même
+            fourchette PLUS la dimension temps, qui est justement l'argument du
+            plan (« la fenêtre se referme »). Deux figures disant la même chose
+            se seraient concurrencées. */}
+        {tailleActuelle ? (
+          <section className="night-card">
+            <h2 className="night-card-title">Ta trajectoire</h2>
+            <GrowthTrajectoryChart
+              ageNow={predictionData.age}
+              heightNow={tailleActuelle}
+              predicted={predicted_height_cm}
+              rangeMin={confidence_range.min}
+              rangeMax={confidence_range.max}
+              sex={predictionData.sex}
+            />
+          </section>
+        ) : (
+          <section className="night-card">
+            <h2 className="night-card-title">Ta fourchette</h2>
+            <div className="results-range">
+              <div className="results-range-bar">
+                <span className="results-range-marker" style={{ left: `${positionRepere}%` }} />
+              </div>
+              <div className="results-range-legend">
+                <span>{fr(confidence_range.min)} cm</span>
+                <span>{fr(confidence_range.max)} cm</span>
+              </div>
             </div>
-            <div className="results-range-legend">
-              <span>{confidence_range.min} cm</span>
-              <span>{confidence_range.max} cm</span>
-            </div>
-          </div>
-          <p className="night-card-text">
-            Ta taille adulte a de fortes chances de tomber quelque part dans cette
-            fourchette. Plus tu approches de la fin de ta croissance, plus elle se
-            resserre.
+            <p className="night-card-text">
+              Ta taille adulte a de fortes chances de tomber dans cette fourchette.
+            </p>
+          </section>
+        )}
+
+        {/* Placé juste après la courbe : c'est l'écran que l'utilisateur
+            vient de regarder, et c'est de celui-là qu'il prend une capture
+            s'il n'a pas de bouton. Volontairement en action secondaire — il ne
+            doit pas concurrencer le CTA du bas. */}
+        <section className="results-share">
+          <button
+            type="button"
+            className="results-share-button"
+            onClick={partager}
+            disabled={etatPartage === 'generation'}
+          >
+            <Share2 size={18} aria-hidden="true" />
+            {etatPartage === 'generation' ? 'Préparation…' : 'Partager mon résultat'}
+          </button>
+          <p className="results-share-note" role="status">
+            {etatPartage === 'telecharge'
+              ? 'Image enregistrée dans tes téléchargements.'
+              : etatPartage === 'erreur'
+                ? 'L’image n’a pas pu être créée sur cet appareil.'
+                : 'Une image prête pour tes stories. La marge d’erreur part avec.'}
           </p>
         </section>
 

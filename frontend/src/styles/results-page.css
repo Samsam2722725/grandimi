@@ -254,3 +254,99 @@
   color: var(--funnel-accent);
   text-underline-offset: 3px;
 }
+
+/* ---------- Chiffre de tête en accent ---------- */
+
+/* Quand c'est la marge de croissance qui mène, elle porte l'orange : c'est la
+   quantité sur laquelle on peut agir, l'estimation adulte est un état de fait. */
+.results-number--accent .results-number-value,
+.results-number--accent .results-number-unit {
+  color: var(--funnel-accent);
+}
+
+.results-hero-sub {
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--funnel-muted);
+  margin: 14px 0 0;
+  max-width: 32ch;
+}
+
+/* La taille adulte reste lisible, en second rang : elle répond à la question
+   posée, mais ce n'est plus elle qui occupe l'écran. */
+.results-hero-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 17px;
+  color: var(--funnel-muted);
+  margin: 22px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--funnel-line);
+}
+
+.results-hero-line strong {
+  color: var(--funnel-text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.results-margin-inline {
+  display: inline-flex;
+  align-items: center;
+  color: var(--funnel-accent);
+}
+
+/* ---------- Partage ---------- */
+
+.results-share {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.results-share-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 999px;
+  background: none;
+  color: var(--funnel-text);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.results-share-button:hover:not(:disabled) {
+  border-color: #3d3d3d;
+  background: var(--funnel-surface);
+}
+
+.results-share-button:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.results-share-button:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+}
+
+.results-share-note {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--funnel-muted);
+  text-align: center;
+  margin: 0;
+}
