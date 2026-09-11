@@ -1,25 +1,26 @@
 package estimator
 
 import (
+	"math"
 	"testing"
 )
 
-func TestPredictHeightV2_HighConfidenceData(t *testing.T) {
+func TestPredictHeightV2_ConfianceEtIntervalle(t *testing.T) {
 	req := HeightPredictionV2Request{
-		Age:            14.5,
-		Sex:            MALE,
-		HeightCM:       162.0,
-		WeightKG:       52.0,
-		FatherHeightCM: 178.0,
-		MotherHeightCM: 164.0,
-		BMI:            19.8, // Healthy
-		HeightVelocityCM: 5.5, // Good growth velocity
-		EthnicBackground: CAUCASIAN,
-		NutritionLevel: GOOD,
+		Age:                14.5,
+		Sex:                MALE,
+		HeightCM:           162.0,
+		WeightKG:           52.0,
+		FatherHeightCM:     178.0,
+		MotherHeightCM:     164.0,
+		BMI:                19.8, // Healthy
+		HeightVelocityCM:   5.5,  // Good growth velocity
+		EthnicBackground:   CAUCASIAN,
+		NutritionLevel:     GOOD,
 		SleepHoursPerNight: 8.5, // Optimal
-		ExerciseMinPerDay: 60,   // Good activity
-		MaternalDiabetes: false,
-		ChronicIllness:   false,
+		ExerciseMinPerDay:  60,  // Good activity
+		MaternalDiabetes:   false,
+		ChronicIllness:     false,
 		PubertySigns: PubertySigns{
 			PubicHair: "3",
 			Genitalia: "3",
@@ -28,8 +29,30 @@ func TestPredictHeightV2_HighConfidenceData(t *testing.T) {
 
 	resp := PredictHeightV2(req)
 
-	if resp.ConfidenceLevel != "high" {
-		t.Errorf("Expected high confidence, got %s", resp.ConfidenceLevel)
+	/* Ce test exigeait « high » pour un garcon de 14 ans prenant 5.5 cm par
+	   an. C est l assertion qui etait fausse, pas le code.
+
+	   A 14 ans, en plein pic de croissance, la dispersion reelle de la
+	   methode mi-parentale est de l ordre de +/-6.5 cm. Annoncer une
+	   confiance elevee a ce moment-la, c est exactement ce que fait la
+	   concurrence avec ses « 98,5 % de precision » — et c est ce que le
+	   site de Grandimi promet de ne pas faire. On teste donc l inverse :
+	   la confiance NE DOIT PAS etre elevee tant que la croissance est
+	   active. TestPredictHeightV2_GrowthVelocity verifie qu elle se
+	   resserre bien quand la croissance ralentit. */
+	if resp.ConfidenceLevel == "high" {
+		t.Error("confiance annoncee elevee en plein pic de croissance")
+	}
+
+	marge := (resp.ConfidenceRange[1] - resp.ConfidenceRange[0]) / 2
+	if marge < 3.0 || marge > 8.5 {
+		t.Errorf("marge %.1f cm hors de la fourchette annoncee sur le site (3 a 8.5 cm)", marge)
+	}
+
+	if resp.PredictedHeightCM < resp.ConfidenceRange[0] ||
+		resp.PredictedHeightCM > resp.ConfidenceRange[1] {
+		t.Errorf("prediction %.1f hors de son intervalle [%.1f, %.1f]",
+			resp.PredictedHeightCM, resp.ConfidenceRange[0], resp.ConfidenceRange[1])
 	}
 
 	if resp.PredictedHeightCM < 170 || resp.PredictedHeightCM > 185 {
@@ -54,17 +77,17 @@ func TestPredictHeightV2_HighConfidenceData(t *testing.T) {
 
 func TestPredictHeightV2_EthnicVariation(t *testing.T) {
 	baseReq := HeightPredictionV2Request{
-		Age:            15.0,
-		Sex:            MALE,
-		HeightCM:       165.0,
-		WeightKG:       54.0,
-		FatherHeightCM: 175.0,
-		MotherHeightCM: 165.0,
-		BMI:            19.8,
-		HeightVelocityCM: 4.0,
-		NutritionLevel: GOOD,
+		Age:                15.0,
+		Sex:                MALE,
+		HeightCM:           165.0,
+		WeightKG:           54.0,
+		FatherHeightCM:     175.0,
+		MotherHeightCM:     165.0,
+		BMI:                19.8,
+		HeightVelocityCM:   4.0,
+		NutritionLevel:     GOOD,
 		SleepHoursPerNight: 8.0,
-		ExerciseMinPerDay: 45,
+		ExerciseMinPerDay:  45,
 		PubertySigns: PubertySigns{
 			PubicHair: "2",
 		},
@@ -98,13 +121,13 @@ func TestPredictHeightV2_EthnicVariation(t *testing.T) {
 
 func TestPredictHeightV2_HealthFactors(t *testing.T) {
 	baseReq := HeightPredictionV2Request{
-		Age:            13.0,
-		Sex:            FEMALE,
-		HeightCM:       158.0,
-		WeightKG:       48.0,
-		FatherHeightCM: 175.0,
-		MotherHeightCM: 162.0,
-		BMI:            19.2,
+		Age:              13.0,
+		Sex:              FEMALE,
+		HeightCM:         158.0,
+		WeightKG:         48.0,
+		FatherHeightCM:   175.0,
+		MotherHeightCM:   162.0,
+		BMI:              19.2,
 		HeightVelocityCM: 4.5,
 		EthnicBackground: CAUCASIAN,
 		PubertySigns: PubertySigns{
@@ -146,17 +169,17 @@ func TestPredictHeightV2_HealthFactors(t *testing.T) {
 
 func TestPredictHeightV2_GrowthVelocity(t *testing.T) {
 	baseReq := HeightPredictionV2Request{
-		Age:            12.5,
-		Sex:            MALE,
-		HeightCM:       153.0,
-		WeightKG:       47.0,
-		FatherHeightCM: 178.0,
-		MotherHeightCM: 164.0,
-		BMI:            20.1,
-		EthnicBackground: CAUCASIAN,
-		NutritionLevel: GOOD,
+		Age:                12.5,
+		Sex:                MALE,
+		HeightCM:           153.0,
+		WeightKG:           47.0,
+		FatherHeightCM:     178.0,
+		MotherHeightCM:     164.0,
+		BMI:                20.1,
+		EthnicBackground:   CAUCASIAN,
+		NutritionLevel:     GOOD,
 		SleepHoursPerNight: 8.0,
-		ExerciseMinPerDay: 50,
+		ExerciseMinPerDay:  50,
 		PubertySigns: PubertySigns{
 			PubicHair: "1",
 		},
@@ -184,60 +207,90 @@ func TestPredictHeightV2_GrowthVelocity(t *testing.T) {
 		velocityDifference)
 }
 
-func TestPredictHeightV2_EnsembleAccuracy(t *testing.T) {
+/*
+Remplace TestPredictHeightV2_EnsembleAccuracy.
+
+L ancien test verifiait la presence des cles « khamis_roche »,
+« ethnic_adjustment » et « growth_velocity » dans Factors, et que l ensemble
+valait la moyenne des trois composantes. Ces trois composantes etaient des
+regressions lineaires aux coefficients inventes — elles rendaient 229, 217 et
+179 cm pour un garcon de 14 ans — et elles ont ete supprimees.
+
+Ce qui merite d etre verrouille, c est que le chiffre affiche reste
+EXPLICABLE : trois valeurs, une arithmetique verifiable a la main, et aucune
+fuite de diagnostic vers le client.
+*/
+func TestPredictHeightV2_FacteursExplicables(t *testing.T) {
 	req := HeightPredictionV2Request{
-		Age:            14.0,
-		Sex:            MALE,
-		HeightCM:       165.0,
-		WeightKG:       55.0,
-		FatherHeightCM: 180.0,
-		MotherHeightCM: 165.0,
-		BMI:            20.2,
-		HeightVelocityCM: 5.0,
-		EthnicBackground: CAUCASIAN,
-		NutritionLevel: GOOD,
-		SleepHoursPerNight: 8.5,
-		ExerciseMinPerDay: 60,
-		PubertySigns: PubertySigns{
-			PubicHair: "3",
-		},
+		Age:                14.0,
+		Sex:                MALE,
+		HeightCM:           165.0,
+		WeightKG:           50.0,
+		FatherHeightCM:     178.0,
+		MotherHeightCM:     164.0,
+		NutritionLevel:     FAIR,
+		SleepHoursPerNight: 6.5,
+		ExerciseMinPerDay:  20,
+		HeightVelocityCM:   5.0,
 	}
 
 	resp := PredictHeightV2(req)
 
-	// Check that ensemble combines multiple models
-	if resp.Factors["khamis_roche"] == 0 {
-		t.Error("Missing Khamis-Roche factor")
-	}
-	if resp.Factors["ethnic_adjusted"] == 0 {
-		t.Error("Missing ethnic adjustment factor")
-	}
-	if resp.Factors["growth_velocity"] == 0 {
-		t.Error("Missing growth velocity factor")
+	for _, cle := range []string{"mid_parent_target", "health_multiplier", "final_prediction"} {
+		if _, present := resp.Factors[cle]; !present {
+			t.Errorf("facteur %q absent de la reponse", cle)
+		}
 	}
 
-	// Ensemble should be roughly average of components
-	components := []float64{
-		resp.Factors["khamis_roche"],
-		resp.Factors["ethnic_adjusted"],
-		resp.Factors["growth_velocity"],
+	// Aucune valeur de diagnostic ne doit partir chez le client : ce sont des
+	// chiffres que personne ne peut defendre s il les lit.
+	for cle := range resp.Factors {
+		if len(cle) > 6 && cle[:6] == "_diag_" {
+			t.Errorf("facteur de diagnostic %q expose dans la reponse", cle)
+		}
 	}
 
-	sum := 0.0
-	for _, c := range components {
-		sum += c
+	cible := resp.Factors["mid_parent_target"]
+	facteur := resp.Factors["health_multiplier"]
+
+	if cible != 177.5 {
+		t.Errorf("cible mi-parentale attendue 177.5, obtenue %.2f", cible)
 	}
-	average := sum / float64(len(components))
-
-	ensemblePred := resp.Factors["ensemble_prediction"]
-	difference := (ensemblePred - average) / average * 100
-
-	if difference > 5 {
-		t.Logf("Warning: Ensemble diverged from average by %.1f%%", difference)
+	if facteur <= 0.80 || facteur > 1.0 {
+		t.Errorf("facteur de mode de vie %.3f hors des bornes [0.80, 1.0]", facteur)
 	}
 
-	t.Logf("Ensemble calculation: Avg of components=%.1f, Ensemble=%.1f (diff: %.1f%%)",
-		average, ensemblePred, difference)
+	// Le facteur s applique a la croissance RESTANTE, pas a la taille totale.
+	attendu := req.HeightCM + (cible-req.HeightCM)*facteur
+	if math.Abs(resp.Factors["final_prediction"]-attendu) > 0.01 {
+		t.Errorf("prediction %.2f ne correspond pas a taille + restant x facteur = %.2f",
+			resp.Factors["final_prediction"], attendu)
+	}
+}
+
+// De bonnes habitudes font ATTEINDRE la cible genetique, jamais la depasser.
+// C est ce que le site promet mot pour mot ; le moteur doit le tenir.
+func TestPredictHeightV2_NeDepassePasLePotentiel(t *testing.T) {
+	req := HeightPredictionV2Request{
+		Age:                13.0,
+		Sex:                MALE,
+		HeightCM:           155.0,
+		WeightKG:           45.0,
+		FatherHeightCM:     180.0,
+		MotherHeightCM:     168.0,
+		NutritionLevel:     EXCELLENT,
+		SleepHoursPerNight: 10.0,
+		ExerciseMinPerDay:  90,
+		HeightVelocityCM:   6.0,
+	}
+
+	resp := PredictHeightV2(req)
+	cible := (req.FatherHeightCM+req.MotherHeightCM)/2 + 6.5
+
+	if resp.PredictedHeightCM > cible+0.01 {
+		t.Errorf("habitudes optimales : %.1f cm annonces au-dessus de la cible genetique %.1f cm",
+			resp.PredictedHeightCM, cible)
+	}
 }
 
 func TestPredictHeightV2_Validation(t *testing.T) {

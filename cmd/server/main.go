@@ -108,8 +108,14 @@ func main() {
 var originesAutorisees = map[string]bool{
 	"https://grandimi.com":     true,
 	"https://www.grandimi.com": true,
-	"http://localhost:5173":    true, // vite dev
-	"http://localhost:4173":    true, // vite preview
+	// `localhost` et `127.0.0.1` sont deux ORIGINES DISTINCTES pour un
+	// navigateur : autoriser l une sans l autre bloque le developpeur qui
+	// ouvre l adresse que Vite affiche au demarrage. Aucune exposition
+	// supplementaire, la boucle locale etait deja de confiance.
+	"http://localhost:5173": true, // vite dev
+	"http://127.0.0.1:5173": true,
+	"http://localhost:4173": true, // vite preview
+	"http://127.0.0.1:4173": true,
 }
 
 func corsMiddleware() gin.HandlerFunc {

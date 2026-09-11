@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -11,6 +12,27 @@ import (
 )
 
 var DB *sql.DB
+
+// ErrIndisponible est renvoyee quand le pool n a pas ete initialise — variable
+// d environnement absente, base injoignable au demarrage.
+//
+// Sans cette sentinelle, chaque fonction dereferencait un *sql.DB nil et
+// PANIQUAIT. Verifie sur un serveur demarre sans DATABASE_URL :
+// POST /api/v2/predict-height rendait un 500 issu du middleware Recovery de
+// Gin, sur un nil pointer dereference dans database/sql. L estimation elle-meme
+// n a pourtant besoin d aucune base.
+var ErrIndisponible = errors.New("base de donnees indisponible")
+
+// Disponible dit si les appels a la base peuvent aboutir. Utilise par
+// /health, qui annoncait « ok » pendant que l endpoint principal paniquait.
+func Disponible() bool { return DB != nil }
+
+func verifierDisponible() error {
+	if DB == nil {
+		return ErrIndisponible
+	}
+	return nil
+}
 
 func Init() error {
 	// DATABASE_URL est la connection string Postgres complète fournie
@@ -47,19 +69,19 @@ type User struct {
 }
 
 type Prediction struct {
-	ID                 string  `json:"id"`
-	UserID             string  `json:"user_id"`
-	Age                float64 `json:"age"`
-	Sex                string  `json:"sex"`
-	HeightCm           float64 `json:"height_cm"`
-	WeightKg           float64 `json:"weight_kg"`
-	FatherHeightCm     float64 `json:"father_height_cm"`
-	MotherHeightCm     float64 `json:"mother_height_cm"`
-	PredictedHeight    float64 `json:"predicted_height"`
-	ConfidenceLevel    string  `json:"confidence_level"`
-	ConfidenceMin      float64 `json:"confidence_min"`
-	ConfidenceMax      float64 `json:"confidence_max"`
-	CreatedAt          string  `json:"created_at"`
+	ID              string  `json:"id"`
+	UserID          string  `json:"user_id"`
+	Age             float64 `json:"age"`
+	Sex             string  `json:"sex"`
+	HeightCm        float64 `json:"height_cm"`
+	WeightKg        float64 `json:"weight_kg"`
+	FatherHeightCm  float64 `json:"father_height_cm"`
+	MotherHeightCm  float64 `json:"mother_height_cm"`
+	PredictedHeight float64 `json:"predicted_height"`
+	ConfidenceLevel string  `json:"confidence_level"`
+	ConfidenceMin   float64 `json:"confidence_min"`
+	ConfidenceMax   float64 `json:"confidence_max"`
+	CreatedAt       string  `json:"created_at"`
 }
 
 type Subscription struct {
@@ -108,6 +130,10 @@ func normaliserEmail(email string) string {
 }
 
 func GetOrCreateUser(email string) (*User, error) {
+	if err := verifierDisponible(); err != nil {
+		return nil, err
+	}
+
 	email = normaliserEmail(email)
 
 	var user User
@@ -139,6 +165,10 @@ func GetOrCreateUser(email string) (*User, error) {
 // sur une adresse inexistante créait un compte, ce qui polluait la base
 // et permettait d'énumérer les adresses connues.
 func GetUserByEmail(email string) (*User, error) {
+	if err := verifierDisponible(); err != nil {
+		return nil, err
+	}
+
 	var user User
 	err := DB.QueryRowContext(context.Background(),
 		selectUserSQL+"email = $1", normaliserEmail(email),
@@ -155,6 +185,10 @@ func GetUserByEmail(email string) (*User, error) {
 
 // GetUserByID - récupère un utilisateur par son id
 func GetUserByID(userID string) (*User, error) {
+	if err := verifierDisponible(); err != nil {
+		return nil, err
+	}
+
 	var user User
 	err := DB.QueryRowContext(context.Background(),
 		selectUserSQL+"id = $1", userID,
@@ -172,6 +206,10 @@ func GetUserByID(userID string) (*User, error) {
 
 // SetUserPremium - active ou désactive le premium
 func SetUserPremium(userID string, isPremium bool) error {
+	if err := verifierDisponible(); err != nil {
+		return err
+	}
+
 	_, err := DB.ExecContext(context.Background(),
 		"UPDATE users SET is_premium = $1 WHERE id = $2",
 		isPremium, userID)
@@ -180,6 +218,10 @@ func SetUserPremium(userID string, isPremium bool) error {
 
 // UpdateUserPremium - update user premium info
 func UpdateUserPremium(userID string, whopCustomerID string, whopSubscriptionID string) error {
+	if err := verifierDisponible(); err != nil {
+		return err
+	}
+
 	_, err := DB.ExecContext(context.Background(),
 		"UPDATE users SET is_premium = $1, whop_customer_id = $2, whop_subscription_id = $3 WHERE id = $4",
 		true, whopCustomerID, whopSubscriptionID, userID)
@@ -188,6 +230,10 @@ func UpdateUserPremium(userID string, whopCustomerID string, whopSubscriptionID 
 
 // SavePrediction - save prediction to database
 func SavePrediction(userID string, prediction *Prediction) (*Prediction, error) {
+	if err := verifierDisponible(); err != nil {
+		return nil, err
+	}
+
 	prediction.UserID = userID
 	err := DB.QueryRowContext(context.Background(),
 		"INSERT INTO predictions (user_id, age, sex, height_cm, weight_kg, father_height_cm, mother_height_cm, predicted_height, confidence_level, confidence_min, confidence_max) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id",
@@ -203,6 +249,10 @@ func SavePrediction(userID string, prediction *Prediction) (*Prediction, error) 
 
 // CreateSubscription - create subscription record
 func CreateSubscription(userID string, whopSubscriptionID string) error {
+	if err := verifierDisponible(); err != nil {
+		return err
+	}
+
 	_, err := DB.ExecContext(context.Background(),
 		"INSERT INTO subscriptions (user_id, whop_subscription_id, status) VALUES ($1, $2, $3)",
 		userID, whopSubscriptionID, "active")

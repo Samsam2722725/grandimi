@@ -19,14 +19,27 @@ class APIClient {
     const url = `${this.baseURL}${endpoint}`;
     const token = localStorage.getItem('token');
 
-    const response = await fetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        ...options.headers,
-      },
-      ...options,
-    });
+    /* `fetch` ne rejette que sur echec RESEAU, et son message est
+       « Failed to fetch » — une chaine du navigateur, en anglais, que
+       l'utilisateur voyait telle quelle en bas du questionnaire apres avoir
+       rempli quatorze ecrans. On la remplace par une phrase qui dit quoi
+       faire. Les erreurs applicatives (4xx/5xx) gardent le message du
+       serveur, qui lui est ecrit pour etre lu. */
+    let response;
+    try {
+      response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...options.headers,
+        },
+        ...options,
+      });
+    } catch {
+      throw new Error(
+        'Connexion impossible. Vérifie ta connexion internet et réessaie — tes réponses sont gardées.',
+      );
+    }
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ error: 'Unknown error' }));

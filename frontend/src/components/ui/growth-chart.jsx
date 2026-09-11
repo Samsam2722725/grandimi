@@ -221,7 +221,7 @@ export function GrowthTrajectoryChart({
           fontSize="10"
           fill="var(--funnel-muted, #9a9a9a)"
         >
-          {ageNow} ans
+          {String(ageNow).replace('.', ',')} ans
         </text>
         <text
           x={W - M.right}
@@ -230,7 +230,7 @@ export function GrowthTrajectoryChart({
           fontSize="10"
           fill="var(--funnel-muted, #9a9a9a)"
         >
-          {ageFin} ans
+          {String(ageFin).replace('.', ',')} ans
         </text>
       </svg>
 

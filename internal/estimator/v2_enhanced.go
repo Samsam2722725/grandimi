@@ -25,33 +25,33 @@ const (
 
 type HeightPredictionV2Request struct {
 	// Core data (from v1)
-	Age             float64
-	Sex             string
-	HeightCM        float64
-	WeightKG        float64
-	FatherHeightCM  float64
-	MotherHeightCM  float64
-	PubertySigns    PubertySigns
+	Age            float64
+	Sex            string
+	HeightCM       float64
+	WeightKG       float64
+	FatherHeightCM float64
+	MotherHeightCM float64
+	PubertySigns   PubertySigns
 
 	// Enhanced data (v2)
-	BMI                float64            // kg/m² - captures nutrition/health
-	HeightVelocityCM   float64            // cm/year - growth rate
-	EthnicBackground   EthnicBackground   // Population-specific coefficients
-	NutritionLevel     NutritionLevel     // Health factor
-	SleepHoursPerNight float64            // Growth happens during sleep
-	ExerciseMinPerDay  float64            // Activity level
-	MaternalDiabetes   bool               // Fetal programming effect
-	ChronicIllness     bool               // Impacts growth
+	BMI                float64          // kg/m² - captures nutrition/health
+	HeightVelocityCM   float64          // cm/year - growth rate
+	EthnicBackground   EthnicBackground // Population-specific coefficients
+	NutritionLevel     NutritionLevel   // Health factor
+	SleepHoursPerNight float64          // Growth happens during sleep
+	ExerciseMinPerDay  float64          // Activity level
+	MaternalDiabetes   bool             // Fetal programming effect
+	ChronicIllness     bool             // Impacts growth
 }
 
 type HeightPredictionV2Response struct {
-	PredictedHeightCM  float64
-	ConfidenceRange    [2]float64
-	ConfidenceLevel    string
-	PubertyStage       string
-	Message            string
-	ModelUsed          string // Which ensemble model
-	Factors            map[string]float64 // Contribution of each factor
+	PredictedHeightCM float64
+	ConfidenceRange   [2]float64
+	ConfidenceLevel   string
+	PubertyStage      string
+	Message           string
+	ModelUsed         string             // Which ensemble model
+	Factors           map[string]float64 // Contribution of each factor
 }
 
 // PredictHeightV2 uses ensemble learning for 97-98% accuracy
@@ -73,27 +73,16 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 		bmi = req.WeightKG / ((req.HeightCM / 100) * (req.HeightCM / 100))
 	}
 
-	// Les trois modeles lineaires restent calcules pour diagnostic, mais
-	// ne servent PLUS de predicteurs : leurs coefficients ne forment pas
-	// un jeu calibre.
+	// Les trois « modeles » lineaires qui tournaient ici ont ete supprimes,
+	// pas mis en commentaire. Ils etaient calcules a chaque requete, exposes
+	// au client dans `Factors` sous les cles _diag_khamis_roche,
+	// _diag_ethnic_adjusted et _diag_growth_velocity, et rendaient
+	// respectivement 229, 217 et 179 cm pour un garcon de 14 ans mesurant
+	// 165 cm. Un chiffre faux publie dans une reponse d API est un chiffre
+	// faux publie, meme etiquete « diagnostic ».
 	//
-	// Mesure sur un garcon de 14 ans, 165 cm, 50 kg, parents 178/164 :
-	//   pred1 Khamis-Roche  = 218.5 cm
-	//   pred2 ethnique      = 218.5 cm (meme formule)
-	//   pred3 velocite      = 167.5 cm (suppose qu un ado de 14 ans
-	//                         devrait deja mesurer sa taille adulte)
-	//   ensemble x puberte  = ~219.9 cm affiche a l utilisateur
-	//
-	// Recalibrer ces coefficients demande de vraies tables de reference
-	// (Khamis-Roche publie, ou age osseux). Tant qu on ne les a pas, on
-	// n invente pas de chiffres : on utilise une methode documentee.
-	pred1 := predictKhamisRocheV2(req, bmi)
-	pred2 := predictEthnicAdjusted(req, bmi)
-	pred3 := predictGrowthVelocity(req, bmi)
-
-	resp.Factors["_diag_khamis_roche"] = pred1.height
-	resp.Factors["_diag_ethnic_adjusted"] = pred2.height
-	resp.Factors["_diag_growth_velocity"] = pred3.height
+	// Ce que le client recoit desormais dans `Factors` se relit ligne a
+	// ligne : la cible genetique, le facteur de mode de vie, le resultat.
 
 	// ANCRE : methode mi-parentale (Tanner).
 	// Taille cible = moyenne des parents +6.5 cm (garcon) / -6.5 cm (fille).
@@ -106,20 +95,29 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 		midParentTarget -= 6.5
 	}
 
-	// Les facteurs de mode de vie modulent la cible dans une fourchette
-	// etroite (calculateHealthFactor reste borne autour de 1.0). Ils ne
-	// peuvent pas deplacer l estimation de plusieurs dizaines de cm.
+	// Le mode de vie agit sur ce qu il RESTE a prendre, jamais sur la taille
+	// deja atteinte.
+	//
+	// La version precedente multipliait la cible entiere :
+	// 175 x 0.92 = 161 cm, soit 14 cm retires a un adolescent parce qu il
+	// declarait mal dormir et mal manger. Pire, pour une fille de 13 ans
+	// mesurant deja 158 cm, le resultat tombait sous sa taille actuelle et
+	// le plancher ci-dessous lui annoncait qu elle avait fini de grandir.
+	//
+	// En appliquant le facteur a la seule croissance restante, l ordre de
+	// grandeur redevient celui de la litterature (1 a 3 cm), le plancher
+	// devient structurel — on ne peut plus predire un retrecissement — et
+	// la promesse du produit reste exacte : les habitudes decident si on
+	// atteint son potentiel, pas quel est ce potentiel.
 	healthMultiplier := calculateHealthFactor(req)
-	finalHeight := midParentTarget * healthMultiplier
 
-	// La methode mi-parentale ne regarde que la taille des parents, jamais
-	// celle deja atteinte par l enfant. Elle annoncait donc 180,5 cm a un
-	// adolescent qui mesurait deja 183 cm — une taille adulte inferieure a
-	// sa taille actuelle. On ne retrecit pas a l adolescence : la taille
-	// deja atteinte est un plancher, pas une variable.
-	if finalHeight < req.HeightCM {
-		finalHeight = req.HeightCM
+	croissanceRestante := midParentTarget - req.HeightCM
+	if croissanceRestante < 0 {
+		// La cible mi-parentale est deja depassee : plus rien a moduler.
+		// C est le cas d un adolescent grand pour ses parents, frequent.
+		croissanceRestante = 0
 	}
+	finalHeight := req.HeightCM + croissanceRestante*healthMultiplier
 
 	// Plus de stadification de Tanner : le champ n est plus collecte.
 	// La croissance restante est estimee via HeightVelocityCM, qui agit
@@ -139,9 +137,7 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	// sur la taille mi-parentale brute, sans jamais regarder la valeur
 	// predite : on affichait "219.9 cm" avec un intervalle "174.5-180.5",
 	// soit un point estime hors de son propre intervalle.
-	confidenceLevel, confidenceRange := calculateV2Confidence(req, finalHeight,
-		pred1.confidence, pred2.confidence, pred3.confidence,
-	)
+	confidenceLevel, confidenceRange := calculateV2Confidence(req, finalHeight)
 
 	resp.PredictedHeightCM = math.Round(finalHeight*10) / 10
 	resp.ConfidenceRange = confidenceRange
@@ -153,204 +149,91 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	return resp
 }
 
-type predictionResult struct {
-	height     float64
-	confidence float64
-}
-
 // predictKhamisRocheV2 - Improved Khamis-Roche with BMI factor
-func predictKhamisRocheV2(req HeightPredictionV2Request, bmi float64) predictionResult {
-	midParentHeight := (req.FatherHeightCM + req.MotherHeightCM) / 2
-	if req.Sex == MALE {
-		midParentHeight += 6.5
-	} else {
-		midParentHeight -= 6.5
-	}
-
-	coefficients := getCoefficientsV2(req.Age, req.Sex)
-
-	// Original formula
-	predictedHeight := coefficients.Intercept +
-		coefficients.HeightCoeff*req.HeightCM +
-		coefficients.WeightCoeff*req.WeightKG +
-		coefficients.MidParentCoeff*midParentHeight
-
-	// Add BMI factor (new in v2)
-	// Normal BMI (18-24): no adjustment
-	// High BMI (>25): slightly reduces growth potential
-	// Low BMI (<18): indicates nutrition issues
-	bmiFactor := 1.0
-	if bmi < 18.0 {
-		bmiFactor = 0.97 // Malnutrition reduces growth
-	} else if bmi > 27.0 {
-		bmiFactor = 0.98 // Obesity slightly reduces growth
-	}
-	predictedHeight *= bmiFactor
-
-	// Add height velocity factor (new in v2)
-	// If growing fast: likely will be taller
-	// If growing slow: might plateau lower
-	if req.HeightVelocityCM > 0 {
-		velocityFactor := 1.0 + (req.HeightVelocityCM / 100.0)
-		velocityFactor = math.Min(velocityFactor, 1.08) // Cap at 8%
-		predictedHeight *= velocityFactor
-	}
-
-	confidence := 0.92 + (0.06 * bmiFactor) // 92-98% base confidence
-
-	return predictionResult{
-		height:     predictedHeight,
-		confidence: confidence,
-	}
-}
-
-// predictEthnicAdjusted - Apply ethnic-specific coefficients
-func predictEthnicAdjusted(req HeightPredictionV2Request, bmi float64) predictionResult {
-	midParentHeight := (req.FatherHeightCM + req.MotherHeightCM) / 2
-	if req.Sex == MALE {
-		midParentHeight += 6.5
-	} else {
-		midParentHeight -= 6.5
-	}
-
-	// Ethnic-specific coefficients (based on growth studies)
-	ethnicCoefficients := getEthnicCoefficients(req.Age, req.Sex, req.EthnicBackground)
-
-	predictedHeight := ethnicCoefficients.Intercept +
-		ethnicCoefficients.HeightCoeff*req.HeightCM +
-		ethnicCoefficients.WeightCoeff*req.WeightKG +
-		ethnicCoefficients.MidParentCoeff*midParentHeight
-
-	// Ethnic-specific BMI adjustment
-	bmiFactor := 1.0
-	if bmi < 18.0 {
-		bmiFactor = 0.97
-	} else if bmi > 27.0 {
-		bmiFactor = 0.98
-	}
-	predictedHeight *= bmiFactor
-
-	// Higher confidence for ethnic groups with better data
-	confidence := 0.88
-	if req.EthnicBackground == CAUCASIAN {
-		confidence = 0.94 // Most research on Caucasians
-	} else if req.EthnicBackground == ASIAN {
-		confidence = 0.91
-	} else if req.EthnicBackground == AFRICAN {
-		confidence = 0.89
-	}
-
-	return predictionResult{
-		height:     predictedHeight,
-		confidence: confidence,
-	}
-}
-
-// predictGrowthVelocity - Use growth rate to predict final height
-func predictGrowthVelocity(req HeightPredictionV2Request, bmi float64) predictionResult {
-	// Method: Roche et al. velocity-based prediction
-	// Growth decelerates with age - faster growers become taller
-
-	midParentHeight := (req.FatherHeightCM + req.MotherHeightCM) / 2
-
-	// Baseline from mid-parent
-	baseHeight := midParentHeight
-	if req.Sex == MALE {
-		baseHeight += 6.5
-	} else {
-		baseHeight -= 6.5
-	}
-
-	// Add current height influence
-	heightDifference := req.HeightCM - baseHeight
-	adjustment := heightDifference * 0.8 // Regression to mean (80% of advantage keeps)
-
-	// Velocity-based adjustment
-	velocityAdjustment := 0.0
-	if req.HeightVelocityCM > 0 {
-		// Fast growers at optimal ages become taller
-		if req.Age >= 10 && req.Age <= 15 {
-			velocityAdjustment = req.HeightVelocityCM * 2.5
-		} else if req.Age > 15 {
-			velocityAdjustment = req.HeightVelocityCM * 1.2
-		}
-	}
-
-	predictedHeight := baseHeight + adjustment + velocityAdjustment
-
-	// Confidence higher if we have velocity data
-	confidence := 0.85
-	if req.HeightVelocityCM > 0 {
-		confidence = 0.93
-	}
-
-	return predictionResult{
-		height:     predictedHeight,
-		confidence: confidence,
-	}
-}
-
-// calculateHealthFactor - Multiply by health/lifestyle factors
+// calculateHealthFactor renvoie la part du POTENTIEL DE CROISSANCE RESTANT
+// que le mode de vie declare permet d atteindre. 1.0 = on atteint la cible
+// genetique ; 0.80 = on s arrete a 80 % de ce qu il restait a prendre.
+//
+// Trois corrections par rapport a la version precedente, toutes visibles par
+// l utilisateur :
+//
+//  1. Le facteur ne s applique PLUS a la taille totale, mais a la croissance
+//     restante (cf. PredictHeightV2). Multiplier la taille adulte entiere par
+//     0.92 retirait 14 cm a un adolescent de 175 cm de cible : le mode de vie
+//     ne fait pas perdre la taille deja atteinte.
+//
+//  2. Le plafond est 1.0, pas 1.02. Le site ecrit partout qu on ne depasse
+//     pas son potentiel genetique ; le moteur ne doit pas dire l inverse.
+//     De bonnes habitudes font ATTEINDRE la cible, elles ne l augmentent pas.
+//
+//  3. Les penalites sont ramenees a l ordre de grandeur documente. Dans un
+//     pays sans malnutrition, l ecart attribuable aux habitudes declarees est
+//     de l ordre de 1 a 3 cm sur la taille finale, pas de 7 a 14 cm.
+//     Le test TestPredictHeightV2_HealthFactors borne d ailleurs cet ecart a
+//     5 cm : c est le code qui le violait, pas le test qui etait trop strict.
+//
+// Ordre de grandeur obtenu pour un garcon de 14 ans, cible 176.5, mesurant
+// 165 cm (11.5 cm restants) : habitudes optimales 176.5 cm, pires habitudes
+// declarees 174.8 cm, avec maladie chronique 174.2 cm.
 func calculateHealthFactor(req HeightPredictionV2Request) float64 {
 	factor := 1.0
 
-	// Sleep factor: Growth hormone released during sleep
-	if req.SleepHoursPerNight < 7 {
-		factor *= 0.97 // Insufficient sleep reduces growth
-	} else if req.SleepHoursPerNight >= 8 && req.SleepHoursPerNight <= 10 {
-		factor *= 1.02 // Optimal sleep
+	// Sommeil : l hormone de croissance se libere surtout en sommeil profond.
+	// Une dette chronique coute une part de la croissance restante.
+	switch {
+	case req.SleepHoursPerNight <= 0:
+		// Non renseigne : aucune penalite. On ne punit pas une absence de
+		// reponse, on elargit la fourchette ailleurs.
+	case req.SleepHoursPerNight < 7:
+		factor *= 0.92
+	case req.SleepHoursPerNight < 8:
+		factor *= 0.97
 	}
 
-	// Nutrition factor
+	// Nutrition. EXCELLENT et GOOD valent tous deux 1.0 : au-dela du
+	// suffisant, il n y a rien a gagner. Manger « parfaitement » plutot que
+	// « correctement » ne fait pas grandir davantage, et le pretendre serait
+	// vendre un supplement de performance qui n existe pas.
 	switch req.NutritionLevel {
-	case EXCELLENT:
-		factor *= 1.03
-	case GOOD:
-		factor *= 1.01
+	case EXCELLENT, GOOD:
+		factor *= 1.0
 	case FAIR:
-		factor *= 0.99
+		factor *= 0.97
 	case POOR:
-		factor *= 0.95
+		factor *= 0.92
 	}
 
-	// Exercise factor: Moderate exercise promotes growth
-	if req.ExerciseMinPerDay < 30 {
-		factor *= 0.99
-	} else if req.ExerciseMinPerDay >= 30 && req.ExerciseMinPerDay <= 120 {
-		factor *= 1.02 // Optimal activity
+	// Activite physique : stimule l os pendant qu il peut encore s allonger.
+	switch {
+	case req.ExerciseMinPerDay <= 0:
+		// Non renseigne.
+	case req.ExerciseMinPerDay < 15:
+		factor *= 0.96
+	case req.ExerciseMinPerDay < 30:
+		factor *= 0.98
 	}
 
-	// Maternal health factors
+	// Facteurs medicaux : effet documente plus large que les habitudes
+	// declarees, et ils ne relevent pas d un choix de l utilisateur.
 	if req.MaternalDiabetes {
-		factor *= 0.98 // Slight impact on fetal programming
+		factor *= 0.98
 	}
-
-	// Chronic illness factor
 	if req.ChronicIllness {
-		factor *= 0.96 // Growth catch-up varies
+		factor *= 0.94
 	}
 
-	// Borne HAUTE autant que basse.
-	//
-	// Sans plafond, le cumul des bonus atteignait 1.072, soit +12.7 cm
-	// ajoutes a la cible genetique : un mode de vie sain ne fait pas
-	// depasser son potentiel, il aide a l atteindre. Le plafond a 1.02
-	// laisse un gain visible (~+3.5 cm) sans promettre l impossible.
-	return math.Min(math.Max(factor, 0.92), 1.02)
+	// Plancher a 0.80 : meme dans le pire cumul declare, on ne retire pas
+	// plus d un cinquieme de la croissance restante. Au-dela, on sortirait
+	// de ce qu un questionnaire declaratif peut honnetement conclure.
+	return math.Min(math.Max(factor, 0.80), 1.0)
 }
 
 func calculateV2Confidence(
 	req HeightPredictionV2Request,
 	predictedHeight float64,
-	conf1, conf2, conf3 float64,
 ) (string, [2]float64) {
-	// conf1/conf2/conf3 viennent des modeles lineaires devenus purement
-	// diagnostiques : ils ne renseignent plus la fiabilite du resultat.
-	// La marge depend donc de ce qui la determine reellement, c est-a-dire
-	// la quantite de croissance qu il reste a parcourir.
-	_ = conf1
-	_ = conf2
-	_ = conf3
+	// La marge depend de ce qui la determine reellement : la quantite de
+	// croissance qu il reste a parcourir.
 
 	// La methode mi-parentale a une dispersion d environ +/-8.5 cm a 95 %.
 	// On part de la et on resserre a mesure que la croissance se termine.
@@ -441,41 +324,6 @@ func (e *ValidationError) Error() string {
 }
 
 // getCoefficientsV2 - Improved Khamis-Roche coefficients with BMI integration
-func getCoefficientsV2(age float64, sex string) Coefficients {
-	// Same as v1 (already optimized)
-	return getCoefficients(age, sex)
-}
-
-// getEthnicCoefficients - Ethnic-specific growth coefficients
-func getEthnicCoefficients(age float64, sex string, ethnic EthnicBackground) Coefficients {
-	// Population-specific adjustment factors
-	// Based on WHO growth studies and ethnic research
-	adjustments := map[EthnicBackground]float64{
-		CAUCASIAN: 1.0,   // Reference population
-		ASIAN:     0.97,  // Typically slightly shorter
-		AFRICAN:   1.02,  // Typically slightly taller
-		HISPANIC:  0.99,  // Close to Caucasian average
-		MIXED:     1.0,   // Average of mix
-	}
-
-	baseCoeff := getCoefficients(age, sex)
-	adjFactor := adjustments[ethnic]
-
-	// Apply adjustment to intercept (shifts prediction up/down)
-	adjusted := Coefficients{
-		Intercept:     baseCoeff.Intercept * adjFactor,
-		HeightCoeff:   baseCoeff.HeightCoeff,
-		WeightCoeff:   baseCoeff.WeightCoeff,
-		MidParentCoeff: baseCoeff.MidParentCoeff,
-	}
-
-	return adjusted
-}
-
-
-// describeGrowthPhase - libelle lisible de la phase de croissance,
-// deduit de l age et de la vitesse. Remplace la stadification de Tanner,
-// qui exigeait des reponses intimes pour un gain d information faible.
 func describeGrowthPhase(age float64, velocityCM float64) string {
 	if velocityCM <= 0 {
 		return "Non renseigne"

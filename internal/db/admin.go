@@ -9,24 +9,28 @@ import (
 
 // WebhookLog stores received Whop webhooks for audit/debug
 type WebhookLog struct {
-	ID        string    `json:"id"`
-	EventType string    `json:"event_type"`
-	UserEmail string    `json:"user_email"`
-	Payload   string    `json:"payload"`
-	Status    string    `json:"status"` // success, failed, pending_retry
-	CreatedAt string    `json:"created_at"`
+	ID        string `json:"id"`
+	EventType string `json:"event_type"`
+	UserEmail string `json:"user_email"`
+	Payload   string `json:"payload"`
+	Status    string `json:"status"` // success, failed, pending_retry
+	CreatedAt string `json:"created_at"`
 }
 
 type AdminStats struct {
-	TotalUsers    int     `json:"total_users"`
-	PremiumUsers  int     `json:"premium_users"`
-	EstimatedMRR  float64 `json:"estimated_mrr"`
-	WebhooksRecv  int     `json:"webhooks_received"`
-	CreatedToday  int     `json:"created_today"`
+	TotalUsers   int     `json:"total_users"`
+	PremiumUsers int     `json:"premium_users"`
+	EstimatedMRR float64 `json:"estimated_mrr"`
+	WebhooksRecv int     `json:"webhooks_received"`
+	CreatedToday int     `json:"created_today"`
 }
 
 // ListAllUsers returns all users for admin dashboard
 func ListAllUsers() ([]User, error) {
+	if err := verifierDisponible(); err != nil {
+		return nil, err
+	}
+
 	rows, err := DB.QueryContext(context.Background(),
 		selectUserSQL+"1=1 ORDER BY created_at DESC")
 	if err != nil {
@@ -48,6 +52,10 @@ func ListAllUsers() ([]User, error) {
 
 // ListAllSubscriptions returns all subscription records
 func ListAllSubscriptions() ([]Subscription, error) {
+	if err := verifierDisponible(); err != nil {
+		return nil, err
+	}
+
 	rows, err := DB.QueryContext(context.Background(),
 		/* CreateSubscription n'insère que user_id, whop_subscription_id et
 		   status : expires_at et updated_at restent donc NULL, et lib/pq
@@ -78,6 +86,10 @@ func ListAllSubscriptions() ([]Subscription, error) {
 
 // LogWebhook stores a received webhook for audit trail
 func LogWebhook(eventType, userEmail string, payload map[string]interface{}, status string) error {
+	if err := verifierDisponible(); err != nil {
+		return err
+	}
+
 	payloadJSON, _ := json.Marshal(payload)
 	_, err := DB.ExecContext(context.Background(),
 		`INSERT INTO webhook_logs (event_type, user_email, payload, status, created_at)
@@ -88,6 +100,10 @@ func LogWebhook(eventType, userEmail string, payload map[string]interface{}, sta
 
 // GetWebhookLogs returns recent webhook logs (limit 100)
 func GetWebhookLogs() ([]WebhookLog, error) {
+	if err := verifierDisponible(); err != nil {
+		return nil, err
+	}
+
 	rows, err := DB.QueryContext(context.Background(),
 		// created_at est un timestamptz : lib/pq le rend en time.Time et
 		// refuse de le scanner dans une string Go, d'où le cast explicite.
@@ -115,6 +131,10 @@ func GetWebhookLogs() ([]WebhookLog, error) {
 
 // GetAdminStats returns dashboard stats
 func GetAdminStats() (*AdminStats, error) {
+	if err := verifierDisponible(); err != nil {
+		return nil, err
+	}
+
 	stats := &AdminStats{}
 
 	// Total users
@@ -153,6 +173,10 @@ func GetAdminStats() (*AdminStats, error) {
 
 // DeleteUser removes a user and related records (for testing/cleanup)
 func DeleteUser(userID string) error {
+	if err := verifierDisponible(); err != nil {
+		return err
+	}
+
 	tx, err := DB.BeginTx(context.Background(), nil)
 	if err != nil {
 		return err
@@ -182,6 +206,10 @@ func DeleteUser(userID string) error {
 
 // GrantPremium marks a user as premium
 func GrantPremium(userID string) error {
+	if err := verifierDisponible(); err != nil {
+		return err
+	}
+
 	_, err := DB.ExecContext(context.Background(),
 		`UPDATE users SET is_premium = true WHERE id = $1`, userID)
 	return err
@@ -189,6 +217,10 @@ func GrantPremium(userID string) error {
 
 // RevokePremium removes premium status
 func RevokePremium(userID string) error {
+	if err := verifierDisponible(); err != nil {
+		return err
+	}
+
 	_, err := DB.ExecContext(context.Background(),
 		`UPDATE users SET is_premium = false WHERE id = $1`, userID)
 	return err
@@ -196,6 +228,10 @@ func RevokePremium(userID string) error {
 
 // UpdateUserPassword stores password hash for user
 func UpdateUserPassword(userID string, passwordHash string) error {
+	if err := verifierDisponible(); err != nil {
+		return err
+	}
+
 	_, err := DB.ExecContext(context.Background(),
 		`UPDATE users SET password_hash = $1 WHERE id = $2`, passwordHash, userID)
 	return err
@@ -203,6 +239,10 @@ func UpdateUserPassword(userID string, passwordHash string) error {
 
 // GetUserPassword retrieves password hash for user
 func GetUserPassword(userID string) (string, error) {
+	if err := verifierDisponible(); err != nil {
+		return "", err
+	}
+
 	var passwordHash string
 	err := DB.QueryRowContext(context.Background(),
 		`SELECT COALESCE(password_hash, '') FROM users WHERE id = $1`, userID).Scan(&passwordHash)
@@ -211,6 +251,10 @@ func GetUserPassword(userID string) (string, error) {
 
 // GetUserPredictions returns all predictions for a user
 func GetUserPredictions(userID string) ([]Prediction, error) {
+	if err := verifierDisponible(); err != nil {
+		return nil, err
+	}
+
 	rows, err := DB.QueryContext(context.Background(),
 		`SELECT id, user_id, age, sex, height_cm, weight_kg, father_height_cm, mother_height_cm,
 		        predicted_height, confidence_level, confidence_min, confidence_max, created_at

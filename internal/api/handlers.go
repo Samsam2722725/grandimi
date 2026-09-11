@@ -33,12 +33,12 @@ type PredictHeightV2Request struct {
 	WeightKG           float64 `json:"weight_kg" binding:"required,gt=15,lt=150"`
 	FatherHeightCM     float64 `json:"father_height_cm" binding:"required,gt=140,lt=220"`
 	MotherHeightCM     float64 `json:"mother_height_cm" binding:"required,gt=140,lt=210"`
-	BMI                float64 `json:"bmi"`                      // Optional, calculated if not provided
-	HeightVelocityCM   float64 `json:"height_velocity_cm"`       // cm/year
-	EthnicBackground   string  `json:"ethnic_background"`        // caucasian, asian, african, hispanic, mixed
-	NutritionLevel     string  `json:"nutrition_level"`          // excellent, good, fair, poor
-	SleepHoursPerNight float64 `json:"sleep_hours_per_night"`    // 4-14 hours
-	ExerciseMinPerDay  float64 `json:"exercise_min_per_day"`     // minutes
+	BMI                float64 `json:"bmi"`                   // Optional, calculated if not provided
+	HeightVelocityCM   float64 `json:"height_velocity_cm"`    // cm/year
+	EthnicBackground   string  `json:"ethnic_background"`     // caucasian, asian, african, hispanic, mixed
+	NutritionLevel     string  `json:"nutrition_level"`       // excellent, good, fair, poor
+	SleepHoursPerNight float64 `json:"sleep_hours_per_night"` // 4-14 hours
+	ExerciseMinPerDay  float64 `json:"exercise_min_per_day"`  // minutes
 	MaternalDiabetes   bool    `json:"maternal_diabetes"`
 	ChronicIllness     bool    `json:"chronic_illness"`
 	PubertySigns       struct {
@@ -62,12 +62,12 @@ func PredictHeight(c *gin.Context) {
 	}
 
 	estimatorReq := estimator.HeightPredictionRequest{
-		Age:             req.Age,
-		Sex:             req.Sex,
-		HeightCM:        req.HeightCM,
-		WeightKG:        req.WeightKG,
-		FatherHeightCM:  req.FatherHeightCM,
-		MotherHeightCM:  req.MotherHeightCM,
+		Age:            req.Age,
+		Sex:            req.Sex,
+		HeightCM:       req.HeightCM,
+		WeightKG:       req.WeightKG,
+		FatherHeightCM: req.FatherHeightCM,
+		MotherHeightCM: req.MotherHeightCM,
 		PubertySigns: estimator.PubertySigns{
 			PubicHair:      req.PubertySigns.PubicHair,
 			BreastDevelop:  req.PubertySigns.BreastDevelop,
@@ -115,20 +115,20 @@ func PredictHeightV2(c *gin.Context) {
 	}
 
 	estimatorReq := estimator.HeightPredictionV2Request{
-		Age:             req.Age,
-		Sex:             req.Sex,
-		HeightCM:        req.HeightCM,
-		WeightKG:        req.WeightKG,
-		FatherHeightCM:  req.FatherHeightCM,
-		MotherHeightCM:  req.MotherHeightCM,
-		BMI:             req.BMI,
-		HeightVelocityCM: req.HeightVelocityCM,
-		EthnicBackground: ethnic,
-		NutritionLevel:   nutrition,
+		Age:                req.Age,
+		Sex:                req.Sex,
+		HeightCM:           req.HeightCM,
+		WeightKG:           req.WeightKG,
+		FatherHeightCM:     req.FatherHeightCM,
+		MotherHeightCM:     req.MotherHeightCM,
+		BMI:                req.BMI,
+		HeightVelocityCM:   req.HeightVelocityCM,
+		EthnicBackground:   ethnic,
+		NutritionLevel:     nutrition,
 		SleepHoursPerNight: req.SleepHoursPerNight,
-		ExerciseMinPerDay: req.ExerciseMinPerDay,
-		MaternalDiabetes: req.MaternalDiabetes,
-		ChronicIllness:   req.ChronicIllness,
+		ExerciseMinPerDay:  req.ExerciseMinPerDay,
+		MaternalDiabetes:   req.MaternalDiabetes,
+		ChronicIllness:     req.ChronicIllness,
 		PubertySigns: estimator.PubertySigns{
 			PubicHair:      req.PubertySigns.PubicHair,
 			BreastDevelop:  req.PubertySigns.BreastDevelop,
@@ -140,36 +140,20 @@ func PredictHeightV2(c *gin.Context) {
 
 	result := estimator.PredictHeightV2(estimatorReq)
 
-	// Get or create user by email
-	user, err := db.GetOrCreateUser(req.Email)
-	if err != nil {
-		fmt.Printf("[predict] GetOrCreateUser(%q): %v\n", req.Email, err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user"})
-		return
-	}
+	/* L ESTIMATION NE DEPEND PAS DE LA BASE.
 
-	// Save prediction to database
-	pred, err := db.SavePrediction(user.ID, &db.Prediction{
-		Age:             req.Age,
-		Sex:             req.Sex,
-		HeightCm:        req.HeightCM,
-		WeightKg:        req.WeightKG,
-		FatherHeightCm:  req.FatherHeightCM,
-		MotherHeightCm:  req.MotherHeightCM,
-		PredictedHeight: result.PredictedHeightCM,
-		ConfidenceLevel: result.ConfidenceLevel,
-		ConfidenceMin:   result.ConfidenceRange[0],
-		ConfidenceMax:   result.ConfidenceRange[1],
-	})
-	if err != nil {
-		fmt.Printf("[predict] SavePrediction(%s): %v\n", user.ID, err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save prediction"})
-		return
-	}
+	   Avant, toute defaillance de persistance renvoyait un 500 et
+	   l utilisateur repartait sans rien : quatorze ecrans de questionnaire
+	   pour une erreur. Pire, sur un serveur demarre sans DATABASE_URL, le
+	   handler paniquait — nil pointer dereference dans database/sql, rattrape
+	   par le middleware Recovery de Gin.
 
-	c.JSON(http.StatusOK, gin.H{
-		"user_id":            user.ID,
-		"prediction_id":      pred.ID,
+	   Le resultat est gratuit et purement calculatoire : il part toujours.
+	   Seuls `user_id` et `prediction_id` manquent quand la base est
+	   injoignable, et le front sait deja faire sans (le lien de paiement
+	   parent disparait, ce qui est le comportement correct : on ne peut pas
+	   crediter un compte qui n a pas ete cree). */
+	reponse := gin.H{
 		"predicted_height_cm": result.PredictedHeightCM,
 		"confidence_range": gin.H{
 			"min": result.ConfidenceRange[0],
@@ -180,7 +164,35 @@ func PredictHeightV2(c *gin.Context) {
 		"model_used":       result.ModelUsed,
 		"message":          result.Message,
 		"factors":          result.Factors,
-	})
+	}
+
+	if user, err := db.GetOrCreateUser(req.Email); err != nil {
+		fmt.Printf("[predict] GetOrCreateUser(%q) : %v — resultat rendu sans compte\n",
+			req.Email, err)
+	} else {
+		reponse["user_id"] = user.ID
+
+		pred, err := db.SavePrediction(user.ID, &db.Prediction{
+			Age:             req.Age,
+			Sex:             req.Sex,
+			HeightCm:        req.HeightCM,
+			WeightKg:        req.WeightKG,
+			FatherHeightCm:  req.FatherHeightCM,
+			MotherHeightCm:  req.MotherHeightCM,
+			PredictedHeight: result.PredictedHeightCM,
+			ConfidenceLevel: result.ConfidenceLevel,
+			ConfidenceMin:   result.ConfidenceRange[0],
+			ConfidenceMax:   result.ConfidenceRange[1],
+		})
+		if err != nil {
+			fmt.Printf("[predict] SavePrediction(%s) : %v — resultat rendu sans historique\n",
+				user.ID, err)
+		} else {
+			reponse["prediction_id"] = pred.ID
+		}
+	}
+
+	c.JSON(http.StatusOK, reponse)
 }
 
 // SignupRequest - Create account with email and password
@@ -335,10 +347,33 @@ func GetPredictionsByEmail(c *gin.Context) {
 	c.JSON(http.StatusOK, predictions)
 }
 
+/*
+HealthCheck reste en 200 tant que le PROCESSUS repond — c est une sonde de
+vivacite, pas de disponibilite, et Render s en sert pour decider de redemarrer
+l instance. Rendre 503 quand la base tombe ferait tourner le service en boucle
+de redemarrage alors qu il peut toujours servir les estimations gratuites.
+
+En revanche il ne doit plus mentir. L ancienne version annoncait « ok » en dur
+pendant que /api/v2/predict-height paniquait faute de base : une sonde verte
+sur un service casse est pire que pas de sonde du tout, parce qu elle empeche
+toute alerte. L etat de la base est donc rapporte tel quel.
+
+Les deux modeles ne sont plus annonces separement : v1 delegue a v2 depuis que
+ses coefficients se sont reveles inventes.
+*/
 func HealthCheck(c *gin.Context) {
+	baseDisponible := db.Disponible()
+
+	statut := "ok"
+	if !baseDisponible {
+		// Les estimations passent, les comptes et l acces premium non.
+		statut = "degraded"
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"status": "ok",
-		"app":    "Grandimi Height Estimator API",
-		"models": []string{"v1 (Khamis-Roche)", "v2 (ML-Enhanced)"},
+		"status":   statut,
+		"app":      "Grandimi Height Estimator API",
+		"database": map[bool]string{true: "up", false: "down"}[baseDisponible],
+		"model":    "Taille mi-parentale (Tanner) + facteurs de mode de vie",
 	})
 }
