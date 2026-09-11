@@ -27,10 +27,15 @@ type SubscriptionDetails struct {
 func GetLatestSubscription(userID string) (*SubscriptionDetails, error) {
 	var s SubscriptionDetails
 	err := DB.QueryRowContext(context.Background(),
+		/* to_char plutôt que ::text : le cast Postgres rend
+		   « 2027-09-11 14:20:50.85+00 », avec une ESPACE au lieu du T. Ce
+		   n'est pas de l'ISO 8601, et new Date() renvoie Invalid Date
+		   dessus sur Safari/iOS — la date du prochain paiement serait
+		   restée vide sur iPhone, soit une bonne partie des utilisateurs. */
 		`SELECT id, user_id, whop_subscription_id, status, plan_type,
-		        COALESCE(current_period_end::text, ''),
+		        COALESCE(to_char(current_period_end AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"'), ''),
 		        cancel_at_period_end,
-		        COALESCE(canceled_at::text, ''),
+		        COALESCE(to_char(canceled_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"'), ''),
 		        COALESCE(manage_url, ''),
 		        COALESCE(created_at::text, '')
 		 FROM   subscriptions
