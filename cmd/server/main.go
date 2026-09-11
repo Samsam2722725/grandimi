@@ -54,6 +54,12 @@ func main() {
 		paye.GET("/exercise-guide", api.GetExerciseGuide)
 		paye.GET("/nutrition-guide", api.GetNutritionGuide)
 		paye.GET("/sleep-optimization", api.GetSleepOptimization)
+
+		// Todo-liste quotidienne : cocher/décocher une tâche du jour, lire
+		// l'état du jour, et l'historique pour le calendrier de série.
+		paye.POST("/tasks/toggle", api.ToggleTaskCompletion)
+		paye.GET("/tasks/today", api.GetTodayCompletions)
+		paye.GET("/tasks/history", api.GetTaskHistory)
 	}
 
 	/* Auth — débit limité : sans plafond, un mot de passe se teste en

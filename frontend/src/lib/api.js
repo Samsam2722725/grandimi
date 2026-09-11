@@ -136,6 +136,27 @@ class APIClient {
   async getMyPredictions() {
     return this.request('/api/user/predictions');
   }
+
+  // ---------- Todo-liste quotidienne ----------
+
+  /** Coche/décoche une tâche. Un même appel sert pour les deux sens. */
+  async toggleTask(taskKey, date) {
+    return this.request('/api/v1/tasks/toggle', {
+      method: 'POST',
+      body: JSON.stringify({ task_key: taskKey, date }),
+    });
+  }
+
+  /** Clés des tâches déjà cochées pour une date (aujourd'hui si omise). */
+  async getTodayTasks(date) {
+    const qs = date ? `?date=${encodeURIComponent(date)}` : '';
+    return this.request(`/api/v1/tasks/today${qs}`);
+  }
+
+  /** Nombre de tâches cochées par jour sur les N derniers jours. */
+  async getTaskHistory(days = 30) {
+    return this.request(`/api/v1/tasks/history?days=${days}`);
+  }
 }
 
 export const apiClient = new APIClient();

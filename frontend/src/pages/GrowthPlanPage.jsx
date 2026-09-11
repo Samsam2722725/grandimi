@@ -6,12 +6,28 @@ import '../styles/funnel.css';
 import '../styles/growth-plan.css';
 import apiClient from '../lib/api';
 
+// Date au format YYYY-MM-DD dans le fuseau local (pas toISOString, qui
+// bascule sur UTC et peut donner la veille ou le lendemain selon l'heure).
+function dateDuJour(decalageJours = 0) {
+  const d = new Date();
+  d.setDate(d.getDate() + decalageJours);
+  const mois = String(d.getMonth() + 1).padStart(2, '0');
+  const jour = String(d.getDate()).padStart(2, '0');
+  return `${d.getFullYear()}-${mois}-${jour}`;
+}
+
 function GrowthPlanPage({ predictionData, onBackHome }) {
   const [plan, setPlan] = useState(null);
   const [monthlyPlan, setMonthlyPlan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('today');
+
+  // Todo-liste quotidienne : quelles tâches sont cochées aujourd'hui, et
+  // quel "pourquoi" est actuellement déplié.
+  const [completedKeys, setCompletedKeys] = useState(new Set());
+  const [openWhy, setOpenWhy] = useState(new Set());
+  const [history, setHistory] = useState([]);
 
   useEffect(() => {
     const fetchPlan = async () => {
@@ -48,7 +64,49 @@ function GrowthPlanPage({ predictionData, onBackHome }) {
     };
 
     fetchPlan();
+
+    // La todo du jour et l'historique sont indépendants du plan : une
+    // panne ici ne doit pas empêcher d'afficher le plan lui-même, donc on
+    // avale l'erreur plutôt que de la remonter à setError.
+    apiClient
+      .getTodayTasks()
+      .then((res) => setCompletedKeys(new Set(res.completed_keys || [])))
+      .catch(() => {});
+
+    apiClient
+      .getTaskHistory(7)
+      .then((res) => setHistory(res.history || []))
+      .catch(() => {});
   }, [predictionData]);
+
+  const basculerTache = (cle) => {
+    setCompletedKeys((prev) => {
+      const suivant = new Set(prev);
+      if (suivant.has(cle)) suivant.delete(cle);
+      else suivant.add(cle);
+      return suivant;
+    });
+
+    apiClient.toggleTask(cle).catch(() => {
+      // Échec réseau : on annule l'optimisme plutôt que de laisser
+      // l'écran mentir sur ce qui est réellement enregistré.
+      setCompletedKeys((prev) => {
+        const suivant = new Set(prev);
+        if (suivant.has(cle)) suivant.delete(cle);
+        else suivant.add(cle);
+        return suivant;
+      });
+    });
+  };
+
+  const basculerPourquoi = (cle) => {
+    setOpenWhy((prev) => {
+      const suivant = new Set(prev);
+      if (suivant.has(cle)) suivant.delete(cle);
+      else suivant.add(cle);
+      return suivant;
+    });
+  };
 
   if (loading) {
     return (
@@ -76,6 +134,32 @@ function GrowthPlanPage({ predictionData, onBackHome }) {
 
   if (!plan) return null;
 
+  // Toutes les tâches du jour, tous moments confondus (Matin/Journée/Soir/
+  // Coucher), avec leur moment d'origine gardé pour l'affichage groupé.
+  const tachesDuJour = monthlyPlan
+    ? monthlyPlan.daily_routine.flatMap((bloc) =>
+        bloc.tasks.map((tache) => ({ ...tache, moment: bloc.moment, heure: bloc.heure }))
+      )
+    : [];
+
+  const nbFaites = tachesDuJour.filter((t) => completedKeys.has(t.key)).length;
+
+  // Bande de 7 jours pour visualiser la constance, du plus ancien à
+  // aujourd'hui. Un jour "fait" est un jour où au moins une tâche a été
+  // cochée (history ne liste que les jours avec au moins une ligne).
+  const joursAvecAuMoinsUneTache = new Set(
+    history.filter((h) => h.nb_faites > 0).map((h) => h.date)
+  );
+  const septDerniersJours = Array.from({ length: 7 }, (_, i) => dateDuJour(i - 6));
+  let serieEnCours = 0;
+  for (let i = septDerniersJours.length - 1; i >= 0; i--) {
+    if (joursAvecAuMoinsUneTache.has(septDerniersJours[i]) || (i === 6 && nbFaites > 0)) {
+      serieEnCours++;
+    } else {
+      break;
+    }
+  }
+
   return (
     <div className="night growth-plan-page">
       {/* Header */}
@@ -93,6 +177,12 @@ function GrowthPlanPage({ predictionData, onBackHome }) {
 
       {/* Tabs */}
       <nav className="plan-tabs" aria-label="Sections du plan">
+        <button
+          className={`tab ${activeTab === 'today' ? 'active' : ''}`}
+          onClick={() => setActiveTab('today')}
+        >
+          Aujourd'hui
+        </button>
         <button
           className={`tab ${activeTab === 'overview' ? 'active' : ''}`}
           onClick={() => setActiveTab('overview')}
@@ -126,6 +216,91 @@ function GrowthPlanPage({ predictionData, onBackHome }) {
       </nav>
 
       <div className="plan-content">
+        {/* Today Tab — la todo-liste du jour */}
+        {activeTab === 'today' && (
+          <section className="tab-content">
+            <div className="streak-card">
+              <div className="streak-row">
+                {septDerniersJours.map((jour, idx) => {
+                  const estAujourdhui = idx === 6;
+                  const fait = estAujourdhui
+                    ? nbFaites > 0
+                    : joursAvecAuMoinsUneTache.has(jour);
+                  return (
+                    <div
+                      key={jour}
+                      className={`streak-dot ${fait ? 'fait' : ''} ${estAujourdhui ? 'aujourdhui' : ''}`}
+                      title={jour}
+                    />
+                  );
+                })}
+              </div>
+              <p className="streak-label">
+                {serieEnCours > 1
+                  ? `${serieEnCours} jours de suite`
+                  : nbFaites > 0
+                    ? 'Bien commencé, continue'
+                    : 'Coche ta première tâche du jour'}
+              </p>
+            </div>
+
+            <div className="section-title">
+              {nbFaites} / {tachesDuJour.length} tâches faites aujourd'hui
+            </div>
+
+            {['Matin', 'Journée', 'Soir', 'Coucher'].map((moment) => {
+              const taches = tachesDuJour.filter((t) => t.moment === moment);
+              if (taches.length === 0) return null;
+              return (
+                <div key={moment} className="todo-group">
+                  <div className="todo-group-heading">{moment}</div>
+                  {taches.map((tache) => {
+                    const fait = completedKeys.has(tache.key);
+                    const ouvert = openWhy.has(tache.key);
+                    return (
+                      <div key={tache.key} className={`todo-item ${fait ? 'fait' : ''}`}>
+                        <button
+                          type="button"
+                          className="todo-checkbox"
+                          onClick={() => basculerTache(tache.key)}
+                          aria-pressed={fait}
+                          aria-label={fait ? 'Marquer comme non fait' : 'Marquer comme fait'}
+                        >
+                          {fait ? '✓' : ''}
+                        </button>
+                        <div className="todo-body">
+                          <p className="todo-label">{tache.label}</p>
+                          <button
+                            type="button"
+                            className="todo-why-toggle"
+                            onClick={() => basculerPourquoi(tache.key)}
+                          >
+                            {ouvert ? '▼ Pourquoi ?' : '▶ Pourquoi ?'}
+                          </button>
+                          {ouvert && (
+                            <div className="todo-why-content">
+                              <p>{tache.pourquoi}</p>
+                              <p className="todo-source">{tache.source}</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+
+            <div className="alert alert-info" style={{ marginTop: '24px' }}>
+              <div>
+                <strong>Ta taille estimée :</strong> {predictionData.predicted_height_cm} cm.
+                Remesure-toi chaque mois : c'est la régularité mesurée dans le temps qui affine
+                cette estimation, pas les cases cochées aujourd'hui.
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Overview Tab */}
         {activeTab === 'overview' && (
           <section className="tab-content">
@@ -195,8 +370,8 @@ function GrowthPlanPage({ predictionData, onBackHome }) {
                       </p>
                     )}
                     <ul className="action-list">
-                      {bloc.actions.map((action, i) => (
-                        <li key={i}>{action}</li>
+                      {bloc.tasks.map((tache) => (
+                        <li key={tache.key}>{tache.label}</li>
                       ))}
                     </ul>
                   </div>

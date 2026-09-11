@@ -653,3 +653,134 @@
   color: var(--funnel-text);
   border-radius: 999px;
 }
+
+/* ---------- Todo-liste du jour ---------- */
+
+.streak-card {
+  background: var(--funnel-surface);
+  border: 1px solid var(--funnel-line);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.streak-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.streak-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--funnel-surface-high);
+  border: 1px solid var(--funnel-line);
+}
+
+.streak-dot.fait {
+  background: var(--funnel-accent);
+  border-color: var(--funnel-accent);
+}
+
+.streak-dot.aujourdhui {
+  box-shadow: 0 0 0 2px var(--funnel-text);
+}
+
+.streak-label {
+  color: var(--funnel-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.todo-group {
+  margin-bottom: 24px;
+}
+
+.todo-group-heading {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--funnel-muted);
+  margin-bottom: 10px;
+}
+
+.todo-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--funnel-surface);
+  border: 1px solid var(--funnel-line);
+  margin-bottom: 10px;
+  transition: opacity 0.15s ease;
+}
+
+.todo-item.fait {
+  opacity: 0.55;
+}
+
+.todo-checkbox {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 2px solid var(--funnel-line);
+  background: transparent;
+  color: var(--funnel-on-accent);
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.todo-item.fait .todo-checkbox {
+  background: var(--funnel-accent);
+  border-color: var(--funnel-accent);
+}
+
+.todo-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.todo-label {
+  margin: 0 0 6px;
+  color: var(--funnel-text);
+  font-size: 0.98rem;
+}
+
+.todo-item.fait .todo-label {
+  text-decoration: line-through;
+}
+
+.todo-why-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--funnel-muted);
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.todo-why-content {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--funnel-line);
+}
+
+.todo-why-content p {
+  margin: 0 0 4px;
+  font-size: 0.85rem;
+}
+
+.todo-source {
+  color: var(--funnel-muted);
+  font-style: italic;
+  font-size: 0.78rem !important;
+}

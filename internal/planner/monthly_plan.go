@@ -17,10 +17,22 @@ type MonthlyPlan struct {
 }
 
 type DailyBlock struct {
-	Moment  string   `json:"moment"`
-	Heure   string   `json:"heure"`
-	Actions []string `json:"actions"`
-	DureeM  int      `json:"duree_min"`
+	Moment string      `json:"moment"`
+	Heure  string      `json:"heure"`
+	Tasks  []DailyTask `json:"tasks"`
+	DureeM int         `json:"duree_min"`
+}
+
+// DailyTask est une action cochable. Key est stable d'un jour à l'autre
+// pour le même moment de la journée (le nombre et l'ordre des actions par
+// bloc ne changent jamais d'un mois à l'autre, seul leur texte change) :
+// c'est ce qui permet à /api/v1/tasks de retrouver "la même tâche" hier,
+// aujourd'hui et demain pour calculer une série de jours tenus.
+type DailyTask struct {
+	Key      string `json:"key"`
+	Label    string `json:"label"`
+	Pourquoi string `json:"pourquoi"`
+	Source   string `json:"source"`
 }
 
 type monthTheme struct {
@@ -225,41 +237,96 @@ func routineQuotidienne(req GrowthPlanRequest, theme monthTheme, month int) []Da
 		{
 			Moment: "Matin",
 			Heure:  "au lever",
-			Actions: []string{
-				fmt.Sprintf("Suspension à la barre : 5 × %d s", suspension),
-				"Étirement vers le haut, 5 respirations lentes",
-				"Petit-déjeuner avec une source de protéines",
-			},
 			DureeM: 10,
+			Tasks: []DailyTask{
+				{
+					Key:      "matin-0",
+					Label:    fmt.Sprintf("Suspension à la barre : 5 × %d s", suspension),
+					Pourquoi: "Décompresse la colonne tassée par la nuit et par la posture de la veille.",
+					Source:   "Littérature sur la décompression spinale par suspension passive",
+				},
+				{
+					Key:      "matin-1",
+					Label:    "Étirement vers le haut, 5 respirations lentes",
+					Pourquoi: "Réactive la posture avant que la journée ne l'affaisse.",
+					Source:   "Kinésithérapie posturale",
+				},
+				{
+					Key:      "matin-2",
+					Label:    "Petit-déjeuner avec une source de protéines",
+					Pourquoi: "Le corps a besoin d'acides aminés disponibles dès le matin pour construire l'os et le muscle.",
+					Source:   "Recommandations nutritionnelles adolescents",
+				},
+			},
 		},
 		{
 			Moment: "Journée",
 			Heure:  "entre les cours",
-			Actions: []string{
-				theme.actionSup,
-				"Se lever et marcher 2 min toutes les heures assises",
-				"Boire régulièrement, viser 2 L sur la journée",
-			},
 			DureeM: 5,
+			Tasks: []DailyTask{
+				{
+					Key:      "journee-0",
+					Label:    theme.actionSup,
+					Pourquoi: theme.pourquoi,
+					Source:   "Programme mensuel Grandimi — " + theme.focus,
+				},
+				{
+					Key:      "journee-1",
+					Label:    "Se lever et marcher 2 min toutes les heures assises",
+					Pourquoi: "Une position assise prolongée tasse la colonne et affaisse la posture.",
+					Source:   "Ergonomie posturale",
+				},
+				{
+					Key:      "journee-2",
+					Label:    "Boire régulièrement, viser 2 L sur la journée",
+					Pourquoi: "Les disques intervertébraux sont en grande partie composés d'eau ; la déshydratation les tasse.",
+					Source:   "Physiologie du disque intervertébral",
+				},
+			},
 		},
 		{
 			Moment: "Soir",
 			Heure:  "avant le dîner",
-			Actions: []string{
-				fmt.Sprintf("Séance du mois — %s : %s", theme.focus, theme.objectif),
-				"Étirement doux du dos et des hanches, 5 min",
-			},
 			DureeM: 20,
+			Tasks: []DailyTask{
+				{
+					Key:      "soir-0",
+					Label:    fmt.Sprintf("Séance du mois — %s : %s", theme.focus, theme.objectif),
+					Pourquoi: theme.pourquoi,
+					Source:   "Programme mensuel Grandimi — " + theme.focus,
+				},
+				{
+					Key:      "soir-1",
+					Label:    "Étirement doux du dos et des hanches, 5 min",
+					Pourquoi: "Relâche les tensions accumulées avant le pic hormonal du sommeil.",
+					Source:   "Kinésithérapie posturale",
+				},
+			},
 		},
 		{
 			Moment: "Coucher",
 			Heure:  coucher,
-			Actions: []string{
-				"Écrans coupés 45 min avant",
-				"Chambre sombre et fraîche (18-20 °C)",
-				"Même heure qu'hier, à 30 min près",
-			},
 			DureeM: 0,
+			Tasks: []DailyTask{
+				{
+					Key:      "coucher-0",
+					Label:    "Écrans coupés 45 min avant",
+					Pourquoi: "La lumière bleue retarde la sécrétion de mélatonine et l'endormissement.",
+					Source:   "Physiologie du sommeil",
+				},
+				{
+					Key:      "coucher-1",
+					Label:    "Chambre sombre et fraîche (18-20 °C)",
+					Pourquoi: "Le sommeil profond, où l'hormone de croissance culmine, est plus stable dans le noir et le frais.",
+					Source:   "Physiologie du sommeil et de la croissance",
+				},
+				{
+					Key:      "coucher-2",
+					Label:    "Même heure qu'hier, à 30 min près",
+					Pourquoi: "Un rythme régulier avance et stabilise le pic de sommeil profond.",
+					Source:   "Physiologie du sommeil et de la croissance",
+				},
+			},
 		},
 	}
 }
