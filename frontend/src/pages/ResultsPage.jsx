@@ -41,7 +41,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
     return <Spinner size="page" label="Chargement de tes résultats..." />
   }
 
-  const { predicted_height_cm, confidence_range, confidence_level } = predictionData
+  const { predicted_height_cm, confidence_range } = predictionData
 
   /* La marge se lit sur la LARGEUR de l'intervalle, pas sur l'écart au
      maximum. L'ancien calcul (max - estimation) devenait négatif dès que
@@ -63,8 +63,10 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
   const tailleActuelle = predictionData.current_height_cm
   const margeRestante = tailleActuelle ? predicted_height_cm - tailleActuelle : 0
 
-  const libelleConfiance =
-    { high: 'Élevée', medium: 'Moyenne' }[confidence_level] || 'Faible'
+  /* Plus de libellé « Fiabilité : faible / moyenne ». Il inquiétait sans
+     informer : « faible » ne dit pas de combien on peut se tromper, alors
+     que le « ± X cm » juste à côté le dit exactement, en chiffres. Garder
+     les deux revenait à répéter la même idée, la version vague en plus. */
 
   const ageFin = ageFinCroissance(predictionData.age, predictionData.sex)
 
@@ -125,18 +127,14 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             </p>
 
             <p className="results-hero-sub">
-              attendus d’ici tes {fr(ageFin)} ans, si tout se passe normalement.
+              à prendre d’ici tes {fr(ageFin)} ans.
             </p>
 
             <p className="results-hero-line">
-              Taille adulte estimée : <strong>{fr(predicted_height_cm)} cm</strong>
+              Tu devrais atteindre <strong>{fr(predicted_height_cm)} cm</strong>
               <span className="results-margin-inline">
                 <HandwritingText text={`± ${fr(margeCm)} cm`} height="1.6rem" />
               </span>
-            </p>
-
-            <p className="results-confidence">
-              Fiabilité de l’estimation : <strong>{libelleConfiance.toLowerCase()}</strong>
             </p>
           </section>
         ) : (
@@ -156,10 +154,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             <span className="results-margin">
               <HandwritingText text={`± ${fr(margeCm)} cm`} height="2rem" />
             </span>
-
-            <p className="results-confidence">
-              Fiabilité de l’estimation : <strong>{libelleConfiance.toLowerCase()}</strong>
-            </p>
           </section>
         )}
 

@@ -129,9 +129,13 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     // réponses partiellement effacées si le format a changé entre deux visites.
     return Number.isInteger(repris) && repris > 0 && repris < ETAPES.length - 1 ? repris : 0
   })
+  /* L'e-mail n'est PAS repris de localStorage. Il y restait d'une session
+     précédente, si bien que l'écran « entre ton e-mail » arrivait déjà
+     rempli avec l'adresse de quelqu'un d'autre sur un appareil partagé —
+     et la prédiction partait alors sur le mauvais compte. Une reprise de
+     questionnaire en cours (`reprise`) le restitue toujours, elle. */
   const [reponses, setReponses] = useState(() => ({
     ...REPONSES_INITIALES,
-    email: localStorage.getItem('userEmail') || '',
     ...(reprise?.reponses || {}),
   }))
   const [unite, setUnite] = useState(() => reprise?.unite || 'metric')

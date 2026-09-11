@@ -22,6 +22,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('today');
+  const [exerciceOuvert, setExerciceOuvert] = useState(null);
 
   // Todo-liste quotidienne : quelles tâches sont cochées aujourd'hui, et
   // quel "pourquoi" est actuellement déplié.
@@ -314,10 +315,15 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
             </div>
 
             <div className="stats-grid">
+              {/* Ce chiffre n'est PAS la croissance restante : c'est le gain
+                  attribuable aux habitudes du plan (plafonné à 3 cm). Étiqueté
+                  « Croissance attendue », il affichait « 1 cm » juste sous un
+                  texte annonçant « 15 cm » — deux chiffres qui se contredisent
+                  pour le lecteur alors qu'ils mesurent deux choses. */}
               <div className="stat-card">
-                <h3>Croissance attendue</h3>
-                <div className="stat-value">{plan.expected_growth} cm</div>
-                <p className="stat-note">sur 12 mois</p>
+                <h3>Gain lié aux habitudes</h3>
+                <div className="stat-value">+{plan.expected_growth} cm</div>
+                <p className="stat-note">en plus, sur 12 mois</p>
               </div>
               <div className="stat-card">
                 <h3>Exercices quotidiens</h3>
@@ -406,18 +412,43 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
           <section className="tab-content">
             <div className="section-title">Exercices clés pour la croissance</div>
             <div className="card-grid">
-              {plan.posture_exercises.map((exercise, idx) => (
-                <div key={idx} className="exercise-card card">
-                  <h3>{exercise.name}</h3>
-                  <div className="exercise-meta">
-                    <span className="badge">{exercise.duration_min} min</span>
-                    <span className="badge">{exercise.frequency}</span>
+              {/* Le bouton "Voir le guide complet" n'avait aucun onClick : il
+                  ne faisait rien du tout. Le détail est déplié depuis les
+                  données déjà reçues avec le plan, plutôt que via
+                  /api/v1/exercise-guide — cette route ne couvre pas tous les
+                  exercices (le yoga renverrait 404) et son contenu est encore
+                  en anglais. */}
+              {plan.posture_exercises.map((exercise, idx) => {
+                const ouvert = exerciceOuvert === idx
+                return (
+                  <div key={idx} className="exercise-card card">
+                    <h3>{exercise.name}</h3>
+                    <div className="exercise-meta">
+                      <span className="badge">{exercise.duration_min} min</span>
+                      <span className="badge">{exercise.frequency}</span>
+                    </div>
+                    <button
+                      type="button"
+                      className="btn-tertiary"
+                      onClick={() => setExerciceOuvert(ouvert ? null : idx)}
+                      aria-expanded={ouvert}
+                    >
+                      {ouvert ? '▼ Masquer le détail' : '▶ Comment faire'}
+                    </button>
+                    {ouvert && (
+                      <div className="exercise-detail">
+                        <p>{exercise.description}</p>
+                        <p className="exercise-detail-line">
+                          <strong>Quand :</strong> {exercise.routine}
+                        </p>
+                        <p className="exercise-detail-line">
+                          <strong>Ce que ça change :</strong> {exercise.impact}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                  <button className="btn-tertiary">
-                    Voir le guide complet →
-                  </button>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </section>
         )}

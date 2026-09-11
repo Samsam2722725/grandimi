@@ -120,38 +120,38 @@ func generatePostureExercises(req GrowthPlanRequest) []Exercise {
 
 	// Morning stretch routine - universal
 	exercises = append(exercises, Exercise{
-		Name:        "Morning Spinal Elongation Stretch",
-		Description: "Hang from pull-up bar or stretch arms upward to decompress spine after sleep",
+		Name:        "Suspension à la barre, le matin",
+		Description: "Suspends-toi à une barre ou étire les bras vers le haut pour décompresser la colonne après la nuit",
 		Duration:    5,
-		Frequency:   "daily",
-		Difficulty:  "easy",
-		Impact:      "Spine decompression, posture correction",
-		Routine:     "Morning (immediately after waking)",
+		Frequency:   "tous les jours",
+		Difficulty:  "facile",
+		Impact:      "Décompression de la colonne, posture",
+		Routine:     "Le matin, juste après le réveil",
 		Video:       "spinal-elongation-technique",
 	})
 
 	// Posture correction - key for height appearance
 	exercises = append(exercises, Exercise{
-		Name:        "Posture Correction Exercises",
-		Description: "Back strengthening to maintain tall posture and prevent slouching",
+		Name:        "Correction de la posture",
+		Description: "Renforcement du dos pour te tenir droit et arrêter de t'affaisser",
 		Duration:    10,
-		Frequency:   "daily",
-		Difficulty:  "easy",
-		Impact:      "Better posture = appear 1-2cm taller",
-		Routine:     "Anytime",
+		Frequency:   "tous les jours",
+		Difficulty:  "facile",
+		Impact:      "Une meilleure posture, c'est 1 à 2 cm visibles en plus",
+		Routine:     "N'importe quand",
 		Video:       "posture-correction-routine",
 	})
 
 	// Pilates/Core - based on age
 	if req.Age >= 14 {
 		exercises = append(exercises, Exercise{
-			Name:        "Core Strengthening (Pilates)",
-			Description: "Builds core stability for better posture and spinal alignment",
+			Name:        "Gainage (Pilates)",
+			Description: "Renforce le centre du corps : c'est lui qui tient la posture sans que tu y penses",
 			Duration:    15,
-			Frequency:   "3x/week",
-			Difficulty:  "medium",
-			Impact:      "Core strength, posture, spinal alignment",
-			Routine:     "Evening",
+			Frequency:   "3 fois par semaine",
+			Difficulty:  "moyen",
+			Impact:      "Centre solide, posture, alignement de la colonne",
+			Routine:     "Le soir",
 			Video:       "pilates-core-routine",
 		})
 	}
@@ -159,26 +159,26 @@ func generatePostureExercises(req GrowthPlanRequest) []Exercise {
 	// Swimming/Hanging - best for height
 	if req.Age >= 12 {
 		exercises = append(exercises, Exercise{
-			Name:        "Swimming or Bar Hanging",
-			Description: "Decompresses spine and promotes vertical growth",
+			Name:        "Natation ou suspension",
+			Description: "Étire la colonne en mouvement, sans impact sur les articulations",
 			Duration:    30,
-			Frequency:   "3-4x/week",
-			Difficulty:  "medium",
-			Impact:      "Spine elongation, posture, full body conditioning",
-			Routine:     "After school/work",
+			Frequency:   "3 à 4 fois par semaine",
+			Difficulty:  "moyen",
+			Impact:      "Étirement de la colonne, posture, condition physique",
+			Routine:     "Après les cours",
 			Video:       "swimming-hanging-technique",
 		})
 	}
 
 	// Yoga - for flexibility and spine
 	exercises = append(exercises, Exercise{
-		Name:        "Yoga for Height Growth",
-		Description: "Gentle yoga focused on spine extension and flexibility",
+		Name:        "Yoga d'étirement",
+		Description: "Yoga doux centré sur l'extension de la colonne et la souplesse",
 		Duration:    20,
-		Frequency:   "3x/week",
-		Difficulty:  "easy",
-		Impact:      "Flexibility, spine elongation, stress relief",
-		Routine:     "Morning or Evening",
+		Frequency:   "3 fois par semaine",
+		Difficulty:  "facile",
+		Impact:      "Souplesse, étirement de la colonne, moins de stress",
+		Routine:     "Le matin ou le soir",
 		Video:       "yoga-height-sequence",
 	})
 
@@ -286,44 +286,44 @@ func generateSleepPlan(req GrowthPlanRequest) SleepPlan {
 func generateSupplements(req GrowthPlanRequest) []Supplement {
 	supplements := []Supplement{
 		{
-			Name:            "Multivitamin",
-			Dosage:          "1 tablet",
-			Frequency:       "daily",
-			BestTakingTime:  "with breakfast",
-			Purpose:         "Fills nutritional gaps, supports overall health",
-			ResearchSupport: "proven",
-			Safety:          "safe for age",
+			Name:            "Multivitamines",
+			Dosage:          "1 comprimé",
+			Frequency:       "tous les jours",
+			BestTakingTime:  "au petit-déjeuner",
+			Purpose:         "Comble les manques de l'alimentation",
+			ResearchSupport: "démontré",
+			Safety:          "adapté à ton âge",
 		},
 		{
-			Name:            "Calcium + Vitamin D",
-			Dosage:          "1000-1300mg calcium, 600 IU vitamin D",
-			Frequency:       "daily",
-			BestTakingTime:  "with meals",
-			Purpose:         "Critical for bone growth and density",
-			ResearchSupport: "proven",
-			Safety:          "safe for age",
+			Name:            "Calcium + vitamine D",
+			Dosage:          "1000 à 1300 mg de calcium, 600 UI de vitamine D",
+			Frequency:       "tous les jours",
+			BestTakingTime:  "pendant les repas",
+			Purpose:         "Le calcium construit l'os, la vitamine D permet de l'absorber",
+			ResearchSupport: "démontré",
+			Safety:          "adapté à ton âge",
 		},
 		{
 			Name:            "Zinc",
-			Dosage:          "8-11mg",
-			Frequency:       "daily",
-			BestTakingTime:  "with dinner",
-			Purpose:         "Essential for growth hormone and protein synthesis",
-			ResearchSupport: "proven",
-			Safety:          "safe for age",
+			Dosage:          "8 à 11 mg",
+			Frequency:       "tous les jours",
+			BestTakingTime:  "au dîner",
+			Purpose:         "Indispensable à l'hormone de croissance",
+			ResearchSupport: "démontré",
+			Safety:          "adapté à ton âge",
 		},
 	}
 
 	// Add additional based on deficiencies
 	if req.NutritionLevel == "poor" {
 		supplements = append(supplements, Supplement{
-			Name:            "Iron + B12",
-			Dosage:          "Varies by age",
-			Frequency:       "daily",
-			BestTakingTime:  "with meals (iron with vitamin C)",
-			Purpose:         "Oxygen transport, energy production",
-			ResearchSupport: "proven",
-			Safety:          "consult doctor for dosage",
+			Name:            "Fer + B12",
+			Dosage:          "Selon l'âge",
+			Frequency:       "tous les jours",
+			BestTakingTime:  "pendant les repas (le fer avec de la vitamine C)",
+			Purpose:         "Transport de l'oxygène, énergie",
+			ResearchSupport: "démontré",
+			Safety:          "demande la dose à un médecin",
 		})
 	}
 
@@ -334,43 +334,43 @@ func generateSupplements(req GrowthPlanRequest) []Supplement {
 func generateDailyHabits(req GrowthPlanRequest) []Habit {
 	habits := []Habit{
 		{
-			Name:        "Morning Hydration",
-			Description: "Drink 500ml water immediately upon waking",
-			Frequency:   "daily",
-			Difficulty:  "easy",
-			Benefit:     "Rehydration, activates metabolism",
+			Name:        "Boire au réveil",
+			Description: "50 cl d'eau dès le lever",
+			Frequency:   "tous les jours",
+			Difficulty:  "facile",
+			Benefit:     "Réhydrate après la nuit, relance le métabolisme",
 			TimePerDay:  2,
 		},
 		{
-			Name:        "Posture Check-ins",
-			Description: "Every 2 hours, correct posture (shoulders back, spine straight)",
-			Frequency:   "daily",
-			Difficulty:  "easy",
-			Benefit:     "Appear 1-2cm taller, strengthen back muscles",
+			Name:        "Vérifier ta posture",
+			Description: "Toutes les 2 heures : épaules en arrière, dos droit",
+			Frequency:   "tous les jours",
+			Difficulty:  "facile",
+			Benefit:     "1 à 2 cm visibles en plus, dos renforcé",
 			TimePerDay:  5,
 		},
 		{
-			Name:        "Stretching Breaks",
-			Description: "Take 2-minute stretching breaks every 4 hours",
-			Frequency:   "daily",
-			Difficulty:  "easy",
-			Benefit:     "Maintains flexibility, decompresses spine",
+			Name:        "Pauses étirement",
+			Description: "2 minutes d'étirement toutes les 4 heures",
+			Frequency:   "tous les jours",
+			Difficulty:  "facile",
+			Benefit:     "Garde la souplesse, décompresse la colonne",
 			TimePerDay:  10,
 		},
 		{
-			Name:        "Consistent Sleep Schedule",
-			Description: "Sleep & wake at same time every day",
-			Frequency:   "daily",
-			Difficulty:  "medium",
-			Benefit:     "Optimizes growth hormone production",
+			Name:        "Horaires de sommeil réguliers",
+			Description: "Te coucher et te lever à la même heure, week-end compris",
+			Frequency:   "tous les jours",
+			Difficulty:  "moyen",
+			Benefit:     "C'est ce qui déclenche le mieux l'hormone de croissance",
 			TimePerDay:  0, // Built into sleep
 		},
 		{
-			Name:        "Nutrition Tracking",
-			Description: "Log meals in app to ensure hitting protein/calcium targets",
-			Frequency:   "daily",
-			Difficulty:  "easy",
-			Benefit:     "Accountability, ensures proper nutrition",
+			Name:        "Suivre ton alimentation",
+			Description: "Noter tes repas pour vérifier que tu atteins tes apports en protéines et calcium",
+			Frequency:   "tous les jours",
+			Difficulty:  "facile",
+			Benefit:     "Te permet de voir ce qui manque vraiment",
 			TimePerDay:  10,
 		},
 	}
@@ -411,18 +411,62 @@ func calculateAdditionalGrowth(req GrowthPlanRequest) float64 {
 	return math.Min(additional, 3.0) // Cap at 3cm additional
 }
 
-// generateMotivation creates personalized motivation message
+// generateMotivation écrit le message d'ouverture du plan.
+//
+// Il cible le levier le PLUS FAIBLE de la personne plutôt que de citer
+// les trois à égalité : un ado qui dort 6 h et mange correctement n'a
+// pas le même premier chantier que l'inverse. C'est aussi la seule
+// partie du plan qui prouve, dès la première phrase, qu'on a lu ses
+// réponses — sans ça le plan a l'air générique même quand il ne l'est
+// pas.
+//
+// Le texte était auparavant en anglais, et annonçait « you have X cm of
+// growth potential » juste au-dessus d'une carte « croissance attendue :
+// 1 cm » : deux chiffres contradictoires pour le lecteur. On distingue
+// désormais explicitement les deux (croissance restante naturelle vs
+// gain attribuable aux habitudes).
 func generateMotivation(req GrowthPlanRequest) string {
-	gap := req.PredictedHeight - req.CurrentHeight
-	motivation := fmt.Sprintf(
-		"You have %.1fcm of growth potential ahead! By following this plan, "+
-			"you can optimize your genetics and reach your maximum height. "+
-			"The key is consistency - these habits compound over months. "+
-			"You're not just getting taller, you're building a healthier version of yourself. "+
-			"Let's maximize your potential! 💪",
-		gap,
+	restant := req.PredictedHeight - req.CurrentHeight
+
+	// Chaque levier est noté sur 1 : plus c'est bas, plus il y a à gagner.
+	scoreSommeil := req.SleepHours / 9.0
+	scoreActivite := req.ExerciseMin / 60.0
+	scoreNutrition := map[string]float64{
+		"poor": 0.25, "fair": 0.5, "good": 0.75, "excellent": 1.0,
+	}[req.NutritionLevel]
+	if scoreNutrition == 0 {
+		scoreNutrition = 0.75
+	}
+
+	levier := "ton sommeil"
+	detail := fmt.Sprintf("tu dors %.1f h, l'hormone de croissance se libère surtout pendant le sommeil profond", req.SleepHours)
+	pire := scoreSommeil
+
+	if scoreNutrition < pire {
+		levier = "ton alimentation"
+		detail = "sans apports suffisants, le corps ne peut pas construire l'os, même avec un sommeil parfait"
+		pire = scoreNutrition
+	}
+	if scoreActivite < pire {
+		levier = "ton activité physique"
+		detail = fmt.Sprintf("tu bouges %.0f min par jour, c'est le levier où tu as le plus de marge", req.ExerciseMin)
+	}
+
+	if restant <= 0 {
+		return fmt.Sprintf(
+			"Ta croissance est probablement terminée ou proche de l'être. Ce plan ne te fera "+
+				"pas gagner de centimètres, mais il travaille ce que tu peux encore changer : "+
+				"la posture, qui vaut 1 à 2 cm visibles. On commence par %s — %s.",
+			levier, detail,
+		)
+	}
+
+	return fmt.Sprintf(
+		"Il te reste environ %.1f cm de croissance naturelle devant toi. Ce plan ne les "+
+			"crée pas : il sert à ne pas les perdre, et à ne pas finir en dessous de ton "+
+			"potentiel. On commence par %s, parce que c'est là que tu as le plus à gagner — %s.",
+		restant, levier, detail,
 	)
-	return motivation
 }
 
 // Helper functions
