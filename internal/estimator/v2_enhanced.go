@@ -87,13 +87,18 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	// Recalibrer ces coefficients demande de vraies tables de reference
 	// (Khamis-Roche publie, ou age osseux). Tant qu on ne les a pas, on
 	// n invente pas de chiffres : on utilise une methode documentee.
+	// Seule la CONFIANCE de ces trois methodes sert encore (largeur de
+	// l intervalle). Leurs hauteurs sont fausses et volontairement
+	// ignorees — cf. le releve ci-dessus.
+	//
+	// Elles ne sont plus exposees dans la reponse : "_diag_khamis_roche"
+	// renvoyait 219 cm en clair a chaque appel, visible par quiconque
+	// ouvre la reponse JSON. Un chiffre absurde publie a cote d un
+	// produit qui vend la rigueur coute plus cher qu il ne rapporte, et
+	// il n a aucune utilite pour le client.
 	pred1 := predictKhamisRocheV2(req, bmi)
 	pred2 := predictEthnicAdjusted(req, bmi)
 	pred3 := predictGrowthVelocity(req, bmi)
-
-	resp.Factors["_diag_khamis_roche"] = pred1.height
-	resp.Factors["_diag_ethnic_adjusted"] = pred2.height
-	resp.Factors["_diag_growth_velocity"] = pred3.height
 
 	// ANCRE : methode mi-parentale (Tanner).
 	// Taille cible = moyenne des parents +6.5 cm (garcon) / -6.5 cm (fille).

@@ -1,6 +1,15 @@
 # 📏 Grandimi - Height Prediction API
 
-Backend Go pour prédire la taille adulte maximale des enfants/jeunes basé sur l'algorithme **Khamis-Roche**.
+Backend Go pour estimer la taille adulte des enfants et adolescents à partir de la **méthode mi-parentale (Tanner)**, ajustée par les facteurs de mode de vie.
+
+> **Note sur la méthode.** Le dépôt contient une implémentation de Khamis-Roche
+> (`internal/estimator/khamis_roche.go`), mais ses coefficients ne sont pas
+> calibrés : elle rend ~219 cm pour un garçon de 14 ans mesurant 165 cm. Sa
+> sortie est donc **calculée puis ignorée** — seule sa valeur de confiance
+> alimente la largeur de l'intervalle. Le chiffre affiché à l'utilisateur vient
+> de la méthode mi-parentale. Ne réintroduisez « Khamis-Roche » dans aucun texte
+> destiné au public tant que ces coefficients n'ont pas été remplacés par de
+> vraies tables de référence.
 
 ## 🚀 Démarrage rapide
 
@@ -98,22 +107,24 @@ grandimi/
 └── Dockerfile
 ```
 
-## 📊 Algorithme Khamis-Roche
+## 📊 Méthode de calcul réellement appliquée
 
-Formule déterministe qui utilise :
-- **Données de l'enfant** : âge, sexe, taille, poids
-- **Données parentales** : taille père + mère
-- **Signaux de puberté** : Tanner stages (1-5)
-- **Coefficients age-specific** : Optimisés par recherche clinique
+1. **Taille cible mi-parentale (Tanner)** : `(taille père + taille mère) / 2`,
+   `+6,5 cm` pour un garçon, `−6,5 cm` pour une fille.
+2. **Facteurs de mode de vie** : sommeil, nutrition et activité déclarés dans le
+   questionnaire modulent cette cible dans une fourchette étroite autour de 1,0.
+   Ils ne peuvent pas déplacer l'estimation de plusieurs dizaines de centimètres.
+3. **Plancher** : l'estimation ne descend jamais sous la taille déjà atteinte.
+   Sans cela, un adolescent de 183 cm se voyait annoncer 180,5 cm.
+4. **Intervalle de confiance** : sa largeur dépend de l'âge, de la vitesse de
+   croissance et du BMI — pas le point estimé. Être plus avancé en puberté ne
+   rend pas plus grand, cela rend seulement la prédiction plus sûre.
 
-**Précision** : ±3 à ±6cm selon l'âge et les données disponibles
+**Précision** : ±3 à ±6 cm selon l'âge et les données disponibles.
 
-### Étapes de puberté (Tanner)
-- `N` ou `1`: Pré-puberté
-- `2`: Puberté précoce
-- `3`: Puberté moyenne
-- `4`: Puberté avancée
-- `5`: Complètement développé
+Les stades de Tanner (réponses intimes) **ne sont plus collectés** : le gain
+d'information était faible au regard de ce qu'on demandait à un mineur. La
+croissance restante est estimée via la vitesse de croissance.
 
 ## 📦 Docker
 

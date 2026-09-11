@@ -286,12 +286,15 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
               <h3>Sources &amp; méthodologie</h3>
               <p>
-                <strong>Algorithme :</strong> Khamis-Roche v2 (enrichi)
+                <strong>Méthode :</strong> taille mi-parentale (Tanner) — la moyenne des
+                tailles de tes deux parents, +6,5 cm pour un garçon, −6,5 cm pour une
+                fille — ajustée par tes réponses sur le sommeil, l’alimentation et
+                l’activité, et jamais inférieure à la taille que tu fais déjà.
                 <br />
                 <strong>Précision moyenne :</strong> ±3 à ±6 cm selon l’âge
               </p>
               <a
-                href="https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+height"
+                href="https://pubmed.ncbi.nlm.nih.gov/?term=mid-parental+height+target"
                 target="_blank"
                 rel="noopener noreferrer"
               >

@@ -202,9 +202,21 @@ func SavePrediction(userID string, prediction *Prediction) (*Prediction, error) 
 }
 
 // CreateSubscription - create subscription record
+// CreateSubscription enregistre (ou réactive) l'abonnement Whop.
+//
+// ON CONFLICT plutôt qu'un INSERT sec : Whop rejoue membership.activated
+// à CHAQUE renouvellement avec le même membership id. Sans ça, un abonné
+// mensuel accumulait une ligne par mois pour le même abonnement — la
+// lecture restait juste (on prend la plus récente) mais la table et le
+// panneau admin se remplissaient de doublons indéfiniment.
 func CreateSubscription(userID string, whopSubscriptionID string) error {
 	_, err := DB.ExecContext(context.Background(),
-		"INSERT INTO subscriptions (user_id, whop_subscription_id, status) VALUES ($1, $2, $3)",
+		`INSERT INTO subscriptions (user_id, whop_subscription_id, status)
+		 VALUES ($1, $2, $3)
+		 ON CONFLICT (whop_subscription_id) DO UPDATE
+		   SET status = EXCLUDED.status,
+		       cancel_at_period_end = false,
+		       canceled_at = NULL`,
 		userID, whopSubscriptionID, "active")
 	return err
 }

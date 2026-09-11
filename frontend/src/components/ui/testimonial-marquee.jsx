@@ -2,12 +2,22 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Marquee } from '@/components/ui/marquee'
 
 /* Sources scientifiques vérifiables : le fondement du positionnement.
-   Pas d'avis fictifs, mais la preuve que ça marche. */
+   Pas d'avis fictifs, mais la preuve que ça marche.
+
+   Ces libellés doivent décrire le calcul RÉELLEMENT effectué par
+   internal/estimator/v2_enhanced.go — c'est-à-dire la méthode
+   mi-parentale de Tanner, modulée par les facteurs de mode de vie.
+   Les versions précédentes annonçaient « Algorithme Khamis-Roche V2 »
+   et « modèle ML-Enhanced » : le serveur ne fait ni l'un ni l'autre
+   (aucun apprentissage automatique nulle part, et la sortie
+   Khamis-Roche est calculée puis jetée). Sur un produit dont l'argument
+   est l'honnêteté, et destiné à des mineurs, annoncer une méthode qu'on
+   n'applique pas est le pire endroit où mentir. */
 const SOURCES_CREDIBILITE = [
   {
-    titre: 'Algorithme Khamis-Roche V2',
-    description: 'Modèle ML-Enhanced basé sur 50+ années d\'études cliniques',
-    lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+height',
+    titre: 'Méthode mi-parentale (Tanner)',
+    description: 'Taille cible calculée depuis celle des deux parents — référence en pédiatrie',
+    lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=mid-parental+height+target',
     icone: '📊',
   },
   {
@@ -23,9 +33,9 @@ const SOURCES_CREDIBILITE = [
     icone: '🔬',
   },
   {
-    titre: 'Confiance statistique (marge d\'erreur)',
-    description: 'Intervalle de confiance 95% selon le modèle Khamis-Roche 2001',
-    lien: 'https://scholar.google.com/scholar?q=khamis+roche+height+prediction',
+    titre: 'Marge d\'erreur affichée',
+    description: '±3 à 6 cm selon l\'âge : l\'incertitude réelle de la méthode, jamais masquée',
+    lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=adult+height+prediction+accuracy',
     icone: '📉',
   },
 ]
