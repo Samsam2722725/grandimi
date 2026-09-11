@@ -148,7 +148,7 @@ const FAQ = [
   {
     question: 'Est-ce que Grandimi peut me faire grandir plus ?',
     answer:
-      'Non, et personne ne le peut. Ta taille adulte est déterminée à environ 80 % par la génétique. Ce qui se joue, c’est le reste : un sommeil suffisant, une alimentation correcte et une activité physique régulière permettent d’atteindre ton potentiel plutôt que de rester en dessous. C’est exactement ce que le plan cible.',
+      'Personne ne peut te faire dépasser ton potentiel génétique — ni nous, ni un complément, ni un programme. Mais beaucoup d’ados finissent en dessous du leur : nuits trop courtes, apports insuffisants, au moment précis où l’os peut encore s’allonger. Ces centimètres-là se jouent vraiment, et c’est exactement ce que le plan cible. Pas un de plus.',
   },
   {
     question: 'À quel point l’estimation est-elle fiable ?',
@@ -313,9 +313,10 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 className="rise mt-6 max-w-xl text-[clamp(16px,2.2vw,19px)] leading-[1.55] text-pretty text-[color:var(--text-secondary)]"
                 style={{ animationDelay: '160ms' }}
               >
-                Réponds à quelques questions et découvre ton estimation de taille adulte —
-                avec sa marge d’erreur, expliquée. Puis, si tu veux aller plus loin, un plan
-                personnalisé qui te dit quoi faire chaque jour, renouvelé chaque mois.
+                Ta taille adulte est déjà en grande partie écrite. Ce qui ne l’est pas :
+                est-ce que tu vas l’atteindre. Réponds à quelques questions, vois ton
+                estimation et les centimètres qu’il te reste — gratuitement, marge d’erreur
+                affichée.
               </p>
 
               <div

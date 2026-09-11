@@ -295,3 +295,86 @@
   line-height: 1.55;
   color: var(--funnel-muted);
 }
+
+/* ---------- Formules côte à côte ---------- */
+
+.paywall .paywall-offers.is-multiple {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+/* Sous 400px, deux colonnes obligeraient à couper « 29,99 € » : on empile. */
+@media (max-width: 400px) {
+  .paywall .paywall-offers.is-multiple {
+    grid-template-columns: 1fr;
+  }
+}
+
+.paywall .paywall-offers.is-multiple .paywall-offer {
+  position: relative;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  /* Non retenue : bordure neutre. Seule la carte sélectionnée porte l'orange,
+     sinon les deux se disputent le regard et le choix n'est plus lisible. */
+  border: 1.5px solid var(--funnel-line);
+  background: var(--funnel-surface);
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.paywall .paywall-offers.is-multiple .paywall-offer.is-selected {
+  border-color: var(--funnel-accent);
+  background: rgba(255, 90, 31, 0.07);
+}
+
+.paywall .paywall-offers.is-multiple .paywall-offer:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+}
+
+.paywall .paywall-offer-badge {
+  position: absolute;
+  top: -11px;
+  left: 20px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ---------- Action « faire payer par un parent » ---------- */
+
+.paywall .paywall-parent-cta {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 18px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 999px;
+  background: none;
+  color: var(--funnel-text);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.paywall .paywall-parent-cta:hover {
+  border-color: #3d3d3d;
+  background: var(--funnel-surface);
+}
+
+.paywall .paywall-parent-cta:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ArrowLeft, Check, Lock } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
@@ -9,23 +9,55 @@ import '../styles/funnel.css'
    partage des noms de classe avec elle. La remplacer cassait cet écran. */
 import '../styles/paywall-night.css'
 
-/* Formule unique à 9,99 €/mois.
-   Le backend n'expose qu'un seul produit Whop (productSlug codé en dur dans
-   whop_handlers.go) : afficher deux formules côte à côte, comme le font les
-   applis concurrentes, enverrait les deux vers le même paiement. On garde donc
-   une seule carte — et pas de badge « meilleure offre », qui n'a aucun sens
-   sans offre à comparer. */
-const FORMULE = {
-  nom: 'Plan de croissance',
-  prix: '9,99',
-  periode: '/mois',
-  avantages: [
-    'Ton plan du mois : quoi faire chaque jour',
-    'Sommeil, nutrition, exercices — les trois leviers, détaillés',
-    'Suivi des progrès et re-mesure mensuelle',
-    'Résiliable en ligne à tout moment',
-  ],
-}
+/* ============================================================
+   FORMULES
+   ============================================================
+   Structure à deux offres, mais UNE SEULE affichée aujourd'hui.
+
+   Le comparatif côte à côte (récurrent / paiement unique) est ce qui fait
+   vendre chez les concurrents : le mensuel sert d'ancre, le paiement unique
+   lève l'objection « encore un abonnement », qui est la vraie objection du
+   parent — pas le montant.
+
+   Mais le backend n'expose qu'un produit Whop (`productSlug` codé en dur dans
+   whop_handlers.go). Afficher deux cartes qui mènent au même paiement serait
+   exactement le genre de mensonge qu'on reproche à la concurrence. La seconde
+   formule reste donc inactive tant que le produit n'existe pas : la bascule
+   est `VITE_WHOP_ONETIME_ENABLED=true`, et `id` est envoyé au backend dès
+   maintenant pour qu'il n'y ait rien à changer ici le jour venu.
+   Cf. docs/BRIEF-BACKEND.md, point 1.
+   ============================================================ */
+const FORMULES = [
+  {
+    id: 'mensuel',
+    nom: 'Plan mensuel',
+    prix: '9,99',
+    periode: '/mois',
+    actif: true,
+    avantages: [
+      'Ton plan du mois : quoi faire chaque jour',
+      'Sommeil, nutrition, exercices — les trois leviers, détaillés',
+      'Suivi des progrès et re-mesure mensuelle',
+      'Résiliable en ligne à tout moment',
+    ],
+  },
+  {
+    id: 'unique',
+    nom: 'Accès complet',
+    prix: '29,99',
+    periode: 'une seule fois',
+    badge: 'Sans abonnement',
+    actif: import.meta.env.VITE_WHOP_ONETIME_ENABLED === 'true',
+    avantages: [
+      'Les 12 plans mensuels, débloqués',
+      'Sommeil, nutrition, exercices — les trois leviers, détaillés',
+      'Suivi des progrès et re-mesure mensuelle',
+      'Payé une fois, rien à résilier',
+    ],
+  },
+]
+
+const FORMULES_ACTIVES = FORMULES.filter((formule) => formule.actif)
 
 const PILIERS = [
   { emoji: '😴', titre: 'Sommeil', detail: 'Heures cibles, routine du soir' },
@@ -35,10 +67,17 @@ const PILIERS = [
 
 function PaywallPage({ onBackHome }) {
   const [email] = useState(() => localStorage.getItem('userEmail') || '')
+  /* La formule retenue par défaut est la dernière de la liste active : quand
+     le paiement unique arrivera, c'est lui qui sera présélectionné. Avec une
+     seule formule, ça revient au comportement actuel. */
+  const [formuleChoisie, setFormuleChoisie] = useState(
+    () => FORMULES_ACTIVES[FORMULES_ACTIVES.length - 1].id,
+  )
   const [loading, setLoading] = useState(false)
   const [erreur, setErreur] = useState(null)
   const [lienParentVisible, setLienParentVisible] = useState(false)
   const [lienCopie, setLienCopie] = useState(false)
+  const blocParentRef = useRef(null)
 
   /* Lien à transmettre au parent. Il porte l'id du compte enfant pour que le
      webhook Whop crédite ce compte-là et non celui du payeur. L'id est écrit
@@ -67,6 +106,8 @@ function PaywallPage({ onBackHome }) {
   }
 
   const emailValide = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  const formule =
+    FORMULES_ACTIVES.find((item) => item.id === formuleChoisie) || FORMULES_ACTIVES[0]
 
   /**
    * Redirige vers la page de paiement hébergée par Whop.
@@ -89,6 +130,9 @@ function PaywallPage({ onBackHome }) {
       const { checkout_url: checkoutURL } = await apiClient.createCheckout({
         email,
         userId: utilisateur.id,
+        // Ignoré par le backend actuel, qui n'a qu'un produit. Envoyé dès
+        // maintenant pour que l'ajout du second se fasse côté serveur seul.
+        plan: formuleChoisie,
       })
 
       if (!checkoutURL) {
@@ -126,24 +170,50 @@ function PaywallPage({ onBackHome }) {
 
         {/* Carte d'offre : bordure accentuée et prix en display. C'est le seul
             élément coloré de la page — rien d'autre ne doit capter le regard ici. */}
-        <section className="paywall-offer" aria-labelledby="paywall-offer-title">
-          <div className="paywall-offer-head">
-            <h2 id="paywall-offer-title">{FORMULE.nom}</h2>
-            <p className="paywall-price">
-              <span>{FORMULE.prix} €</span>
-              {FORMULE.periode}
-            </p>
-          </div>
+        <div
+          className={`paywall-offers ${FORMULES_ACTIVES.length > 1 ? 'is-multiple' : ''}`}
+          role={FORMULES_ACTIVES.length > 1 ? 'radiogroup' : undefined}
+          aria-label={FORMULES_ACTIVES.length > 1 ? 'Choix de la formule' : undefined}
+        >
+          {FORMULES_ACTIVES.map((item) => {
+            const retenue = item.id === formule.id
+            const multiple = FORMULES_ACTIVES.length > 1
+            /* Avec une seule formule il n'y a rien à choisir : la carte est un
+               bloc de texte, pas un bouton. Un radio isolé annonce « 1 sur 1 »
+               au lecteur d'écran et laisse croire qu'une autre option existe. */
+            const Balise = multiple ? 'button' : 'section'
 
-          <ul className="paywall-features">
-            {FORMULE.avantages.map((avantage) => (
-              <li key={avantage}>
-                <Check size={18} aria-hidden="true" />
-                <span>{avantage}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+            return (
+              <Balise
+                key={item.id}
+                type={multiple ? 'button' : undefined}
+                role={multiple ? 'radio' : undefined}
+                aria-checked={multiple ? retenue : undefined}
+                onClick={multiple ? () => setFormuleChoisie(item.id) : undefined}
+                className={`paywall-offer ${retenue ? 'is-selected' : ''}`}
+              >
+                {item.badge && <span className="paywall-offer-badge">{item.badge}</span>}
+
+                <div className="paywall-offer-head">
+                  <h2>{item.nom}</h2>
+                  <p className="paywall-price">
+                    <span>{item.prix} €</span>
+                    {item.periode}
+                  </p>
+                </div>
+
+                <ul className="paywall-features">
+                  {item.avantages.map((avantage) => (
+                    <li key={avantage}>
+                      <Check size={18} aria-hidden="true" />
+                      <span>{avantage}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Balise>
+            )
+          })}
+        </div>
 
         <section className="paywall-pillars" aria-label="Ce que contient le plan">
           <h2 className="paywall-section-title">Voici ce que tu obtiens</h2>
@@ -172,22 +242,18 @@ function PaywallPage({ onBackHome }) {
           </p>
         )}
 
+        {/* Un seul contrôle pour ce bloc : le bouton du pied de page. Deux
+            boutons ouvrant la même chose, l'un en bas l'autre au milieu,
+            c'était une commande de trop. */}
         {lienParent && (
-          <section className="paywall-parent">
-            <button
-              type="button"
-              className="paywall-parent-toggle"
-              onClick={() => setLienParentVisible((visible) => !visible)}
-              aria-expanded={lienParentVisible}
-            >
-              Faire payer par un parent
-            </button>
-
+          <section className="paywall-parent" ref={blocParentRef}>
             {lienParentVisible && (
               <div className="paywall-parent-body">
+                <h2 className="paywall-section-title">Faire payer par un parent</h2>
                 <p>
-                  Envoie ce lien à ton parent. Il y trouvera l’explication et pourra
-                  régler depuis son e-mail — ton accès s’ouvrira ici, sur ce compte.
+                  Envoie ce lien à ton parent. Il y trouvera l’explication, le prix et
+                  la mention que Grandimi n’est pas un dispositif médical — et il pourra
+                  régler depuis son e-mail. Ton accès s’ouvrira ici, sur ce compte.
                 </p>
                 <input
                   type="text"
@@ -253,9 +319,31 @@ function PaywallPage({ onBackHome }) {
               Redirection…
             </>
           ) : (
-            `S’abonner — ${FORMULE.prix} €/mois`
+            formule.id === 'mensuel'
+              ? `S’abonner — ${formule.prix} €/mois`
+              : `Payer ${formule.prix} € — une seule fois`
           )}
         </button>
+
+        {/* Deuxième action de plein droit, pas un lien replié au milieu de la
+            page. L'utilisateur type a 14 ans et pas de carte bancaire : lui
+            faire chercher ce chemin, c'est le perdre. Contour et non aplat —
+            la hiérarchie reste lisible. */}
+        {lienParent && (
+          <button
+            type="button"
+            className="paywall-parent-cta"
+            onClick={() => {
+              setLienParentVisible(true)
+              blocParentRef.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+              })
+            }}
+          >
+            Je n’ai pas de carte — faire payer par un parent
+          </button>
+        )}
       </footer>
     </div>
   )

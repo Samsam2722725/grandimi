@@ -57,6 +57,16 @@ const decelere = (t) => 1 - (1 - t) * (1 - t)
 const AGE_FIN = { M: 18.5, F: 16.5 }
 
 /**
+ * Âge auquel on considère la croissance terminée, borné par l'âge actuel :
+ * un garçon de 18 ans ne se voit pas annoncer une fin à 18,5 ans passée.
+ * Exporté parce que le résultat ET la carte partageable affichent cette date —
+ * deux calculs séparés finiraient par diverger.
+ */
+export function ageFinCroissance(ageNow, sex = 'M') {
+  return Math.max(Number(ageNow) + 0.5, AGE_FIN[sex] ?? 18)
+}
+
+/**
  * Trajectoire réelle : de la mesure d'aujourd'hui à l'estimation adulte,
  * avec la fourchette qui s'ouvre à mesure qu'on s'éloigne de la mesure.
  */
@@ -73,7 +83,7 @@ export function GrowthTrajectoryChart({
   const H = 210
   const M = { top: 22, right: 58, bottom: 30, left: 38 }
 
-  const ageFin = Math.max(Number(ageNow) + 0.5, AGE_FIN[sex] ?? 18)
+  const ageFin = ageFinCroissance(ageNow, sex)
   const bas = Math.min(heightNow, rangeMin) - 3
   const haut = Math.max(predicted, rangeMax) + 3
 

@@ -27,6 +27,11 @@ export const mockPredictHeight = async (data) => {
               ? 'medium'
               : 'low',
         puberty_stage: 'moderate',
+        /* Le vrai endpoint renvoie `user_id` (internal/api/handlers.go, l.171)
+           et la paywall en dépend : sans lui, le bouton « faire payer par un
+           parent » n'apparaît pas. Le simulacre doit le renvoyer aussi, sinon
+           ce chemin est intestable en local. */
+        user_id: 'mock-user-0001',
         model_used: 'Khamis-Roche v2 (Mock)',
         message: 'Prédiction générée en mode développement',
       });

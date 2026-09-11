@@ -91,10 +91,21 @@ class APIClient {
    * l'enfant. Le backend le transmet à Whop en metadata et le webhook
    * s'en sert pour choisir le bénéficiaire.
    */
-  async createCheckout({ email, userId, childUserId }) {
+  /**
+   * `plan` désigne la formule choisie ('mensuel' | 'unique'). Le backend
+   * actuel n'expose qu'un produit et ignore ce champ ; il est envoyé dès
+   * maintenant pour que l'ajout du paiement unique ne demande aucune
+   * modification côté client. Cf. docs/BRIEF-BACKEND.md, point 1.
+   */
+  async createCheckout({ email, userId, childUserId, plan }) {
     return this.request('/api/v1/checkout', {
       method: 'POST',
-      body: JSON.stringify({ email, user_id: userId, child_user_id: childUserId }),
+      body: JSON.stringify({
+        email,
+        user_id: userId,
+        child_user_id: childUserId,
+        plan,
+      }),
     });
   }
 
