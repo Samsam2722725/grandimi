@@ -4,7 +4,6 @@ import {
   BookOpenCheck,
   Check,
   Eye,
-  Moon,
   Ruler,
   ScanLine,
   ShieldCheck,
@@ -103,22 +102,22 @@ const ETAPES = [
   {
     num: '01',
     icone: ScanLine,
-    titre: 'Questionnaire',
-    texte: 'Ta taille, ton âge, celle de tes parents, tes habitudes. 5 minutes, pas plus.',
+    titre: 'Tu réponds',
+    texte: '14 questions, une par écran : ton âge, ta taille, celle de tes parents, tes habitudes. 2 minutes.',
     teinte: 'var(--color-cream)',
   },
   {
     num: '02',
     icone: Ruler,
-    titre: 'Estimation gratuite',
-    texte: 'Ta taille adulte estimée, avec sa marge d’erreur affichée. Avant tout paiement.',
+    titre: 'Tu vois ton estimation',
+    texte: 'Ta taille adulte estimée et les centimètres qu’il te reste, marge d’erreur affichée. Gratuit, sans compte.',
     teinte: 'var(--color-peach-wash)',
   },
   {
     num: '03',
     icone: Sparkles,
-    titre: 'Un plan chaque mois',
-    texte: 'Ce que tu fais aujourd’hui, cette semaine, ce mois-ci. Un nouveau plan à chaque mois d’abonnement.',
+    titre: 'Tu suis ton plan — c’est la partie payante',
+    texte: 'Chaque jour, 8 actions à cocher : sommeil, repas, exercices. Adaptées à TES réponses, et renouvelées chaque mois.',
     teinte: 'var(--color-sage-wash)',
   },
 ]
@@ -313,10 +312,20 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 className="rise mt-6 max-w-xl text-[clamp(16px,2.2vw,19px)] leading-[1.55] text-pretty text-[color:var(--text-secondary)]"
                 style={{ animationDelay: '160ms' }}
               >
-                Ta taille adulte est déjà en grande partie écrite. Ce qui ne l’est pas :
-                est-ce que tu vas l’atteindre. Réponds à quelques questions, vois ton
-                estimation et les centimètres qu’il te reste — gratuitement, marge d’erreur
-                affichée.
+                {/* Le paragraphe d'accroche ne parlait que de l'estimation —
+                    or l'estimation est gratuite. Un visiteur repartait sans
+                    savoir ce qui est vendu. Il dit maintenant les deux, dans
+                    l'ordre : ce qui est offert, puis ce qui est payant. */}
+                Ta génétique fixe un plafond. Ce qu’elle ne décide pas, c’est si tu
+                l’atteindras ou si tu finiras en dessous — et ça, ça se joue sur ton
+                sommeil, tes repas et ton activité, maintenant.
+                <br />
+                <br />
+                <strong className="font-semibold text-ink">
+                  Ton estimation est gratuite.
+                </strong>{' '}
+                Ensuite, le plan te dit chaque jour quoi faire pour ne pas perdre ces
+                centimètres-là.
               </p>
 
               <div
@@ -452,7 +461,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 enchaîne sur le même axe plutôt que de recentrer. */}
             <div className="mb-12 max-w-2xl">
               <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-                Trois étapes, cinq minutes
+                Trois étapes, deux minutes
               </h2>
               <p className="mt-4 text-base text-[color:var(--text-secondary)]">
                 Aucune mesure compliquée à prendre. Ce que tu sais déjà suffit.
@@ -713,8 +722,8 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             </h2>
 
             <p className="mx-auto mt-5 max-w-xl text-base text-white/70">
-              Cinq minutes de questions, un résultat immédiat, et la marge d’erreur
-              affichée noir sur blanc.
+              Deux minutes de questions, ton estimation tout de suite, puis un plan
+              qui te dit quoi faire chaque jour pour l’atteindre.
             </p>
 
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -815,95 +824,123 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
   )
 }
 
-/* Échelle de la barre de fourchette.
-   La géométrie est DÉRIVÉE de ces nombres, jamais écrite en dur : une
-   version précédente affichait une bande à 22–68 % pour une fourchette
-   173–183 cm, soit une barre qui contredisait son propre texte. Sur un
-   produit dont l'argument est « on montre la marge d'erreur », c'est
-   la dernière chose qu'on peut se permettre de faire fausse. */
-const ECHELLE_MIN = 160
-const ECHELLE_MAX = 200
+/* Chiffres de la maquette du hero. Cohérents entre eux : un garçon de
+   14 ans mesurant 166 cm, estimé à 178 cm — il lui reste donc 12 cm.
+   Tous ces nombres sont produits par le vrai calcul, aucun n'est une
+   métrique inventée pour la vitrine. */
 const ESTIMATION = 178
 const MARGE = 5
-
-const pct = (valeur) =>
-  ((valeur - ECHELLE_MIN) / (ECHELLE_MAX - ECHELLE_MIN)) * 100
+const RESTANT = 12
 
 /**
- * Maquette de l'écran de résultat, affichée dans le hero.
- * Montrer le produit vaut mieux qu'une photo d'illustration : c'est le
- * moment « magique » qu'on vend.
+ * Maquette affichée dans le hero.
+ *
+ * Elle montre le PLAN, pas seulement l'estimation : l'estimation est
+ * gratuite, elle ne peut donc pas illustrer ce qu'on vend. Le visiteur
+ * doit voir en une image ce qu'il obtient en payant — la liste de ce
+ * qu'il fait aujourd'hui, et sa série de jours tenus.
  */
 function ApercuResultat() {
-  const bas = ESTIMATION - MARGE
-  const haut = ESTIMATION + MARGE
-
   return (
     <div className="flex w-full flex-col gap-4 rounded-[26px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-5 text-left shadow-[0_24px_60px_-24px_rgba(23,18,14,0.22)] sm:p-6">
       <div className="flex items-center justify-between">
         <span className="inline-flex items-center gap-2 rounded-full bg-[color:var(--color-sage-wash)] px-3 py-1 text-xs font-semibold text-ink">
           <Sparkles className="size-3" aria-hidden="true" />
-          Ton estimation
+          Ton plan Grandimi
         </span>
         <span className="text-xs text-muted-foreground">Théo, 14 ans</span>
       </div>
 
+      {/* Le chiffre mis en avant est celui sur lequel on peut encore agir.
+          La taille adulte est un état de fait ; les centimètres restants
+          sont ce que le plan sert à ne pas perdre — et donc ce qu'on vend.
+
+          L'ancienne version empilait le grand chiffre, la fourchette en
+          texte ET une barre d'échelle : trois façons de dire la même
+          chose, sur la première image que voit le visiteur. */}
       <div className="rounded-[20px] bg-[color:var(--color-cream)] p-5">
-        <p className="text-sm text-[color:var(--text-secondary)]">Taille adulte estimée</p>
-        {/* « cm » sur la ligne de base : en exposant, 178 cm se lisait
-            comme une puissance mathématique. */}
+        <p className="text-sm text-[color:var(--text-secondary)]">Il te reste</p>
         <p className="mt-1 flex items-baseline gap-1 font-display text-[clamp(44px,7vw,68px)] leading-none font-medium tracking-[-0.04em] text-ink">
-          {ESTIMATION}
+          +{RESTANT}
           <span className="text-[0.3em] font-sans font-semibold tracking-normal text-[color:var(--text-secondary)]">
-            cm
+            cm à prendre
           </span>
         </p>
         <p className="mt-2 text-sm font-medium text-[color:var(--color-indigo-bloom)]">
-          Fourchette : {bas} – {haut} cm (±{MARGE} cm)
+          Taille adulte estimée : {ESTIMATION} cm (± {MARGE} cm)
         </p>
       </div>
 
-      {/* Barre de fourchette : la marge d'erreur est montrée, pas cachée. */}
-      <div>
-        <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-[color:var(--color-cloud-gray)]">
-          <div
-            className="absolute inset-y-0 rounded-full bg-[color:var(--color-peach-wash)]"
-            style={{ left: `${pct(bas)}%`, width: `${pct(haut) - pct(bas)}%` }}
-          />
-          <div
-            className="absolute inset-y-0 w-1 -translate-x-1/2 rounded-full bg-brand"
-            style={{ left: `${pct(ESTIMATION)}%` }}
-          />
-        </div>
-        <div className="relative mt-2 text-[11px] text-muted-foreground">
-          <span>{ECHELLE_MIN} cm</span>
-          {/* Aligné sur le repère, pas au centre : la légende doit
-              désigner le point qu'elle nomme. */}
-          <span
-            className="absolute -translate-x-1/2"
-            style={{ left: `${pct(ESTIMATION)}%` }}
-          >
-            Estimation
-          </span>
-          <span className="float-right">{ECHELLE_MAX} cm</span>
-        </div>
-      </div>
+      {/* ====================================================
+          CE QUI EST RÉELLEMENT VENDU
+          ====================================================
+          L'estimation est gratuite : elle ne peut pas être l'aperçu du
+          produit. Ce bloc montre donc la todo du jour — l'écran que
+          l'abonné ouvre chaque matin, et la seule chose qui justifie de
+          payer. Le visiteur voit d'un coup d'œil ce qu'il achète.
 
-      <div className="grid grid-cols-3 gap-3">
-        {[
-          /* sauge / abricot / bleu — trois teintes DISTINCTES.
-             `lilac` est désormais un alias de `sky` : l'utiliser ici
-             donnait deux cartes bleues identiques sur trois. */
-          { icone: Moon, label: 'Sommeil', valeur: '8 h 40', teinte: 'var(--color-sage-wash)' },
-          { icone: Sparkles, label: 'Marge', valeur: '+4 cm', teinte: 'var(--color-peach-wash)' },
-          { icone: Ruler, label: 'Percentile', valeur: '68e', teinte: 'var(--color-sky-wash)' },
-        ].map(({ icone: Icone, label, valeur, teinte }) => (
-          <div key={label} className="rounded-[16px] p-3" style={{ backgroundColor: teinte }}>
-            <Icone className="size-4 text-ink" aria-hidden="true" />
-            <p className="mt-2 text-[11px] text-[color:var(--text-secondary)]">{label}</p>
-            <p className="font-display text-lg font-medium text-ink">{valeur}</p>
-          </div>
-        ))}
+          Les trois cartes précédentes annonçaient « Percentile : 68e »
+          (le produit ne calcule aucun percentile), « Sommeil : 8 h 40 »
+          (le questionnaire ne propose que 6 / 7,5 / 8,5 / 9,5 h) et
+          « Marge : +4 cm » qui confondait marge d'erreur et croissance
+          restante. Trois chiffres inventés sur une page dont l'argument
+          est qu'on ne cache rien.
+
+          Toutes les lignes ci-dessous existent telles quelles dans le
+          plan réel (cf. internal/planner/monthly_plan.go). */}
+      <div className="rounded-[20px] bg-[color:var(--color-sage-wash)] p-4">
+        <div className="flex items-baseline justify-between">
+          <p className="text-[11px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase">
+            Ton plan d’aujourd’hui
+          </p>
+          <p className="text-[11px] font-semibold text-ink">2 / 3 faites</p>
+        </div>
+
+        <ul className="mt-3 flex flex-col gap-2">
+          {[
+            { texte: 'Suspension à la barre : 5 × 15 s', faite: true },
+            { texte: 'Petit-déjeuner avec des protéines', faite: true },
+            { texte: 'Écrans coupés 45 min avant le coucher', faite: false },
+          ].map(({ texte, faite }) => (
+            <li key={texte} className="flex items-center gap-2.5">
+              <span
+                className={`flex size-[18px] shrink-0 items-center justify-center rounded-[6px] text-[11px] font-bold ${
+                  faite
+                    ? 'bg-brand text-[color:var(--color-on-brand)]'
+                    : 'border-2 border-[color:var(--color-frost-gray)]'
+                }`}
+                aria-hidden="true"
+              >
+                {faite ? '✓' : ''}
+              </span>
+              <span
+                className={`text-[13px] leading-tight ${
+                  faite
+                    ? 'text-[color:var(--text-secondary)] line-through'
+                    : 'text-ink'
+                }`}
+              >
+                {texte}
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-3 flex items-center gap-2 border-t border-[color:var(--color-frost-gray)] pt-3">
+          <span className="flex gap-1" aria-hidden="true">
+            {[true, true, true, true, true, false, false].map((rempli, i) => (
+              <span
+                key={i}
+                className={`size-2 rounded-full ${
+                  rempli ? 'bg-brand' : 'bg-[color:var(--color-cloud-gray)]'
+                }`}
+              />
+            ))}
+          </span>
+          <span className="text-[11px] text-[color:var(--text-secondary)]">
+            5 jours d’affilée
+          </span>
+        </div>
       </div>
     </div>
   )
