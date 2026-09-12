@@ -527,19 +527,13 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="final-cta">
-        <div className="cta-box">
-          <h2>Prêt à commencer ?</h2>
-          <p>
-            Ce plan couvre le mois qui vient. La régularité fait tout le résultat.
-            Mesure-toi à la fin du mois : ton prochain plan sera adapté à tes progrès.
-          </p>
-          <button className="btn-primary btn-large" onClick={onBackHome}>
-            ✓ Commencer mon parcours
-          </button>
-        </div>
-      </section>
+      {/* Le bloc « Prêt à commencer ? » a été retiré.
+
+          Son bouton appelait onBackHome : il renvoyait l’abonné sur la
+          page d’accueil marchande, c’est-à-dire hors du plan qu’il vient
+          de payer, en lui promettant l’inverse. Un « Commencer mon
+          parcours » qui fait sortir du produit est pire qu’absent — et
+          le plan est déjà à l’écran, il n’y a rien à démarrer. */}
     </div>
   );
 }
