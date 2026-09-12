@@ -535,9 +535,15 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
               onChange={(e) => definir('email', e.target.value)}
               aria-label="Adresse e-mail"
             />
+            {/* Disait « Pas de newsletter, pas de revente » juste sous le
+                sous-titre qui annonce maintenant un envoi à un mois. Les deux
+                phrases se contredisaient à deux centimètres l'une de l'autre,
+                sur l'écran même où l'on demande une adresse à un mineur. La
+                promesse qui reste est celle qu'on tient vraiment : rien n'est
+                revendu, et il n'y a pas de suite d'e-mails. */}
             <p className="funnel-help">
-              Elle sert à retrouver ton estimation et ton plan. Pas de newsletter,
-              pas de revente.
+              Elle sert à retrouver ton estimation et ton plan. Jamais revendue,
+              jamais transmise à personne.
             </p>
           </div>
         )
