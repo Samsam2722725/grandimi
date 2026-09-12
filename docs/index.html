@@ -9,6 +9,27 @@
         location.replace('https://' + location.host + location.pathname + location.search + location.hash);
       }
     </script>
+    <!-- Pixel Whop (biz_nqh5U5JaSMUVS7).
+
+         Mesure d’attribution publicitaire : il dit à Whop quelles visites
+         viennent de quelle campagne, et les relie aux achats faits sur
+         leur page de paiement.
+
+         Placé dans le <head>, comme la documentation Whop le demande, et
+         APRÈS la redirection HTTPS ci-dessus : inutile de compter une vue
+         sur une page qui va être rechargée dans la seconde.
+
+         Ce fichier est la coquille de TOUTE l’application — accueil,
+         questionnaire, résultat, paywall sont le même document HTML. Le
+         pixel couvre donc l’intégralité du tunnel avec une seule pose.
+
+         Snippet repris tel quel, sans modifier un caractère.
+
+         L’achat lui-même n’a pas besoin d’événement : il se conclut sur la
+         page de paiement de Whop, qui le compte elle-même. Un événement
+         « purchase » manuel ne sert que pour un encaissement extérieur. -->
+    <script>!function(w,d,s,u,n,a,b){if(w[n])return;a=w[n]={q:[],t:+new Date,s:[],o:u,track:function(){a.q.push([+new Date].concat([].slice.call(arguments)))},setScope:function(){a.s=[].slice.call(arguments).filter(function(x){return typeof x==="string"});a.q.push([+new Date,"setScope"].concat(a.s))},scope:function(){var c=[].slice.call(arguments);return{track:function(){a.q.push([+new Date].concat([].slice.call(arguments)).concat([{__scope:c}]))}}}};b=d.createElement(s);b.async=1;b.src=u+"/s.js";d.getElementsByTagName(s)[0].parentNode.insertBefore(b,d.getElementsByTagName(s)[0])}(window,document,"script","https://t.whop.tw","whop");whop.setScope("biz_nqh5U5JaSMUVS7");whop.track("page");</script>
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#fbf7f2" />
