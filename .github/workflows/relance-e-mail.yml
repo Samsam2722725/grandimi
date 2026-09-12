@@ -1,0 +1,79 @@
+name: Relance e-mail J+30
+
+# Déclenche l'envoi de la relance à un mois.
+#
+# POURQUOI ICI ET PAS DANS LE SERVEUR. Le backend tourne sur l'offre
+# gratuite Render, qui endort l'instance après un quart d'heure sans
+# trafic. Un time.Ticker dans main.go ne tournerait donc pas la nuit,
+# c'est-à-dire jamais. Cet appel réveille l'instance, et laisse en prime
+# une trace horodatée de chaque passage, consultable sans ouvrir Render.
+#
+# SANS DANGER SI REJOUÉ. Le serveur pose une réservation en base avant
+# d'appeler le fournisseur, et un index UNIQUE (user_id, type) refuse la
+# seconde : relancer ce workflow à la main n'envoie aucun doublon.
+#
+# CE QU'IL FAUT AVOIR POSÉ POUR QUE ÇA ENVOIE VRAIMENT :
+#   - secret GitHub  ADMIN_TOKEN        (Settings > Secrets > Actions)
+#   - sur Render     RESEND_API_KEY     (clé du fournisseur d'envoi)
+#   - sur Render     EMAIL_EXPEDITEUR   ex. "Grandimi <bonjour@grandimi.com>"
+#   - sur Render     AUTH_SECRET        (déjà présent : signe aussi les
+#                                        liens de désinscription)
+# Tant que les deux variables Render manquent, la route répond 503 et
+# n'envoie rien : ce workflow échouera bruyamment plutôt que de laisser
+# croire que des e-mails partent.
+
+on:
+  schedule:
+    # 08:00 UTC — 10 h à Paris en été, 9 h en hiver. Un e-mail non
+    # sollicité arrive mieux en milieu de matinée qu'en pleine nuit.
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  relancer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Appeler la tâche d'envoi
+        env:
+          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+          API_URL: ${{ vars.API_URL || 'https://grandimi-api.onrender.com' }}
+        run: |
+          if [ -z "$ADMIN_TOKEN" ]; then
+            echo "::error::Le secret ADMIN_TOKEN n'est pas défini sur ce dépôt."
+            echo "Settings > Secrets and variables > Actions > New repository secret."
+            exit 1
+          fi
+
+          # --max-time généreux : sur l'offre gratuite Render, la première
+          # requête réveille l'instance et peut mettre près d'une minute
+          # avant la moindre réponse. S'y ajoute une demi-seconde de pause
+          # entre chaque envoi, côté serveur, pour ne pas dépasser le débit
+          # autorisé par le fournisseur.
+          reponse=$(mktemp)
+          code=$(curl --silent --show-error \
+                      --max-time 600 \
+                      --retry 2 --retry-delay 30 --retry-connrefused \
+                      --output "$reponse" --write-out '%{http_code}' \
+                      -X POST "$API_URL/api/admin/relances/j30" \
+                      -H "Authorization: Bearer $ADMIN_TOKEN")
+
+          echo "HTTP $code"
+          cat "$reponse"
+          echo
+
+          if [ "$code" != "200" ]; then
+            echo "::error::La tâche d'envoi a répondu $code."
+            exit 1
+          fi
+
+          # Résumé lisible dans l'onglet Actions, sans avoir à déplier les
+          # journaux. Les échecs sont remontés en avertissement : ils ne
+          # cassent pas le passage (les autres envois sont partis) mais ils
+          # ne doivent pas passer inaperçus non plus.
+          envoyes=$(grep -o '"envoyes":[0-9]*' "$reponse" | head -1 | cut -d: -f2)
+          echecs=$(grep -o '"echecs":[0-9]*' "$reponse" | head -1 | cut -d: -f2)
+          echo "### Relance J+30 — ${envoyes:-0} envoyés, ${echecs:-0} échecs" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "${echecs:-0}" != "0" ]; then
+            echo "::warning::${echecs} envoi(s) en échec — voir les journaux Render (motif enregistré dans email_envois.erreur)."
+          fi

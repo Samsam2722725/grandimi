@@ -636,12 +636,20 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       sous: 'Aucune prédiction de taille n’est exacte. On affiche la fourchette au lieu de la cacher.',
     },
     email: {
-      /* « Où t'envoyer ton estimation ? » promettait un e-mail. Aucun
-         n'est envoyé : il n'existe aucune brique d'envoi dans le
-         backend. On attendait donc un message qui n'arrive jamais.
-         Le titre dit maintenant à quoi l'adresse sert réellement. */
+      /* « Où t'envoyer ton estimation ? » promettait un e-mail que rien
+         n'envoyait : le backend n'avait aucune brique d'envoi, et on
+         attendait un message qui n'arrivait jamais. Le texte a d'abord
+         été corrigé pour ne plus rien promettre.
+
+         Un envoi existe maintenant — un seul, la relance à un mois
+         (internal/email/relance_j30.go). Ce texte doit donc l'annoncer
+         AVANT que l'adresse soit saisie, et l'annoncer exactement :
+         combien d'e-mails, pour quoi, et comment en sortir. Une adresse
+         obtenue sans dire ce qu'on en fera, auprès d'un mineur, est
+         précisément ce que le RGPD refuse. Si un second type d'envoi
+         est ajouté un jour, cette phrase change le même jour. */
       titre: 'Ton adresse e-mail',
-      sous: 'Elle ne sert qu’à retrouver ton compte plus tard. Ton résultat s’affiche à l’écran juste après, tout de suite.',
+      sous: 'Elle sert à retrouver ton compte, et à t’envoyer un seul e-mail : dans un mois, pour te re-mesurer. Désinscription en un clic. Ton résultat, lui, s’affiche tout de suite.',
     },
     recapitulatif: {
       titre: 'On vérifie avant de calculer',

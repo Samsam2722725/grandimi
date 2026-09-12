@@ -83,6 +83,12 @@ func main() {
 	   quelqu'un d'autre a payé pour lui depuis un autre appareil. */
 	router.GET("/api/v1/checkout-status", api.GetCheckoutStatus)
 	router.GET("/api/v1/child-status", api.GetChildStatus)
+	/* Désinscription des e-mails. Publique et sans session, par
+	   construction : le lien est ouvert depuis le pied d'un e-mail, par
+	   quelqu'un qui n'a pas de session et souvent pas de mot de passe.
+	   C'est le jeton signé porté par le lien qui fait autorité. */
+	router.GET("/api/v1/emails/desinscription", api.Desinscription)
+
 	// Le webhook n'est pas protégé par session mais par signature Whop.
 	router.POST("/webhooks/whop", api.WhopWebhook)
 
@@ -119,6 +125,13 @@ func main() {
 		admin.POST("/user/revoke-premium", api.AdminRevokePremium)
 		admin.DELETE("/user/:id", api.AdminDeleteUser)
 		admin.POST("/webhook/simulate", api.AdminWebhookSimulator)
+
+		/* Relance à un mois. Déclenchée une fois par jour depuis GitHub
+		   Actions plutôt que par une minuterie interne : sur l'offre
+		   gratuite Render l'instance s'endort au bout d'un quart d'heure
+		   sans trafic, et un ticker ne tournerait donc jamais la nuit.
+		   Rejouable sans risque de doublon (cf. email_handlers.go). */
+		admin.POST("/relances/j30", api.LancerRelancesJ30)
 	}
 
 	router.Run(":" + port)

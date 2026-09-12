@@ -1,0 +1,59 @@
+name: Vérifier le backend
+
+# Le dépôt vérifiait le front à chaque push (verifier-le-site.yml) mais
+# rien ne compilait le Go. Render reconstruit à chaque push : une erreur
+# de compilation ne casse donc pas la production — l'ancienne version
+# continue de tourner — mais le déploiement échoue en silence et on croit
+# avoir livré. C'est exactement le faux signal que les deux workflows
+# précédents produisaient, et qu'on a désactivés pour cette raison.
+#
+# Ce workflow ne déploie rien. Il répond à une seule question : est-ce que
+# ce qui vient d'être poussé se compile encore ?
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cmd/**'
+      - 'internal/**'
+      - 'go.mod'
+      - 'go.sum'
+      - 'Dockerfile'
+      - '.github/workflows/verifier-le-backend.yml'
+  pull_request:
+    paths:
+      - 'cmd/**'
+      - 'internal/**'
+      - 'go.mod'
+      - 'go.sum'
+      - 'Dockerfile'
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          # Même version que le Dockerfile (golang:1.22-alpine) : vérifier
+          # avec une autre laisserait passer ce qui casse chez Render.
+          go-version: '1.22'
+
+      # Le dépôt ne versionne pas de go.sum ; le Dockerfile lance lui aussi
+      # `go mod tidy` avant de construire. On reproduit la même séquence
+      # pour tester ce qui sera réellement déployé.
+      - name: Résoudre les dépendances
+        run: go mod tidy
+
+      - name: Compiler
+        run: go build ./...
+
+      # go vet attrape ce que le compilateur laisse passer : un Printf dont
+      # les verbes ne correspondent pas aux arguments, une méthode jamais
+      # appelée parce que sa signature diverge.
+      - name: Analyser
+        run: go vet ./...
+
+      - name: Tester
+        run: go test ./...
