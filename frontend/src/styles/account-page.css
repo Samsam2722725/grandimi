@@ -126,3 +126,21 @@
   .account-section { padding: var(--spacing-20) var(--spacing-16); }
   .account-card { padding: var(--spacing-20); }
 }
+
+/* Lien de résiliation en libre-service, affiché en permanence sous le
+   bouton. Discret mais jamais caché : un abonné qui veut partir doit
+   trouver la sortie du premier coup. */
+.account-manage-link {
+  margin: 12px 0 0;
+  font-size: 14px;
+}
+
+.account-manage-link a {
+  color: var(--text-secondary, #6f675f);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.account-manage-link a:hover {
+  color: var(--color-coral-pulse, #ff5a1f);
+}

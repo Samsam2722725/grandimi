@@ -116,9 +116,20 @@ func CancelSubscription(c *gin.Context) {
 		   résilier lui-même et lui envoie l'e-mail de confirmation, donc
 		   il existe une vraie sortie à lui indiquer. */
 		fmt.Printf("[subscription] annulation impossible pour %s : WHOP_API_KEY absente\n", userID)
+
+		/* Le lien de gestion propre a CET abonnement, envoye par Whop
+		   dans chaque webhook et stocke en base. Il ouvre directement la
+		   page de son abonnement, au lieu de la liste de commandes ou il
+		   faudrait le retrouver. Repli sur l adresse generique seulement
+		   si le webhook ne l a jamais fourni. */
+		lienGestion := sub.ManageURL
+		if lienGestion == "" {
+			lienGestion = "https://whop.com/@me/settings/orders/"
+		}
+
 		c.JSON(http.StatusServiceUnavailable, gin.H{
-			"error":          "La résiliation automatique n'est pas encore active ici. Tu peux résilier toi-même depuis le compte Whop qui a servi au paiement : ton accès reste actif jusqu'à la fin de la période déjà payée.",
-			"self_serve_url": "https://whop.com/@me/settings/orders/",
+			"error":          "La résiliation automatique n'est pas encore active ici. Tu peux résilier toi-même en un clic depuis Whop : ton accès reste actif jusqu'à la fin de la période déjà payée.",
+			"self_serve_url": lienGestion,
 		})
 		return
 	}

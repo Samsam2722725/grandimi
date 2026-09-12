@@ -30,15 +30,19 @@ import { useEffect, useRef, useState } from 'react'
  *
  * La couleur vient de `currentColor` : `className="text-brand"` le stylise.
  *
- * NOTE PROD : `DEFAULT_FONT_URL` pointe sur un CDN tiers. Pour de la production,
- * déposer le .ttf dans `public/fonts/` et passer `fontUrl="/fonts/…"` — une
- * dépendance réseau externe dans le hero est un point de panne inutile.
+ * La police est servie depuis notre propre domaine (`public/fonts/`).
+ * Elle venait d’un CDN tiers qui ne renvoie pas d’en-tête CORS : le
+ * navigateur bloquait le fetch à chaque visite et l’effet ne s’est jamais
+ * affiché en production. Une dépendance réseau externe dans le hero est
+ * un point de panne inutile — et celle-ci était déjà en panne.
  */
 
 const OPENTYPE_CDN = 'https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js'
 
-const DEFAULT_FONT_URL =
-  'https://cdn.21st.dev/assets/mirror/13/1347863151acdc00fa281daaba1a3543dbce5870b55f9cf7479a15bb84007681.ttf'
+// Caveat, SIL Open Font License 1.1 (voir public/fonts/caveat-OFL.txt).
+// Servie depuis notre domaine : pas de CORS, pas de tiers, pas de doute
+// sur les droits.
+const DEFAULT_FONT_URL = '/fonts/caveat.ttf'
 
 // La bibliothèque, chargée une seule fois par page.
 let libPromise = null

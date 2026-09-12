@@ -155,6 +155,21 @@ function AccountPage({ onBackHome }) {
               </button>
             )}
 
+            {/* Sortie de secours permanente. Elle ouvre la page Whop de CET
+                abonnement — pas la liste des commandes — et fonctionne que la
+                résiliation automatique soit branchée ou non. */}
+            {abonnement.manage_url && (
+              <p className="account-manage-link">
+                <a
+                  href={abonnement.manage_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Gérer ou résilier directement chez Whop
+                </a>
+              </p>
+            )}
+
             {resiliationErreur && (
               <div className="alert alert-error" role="alert">
                 <span className="alert-icon">!</span>
