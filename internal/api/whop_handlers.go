@@ -296,6 +296,26 @@ func WhopWebhook(c *gin.Context) {
 	}
 	db.LogWebhook(payload.Type, payload.Data.User.Email, payloadMap, "received")
 
+	/* payment.succeeded : on note le paiement pour que le client puisse
+	   le réclamer au retour.
+
+	   C'est le seul identifiant partagé entre ce que Whop nous envoie
+	   et ce que Whop donne au client : le même pay_XXXX se trouve dans
+	   ce webhook et dans l'URL de retour. L'e-mail, lui, ne relie rien —
+	   celui tapé sur la page Whop n'a aucune raison d'être celui tapé
+	   sur Grandimi, et les métadonnées de l'URL de paiement arrivent
+	   vides (vérifié sur trois paiements réels le 12/09/2026). */
+	if payload.Type == "payment.succeeded" {
+		if err := db.EnregistrerPaiement(payload.Data.ID, payload.Data.User.ID,
+			payload.Data.Plan.ID, payload.Data.Status); err != nil {
+			fmt.Printf("[whop] EnregistrerPaiement(%s): %v\n", payload.Data.ID, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to record payment"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"status": "received"})
+		return
+	}
+
 	// Handle membership.activated (paiement confirmé)
 	if payload.Type == "membership.activated" {
 		user, err := resoudreBeneficiaire(payload)

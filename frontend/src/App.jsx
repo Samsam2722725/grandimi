@@ -244,43 +244,86 @@ function App() {
     const params = new URLSearchParams(window.location.search);
 
     if (retourDePaiementReussi(params)) {
-      const email = params.get('customer_email');
-      if (!email) {
-        setCurrentPage('set-password');
-        return;
-      }
+      let annule = false;
 
-      /* fetch() n'a pas de délai maximum : une requête restée en suspens
-         ne déclenche ni .then ni .catch, et laisserait le payeur devant
-         l'écran d'attente sans fin. Passé quinze secondes, on applique
-         la même issue que le .catch ci-dessous. Le minuteur est annulé
-         dès qu'une réponse arrive, pour ne pas écraser le cas cadeau —
-         où l'adresse du payeur n'est justement pas celle du compte. */
+      /* On RÉCLAME le paiement avant tout le reste.
+
+         L'accès était rattaché par l'adresse e-mail : celle tapée sur la
+         page Whop devait être identique à celle tapée dans le
+         questionnaire. Whop laisse ce champ modifiable, personne ne
+         retape deux fois la même chose, et le client se retrouvait avec
+         deux comptes — le premium sur celui de Whop, lui sur l'autre.
+
+         L'identifiant de paiement, lui, est le même des deux côtés :
+         Whop le met dans l'URL de retour et l'envoie au serveur dans un
+         webhook signé. Il n'y a plus rien à retaper. */
+      const idCompte = (() => {
+        try {
+          return JSON.parse(localStorage.getItem('user') || '{}').id || '';
+        } catch {
+          return '';
+        }
+      })();
+      const idPaiement = params.get('payment_id') || params.get('receipt_id') || '';
+
+      const reclamer = async () => {
+        if (!idPaiement || !idCompte) return;
+        /* Le client revient parfois avant le webhook de Whop. « pending »
+           n'est donc pas un échec : on redemande pendant une quinzaine de
+           secondes avant de laisser tomber. */
+        for (let essai = 0; essai < 6 && !annule; essai += 1) {
+          try {
+            const res = await apiClient.reclamerPaiement({
+              paymentId: idPaiement,
+              userId: idCompte,
+            });
+            if (res.status === 'granted' || res.status === 'already_granted') return;
+          } catch {
+            // Réseau : on retente.
+          }
+          await new Promise((resoudre) => setTimeout(resoudre, 2500));
+        }
+      };
+
       const versMotDePasse = () => {
-        localStorage.setItem('userEmail', email);
+        if (annule) return;
         setCurrentPage('set-password');
       };
-      const secours = setTimeout(versMotDePasse, 15000);
 
-      apiClient
-        .getCheckoutStatus(email)
-        .then((res) => {
-          clearTimeout(secours);
+      (async () => {
+        await reclamer();
+        if (annule) return;
+
+        const email = params.get('customer_email');
+
+        /* Sans adresse dans l'URL, il ne reste que ce qu'on a en local :
+           l'écran de mot de passe s'en charge. */
+        if (!email) {
+          versMotDePasse();
+          return;
+        }
+
+        /* Paiement cadeau : le payeur n'est pas le bénéficiaire, il ne
+           doit surtout pas se voir proposer de créer un compte. On ne
+           bloque pas un vrai payeur derrière une panne réseau : en cas
+           d'échec on l'envoie quand même vers son mot de passe. */
+        try {
+          const res = await apiClient.getCheckoutStatus(email);
+          if (annule) return;
           if (res.gift) {
             setCurrentPage('gift-confirmed');
-          } else {
-            versMotDePasse();
+            return;
           }
-        })
-        .catch(() => {
-          // Statut illisible : on ne bloque pas un vrai payeur derrière
-          // une panne réseau, quitte à risquer (rarement) un compte
-          // fantôme plutôt qu'un paiement sans suite du tout.
-          clearTimeout(secours);
-          versMotDePasse();
-        });
+        } catch {
+          // Statut illisible : on continue vers le mot de passe.
+        }
 
-      return () => clearTimeout(secours);
+        versMotDePasse();
+      })();
+
+      return () => {
+        annule = true;
+      };
     }
   }, []);
 

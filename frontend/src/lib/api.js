@@ -132,6 +132,26 @@ class APIClient {
   }
 
   /**
+   * Rattache un paiement au compte qui l'a fait.
+   *
+   * L'identifiant vient de l'URL de retour de Whop (?payment_id=pay_XXXX)
+   * et le même arrive côté serveur dans un webhook signé. C'est le seul
+   * lien fiable entre les deux : l'adresse tapée sur la page Whop peut
+   * différer de celle tapée sur Grandimi, et c'est ce qui faisait perdre
+   * l'accès à des clients qui avaient payé.
+   *
+   * Réponses : { status: 'granted' | 'already_granted' | 'pending' }.
+   * « pending » veut dire que le webhook n'est pas encore arrivé — il
+   * faut réessayer, pas abandonner.
+   */
+  async reclamerPaiement({ paymentId, userId }) {
+    return this.request('/api/v1/checkout/reclamer', {
+      method: 'POST',
+      body: JSON.stringify({ payment_id: paymentId, user_id: userId }),
+    });
+  }
+
+  /**
    * Dit si le dernier paiement de cette adresse était un paiement cadeau
    * (pour le compte d'un enfant) plutôt que pour son propre compte.
    * Appelé juste après le retour de Whop, avant toute création de compte.

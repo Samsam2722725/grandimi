@@ -82,6 +82,13 @@ func main() {
 	   le payeur qui revient de Whop, et l'enfant qui découvre que
 	   quelqu'un d'autre a payé pour lui depuis un autre appareil. */
 	router.GET("/api/v1/checkout-status", api.GetCheckoutStatus)
+
+	/* Rattache un paiement au compte qui l a fait, par l identifiant
+	   que Whop met dans l URL de retour. Publique et sans session : a
+	   cet instant le client vient de payer et n a pas encore de mot de
+	   passe. C est l identifiant de paiement, connu du seul payeur et
+	   utilisable une seule fois, qui fait autorite. */
+	router.POST("/api/v1/checkout/reclamer", api.ReclamerPaiement)
 	router.GET("/api/v1/child-status", api.GetChildStatus)
 	/* Désinscription des e-mails. Publique et sans session, par
 	   construction : le lien est ouvert depuis le pied d'un e-mail, par
