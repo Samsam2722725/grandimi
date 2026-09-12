@@ -39,7 +39,7 @@ func main() {
 	// V1 API (Original Khamis-Roche)
 	router.POST("/api/v1/predict-height", api.PredictHeight)
 
-	// V2 API (ML-Enhanced with ethnic/health factors)
+	// V2 API (taille mi-parentale + facteurs de mode de vie)
 	// Chaque appel crée un compte et une prédiction en base : plafonné
 	// pour qu'on ne puisse pas la remplir depuis une boucle.
 	router.POST("/api/v2/predict-height", api.RateLimit(30, time.Hour), api.PredictHeightV2)

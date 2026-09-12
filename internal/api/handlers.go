@@ -89,11 +89,11 @@ func PredictHeight(c *gin.Context) {
 		"confidence_level": result.ConfidenceLevel,
 		"puberty_stage":    result.PubertyStage,
 		"message":          result.Message,
-		"model":            "Khamis-Roche v1",
+		"model":            "Taille mi-parentale (Tanner)",
 	})
 }
 
-// V2 API - ML-Enhanced with ethnic adjustments and health factors
+// V2 API - methode mi-parentale, ajustee par les facteurs de mode de vie
 func PredictHeightV2(c *gin.Context) {
 	var req PredictHeightV2Request
 
@@ -354,7 +354,7 @@ func HealthCheck(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": "ok",
 		"app":    "Grandimi Height Estimator API",
-		"models": []string{"v1 (Khamis-Roche)", "v2 (ML-Enhanced)"},
+		"models": []string{"v1 et v2 : taille mi-parentale (Tanner) + facteurs de mode de vie"},
 		"commit": commit,
 	})
 }
