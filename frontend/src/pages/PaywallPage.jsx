@@ -8,6 +8,14 @@ import '../styles/funnel.css'
    ParentPage (page claire, destinée à un adulte arrivé par lien partagé) et
    partage des noms de classe avec elle. La remplacer cassait cet écran. */
 import '../styles/paywall-night.css'
+import {
+  checkoutEchoue,
+  checkoutOuvert,
+  lienParentCopie,
+  lienParentOuvert,
+  paywallVue,
+  planChoisi as mesurerPlanChoisi,
+} from '../lib/analytics'
 
 /* Deux offres, mêmes fonctionnalités : seul le rythme de facturation
    change. Les montants sont ceux affichés par défaut ; getPlans() les
@@ -75,6 +83,16 @@ function PaywallPage({ onBackHome }) {
     }
   }, [])
 
+  /* Dénominateur du seul taux que le brief demande de suivre :
+     « paywall affichée → checkout Whop ouvert ». Sans cet
+     événement, le numérateur seul ne veut rien dire. */
+  useEffect(() => {
+    paywallVue(planChoisi)
+    // Une fois par affichage : le changement d'offre est un autre
+    // événement, il ne doit pas regonfler celui-ci.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const offre = plans[planChoisi]
   const economieAnnuelle = COUT_DOUZE_MENSUALITES - plans.annual.price_eur
   const pourcentageEconomie = Math.round((economieAnnuelle / COUT_DOUZE_MENSUALITES) * 100)
@@ -96,6 +114,7 @@ function PaywallPage({ onBackHome }) {
   const copierLien = async () => {
     try {
       await navigator.clipboard.writeText(lienParent)
+      lienParentCopie()
       setLienCopie(true)
       setTimeout(() => setLienCopie(false), 2500)
     } catch {
@@ -136,8 +155,13 @@ function PaywallPage({ onBackHome }) {
       }
 
       localStorage.setItem('user', JSON.stringify({ ...utilisateur, email }))
+      /* Émis AVANT window.location.href : la redirection décharge la
+         page, et PostHog n'aurait plus le temps d'envoyer quoi que ce
+         soit après. */
+      checkoutOuvert(planChoisi)
       window.location.href = checkoutURL
     } catch (err) {
+      checkoutEchoue(planChoisi, err.message)
       setErreur(
         err.message || "Impossible d'ouvrir la page de paiement. Réessaie dans un instant.",
       )
@@ -179,7 +203,10 @@ function PaywallPage({ onBackHome }) {
               role="radio"
               aria-checked={planChoisi === 'monthly'}
               className={`paywall-plan-option ${planChoisi === 'monthly' ? 'active' : ''}`}
-              onClick={() => setPlanChoisi('monthly')}
+              onClick={() => {
+              setPlanChoisi('monthly')
+              mesurerPlanChoisi('monthly')
+            }}
             >
               Mensuel
             </button>
@@ -188,7 +215,10 @@ function PaywallPage({ onBackHome }) {
               role="radio"
               aria-checked={planChoisi === 'annual'}
               className={`paywall-plan-option ${planChoisi === 'annual' ? 'active' : ''}`}
-              onClick={() => setPlanChoisi('annual')}
+              onClick={() => {
+              setPlanChoisi('annual')
+              mesurerPlanChoisi('annual')
+            }}
             >
               Annuel
             </button>
@@ -337,6 +367,7 @@ function PaywallPage({ onBackHome }) {
             type="button"
             className="paywall-parent-cta"
             onClick={() => {
+              lienParentOuvert()
               setLienParentVisible(true)
               blocParentRef.current?.scrollIntoView({
                 behavior: 'smooth',

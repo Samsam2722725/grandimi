@@ -23,6 +23,8 @@ import { PotentialComparisonChart } from '@/components/ui/growth-chart'
 import '../styles/theme-night.css'
 import TestimonialMarquee from '@/components/ui/testimonial-marquee'
 
+import { tunnelDemarre } from '../lib/analytics'
+
 /* Piliers du plan de croissance. Les photos passent par Unsplash ;
    si l'une ne charge pas, CircularSplitRoll retombe sur l'aplat
    `tint` — jamais d'image cassée à l'écran. */
@@ -177,6 +179,15 @@ const FAQ = [
 ]
 
 function HomePage({ onStartQuestionnaire, onLogin }) {
+  /* La page compte sept boutons qui mènent tous au même questionnaire.
+     Agrégés, ils ne disent rien : on sait combien de gens démarrent, pas
+     ce qui les a décidés, donc pas quelle section mérite d'exister.
+     Chaque bouton déclare son emplacement avant de déléguer. */
+  const demarrer = (emplacement) => {
+    tunnelDemarre(emplacement)
+    onStartQuestionnaire()
+  }
+
   /* Barre d'action collante sur mobile.
      Passé le hero, il n'existait plus aucun moyen de lancer le questionnaire
      sans remonter : le bouton de l'en-tête est réduit sur petit écran et le
@@ -240,7 +251,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
 
             <button
               type="button"
-              onClick={onStartQuestionnaire}
+              onClick={() => demarrer('en-tete')}
               className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:px-5"
             >
               <span className="sm:hidden">Estimer</span>
@@ -334,7 +345,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               >
                 <button
                   type="button"
-                  onClick={onStartQuestionnaire}
+                  onClick={() => demarrer('hero')}
                   className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
                 >
                   Estimer ma taille adulte — gratuit
@@ -440,7 +451,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               </p>
               <button
                 type="button"
-                onClick={onStartQuestionnaire}
+                onClick={() => demarrer('ce-qui-se-joue')}
                 className="mt-8 inline-flex min-h-13 items-center gap-2 rounded-full border border-ink px-7 text-base font-medium text-ink transition-colors hover:bg-ink/10"
               >
                 Voir où j’en suis
@@ -632,7 +643,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 <div className="mt-auto pt-8">
                   <button
                     type="button"
-                    onClick={onStartQuestionnaire}
+                    onClick={() => demarrer('prix-mensuel')}
                     className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full border border-ink px-6 text-base font-medium text-ink transition-colors hover:bg-ink/10"
                   >
                     Commencer
@@ -674,7 +685,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 <div className="mt-auto pt-8">
                   <button
                     type="button"
-                    onClick={onStartQuestionnaire}
+                    onClick={() => demarrer('prix-annuel')}
                     className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-6 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
                   >
                     Voir mon estimation d’abord
@@ -729,7 +740,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <button
                 type="button"
-                onClick={onStartQuestionnaire}
+                onClick={() => demarrer('cta-final')}
                 className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:w-auto"
               >
                 Commencer maintenant
@@ -813,7 +824,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
       >
         <button
           type="button"
-          onClick={onStartQuestionnaire}
+          onClick={() => demarrer('barre-mobile')}
           className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-6 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
         >
           Estimer ma taille — gratuit

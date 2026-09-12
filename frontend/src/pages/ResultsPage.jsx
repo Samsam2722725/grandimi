@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowLeft, Share2 } from 'lucide-react'
 
 import { GrowthTrajectoryChart, ageFinCroissance } from '@/components/ui/growth-chart'
@@ -7,6 +7,7 @@ import { SpecialText } from '@/components/ui/special-text'
 
 import Spinner from '../components/Spinner'
 import { genererCarteResultat, partagerCarte } from '../lib/share-card'
+import { resultatPartage, resultatVu } from '../lib/analytics'
 import '../styles/funnel.css'
 import '../styles/results-page.css'
 
@@ -36,6 +37,19 @@ const fr = (valeur) => String(valeur).replace('.', ',')
 function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
   const [limitesVisibles, setLimitesVisibles] = useState(false)
   const [etatPartage, setEtatPartage] = useState('pret')
+
+  /* Le résultat est le pivot du tunnel : c'est ici que se décide la
+     suite (payer, partager, partir). Il doit être compté séparément
+     de l'estimation obtenue — l'appel peut réussir sans que l'écran
+     soit jamais vu. */
+  useEffect(() => {
+    if (!predictionData) return
+    resultatVu({
+      age: predictionData.age,
+      sexe: predictionData.sex,
+      confiance: predictionData.confidence_level,
+    })
+  }, [predictionData])
 
   if (!predictionData) {
     return <Spinner size="page" label="Chargement de tes résultats..." />
@@ -85,6 +99,9 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
         image,
         `Ma taille adulte estimée : ${fr(predicted_height_cm)} cm (± ${fr(margeCm)} cm).`,
       )
+      // Partage natif ou téléchargement : deux gestes différents, le
+      // second n'atteint personne tant que le fichier n'est pas envoyé.
+      resultatPartage(issue)
       setEtatPartage(issue === 'telechargement' ? 'telecharge' : 'pret')
     } catch {
       // Canvas indisponible, mémoire, navigateur exotique : on le dit, on ne

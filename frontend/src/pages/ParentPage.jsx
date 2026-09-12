@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Spinner from '../components/Spinner';
 import apiClient from '../lib/api';
 import '../styles/paywall.css';
+import { checkoutOuvert, parentPageVue } from '../lib/analytics';
 
 /* Page ouverte par un parent depuis le lien partagé par son enfant
    (grandimi.com/?parent=<id du compte enfant>).
@@ -36,6 +37,13 @@ function ParentPage({ childUserId }) {
   const [erreur, setErreur] = useState(null);
   const [planChoisi, setPlanChoisi] = useState('monthly');
   const [plans, setPlans] = useState(PLANS_PAR_DEFAUT);
+
+  /* Le chemin parent est passé en action de premier rang sur la
+     paywall sans avoir jamais été mesuré : on ignore s'il est
+     emprunté, et à plus forte raison s'il aboutit. */
+  useEffect(() => {
+    parentPageVue();
+  }, []);
 
   useEffect(() => {
     let annule = false;
@@ -74,6 +82,7 @@ function ParentPage({ childUserId }) {
         throw new Error("Le serveur n'a pas renvoyé d'URL de paiement.");
       }
 
+      checkoutOuvert(planChoisi);
       window.location.href = checkoutURL;
     } catch (err) {
       setErreur(

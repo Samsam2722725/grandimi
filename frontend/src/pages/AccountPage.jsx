@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Spinner from '../components/Spinner';
 import apiClient from '../lib/api';
 import '../styles/account-page.css';
+import { resiliationDemandee } from '../lib/analytics';
 
 function formatDate(iso) {
   if (!iso) return '';
@@ -54,6 +55,11 @@ function AccountPage({ onBackHome }) {
   }, []);
 
   const confirmerResiliation = async () => {
+    /* Émis à la demande, pas au succès : l'échec est précisément ce
+       qu'on veut voir (la résiliation renvoie une erreur tant que
+       WHOP_API_KEY n'est pas posée, et un abonné bloqué là fait une
+       réclamation, pas un renouvellement). */
+    resiliationDemandee();
     setResiliationEnCours(true);
     setResiliationErreur(null);
     try {

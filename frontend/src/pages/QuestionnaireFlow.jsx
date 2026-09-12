@@ -12,6 +12,14 @@ import Spinner from '../components/Spinner'
 import '../styles/funnel.css'
 import apiClient from '../lib/api'
 import { mockPredictHeight } from '../lib/mock-api'
+import {
+  emailSaisi,
+  estimationDemandee,
+  estimationEchouee,
+  estimationObtenue,
+  tunnelAbandonne,
+  tunnelEtapeVue,
+} from '../lib/analytics'
 
 /* ============================================================
    TUNNEL DE QUESTIONNAIRE — une décision par écran
@@ -158,11 +166,24 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     }
   }, [index, reponses, unite])
 
+  /* Une vue par écran. C'est la seule mesure qui dit OÙ on perd les
+     gens : quatorze écrans, et jusqu'ici un seul $pageview pour les
+     quatorze. Le rang est envoyé avec le nom pour que l'entonnoir
+     reste lisible si l'ordre des écrans change un jour. */
+  useEffect(() => {
+    tunnelEtapeVue(etape, index + 1, ETAPES.length)
+  }, [etape, index])
+
   useEffect(() => () => clearTimeout(minuterie.current), [])
 
   const definir = (champ, valeur) => setReponses((prec) => ({ ...prec, [champ]: valeur }))
 
   const avancer = () => {
+    /* L'adresse est le seul champ qu'on demande sans rien donner en
+       échange à cet instant : savoir combien la franchissent dit si
+       elle coûte des conversions. La valeur saisie, elle, ne part
+       jamais vers PostHog. */
+    if (etape === 'email') emailSaisi()
     clearTimeout(minuterie.current)
     setIndex((i) => Math.min(ETAPES.length - 1, i + 1))
   }
@@ -170,6 +191,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
   const reculer = () => {
     clearTimeout(minuterie.current)
     if (index === 0) {
+      tunnelAbandonne(etape, index + 1)
       onCancel()
       return
     }
@@ -207,6 +229,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
   const envoyer = async () => {
     setChargement(true)
     setErreur(null)
+    estimationDemandee()
 
     try {
       const utiliserAPI = import.meta.env.VITE_USE_REAL_API !== 'false'
@@ -233,6 +256,12 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          on les rattache ici. Sans l'e-mail, la paywall et l'écran parent
          n'identifient plus le compte ; sans les mesures, le plan de croissance
          n'a rien à personnaliser. */
+      estimationObtenue({
+        age: Number(reponses.age),
+        sexe: reponses.sex,
+        confiance: resultat.confidence_level,
+      })
+
       onPredictionComplete({
         ...resultat,
         email: reponses.email,
@@ -250,6 +279,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         /* sans conséquence */
       }
     } catch (err) {
+      estimationEchouee(err.message)
       setErreur(err.message)
       setChargement(false)
     }
