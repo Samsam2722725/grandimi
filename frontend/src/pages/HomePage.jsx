@@ -94,7 +94,7 @@ const SOURCES = [
    peut pas prouver coûte plus cher qu'il ne rapporte sur un produit dont
    l'argument est justement l'honnêteté. */
 const CHIFFRES = [
-  { valeur: '±3–6 cm', label: 'la marge réelle du modèle, affichée avec chaque résultat' },
+  { valeur: '±4–8 cm', label: 'la marge réelle du modèle, affichée avec chaque résultat' },
   { valeur: '0 €', label: 'pour le questionnaire et l’estimation, sans compte' },
   { valeur: '11', label: 'actions par jour, du lever au coucher' },
   { valeur: '30', label: 'jours de plan, renouvelé chaque mois d’abonnement' },
@@ -135,7 +135,7 @@ const DIFFERENCES = [
     icone: ShieldCheck,
     titre: 'La marge d’erreur affichée',
     texte:
-      'Une prédiction de taille n’est jamais exacte. On affiche la fourchette (±3 à ±6 cm selon l’âge) et on explique d’où elle vient.',
+      'Une prédiction de taille n’est jamais exacte. On affiche la fourchette (±4 à ±8 cm selon l’âge) et on explique d’où elle vient.',
   },
   {
     icone: BookOpenCheck,
@@ -154,7 +154,7 @@ const FAQ = [
   {
     question: 'À quel point l’estimation est-elle fiable ?',
     answer:
-      'La marge est de ±3 à ±6 cm selon ton âge : plus tu es proche de la fin de ta croissance, plus l’estimation se resserre. On affiche systématiquement cette fourchette avec le résultat — un chiffre seul, sans marge, serait trompeur.',
+      'La marge est de ±4 à ±8 cm selon ton âge et ta croissance récente : plus tu es proche de la fin de ta croissance, plus l’estimation se resserre. On affiche systématiquement cette fourchette avec le résultat — un chiffre seul, sans marge, serait trompeur.',
   },
   {
     question: 'Faut-il payer pour voir mon estimation ?',
@@ -586,10 +586,11 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
         <section className="overflow-hidden py-20">
           <div className="mx-auto mb-12 max-w-2xl px-5 text-center sm:px-8">
             <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-ink">
-              Ils ont testé
+              D’où viennent les chiffres
             </h2>
             <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-              Des ados, et les parents qui regardaient par-dessus leur épaule.
+              Pas de témoignages : nous n’avons pas encore de clients à citer.
+              Des études, que tu peux ouvrir et lire.
             </p>
           </div>
 

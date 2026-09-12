@@ -120,7 +120,7 @@ grandimi/
    croissance et du BMI — pas le point estimé. Être plus avancé en puberté ne
    rend pas plus grand, cela rend seulement la prédiction plus sûre.
 
-**Précision** : ±3 à ±6 cm selon l'âge et les données disponibles.
+**Précision** : ±4 à ±8 cm selon l'âge et la croissance récente.
 
 Les stades de Tanner (réponses intimes) **ne sont plus collectés** : le gain
 d'information était faible au regard de ce qu'on demandait à un mineur. La

@@ -34,7 +34,7 @@ const SOURCES_CREDIBILITE = [
   },
   {
     titre: 'Marge d\'erreur affichée',
-    description: '±3 à 6 cm selon l\'âge : l\'incertitude réelle de la méthode, jamais masquée',
+    description: '±4 à 8 cm selon l\'âge : l\'incertitude réelle de la méthode, jamais masquée',
     lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=adult+height+prediction+accuracy',
     icone: '📉',
   },

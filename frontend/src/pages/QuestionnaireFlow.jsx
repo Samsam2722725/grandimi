@@ -511,7 +511,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 déjà à l'image. Attendre un croisement d'intersection le
                 laissait vide sur les appareils où l'observateur se déclenche
                 après la première frame. */}
-            <SpecialText className="funnel-figure-number">±3 à 6 cm</SpecialText>
+            <SpecialText className="funnel-figure-number">±4 à 8 cm</SpecialText>
             <HandwritingText
               text="la marge, affichée"
               className="funnel-figure-note"

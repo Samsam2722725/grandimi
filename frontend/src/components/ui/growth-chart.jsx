@@ -127,7 +127,7 @@ export function GrowthTrajectoryChart({
         viewBox={`0 0 ${W} ${H}`}
         width="100%"
         role="img"
-        aria-label={`Trajectoire de croissance : ${heightNow} cm à ${ageNow} ans, environ ${predicted} cm à l’âge adulte, dans une fourchette de ${rangeMin} à ${rangeMax} cm.`}
+        aria-label={`Trajectoire de croissance : ${Math.round(heightNow)} cm à ${ageNow} ans, environ ${Math.round(predicted)} cm à l’âge adulte, dans une fourchette de ${Math.round(rangeMin)} à ${Math.round(rangeMax)} cm.`}
         style={{ display: 'block', height: 'auto', overflow: 'visible' }}
       >
         {/* Grille : filets pleins d'un cran au-dessus de la surface. Jamais en
@@ -203,7 +203,7 @@ export function GrowthTrajectoryChart({
           fontWeight="700"
           fill="var(--funnel-text, #fff)"
         >
-          {predicted}
+          {Math.round(predicted)}
         </text>
         <text
           x={W - M.right + 8}

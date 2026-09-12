@@ -34,6 +34,11 @@ import '../styles/results-page.css'
    écran, c'est le genre de détail qui fait amateur. */
 const fr = (valeur) => String(valeur).replace('.', ',')
 
+/* Arrondi d’affichage. Une estimation donnée à ±8 cm n’a pas de
+   dixième de centimètre à revendiquer ; l'écrire quand même se lit
+   comme une fausse précision. */
+const cm = (valeur) => Math.round(Number(valeur))
+
 function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
   const [limitesVisibles, setLimitesVisibles] = useState(false)
   const [etatPartage, setEtatPartage] = useState('pret')
@@ -62,7 +67,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      l'estimation sortait de sa fourchette, et affichait littéralement
      « ±-39.4 cm » à l'utilisateur. */
   const largeur = Math.max(0, confidence_range.max - confidence_range.min)
-  const margeCm = Math.round((largeur / 2) * 10) / 10
+  const margeCm = Math.round(largeur / 2)
   const positionRepere =
     largeur === 0
       ? 50
@@ -138,7 +143,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
             <p className="results-number results-number--accent">
               <SpecialText className="results-number-value">
-                {`+${fr(Math.round(margeRestante * 10) / 10)}`}
+                {`+${cm(margeRestante)}`}
               </SpecialText>
               <span className="results-number-unit">cm</span>
             </p>
@@ -148,7 +153,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             </p>
 
             <p className="results-hero-line">
-              Tu devrais atteindre <strong>{fr(predicted_height_cm)} cm</strong>
+              Tu devrais atteindre <strong>{cm(predicted_height_cm)} cm</strong>
               <span className="results-margin-inline">
                 <HandwritingText text={`± ${fr(margeCm)} cm`} height="1.6rem" />
               </span>
@@ -163,7 +168,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
             <p className="results-number">
               <SpecialText className="results-number-value">
-                {fr(predicted_height_cm)}
+                {cm(predicted_height_cm)}
               </SpecialText>
               <span className="results-number-unit">cm</span>
             </p>
@@ -198,8 +203,8 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
                 <span className="results-range-marker" style={{ left: `${positionRepere}%` }} />
               </div>
               <div className="results-range-legend">
-                <span>{fr(confidence_range.min)} cm</span>
-                <span>{fr(confidence_range.max)} cm</span>
+                <span>{cm(confidence_range.min)} cm</span>
+                <span>{cm(confidence_range.max)} cm</span>
               </div>
             </div>
             <p className="night-card-text">
@@ -279,8 +284,9 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
               <h3>Limites de cette estimation</h3>
               <ul>
                 <li>
-                  <strong>Imprécision à l’adolescence :</strong> avant 16 ans,
-                  l’estimation peut varier de ±6 cm. Après 16 ans, elle se précise (±3 cm).
+                  <strong>Imprécision à l’adolescence :</strong> en plein pic de
+                  croissance, l’estimation peut varier de ±8 cm. Passé 16 ans, quand
+                  la croissance ralentit, elle se resserre autour de ±4 cm.
                 </li>
                 <li>
                   <strong>Facteurs non mesurés :</strong> hormones, maladies, traitements —
@@ -303,7 +309,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
                 fille — ajustée par tes réponses sur le sommeil, l’alimentation et
                 l’activité, et jamais inférieure à la taille que tu fais déjà.
                 <br />
-                <strong>Précision moyenne :</strong> ±3 à ±6 cm selon l’âge
+                <strong>Précision moyenne :</strong> ±4 à ±8 cm selon l’âge et la croissance récente
               </p>
               <a
                 href="https://pubmed.ncbi.nlm.nih.gov/?term=mid-parental+height+target"
