@@ -127,17 +127,26 @@ func ReclamerPaiement(paymentID, userID string) (ResultatReclamation, error) {
 			return ResultatReclamation{}, err
 		}
 
-		// L'ancien compte, cree par hasard depuis l'adresse tapee sur
-		// Whop, ne doit pas garder un acces qu'il n'a jamais demande.
+		/* L ancien compte lache l identifiant client Whop AVANT que le
+		   nouveau ne le prenne.
+
+		   users.whop_customer_id porte un index UNIQUE. Poser la valeur
+		   sur le compte reclamant pendant que l ancien la detient encore
+		   viole la contrainte, et toute la transaction est annulee : la
+		   reclamation echouait en 500 pour le seul cas qu elle existe
+		   pour traiter. Mesure en production : reclamer un paiement pour
+		   un compte autre que celui deja credite rendait 500, alors que
+		   le reclamer pour le compte deja credite passait.
+
+		   NULL et non chaine vide : deux comptes a "" se heurteraient au
+		   meme index unique, alors que Postgres accepte autant de NULL
+		   qu on veut. Les lectures font deja COALESCE (selectUserSQL). */
 		if _, err := tx.ExecContext(context.Background(),
 			`UPDATE users
-			    SET is_premium = false
+			    SET is_premium = false,
+			        whop_customer_id = NULL
 			  WHERE whop_customer_id = $1
-			    AND id <> $2
-			    AND NOT EXISTS (
-			          SELECT 1 FROM subscriptions s
-			           WHERE s.user_id = users.id AND s.status = 'active'
-			        )`,
+			    AND id <> $2`,
 			whopUserID, userID); err != nil {
 			return ResultatReclamation{}, err
 		}
