@@ -96,8 +96,8 @@ const SOURCES = [
 const CHIFFRES = [
   { valeur: '±3–6 cm', label: 'la marge réelle du modèle, affichée avec chaque résultat' },
   { valeur: '0 €', label: 'pour le questionnaire et l’estimation, sans compte' },
-  { valeur: '~2 min', label: 'de questions, une réponse par écran' },
-  { valeur: '3', label: 'leviers suivis chaque jour : sommeil, nutrition, activité' },
+  { valeur: '11', label: 'actions par jour, du lever au coucher' },
+  { valeur: '30', label: 'jours de plan, renouvelé chaque mois d’abonnement' },
 ]
 
 const ETAPES = [
@@ -105,7 +105,7 @@ const ETAPES = [
     num: '01',
     icone: ScanLine,
     titre: 'Tu réponds',
-    texte: '14 questions, une par écran : ton âge, ta taille, celle de tes parents, tes habitudes. 2 minutes.',
+    texte: '14 questions, une par écran : ton âge, ta taille, celle de tes parents, tes habitudes. Compte 3 à 4 minutes.',
     teinte: 'var(--color-cream)',
   },
   {
@@ -119,7 +119,7 @@ const ETAPES = [
     num: '03',
     icone: Sparkles,
     titre: 'Tu suis ton plan — c’est la partie payante',
-    texte: 'Chaque jour, 8 actions à cocher : sommeil, repas, exercices. Adaptées à TES réponses, et renouvelées chaque mois.',
+    texte: '11 actions à cocher chaque jour, réparties du lever au coucher. Chacune dit pourquoi elle est là et d’où elle vient. Renouvelées chaque mois.',
     teinte: 'var(--color-sage-wash)',
   },
 ]
@@ -255,7 +255,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:px-5"
             >
               <span className="sm:hidden">Estimer</span>
-              <span className="hidden sm:inline">Estimer ma taille</span>
+              <span className="hidden sm:inline">Commencer</span>
               <ArrowRight className="hidden size-4 sm:block" aria-hidden="true" />
             </button>
           </div>
@@ -297,26 +297,26 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   className="size-3.5 text-[color:var(--color-indigo-bloom)]"
                   aria-hidden="true"
                 />
-                Estimation gratuite · sans compte
+                Plan quotidien · estimation gratuite pour commencer
               </span>
 
               <h1
                 className="rise night-title-gradient mt-6 font-display text-[clamp(40px,6.2vw,72px)] leading-[1.02] font-medium tracking-[-0.035em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
-                Quelle taille vas-tu vraiment{' '}
+                Prends {' '}
                 {/* Le mot est tracé au stylo plutôt que posé en couleur : c'est
                     la promesse du site — une estimation écrite à la main pour
                     toi — et ça donne au titre un point de fixation que le
                     surlignage orange n'obtenait pas. Si la police distante ne
                     répond pas, le composant retombe sur du texte simple. */}
                 <HandwritingText
-                  text="atteindre"
+                  text="tous"
                   height="0.92em"
                   strokeWidth={1.4}
                   className="align-baseline text-[color:var(--color-brand-display)]"
                 />{' '}
-                ?
+                les centimètres qu’il te reste.
               </h1>
 
               <p
@@ -327,16 +327,19 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     or l'estimation est gratuite. Un visiteur repartait sans
                     savoir ce qui est vendu. Il dit maintenant les deux, dans
                     l'ordre : ce qui est offert, puis ce qui est payant. */}
-                Ta génétique fixe un plafond. Ce qu’elle ne décide pas, c’est si tu
-                l’atteindras ou si tu finiras en dessous — et ça, ça se joue sur ton
-                sommeil, tes repas et ton activité, maintenant.
+                Ta génétique fixe un plafond. Tes habitudes décident si tu l’atteins,
+                ou si tu t’arrêtes en dessous.
                 <br />
                 <br />
                 <strong className="font-semibold text-ink">
-                  Ton estimation est gratuite.
+                  Grandimi, c’est 11 actions par jour
                 </strong>{' '}
-                Ensuite, le plan te dit chaque jour quoi faire pour ne pas perdre ces
-                centimètres-là.
+                — du lever au coucher, choisies d’après tes réponses. Chacune dit
+                pourquoi elle est là et d’où elle vient.
+                <br />
+                <br />
+                Tu commences par ton estimation : elle est gratuite, et elle te dit
+                combien de centimètres sont encore en jeu.
               </p>
 
               <div
@@ -348,7 +351,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   onClick={() => demarrer('hero')}
                   className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
                 >
-                  Estimer ma taille adulte — gratuit
+                  Commencer — estimation gratuite
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </button>
 
@@ -472,7 +475,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 enchaîne sur le même axe plutôt que de recentrer. */}
             <div className="mb-12 max-w-2xl">
               <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-                Trois étapes, deux minutes
+                Trois étapes
               </h2>
               <p className="mt-4 text-base text-[color:var(--text-secondary)]">
                 Aucune mesure compliquée à prendre. Ce que tu sais déjà suffit.
@@ -733,8 +736,8 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             </h2>
 
             <p className="mx-auto mt-5 max-w-xl text-base text-white/70">
-              Deux minutes de questions, ton estimation tout de suite, puis un plan
-              qui te dit quoi faire chaque jour pour l’atteindre.
+              Ton estimation tout de suite et gratuitement, puis 11 actions par jour
+              pour aller chercher les centimètres qui te restent.
             </p>
 
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -827,7 +830,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           onClick={() => demarrer('barre-mobile')}
           className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-6 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
         >
-          Estimer ma taille — gratuit
+          Commencer — gratuit
           <ArrowRight className="size-4" aria-hidden="true" />
         </button>
       </div>
@@ -869,15 +872,16 @@ function ApercuResultat() {
           L'ancienne version empilait le grand chiffre, la fourchette en
           texte ET une barre d'échelle : trois façons de dire la même
           chose, sur la première image que voit le visiteur. */}
-      <div className="rounded-[20px] bg-[color:var(--color-cream)] p-5">
-        <p className="text-sm text-[color:var(--text-secondary)]">Il te reste</p>
-        <p className="mt-1 flex items-baseline gap-1 font-display text-[clamp(44px,7vw,68px)] leading-none font-medium tracking-[-0.04em] text-ink">
-          +{RESTANT}
-          <span className="text-[0.3em] font-sans font-semibold tracking-normal text-[color:var(--text-secondary)]">
-            cm à prendre
+      {/* Une ligne, pas un bloc : l’estimation est gratuite, elle situe
+          l’enjeu mais ne peut pas être la vitrine de ce qu’on vend. */}
+      <div className="rounded-[16px] bg-[color:var(--color-cream)] px-4 py-3">
+        <p className="flex items-baseline gap-2 text-sm text-[color:var(--text-secondary)]">
+          <span className="font-display text-[22px] leading-none font-medium tracking-[-0.03em] text-ink">
+            +{RESTANT} cm
           </span>
+          encore à prendre
         </p>
-        <p className="mt-2 text-sm font-medium text-[color:var(--color-indigo-bloom)]">
+        <p className="mt-1 text-xs text-[color:var(--text-secondary)]">
           Taille adulte estimée : {ESTIMATION} cm (± {MARGE} cm)
         </p>
       </div>
@@ -904,14 +908,16 @@ function ApercuResultat() {
           <p className="text-[11px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase">
             Ton plan d’aujourd’hui
           </p>
-          <p className="text-[11px] font-semibold text-ink">2 / 3 faites</p>
+          <p className="text-[11px] font-semibold text-ink">4 / 11 faites</p>
         </div>
 
         <ul className="mt-3 flex flex-col gap-2">
           {[
-            { texte: 'Suspension à la barre : 5 × 15 s', faite: true },
-            { texte: 'Petit-déjeuner avec des protéines', faite: true },
-            { texte: 'Écrans coupés 45 min avant le coucher', faite: false },
+            { texte: 'Matin — suspension à la barre : 5 × 15 s', faite: true },
+            { texte: 'Matin — petit-déjeuner avec des protéines', faite: true },
+            { texte: 'Journée — marcher 2 min par heure assise', faite: true },
+            { texte: 'Soir — séance du mois : dos et hanches', faite: false },
+            { texte: 'Coucher — écrans coupés 45 min avant', faite: false },
           ].map(({ texte, faite }) => (
             <li key={texte} className="flex items-center gap-2.5">
               <span
@@ -949,7 +955,7 @@ function ApercuResultat() {
             ))}
           </span>
           <span className="text-[11px] text-[color:var(--text-secondary)]">
-            5 jours d’affilée
+            5 jours d’affilée · + 6 autres actions aujourd’hui
           </span>
         </div>
       </div>
