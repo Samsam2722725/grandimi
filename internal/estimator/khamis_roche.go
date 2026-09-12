@@ -1,9 +1,5 @@
 package estimator
 
-import (
-	"math"
-)
-
 type PubertySigns struct {
 	PubicHair      string // "N", "1", "2", "3", "4", "5" (Tanner stages)
 	Genitalia      string // For males
@@ -58,34 +54,35 @@ func PredictHeight(req HeightPredictionRequest) HeightPredictionResponse {
 		return resp
 	}
 
-	// Calculate mid-parent height
-	midParentHeight := (req.FatherHeightCM + req.MotherHeightCM) / 2
-	if req.Sex == MALE {
-		midParentHeight += 6.5 // Male adjustment
-	} else {
-		midParentHeight -= 6.5 // Female adjustment
-	}
+	/* Un seul moteur pour les deux routes.
 
-	// Khamis-Roche formula coefficients (age-specific)
-	coefficients := getCoefficients(req.Age, req.Sex)
+	   Les coefficients getCoefficients ci-dessous ne sont pas calibres :
+	   sur ce meme profil ils rendaient 217 cm. On delegue donc au moteur
+	   que le site utilise reellement, et cette route cesse de publier un
+	   chiffre que le README lui-meme qualifie de faux.
 
-	// Calculate predicted height
-	predictedHeight := coefficients.Intercept +
-		coefficients.HeightCoeff*req.HeightCM +
-		coefficients.WeightCoeff*req.WeightKG +
-		coefficients.MidParentCoeff*midParentHeight
+	   Les champs de mode de vie ne sont volontairement pas remplis : la
+	   requete v1 ne les collecte pas, et les inventer serait pire que de
+	   les laisser vides. calculateHealthFactor traite desormais
+	   l absence comme neutre. */
+	resultat := PredictHeightV2(HeightPredictionV2Request{
+		Age:            req.Age,
+		Sex:            req.Sex,
+		HeightCM:       req.HeightCM,
+		WeightKG:       req.WeightKG,
+		FatherHeightCM: req.FatherHeightCM,
+		MotherHeightCM: req.MotherHeightCM,
+		PubertySigns:   req.PubertySigns,
+	})
 
-	// Apply puberty adjustments
-	pubertyMultiplier, pubertyStage := getPubertyAdjustment(req.Sex, req.PubertySigns)
-	predictedHeight *= pubertyMultiplier
+	/* Le libelle de stade reste celui de la v1 : c est son contrat
+	   publie, et la v2 decrit une phase de croissance plutot qu un
+	   stade de Tanner. */
+	_, pubertyStage := getPubertyAdjustment(req.Sex, req.PubertySigns)
 
-	// Calculate confidence range
-	confidenceRange := calculateConfidenceRange(req.Age, predictedHeight)
-	confidenceLevel := evaluateConfidence(req.Age, req.PubertySigns)
-
-	resp.PredictedHeightCM = math.Round(predictedHeight*10) / 10 // Round to 1 decimal
-	resp.ConfidenceRange = confidenceRange
-	resp.ConfidenceLevel = confidenceLevel
+	resp.PredictedHeightCM = resultat.PredictedHeightCM
+	resp.ConfidenceRange = resultat.ConfidenceRange
+	resp.ConfidenceLevel = resultat.ConfidenceLevel
 	resp.PubertyStage = pubertyStage
 	resp.Message = "Height prediction successful"
 
@@ -206,39 +203,10 @@ func getTannerStage(stage string) int {
 	}
 }
 
-// calculateConfidenceRange returns ±cm based on age and uncertainty
-func calculateConfidenceRange(age float64, predictedHeight float64) [2]float64 {
-	// Confidence decreases with distance from average age (13-15)
-	var rangeMargin float64
-	if age < 10 {
-		rangeMargin = 6.0
-	} else if age < 13 {
-		rangeMargin = 4.5
-	} else if age < 16 {
-		rangeMargin = 3.0
-	} else {
-		rangeMargin = 2.0
-	}
+/* calculateConfidenceRange et evaluateConfidence ont ete retirees.
 
-	return [2]float64{
-		predictedHeight - rangeMargin,
-		predictedHeight + rangeMargin,
-	}
-}
-
-func evaluateConfidence(age float64, signs PubertySigns) string {
-	tannerStage := getTannerStage(signs.PubicHair)
-
-	// Confidence is high if we have clear puberty indicators and age is 13-16
-	if age >= 13 && age <= 16 && tannerStage >= 2 && tannerStage <= 4 {
-		return "high"
-	}
-
-	// Medium confidence for younger kids with clear data
-	if age >= 10 && age <= 13 && tannerStage >= 1 {
-		return "medium"
-	}
-
-	// Lower confidence for very young or very old
-	return "low"
-}
+   La premiere tirait la marge du seul age ; la seconde tirait la
+   confiance des stades de Tanner, qui ne sont plus collectes. Les
+   deux sont desormais calculees par calculateV2Confidence a partir
+   de la vitesse de croissance. Les garder aurait laisse deux modeles
+   de confiance dans le meme paquet, dont un sans appelant. */

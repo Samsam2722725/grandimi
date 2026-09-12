@@ -297,13 +297,33 @@ func predictGrowthVelocity(req HeightPredictionV2Request, bmi float64) predictio
 
 // calculateHealthFactor - Multiply by health/lifestyle factors
 func calculateHealthFactor(req HeightPredictionV2Request) float64 {
+	/* Une donnee absente n est pas une mauvaise donnee.
+
+	   Les seuils sont ecrits en « moins de » : un champ laisse a zero
+	   tombait du mauvais cote. Un appelant qui ne renseignait ni
+	   sommeil ni activite recevait 0.97 x 0.99 = 0.96, soit sept
+	   centimetres de moins sur 180 pour n avoir rien declare — et
+	   c est exactement le cas de /api/v1/predict-height, qui ne
+	   collecte aucun de ces champs.
+
+	   Chaque facteur est donc garde individuellement : declarer son
+	   sommeil ne doit pas faire perdre un point sur une activite dont
+	   on n a rien dit. Ne rien savoir reste neutre ; l incertitude
+	   supplementaire se traduit par un intervalle plus large (cf.
+	   calculateV2Confidence), jamais par une estimation plus basse.
+
+	   Le questionnaire n envoie jamais zero : les valeurs proposees
+	   sont 6 / 7,5 / 8,5 / 9,5 h et 10 / 30 / 60 / 120 min. Zero
+	   signifie donc toujours « non renseigne ». */
 	factor := 1.0
 
 	// Sleep factor: Growth hormone released during sleep
-	if req.SleepHoursPerNight < 7 {
-		factor *= 0.97 // Insufficient sleep reduces growth
-	} else if req.SleepHoursPerNight >= 8 && req.SleepHoursPerNight <= 10 {
-		factor *= 1.02 // Optimal sleep
+	if req.SleepHoursPerNight > 0 {
+		if req.SleepHoursPerNight < 7 {
+			factor *= 0.97 // Insufficient sleep reduces growth
+		} else if req.SleepHoursPerNight <= 10 {
+			factor *= 1.02 // Optimal sleep
+		}
 	}
 
 	// Nutrition factor
@@ -319,10 +339,12 @@ func calculateHealthFactor(req HeightPredictionV2Request) float64 {
 	}
 
 	// Exercise factor: Moderate exercise promotes growth
-	if req.ExerciseMinPerDay < 30 {
-		factor *= 0.99
-	} else if req.ExerciseMinPerDay >= 30 && req.ExerciseMinPerDay <= 120 {
-		factor *= 1.02 // Optimal activity
+	if req.ExerciseMinPerDay > 0 {
+		if req.ExerciseMinPerDay < 30 {
+			factor *= 0.99
+		} else if req.ExerciseMinPerDay <= 120 {
+			factor *= 1.02 // Optimal activity
+		}
 	}
 
 	// Maternal health factors
