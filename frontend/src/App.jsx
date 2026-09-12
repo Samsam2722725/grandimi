@@ -175,10 +175,40 @@ function App() {
     setCurrentPage('results');
   };
 
-  const handlePaymentComplete = () => {
+  /* Après création du mot de passe, on DEMANDE au serveur si le
+     compte est premium au lieu de le supposer.
+
+     L'ancienne version posait isPaid(true) et envoyait droit sur le
+     plan. Quand le compte crédité n'était pas celui-là, le client
+     venait de payer et tombait sur un « abonnement requis » sec,
+     sans explication et sans issue — c'est ce qu'on a vu trois fois
+     en production le 12/09/2026.
+
+     On réessaie quelques secondes : le webhook Whop arrive parfois
+     après le retour du client, et un accès qui met deux secondes à
+     s'ouvrir ne doit pas se lire comme un refus. */
+  const handlePaymentComplete = async () => {
     setIsAuthenticated(true);
-    setIsPaid(true);
-    setCurrentPage('plan');
+
+    for (let essai = 0; essai < 5; essai += 1) {
+      try {
+        const res = await apiClient.checkPremium();
+        if (res.is_premium) {
+          setIsPaid(true);
+          setCurrentPage('plan');
+          return;
+        }
+      } catch {
+        // Réseau : on retente, le compte est peut-être déjà crédité.
+      }
+      await new Promise((resoudre) => setTimeout(resoudre, 2000));
+    }
+
+    /* Toujours rien après dix secondes : on l'envoie sur « Mon compte »,
+       qui lui montre l'état réel de son abonnement et le lien Whop,
+       plutôt que sur un écran de plan qui répondra 402. */
+    setIsPaid(false);
+    setCurrentPage('account');
   };
 
   /* handlePaymentComplete a été retiré : accorder le premium depuis le

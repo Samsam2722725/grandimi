@@ -24,11 +24,31 @@ function SetPasswordPage({ onAuthComplete }) {
     const emailFromWhop = params.get('customer_email');
     const savedEmail = localStorage.getItem('userEmail');
 
-    if (emailFromWhop) {
-      setEmail(emailFromWhop);
-      setEmailConnu(true);
-    } else if (savedEmail) {
+    /* L'adresse saisie sur Grandimi passe AVANT celle renvoyée par Whop.
+
+         C'est elle qui identifie le compte crédité : /api/v1/checkout
+         résout le compte depuis cette adresse et transmet son
+         identifiant à Whop (metadata[grandimi_user_id]), que le webhook
+         relit pour accorder le premium.
+
+         customer_email, lui, est l'adresse du COMPTE WHOP du payeur.
+         Elle n'a aucune raison d'être la même — on paie depuis un
+         compte Whop ouvert avec une autre adresse que celle tapée dans
+         le questionnaire. En la préférant, cet écran créait un compte
+         tout neuf, sans abonnement, pendant que le premium venait
+         d'atterrir sur le bon : le client payait puis lisait
+         « abonnement requis ».
+
+         Constaté trois fois en production le 12/09/2026.
+
+         Whop garde le dernier mot uniquement quand on n'a rien en
+         local — paiement fait depuis un autre appareil, où il ne reste
+         que ce que l'URL de retour transporte. */
+    if (savedEmail) {
       setEmail(savedEmail);
+      setEmailConnu(true);
+    } else if (emailFromWhop) {
+      setEmail(emailFromWhop);
       setEmailConnu(true);
     }
   }, []);
