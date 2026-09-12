@@ -511,9 +511,9 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 déjà à l'image. Attendre un croisement d'intersection le
                 laissait vide sur les appareils où l'observateur se déclenche
                 après la première frame. */}
-            <SpecialText className="funnel-figure-number">±4 à 8 cm</SpecialText>
+            <SpecialText className="funnel-figure-number">4 à 8 cm</SpecialText>
             <HandwritingText
-              text="la marge, affichée"
+              text="en plus ou en moins"
               className="funnel-figure-note"
               height="2.1rem"
             />
@@ -639,7 +639,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     methode: {
       titre: 'Quelle précision peux-tu attendre ?',
-      sous: 'Aucune prédiction de taille n’est exacte. On affiche la fourchette au lieu de la cacher.',
+      sous: 'Une taille adulte ne se devine pas au centimètre près. On te donne une fourchette — quelques centimètres en plus ou en moins — et on te la montre au lieu de la cacher.',
     },
     email: {
       /* « Où t'envoyer ton estimation ? » promettait un e-mail que rien

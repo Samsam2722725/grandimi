@@ -154,8 +154,15 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
             <p className="results-hero-line">
               Tu devrais atteindre <strong>{cm(predicted_height_cm)} cm</strong>
+              {/* Les deux bornes en toutes lettres plutôt que « ± 8 cm » :
+                  la même information, mais sans demander au lecteur de
+                  faire deux soustractions de tête pour savoir ce qu’on lui
+                  annonce. */}
               <span className="results-margin-inline">
-                <HandwritingText text={`± ${fr(margeCm)} cm`} height="1.6rem" />
+                <HandwritingText
+                  text={`entre ${cm(confidence_range.min)} et ${cm(confidence_range.max)} cm`}
+                  height="1.6rem"
+                />
               </span>
             </p>
           </section>
