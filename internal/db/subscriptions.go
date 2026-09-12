@@ -80,3 +80,57 @@ func SetCancelAtPeriodEnd(whopSubscriptionID string, cancel bool, canceledAt *ti
 		cancel, canceledAt, whopSubscriptionID)
 	return err
 }
+
+/* RevoquerSiPlusAucunAbonnement traite une desactivation Whop.
+
+   LE BUG QU ELLE CORRIGE. Le webhook membership.deactivated retirait le
+   premium sans regarder QUEL abonnement venait d etre desactive. Un
+   client qui resilie puis se reabonne recoit les deux evenements a
+   quelques secondes d intervalle, et rien ne garantit leur ordre : si la
+   desactivation de l ancien abonnement arrive apres l activation du
+   nouveau, elle annule l acces que le client vient de payer.
+
+   Observe en production le 12/09/2026 : resiliation a 13:37:34, nouvel
+   achat a 13:38:57, deux webhooks a 13:39:47 et 13:39:48, puis
+   /api/v1/growth-plan qui repond 402 a quelqu un qui venait de payer.
+
+   La ligne desactivee est donc d abord marquee, PUIS le premium n est
+   retire que s il ne reste aucun abonnement actif. L ordre compte : en
+   marquant avant de compter, un evenement en retard ne peut plus
+   emporter un abonnement plus recent.
+
+   Renvoie true si l acces a effectivement ete retire. */
+func RevoquerSiPlusAucunAbonnement(userID, whopSubscriptionID string) (bool, error) {
+	if _, err := DB.ExecContext(context.Background(),
+		`UPDATE subscriptions
+		    SET status = 'canceled'
+		  WHERE whop_subscription_id = $1`,
+		whopSubscriptionID); err != nil {
+		return false, err
+	}
+
+	/* Le NOT EXISTS est evalue par la base, dans la meme requete que la
+	   mise a jour : deux webhooks traites en parallele ne peuvent pas
+	   lire un etat intermediaire et se contredire. */
+	var revoque bool
+	err := DB.QueryRowContext(context.Background(),
+		`UPDATE users
+		    SET is_premium = false
+		  WHERE id = $1
+		    AND NOT EXISTS (
+		          SELECT 1 FROM subscriptions
+		           WHERE user_id = $1 AND status = 'active'
+		        )
+		  RETURNING true`, userID).Scan(&revoque)
+
+	if err == sql.ErrNoRows {
+		// Aucune ligne mise a jour : il reste un abonnement actif, donc
+		// l acces est conserve. Ce n est pas une erreur, c est le cas
+		// que cette fonction existe pour proteger.
+		return false, nil
+	}
+	if err != nil {
+		return false, err
+	}
+	return revoque, nil
+}

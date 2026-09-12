@@ -323,10 +323,38 @@ func WhopWebhook(c *gin.Context) {
 			return
 		}
 
-		// Sans ceci, un abonné résilié conservait l'accès premium à vie.
-		if err := db.SetUserPremium(user.ID, false); err != nil {
-			fmt.Printf("[whop] SetUserPremium(%s, false): %v\n", user.ID, err)
+		/* On ne retire l'accès que si plus AUCUN abonnement n'est actif.
+
+		   Ce cas retirait auparavant le premium sans regarder quel
+		   abonnement venait d'être désactivé. Un client qui résilie puis
+		   se réabonne déclenche les deux événements à quelques secondes
+		   d'écart, dans un ordre que Whop ne garantit pas : la
+		   désactivation de l'ancien arrivait après l'activation du
+		   nouveau et annulait l'accès qu'il venait de payer.
+
+		   Constaté en production le 12/09/2026 : résiliation 13:37:34,
+		   nouvel achat 13:38:57, deux webhooks à 13:39:47 et 13:39:48,
+		   puis 402 sur /api/v1/growth-plan pour quelqu'un qui venait de
+		   payer. Le même piège attend tout paiement rejoué après un
+		   échec de carte. */
+		revoque, err := db.RevoquerSiPlusAucunAbonnement(user.ID, payload.Data.ID)
+		if err != nil {
+			fmt.Printf("[whop] RevoquerSiPlusAucunAbonnement(%s, %s): %v\n", user.ID, payload.Data.ID, err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to revoke premium"})
+			return
+		}
+
+		if !revoque {
+			// Un autre abonnement reste actif : l'accès est conservé,
+			// et on le dit dans les journaux pour que ce cas soit lisible
+			// le jour où quelqu'un se demande pourquoi rien n'a bougé.
+			fmt.Printf("[whop] %s désactivé pour le compte %s, mais un autre abonnement reste actif : accès conservé\n",
+				payload.Data.ID, user.ID)
+			c.JSON(http.StatusOK, gin.H{
+				"status":  "success",
+				"user_id": user.ID,
+				"message": "membership deactivated, access kept (another subscription is active)",
+			})
 			return
 		}
 
