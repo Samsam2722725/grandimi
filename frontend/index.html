@@ -17,6 +17,73 @@
       content="Grandimi estime ta taille adulte à partir de tes mesures et de celles de tes parents, puis te propose un plan de croissance personnalisé, renouvelé chaque mois."
     />
     <title>Grandimi — Estime ta taille adulte</title>
+
+    <link rel="canonical" href="https://grandimi.com/" />
+
+    <!-- Partage social.
+
+         Sans ces balises, tout lien partagé — et le trafic vient de
+         TikTok et de conversations WhatsApp entre ados — s'affiche en
+         URL nue : pas de titre, pas d'image, rien qui donne envie
+         d'ouvrir. Le site avait déjà une carte de résultat partageable
+         (lib/share-card.js) mais pas de carte pour le site lui-même.
+
+         Les robots des réseaux sociaux n'exécutent PAS le JavaScript :
+         ces balises doivent être écrites ici, en dur, et non posées par
+         React au montage. Même raison pour l'image, qui doit être une
+         URL absolue et un PNG (le SVG est refusé par Facebook, X,
+         LinkedIn et WhatsApp).
+
+         og-image.png : 1200 × 630, généré une fois, à la charte du site
+         (fond sombre, courbe corail, ± 4 cm affiché — l'argument du
+         produit tient dans la vignette). -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Grandimi" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:url" content="https://grandimi.com/" />
+    <meta property="og:title" content="Quelle taille vas-tu faire ? — Grandimi" />
+    <meta
+      property="og:description"
+      content="Estime ta taille adulte en 2 minutes, gratuitement et sans compte. Méthode mi-parentale, marge d'erreur affichée."
+    />
+    <meta property="og:image" content="https://grandimi.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Grandimi — courbe de croissance et marge d'erreur de ± 4 cm"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Quelle taille vas-tu faire ? — Grandimi" />
+    <meta
+      name="twitter:description"
+      content="Estime ta taille adulte en 2 minutes, gratuitement et sans compte. Marge d'erreur affichée."
+    />
+    <meta name="twitter:image" content="https://grandimi.com/og-image.png" />
+
+    <!-- Données structurées.
+
+         Volontairement sans "offers" ni "aggregateRating" :
+         - un prix ici serait une TROISIÈME copie des montants, après
+           internal/billing/plans.go et le texte de la landing ; une copie
+           oubliée afficherait un faux prix dans Google, ce qui est pire
+           que pas de prix du tout ;
+         - une note agrégée supposerait des avis. Les faux témoignages ont
+           été retirés du site pour cette raison exacte, les réintroduire
+           en JSON-LD serait la même faute, simplement moins visible. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Grandimi",
+        "url": "https://grandimi.com/",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Web",
+        "inLanguage": "fr-FR",
+        "description": "Estimation de la taille adulte par la méthode mi-parentale, et plan de croissance mensuel personnalisé.",
+        "audience": { "@type": "PeopleAudience", "suggestedMinAge": 12, "suggestedMaxAge": 25 }
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
