@@ -1,6 +1,7 @@
 package estimator
 
 import (
+	"math"
 	"testing"
 )
 
@@ -228,39 +229,37 @@ func TestPredictHeightV2_EnsembleAccuracy(t *testing.T) {
 
 	resp := PredictHeightV2(req)
 
-	// Check that ensemble combines multiple models
-	if resp.Factors["khamis_roche"] == 0 {
-		t.Error("Missing Khamis-Roche factor")
-	}
-	if resp.Factors["ethnic_adjusted"] == 0 {
-		t.Error("Missing ethnic adjustment factor")
-	}
-	if resp.Factors["growth_velocity"] == 0 {
-		t.Error("Missing growth velocity factor")
+	// Le calcul doit etre lisible : d ou part-on, de combien module-t-on,
+	// ou arrive-t-on. C est ce que la page promet d expliquer.
+	for _, cle := range []string{"mid_parent_target", "health_multiplier", "final_prediction"} {
+		if resp.Factors[cle] == 0 {
+			t.Errorf("facteur %q absent de la reponse", cle)
+		}
 	}
 
-	// Ensemble should be roughly average of components
-	components := []float64{
-		resp.Factors["khamis_roche"],
-		resp.Factors["ethnic_adjusted"],
-		resp.Factors["growth_velocity"],
+	/* Les trois predicteurs lineaires non calibres ne doivent PAS
+	   ressortir. Ils rendaient 218 cm sur cet enfant, et la reponse les
+	   publiait en clair a chaque appel. */
+	for _, cle := range []string{"khamis_roche", "ethnic_adjusted", "growth_velocity", "ensemble_prediction", "_diag_khamis_roche"} {
+		if _, present := resp.Factors[cle]; present {
+			t.Errorf("le facteur non calibre %q est reexpose dans la reponse", cle)
+		}
 	}
 
-	sum := 0.0
-	for _, c := range components {
-		sum += c
+	// Le resultat annonce est bien la cible modulee, pas autre chose.
+	attendu := resp.Factors["mid_parent_target"] * resp.Factors["health_multiplier"]
+	if attendu < req.HeightCM {
+		attendu = req.HeightCM // plancher : on ne retrecit pas
 	}
-	average := sum / float64(len(components))
-
-	ensemblePred := resp.Factors["ensemble_prediction"]
-	difference := (ensemblePred - average) / average * 100
-
-	if difference > 5 {
-		t.Logf("Warning: Ensemble diverged from average by %.1f%%", difference)
+	if math.Abs(resp.Factors["final_prediction"]-attendu) > 0.01 {
+		t.Errorf("final_prediction = %.2f, attendu %.2f (cible %.2f x facteur %.4f)",
+			resp.Factors["final_prediction"], attendu,
+			resp.Factors["mid_parent_target"], resp.Factors["health_multiplier"])
 	}
 
-	t.Logf("Ensemble calculation: Avg of components=%.1f, Ensemble=%.1f (diff: %.1f%%)",
-		average, ensemblePred, difference)
+	t.Logf("cible %.1f cm x %.4f = %.1f cm",
+		resp.Factors["mid_parent_target"], resp.Factors["health_multiplier"],
+		resp.Factors["final_prediction"])
 }
 
 func TestPredictHeightV2_Validation(t *testing.T) {
