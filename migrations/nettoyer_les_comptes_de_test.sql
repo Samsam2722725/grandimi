@@ -35,6 +35,7 @@ WITH comptes_de_test AS (
     WHERE  (   u.email LIKE 'granny-test-%'
             OR u.email LIKE 'verif-%'
             OR u.email LIKE 'migration-check-%'
+            OR u.email LIKE 'audit-%'
             OR u.email LIKE '%@grandimi.test')
       AND  COALESCE(u.is_premium, false) = false
       AND  NOT EXISTS (SELECT 1 FROM subscriptions s WHERE s.user_id = u.id)
@@ -52,7 +53,29 @@ ORDER BY created_at;
 -- part. Les enfants sont retires avant le compte pour ne pas heurter
 -- les cles etrangeres.
 
+--  AVANT DE LANCER : le plan Supabase Free ne sauvegarde RIEN
+--  (« Free Plan does not include project backups »). Une suppression
+--  est donc definitive. Cette etape copie les lignes dans une table
+--  de secours AVANT de les retirer ; si on s est trompe, elles sont
+--  encore la. La table porte la date pour qu on sache quoi jeter
+--  plus tard.
+
 BEGIN;
+
+CREATE TABLE IF NOT EXISTS sauvegarde_comptes_test AS
+SELECT u.*, now() AS supprime_le
+FROM   users u
+WHERE  (   u.email LIKE 'granny-test-%'
+        OR u.email LIKE 'verif-%'
+        OR u.email LIKE 'migration-check-%'
+        OR u.email LIKE 'audit-%'
+        OR u.email LIKE '%@grandimi.test')
+  AND  COALESCE(u.is_premium, false) = false
+  AND  NOT EXISTS (SELECT 1 FROM subscriptions s WHERE s.user_id = u.id);
+
+-- La table de secours contient des adresses e-mail : elle ne doit pas
+-- etre lisible par la cle publique Supabase.
+ALTER TABLE sauvegarde_comptes_test ENABLE ROW LEVEL SECURITY;
 
 CREATE TEMP TABLE a_supprimer AS
 SELECT u.id
@@ -60,6 +83,7 @@ FROM   users u
 WHERE  (   u.email LIKE 'granny-test-%'
         OR u.email LIKE 'verif-%'
         OR u.email LIKE 'migration-check-%'
+        OR u.email LIKE 'audit-%'
         OR u.email LIKE '%@grandimi.test')
   AND  COALESCE(u.is_premium, false) = false
   AND  NOT EXISTS (SELECT 1 FROM subscriptions s WHERE s.user_id = u.id);
