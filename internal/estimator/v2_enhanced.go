@@ -357,13 +357,29 @@ func calculateHealthFactor(req HeightPredictionV2Request) float64 {
 		factor *= 0.96 // Growth catch-up varies
 	}
 
-	// Borne HAUTE autant que basse.
-	//
-	// Sans plafond, le cumul des bonus atteignait 1.072, soit +12.7 cm
-	// ajoutes a la cible genetique : un mode de vie sain ne fait pas
-	// depasser son potentiel, il aide a l atteindre. Le plafond a 1.02
-	// laisse un gain visible (~+3.5 cm) sans promettre l impossible.
-	return math.Min(math.Max(factor, 0.92), 1.02)
+	/* Bornes de l effet du mode de vie.
+
+	   Sans plafond, le cumul des bonus atteignait 1.072, soit +12.7 cm
+	   ajoutes a la cible genetique : un mode de vie sain ne fait pas
+	   depasser son potentiel, il aide a l atteindre.
+
+	   Le plancher, lui, etait reste a 0.92 : un mode de vie declare
+	   mauvais retirait jusqu a 8 %, soit quatorze centimetres sur 180.
+	   Ces reponses sont AUTO-DECLAREES par un adolescent en trois taps
+	   — « je mange mal », « je dors 6 h » — pas diagnostiquees. Annoncer
+	   quatorze centimetres de moins sur cette base est indefendable le
+	   jour ou il faut le justifier, et c est le genre de chiffre qui se
+	   retourne contre un produit vendu a des mineurs.
+
+	   La bande est donc resserree a [0.98 ; 1.01]. Elle reste
+	   ASYMETRIQUE, et volontairement : on ne depasse pas son plafond
+	   genetique, on peut en revanche rester en dessous. De mauvaises
+	   habitudes coutent donc deux fois ce que de bonnes rapportent.
+
+	   Sur une cible de 180 cm : +1.8 cm au mieux, -3.6 cm au pire.
+	   TestPredictHeightV2_HealthFactors verifie que l ecart observable
+	   entre les deux extremes reste sous cinq centimetres. */
+	return math.Min(math.Max(factor, 0.98), 1.01)
 }
 
 func calculateV2Confidence(
