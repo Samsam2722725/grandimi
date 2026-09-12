@@ -133,6 +133,21 @@ func metadataTexte(metadata map[string]interface{}, cle string) string {
 // En l'absence de metadata — Whop ne le transmet pas, ou paiement
 // classique par l'utilisateur lui-même — on retombe sur l'email du
 // payeur, c'est-à-dire le comportement d'avant.
+/* resoudreBeneficiaire décide QUEL compte reçoit l'accès.
+
+   Trois sources, dans cet ordre :
+
+   1. child_user_id — un parent paie pour son enfant. C'est le
+      compte de l'enfant qui doit être crédité, jamais celui du
+      payeur. Prioritaire sur tout le reste.
+   2. grandimi_user_id — le compte qui a lancé le paiement depuis
+      le site. Posé par GetCheckout sur TOUS les paiements.
+   3. l'e-mail du compte Whop — dernier recours seulement.
+
+   Le point 2 manquait, et le point 3 servait donc de règle
+   générale : l'accès partait vers l'adresse du compte Whop du
+   payeur, qui n'est pas celle saisie sur Grandimi. Le client payait
+   et se connectait sur un compte resté gratuit. */
 func resoudreBeneficiaire(payload WhopWebhookPayload) (*db.User, error) {
 	if id := metadataTexte(payload.Data.Metadata, "child_user_id"); id != "" {
 		enfant, err := db.GetUserByID(id)
@@ -143,6 +158,21 @@ func resoudreBeneficiaire(payload WhopWebhookPayload) (*db.User, error) {
 		// plutôt que de le perdre. La trace permet de rattraper à la main.
 		fmt.Printf("[whop] child_user_id %q introuvable, repli sur l'email du payeur: %v\n", id, err)
 	}
+
+	if id := metadataTexte(payload.Data.Metadata, "grandimi_user_id"); id != "" {
+		acheteur, err := db.GetUserByID(id)
+		if err == nil && acheteur != nil {
+			return acheteur, nil
+		}
+		fmt.Printf("[whop] grandimi_user_id %q introuvable, repli sur l'email du compte Whop: %v\n", id, err)
+	}
+
+	/* Dernier recours. Cette adresse est celle du COMPTE WHOP, pas
+	   celle saisie sur Grandimi : elle ne coïncide que par chance. On
+	   la trace, parce qu'y arriver signifie qu'un paiement est passé
+	   sans métadonnée — un achat fait hors de notre checkout, ou une
+	   métadonnée perdue en route. */
+	fmt.Printf("[whop] aucune métadonnée de compte sur %s : rattachement par l'e-mail du compte Whop\n", payload.Data.ID)
 	return db.GetOrCreateUser(payload.Data.User.Email)
 }
 
@@ -195,10 +225,26 @@ func GetCheckout(c *gin.Context) {
 		return
 	}
 
+	/* L identifiant du compte Grandimi voyage avec le paiement.
+
+	   Sans lui, le webhook ne disposait que de payload.Data.User.Email
+	   — l adresse du COMPTE WHOP du payeur, qui n a aucune raison
+	   d etre celle saisie dans le questionnaire. Un adolescent tape
+	   son adresse perso sur Grandimi et paie depuis un compte Whop
+	   ouvert avec une autre : le premium etait accorde au compte de
+	   l adresse Whop, pendant qu il creait son mot de passe sur
+	   l autre. Il payait, et voyait « abonnement requis ».
+
+	   Le pire etant que rien ne ratait : le webhook repondait 200, la
+	   base etait coherente, aucune erreur nulle part. Seul le client
+	   voyait le probleme.
+
+	   Constate deux fois en production le 12/09/2026 (13:39 et 13:53). */
 	checkoutURL := fmt.Sprintf(
-		"https://whop.com/checkout/%s?customer_email=%s",
+		"https://whop.com/checkout/%s?customer_email=%s&metadata[grandimi_user_id]=%s",
 		planID,
 		url.QueryEscape(req.Email),
+		url.QueryEscape(user.ID),
 	)
 
 	// Paiement par un parent : on vérifie que le compte enfant existe
