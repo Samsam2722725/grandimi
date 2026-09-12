@@ -82,6 +82,26 @@ function ParentPage({ childUserId }) {
         throw new Error("Le serveur n'a pas renvoyé d'URL de paiement.");
       }
 
+      /* On note POUR QUI ce paiement est fait, avant de quitter le site.
+
+         Le parent paie depuis son propre appareil : son navigateur ne
+         connaît aucun compte Grandimi, il n'a jamais fait le
+         questionnaire. Au retour de Whop, sans cette note, il n'y a
+         rien à créditer et l'enfant n'obtient rien.
+
+         Ce chemin passait jusqu'ici par metadata[child_user_id] dans
+         l'URL de paiement. Whop ne transmet pas ces métadonnées — le
+         webhook les reçoit vides, vérifié sur trois paiements réels —
+         donc le parcours parent n'a jamais pu fonctionner. On utilise
+         désormais le même mécanisme que le paiement normal :
+         l'identifiant de paiement, réclamé au retour pour ce compte. */
+      try {
+        localStorage.setItem('grandimi:paiement_pour', childUserId);
+      } catch {
+        /* navigation privée ou quota plein : le paiement se fait quand
+           même, mais le rattachement devra être fait à la main. */
+      }
+
       checkoutOuvert(planChoisi);
       window.location.href = checkoutURL;
     } catch (err) {

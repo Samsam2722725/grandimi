@@ -257,8 +257,25 @@ function App() {
          L'identifiant de paiement, lui, est le même des deux côtés :
          Whop le met dans l'URL de retour et l'envoie au serveur dans un
          webhook signé. Il n'y a plus rien à retaper. */
+      /* Quel compte doit recevoir l'accès ?
+
+         « grandimi:paiement_pour » est posé par l'écran parent : il
+         porte l'identifiant de l'ENFANT. Il passe avant le compte local,
+         parce que sur le téléphone du parent le compte local est soit
+         absent, soit le sien — et c'est l'enfant qui doit être crédité.
+
+         Il est retiré aussitôt lu : sans ça, le prochain paiement fait
+         depuis ce même navigateur irait encore sur le compte de
+         l'enfant. */
+      let estCadeau = false;
       const idCompte = (() => {
         try {
+          const pour = localStorage.getItem('grandimi:paiement_pour');
+          if (pour) {
+            localStorage.removeItem('grandimi:paiement_pour');
+            estCadeau = true;
+            return pour;
+          }
           return JSON.parse(localStorage.getItem('user') || '{}').id || '';
         } catch {
           return '';
@@ -293,6 +310,21 @@ function App() {
       (async () => {
         await reclamer();
         if (annule) return;
+
+        /* Paiement parent : on sait de source sûre que le payeur n'est
+           pas le bénéficiaire — c'est son propre navigateur qui l'a noté
+           avant de partir chez Whop. On l'envoie donc directement sur
+           l'écran de confirmation, sans interroger le serveur.
+
+           L'ancienne détection passait par /checkout-status, qui devine
+           le cas cadeau à partir de l'adresse du payeur. Une devinette
+           de moins sur le chemin qui compte le plus : un parent à qui on
+           proposerait de « créer son mot de passe » ouvrirait un compte
+           fantôme pendant que l'accès de l'enfant, lui, est déjà prêt. */
+        if (estCadeau) {
+          setCurrentPage('gift-confirmed');
+          return;
+        }
 
         const email = params.get('customer_email');
 
