@@ -55,5 +55,19 @@ jobs:
       - name: Analyser
         run: go vet ./...
 
+      # Les journaux d'un dépôt public ne se lisent qu'une fois connecté,
+      # alors que les annotations, elles, sont publiques. On y remonte les
+      # lignes qui nomment le test et sa cause : un échec se diagnostique
+      # depuis la page du run, sans ouvrir de session ni télécharger le log.
       - name: Tester
-        run: go test ./...
+        run: |
+          set +e
+          sortie=$(go test ./... 2>&1)
+          code=$?
+          echo "$sortie"
+          if [ $code -ne 0 ]; then
+            echo "$sortie" | grep -E '^(--- FAIL|FAIL)|_test\.go:' | head -40 | while IFS= read -r ligne; do
+              echo "::error::$ligne"
+            done
+          fi
+          exit $code
