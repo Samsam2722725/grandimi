@@ -350,3 +350,87 @@
   text-align: center;
   margin: 0;
 }
+
+/* ---------- Analyse : grille de cartes, valeurs sous cadenas ----------
+
+   Reprise de l'ecran « Analyse prete » de GoTall. Chez eux la taille
+   adulte elle-meme est floutee ; ici les cadenas ne portent que sur ce
+   qui est payant, parce que l'accueil promet « aucun resultat floute ».
+   ------------------------------------------------------------------ */
+
+.results-analyse {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.analyse-grille {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.analyse-carte,
+.analyse-verrou {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--funnel-line, rgba(255, 255, 255, 0.12));
+  background: var(--funnel-surface, rgba(255, 255, 255, 0.04));
+}
+
+.analyse-carte--accent {
+  border-color: var(--funnel-accent, #ff5a1f);
+  background: rgba(255, 90, 31, 0.1);
+}
+
+.analyse-etiquette {
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--funnel-muted, rgba(255, 255, 255, 0.6));
+}
+
+.analyse-valeur {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--funnel-text, #fff);
+}
+
+/* Le cadenas remplace la valeur — il ne la recouvre pas. Flouter un
+   chiffre reel laisse deviner sa longueur, et donne surtout envie de le
+   gratter ; une serrure dit ce qu'elle est. */
+.analyse-valeur--verrouille {
+  color: var(--funnel-muted, rgba(255, 255, 255, 0.55));
+}
+
+.analyse-carte--verrouille {
+  border-style: dashed;
+}
+
+.analyse-verrou--alerte {
+  border-color: rgba(255, 90, 31, 0.45);
+  background: rgba(255, 90, 31, 0.07);
+}
+
+.analyse-badge {
+  align-self: flex-start;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--funnel-accent, #ff5a1f);
+  color: var(--funnel-on-accent, #17120e);
+  font-size: 12.5px;
+  font-weight: 800;
+}
+
+.analyse-note {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--funnel-muted, rgba(255, 255, 255, 0.7));
+}

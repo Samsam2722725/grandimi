@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { ArrowLeft, Share2 } from 'lucide-react'
 
+import { Lock } from 'lucide-react'
+
 import { GrowthTrajectoryChart, ageFinCroissance } from '@/components/ui/growth-chart'
 import { HandwritingText } from '@/components/ui/handwriting-text'
 import { SpecialText } from '@/components/ui/special-text'
@@ -99,6 +101,18 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      dixième et annonçait « +0,1 cm » : deux écritures différentes du
      même non-sens. Une seule décision, ici, pour les deux. */
   const margeAffichee = cm(margeRestante)
+
+  /* Combien de leviers sont en dessous de la cible, d'apres SES
+     réponses. Un champ vide ou nul veut dire « pas renseigné » et
+     ne compte pas : mieux vaut annoncer deux points vrais que trois
+     dont un inventé. */
+  const heuresSommeil = Number(predictionData.sleep_hours_per_night)
+  const minutesSport = Number(predictionData.exercise_min_per_day)
+  const pointsACorriger = [
+    Number.isFinite(heuresSommeil) && heuresSommeil > 0 && heuresSommeil < 8,
+    ['poor', 'fair'].includes(predictionData.nutrition_level),
+    Number.isFinite(minutesSport) && minutesSport > 0 && minutesSport < 30,
+  ].filter(Boolean).length
 
   /* Plus de libellé « Fiabilité : faible / moyenne ». Il inquiétait sans
      informer : « faible » ne dit pas de combien on peut se tromper, alors
@@ -276,6 +290,74 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             </p>
           </section>
         )}
+
+        {/* ---------- Analyse, façon tableau de bord ----------
+
+            Reprise de l'écran « Analyse prête » de GoTall : une grille de
+            cartes, des valeurs sous cadenas, un compte de points à
+            corriger. Le dispositif crée l'envie mieux qu'un paragraphe.
+
+            UNE DIFFÉRENCE, ET ELLE N'EST PAS NÉGOCIABLE : chez eux, la
+            taille adulte elle-même est floutée. L'accueil de Grandimi
+            promet l'inverse, écrit noir sur blanc — « Tu vois ton
+            estimation complète, gratuitement. Aucun résultat flouté,
+            aucune surprise. » Les cadenas ne portent donc que sur ce qui
+            est réellement payant : ce que le plan va chercher, et où.
+
+            Le nombre de points, lui, est vrai — il vient de ses réponses
+            sur le sommeil, l'alimentation et l'activité. Annoncer « 3
+            points » à tout le monde aurait été le même mensonge que le
+            « 98,5 % » d'en face. */}
+        <section className="night-card results-analyse">
+          <h2 className="night-card-title">Ton analyse</h2>
+
+          <div className="analyse-grille">
+            <div className="analyse-carte">
+              <span className="analyse-etiquette">Taille actuelle</span>
+              <span className="analyse-valeur">{cm(tailleActuelle)} cm</span>
+            </div>
+            <div className="analyse-carte analyse-carte--accent">
+              <span className="analyse-etiquette">Taille adulte estimée</span>
+              <span className="analyse-valeur">{cm(predicted_height_cm)} cm</span>
+            </div>
+          </div>
+
+          <div className="analyse-verrou">
+            <span className="analyse-etiquette">Ce que ton plan peut aller chercher</span>
+            <span className="analyse-valeur analyse-valeur--verrouille">
+              <Lock size={18} aria-hidden="true" />
+              cm
+            </span>
+          </div>
+
+          {pointsACorriger > 0 && (
+            <div className="analyse-verrou analyse-verrou--alerte">
+              <span className="analyse-badge">
+                {pointsACorriger} point{pointsACorriger > 1 ? 's' : ''} à corriger
+              </span>
+              <p className="analyse-note">
+                Sommeil, alimentation, activité : tes réponses en ont signalé{' '}
+                {pointsACorriger === 1 ? 'un' : pointsACorriger}. Le détail — lequel, et
+                quoi faire — est dans ton plan.
+              </p>
+            </div>
+          )}
+
+          <div className="analyse-grille">
+            <div className="analyse-carte analyse-carte--verrouille">
+              <span className="analyse-etiquette">Ton frein principal</span>
+              <span className="analyse-valeur analyse-valeur--verrouille">
+                <Lock size={18} aria-hidden="true" />
+              </span>
+            </div>
+            <div className="analyse-carte analyse-carte--verrouille">
+              <span className="analyse-etiquette">Tes 11 actions du jour</span>
+              <span className="analyse-valeur analyse-valeur--verrouille">
+                <Lock size={18} aria-hidden="true" />
+              </span>
+            </div>
+          </div>
+        </section>
 
         <section className="night-card results-offer">
           <h2 className="night-card-title">Et maintenant ?</h2>

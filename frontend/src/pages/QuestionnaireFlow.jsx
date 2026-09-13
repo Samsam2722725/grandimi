@@ -2,10 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { FunnelButton, FunnelShell } from '@/components/ui/funnel-shell'
-import { HandwritingText } from '@/components/ui/handwriting-text'
 import { Interstitial } from '@/components/ui/interstitial'
 import { SegmentedControl } from '@/components/ui/segmented-control'
-import { SpecialText } from '@/components/ui/special-text'
 import { WheelPicker } from '@/components/ui/wheel-picker'
 
 import Spinner from '../components/Spinner'
@@ -66,7 +64,6 @@ const ETAPES = [
   'activite',
   'enjeu',
   'part-habitudes',
-  'methode',
   'email',
   'recapitulatif',
 ]
@@ -271,6 +268,9 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         sex: reponses.sex,
         current_height_cm: Number(reponses.height_cm),
         weight_kg: Number(reponses.weight_kg),
+        sleep_hours_per_night: reponses.sleep_hours_per_night,
+        nutrition_level: reponses.nutrition_level,
+        exercise_min_per_day: reponses.exercise_min_per_day,
       })
 
       // Le tunnel est terminé : garder le brouillon rouvrirait un questionnaire
@@ -531,13 +531,25 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          graphique le dit, et le ramène à ce qu'il est vraiment : des
          centimètres, pas des dizaines. */
       case 'enjeu': {
-        const ageFermeture = reponses.sex === 'F' ? '16 ans' : '18 ans'
+        /* Le compte a rebours est calcule sur SES reponses : age saisi et
+           sexe. Taller affiche la meme liste a tout le monde — un compte a
+           rebours personnel frappe plus fort qu'une generalite, et il a le
+           merite d'etre vrai. */
+        const ageFin = reponses.sex === 'F' ? 16.5 : 18.5
+        const ansRestants = Math.max(0, Math.round((ageFin - Number(reponses.age)) * 2) / 2)
+        const compteARebours =
+          ansRestants <= 0
+            ? 'Ta croissance est probablement déjà terminée'
+            : ansRestants < 1
+              ? 'Il te reste moins d’un an. Après, c’est joué.'
+              : `Il te reste environ ${String(ansRestants).replace('.', ',')} ans. Après, c’est joué.`
+
         const LIGNES = [
-          `Tes cartilages de croissance se ferment vers ${ageFermeture}`,
-          'Sous 8 h de sommeil, le pic d’hormone de croissance est écourté',
-          'Sans assez de protéines ni de calcium, l’os ne se construit pas',
-          'Assis toute la journée, l’os n’est pas stimulé',
-          'Ce qui n’est pas pris avant la fermeture ne revient jamais',
+          compteARebours,
+          'Chaque nuit trop courte est de la croissance perdue, pas reportée',
+          'Ton squelette se construit maintenant — il n’y aura pas de rattrapage',
+          'Aucun sport, aucun complément ne rouvre un cartilage fermé',
+          'Ceux qui atteignent leur plafond ne l’ont pas fait par hasard',
         ]
         return (
           <ul className="funnel-enjeux">
@@ -574,22 +586,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
               Ces 20 % ne se comptent pas en dizaines de centimètres. Ils se comptent en
               centimètres — et ce sont les seuls sur lesquels tu peux encore agir.
             </p>
-          </div>
-        )
-
-      case 'methode':
-        return (
-          <div className="funnel-figure">
-            {/* Pas de `inView` : l'écran vient d'être poussé, l'élément est
-                déjà à l'image. Attendre un croisement d'intersection le
-                laissait vide sur les appareils où l'observateur se déclenche
-                après la première frame. */}
-            <SpecialText className="funnel-figure-number">4 à 8 cm</SpecialText>
-            <HandwritingText
-              text="en plus ou en moins"
-              className="funnel-figure-note"
-              height="2.1rem"
-            />
           </div>
         )
 
@@ -711,16 +707,12 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       sous: 'L’activité stimule l’os pendant qu’il peut encore s’allonger.',
     },
     enjeu: {
-      titre: 'Ce que tu ne rattraperas pas',
-      sous: 'La croissance a une date de fin. Ce qui compte, c’est ce qui se joue avant.',
+      titre: 'La vérité que personne ne te dit',
+      sous: 'Ta croissance a une date de fin, et elle approche. Voilà ce qui se joue d’ici là.',
     },
     'part-habitudes': {
       titre: 'Ce que tes habitudes pèsent vraiment',
       sous: 'La génétique fixe ton plafond. Le reste décide si tu l’atteins, ou si tu t’arrêtes en dessous.',
-    },
-    methode: {
-      titre: 'Quelle précision peux-tu attendre ?',
-      sous: 'Une taille adulte ne se devine pas au centimètre près. On te donne une fourchette — quelques centimètres en plus ou en moins — et on te la montre au lieu de la cacher.',
     },
     email: {
       /* « Où t'envoyer ton estimation ? » promettait un e-mail que rien
