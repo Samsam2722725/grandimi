@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 /* EnregistrerPaiement note un paiement confirme par Whop.
@@ -62,12 +63,13 @@ type ResultatReclamation struct {
 func ReclamerPaiement(paymentID, userID string) (ResultatReclamation, error) {
 	var statut, whopUserID string
 	var dejaReclamePar sql.NullString
+	var paiementCreeLe time.Time
 
 	err := DB.QueryRowContext(context.Background(),
-		`SELECT statut, whop_user_id, user_id::text
+		`SELECT statut, whop_user_id, user_id::text, created_at
 		   FROM paiements_whop
 		  WHERE payment_id = $1`, paymentID,
-	).Scan(&statut, &whopUserID, &dejaReclamePar)
+	).Scan(&statut, &whopUserID, &dejaReclamePar, &paiementCreeLe)
 
 	if err == sql.ErrNoRows {
 		/* Le webhook n'est pas encore arrive, ou l'identifiant est
@@ -116,14 +118,54 @@ func ReclamerPaiement(paymentID, userID string) (ResultatReclamation, error) {
 		return ResultatReclamation{Motif: "paiement déjà utilisé"}, nil
 	}
 
-	// L'abonnement suit le paiement : sinon « Mon compte » et la
-	// resiliation continueraient de viser l'ancien compte.
+	/* L'abonnement suit le paiement : sinon « Mon compte » et la
+	   resiliation continueraient de viser l'ancien compte.
+
+	   UN SEUL abonnement bouge : celui que ce paiement vient de creer.
+
+	   La version precedente deplacait TOUS les abonnements du client
+	   Whop (`WHERE user_id IN (SELECT id FROM users WHERE
+	   whop_customer_id = $1)`). Mesure en production le 13/09/2026 : un
+	   compte cree le jour meme s'est retrouve avec neuf abonnements,
+	   dont huit dataient du 9 au 12 septembre. Sur un vrai client qui
+	   achete deux fois — un parent qui paie pour un second enfant — le
+	   premier enfant perdait son abonnement au profit du second.
+
+	   Whop ne donne aucun moyen de relier un paiement a son abonnement :
+	   payment.succeeded ne porte pas d'identifiant de membership (verifie
+	   dans webhook_logs le 13/09/2026). On prend donc le plus recent, et
+	   seulement s'il est ne au moment du paiement : un abonnement bien
+	   anterieur appartient forcement a un achat precedent, et ne doit
+	   pas bouger.
+
+	   DEUX PRECAUTIONS DANS CETTE COMPARAISON.
+
+	   subscriptions.created_at est un timestamp SANS fuseau, alors que
+	   paiements_whop.created_at en porte un. Les comparer directement
+	   marche tant que la base tourne en UTC, et se decale de plusieurs
+	   heures le jour ou ce n'est plus vrai. AT TIME ZONE 'UTC' rend la
+	   comparaison independante du reglage du serveur.
+
+	   Et la fenetre demarre cinq minutes AVANT le paiement, parce que
+	   rien ne garantit que Whop envoie payment.succeeded avant
+	   membership.activated. Mesure sur le paiement du 13/09/2026 :
+	   l'abonnement est ne 0,45 s apres le paiement — l'ordre etait le
+	   bon, mais la marge est trop mince pour en faire une regle. Si
+	   l'ordre s'inverse, une borne stricte ne deplacerait rien du tout
+	   et le parcours parent casserait en silence. */
 	if whopUserID != "" {
 		if _, err := tx.ExecContext(context.Background(),
 			`UPDATE subscriptions
 			    SET user_id = $2
-			  WHERE user_id IN (SELECT id FROM users WHERE whop_customer_id = $1)`,
-			whopUserID, userID); err != nil {
+			  WHERE id = (
+			        SELECT s.id
+			          FROM subscriptions s
+			          JOIN users u ON u.id = s.user_id
+			         WHERE u.whop_customer_id = $1
+			           AND s.created_at >= ($3 AT TIME ZONE 'UTC') - interval '5 minutes'
+			         ORDER BY s.created_at DESC
+			         LIMIT 1)`,
+			whopUserID, userID, paiementCreeLe); err != nil {
 			return ResultatReclamation{}, err
 		}
 

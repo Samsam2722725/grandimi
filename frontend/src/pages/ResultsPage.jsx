@@ -82,6 +82,24 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
   const tailleActuelle = predictionData.current_height_cm
   const margeRestante = tailleActuelle ? predicted_height_cm - tailleActuelle : 0
 
+  /* On décide sur le chiffre AFFICHÉ, pas sur la valeur brute.
+
+     La condition testait `margeRestante > 0` pendant que l'affichage
+     arrondissait au centimètre : un écart de 0,1 cm passait donc le test
+     et s'écrivait « +0 cm ». Vérifié en production le 13/09/2026 — fille
+     de 15 ans, 165 cm, parents de 176 et 164 : estimation 165,1 cm,
+     écart 0,1 cm, écran « Il te reste encore +0 cm ».
+
+     Ça tombe surtout sur les filles : elles finissent de grandir vers
+     16 ans, donc leur estimation est souvent à quelques millimètres de
+     leur taille du jour. Le défaut n'est pas dans le calcul, il est
+     dans le seuil.
+
+     Le même nombre part vers l'image de partage, qui arrondissait au
+     dixième et annonçait « +0,1 cm » : deux écritures différentes du
+     même non-sens. Une seule décision, ici, pour les deux. */
+  const margeAffichee = cm(margeRestante)
+
   /* Plus de libellé « Fiabilité : faible / moyenne ». Il inquiétait sans
      informer : « faible » ne dit pas de combien on peut se tromper, alors
      que le « ± X cm » juste à côté le dit exactement, en chiffres. Garder
@@ -97,7 +115,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
         rangeMin: confidence_range.min,
         rangeMax: confidence_range.max,
         margeCm,
-        croissanceRestante: margeRestante,
+        croissanceRestante: margeAffichee,
         ageFin,
       })
       const issue = await partagerCarte(
@@ -137,7 +155,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
             Formulée « attendus » et non « possibles » : c'est l'estimation
             centrale du modèle, pas une borne haute. */}
-        {margeRestante > 0 ? (
+        {margeAffichee > 0 ? (
           <section className="results-hero">
             <p className="results-eyebrow">Il te reste encore</p>
 
@@ -248,7 +266,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             seconde fois en grand donnait l'impression de radoter, et
             noyait la seule information que ce bloc apporte vraiment —
             que cette fenêtre se referme. */}
-        {margeRestante > 0 && (
+        {margeAffichee > 0 && (
           <section className="night-card">
             <h2 className="night-card-title">Pourquoi maintenant</h2>
             <p className="night-card-text">
