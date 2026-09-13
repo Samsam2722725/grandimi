@@ -10,7 +10,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 
 /* GSAP (~70 kB) ne sert qu'a ce carrousel, situe tres bas dans la page.
    Le charger dans le bundle initial retardait l'affichage du hero sur
@@ -198,19 +198,29 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
      IntersectionObserver plutôt qu'un écouteur de scroll : pas de calcul à
      chaque frame, et le seuil suit le bouton même si la hauteur du hero
      change. */
-  const sentinelleRef = useRef(null)
   const [barreVisible, setBarreVisible] = useState(false)
 
-  useEffect(() => {
-    const cible = sentinelleRef.current
-    if (!cible || typeof IntersectionObserver === 'undefined') return undefined
+  /* La barre apparaît passé un seuil de défilement.
 
-    const observateur = new IntersectionObserver(
-      ([entree]) => setBarreVisible(!entree.isIntersecting && entree.boundingClientRect.top < 0),
-      { threshold: 0 },
-    )
-    observateur.observe(cible)
-    return () => observateur.disconnect()
+     Elle dépendait d'un IntersectionObserver sur une sentinelle d'un
+     pixel placée sous le bouton du hero. Mesuré en production sur un
+     écran 375 × 667 : à 2000 px de défilement, la sentinelle était à
+     -1275 px et la barre restait « translate-y-full » — elle ne s'est
+     donc jamais affichée sur téléphone, alors que c'est précisément
+     l'appareil pour lequel elle existe.
+
+     Un seuil de défilement n'a pas de cas limite : on compare deux
+     nombres. Le seuil vaut une hauteur d'écran, donc la barre arrive
+     exactement quand le bouton du hero vient de sortir par le haut. */
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+
+    const auDefilement = () => {
+      setBarreVisible(window.scrollY > window.innerHeight * 0.9)
+    }
+    auDefilement()
+    window.addEventListener('scroll', auDefilement, { passive: true })
+    return () => window.removeEventListener('scroll', auDefilement)
   }, [])
 
   return (
@@ -252,9 +262,9 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             <button
               type="button"
               onClick={() => demarrer('en-tete')}
-              className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:px-5"
+              className="hidden min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:inline-flex sm:px-5"
             >
-              <span className="sm:hidden">Estimer</span>
+              <span className="sm:hidden">Commencer</span>
               <span className="hidden sm:inline">Commencer</span>
               <ArrowRight className="hidden size-4 sm:block" aria-hidden="true" />
             </button>
@@ -327,19 +337,16 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     or l'estimation est gratuite. Un visiteur repartait sans
                     savoir ce qui est vendu. Il dit maintenant les deux, dans
                     l'ordre : ce qui est offert, puis ce qui est payant. */}
-                Ta génétique fixe un plafond. Tes habitudes décident si tu l’atteins,
-                ou si tu t’arrêtes en dessous.
+                Ta génétique fixe un plafond. Tes habitudes décident si tu l’atteins.
                 <br />
                 <br />
                 <strong className="font-semibold text-ink">
-                  Grandimi, c’est 11 actions par jour
+                  11 actions par jour
                 </strong>{' '}
-                — du lever au coucher, choisies d’après tes réponses. Chacune dit
-                pourquoi elle est là et d’où elle vient.
+                — du lever au coucher, choisies d’après tes réponses.
                 <br />
                 <br />
-                Tu commences par ton estimation : elle est gratuite, et elle te dit
-                combien de centimètres sont encore en jeu.
+                Ton estimation de départ est gratuite.
               </p>
 
               <div
@@ -371,9 +378,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 Gratuit · résultat immédiat · aucune carte bancaire
               </p>
 
-              {/* Sentinelle : tant qu'elle est à l'écran, le bouton du hero
-                  est visible et la barre du bas reste masquée. */}
-              <div ref={sentinelleRef} aria-hidden="true" className="h-px w-full" />
+
             </div>
 
             {/* --- Colonne visuelle : le moment magique, au-dessus du fold --- */}
