@@ -559,12 +559,27 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
               ? 'Il te reste moins d’un an'
               : `Il te reste ${String(ansRestants).replace('.', ',')} ans. Pas plus.`
 
+        /* RECONNAITRE, PAS ATTAQUER.
+
+           Taller ecrit « les femmes te negligent », « 40 % de matchs en
+           moins », « chaque cm coute 600 $ par an ». Ces lignes fabriquent
+           une insecurite chez un mineur pour lui vendre un abonnement, et
+           deux des trois chiffres sont inventes.
+
+           Ces lignes-ci visent la meme corde, par l'autre bout : celui qui
+           lit cet ecran a deja l'insecurite — c'est pour ca qu'il est la,
+           il a tape « comment grandir » un soir. Lui dire qu'on le sait
+           porte plus loin que lui annoncer qu'il sera rejete, parce que
+           c'est vrai et qu'il le reconnait immediatement.
+
+           La derniere ligne est la charniere : elle dit ce qui manque, et
+           c'est exactement ce que le produit vend. */
         const LIGNES = [
+          'Tu y penses souvent. Sans le dire.',
+          'Tu te compares. Tout le temps.',
+          'Tu as déjà cherché ça, la nuit',
           compteARebours,
-          'Une nuit courte ne se rattrape pas',
-          'Ton corps décide bientôt. Pas toi.',
-          'Après, plus rien ne marche',
-          'La plupart s’en aperçoivent trop tard',
+          'Personne ne t’a jamais dit quoi faire',
         ]
         return (
           <ul className="funnel-enjeux">
@@ -722,8 +737,8 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       sous: 'L’activité stimule l’os pendant qu’il peut encore s’allonger.',
     },
     enjeu: {
-      titre: 'La vérité que personne ne te dit',
-      sous: 'Ta croissance a une date de fin. Elle approche.',
+      titre: 'La vérité brutale sur la petite taille',
+      sous: 'Ce que tu sais déjà, et ce que personne ne t’a expliqué.',
     },
     'part-habitudes': {
       titre: 'Ce que tes habitudes pèsent vraiment',
