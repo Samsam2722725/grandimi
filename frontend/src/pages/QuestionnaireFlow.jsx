@@ -62,7 +62,6 @@ const ETAPES = [
   'sommeil',
   'nutrition',
   'activite',
-  'enjeu',
   'part-habitudes',
   'email',
   'recapitulatif',
@@ -530,111 +529,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          entre deux personnes, pas de leur taille. La note sous le
          graphique le dit, et le ramène à ce qu'il est vraiment : des
          centimètres, pas des dizaines. */
-      case 'enjeu': {
-        /* CINQ LIGNES, AUCUNE AU-DELA DE SEPT MOTS.
-
-           La version precedente disait les memes choses en onze mots, et
-           chaque carte prenait trois lignes : la cinquieme passait sous le
-           bouton, et l'ecran se lisait comme un paragraphe decoupe. Chez
-           Taller aucune carte ne depasse une ligne — c'est ce qui fait que
-           leur ecran frappe et pas un texte plus long qui dirait mieux.
-
-           Elles parlent de ce qu'on PERD, pas du mecanisme qui le produit.
-           « Une nuit courte ne se rattrape pas » porte ; « le pic
-           d'hormone de croissance est ecourte » explique. A cet endroit du
-           tunnel on ne cherche pas a expliquer.
-
-           Ce qui n'est PAS repris de leur ecran : « les femmes te
-           negligent », « 40 % de matchs en moins », « chaque cm coute
-           600 $ par an ». Deux de ces trois chiffres sont inventes, et
-           l'ensemble vise l'estime de soi d'un mineur pour lui vendre un
-           abonnement — en France, article L121-1 du code de la
-           consommation. Le registre est repris, ces lignes-la non. */
-        const ageFin = reponses.sex === 'F' ? 16.5 : 18.5
-        const ansRestants = Math.max(0, Math.round((ageFin - Number(reponses.age)) * 2) / 2)
-        const compteARebours =
-          ansRestants <= 0
-            ? 'Ta croissance touche à sa fin'
-            : ansRestants < 1
-              ? 'Il te reste moins d’un an'
-              : `Il te reste ${String(ansRestants).replace('.', ',')} ans. Pas plus.`
-
-        /* RECONNAITRE, PAS ATTAQUER.
-
-           Taller ecrit « les femmes te negligent », « 40 % de matchs en
-           moins », « chaque cm coute 600 $ par an ». Ces lignes fabriquent
-           une insecurite chez un mineur pour lui vendre un abonnement, et
-           deux des trois chiffres sont inventes.
-
-           Ces lignes-ci visent la meme corde, par l'autre bout : celui qui
-           lit cet ecran a deja l'insecurite — c'est pour ca qu'il est la,
-           il a tape « comment grandir » un soir. Lui dire qu'on le sait
-           porte plus loin que lui annoncer qu'il sera rejete, parce que
-           c'est vrai et qu'il le reconnait immediatement.
-
-           La derniere ligne est la charniere : elle dit ce qui manque, et
-           c'est exactement ce que le produit vend. */
-        /* CHOQUER PAR CE QU'IL IGNORE, PAS PAR CE QU'IL CRAINT.
-
-           Taller choque en annoncant a un garcon de 13 ans qu'il sera
-           rejete. C'est efficace une seconde, puis il se braque — et deux
-           des trois chiffres sont inventes.
-
-           Ces lignes choquent par des faits verifiables qu'un adolescent
-           ne connait pas, et qui designent tous le meme levier :
-
-             - le pourcentage deja parcouru, calcule sur SES mesures. Voir
-               « tu as fait 91 % du chemin » quand on a 14 ans et qu'on se
-               croit en plein devenir, c'est le vrai coup a l'estomac — et
-               c'est son chiffre, pas une moyenne ;
-             - la compression des disques intervertebraux : on perd bien
-               un a deux centimetres dans la journee, recuperes en dormant.
-               Personne ne le sait, et ca rend le sommeil concret ;
-             - l'hormone de croissance se libere par pics pendant le
-               sommeil profond, ce qui renverse la croyance « le sport fait
-               grandir ».
-
-           La cible mi-parentale (Tanner) sert ici de reperetoire : le
-           serveur rendra l'estimation exacte quelques ecrans plus loin,
-           donc on arrondit et on ecrit « environ » pour qu'un ecart de
-           quelques centimetres ne se lise pas comme une contradiction. */
-        const tailleActuelleCm = Number(reponses.height_cm)
-        const cibleMiParentale =
-          (Number(reponses.father_height_cm) +
-            Number(reponses.mother_height_cm) +
-            (reponses.sex === 'F' ? -13 : 13)) /
-          2
-        const partParcourue =
-          Number.isFinite(cibleMiParentale) && cibleMiParentale > 0
-            ? Math.round((tailleActuelleCm / cibleMiParentale) * 100)
-            : 0
-
-        const ligneParcours =
-          partParcourue >= 97 || partParcourue <= 0
-            ? 'Tu es tout proche de ta taille adulte'
-            : `Tu as fait ${partParcourue} % du chemin`
-
-        const LIGNES = [
-          ligneParcours,
-          'Tu perds 1 cm dans la journée',
-          'Tu grandis surtout en dormant',
-          compteARebours,
-          'Ce que tu ne prends pas est perdu',
-        ]
-        return (
-          <ul className="funnel-enjeux">
-            {LIGNES.map((ligne) => (
-              <li key={ligne}>
-                <span className="funnel-enjeux-marque" aria-hidden="true">
-                  !
-                </span>
-                <span>{ligne}</span>
-              </li>
-            ))}
-          </ul>
-        )
-      }
-
       case 'part-habitudes':
         return (
           <div className="funnel-part">
@@ -775,10 +669,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     activite: {
       titre: 'Tu bouges combien par jour ?',
       sous: 'L’activité stimule l’os pendant qu’il peut encore s’allonger.',
-    },
-    enjeu: {
-      titre: 'La vérité brutale sur la petite taille',
-      sous: 'Cinq choses que personne ne t’a dites. La première est ton chiffre.',
     },
     'part-habitudes': {
       titre: 'Ce que tes habitudes pèsent vraiment',
