@@ -531,25 +531,40 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          graphique le dit, et le ramène à ce qu'il est vraiment : des
          centimètres, pas des dizaines. */
       case 'enjeu': {
-        /* Le compte a rebours est calcule sur SES reponses : age saisi et
-           sexe. Taller affiche la meme liste a tout le monde — un compte a
-           rebours personnel frappe plus fort qu'une generalite, et il a le
-           merite d'etre vrai. */
+        /* CINQ LIGNES, AUCUNE AU-DELA DE SEPT MOTS.
+
+           La version precedente disait les memes choses en onze mots, et
+           chaque carte prenait trois lignes : la cinquieme passait sous le
+           bouton, et l'ecran se lisait comme un paragraphe decoupe. Chez
+           Taller aucune carte ne depasse une ligne — c'est ce qui fait que
+           leur ecran frappe et pas un texte plus long qui dirait mieux.
+
+           Elles parlent de ce qu'on PERD, pas du mecanisme qui le produit.
+           « Une nuit courte ne se rattrape pas » porte ; « le pic
+           d'hormone de croissance est ecourte » explique. A cet endroit du
+           tunnel on ne cherche pas a expliquer.
+
+           Ce qui n'est PAS repris de leur ecran : « les femmes te
+           negligent », « 40 % de matchs en moins », « chaque cm coute
+           600 $ par an ». Deux de ces trois chiffres sont inventes, et
+           l'ensemble vise l'estime de soi d'un mineur pour lui vendre un
+           abonnement — en France, article L121-1 du code de la
+           consommation. Le registre est repris, ces lignes-la non. */
         const ageFin = reponses.sex === 'F' ? 16.5 : 18.5
         const ansRestants = Math.max(0, Math.round((ageFin - Number(reponses.age)) * 2) / 2)
         const compteARebours =
           ansRestants <= 0
-            ? 'Ta croissance est probablement déjà terminée'
+            ? 'Ta croissance touche à sa fin'
             : ansRestants < 1
-              ? 'Il te reste moins d’un an. Après, c’est joué.'
-              : `Il te reste environ ${String(ansRestants).replace('.', ',')} ans. Après, c’est joué.`
+              ? 'Il te reste moins d’un an'
+              : `Il te reste ${String(ansRestants).replace('.', ',')} ans. Pas plus.`
 
         const LIGNES = [
           compteARebours,
-          'Chaque nuit trop courte est de la croissance perdue, pas reportée',
-          'Ton squelette se construit maintenant — il n’y aura pas de rattrapage',
-          'Aucun sport, aucun complément ne rouvre un cartilage fermé',
-          'Ceux qui atteignent leur plafond ne l’ont pas fait par hasard',
+          'Une nuit courte ne se rattrape pas',
+          'Ton corps décide bientôt. Pas toi.',
+          'Après, plus rien ne marche',
+          'La plupart s’en aperçoivent trop tard',
         ]
         return (
           <ul className="funnel-enjeux">
@@ -708,7 +723,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     enjeu: {
       titre: 'La vérité que personne ne te dit',
-      sous: 'Ta croissance a une date de fin, et elle approche. Voilà ce qui se joue d’ici là.',
+      sous: 'Ta croissance a une date de fin. Elle approche.',
     },
     'part-habitudes': {
       titre: 'Ce que tes habitudes pèsent vraiment',
