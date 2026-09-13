@@ -84,8 +84,7 @@ func GetGrowthPlan(c *gin.Context) {
 	   ramene a ses horaires par defaut. Mieux vaut un plan generique
 	   qu'un abonne devant une erreur. */
 	if prefs, err := db.LirePreferences(c.GetString("userID")); err != nil {
-		fmt.Printf("[plan] LirePreferences: %v
-", err)
+		fmt.Printf("[plan] LirePreferences: %v\n", err)
 	} else {
 		plannerReq.Preferences = planner.PreferencesPlan{
 			CoucherMin: prefs.CoucherMin,
