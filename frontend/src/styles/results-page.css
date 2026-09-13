@@ -434,3 +434,112 @@
   line-height: 1.55;
   color: var(--funnel-muted, rgba(255, 255, 255, 0.7));
 }
+
+/* ---------- Ta journee : montrer le produit, pas le decrire ----------
+
+   Deux consignes en clair disent la qualite ; les trois cadenas disent
+   ce qu on achete. Une liste de fonctionnalites ne fait pas ca.
+   ------------------------------------------------------------------ */
+
+.results-journee {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.journee-exemple {
+  margin: -4px 0 2px;
+  font-size: 12.5px;
+  color: var(--funnel-muted, rgba(255, 255, 255, 0.5));
+}
+
+.journee-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.journee-ligne {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--funnel-surface, rgba(255, 255, 255, 0.05));
+}
+
+.journee-moment {
+  flex-shrink: 0;
+  width: 106px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--funnel-muted, rgba(255, 255, 255, 0.6));
+}
+
+.journee-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--funnel-text, #fff);
+}
+
+/* Le trait interrompu marque ce qui manque sans imiter une vraie ligne :
+   flouter un texte invente laisserait croire qu on cache un contenu
+   deja ecrit pour lui. */
+.journee-ligne--verrouille {
+  background: transparent;
+  border: 1px dashed var(--funnel-line, rgba(255, 255, 255, 0.16));
+}
+
+.journee-ligne--verrouille .journee-action {
+  color: var(--funnel-muted, rgba(255, 255, 255, 0.45));
+}
+
+.journee-total {
+  margin: 2px 0 0;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--funnel-text, #fff);
+}
+
+/* ---------- Ce que tu debloques ---------- */
+
+.results-atouts {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.results-atouts li {
+  position: relative;
+  padding-left: 26px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--funnel-text, #fff);
+}
+
+.results-atouts li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  font-weight: 800;
+  color: var(--funnel-accent, #ff5a1f);
+}
+
+/* ---------- Mention legale, apres la decision ---------- */
+
+.results-mention {
+  margin: 18px 0 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--funnel-muted, rgba(255, 255, 255, 0.45));
+}

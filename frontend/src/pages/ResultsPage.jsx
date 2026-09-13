@@ -359,22 +359,79 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </div>
         </section>
 
-        <section className="night-card results-offer">
-          <h2 className="night-card-title">Et maintenant ?</h2>
-          <p className="night-card-text">
-            Le plan de croissance te dit quoi faire chaque jour — sommeil, nutrition,
-            exercices — et change à chaque mois d’abonnement.
+        {/* ---------- Ce qu'il achète, montré plutôt que décrit ----------
+
+            « Et maintenant ? » tenait en deux phrases plates juste avant
+            le bouton : à l'endroit exact où il faut donner envie, la page
+            expliquait. Elle montre désormais une journée — deux actions
+            en clair, le reste sous cadenas. Voir deux vraies consignes
+            dit la qualité du produit ; le compte de celles qui manquent
+            dit ce qu'on achète.
+
+            Les horaires portent la mention « exemple » : ceux du vrai
+            plan sont calés sur les heures de coucher et de lever
+            demandées après le paiement (PlanSetupPage). Les afficher ici
+            comme si c'étaient les siens serait une promesse qu'on ne
+            tient pas encore. */}
+        <section className="night-card results-journee">
+          <h2 className="night-card-title">Ta journée, à partir de demain</h2>
+          <p className="journee-exemple">Exemple — tes horaires seront calés sur les tiens</p>
+
+          <ul className="journee-liste">
+            <li className="journee-ligne">
+              <span className="journee-moment">Au réveil</span>
+              <span className="journee-action">3 étirements au mur, 4 minutes</span>
+            </li>
+            <li className="journee-ligne">
+              <span className="journee-moment">Petit-déjeuner</span>
+              <span className="journee-action">25 g de protéines avant de partir</span>
+            </li>
+            <li className="journee-ligne journee-ligne--verrouille">
+              <span className="journee-moment">Après-midi</span>
+              <span className="journee-action">
+                <Lock size={15} aria-hidden="true" />
+              </span>
+            </li>
+            <li className="journee-ligne journee-ligne--verrouille">
+              <span className="journee-moment">Le soir</span>
+              <span className="journee-action">
+                <Lock size={15} aria-hidden="true" />
+              </span>
+            </li>
+            <li className="journee-ligne journee-ligne--verrouille">
+              <span className="journee-moment">Au coucher</span>
+              <span className="journee-action">
+                <Lock size={15} aria-hidden="true" />
+              </span>
+            </li>
+          </ul>
+
+          <p className="journee-total">
+            <strong>11 actions par jour.</strong> Chacune dit pourquoi elle est là.
           </p>
+        </section>
+
+        <section className="night-card results-offer">
+          <h2 className="night-card-title">Ce que tu débloques</h2>
+          <ul className="results-atouts">
+            <li>Ton plan du jour, refait chaque mois selon tes progrès</li>
+            <li>Les 5 guides : sommeil, nutrition, exercices</li>
+            <li>Ta re-mesure mensuelle, pour voir la courbe bouger</li>
+            <li>Ton frein principal, nommé — et quoi faire à la place</li>
+          </ul>
           <p className="results-price">À partir de 4,99 €/mois · résiliable à tout moment</p>
         </section>
 
-        <section className="night-card night-card--quiet">
-          <p className="night-card-text">
-            <strong>Une estimation n’est pas une garantie.</strong> Elle repose sur des
-            modèles statistiques et sur les données que tu as saisies. La croissance
-            dépend aussi de la génétique, de la santé et de facteurs non mesurables.
-          </p>
-        </section>
+        {/* La mention occupait une carte entière juste avant le bouton :
+            le dernier mot avant l'achat était un avertissement. Elle reste
+            — elle est due, le produit s'adresse à des mineurs et touche à
+            la santé — mais à sa place, après la décision, avec le lien
+            vers les limites détaillées. */}
+        <p className="results-mention">
+          Une estimation n’est pas une garantie : elle repose sur des modèles
+          statistiques et sur les données que tu as saisies. Grandimi n’est pas un
+          dispositif médical et ne remplace pas l’avis d’un professionnel de santé.
+        </p>
 
         <section className="results-limits">
           <button
