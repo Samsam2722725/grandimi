@@ -112,7 +112,7 @@ function AuthPage({ onAuthComplete }) {
               </form>
 
               <div className="auth-footer">
-                <p>Pas de compte ? <button className="btn-tertiary" onClick={() => setMode('signup')}>Créer un compte</button></p>
+                <p>Première connexion, ou un parent a payé pour toi ? <button className="btn-tertiary" onClick={() => setMode('signup')}>Choisir mon mot de passe</button></p>
                 <button className="btn-tertiary" onClick={() => setMode('forgot')}>Mot de passe oublié ?</button>
               </div>
             </>
@@ -121,7 +121,7 @@ function AuthPage({ onAuthComplete }) {
           {mode === 'signup' && (
             <>
               <h1>Créer un compte</h1>
-              <p className="subtitle">Sauvegarde ton plan personnalisé</p>
+              <p className="subtitle">Utilise la même adresse qu’à ton estimation : ton résultat et ton abonnement y sont déjà attachés.</p>
 
               <form onSubmit={handleSubmit} className="auth-form">
                 {error && (

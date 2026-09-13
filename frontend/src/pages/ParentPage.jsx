@@ -117,9 +117,9 @@ function ParentPage({ childUserId }) {
       <header className="paywall-header">
         <h1>Votre enfant vous demande de régler son plan</h1>
         <p className="subtitle">
-          Vous payez depuis votre propre adresse e-mail. L'accès, lui, s'ouvre
-          automatiquement sur le compte que votre enfant a déjà créé — il n'a rien à
-          refaire, et vous n'avez pas de compte à créer.
+          Vous payez depuis votre propre adresse e-mail. L'accès, lui, s'ouvre sur le
+          compte que votre enfant a déjà créé en faisant son estimation — il n'a pas à
+          la refaire, et vous n'avez aucun compte à créer.
         </p>
       </header>
 
@@ -147,6 +147,38 @@ function ParentPage({ childUserId }) {
               </li>
             ))}
           </ul>
+
+          {/* Un parent arrive ici sans rien connaître : ni le site, ni ce
+              qu'il a déjà payé, ni ce qui se passe après. Les trois étapes
+              répondent à la seule question qu'il se pose vraiment — « et
+              ensuite, qu'est-ce qui se passe ? » — avant de lui demander
+              sa carte. Elles disent aussi, noir sur blanc, qu'il n'aura
+              pas de compte à créer : c'est le premier frein. */}
+          <h2>Comment ça se passe</h2>
+          <ol className="parent-etapes">
+            <li>
+              <strong>Vous réglez ici.</strong> Le paiement est traité par Whop.
+              Grandimi ne voit ni ne conserve votre carte, et aucun compte n'est
+              créé à votre nom.
+            </li>
+            <li>
+              <strong>L'accès s'ouvre sur le compte de votre enfant</strong>, pas
+              sur le vôtre — celui qu'il a créé en faisant son estimation.
+            </li>
+            <li>
+              <strong>Il retourne sur grandimi.com</strong> et choisit un mot de
+              passe. S'il est sur un autre téléphone, il clique « Se connecter »
+              puis « Créer un compte », avec la même adresse e-mail qu'à son
+              estimation.
+            </li>
+          </ol>
+
+          <p className="parent-rassurance">
+            Vous recevez un reçu par e-mail. L'abonnement est résiliable en ligne
+            à tout moment, sans justification et sans appel à passer. Grandimi
+            n'est pas un dispositif médical et ne remplace pas l'avis d'un
+            professionnel de santé.
+          </p>
 
           <h2>Choisissez la formule</h2>
           <div className="plans-container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-16)' }}>
