@@ -1,9 +1,14 @@
 /* ============================================
    PAYWALL — surface sombre, une seule offre
    ============================================
-   Tout est scopé sous `.paywall` : `paywall.css` habille toujours ParentPage
+   Tout est scopé sous `.paywall` : `paywall.css` sert encore à d'autres écrans
    et partage des noms (.paywall-faq, .price…). Sans ce préfixe, modifier l'un
    déforme l'autre.
+
+   Cette feuille habille les DEUX écrans de paiement — celui de l'enfant et
+   celui du parent. Le parent arrivait auparavant sur paywall.css seule, donc
+   sur un écran visiblement plus pauvre que le reste du site, au moment précis
+   où on lui demande sa carte.
 
    Les jetons (--funnel-*) viennent de funnel.css via la classe `.night`.
    ============================================ */
@@ -412,4 +417,116 @@
 .paywall .paywall-parent-cta:focus-visible {
   outline: 2px solid var(--funnel-accent);
   outline-offset: 2px;
+}
+
+/* ---------- Page parent ----------
+
+   Le parent est le seul visiteur qui paie sans avoir rien essaye du
+   produit : il lit beaucoup plus de texte que l'enfant avant de sortir
+   sa carte. D'ou des paragraphes plus aeres ici que sur la paywall
+   enfant, qui elle va droit au prix. */
+
+.paywall .parent-texte {
+  margin: 0 0 12px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--funnel-text);
+}
+
+.paywall .parent-texte:last-child {
+  margin-bottom: 0;
+}
+
+.paywall .parent-texte--discret {
+  font-size: 13.5px;
+  color: var(--funnel-muted);
+}
+
+/* Le bloc qui repond a « et ensuite ? ». Encadre comme une offre, parce
+   que c'est ce que le parent vient verifier avant de payer. */
+.paywall .parent-suite {
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid var(--funnel-line);
+  background: var(--funnel-surface);
+}
+
+/* Numerotation forcee : une reinitialisation globale met list-style:none
+   sur les listes du tunnel, et les etapes s'affichaient sans leurs
+   chiffres — or c'est le chiffre qui transforme un paragraphe en mode
+   d'emploi. */
+.paywall .parent-etapes {
+  list-style: decimal;
+  margin: 0 0 12px;
+  padding-left: 1.35rem;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--funnel-text);
+}
+
+.paywall .parent-etapes li {
+  margin-bottom: 8px;
+  padding-left: 2px;
+}
+
+.paywall .parent-etapes li::marker {
+  font-weight: 700;
+  color: var(--funnel-accent);
+}
+
+.paywall .parent-champ-bloc {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.paywall .parent-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--funnel-text);
+}
+
+.paywall .parent-champ {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1px solid var(--funnel-line);
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  font-family: inherit;
+  font-size: 16px; /* 16px minimum : en dessous, iOS zoome sur le champ. */
+}
+
+.paywall .parent-champ:focus {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 1px;
+}
+
+/* Message d'attente sous le bouton. Il ne s'affiche qu'apres quatre
+   secondes : sur l'offre gratuite Render l'instance s'endort, et un
+   bouton qui tourne en silence pendant une minute se lit comme un
+   bouton casse. */
+.paywall .parent-attente {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--funnel-muted);
+}
+
+/* Bandeau de confirmation, apres paiement du parent. Vert plutot que la
+   couleur de marque : c'est un etat, pas une action. */
+.paywall .gift-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin: 4px 0 0;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(52, 199, 89, 0.12);
+  color: #34c759;
+  font-size: 13.5px;
+  font-weight: 700;
 }

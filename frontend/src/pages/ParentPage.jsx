@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Check, Lock } from 'lucide-react';
+
 import Spinner from '../components/Spinner';
 import apiClient from '../lib/api';
-import '../styles/paywall.css';
+import '../styles/funnel.css';
+import '../styles/paywall-night.css';
 import { checkoutOuvert, parentPageVue } from '../lib/analytics';
 
 /* Page ouverte par un parent depuis le lien partagé par son enfant
@@ -13,7 +16,22 @@ import { checkoutOuvert, parentPageVue } from '../lib/analytics';
 
    L'email de l'enfant n'est volontairement pas affiché : la page est
    accessible à qui possède le lien, l'y exposer permettrait de lire
-   l'adresse d'un mineur à partir d'un simple identifiant. */
+   l'adresse d'un mineur à partir d'un simple identifiant.
+
+   MÊME HABILLAGE QUE LA PAYWALL DE L'ENFANT
+   Cette page tournait seule sur l'ancienne feuille paywall.css pendant
+   que la paywall enfant passait au thème sombre : le parent arrivait
+   sur un écran visiblement plus pauvre que le reste du site, à
+   l'instant précis où on lui demande sa carte. Elle reprend maintenant
+   funnel.css + paywall-night.css et les mêmes classes, pour que les
+   deux écrans de paiement soient le même produit.
+
+   CE QUI SE PASSE APRÈS EST EXPLIQUÉ AVANT
+   Le parent est le seul visiteur du site qui paie sans avoir rien
+   essayé. La marche à suivre pour son enfant ne figurait que sur
+   l'écran de confirmation, donc APRÈS la carte : il payait sans savoir
+   comment son enfant récupérerait l'accès. Elle est désormais lisible
+   avant, au-dessus du prix. */
 
 const AVANTAGES = [
   'Un plan de croissance personnalisé, renouvelé chaque mois',
@@ -31,9 +49,13 @@ const PLANS_PAR_DEFAUT = {
 };
 const COUT_DOUZE_MENSUALITES = 12 * PLANS_PAR_DEFAUT.monthly.price_eur;
 
+/* Au-delà de ce délai, on nomme l'attente au lieu de la laisser tourner. */
+const DELAI_AVANT_MESSAGE_MS = 4000;
+
 function ParentPage({ childUserId }) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [attenteLongue, setAttenteLongue] = useState(false);
   const [erreur, setErreur] = useState(null);
   const [planChoisi, setPlanChoisi] = useState('monthly');
   const [plans, setPlans] = useState(PLANS_PAR_DEFAUT);
@@ -45,6 +67,11 @@ function ParentPage({ childUserId }) {
     parentPageVue();
   }, []);
 
+  /* Cet appel confirme les tarifs — et, effet de bord utile, il réveille
+     l'instance Render pendant que le parent lit la page. Sur l'offre
+     gratuite elle s'endort après un quart d'heure sans trafic et le
+     réveil prend jusqu'à une minute : sans ce coup de semonce, c'est le
+     clic sur « Régler » qui paierait l'attente. */
   useEffect(() => {
     let annule = false;
     apiClient
@@ -61,15 +88,23 @@ function ParentPage({ childUserId }) {
     };
   }, []);
 
+  const offre = plans[planChoisi];
   const economieAnnuelle = COUT_DOUZE_MENSUALITES - plans.annual.price_eur;
   const pourcentageEconomie = Math.round((economieAnnuelle / COUT_DOUZE_MENSUALITES) * 100);
-
   const emailValide = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const peutPayer = emailValide && !loading;
+
+  const prixEcrit = (p) =>
+    `${p.price_eur.toFixed(2).replace('.', ',')} €${p.interval === 'year' ? '/an' : '/mois'}`;
 
   const lancerPaiement = async () => {
     setErreur(null);
     setLoading(true);
+    setAttenteLongue(false);
+
+    /* Un bouton qui tourne sans rien dire se lit comme un bouton cassé —
+       c'est le retour qu'on a eu du parcours parent. Passé quatre
+       secondes, on explique au lieu de faire attendre en silence. */
+    const minuterie = setTimeout(() => setAttenteLongue(true), DELAI_AVANT_MESSAGE_MS);
 
     try {
       const { checkout_url: checkoutURL } = await apiClient.createCheckout({
@@ -109,204 +144,222 @@ function ParentPage({ childUserId }) {
         err.message || "Impossible d'ouvrir la page de paiement. Réessayez dans un instant.",
       );
       setLoading(false);
+      setAttenteLongue(false);
+    } finally {
+      clearTimeout(minuterie);
     }
   };
 
   return (
-    <div className="paywall-page">
-      <header className="paywall-header">
-        <h1>Votre enfant vous demande de régler son plan</h1>
-        <p className="subtitle">
-          Vous payez depuis votre propre adresse e-mail. L'accès, lui, s'ouvre sur le
-          compte que votre enfant a déjà créé en faisant son estimation — il n'a pas à
-          la refaire, et vous n'avez aucun compte à créer.
+    <div className="night paywall">
+      <main className="paywall-scroll">
+        <h1 className="paywall-title">Votre enfant vous demande de régler son plan</h1>
+        <p className="paywall-subtitle">
+          Vous payez depuis votre propre adresse e-mail. L’accès, lui, s’ouvre sur le
+          compte que votre enfant a déjà créé en faisant son estimation.
         </p>
-      </header>
 
-      <section className="payment-section">
-        <div className="payment-box">
-          <h2>Ce que Grandimi fait</h2>
-          <p>
-            Votre enfant a répondu à un questionnaire (âge, taille, poids, votre taille et
-            celle de l'autre parent) et a reçu <strong>gratuitement</strong> une estimation
-            de sa taille adulte, avec sa marge d'erreur. Cette partie est et reste gratuite.
+        <section className="paywall-pillars" aria-label="Ce que vous payez">
+          <h2 className="paywall-section-title">Ce que vous payez</h2>
+          <p className="parent-texte">
+            Votre enfant a répondu à un questionnaire et reçu <strong>gratuitement</strong>{' '}
+            une estimation de sa taille adulte, avec sa marge d’erreur. Cette partie est et
+            reste gratuite.
           </p>
-          <p>
-            Ce qui est payant, c'est la suite : un accompagnement pour l'aider à atteindre
-            son potentiel — sommeil, alimentation, activité physique. Un nouveau plan
-            adapté à sa progression lui est remis chaque mois, que l'abonnement soit
-            réglé mensuellement ou en une fois pour l'année.
+          <p className="parent-texte">
+            Ce qui est payant, c’est la suite : un accompagnement quotidien — sommeil,
+            alimentation, activité physique — renouvelé chaque mois selon sa progression.
           </p>
 
-          <h2>Ce que contient l'abonnement</h2>
-          <ul className="features">
+          <ul className="paywall-features">
             {AVANTAGES.map((avantage) => (
               <li key={avantage}>
-                <span className="check">✓</span>
-                {avantage}
+                <Check size={18} aria-hidden="true" />
+                <span>{avantage}</span>
               </li>
             ))}
           </ul>
+        </section>
 
-          {/* Un parent arrive ici sans rien connaître : ni le site, ni ce
-              qu'il a déjà payé, ni ce qui se passe après. Les trois étapes
-              répondent à la seule question qu'il se pose vraiment — « et
-              ensuite, qu'est-ce qui se passe ? » — avant de lui demander
-              sa carte. Elles disent aussi, noir sur blanc, qu'il n'aura
-              pas de compte à créer : c'est le premier frein. */}
-          <h2>Comment ça se passe</h2>
+        {/* Avant le prix, volontairement : c’est la question que le parent se
+            pose en tenant sa carte — « et ensuite, comment mon enfant y
+            accède ? ». La lui laisser sans réponse jusqu’à l’écran de
+            confirmation, c’est la lui faire poser au mauvais moment. */}
+        <section className="parent-suite" aria-labelledby="parent-suite-titre">
+          <h2 className="paywall-section-title" id="parent-suite-titre">
+            Ce qui se passe après votre paiement
+          </h2>
+
+          <p className="parent-texte">
+            <strong>Vous n’avez aucun compte à créer</strong>, et rien à installer.
+            L’accès s’ouvre sur le compte de votre enfant, pas sur le vôtre.
+          </p>
+          <p className="parent-texte">
+            Sur le téléphone où il a fait son estimation,{' '}
+            <strong>son plan s’ouvre tout seul</strong> : il lui sera simplement demandé
+            de choisir un mot de passe.
+          </p>
+          <p className="parent-texte">
+            S’il est sur un autre téléphone ou un autre navigateur, son estimation n’est
+            pas en mémoire. <strong>En trois étapes :</strong>
+          </p>
+
           <ol className="parent-etapes">
+            <li>Aller sur grandimi.com et cliquer sur « Se connecter »</li>
+            <li>Choisir « Créer un compte »</li>
             <li>
-              <strong>Vous réglez ici.</strong> Le paiement est traité par Whop.
-              Grandimi ne voit ni ne conserve votre carte, et aucun compte n'est
-              créé à votre nom.
-            </li>
-            <li>
-              <strong>L'accès s'ouvre sur le compte de votre enfant</strong>, pas
-              sur le vôtre — celui qu'il a créé en faisant son estimation.
-            </li>
-            <li>
-              <strong>Il retourne sur grandimi.com</strong> et choisit un mot de
-              passe. S'il est sur un autre téléphone, il clique « Se connecter »
-              puis « Créer un compte », avec la même adresse e-mail qu'à son
-              estimation.
+              Saisir <strong>exactement la même adresse e-mail</strong> que celle utilisée
+              pour son estimation, puis choisir un mot de passe
             </li>
           </ol>
 
-          <p className="parent-rassurance">
-            Vous recevez un reçu par e-mail. L'abonnement est résiliable en ligne
-            à tout moment, sans justification et sans appel à passer. Grandimi
-            n'est pas un dispositif médical et ne remplace pas l'avis d'un
-            professionnel de santé.
+          <p className="parent-texte">
+            Son plan l’attend derrière. Cela ne crée pas de second compte : c’est bien le
+            sien qui s’ouvre, avec l’abonnement que vous venez de régler.
           </p>
+          <p className="parent-texte parent-texte--discret">
+            Si l’adresse ne correspond pas, l’accès reste attaché au compte de son
+            estimation. Demandez-lui laquelle il a saisie — une faute de frappe suffit à
+            créer une autre adresse.
+          </p>
+        </section>
 
-          <h2>Choisissez la formule</h2>
-          <div className="plans-container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-16)' }}>
-            <div
-              className={`plan-card ${planChoisi === 'monthly' ? 'selected' : ''}`}
-              onClick={() => setPlanChoisi('monthly')}
+        <section className="paywall-offer" aria-labelledby="parent-offre-titre">
+          <div
+            className="paywall-plan-toggle"
+            role="radiogroup"
+            aria-label="Choisir la formule"
+          >
+            <button
+              type="button"
               role="radio"
               aria-checked={planChoisi === 'monthly'}
-              tabIndex={0}
+              className={`paywall-plan-option ${planChoisi === 'monthly' ? 'active' : ''}`}
+              onClick={() => setPlanChoisi('monthly')}
             >
-              <h2>Mensuel</h2>
-              <div className="price">
-                <span className="amount">{plans.monthly.price_eur.toFixed(2).replace('.', ',')} €</span>
-                <span className="duration">/mois</span>
-              </div>
-            </div>
-
-            <div
-              className={`plan-card ${planChoisi === 'annual' ? 'selected' : ''}`}
-              onClick={() => setPlanChoisi('annual')}
+              Mensuel
+            </button>
+            <button
+              type="button"
               role="radio"
               aria-checked={planChoisi === 'annual'}
-              tabIndex={0}
+              className={`paywall-plan-option ${planChoisi === 'annual' ? 'active' : ''}`}
+              onClick={() => setPlanChoisi('annual')}
             >
-              {planChoisi === 'annual' && <span className="popular-badge">Choisi</span>}
-              <h2>Annuel</h2>
-              <div className="price">
-                <span className="amount">{plans.annual.price_eur.toFixed(2).replace('.', ',')} €</span>
-                <span className="duration">/an</span>
-              </div>
-              <p style={{ fontSize: 'var(--text-caption)', color: 'var(--color-canopy-green)', fontWeight: 600, margin: 0 }}>
+              Annuel
+            </button>
+          </div>
+
+          <div className="paywall-offer-head">
+            <h2 id="parent-offre-titre">Plan de croissance</h2>
+            <p className="paywall-price">
+              <span>{offre.price_eur.toFixed(2).replace('.', ',')} €</span>
+              {offre.interval === 'year' ? '/an' : '/mois'}
+            </p>
+            {planChoisi === 'annual' && (
+              <p className="paywall-savings">
                 Économisez près de {pourcentageEconomie} % par rapport à 12 mensualités à{' '}
                 {plans.monthly.price_eur.toFixed(2).replace('.', ',')} €.
               </p>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="email-parent">Votre e-mail</label>
-            <input
-              id="email-parent"
-              type="email"
-              autoComplete="email"
-              placeholder="vous@email.com"
-              value={email}
-              onChange={(evenement) => setEmail(evenement.target.value)}
-            />
-            <p className="form-helper">
-              Sert à votre reçu et à gérer ou résilier l'abonnement. C'est bien le compte de
-              votre enfant qui recevra l'accès.
-            </p>
-          </div>
-
-          {erreur && (
-            <div className="alert alert-error" role="alert">
-              <span className="alert-icon">!</span>
-              <p>{erreur}</p>
-            </div>
-          )}
-
-          <button
-            className="btn-primary btn-full btn-large"
-            onClick={lancerPaiement}
-            disabled={!peutPayer}
-          >
-            {loading ? (
-              <>
-                <Spinner />
-                Redirection…
-              </>
-            ) : (
-              `Régler l'abonnement — ${plans[planChoisi].price_eur.toFixed(2).replace('.', ',')} €${
-                plans[planChoisi].interval === 'year' ? '/an' : '/mois'
-              }`
             )}
-          </button>
-
-          <div className="security-note">
-            <span>🔒</span> Paiement traité par Whop. Grandimi ne voit ni ne stocke votre
-            carte bancaire.
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="paywall-faq">
-        <h2>Questions fréquentes</h2>
-        <div className="faq-items">
-          <details className="faq-item">
+        <section className="parent-champ-bloc">
+          <label className="parent-label" htmlFor="parent-email">
+            Votre e-mail
+          </label>
+          <input
+            id="parent-email"
+            className="parent-champ"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            placeholder="vous@email.com"
+            value={email}
+            onChange={(evenement) => setEmail(evenement.target.value)}
+          />
+          <p className="parent-texte parent-texte--discret">
+            Sert à votre reçu et à gérer ou résilier l’abonnement. C’est bien le compte de
+            votre enfant qui recevra l’accès.
+          </p>
+        </section>
+
+        {erreur && (
+          <p className="funnel-error" role="alert">
+            {erreur}
+          </p>
+        )}
+
+        <p className="paywall-security">
+          <Lock size={15} aria-hidden="true" />
+          Paiement traité par Whop. Grandimi ne voit ni ne stocke votre carte bancaire.
+        </p>
+
+        <section className="paywall-faq">
+          <details>
             <summary>Dois-je créer un compte ?</summary>
             <p>
-              Non. Vous renseignez seulement votre e-mail pour le paiement. L'accès s'ouvre
-              sur le compte que votre enfant a créé.
+              Non. Aucun compte n’est créé à votre nom. Vous recevez un reçu par e-mail,
+              et c’est tout.
             </p>
           </details>
-
-          <details className="faq-item">
+          <details>
             <summary>Comment mon enfant y accède-t-il ensuite ?</summary>
             <p>
-              Automatiquement : dès le paiement confirmé, il retrouve son plan en se
-              reconnectant à son compte. Rien à saisir de votre côté.
+              Il retourne sur grandimi.com et choisit un mot de passe. Sur un autre
+              appareil, il clique « Se connecter » puis « Créer un compte », avec la même
+              adresse e-mail qu’à son estimation.
             </p>
           </details>
-
-          <details className="faq-item">
+          <details>
             <summary>Puis-je résilier ?</summary>
             <p>
-              Oui, en ligne et à tout moment depuis votre espace Whop. L'accès reste actif
-              jusqu'à la fin de la période déjà réglée.
+              Oui, en ligne et à tout moment, sans justification et sans appel à passer.
+              L’accès reste actif jusqu’à la fin de la période déjà payée.
             </p>
           </details>
-
-          <details className="faq-item">
-            <summary>Pourquoi est-ce à moi de payer ?</summary>
+          <details>
+            <summary>Est-ce un dispositif médical ?</summary>
             <p>
-              Grandimi s'adresse aux 8-18 ans. L'abonnement est donc souscrit par un parent
-              ou un adulte responsable, jamais par l'enfant seul.
+              Non. Grandimi ne pose aucun diagnostic et ne remplace pas l’avis d’un
+              professionnel de santé. L’estimation repose sur des modèles statistiques et
+              sur les réponses saisies.
             </p>
           </details>
+        </section>
 
-          <details className="faq-item">
-            <summary>Que devient l'estimation si je ne paie pas ?</summary>
-            <p>
-              Elle reste accessible et gratuite. Seul l'accompagnement (mensuel ou annuel)
-              est concerné par l'abonnement.
-            </p>
-          </details>
-        </div>
-      </section>
+        <p className="paywall-legal">
+          En continuant, vous acceptez nos <a href="/cgv.html">conditions d’utilisation</a>{' '}
+          et notre <a href="/privacy.html">politique de confidentialité</a>. Résiliable en
+          ligne à tout moment.
+        </p>
+      </main>
+
+      <footer className="funnel-footer">
+        <button
+          type="button"
+          className="funnel-cta"
+          onClick={lancerPaiement}
+          disabled={!emailValide || loading}
+        >
+          {loading ? (
+            <>
+              <Spinner />
+              Ouverture du paiement…
+            </>
+          ) : (
+            `Régler l’abonnement — ${prixEcrit(offre)}`
+          )}
+        </button>
+
+        {attenteLongue && (
+          <p className="parent-attente" role="status">
+            Le serveur se réveille — cela peut prendre jusqu’à une minute la première
+            fois. Ne fermez pas la page.
+          </p>
+        )}
+      </footer>
     </div>
   );
 }
