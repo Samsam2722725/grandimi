@@ -714,3 +714,113 @@
   color: var(--funnel-muted);
   margin: 12px 0 0;
 }
+
+/* ------------------------------------------------------------------
+   Écrans de pression — forme reprise du tunnel de Taller
+
+   Leurs cartes a puce alarmee et leur graphique a deux barres sont ce
+   qui travaille chez eux : on garde la forme. Le contenu, lui, parle de
+   l'echeance biologique et non de l'estime de soi du visiteur — voir le
+   commentaire dans QuestionnaireFlow.jsx.
+   ------------------------------------------------------------------ */
+
+.funnel-enjeux {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.funnel-enjeux li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(255, 90, 31, 0.08);
+  color: var(--funnel-accent);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.funnel-enjeux-marque {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1.5px solid var(--funnel-accent);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* ---------- Part génétique / habitudes ---------- */
+
+.funnel-part {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.funnel-part-barres {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: end;
+  height: 260px;
+  padding: 18px;
+  border-radius: 22px;
+  background: var(--funnel-surface);
+}
+
+.funnel-part-colonne {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  height: 100%;
+}
+
+.funnel-part-nom {
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--funnel-muted);
+}
+
+.funnel-part-barre {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 12px;
+  border-radius: 16px;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+/* La hauteur EST la donnée : 80 contre 20. Les deux barres partagent la
+   même colonne, donc le rapport se lit sans avoir à comparer des
+   chiffres. */
+.funnel-part-barre--forte {
+  height: 80%;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+}
+
+.funnel-part-barre--faible {
+  height: 20%;
+  background: var(--funnel-surface-high);
+  color: var(--funnel-text);
+}
+
+.funnel-part-note {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--funnel-muted);
+}

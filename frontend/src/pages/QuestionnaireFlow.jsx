@@ -64,6 +64,8 @@ const ETAPES = [
   'sommeil',
   'nutrition',
   'activite',
+  'enjeu',
+  'part-habitudes',
   'methode',
   'email',
   'recapitulatif',
@@ -504,6 +506,77 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          concurrentes : on affiche la marge réelle du modèle, pas un score
          inventé. C'est aussi l'argument de vente de Grandimi — autant le poser
          avant le résultat plutôt que de le cacher dans une note de bas de page. */
+      /* ---------- Écrans de pression ----------
+
+         Copiés dans leur forme sur le tunnel de Taller (captures du
+         13/09/2026) : une liste de conséquences à puces alarmées, puis
+         un graphique à deux barres génétique / habitudes. Cette forme
+         travaille, elle reste.
+
+         Le CONTENU, lui, diffère sur deux points, et pas par pudeur.
+
+         Taller écrit « 40 % de matchs en moins », « les femmes te
+         négligent », « chaque cm coûte 600 $ par an » à des garçons de
+         13 ans. En France, une pratique commerciale qui exploite la
+         vulnérabilité d'un mineur pour vendre est une pratique
+         commerciale déloyale (art. L121-1 et suivants du code de la
+         consommation). Les mêmes écrans, retournés vers l'échéance
+         biologique — qui est le vrai sujet du produit — gardent leur
+         force sans reposer sur l'estime de soi d'un adolescent.
+
+         Taller écrit aussi « jusqu'à 20 % de ta taille finale est
+         déterminée par tes habitudes ». Sur 170 cm, cela ferait 34 cm,
+         ce qui est faux. Le chiffre réel décrit la part de l'ÉCART
+         entre deux personnes, pas de leur taille. La note sous le
+         graphique le dit, et le ramène à ce qu'il est vraiment : des
+         centimètres, pas des dizaines. */
+      case 'enjeu': {
+        const ageFermeture = reponses.sex === 'F' ? '16 ans' : '18 ans'
+        const LIGNES = [
+          `Tes cartilages de croissance se ferment vers ${ageFermeture}`,
+          'Sous 8 h de sommeil, le pic d’hormone de croissance est écourté',
+          'Sans assez de protéines ni de calcium, l’os ne se construit pas',
+          'Assis toute la journée, l’os n’est pas stimulé',
+          'Ce qui n’est pas pris avant la fermeture ne revient jamais',
+        ]
+        return (
+          <ul className="funnel-enjeux">
+            {LIGNES.map((ligne) => (
+              <li key={ligne}>
+                <span className="funnel-enjeux-marque" aria-hidden="true">
+                  !
+                </span>
+                <span>{ligne}</span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      case 'part-habitudes':
+        return (
+          <div className="funnel-part">
+            <div className="funnel-part-barres">
+              <div className="funnel-part-colonne">
+                <span className="funnel-part-nom">Génétique</span>
+                <div className="funnel-part-barre funnel-part-barre--forte">
+                  <span>80 %</span>
+                </div>
+              </div>
+              <div className="funnel-part-colonne">
+                <span className="funnel-part-nom">Tes habitudes</span>
+                <div className="funnel-part-barre funnel-part-barre--faible">
+                  <span>20 %</span>
+                </div>
+              </div>
+            </div>
+            <p className="funnel-part-note">
+              Ces 20 % ne se comptent pas en dizaines de centimètres. Ils se comptent en
+              centimètres — et ce sont les seuls sur lesquels tu peux encore agir.
+            </p>
+          </div>
+        )
+
       case 'methode':
         return (
           <div className="funnel-figure">
@@ -636,6 +709,14 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     activite: {
       titre: 'Tu bouges combien par jour ?',
       sous: 'L’activité stimule l’os pendant qu’il peut encore s’allonger.',
+    },
+    enjeu: {
+      titre: 'Ce que tu ne rattraperas pas',
+      sous: 'La croissance a une date de fin. Ce qui compte, c’est ce qui se joue avant.',
+    },
+    'part-habitudes': {
+      titre: 'Ce que tes habitudes pèsent vraiment',
+      sous: 'La génétique fixe ton plafond. Le reste décide si tu l’atteins, ou si tu t’arrêtes en dessous.',
     },
     methode: {
       titre: 'Quelle précision peux-tu attendre ?',
