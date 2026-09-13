@@ -123,6 +123,22 @@ class APIClient {
   }
 
   /**
+   * Les cinq réponses posées après le paiement, qui donnent au plan
+   * des heures réelles. `renseignees` à faux signifie « on n'a jamais
+   * demandé » : c'est ce qui déclenche l'écran de réglage.
+   */
+  async getPreferences() {
+    return this.request('/api/v1/preferences');
+  }
+
+  async savePreferences(preferences) {
+    return this.request('/api/v1/preferences', {
+      method: 'POST',
+      body: JSON.stringify(preferences),
+    });
+  }
+
+  /**
    * Source de vérité de l'accès premium : la base, via le backend.
    * Ne jamais se fier au localStorage pour ça — il est modifiable par
    * l'utilisateur en deux clics dans la console.

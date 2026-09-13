@@ -1,8 +1,11 @@
 package api
 
 import (
-	"grandimi/internal/planner"
+	"fmt"
 	"net/http"
+
+	"grandimi/internal/db"
+	"grandimi/internal/planner"
 
 	"github.com/gin-gonic/gin"
 )
@@ -71,6 +74,26 @@ func GetGrowthPlan(c *gin.Context) {
 		ExerciseMin:     req.ExerciseMin,
 		Puberty:         req.PubertyStage,
 		HeightVelocity:  req.HeightVelocity,
+	}
+
+	/* Les reponses posees apres le paiement. Elles viennent du compte
+	   authentifie, jamais du corps de la requete : sans ca, un client
+	   pourrait demander le plan d'horaires de quelqu'un d'autre.
+
+	   Une lecture qui echoue ne fait pas echouer le plan — elle le
+	   ramene a ses horaires par defaut. Mieux vaut un plan generique
+	   qu'un abonne devant une erreur. */
+	if prefs, err := db.LirePreferences(c.GetString("userID")); err != nil {
+		fmt.Printf("[plan] LirePreferences: %v
+", err)
+	} else {
+		plannerReq.Preferences = planner.PreferencesPlan{
+			CoucherMin: prefs.CoucherMin,
+			LeverMin:   prefs.LeverMin,
+			PetitDej:   prefs.PetitDej,
+			JoursSport: prefs.JoursSport,
+			Difficulte: prefs.Difficulte,
+		}
 	}
 
 	growthPlan := planner.GeneratePersonalizedPlan(plannerReq)

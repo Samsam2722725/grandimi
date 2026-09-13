@@ -16,6 +16,7 @@ import SetPasswordPage from './pages/SetPasswordPage';
 import AdminPage from './pages/AdminPage';
 import ParentPage from './pages/ParentPage';
 import GiftConfirmedPage from './pages/GiftConfirmedPage';
+import PlanSetupPage from './pages/PlanSetupPage';
 import AccountPage from './pages/AccountPage';
 
 /* Reconnaît un retour de paiement Whop.
@@ -150,12 +151,33 @@ function App() {
     setCurrentPage('results');
   };
 
+  /* Le plan ne s’ouvre qu’une fois ses horaires connus.
+
+     Sans ce détour, le plan annonçait « 10:00 PM » et « 7:00 AM » à
+     tout le monde — écrit en dur côté serveur, en anglais, sur un
+     site français. Cinq questions posées une seule fois suffisent à
+     poser des heures réelles ; `renseignees` dit si elles l’ont déjà
+     été.
+
+     Une lecture qui échoue N’EMPÊCHE PAS d’accéder au plan : on ne
+     laisse pas quelqu’un qui vient de payer devant un écran de
+     réglage cassé. Il obtient son plan, avec les horaires par
+     défaut, et pourra le régler plus tard. */
+  const ouvrirPlan = async () => {
+    try {
+      const prefs = await apiClient.getPreferences();
+      setCurrentPage(prefs?.renseignees ? 'plan' : 'plan-setup');
+    } catch {
+      setCurrentPage('plan');
+    }
+  };
+
   const handleViewPlan = () => {
     if (!isPaid) {
       setCurrentPage('paywall');
-    } else {
-      setCurrentPage('plan');
+      return;
     }
+    ouvrirPlan();
   };
 
   const handleGoToAccount = () => {
@@ -195,7 +217,7 @@ function App() {
         const res = await apiClient.checkPremium();
         if (res.is_premium) {
           setIsPaid(true);
-          setCurrentPage('plan');
+          await ouvrirPlan();
           return;
         }
       } catch {
@@ -447,6 +469,10 @@ function App() {
 
       {/* Paiement cadeau confirmé : le payeur n'est pas le bénéficiaire,
           aucun compte n'est créé ici. */}
+      {currentPage === 'plan-setup' && (
+        <PlanSetupPage onTermine={() => setCurrentPage('plan')} />
+      )}
+
       {currentPage === 'gift-confirmed' && (
         <GiftConfirmedPage onBackHome={handleBackHome} />
       )}

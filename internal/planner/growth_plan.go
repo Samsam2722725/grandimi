@@ -96,6 +96,22 @@ type GrowthPlanRequest struct {
 	ExerciseMin    float64
 	Puberty        string
 	HeightVelocity float64
+
+	/* Les cinq reponses posees APRES le paiement. Sans elles, le plan
+	   donnait la meme heure de coucher a tout le monde. */
+	Preferences    PreferencesPlan
+}
+
+/* PreferencesPlan reprend, sans dependre du paquet db, ce dont le
+   plan a besoin pour poser des heures reelles. Les minutes sont
+   comptees depuis minuit : « 30 minutes plus tot » est alors une
+   soustraction, pas une analyse de chaine. */
+type PreferencesPlan struct {
+	CoucherMin int
+	LeverMin   int
+	PetitDej   string
+	JoursSport []int
+	Difficulte string
 }
 
 // GeneratePersonalizedPlan creates a customized growth plan based on user profile
@@ -241,6 +257,34 @@ func generateNutritionPlan(req GrowthPlanRequest) NutritionPlan {
 	return plan
 }
 
+/* heureFr écrit des minutes depuis minuit à la française : 1350 → « 22 h 30 ».
+
+   Le plan annonçait « 10:00 PM » et « 7:00 AM » à des adolescents
+   français. Ce n'était pas qu'une question de format : ces deux heures
+   étaient écrites en dur, donc identiques pour tout le monde. */
+func heureFr(minutes int) string {
+	minutes = ((minutes % minutesParJourPlan) + minutesParJourPlan) % minutesParJourPlan
+	h := minutes / 60
+	m := minutes % 60
+	if m == 0 {
+		return fmt.Sprintf("%d h", h)
+	}
+	return fmt.Sprintf("%d h %02d", h, m)
+}
+
+const minutesParJourPlan = 24 * 60
+
+/* dureeSommeil compte les minutes entre le coucher et le lever, en
+   passant par minuit. Sans le rattrapage, un coucher à 22 h 30 et un
+   lever à 7 h donnent un nombre négatif. */
+func dureeSommeil(coucher, lever int) int {
+	duree := lever - coucher
+	if duree <= 0 {
+		duree += minutesParJourPlan
+	}
+	return duree
+}
+
 // generateSleepPlan creates sleep optimization strategy
 func generateSleepPlan(req GrowthPlanRequest) SleepPlan {
 	targetHours := 9
@@ -248,16 +292,42 @@ func generateSleepPlan(req GrowthPlanRequest) SleepPlan {
 		targetHours = 8
 	}
 
+	coucher := req.Preferences.CoucherMin
+	lever := req.Preferences.LeverMin
+
+	/* Zero est une heure valide — minuit — donc indistinguable d un
+	   champ jamais rempli. Deux zeros ensemble, eux, ne decrivent
+	   aucun emploi du temps reel : on retombe alors sur 22 h 30 /
+	   7 h. Sans ce garde-fou, un plan genere sans preferences (appel
+	   direct, test) annoncerait « couche-toi a 0 h ». */
+	if coucher == 0 && lever == 0 {
+		coucher, lever = 1350, 420
+	}
+	dormies := dureeSommeil(coucher, lever)
+
+	/* La consigne dépend de l'écart réel, pas d'une phrase générique.
+	   Dire « couche-toi plus tôt » à quelqu'un qui dort déjà neuf heures
+	   est le meilleur moyen qu'il cesse de lire le plan. */
+	consigne := fmt.Sprintf(
+		"Tu dors %s. C'est ce qu'il te faut à ton âge — garde ces horaires, même le week-end (à 1 h près).",
+		heureFr(dormies))
+	if dormies < targetHours*60 {
+		manque := targetHours*60 - dormies
+		consigne = fmt.Sprintf(
+			"Tu dors %s, il t'en manque %s. Avance ton coucher à %s : c'est la première heure de sommeil profond qui porte le pic d'hormone de croissance, et c'est celle qu'on perd en se couchant tard.",
+			heureFr(dormies), heureFr(manque), heureFr(coucher-manque))
+	}
+
 	plan := SleepPlan{
-		TargetHours:    targetHours,
-		BedTime:        "10:00 PM",
-		WakeTime:       "7:00 AM",
-		Consistency:    "Same time every day (±30 minutes)",
-		Growth:         "Growth hormone peaks 1-2 hours after sleep onset during deep sleep (stages 3-4)",
+		TargetHours: targetHours,
+		BedTime:     heureFr(coucher),
+		WakeTime:    heureFr(lever),
+		Consistency: consigne,
+		Growth:      "L'hormone de croissance atteint son pic 1 à 2 h après l'endormissement, pendant le sommeil profond.",
 		PreSleepRoutine: []string{
-			"9:30 PM: Stop using screens (blue light suppresses melatonin)",
-			"9:45 PM: Relaxation (reading, meditation, stretching)",
-			"10:00 PM: Lights off, bedroom dark & cool (65-68°F)",
+			fmt.Sprintf("%s : écrans éteints — la lumière bleue retarde la mélatonine", heureFr(coucher-60)),
+			fmt.Sprintf("%s : au calme — lecture, étirements, respiration", heureFr(coucher-30)),
+			fmt.Sprintf("%s : lumière éteinte, chambre sombre et fraîche (18-20 °C)", heureFr(coucher)),
 		},
 		Environment: []string{
 			"Complete darkness (blackout curtains)",

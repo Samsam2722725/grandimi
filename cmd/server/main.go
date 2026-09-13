@@ -60,6 +60,13 @@ func main() {
 		paye.POST("/tasks/toggle", api.ToggleTaskCompletion)
 		paye.GET("/tasks/today", api.GetTodayCompletions)
 		paye.GET("/tasks/history", api.GetTaskHistory)
+
+		/* Les cinq reponses posees apres le paiement, qui donnent au
+		   plan des heures reelles. Derriere abonnement comme le reste
+		   du groupe : l ecran qui les demande n existe que pour
+		   quelqu'un qui a paye. */
+		paye.GET("/preferences", api.GetPreferencesPlan)
+		paye.POST("/preferences", api.EnregistrerPreferencesPlan)
 	}
 
 	/* Auth — débit limité : sans plafond, un mot de passe se teste en
