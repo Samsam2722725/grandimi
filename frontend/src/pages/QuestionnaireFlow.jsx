@@ -574,12 +574,52 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
 
            La derniere ligne est la charniere : elle dit ce qui manque, et
            c'est exactement ce que le produit vend. */
+        /* CHOQUER PAR CE QU'IL IGNORE, PAS PAR CE QU'IL CRAINT.
+
+           Taller choque en annoncant a un garcon de 13 ans qu'il sera
+           rejete. C'est efficace une seconde, puis il se braque — et deux
+           des trois chiffres sont inventes.
+
+           Ces lignes choquent par des faits verifiables qu'un adolescent
+           ne connait pas, et qui designent tous le meme levier :
+
+             - le pourcentage deja parcouru, calcule sur SES mesures. Voir
+               « tu as fait 91 % du chemin » quand on a 14 ans et qu'on se
+               croit en plein devenir, c'est le vrai coup a l'estomac — et
+               c'est son chiffre, pas une moyenne ;
+             - la compression des disques intervertebraux : on perd bien
+               un a deux centimetres dans la journee, recuperes en dormant.
+               Personne ne le sait, et ca rend le sommeil concret ;
+             - l'hormone de croissance se libere par pics pendant le
+               sommeil profond, ce qui renverse la croyance « le sport fait
+               grandir ».
+
+           La cible mi-parentale (Tanner) sert ici de reperetoire : le
+           serveur rendra l'estimation exacte quelques ecrans plus loin,
+           donc on arrondit et on ecrit « environ » pour qu'un ecart de
+           quelques centimetres ne se lise pas comme une contradiction. */
+        const tailleActuelleCm = Number(reponses.height_cm)
+        const cibleMiParentale =
+          (Number(reponses.father_height_cm) +
+            Number(reponses.mother_height_cm) +
+            (reponses.sex === 'F' ? -13 : 13)) /
+          2
+        const partParcourue =
+          Number.isFinite(cibleMiParentale) && cibleMiParentale > 0
+            ? Math.round((tailleActuelleCm / cibleMiParentale) * 100)
+            : 0
+
+        const ligneParcours =
+          partParcourue >= 97 || partParcourue <= 0
+            ? 'Tu es tout proche de ta taille adulte'
+            : `Tu as fait ${partParcourue} % du chemin`
+
         const LIGNES = [
-          'Tu y penses souvent. Sans le dire.',
-          'Tu te compares. Tout le temps.',
-          'Tu as déjà cherché ça, la nuit',
+          ligneParcours,
+          'Tu perds 1 cm dans la journée',
+          'Tu grandis surtout en dormant',
           compteARebours,
-          'Personne ne t’a jamais dit quoi faire',
+          'Ce que tu ne prends pas est perdu',
         ]
         return (
           <ul className="funnel-enjeux">
@@ -738,7 +778,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     enjeu: {
       titre: 'La vérité brutale sur la petite taille',
-      sous: 'Ce que tu sais déjà, et ce que personne ne t’a expliqué.',
+      sous: 'Cinq choses que personne ne t’a dites. La première est ton chiffre.',
     },
     'part-habitudes': {
       titre: 'Ce que tes habitudes pèsent vraiment',
