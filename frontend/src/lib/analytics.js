@@ -10,6 +10,7 @@
 // - autocapture laissé actif, mais il n'enregistre jamais le contenu
 //   saisi dans les champs, seulement les clics et les libellés.
 import posthog from 'posthog-js';
+import { API_BASE } from './api';
 
 const CLE = import.meta.env.VITE_POSTHOG_KEY;
 const HOTE = import.meta.env.VITE_POSTHOG_HOST || 'https://eu.i.posthog.com';
@@ -31,12 +32,101 @@ export function initAnalytics() {
   actif = true;
 }
 
+/* ============================================================
+   Une copie de la mesure chez nous
+
+   PostHog ne se lit qu'en s'y connectant, et le tableau de bord Whop
+   ne voit qu'une seule page : le site est une application d'une seule
+   page, son adresse ne change jamais. Vérifié le 13/09/2026 — 131 vues
+   de grandimi.com, toutes comptées sur « / ». Aucun des deux ne peut
+   donc répondre à « où les gens s'arrêtent ».
+
+   Les mêmes événements partent aussi vers notre base, où la réponse se
+   lit en SQL (migrations/lire_le_tunnel.sql).
+
+   CE QUI PART, ET RIEN D'AUTRE
+   Le nom de l'événement, le nom de l'écran (ou, à l'entrée du tunnel,
+   le bouton par lequel on est entré) et son rang. Écrits en dur, un
+   par un : volontairement PAS `...proprietes` — sans
+   quoi une propriété ajoutée un jour à un événement partirait en base
+   sans que personne ne l'ait décidé. Ni tranche d'âge, ni sexe, ni
+   confiance : cette copie sait dire où on perd les gens, et rien sur
+   qui ils sont.
+   ============================================================ */
+
+let idVolatile = '';
+
+function nouvelId() {
+  try {
+    return crypto.randomUUID();
+  } catch {
+    return String(Date.now()) + String(Math.random()).slice(2);
+  }
+}
+
+/* Identifiant de visite, tiré au hasard, sans aucun lien avec un
+   compte. Il ne sert qu'à recoller les écrans d'une même visite, pour
+   compter des visiteurs plutôt que des clics. */
+function idDeVisite() {
+  try {
+    let id = localStorage.getItem('grandimi:mesure');
+    if (!id) {
+      id = nouvelId();
+      localStorage.setItem('grandimi:mesure', id);
+    }
+    return id;
+  } catch {
+    // Navigation privée, stockage refusé : on mesure quand même, avec
+    // un identifiant qui ne vivra que le temps de la page.
+    if (!idVolatile) idVolatile = nouvelId();
+    return idVolatile;
+  }
+}
+
+function envoyerAuServeur(evenement, proprietes) {
+  const rang = Number(proprietes && proprietes.rang);
+  const corps = JSON.stringify({
+    session: idDeVisite(),
+    evenement,
+    etape: String((proprietes && (proprietes.etape || proprietes.emplacement)) || ''),
+    rang: Number.isFinite(rang) ? rang : 0,
+  });
+
+  try {
+    /* sendBeacon plutôt que fetch : il part même si l'onglet se ferme
+       dans la seconde, et c'est justement l'abandon qu'on cherche à
+       mesurer. Le type text/plain évite la requête OPTIONS préalable,
+       qu'un beacon ne sait pas négocier. */
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(
+        API_BASE + '/api/v1/tunnel',
+        new Blob([corps], { type: 'text/plain' }),
+      );
+      return;
+    }
+
+    fetch(API_BASE + '/api/v1/tunnel', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: corps,
+      keepalive: true,
+    }).catch(() => {});
+  } catch {
+    // Une mesure ne doit jamais casser la page qu'elle observe.
+  }
+}
+
+/* L'envoi chez nous précède le `return` sur `actif` : il ne dépend pas
+   de PostHog. Sans ça, une clé PostHog absente du build rendrait le
+   site muet des deux côtés à la fois. */
 export function capturePageview(page) {
+  envoyerAuServeur('page_vue', { etape: page });
   if (!actif) return;
   posthog.capture('$pageview', { page });
 }
 
 export function capture(evenement, proprietes) {
+  envoyerAuServeur(evenement, proprietes);
   if (!actif) return;
   posthog.capture(evenement, proprietes);
 }

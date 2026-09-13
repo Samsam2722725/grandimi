@@ -3,7 +3,7 @@
  * Wrapper for all backend API calls
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+export const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 class APIClient {
   constructor(baseURL = API_BASE) {

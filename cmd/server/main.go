@@ -104,6 +104,18 @@ func main() {
 	   envoyé à Whop. */
 	router.GET("/api/v1/plans", api.GetPlans)
 
+	/* Mesure du tunnel : une ligne par ecran vu, pour savoir OU les
+	   visiteurs s arretent. Publique et sans session par construction
+	   (celui qu on mesure n a pas encore de compte), et sans effet de
+	   bord : elle n ecrit que dans evenements_tunnel.
+
+	   600 par heure et par IP : un questionnaire complet en emet une
+	   vingtaine, donc la marge est large. Elle reste large a dessein,
+	   parce qu'un operateur mobile fait passer beaucoup d abonnes par
+	   la meme adresse : une limite serree couperait de vrais visiteurs
+	   avant de gener qui que ce soit. */
+	router.POST("/api/v1/tunnel", api.RateLimit(600, time.Hour), api.EnregistrerEtapeTunnel)
+
 	/* Routes portant des données personnelles : session obligatoire.
 	   Elles répondaient auparavant à un ?user_id= ou ?email= arbitraire,
 	   sans authentification. */
