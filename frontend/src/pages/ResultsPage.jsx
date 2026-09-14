@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowLeft, Check, Lock, Share2 } from 'lucide-react'
+import { ArrowLeft, Lock, Share2 } from 'lucide-react'
 
 import { ageFinCroissance } from '@/components/ui/growth-chart'
 import { GrowthProjectionChart } from '@/components/ui/growth-projection-chart'
@@ -102,19 +102,12 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
   const margeAffichee = cm(margeRestante)
 
   /* Les trois leviers, d'apres SES réponses. Un champ vide ou nul veut
-     dire « pas renseigné » et ne compte pas : mieux vaut annoncer deux
-     points vrais que trois dont un inventé.
+     dire « pas renseigné » et ne compte pas.
 
-     L'écran se contentait d'un compte — « 2 points à corriger » — et
-     renvoyait le détail au plan payant. C'était un cadenas de trop : au
-     moment de décider s'il paie, le visiteur ne savait même pas de QUOI
-     on parlait, donc ce qu'il achetait. Or ces trois valeurs viennent de
-     ses propres réponses, il les a saisies quatre écrans plus tôt ; les
-     lui cacher ne protège rien et ne vend rien.
-
-     Ce qui reste payant est ce qui l'a toujours été : quoi faire, dans
-     quel ordre, à quelle heure. Nommer le problème donne envie de la
-     solution — cacher le problème donne seulement envie de partir. */
+     Le détail levier par levier a été retiré de l'écran : il ne reste
+     de cette liste que le test « au moins un levier renseigné », qui
+     conditionne l'affichage du coût des habitudes. Sans aucune réponse
+     de mode de vie, ce coût ne veut rien dire et le bloc disparaît. */
   const heuresSommeil = Number(predictionData.sleep_hours_per_night)
   const minutesSport = Number(predictionData.exercise_min_per_day)
 
@@ -154,9 +147,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
       enjeu: 'La mise en charge stimule le cartilage tant qu’il est ouvert.',
     },
   ].filter((levier) => levier.renseigne)
-
-  const aCorriger = leviers.filter((levier) => levier.sousCible)
-  const pointsACorriger = aCorriger.length
 
   /* Ce que les habitudes actuelles coûtent, en centimètres.
 
@@ -398,24 +388,12 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
               qu'on montre dans la même carte. Ce qui reste payant est ce qui
               l'a toujours été — quoi faire, dans quel ordre, à quelle heure. */}
 
-          {/* Le diagnostic nommé, levier par levier.
-
-              Forme reprise de la liste « Leçon 1 / Leçon 2 / Leçon 3 » du
-              paywall de Taller : des lignes identiques, un état par ligne,
-              une pastille verte sur ce qui est acquis et un cadenas sur ce
-              qui ne l'est pas. Voir le vert à côté du cadenas est ce qui
-              rend le cadenas désirable — un écran entièrement verrouillé
-              ne donne envie de rien.
-
-              Ici le vert n'est pas un cadeau marketing : c'est un levier
-              que l'utilisateur tient déjà, et le dire est la moitié de la
-              crédibilité du diagnostic. */}
+          {/* Le détail levier par levier (trois cartes « sous la cible » /
+              « au niveau ») a été retiré à la demande du client. Ce qui
+              reste est le chiffre seul : ce que les habitudes coûtent, sans
+              la liste qui l'explique. */}
           {leviers.length > 0 && (
             <div className="analyse-leviers">
-              {/* Le chiffre d'abord, la cause ensuite, la solution après :
-                  c'est l'ordre dans lequel on accepte une dépense. La liste
-                  des leviers qui suit n'est plus une liste de reproches, elle
-                  explique d'où sort ce nombre-là. */}
               {coutHabitudes > 0 ? (
                 <div className="cout-habitudes">
                   <p className="cout-chiffre">
@@ -443,47 +421,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
                 </div>
               )}
 
-              {pointsACorriger > 0 && (
-                <span className="analyse-badge">
-                  {pointsACorriger} point{pointsACorriger > 1 ? 's' : ''} à corriger
-                </span>
-              )}
-
-              <ul className="levier-liste">
-                {leviers.map((levier) => (
-                  <li
-                    key={levier.cle}
-                    className={`levier ${levier.sousCible ? 'levier--alerte' : 'levier--ok'}`}
-                  >
-                    <span className="levier-etat" aria-hidden="true">
-                      {levier.sousCible ? <Lock size={14} /> : <Check size={14} />}
-                    </span>
-
-                    <span className="levier-corps">
-                      <span className="levier-nom">
-                        {levier.nom}
-                        <em className="levier-valeur">{levier.valeur}</em>
-                      </span>
-                      <span className="levier-detail">
-                        {levier.sousCible ? (
-                          <>
-                            Sous la cible ({levier.cible}). {levier.enjeu}
-                          </>
-                        ) : (
-                          <>Au niveau. Ce levier-là, tu le tiens déjà.</>
-                        )}
-                      </span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
-              {pointsACorriger > 0 && (
-                <p className="analyse-note">
-                  Ton plan attaque {pointsACorriger === 1 ? 'ce point' : 'ces points'} en
-                  premier : quoi faire, à quelle heure, et pendant combien de temps.
-                </p>
-              )}
             </div>
           )}
 
@@ -501,72 +438,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
               </span>
             </div>
           </div>
-        </section>
-
-        {/* ---------- Ce qu'il achète, montré plutôt que décrit ----------
-
-            « Et maintenant ? » tenait en deux phrases plates juste avant
-            le bouton : à l'endroit exact où il faut donner envie, la page
-            expliquait. Elle montre désormais une journée — deux actions
-            en clair, le reste sous cadenas. Voir deux vraies consignes
-            dit la qualité du produit ; le compte de celles qui manquent
-            dit ce qu'on achète.
-
-            Les horaires portent la mention « exemple » : ceux du vrai
-            plan sont calés sur les heures de coucher et de lever
-            demandées après le paiement (PlanSetupPage). Les afficher ici
-            comme si c'étaient les siens serait une promesse qu'on ne
-            tient pas encore. */}
-        <section className="night-card results-journee">
-          <h2 className="night-card-title">Ta journée, à partir de demain</h2>
-          <p className="journee-exemple">Exemple — tes horaires seront calés sur les tiens</p>
-
-          <ul className="journee-liste">
-            <li className="journee-ligne">
-              <span className="journee-moment">Au réveil</span>
-              <span className="journee-action">3 étirements au mur, 4 minutes</span>
-            </li>
-            <li className="journee-ligne">
-              <span className="journee-moment">Petit-déjeuner</span>
-              <span className="journee-action">25 g de protéines avant de partir</span>
-            </li>
-            <li className="journee-ligne journee-ligne--verrouille">
-              <span className="journee-moment">Après-midi</span>
-              <span className="journee-action">
-                <Lock size={15} aria-hidden="true" />
-              </span>
-            </li>
-            <li className="journee-ligne journee-ligne--verrouille">
-              <span className="journee-moment">Le soir</span>
-              <span className="journee-action">
-                <Lock size={15} aria-hidden="true" />
-              </span>
-            </li>
-            <li className="journee-ligne journee-ligne--verrouille">
-              <span className="journee-moment">Au coucher</span>
-              <span className="journee-action">
-                <Lock size={15} aria-hidden="true" />
-              </span>
-            </li>
-          </ul>
-
-          <p className="journee-total">
-            <strong>11 actions par jour.</strong> Chacune dit pourquoi elle est là.
-          </p>
-
-          {/* « Ce que tu débloques » était une carte séparée, juste après
-              celle-ci, avec sa propre liste de quatre promesses. Deux cartes
-              d'affilée pour décrire le même abonnement : la première le
-              montrait, la seconde le racontait. On garde la démonstration et
-              on replie la liste dessous — c'est le même bloc, il n'en faut
-              qu'un. */}
-          <ul className="results-atouts">
-            <li>Refait chaque mois selon tes progrès</li>
-            <li>Sommeil, nutrition, exercices — détaillés</li>
-            <li>Ta re-mesure mensuelle</li>
-            <li>Ton frein principal, nommé</li>
-          </ul>
-          <p className="results-price">À partir de 4,99 €/mois · résiliable à tout moment</p>
         </section>
 
         {/* Le partage descend ici, APRÈS le bloc produit et juste avant le

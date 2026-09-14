@@ -2,9 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { FunnelButton, FunnelShell } from '@/components/ui/funnel-shell'
-import { HandwritingText } from '@/components/ui/handwriting-text'
 import { Interstitial } from '@/components/ui/interstitial'
-import { SpecialText } from '@/components/ui/special-text'
 import { SegmentedControl } from '@/components/ui/segmented-control'
 import { WheelPicker } from '@/components/ui/wheel-picker'
 
@@ -68,7 +66,6 @@ const ETAPES = [
   'nutrition',
   'activite',
   'part-habitudes',
-  'precision',
   'email',
   'recapitulatif',
 ]
@@ -584,50 +581,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           </div>
         )
 
-      /* ---------- Écran de confiance ----------
-
-         Forme copiée sur Taller (capture du 13/09/2026) : une question,
-         un chiffre géant seul au milieu de l'écran, une annotation
-         manuscrite qui le désigne. C'est le motif le plus efficace de
-         leur tunnel et il n'a aucune raison de leur appartenir.
-
-         Le CONTENU est l'inverse du leur, et c'est précisément ce qui
-         rend l'écran meilleur que l'original. Taller affiche « 98,5 % »
-         sous le mot « Accuracy », sans jamais dire 98,5 % de quoi — un
-         pourcentage de précision n'a pas de sens sur une prédiction
-         continue, on ne peut pas avoir « raison à 98,5 % » sur une
-         taille. Le chiffre est invérifiable par construction.
-
-         Grandimi affiche le sien, qui lui veut dire quelque chose. Poser
-         les deux côte à côte sur le même écran fait le travail que
-         quatre paragraphes de la page d'accueil ne font pas : le
-         visiteur comprend en trois secondes lequel des deux produits
-         lui parle sérieusement.
-
-         Placé juste avant la demande d'e-mail — c'est l'écran où l'on
-         demande sans rien donner, donc celui qui a le plus besoin
-         d'avoir été précédé par une raison de faire confiance. */
-      case 'precision':
-        return (
-          <div className="funnel-precision">
-            <p className="funnel-precision-chiffre">
-              <span className="funnel-precision-signe">±</span>
-              <SpecialText className="funnel-precision-valeur">4</SpecialText>
-              <span className="funnel-precision-unite">cm</span>
-            </p>
-
-            <span className="funnel-precision-note">
-              <HandwritingText text="notre marge réelle" height="1.9rem" />
-            </span>
-
-            <p className="funnel-precision-texte">
-              Sur une taille adulte, c’est l’écart entre deux tailles de jean. Elle
-              s’élargit jusqu’à ± 8 cm en plein pic de croissance — et on te dira
-              laquelle s’applique à toi, avec ton résultat.
-            </p>
-          </div>
-        )
-
       case 'email':
         return (
           <div className="funnel-field">
@@ -677,10 +630,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 : `${fr(reponses.height_velocity_cm)} cm`,
             vers: 7,
           },
-          /* L'index suit ETAPES, il n'est pas décoratif : l'insertion de
-             l'écran « precision » a décalé l'e-mail de 12 à 13. Oublier ce
-             chiffre renvoie « Modifier » sur l'écran d'à côté. */
-          { label: 'E-mail', valeur: reponses.email, vers: 13 },
+          /* L'index suit ETAPES, il n'est pas décoratif : un écran ajouté ou
+             retiré avant celui-ci décale la cible, et « Modifier » renvoie
+             alors sur l'écran d'à côté. */
+          { label: 'E-mail', valeur: reponses.email, vers: 12 },
         ]
 
         return (
@@ -756,10 +709,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     'part-habitudes': {
       titre: 'Ce que tes habitudes pèsent vraiment',
       sous: 'La génétique fixe ton plafond. Le reste décide si tu l’atteins, ou si tu t’arrêtes en dessous.',
-    },
-    precision: {
-      titre: 'À quel point on peut se tromper ?',
-      sous: 'Les applis qui annoncent « 98,5 % de précision » ne disent jamais 98,5 % de quoi. Voilà notre chiffre, et ce qu’il veut dire.',
     },
     email: {
       /* « Où t'envoyer ton estimation ? » promettait un e-mail que rien
