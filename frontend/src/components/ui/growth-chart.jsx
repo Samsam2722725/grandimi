@@ -32,6 +32,16 @@ const SERIE_TRAJECTOIRE = '#ff5a1f'
  * Catmull-Rom converti en Bézier cubique : une polyligne donnerait des angles
  * là où la croissance ralentit progressivement.
  */
+/* Séparateur décimal français. Les âges du questionnaire avancent de demi
+   en demi (13,5 / 14 / 14,5) et la fin de croissance tombe souvent sur un
+   demi : les deux repères de l'axe écrivaient « 16.5 ans » au point
+   anglais, à deux centimètres d'un résultat qui écrit « 16,5 ans » à la
+   virgule. Deux typographies pour le même nombre sur le même écran, sur
+   un produit dont l'argument est la rigueur. */
+function frAge(valeur) {
+  return String(valeur).replace('.', ',')
+}
+
 function lisser(points, sansDepart = false) {
   if (points.length < 2) return ''
   let d = sansDepart ? '' : `M ${points[0][0]} ${points[0][1]}`
@@ -221,7 +231,7 @@ export function GrowthTrajectoryChart({
           fontSize="10"
           fill="var(--funnel-muted, #9a9a9a)"
         >
-          {ageNow} ans
+          {frAge(ageNow)} ans
         </text>
         <text
           x={W - M.right}
@@ -230,7 +240,7 @@ export function GrowthTrajectoryChart({
           fontSize="10"
           fill="var(--funnel-muted, #9a9a9a)"
         >
-          {ageFin} ans
+          {frAge(ageFin)} ans
         </text>
       </svg>
 

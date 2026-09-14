@@ -330,23 +330,24 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               </h1>
 
               <p
-                className="rise mt-6 max-w-xl text-[clamp(16px,2.2vw,19px)] leading-[1.55] text-pretty text-[color:var(--text-secondary)]"
+                className="rise mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
                 style={{ animationDelay: '160ms' }}
               >
-                {/* Le paragraphe d'accroche ne parlait que de l'estimation —
-                    or l'estimation est gratuite. Un visiteur repartait sans
-                    savoir ce qui est vendu. Il dit maintenant les deux, dans
-                    l'ordre : ce qui est offert, puis ce qui est payant. */}
+                {/* UNE phrase, pas trois.
+
+                    Le hero empilait trois paragraphes séparés par des sauts de
+                    ligne doubles : la promesse, ce qui est vendu, ce qui est
+                    gratuit. Trois blocs à lire avant d'atteindre le bouton, sur
+                    un écran où le visiteur arrive de TikTok et décide en trois
+                    secondes.
+
+                    Les deux blocs retirés ne sont pas perdus : « 11 actions par
+                    jour » est déjà le troisième des quatre chiffres du bandeau
+                    juste dessous ET le titre de la carte de droite ; « estimation
+                    gratuite » est déjà dans le badge au-dessus du titre, dans le
+                    libellé du bouton, et dans la ligne qui le suit. On les disait
+                    quatre fois chacun. */}
                 Ta génétique fixe un plafond. Tes habitudes décident si tu l’atteins.
-                <br />
-                <br />
-                <strong className="font-semibold text-ink">
-                  11 actions par jour
-                </strong>{' '}
-                — du lever au coucher, choisies d’après tes réponses.
-                <br />
-                <br />
-                Ton estimation de départ est gratuite.
               </p>
 
               <div

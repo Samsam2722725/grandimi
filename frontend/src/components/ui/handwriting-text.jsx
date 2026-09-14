@@ -178,10 +178,23 @@ export function HandwritingText({
     return () => cancelAnimationFrame(id)
   }, [geom, reduceMotion])
 
-  // Avant que la police ne réponde — et si elle ne répond jamais — le texte
-  // reste lisible.
+  /* Avant que la police ne réponde — et si elle ne répond jamais — le texte
+     reste lisible.
+
+     `WebkitTextFillColor` est indispensable, pas décoratif. Ce composant sert
+     un mot AU MILIEU d'un <h1 class="night-title-gradient">, et ce titre pose
+     `color: transparent` pour laisser voir son dégradé à travers les lettres.
+     Un repli qui n'hérite que de cette couleur est un mot invisible : le hero
+     affichait « Prends [rien] les centimètres » pendant tout le temps de
+     chargement d'opentype.js et de la police, soit deux bonnes secondes sur un
+     visiteur qui en accorde trois. La propriété de remplissage l'emporte sur
+     `color` là où le dégradé est actif ; ailleurs elle ne change rien. */
   if (!geom) {
-    return <span className={className}>{current}</span>
+    return (
+      <span className={className} style={{ WebkitTextFillColor: 'currentColor' }}>
+        {current}
+      </span>
+    )
   }
 
   const count = Math.max(1, geom.contours.length)

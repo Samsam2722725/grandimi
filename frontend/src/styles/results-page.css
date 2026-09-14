@@ -543,3 +543,104 @@
   line-height: 1.55;
   color: var(--funnel-muted, rgba(255, 255, 255, 0.45));
 }
+
+/* ---------- Diagnostic nomme, levier par levier ----------
+
+   Remplace le simple compte « 2 points a corriger », qui annoncait un
+   probleme sans jamais dire lequel. Les valeurs affichees ici sont
+   celles que l utilisateur a saisies lui-meme quatre ecrans plus tot :
+   il n y a rien a proteger derriere un cadenas, et tout a gagner a lui
+   montrer qu on a lu ses reponses.
+   --------------------------------------------------------------- */
+
+.analyse-leviers {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.levier-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.levier {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid var(--funnel-line, #2a2a2a);
+  background: var(--funnel-surface, #141414);
+}
+
+/* La pastille porte l etat a elle seule : pleine et verte pour ce qui
+   est acquis, cerclee et orange pour ce qui manque. La couleur n est
+   pas seule a distinguer les deux — l icone change aussi, faute de quoi
+   la ligne ne dit plus rien a qui ne separe pas ces deux teintes. */
+.levier-etat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.levier--ok {
+  border-color: rgba(52, 199, 89, 0.28);
+}
+
+.levier--ok .levier-etat {
+  background: rgba(52, 199, 89, 0.16);
+  color: #4ed473;
+}
+
+.levier--alerte {
+  border-color: rgba(255, 90, 31, 0.4);
+  background: rgba(255, 90, 31, 0.06);
+}
+
+.levier--alerte .levier-etat {
+  background: rgba(255, 90, 31, 0.16);
+  color: var(--funnel-accent, #ff5a1f);
+}
+
+.levier-corps {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.levier-nom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--funnel-text, #fff);
+}
+
+/* La valeur saisie, juste apres le nom du levier : c est elle qui prouve
+   que le diagnostic parle de LUI et non d un adolescent moyen. */
+.levier-valeur {
+  font-style: normal;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--funnel-muted, rgba(255, 255, 255, 0.7));
+}
+
+.levier-detail {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--funnel-muted, rgba(255, 255, 255, 0.7));
+  text-wrap: pretty;
+}

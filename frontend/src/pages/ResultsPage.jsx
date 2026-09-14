@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowLeft, Share2 } from 'lucide-react'
-
-import { Lock } from 'lucide-react'
+import { ArrowLeft, Check, Lock, Share2 } from 'lucide-react'
 
 import { GrowthTrajectoryChart, ageFinCroissance } from '@/components/ui/growth-chart'
 import { HandwritingText } from '@/components/ui/handwriting-text'
@@ -102,17 +100,62 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      même non-sens. Une seule décision, ici, pour les deux. */
   const margeAffichee = cm(margeRestante)
 
-  /* Combien de leviers sont en dessous de la cible, d'apres SES
-     réponses. Un champ vide ou nul veut dire « pas renseigné » et
-     ne compte pas : mieux vaut annoncer deux points vrais que trois
-     dont un inventé. */
+  /* Les trois leviers, d'apres SES réponses. Un champ vide ou nul veut
+     dire « pas renseigné » et ne compte pas : mieux vaut annoncer deux
+     points vrais que trois dont un inventé.
+
+     L'écran se contentait d'un compte — « 2 points à corriger » — et
+     renvoyait le détail au plan payant. C'était un cadenas de trop : au
+     moment de décider s'il paie, le visiteur ne savait même pas de QUOI
+     on parlait, donc ce qu'il achetait. Or ces trois valeurs viennent de
+     ses propres réponses, il les a saisies quatre écrans plus tôt ; les
+     lui cacher ne protège rien et ne vend rien.
+
+     Ce qui reste payant est ce qui l'a toujours été : quoi faire, dans
+     quel ordre, à quelle heure. Nommer le problème donne envie de la
+     solution — cacher le problème donne seulement envie de partir. */
   const heuresSommeil = Number(predictionData.sleep_hours_per_night)
   const minutesSport = Number(predictionData.exercise_min_per_day)
-  const pointsACorriger = [
-    Number.isFinite(heuresSommeil) && heuresSommeil > 0 && heuresSommeil < 8,
-    ['poor', 'fair'].includes(predictionData.nutrition_level),
-    Number.isFinite(minutesSport) && minutesSport > 0 && minutesSport < 30,
-  ].filter(Boolean).length
+
+  const NUTRITION_LABEL = {
+    poor: 'irrégulière',
+    fair: 'moyenne',
+    good: 'correcte',
+    excellent: 'très suivie',
+  }
+
+  const leviers = [
+    {
+      cle: 'sommeil',
+      nom: 'Sommeil',
+      renseigne: Number.isFinite(heuresSommeil) && heuresSommeil > 0,
+      sousCible: Number.isFinite(heuresSommeil) && heuresSommeil > 0 && heuresSommeil < 8,
+      valeur: Number.isFinite(heuresSommeil) ? `${fr(heuresSommeil)} h par nuit` : '',
+      cible: '8 à 10 h à ton âge',
+      enjeu: 'L’hormone de croissance se libère surtout en sommeil profond.',
+    },
+    {
+      cle: 'nutrition',
+      nom: 'Alimentation',
+      renseigne: Boolean(NUTRITION_LABEL[predictionData.nutrition_level]),
+      sousCible: ['poor', 'fair'].includes(predictionData.nutrition_level),
+      valeur: NUTRITION_LABEL[predictionData.nutrition_level] || '',
+      cible: 'protéines et calcium à chaque repas',
+      enjeu: 'L’os ne s’allonge pas avec ce qu’il n’a pas reçu.',
+    },
+    {
+      cle: 'activite',
+      nom: 'Activité',
+      renseigne: Number.isFinite(minutesSport) && minutesSport > 0,
+      sousCible: Number.isFinite(minutesSport) && minutesSport > 0 && minutesSport < 30,
+      valeur: Number.isFinite(minutesSport) ? `${minutesSport} min par jour` : '',
+      cible: '30 min minimum',
+      enjeu: 'La mise en charge stimule le cartilage tant qu’il est ouvert.',
+    },
+  ].filter((levier) => levier.renseigne)
+
+  const aCorriger = leviers.filter((levier) => levier.sousCible)
+  const pointsACorriger = aCorriger.length
 
   /* Plus de libellé « Fiabilité : faible / moyenne ». Il inquiétait sans
      informer : « faible » ne dit pas de combien on peut se tromper, alors
@@ -330,16 +373,61 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             </span>
           </div>
 
-          {pointsACorriger > 0 && (
-            <div className="analyse-verrou analyse-verrou--alerte">
-              <span className="analyse-badge">
-                {pointsACorriger} point{pointsACorriger > 1 ? 's' : ''} à corriger
-              </span>
-              <p className="analyse-note">
-                Sommeil, alimentation, activité : tes réponses en ont signalé{' '}
-                {pointsACorriger === 1 ? 'un' : pointsACorriger}. Le détail — lequel, et
-                quoi faire — est dans ton plan.
-              </p>
+          {/* Le diagnostic nommé, levier par levier.
+
+              Forme reprise de la liste « Leçon 1 / Leçon 2 / Leçon 3 » du
+              paywall de Taller : des lignes identiques, un état par ligne,
+              une pastille verte sur ce qui est acquis et un cadenas sur ce
+              qui ne l'est pas. Voir le vert à côté du cadenas est ce qui
+              rend le cadenas désirable — un écran entièrement verrouillé
+              ne donne envie de rien.
+
+              Ici le vert n'est pas un cadeau marketing : c'est un levier
+              que l'utilisateur tient déjà, et le dire est la moitié de la
+              crédibilité du diagnostic. */}
+          {leviers.length > 0 && (
+            <div className="analyse-leviers">
+              {pointsACorriger > 0 && (
+                <span className="analyse-badge">
+                  {pointsACorriger} point{pointsACorriger > 1 ? 's' : ''} à corriger
+                </span>
+              )}
+
+              <ul className="levier-liste">
+                {leviers.map((levier) => (
+                  <li
+                    key={levier.cle}
+                    className={`levier ${levier.sousCible ? 'levier--alerte' : 'levier--ok'}`}
+                  >
+                    <span className="levier-etat" aria-hidden="true">
+                      {levier.sousCible ? <Lock size={14} /> : <Check size={14} />}
+                    </span>
+
+                    <span className="levier-corps">
+                      <span className="levier-nom">
+                        {levier.nom}
+                        <em className="levier-valeur">{levier.valeur}</em>
+                      </span>
+                      <span className="levier-detail">
+                        {levier.sousCible ? (
+                          <>
+                            Sous la cible ({levier.cible}). {levier.enjeu}
+                          </>
+                        ) : (
+                          <>Au niveau. Ce levier-là, tu le tiens déjà.</>
+                        )}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              {pointsACorriger > 0 && (
+                <p className="analyse-note">
+                  Ton plan attaque {pointsACorriger === 1 ? 'ce point' : 'ces points'} en
+                  premier : quoi faire, à quelle heure, et pendant combien de temps.
+                </p>
+              )}
             </div>
           )}
 

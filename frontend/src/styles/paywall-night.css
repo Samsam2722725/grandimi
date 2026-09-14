@@ -342,11 +342,23 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  align-items: start;
+  /* `start` laissait la carte annuelle — plus haute d'une pastille
+     d'économie — dépasser sa voisine par le bas. Deux offres qu'on
+     compare doivent occuper le même rectangle, sinon la différence de
+     hauteur se lit comme une différence d'importance. */
+  align-items: stretch;
 }
 
-/* Sous 400px, deux colonnes obligeraient à couper « 29,99 € » : on empile. */
-@media (max-width: 400px) {
+/* Le seuil était à 400px « pour ne pas couper 29,99 € ». Il annulait la
+   comparaison côte à côte sur 375px — c'est-à-dire sur la largeur de
+   téléphone la plus répandue, donc sur la quasi-totalité du trafic visé.
+   Les deux offres empilées, on ne voit qu'un prix à la fois : exactement
+   le défaut qu'on venait de corriger en abandonnant la bascule.
+
+   Le montant tient, à condition de ne pas exiger 32px de corps sur un
+   écran de 375 (cf. .paywall-offer-prix, échelle fluide). Reste un seuil
+   bien plus bas, pour les 320px où plus rien ne tient. */
+@media (max-width: 330px) {
   .paywall .paywall-offers.is-multiple {
     grid-template-columns: 1fr;
   }
@@ -380,8 +392,12 @@
 .paywall .paywall-offer-badge {
   position: absolute;
   top: -11px;
-  left: 20px;
-  padding: 3px 10px;
+  /* 20px de retrait débordait de la demi-colonne une fois les deux offres
+     côte à côte sur téléphone. Le badge part désormais du bord utile. */
+  left: 10px;
+  right: 10px;
+  text-align: center;
+  padding: 3px 8px;
   border-radius: 999px;
   background: var(--funnel-accent);
   color: var(--funnel-on-accent);
@@ -529,4 +545,199 @@
   color: #34c759;
   font-size: 13.5px;
   font-weight: 700;
+}
+
+/* ---------- Contenu des deux cartes d'offre ----------
+
+   `.paywall-offers.is-multiple .paywall-offer` (plus haut) pose la grille,
+   la bordure et l'etat selectionne. Ces regles-ci habillent ce qu'il y a
+   DEDANS. Les classes de l'ancienne presentation (.paywall-offer-head,
+   .paywall-price, .paywall-savings, .paywall-plan-toggle) restent en
+   place : ParentPage s'en sert encore.
+   --------------------------------------------------------------- */
+
+.paywall .paywall-offers.is-multiple .paywall-offer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 18px 16px 16px;
+}
+
+.paywall .paywall-offer-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--funnel-muted);
+}
+
+/* Echelle fluide, calee pour que « 29,99 € » tienne sur une ligne dans une
+   demi-colonne : a 375px de viewport la carte offre ~125px de texte utile,
+   et 6,6vw y valent ~25px, soit ~100px de montant. C'est ce reglage qui
+   permet de garder les deux offres cote a cote sur telephone. */
+.paywall .paywall-offer-prix {
+  font-size: clamp(22px, 6.6vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--funnel-text);
+  white-space: nowrap;
+}
+
+.paywall .paywall-offers.is-multiple .paywall-offer.is-selected .paywall-offer-prix {
+  color: var(--funnel-accent);
+}
+
+.paywall .paywall-offer-sous {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--funnel-muted);
+}
+
+/* L'economie est une consequence du calcul affiche juste au-dessus
+   (« soit X € par mois »), pas une reduction sur un ancien prix : aucune
+   barre sur un montant qui n'a jamais ete demande. */
+.paywall .paywall-offer-eco {
+  margin-top: 6px;
+  align-self: flex-start;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 90, 31, 0.14);
+  color: var(--funnel-accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ---------- Apercu du produit ---------- */
+
+/* Une phrase de transition, pas un titre de section : elle annonce l'ecran
+   qui suit et doit se lire comme une voix, pas comme un intertitre. */
+.paywall .paywall-voici {
+  margin: 6px 0 -8px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--funnel-muted);
+}
+
+.paywall .paywall-apercu {
+  border-radius: 22px;
+  border: 1px solid var(--funnel-line);
+  background: var(--funnel-surface);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.paywall .apercu-tete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.paywall .apercu-titre {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--funnel-muted);
+}
+
+.paywall .apercu-compte {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--funnel-text);
+}
+
+.paywall .apercu-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.paywall .apercu-ligne {
+  display: grid;
+  grid-template-columns: 20px 92px 1fr;
+  gap: 10px;
+  align-items: center;
+  font-size: 13.5px;
+  line-height: 1.35;
+}
+
+/* Sous 340px, la colonne du moment etrangle le texte de l'action : on
+   passe le moment au-dessus plutot que de couper chaque consigne en
+   quatre lignes. */
+@media (max-width: 340px) {
+  .paywall .apercu-ligne {
+    grid-template-columns: 20px 1fr;
+  }
+  .paywall .apercu-moment {
+    grid-column: 2;
+  }
+  .paywall .apercu-texte {
+    grid-column: 2;
+  }
+}
+
+.paywall .apercu-case {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid var(--funnel-line);
+  color: var(--funnel-muted);
+  flex-shrink: 0;
+}
+
+.paywall .apercu-moment {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--funnel-muted);
+}
+
+.paywall .apercu-texte {
+  color: var(--funnel-text);
+  overflow-wrap: anywhere;
+}
+
+/* Le cadenas remplace la consigne, il ne la floute pas : un texte floute
+   se lit comme quelque chose qu'on pourrait gratter, une serrure dit ce
+   qu'elle est. Meme choix que sur la page de resultat. */
+.paywall .apercu-ligne--verrouille .apercu-case {
+  border-style: dashed;
+}
+
+.paywall .apercu-ligne--verrouille .apercu-texte {
+  color: var(--funnel-muted);
+  letter-spacing: 0.3em;
+}
+
+.paywall .apercu-pied {
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--funnel-line);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--funnel-muted);
+}
+
+.paywall .apercu-pied strong {
+  color: var(--funnel-text);
+  font-weight: 700;
+}
+
+/* La liste d'avantages etait imbriquee dans la carte d'offre, d'ou son
+   `margin-top: 20px`. Sortie au premier niveau, elle herite en plus du
+   `gap: 20px` de la colonne : les deux s'additionnent et creusent un
+   trou de 40px. On annule la marge dans ce cas precis seulement —
+   ParentPage garde la sienne, la liste y est toujours dans la carte. */
+.paywall .paywall-scroll > .paywall-features {
+  margin-top: 0;
 }

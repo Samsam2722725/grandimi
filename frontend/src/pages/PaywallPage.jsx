@@ -53,6 +53,23 @@ const PILIERS = [
   { emoji: '🏃', titre: 'Exercices', detail: 'Étirements, sauts, posture' },
 ]
 
+/* L'écran du matin, tel qu'un abonné l'ouvre. Les deux premières lignes
+   sont les vraies actions du plan (internal/planner/monthly_plan.go) —
+   pas un échantillon flatteur : les deux premières de la journée, dans
+   l'ordre. Les suivantes sont sous cadenas.
+
+   Les horaires ne sont pas affichés ici : ceux du plan réel sont calés
+   sur les heures de lever et de coucher demandées APRÈS le paiement
+   (PlanSetupPage). En inventer sur cet écran serait promettre un
+   ajustement qu'on n'a pas encore les moyens de faire. */
+const APERCU_ACTIONS = [
+  { moment: 'Au réveil', texte: 'Suspension à la barre : 5 × 15 s', verrouille: false },
+  { moment: 'Petit-déjeuner', texte: '25 g de protéines avant de partir', verrouille: false },
+  { moment: 'Journée', texte: '', verrouille: true },
+  { moment: 'Le soir', texte: '', verrouille: true },
+  { moment: 'Au coucher', texte: '', verrouille: true },
+]
+
 function PaywallPage({ onBackHome }) {
   const [email] = useState(() => localStorage.getItem('userEmail') || '')
   const [loading, setLoading] = useState(false)
@@ -60,7 +77,14 @@ function PaywallPage({ onBackHome }) {
   const [lienParentVisible, setLienParentVisible] = useState(false)
   const [lienCopie, setLienCopie] = useState(false)
   const blocParentRef = useRef(null)
-  const [planChoisi, setPlanChoisi] = useState('monthly')
+  /* L'annuel est présélectionné, comme sur tous les tunnels qui vendent
+     sur ce marché. Ce n'est pas un piège : les deux offres sont affichées
+     côte à côte, l'autre se prend en un geste, et le bouton du pied écrit
+     le montant exact qui sera prélevé. Le défaut penche simplement du
+     côté de l'offre qui coûte le moins cher au mois — et du seul format
+     qu'un parent accepte volontiers, un paiement par an plutôt qu'un
+     prélèvement mensuel sur le compte de son enfant. */
+  const [planChoisi, setPlanChoisi] = useState('annual')
   const [plans, setPlans] = useState(PLANS_PAR_DEFAUT)
 
   /* Les montants par défaut sont déjà corrects ; cet appel ne fait que
@@ -188,68 +212,127 @@ function PaywallPage({ onBackHome }) {
           Ton estimation reste gratuite, pour toujours. Seul le plan de croissance est payant.
         </p>
 
-        {/* Carte d'offre : bordure accentuée et prix en display. C'est le seul
-            élément coloré de la page — rien d'autre ne doit capter le regard ici.
-            Les deux offres partagent la même liste de fonctionnalités, affichée
-            une seule fois : seul le rythme de facturation change. */}
-        <section className="paywall-offer" aria-labelledby="paywall-offer-title">
-          <div
-            className="paywall-plan-toggle"
-            role="radiogroup"
-            aria-label="Choisir la formule"
-          >
-            <button
-              type="button"
-              role="radio"
-              aria-checked={planChoisi === 'monthly'}
-              className={`paywall-plan-option ${planChoisi === 'monthly' ? 'active' : ''}`}
-              onClick={() => {
-              setPlanChoisi('monthly')
-              mesurerPlanChoisi('monthly')
-            }}
-            >
-              Mensuel
-            </button>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={planChoisi === 'annual'}
-              className={`paywall-plan-option ${planChoisi === 'annual' ? 'active' : ''}`}
-              onClick={() => {
-              setPlanChoisi('annual')
-              mesurerPlanChoisi('annual')
-            }}
-            >
-              Annuel
-            </button>
+        {/* Les deux formules CÔTE À CÔTE, avant tout argument.
+
+            Elles étaient présentées par un sélecteur à bascule (deux
+            pastilles dans une glissière) qui n'affichait qu'un prix à la
+            fois : pour comparer, il fallait cliquer, retenir, recliquer.
+            Un choix qu'on ne peut pas voir d'un coup d'œil n'est pas un
+            choix, c'est une manipulation à faire.
+
+            Deux cartes visibles ensemble changent la question posée au
+            visiteur : non plus « est-ce que je paie ? » mais « laquelle
+            je prends ? ». C'est le motif de tous les tunnels qui
+            convertissent sur ce marché, et la feuille de style le
+            prévoyait déjà (`.paywall-offers.is-multiple`, badge compris)
+            sans que personne ne s'en serve.
+
+            L'ordre des cartes n'est pas neutre : le mensuel à gauche sert
+            d'ancre — c'est en le lisant qu'on comprend ce que l'annuel
+            fait économiser. L'inverse ne marche pas. */}
+        <section
+          className="paywall-offers is-multiple"
+          role="radiogroup"
+          aria-label="Choisir la formule"
+        >
+          {['monthly', 'annual'].map((clef) => {
+            const plan = plans[clef]
+            const selectionne = planChoisi === clef
+            const annuel = clef === 'annual'
+
+            return (
+              <button
+                key={clef}
+                type="button"
+                role="radio"
+                aria-checked={selectionne}
+                className={`paywall-offer ${selectionne ? 'is-selected' : ''}`}
+                onClick={() => {
+                  setPlanChoisi(clef)
+                  mesurerPlanChoisi(clef)
+                }}
+              >
+                {annuel && <span className="paywall-offer-badge">Meilleure offre</span>}
+
+                <span className="paywall-offer-label">{plan.label}</span>
+
+                <span className="paywall-offer-prix">
+                  {plan.price_eur.toFixed(2).replace('.', ',')} €
+                </span>
+
+                <span className="paywall-offer-sous">
+                  {annuel
+                    ? `soit ${(plan.price_eur / 12).toFixed(2).replace('.', ',')} € par mois`
+                    : 'sans engagement'}
+                </span>
+
+                {/* « − 50 % sur l'année » passait à la ligne dans une
+                    demi-colonne et la pastille se lisait comme un pavé de
+                    deux lignes. Le pourcentage seul suffit : la ligne du
+                    dessus vient de dire à quoi il se rapporte. */}
+                {annuel && <span className="paywall-offer-eco">− {pourcentageEconomie} %</span>}
+              </button>
+            )
+          })}
+        </section>
+
+        {/* ---------- Montrer le produit, pas le décrire ----------
+
+            La page listait quatre avantages en texte, puis trois
+            pastilles emoji. Aucun des deux ne dit à quoi ressemble la
+            chose qu'on achète — et sur un abonnement à un écran
+            quotidien, c'est précisément la seule question.
+
+            Ce bloc montre donc l'écran du matin, avec les actions
+            réelles du plan (internal/planner/monthly_plan.go, les mêmes
+            que sur la page d'accueil). Deux sont lisibles, le reste est
+            sous cadenas : le visiteur juge la qualité sur celles qu'il
+            voit et achète celles qu'il ne voit pas.
+
+            Les deux lignes en clair ne sont pas un échantillon choisi
+            pour impressionner — ce sont les deux premières de la
+            journée, dans l'ordre où le plan les donne. */}
+        <p className="paywall-voici">Voici ce que tu obtiens :</p>
+
+        <section className="paywall-apercu" aria-label="Aperçu du plan quotidien">
+          <div className="apercu-tete">
+            <span className="apercu-titre">Ton plan d’aujourd’hui</span>
+            <span className="apercu-compte">0 / 11 faites</span>
           </div>
 
-          <div className="paywall-offer-head">
-            <h2 id="paywall-offer-title">Plan de croissance</h2>
-            <p className="paywall-price">
-              <span>{offre.price_eur.toFixed(2).replace('.', ',')} €</span>
-              {offre.interval === 'year' ? '/an' : '/mois'}
-            </p>
-            {planChoisi === 'annual' && (
-              <p className="paywall-savings">
-                Économisez près de {pourcentageEconomie} % par rapport à 12 mensualités à{' '}
-                {plans.monthly.price_eur.toFixed(2).replace('.', ',')} €.
-              </p>
-            )}
-          </div>
-
-          <ul className="paywall-features">
-            {AVANTAGES.map((avantage) => (
-              <li key={avantage}>
-                <Check size={18} aria-hidden="true" />
-                <span>{avantage}</span>
+          <ul className="apercu-liste">
+            {APERCU_ACTIONS.map((action) => (
+              <li
+                key={action.texte}
+                className={`apercu-ligne ${action.verrouille ? 'apercu-ligne--verrouille' : ''}`}
+              >
+                <span className="apercu-case" aria-hidden="true">
+                  {action.verrouille ? <Lock size={12} /> : null}
+                </span>
+                <span className="apercu-moment">{action.moment}</span>
+                <span className="apercu-texte">
+                  {action.verrouille ? '—' : action.texte}
+                </span>
               </li>
             ))}
           </ul>
+
+          <p className="apercu-pied">
+            <strong>11 actions par jour</strong>, renouvelées chaque mois. Chacune dit
+            pourquoi elle est là et d’où elle vient.
+          </p>
         </section>
 
+        <ul className="paywall-features">
+          {AVANTAGES.map((avantage) => (
+            <li key={avantage}>
+              <Check size={18} aria-hidden="true" />
+              <span>{avantage}</span>
+            </li>
+          ))}
+        </ul>
+
         <section className="paywall-pillars" aria-label="Ce que contient le plan">
-          <h2 className="paywall-section-title">Voici ce que tu obtiens</h2>
           <div className="paywall-pillar-grid">
             {PILIERS.map((pilier) => (
               <div className="paywall-pillar" key={pilier.titre}>
