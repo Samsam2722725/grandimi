@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from 'react'
 import { ArrowLeft, Check, Lock } from 'lucide-react'
 
-import { OffreCarousel } from '@/components/ui/offre-carousel'
+import { CarouselOffre } from '@/components/ui/carousel-offre'
+import { SLIDES_OFFRE } from '@/components/ui/offre-carousel'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
@@ -342,7 +343,7 @@ function PaywallPage({ onBackHome }) {
             souriant acheté sur Unsplash est exactement le signal qu'on évite
             partout ailleurs. */}
         <section aria-label="Ce que contient le plan">
-          <OffreCarousel />
+          <CarouselOffre slides={SLIDES_OFFRE} />
         </section>
 
         {email && (

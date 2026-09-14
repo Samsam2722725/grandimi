@@ -1,30 +1,21 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-
 /**
- * Les trois choses qu'on vend, une carte chacune, qui défilent.
+ * Les trois choses qu'on vend : une diapositive chacune.
  *
- * POURQUOI PAS L'ANNEAU 3D DE RÉFÉRENCE. Le composant proposé fait tourner dix
- * vignettes sur un anneau en perspective, en rotation automatique toutes les
- * 2,4 s. C'est une vitrine de galerie : il est construit pour faire regarder
- * les images, et il le fait bien. Ici il travaillerait contre l'écran — sur un
- * paywall, tout ce qui bouge en permanence prend l'attention qui devait aller
- * au bouton, et une rotation automatique déplace la carte qu'on était en train
- * de lire. Il supposait aussi `next/image` et `react-icons`, qui n'existent
- * pas dans ce projet (Vite, pas Next).
+ * Ce module ne porte que les DONNÉES et les VISUELS. Le rail qui les fait
+ * glisser de gauche à droite est dans carousel-offre.jsx, porté du composant
+ * fourni par le client.
  *
- * Ce qui est gardé de l'idée : trois cartes, une par promesse, qui défilent, et
- * une progression visible. Ce qui change : un rail horizontal qu'on fait
- * glisser au pouce, pas un anneau ; et surtout des VISUELS DE PRODUIT dessinés
- * ici, pas des photos d'inconnus. Sur un site vendu à des mineurs dont
- * l'argument est qu'on ne raconte rien de faux, une photo d'ado souriant prise
- * sur une banque d'images est exactement le signal qu'on évite partout
- * ailleurs.
+ * Les visuels sont du SVG dessiné ici, et non des images. Le projet n'a aucune
+ * photo du produit, et une photo de banque d'images serait le seul élément
+ * inventé d'une page dont tout l'argument est qu'on ne raconte rien de faux.
+ * Ils pèsent quelques centaines d'octets, restent nets à toutes les tailles,
+ * et suivent les jetons de couleur du tunnel.
  *
- * L'avance automatique s'arrête définitivement au premier geste : si
- * l'utilisateur prend la main, la lui reprendre est une faute.
+ * Les composants de visuel sont référencés par `SLIDES_OFFRE` avant leur
+ * déclaration : les déclarations de fonction sont hissées, c'est valide.
  */
 
-const CARTES = [
+export const SLIDES_OFFRE = [
   {
     cle: 'optimiser',
     titre: 'Optimiser ta taille',
@@ -165,96 +156,3 @@ function VisuelGuides() {
     </svg>
   )
 }
-
-const AVANCE_MS = 4200
-
-export function OffreCarousel({ className }) {
-  const railRef = useRef(null)
-  const [actif, setActif] = useState(0)
-  const [mainPrise, setMainPrise] = useState(false)
-
-  const allerA = useCallback((index) => {
-    const rail = railRef.current
-    if (!rail) return
-    const carte = rail.children[index]
-    if (!carte) return
-    /* `scrollTo` sur le rail plutôt que `scrollIntoView` sur la carte :
-       scrollIntoView remonte la page entière jusqu'au carrousel, ce qui
-       arrache le lecteur à l'endroit où il était. */
-    rail.scrollTo({ left: carte.offsetLeft - rail.offsetLeft, behavior: 'smooth' })
-  }, [])
-
-  /* L'index actif se lit sur la position réelle du rail, pas sur un compteur
-     interne : l'utilisateur peut faire glisser au doigt, et un compteur
-     désynchronisé allumerait la mauvaise pastille. */
-  useEffect(() => {
-    const rail = railRef.current
-    if (!rail) return undefined
-
-    const auDefilement = () => {
-      const largeur = rail.children[0]?.offsetWidth || 1
-      setActif(Math.round(rail.scrollLeft / largeur))
-    }
-    rail.addEventListener('scroll', auDefilement, { passive: true })
-    return () => rail.removeEventListener('scroll', auDefilement)
-  }, [])
-
-  useEffect(() => {
-    if (mainPrise) return undefined
-    const id = setInterval(() => {
-      setActif((precedent) => {
-        const suivant = (precedent + 1) % CARTES.length
-        allerA(suivant)
-        return suivant
-      })
-    }, AVANCE_MS)
-    return () => clearInterval(id)
-  }, [mainPrise, allerA])
-
-  /* Respecte le réglage système : plus d'avance automatique du tout si
-     l'utilisateur a demandé moins d'animation. */
-  useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) setMainPrise(true)
-  }, [])
-
-  return (
-    <div className={`offre-carousel ${className || ''}`}>
-      <div
-        className="offre-rail"
-        ref={railRef}
-        onPointerDown={() => setMainPrise(true)}
-      >
-        {CARTES.map(({ cle, titre, texte, Visuel }) => (
-          <article className="offre-carte" key={cle}>
-            <div className="offre-visuel-cadre">
-              <Visuel />
-            </div>
-            <h3 className="offre-carte-titre">{titre}</h3>
-            <p className="offre-carte-texte">{texte}</p>
-          </article>
-        ))}
-      </div>
-
-      <div className="offre-pastilles" role="tablist" aria-label="Choisir la carte">
-        {CARTES.map((carte, index) => (
-          <button
-            key={carte.cle}
-            type="button"
-            role="tab"
-            aria-selected={index === actif}
-            aria-label={carte.titre}
-            className={`offre-pastille ${index === actif ? 'est-active' : ''}`}
-            onClick={() => {
-              setMainPrise(true)
-              setActif(index)
-              allerA(index)
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  )
-}
-
-export default OffreCarousel

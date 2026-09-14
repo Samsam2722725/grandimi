@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { FunnelButton, FunnelShell } from '@/components/ui/funnel-shell'
 import { Interstitial } from '@/components/ui/interstitial'
+import { LongTermeChart } from '@/components/ui/long-terme-chart'
 import { SegmentedControl } from '@/components/ui/segmented-control'
 import { WheelPicker } from '@/components/ui/wheel-picker'
 
@@ -66,6 +67,7 @@ const ETAPES = [
   'nutrition',
   'activite',
   'part-habitudes',
+  'long-terme',
   'email',
   'recapitulatif',
 ]
@@ -581,6 +583,19 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           </div>
         )
 
+      /* ---------- Ce que le plan change, sur la durée ----------
+
+         Copie de l'écran « résultats à long terme » du tunnel de Taller :
+         deux courbes partant du même point, celle des habitudes subies
+         finissant sous celle de la routine optimisée, une légende dessous.
+
+         Posé ICI, avant le calcul, et non sur la page de résultat : à cet
+         instant aucun chiffre n'existe encore, donc la figure ne peut pas
+         être prise pour un pronostic personnel. Elle dit une chose vraie et
+         générale, et la légende sous le dessin le précise. */
+      case 'long-terme':
+        return <LongTermeChart className="funnel-longterme" />
+
       case 'email':
         return (
           <div className="funnel-field">
@@ -633,7 +648,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           /* L'index suit ETAPES, il n'est pas décoratif : un écran ajouté ou
              retiré avant celui-ci décale la cible, et « Modifier » renvoie
              alors sur l'écran d'à côté. */
-          { label: 'E-mail', valeur: reponses.email, vers: 12 },
+          { label: 'E-mail', valeur: reponses.email, vers: 13 },
         ]
 
         return (
@@ -709,6 +724,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     'part-habitudes': {
       titre: 'Ce que tes habitudes pèsent vraiment',
       sous: 'La génétique fixe ton plafond. Le reste décide si tu l’atteins, ou si tu t’arrêtes en dessous.',
+    },
+    'long-terme': {
+      titre: 'Grandimi joue sur la durée',
+      sous: 'Beaucoup n’atteignent pas leur plein potentiel de taille à cause d’habitudes non optimisées.',
     },
     email: {
       /* « Où t'envoyer ton estimation ? » promettait un e-mail que rien

@@ -1,0 +1,170 @@
+/* ============================================
+   ÉCRAN D'ANALYSE — grille de cartes, valeurs sous cadenas
+   ============================================
+   Repris de l'écran « Analyse prête » de Taller : un titre court, une grille
+   de cartes dont certaines sont verrouillées, un graphique au milieu, une
+   salve de confettis au montage.
+
+   Tout est scopé sous `.analyse` : `results-page.css` habille encore le
+   partage, la mention et les limites, qui restent sur cet écran.
+   ============================================ */
+
+.analyse .analyse-titre {
+  font-size: clamp(30px, 9vw, 40px);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 4px 0 4px;
+  color: var(--funnel-text);
+}
+
+/* ---------- Grille de deux cartes ---------- */
+
+.analyse .analyse-duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 11px;
+}
+
+.analyse .analyse-case {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 96px;
+  padding: 15px 16px;
+  border-radius: 20px;
+  background: var(--funnel-surface);
+  border: 1px solid var(--funnel-line);
+}
+
+.analyse .analyse-case-label {
+  font-size: 13.5px;
+  line-height: 1.25;
+  font-weight: 600;
+  color: var(--funnel-muted);
+}
+
+.analyse .analyse-case-valeur {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  font-size: clamp(22px, 6.4vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--funnel-text);
+}
+
+/* La carte accentuée porte le chiffre que l'écran existe pour donner. Aplat
+   plein et non bordure teintée : c'est le seul élément de la grille qui doit
+   se voir avant tous les autres. */
+.analyse .analyse-case--accent {
+  background: var(--funnel-accent);
+  border-color: var(--funnel-accent);
+}
+
+.analyse .analyse-case--accent .analyse-case-label,
+.analyse .analyse-case--accent .analyse-case-valeur {
+  color: var(--funnel-on-accent);
+}
+
+.analyse .analyse-case--verrou .analyse-case-valeur {
+  color: var(--funnel-muted);
+}
+
+/* ---------- Ligne pleine largeur, verrouillée ---------- */
+
+.analyse .analyse-ligne {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--funnel-surface);
+  border: 1px solid var(--funnel-line);
+  font-size: clamp(15px, 4.4vw, 17px);
+  font-weight: 600;
+  color: var(--funnel-text);
+  text-align: center;
+}
+
+.analyse .analyse-ligne--verrou svg {
+  color: var(--funnel-accent);
+  flex-shrink: 0;
+}
+
+/* ---------- Carte du graphique ---------- */
+
+.analyse .analyse-carte-graphe {
+  padding: 16px 14px 10px;
+  border-radius: 20px;
+  background: var(--funnel-surface);
+  border: 1px solid var(--funnel-line);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.analyse .analyse-graphe-tete {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.analyse .analyse-graphe-titre {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--funnel-text);
+}
+
+.analyse .analyse-point {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--funnel-accent);
+}
+
+/* Pastille cadenas posée au-dessus de la courbe, à la façon d'une infobulle
+   qui n'aurait pas encore le droit de s'ouvrir. */
+.analyse .analyse-graphe-verrou {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 24px;
+  border-radius: 8px;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+}
+
+/* Rouge et non orange de marque : c'est une alerte, pas une action. Le fond
+   sourd garde le texte lisible sans allumer un second accent. */
+.analyse .analyse-alerte {
+  margin-left: auto;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(214, 69, 47, 0.16);
+  color: #ff8a70;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ---------- Confettis ---------- */
+
+/* Posés par-dessus tout l'écran, sans jamais intercepter un geste. `fixed`
+   parce que la salve doit couvrir la fenêtre, pas la zone défilante : sinon
+   elle disparaît dès le premier scroll. */
+.analyse .confetti {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 40;
+}

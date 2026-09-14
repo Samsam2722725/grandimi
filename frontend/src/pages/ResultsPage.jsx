@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { ArrowLeft, Lock, Share2 } from 'lucide-react'
 
+import { AnalyseChart } from '@/components/ui/analyse-chart'
+import { Confetti } from '@/components/ui/confetti'
 import { ageFinCroissance } from '@/components/ui/growth-chart'
-import { GrowthProjectionChart } from '@/components/ui/growth-projection-chart'
-import { HandwritingText } from '@/components/ui/handwriting-text'
-import { SpecialText } from '@/components/ui/special-text'
 
 import Spinner from '../components/Spinner'
 import { genererCarteResultat, partagerCarte } from '../lib/share-card'
 import { resultatPartage, resultatVu } from '../lib/analytics'
 import '../styles/funnel.css'
 import '../styles/results-page.css'
+import '../styles/analyse-page.css'
 
 /* ============================================================
    RÉSULTAT — un seul chiffre, et sa marge à côté
@@ -69,13 +69,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      « ±-39.4 cm » à l'utilisateur. */
   const largeur = Math.max(0, confidence_range.max - confidence_range.min)
   const margeCm = Math.round(largeur / 2)
-  const positionRepere =
-    largeur === 0
-      ? 50
-      : Math.min(
-          100,
-          Math.max(0, ((predicted_height_cm - confidence_range.min) / largeur) * 100),
-        )
 
   /* Le repli sur 170 cm fabriquait un chiffre : le champ lu n'existait pas,
      si bien qu'un adolescent de 183 cm se voyait annoncer « +16,2 cm » de
@@ -148,40 +141,16 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
     },
   ].filter((levier) => levier.renseigne)
 
-  /* Ce que les habitudes actuelles coûtent, en centimètres.
+  /* Nombre de leviers sous la cible. Sert la pastille rouge du graphe.
+     Un champ vide ne compte pas : deux points vrais valent mieux que trois
+     dont un inventé. */
+  const pointsACorriger = leviers.filter((levier) => levier.sousCible).length
 
-     Le serveur renvoie `potential_height_cm` : la même estimation, calculée
-     avec les trois leviers à la cible. L'écart entre les deux sort donc du
-     modèle, pas d'un argumentaire — c'est la seule façon honnête de répondre
-     à « le plan me rapporte quoi ? », question qu'on esquivait jusqu'ici
-     derrière un cadenas.
-
-     POURQUOI CE BLOC EXISTE ALORS QUE LA COURBE MONTRE DÉJÀ LES DEUX
-     TRAJECTOIRES. Parce qu'une figure ne donne pas un nombre à retenir. La
-     courbe dit la FORME — l'écart se creuse avec le temps, il se referme à la
-     fin de la croissance — et ce bloc dit le CHIFFRE. Les deux se renforcent
-     au lieu de se concurrencer, contrairement à deux figures qui porteraient
-     la même fourchette.
-
-     C'est aussi ce qui a condamné la version où l'écart était un simple
-     repère de plus sur une jauge verticale : 1 à 5 cm posés sur une échelle
-     qui en couvre 17, les étiquettes se chevauchaient et on ne lisait ni le
-     nombre ni la forme.
-
-     Formulé en PERTE et non en gain. C'est ce que le modèle calcule
-     littéralement (un facteur sous la cible), et c'est aussi ce qui se
-     retient — on protège plus volontiers ce qu'on a que ce qu'on pourrait
-     avoir.
-
-     L'écart se calcule sur les chiffres AFFICHÉS, pas sur les valeurs brutes
-     — même règle que `margeAffichee` plus haut, et pour la même raison. Sur
-     177,3 contre 176,5 la soustraction brute donne 0,8 → « −1 cm », pendant
-     que la phrase juste dessous écrit « 177 au lieu de 177 ». Le lecteur fait
-     la soustraction lui-même : les deux doivent tomber juste. */
-  const potentiel = Number(predictionData.potential_height_cm)
-  const coutHabitudes = Number.isFinite(potentiel)
-    ? Math.max(0, cm(potentiel) - cm(predicted_height_cm))
-    : 0
+  /* Le potentiel optimisé (potential_height_cm) n''est plus affiché en clair
+     sur cet écran : il est passé derrière le cadenas « Optimise jusqu''à 🔒 cm »,
+     qui est précisément ce que l''abonnement ouvre. Le chiffre existe côté
+     serveur, il est donc livrable après paiement — un cadenas ne doit jamais
+     promettre une valeur que le produit ne sait pas produire. */
 
   /* Plus de libellé « Fiabilité : faible / moyenne ». Il inquiétait sans
      informer : « faible » ne dit pas de combien on peut se tromper, alors
@@ -217,7 +186,9 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
   }
 
   return (
-    <div className="night results">
+    <div className="night results analyse">
+      <Confetti />
+
       <header className="results-top">
         <button
           type="button"
@@ -230,222 +201,88 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
       </header>
 
       <main className="results-scroll">
-        {/* Ce qui occupe la plus grande typographie de l'écran, c'est ce dont
-            on se souvient. La taille adulte est un état de fait sur lequel on
-            ne peut rien ; les centimètres restants sont la seule quantité que
-            l'utilisateur peut encore influencer, et la seule qui diminue avec
-            le temps. C'est donc elle qui prend la place, quand elle existe.
+        <h1 className="analyse-titre">
+          Analyse prête <span aria-hidden="true">👀</span>
+        </h1>
 
-            Formulée « attendus » et non « possibles » : c'est l'estimation
-            centrale du modèle, pas une borne haute. */}
-        {margeAffichee > 0 ? (
-          <section className="results-hero">
-            <p className="results-eyebrow">Il te reste encore</p>
+        {/* Deux cartes, la seconde accentuée.
 
-            <p className="results-number results-number--accent">
-              <SpecialText className="results-number-value">
-                {`+${cm(margeRestante)}`}
-              </SpecialText>
-              <span className="results-number-unit">cm</span>
-            </p>
+            Chez Taller, cette seconde carte est verrouillée : la taille adulte
+            elle-même est le produit qu'on achète. Ici elle est LISIBLE, et ce
+            n'est pas un oubli — la page d'accueil promet quatre fois que
+            l'estimation est gratuite et qu'aucun résultat n'est flouté. La
+            verrouiller demanderait de réécrire ces quatre promesses le même
+            jour.
 
-            <p className="results-hero-sub">
-              à prendre d’ici tes {fr(ageFin)} ans.
-            </p>
+            Ce qui passe derrière le cadenas est ce qui est réellement payant :
+            le potentiel optimisé, juste en dessous. */}
+        <div className="analyse-duo">
+          <div className="analyse-case">
+            <span className="analyse-case-label">Taille actuelle</span>
+            <span className="analyse-case-valeur">{cm(tailleActuelle)} cm</span>
+          </div>
+          <div className="analyse-case analyse-case--accent">
+            <span className="analyse-case-label">Taille adulte estimée</span>
+            <span className="analyse-case-valeur">{cm(predicted_height_cm)} cm</span>
+          </div>
+        </div>
 
-            <p className="results-hero-line">
-              Tu devrais atteindre <strong>{cm(predicted_height_cm)} cm</strong>
-              {/* Les deux bornes en toutes lettres plutôt que « ± 8 cm » :
-                  la même information, mais sans demander au lecteur de
-                  faire deux soustractions de tête pour savoir ce qu’on lui
-                  annonce. */}
-              <span className="results-margin-inline">
-                <HandwritingText
-                  text={`entre ${cm(confidence_range.min)} et ${cm(confidence_range.max)} cm`}
-                  height="1.6rem"
-                />
-              </span>
-            </p>
-          </section>
-        ) : (
-          /* Croissance terminée, ou estimation sous la taille saisie : il n'y a
-             pas de marge à mettre en avant, et en inventer une serait mentir.
-             On revient au résultat brut. */
-          <section className="results-hero">
-            <p className="results-eyebrow">Ta taille adulte estimée</p>
+        <div className="analyse-ligne analyse-ligne--verrou">
+          <span>Optimise jusqu’à</span>
+          <Lock size={17} aria-hidden="true" />
+          <span>cm</span>
+          <span aria-hidden="true">📈</span>
+        </div>
 
-            <p className="results-number">
-              <SpecialText className="results-number-value">
-                {cm(predicted_height_cm)}
-              </SpecialText>
-              <span className="results-number-unit">cm</span>
-            </p>
-
-            <span className="results-margin">
-              <HandwritingText text={`± ${fr(margeCm)} cm`} height="2rem" />
+        <section className="analyse-carte-graphe">
+          <div className="analyse-graphe-tete">
+            <span className="analyse-graphe-titre">
+              <span className="analyse-point" aria-hidden="true" />
+              Taille / Âge
             </span>
-          </section>
-        )}
-
-        {/* UNE figure, et une seule, sur cet écran.
-
-            Elle a changé deux fois, et les deux fois pour la même raison de
-            fond : montrer ce qui se joue plutôt que ce qui est déjà écrit.
-
-            La trajectoire d'origine traçait une courbe unique vers
-            l'estimation — elle disait où il va, jamais ce qu'il peut y
-            changer. La jauge verticale qui l'a remplacée disait la distance à
-            parcourir, mais avait perdu le temps, donc l'échéance.
-
-            Cette version a les deux, et le second chiffre en plus : le passé
-            mesuré à gauche, aujourd'hui comme frontière, puis DEUX
-            trajectoires — celle des habitudes actuelles, celle des leviers à
-            la cible. L'aire entre les deux est littéralement ce que le plan
-            vend, et elle n'existait pas tant que l'estimateur ne renvoyait
-            qu'un seul nombre.
-
-            Ce qui disparaît avec la jauge : la fourchette dessinée. Elle
-            reste écrite en toutes lettres sous le grand chiffre (« entre X et
-            Y cm »), ce qui suffit — une troisième bande sur la même figure
-            aurait rendu les deux trajectoires illisibles. */}
-        {tailleActuelle ? (
-          <section className="night-card">
-            <h2 className="night-card-title">Ta trajectoire</h2>
-            <GrowthProjectionChart
-              ageNow={predictionData.age}
-              heightNow={tailleActuelle}
-              predicted={predicted_height_cm}
-              potentiel={potentiel}
-              velocityCM={predictionData.height_velocity_cm}
-              sex={predictionData.sex}
-            />
-          </section>
-        ) : (
-          <section className="night-card">
-            <h2 className="night-card-title">Ta fourchette</h2>
-            <div className="results-range">
-              <div className="results-range-bar">
-                <span className="results-range-marker" style={{ left: `${positionRepere}%` }} />
-              </div>
-              <div className="results-range-legend">
-                <span>{cm(confidence_range.min)} cm</span>
-                <span>{cm(confidence_range.max)} cm</span>
-              </div>
-            </div>
-            <p className="night-card-text">
-              Ta taille adulte a de fortes chances de tomber dans cette fourchette.
-            </p>
-          </section>
-        )}
-
-        {/* « Pourquoi maintenant » occupait ici une carte entière pour dire
-            que la fenêtre se referme. L'information est vraie et elle reste —
-            mais elle est déjà sous le grand chiffre, en toutes lettres (« à
-            prendre d'ici tes X ans »), à l'endroit où elle est effectivement
-            lue. Une carte de plus pour la redire coûtait un écran de
-            défilement au visiteur.
-
-            Le partage descend après le bouton, pour la même raison : neuf
-            blocs séparaient le résultat du paywall, et un adolescent qui a
-            fait quinze écrans puis neuf blocs n'achète pas — il ferme. */}
-
-        {/* ---------- Analyse, façon tableau de bord ----------
-
-            Reprise de l'écran « Analyse prête » de GoTall : une grille de
-            cartes, des valeurs sous cadenas, un compte de points à
-            corriger. Le dispositif crée l'envie mieux qu'un paragraphe.
-
-            UNE DIFFÉRENCE, ET ELLE N'EST PAS NÉGOCIABLE : chez eux, la
-            taille adulte elle-même est floutée. L'accueil de Grandimi
-            promet l'inverse, écrit noir sur blanc — « Tu vois ton
-            estimation complète, gratuitement. Aucun résultat flouté,
-            aucune surprise. » Les cadenas ne portent donc que sur ce qui
-            est réellement payant : ce que le plan va chercher, et où.
-
-            Le nombre de points, lui, est vrai — il vient de ses réponses
-            sur le sommeil, l'alimentation et l'activité. Annoncer « 3
-            points » à tout le monde aurait été le même mensonge que le
-            « 98,5 % » d'en face. */}
-        <section className="night-card results-analyse">
-          <h2 className="night-card-title">Ton analyse</h2>
-
-          <div className="analyse-grille">
-            <div className="analyse-carte">
-              <span className="analyse-etiquette">Taille actuelle</span>
-              <span className="analyse-valeur">{cm(tailleActuelle)} cm</span>
-            </div>
-            <div className="analyse-carte analyse-carte--accent">
-              <span className="analyse-etiquette">Taille adulte estimée</span>
-              <span className="analyse-valeur">{cm(predicted_height_cm)} cm</span>
-            </div>
+            <span className="analyse-graphe-verrou" aria-hidden="true">
+              <Lock size={14} />
+            </span>
+            {pointsACorriger > 0 && (
+              <span className="analyse-alerte">
+                {pointsACorriger} point{pointsACorriger > 1 ? 's' : ''} à corriger
+              </span>
+            )}
           </div>
 
-          {/* La ligne « Ce que ton plan peut aller chercher : 🔒 cm » est
-              retirée. Elle avait un sens tant que le chiffre n'existait pas —
-              elle posait la question pour donner envie de la réponse. Le
-              serveur renvoie maintenant cette réponse, et elle s'affiche dix
-              pixels plus bas : garder le cadenas revenait à cacher une chose
-              qu'on montre dans la même carte. Ce qui reste payant est ce qui
-              l'a toujours été — quoi faire, dans quel ordre, à quelle heure. */}
-
-          {/* Le détail levier par levier (trois cartes « sous la cible » /
-              « au niveau ») a été retiré à la demande du client. Ce qui
-              reste est le chiffre seul : ce que les habitudes coûtent, sans
-              la liste qui l'explique. */}
-          {leviers.length > 0 && (
-            <div className="analyse-leviers">
-              {coutHabitudes > 0 ? (
-                <div className="cout-habitudes">
-                  <p className="cout-chiffre">
-                    <span className="cout-valeur">−{coutHabitudes}</span>
-                    <span className="cout-unite">cm</span>
-                  </p>
-                  <p className="cout-texte">
-                    C’est ce que tes habitudes actuelles te coûtent, d’après tes
-                    réponses. Avec les trois leviers à la cible, le même calcul
-                    donne <strong>{cm(potentiel)} cm</strong> au lieu de{' '}
-                    {cm(predicted_height_cm)}.
-                  </p>
-                </div>
-              ) : (
-                /* Rien à aller chercher : le dire franchement vaut mieux que
-                   fabriquer un manque. Ça ne tue pas la vente — ça la déplace
-                   sur le seul argument qui reste vrai pour ce profil, qui est
-                   de ne pas perdre ce qu'il tient déjà. */
-                <div className="cout-habitudes cout-habitudes--ok">
-                  <p className="cout-texte">
-                    <strong>Tes habitudes ne te coûtent rien aujourd’hui.</strong> Le
-                    plan sert alors à tenir la position jusqu’au bout de ta
-                    croissance, pas à rattraper un retard.
-                  </p>
-                </div>
-              )}
-
-            </div>
-          )}
-
-          <div className="analyse-grille">
-            <div className="analyse-carte analyse-carte--verrouille">
-              <span className="analyse-etiquette">Ton frein principal</span>
-              <span className="analyse-valeur analyse-valeur--verrouille">
-                <Lock size={18} aria-hidden="true" />
-              </span>
-            </div>
-            <div className="analyse-carte analyse-carte--verrouille">
-              <span className="analyse-etiquette">Tes 11 actions du jour</span>
-              <span className="analyse-valeur analyse-valeur--verrouille">
-                <Lock size={18} aria-hidden="true" />
-              </span>
-            </div>
-          </div>
+          <AnalyseChart
+            ageNow={predictionData.age}
+            ageFin={ageFin}
+            heightNow={tailleActuelle}
+            predicted={predicted_height_cm}
+          />
         </section>
 
-        {/* Le partage descend ici, APRÈS le bloc produit et juste avant le
-            bouton du pied. Il était placé haut, entre la figure et l'analyse,
-            où il coupait la lecture par une action secondaire au moment où le
-            visiteur venait d'avoir son chiffre. Il reste discret — il ne doit
-            pas concurrencer le CTA — mais sur un site à 26 visiteurs, un
-            visiteur qui partage vaut plus qu'un visiteur qui hésite à payer. */}
+        {/* Taller met ici « Plus grand que 🔒 de ton âge ». Le percentile
+            demande de vraies tables de référence (OMS, taille-pour-âge), que
+            ce produit n'a pas : promettre derrière un cadenas un chiffre qu'on
+            ne saura pas livrer après paiement est la seule chose qu'un
+            cadenas ne doit jamais faire. La ligne garde sa forme, avec ce que
+            le plan produit réellement. */}
+        <div className="analyse-ligne analyse-ligne--verrou">
+          <span>Ton frein principal</span>
+          <Lock size={17} aria-hidden="true" />
+          <span aria-hidden="true">🎯</span>
+        </div>
+
+        <div className="analyse-duo">
+          <div className="analyse-case analyse-case--verrou">
+            <span className="analyse-case-label">Tes 11 actions du jour</span>
+            <span className="analyse-case-valeur">
+              <Lock size={20} aria-hidden="true" />
+            </span>
+          </div>
+          <div className="analyse-case">
+            <span className="analyse-case-label">Croissance finie</span>
+            <span className="analyse-case-valeur">{fr(ageFin)} ans</span>
+          </div>
+        </div>
+
         <section className="results-share">
           <button
             type="button"
@@ -465,11 +302,9 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </p>
         </section>
 
-        {/* La mention occupait une carte entière juste avant le bouton :
-            le dernier mot avant l'achat était un avertissement. Elle reste
-            — elle est due, le produit s'adresse à des mineurs et touche à
-            la santé — mais à sa place, après la décision, avec le lien
-            vers les limites détaillées. */}
+        {/* La mention reste. Elle n'est sur aucune des captures de référence,
+            mais elle est due : le produit s'adresse à des mineurs et touche à
+            la santé. Elle est petite et après la décision, pas avant. */}
         <p className="results-mention">
           Une estimation n’est pas une garantie : elle repose sur des modèles
           statistiques et sur les données que tu as saisies. Grandimi n’est pas un
@@ -532,7 +367,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
       <footer className="funnel-footer">
         <button type="button" className="funnel-cta" onClick={onViewPlan}>
-          Voir mon plan de croissance
+          Débloquer mon potentiel
         </button>
         <button type="button" className="funnel-link" onClick={onBackHome}>
           Plus tard
