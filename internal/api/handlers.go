@@ -11,7 +11,7 @@ import (
 )
 
 type PredictHeightRequest struct {
-	Age            float64 `json:"age" binding:"required,gt=8,lte=25"`
+	Age            float64 `json:"age" binding:"required,gte=8,lte=22"`
 	Sex            string  `json:"sex" binding:"required,oneof=M F"`
 	HeightCM       float64 `json:"height_cm" binding:"required,gt=100,lt=210"`
 	WeightKG       float64 `json:"weight_kg" binding:"required,gt=15,lte=200"`
@@ -28,7 +28,7 @@ type PredictHeightRequest struct {
 
 type PredictHeightV2Request struct {
 	Email              string  `json:"email" binding:"required,email"`
-	Age                float64 `json:"age" binding:"required,gt=8,lte=25"`
+	Age                float64 `json:"age" binding:"required,gte=8,lte=22"`
 	Sex                string  `json:"sex" binding:"required,oneof=M F"`
 	HeightCM           float64 `json:"height_cm" binding:"required,gt=100,lt=210"`
 	WeightKG           float64 `json:"weight_kg" binding:"required,gt=15,lte=200"`

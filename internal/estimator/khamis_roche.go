@@ -36,8 +36,11 @@ func PredictHeight(req HeightPredictionRequest) HeightPredictionResponse {
 	resp := HeightPredictionResponse{}
 
 	// Validate inputs
-	if req.Age < 8.0 || req.Age > 18.0 {
-		resp.Message = "Age must be between 8 and 18 years"
+	// Meme borne que validateV2Input : la croissance masculine peut se
+	// poursuivre jusque vers 22 ans. Voir le commentaire detaille dans
+	// v2_enhanced.go.
+	if req.Age < 8.0 || req.Age > 22.0 {
+		resp.Message = "Age must be between 8 and 22 years"
 		resp.ConfidenceLevel = "low"
 		return resp
 	}

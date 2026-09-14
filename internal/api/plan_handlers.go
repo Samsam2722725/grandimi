@@ -11,7 +11,12 @@ import (
 )
 
 type GetGrowthPlanRequest struct {
-	Age            float64 `json:"age" binding:"required,gt=8,lt=18"`
+	// `lt=18` rejetait tout abonne de 18 ans ou plus : il pouvait payer,
+	// puis n obtenait aucun plan. Aligne sur la borne de l estimateur
+	// (22 ans), et `gte` plutot que `gt` parce que la molette du
+	// questionnaire commence exactement a 8 ans — `gt=8` refusait cette
+	// premiere valeur.
+	Age            float64 `json:"age" binding:"required,gte=8,lte=22"`
 	Sex            string  `json:"sex" binding:"required,oneof=M F"`
 	CurrentHeight  float64 `json:"current_height_cm" binding:"required,gt=100,lt=210"`
 	PredictedHeight float64 `json:"predicted_height_cm" binding:"required,gt=100,lt=230"`

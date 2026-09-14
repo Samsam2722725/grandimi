@@ -644,3 +644,120 @@
   color: var(--funnel-muted, rgba(255, 255, 255, 0.7));
   text-wrap: pretty;
 }
+
+/* ---------- Jauge verticale ----------
+
+   Remplace la courbe de trajectoire. Deux langages visuels, volontairement
+   distincts, pour deux natures d information :
+
+   - la BARRE PLEINE est la croissance restante, la seule chose dont le plan
+     parle ;
+   - la ZONE TERNE est la marge du calcul. Elle ne doit jamais ressembler a
+     une cible : ni couleur de marque, ni degrade qui la relie a la barre.
+
+   Confondre les deux reviendrait a promettre que le plan mene au haut de la
+   fourchette, ce qui est faux — cette marge mesure ce que le modele ignore.
+   ------------------------------------------------------------------ */
+
+.jauge {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 14px;
+  height: 210px;
+  margin: 4px 0 2px;
+}
+
+.jauge-piste {
+  position: relative;
+  height: 100%;
+  border-radius: 8px;
+  background: var(--funnel-line, #2a2a2a);
+  overflow: hidden;
+}
+
+.jauge-fourchette {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  /* Brun eteint : c est de l orange desature a l extreme, donc visiblement
+     de la meme famille que la barre — meme sujet — mais sans rien de la
+     vivacite qui ferait lire « objectif ». */
+  background: #3a2a20;
+}
+
+.jauge-remplissage {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 8px;
+  background: var(--funnel-accent, #ff5a1f);
+}
+
+/* Encoche de l estimation. Elle deborde la piste des deux cotes pour rester
+   lisible par-dessus le remplissage, qui est de couleur pleine. */
+.jauge-trait {
+  position: absolute;
+  left: -3px;
+  width: calc(100% + 6px);
+  height: 2px;
+  background: var(--funnel-text, #fff);
+}
+
+.jauge-reperes {
+  position: relative;
+  height: 100%;
+}
+
+.jauge-repere {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.jauge-repere--haut {
+  top: 0;
+}
+
+/* Les reperes intermediaires sont poses par `bottom` en pourcentage, calcule
+   dans le composant. La translation les centre sur leur valeur au lieu de les
+   faire reposer dessus. */
+.jauge-repere--estimation,
+.jauge-repere--bas-fourchette {
+  transform: translateY(50%);
+}
+
+.jauge-repere--pied {
+  bottom: 0;
+}
+
+.jauge-valeur {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--funnel-text, #fff);
+}
+
+.jauge-valeur--forte {
+  font-size: 19px;
+}
+
+.jauge-libelle {
+  font-size: 11.5px;
+  line-height: 1.3;
+  color: var(--funnel-muted, rgba(255, 255, 255, 0.7));
+}
+
+.jauge-libelle--accent {
+  color: var(--funnel-accent, #ff5a1f);
+  font-weight: 600;
+}
+
+/* L avertissement sous la figure : il porte le sens de la zone terne, donc il
+   ne peut pas etre une note de bas de page a 11px. */
+.jauge-avertissement {
+  margin-top: 14px;
+}

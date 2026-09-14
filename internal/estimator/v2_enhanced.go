@@ -460,8 +460,27 @@ func calculateV2Confidence(
 }
 
 func validateV2Input(req HeightPredictionV2Request) error {
-	if req.Age < 8.0 || req.Age > 18.0 {
-		return &ValidationError{"Age must be between 8 and 18 years"}
+	/* Borne haute portee de 18 a 22 ans.
+
+	   Chez le garcon, les cartilages de conjugaison ne se ferment pas tous
+	   a 18 ans : la fermeture s etale jusque vers 21-22 ans, et une
+	   croissance residuelle de quelques millimetres a un ou deux
+	   centimetres reste possible sur cette periode. Refuser un utilisateur
+	   de 19 ans lui renvoyait une erreur de validation en fin de
+	   questionnaire — apres quinze ecrans — alors qu il venait justement
+	   chercher une reponse a cette question.
+
+	   Le modele n a pas besoin d etre retouche pour les accueillir : la
+	   correction de vitesse au-dela de 15 ans (req.Age > 15) s applique
+	   telle quelle, et la marge se resserre deja d elle-meme au-dela de 16
+	   ans. Pour un profil de 20 ans avec une croissance quasi nulle, elle
+	   tombe au plancher de 3 cm, ce qui est le comportement attendu.
+
+	   Le plancher « jamais sous la taille deja atteinte » fait le reste :
+	   ces utilisateurs obtiennent une estimation egale ou tres proche de
+	   leur taille actuelle, ce qui est la verite. */
+	if req.Age < 8.0 || req.Age > 22.0 {
+		return &ValidationError{"Age must be between 8 and 22 years"}
 	}
 	if req.HeightCM < 100 || req.HeightCM > 210 {
 		return &ValidationError{"Height must be between 100 and 210 cm"}

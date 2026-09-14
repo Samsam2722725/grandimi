@@ -285,6 +285,27 @@ func TestPredictHeightV2_Validation(t *testing.T) {
 			invalid: true,
 		},
 		{
+			// 20 ans : accepte depuis que la borne haute est passee a 22.
+			// Chez le garcon la fermeture des cartilages s etale jusque vers
+			// 21-22 ans ; refuser ce profil renvoyait une erreur de
+			// validation en fin de questionnaire a quelqu un qui venait
+			// precisement poser la question.
+			name: "Jeune adulte encore dans la fenetre",
+			req: HeightPredictionV2Request{
+				Age: 20.0, Sex: MALE, HeightCM: 178, WeightKG: 70,
+				FatherHeightCM: 175, MotherHeightCM: 162,
+			},
+			invalid: false,
+		},
+		{
+			name: "Age too old",
+			req: HeightPredictionV2Request{
+				Age: 23.0, Sex: MALE, HeightCM: 178, WeightKG: 70,
+				FatherHeightCM: 175, MotherHeightCM: 162,
+			},
+			invalid: true,
+		},
+		{
 			name: "Invalid sex",
 			req: HeightPredictionV2Request{
 				Age: 14.0, Sex: "X", HeightCM: 160, WeightKG: 50,

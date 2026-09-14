@@ -169,7 +169,7 @@ const FAQ = [
   {
     question: 'À partir de quel âge est-ce utile ?',
     answer:
-      'L’outil est pensé pour les 10-18 ans, la période où la croissance est encore active. En dessous de 10 ans l’estimation devient trop imprécise pour être honnête, et après 18 ans la croissance est généralement terminée.',
+      'De 10 à 22 ans. En dessous de 10 ans, l’estimation devient trop imprécise pour être honnête. Au-dessus de 18 ans, la croissance est le plus souvent terminée — mais pas toujours : chez le garçon, les cartilages de croissance se ferment par étapes jusque vers 21-22 ans, et il y reste parfois un ou deux centimètres. Si tu es dans cette tranche, l’estimation te dira honnêtement où tu en es, quitte à t’annoncer que c’est fini.',
   },
   {
     question: 'Est-ce que ça remplace un médecin ?',

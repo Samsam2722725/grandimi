@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { ArrowLeft, Check, Lock, Share2 } from 'lucide-react'
 
-import { GrowthTrajectoryChart, ageFinCroissance } from '@/components/ui/growth-chart'
+import { ageFinCroissance } from '@/components/ui/growth-chart'
+import { HeightGauge } from '@/components/ui/height-gauge'
 import { HandwritingText } from '@/components/ui/handwriting-text'
 import { SpecialText } from '@/components/ui/special-text'
 
@@ -261,21 +262,39 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </section>
         )}
 
-        {/* La courbe remplace l'ancienne barre horizontale : elle porte la même
-            fourchette PLUS la dimension temps, qui est justement l'argument du
-            plan (« la fenêtre se referme »). Deux figures disant la même chose
-            se seraient concurrencées. */}
-        {tailleActuelle ? (
+        {/* La jauge verticale remplace la courbe de trajectoire.
+
+            La courbe portait le temps en abscisse, donc l'urgence — et c'était
+            son intérêt. Mais elle demandait de comprendre un repère avant de
+            comprendre un chiffre, sur l'écran où l'on a le moins d'attention
+            disponible. Une taille est une hauteur : une barre verticale se lit
+            sans traduction, et surtout elle montre une DISTANCE À PARCOURIR
+            plutôt qu'une progression déjà écrite. C'est cette distance qu'on
+            vend.
+
+            L'urgence n'est pas perdue : elle passe en toutes lettres sous le
+            grand chiffre (« à prendre d'ici tes X ans »), où elle est lue plus
+            sûrement que sur un axe.
+
+            Les deux ne peuvent pas cohabiter : même fourchette, deux figures,
+            aucune des deux lue. */}
+        {tailleActuelle && confidence_range.max > tailleActuelle ? (
           <section className="night-card">
-            <h2 className="night-card-title">Ta trajectoire</h2>
-            <GrowthTrajectoryChart
-              ageNow={predictionData.age}
-              heightNow={tailleActuelle}
+            <h2 className="night-card-title">Où tu en es</h2>
+            <HeightGauge
+              current={tailleActuelle}
               predicted={predicted_height_cm}
               rangeMin={confidence_range.min}
               rangeMax={confidence_range.max}
-              sex={predictionData.sex}
             />
+            {/* Dit noir sur blanc ce que la zone terne est, et ce qu'elle
+                n'est pas. Sans cette phrase, un lecteur pressé lit « je peux
+                faire 181 si je m'applique » — exactement le contresens que la
+                figure est construite pour éviter. */}
+            <p className="night-card-text jauge-avertissement">
+              La zone claire est la marge du calcul, pas un objectif : elle dit ce
+              que le modèle ignore, pas ce que tes habitudes peuvent ajouter.
+            </p>
           </section>
         ) : (
           <section className="night-card">
@@ -295,44 +314,16 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </section>
         )}
 
-        {/* Placé juste après la courbe : c'est l'écran que l'utilisateur
-            vient de regarder, et c'est de celui-là qu'il prend une capture
-            s'il n'a pas de bouton. Volontairement en action secondaire — il ne
-            doit pas concurrencer le CTA du bas. */}
-        <section className="results-share">
-          <button
-            type="button"
-            className="results-share-button"
-            onClick={partager}
-            disabled={etatPartage === 'generation'}
-          >
-            <Share2 size={18} aria-hidden="true" />
-            {etatPartage === 'generation' ? 'Préparation…' : 'Partager mon résultat'}
-          </button>
-          <p className="results-share-note" role="status">
-            {etatPartage === 'telecharge'
-              ? 'Image enregistrée dans tes téléchargements.'
-              : etatPartage === 'erreur'
-                ? 'L’image n’a pas pu être créée sur cet appareil.'
-                : 'Une image prête pour tes stories. La marge d’erreur part avec.'}
-          </p>
-        </section>
+        {/* « Pourquoi maintenant » occupait ici une carte entière pour dire
+            que la fenêtre se referme. L'information est vraie et elle reste —
+            mais elle est déjà sous le grand chiffre, en toutes lettres (« à
+            prendre d'ici tes X ans »), à l'endroit où elle est effectivement
+            lue. Une carte de plus pour la redire coûtait un écran de
+            défilement au visiteur.
 
-        {/* Le « +X cm » n'est plus répété ici : il est déjà le plus gros
-            chiffre de l'écran, deux sections plus haut. L'afficher une
-            seconde fois en grand donnait l'impression de radoter, et
-            noyait la seule information que ce bloc apporte vraiment —
-            que cette fenêtre se referme. */}
-        {margeAffichee > 0 && (
-          <section className="night-card">
-            <h2 className="night-card-title">Pourquoi maintenant</h2>
-            <p className="night-card-text">
-              Ces centimètres ne resteront pas disponibles indéfiniment. Plus tu agis
-              tôt, plus l’effet est réel : une fois les cartilages de croissance
-              fermés, plus rien ne rattrape ce qui n’a pas été fait.
-            </p>
-          </section>
-        )}
+            Le partage descend après le bouton, pour la même raison : neuf
+            blocs séparaient le résultat du paywall, et un adolescent qui a
+            fait quinze écrans puis neuf blocs n'achète pas — il ferme. */}
 
         {/* ---------- Analyse, façon tableau de bord ----------
 
@@ -497,17 +488,45 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           <p className="journee-total">
             <strong>11 actions par jour.</strong> Chacune dit pourquoi elle est là.
           </p>
-        </section>
 
-        <section className="night-card results-offer">
-          <h2 className="night-card-title">Ce que tu débloques</h2>
+          {/* « Ce que tu débloques » était une carte séparée, juste après
+              celle-ci, avec sa propre liste de quatre promesses. Deux cartes
+              d'affilée pour décrire le même abonnement : la première le
+              montrait, la seconde le racontait. On garde la démonstration et
+              on replie la liste dessous — c'est le même bloc, il n'en faut
+              qu'un. */}
           <ul className="results-atouts">
-            <li>Ton plan du jour, refait chaque mois selon tes progrès</li>
-            <li>Les 5 guides : sommeil, nutrition, exercices</li>
-            <li>Ta re-mesure mensuelle, pour voir la courbe bouger</li>
-            <li>Ton frein principal, nommé — et quoi faire à la place</li>
+            <li>Refait chaque mois selon tes progrès</li>
+            <li>Sommeil, nutrition, exercices — détaillés</li>
+            <li>Ta re-mesure mensuelle</li>
+            <li>Ton frein principal, nommé</li>
           </ul>
           <p className="results-price">À partir de 4,99 €/mois · résiliable à tout moment</p>
+        </section>
+
+        {/* Le partage descend ici, APRÈS le bloc produit et juste avant le
+            bouton du pied. Il était placé haut, entre la figure et l'analyse,
+            où il coupait la lecture par une action secondaire au moment où le
+            visiteur venait d'avoir son chiffre. Il reste discret — il ne doit
+            pas concurrencer le CTA — mais sur un site à 26 visiteurs, un
+            visiteur qui partage vaut plus qu'un visiteur qui hésite à payer. */}
+        <section className="results-share">
+          <button
+            type="button"
+            className="results-share-button"
+            onClick={partager}
+            disabled={etatPartage === 'generation'}
+          >
+            <Share2 size={18} aria-hidden="true" />
+            {etatPartage === 'generation' ? 'Préparation…' : 'Partager mon résultat'}
+          </button>
+          <p className="results-share-note" role="status">
+            {etatPartage === 'telecharge'
+              ? 'Image enregistrée dans tes téléchargements.'
+              : etatPartage === 'erreur'
+                ? 'L’image n’a pas pu être créée sur cet appareil.'
+                : 'Une image prête pour tes stories. La marge d’erreur part avec.'}
+          </p>
         </section>
 
         {/* La mention occupait une carte entière juste avant le bouton :

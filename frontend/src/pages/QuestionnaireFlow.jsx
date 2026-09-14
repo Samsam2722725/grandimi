@@ -330,10 +330,25 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
 
       case 'age':
         return (
+          /* Jusqu'à 22 ans, et pas 18.
+
+             La croissance masculine ne s'arrête pas net à 18 ans : les
+             cartilages de conjugaison se ferment par étapes jusque vers
+             21-22 ans, et il reste sur cette période une croissance
+             résiduelle — faible, mais réelle. Un garçon de 19 ans qui
+             arrivait ici ne pouvait tout simplement pas répondre à la
+             question qu'il venait poser.
+
+             Il n'y a aucune raison de l'écarter : le calcul le gère (la
+             marge se resserre d'elle-même au-delà de 16 ans) et le
+             plancher « jamais sous la taille déjà atteinte » l'empêche de
+             recevoir un chiffre flatteur. Il obtient la vérité, qui est
+             souvent « tu y es presque » — et c'est à lui de décider si ça
+             l'intéresse encore. */
           <WheelPicker
             label="Âge en années"
             min={8}
-            max={18}
+            max={22}
             step={0.5}
             value={Number(reponses.age)}
             onChange={(v) => definir('age', v)}
