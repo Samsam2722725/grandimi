@@ -48,6 +48,22 @@ export function HeightGauge({ current, predicted, rangeMin, rangeMax, className 
   const pctEstimation = Math.min(100, Math.max(0, pct(predicted)))
   const pctBasFourchette = Math.min(100, Math.max(0, pct(rangeMin)))
 
+  /* Seuil de place, commun aux deux repères intermédiaires.
+
+     Ni l'estimation ni le bas de fourchette ne s'affichent quand ils sont
+     trop près du pied de la jauge : leurs étiquettes se poseraient sur celle
+     d'« aujourd'hui ». Ce n'est pas un cas rare. Le serveur ramène la borne
+     basse à la taille du jour dès que la marge passerait dessous, et
+     l'estimation elle-même ne descend jamais sous cette taille — donc pour
+     tout profil en fin de croissance (les 18-22 ans qu'on accepte désormais,
+     les filles à partir de 15 ans) les trois valeurs se tassent au même
+     endroit.
+
+     Rien n'est perdu : les deux chiffres sont déjà écrits en toutes lettres
+     sous le grand nombre, « entre X et Y cm ». */
+  const PLACE_MIN = 14
+  const estimationLisible = pctEstimation > PLACE_MIN
+
   const cm = (v) => Math.round(Number(v))
 
   return (
@@ -70,12 +86,15 @@ export function HeightGauge({ current, predicted, rangeMin, rangeMax, className 
         />
 
         {/* Trait de l'estimation : il doit se voir SUR la barre pleine, donc
-            une encoche claire qui déborde de part et d'autre. */}
-        <span
-          className="jauge-trait"
-          style={{ bottom: `${pctEstimation}%` }}
-          aria-hidden="true"
-        />
+            une encoche claire qui déborde de part et d'autre. Il disparaît
+            avec son étiquette — une encoche sans légende ne désigne rien. */}
+        {estimationLisible && (
+          <span
+            className="jauge-trait"
+            style={{ bottom: `${pctEstimation}%` }}
+            aria-hidden="true"
+          />
+        )}
       </div>
 
       <div className="jauge-reperes">
@@ -84,20 +103,38 @@ export function HeightGauge({ current, predicted, rangeMin, rangeMax, className 
           <span className="jauge-libelle">haut de ta fourchette</span>
         </div>
 
-        <div
-          className="jauge-repere jauge-repere--estimation"
-          style={{ bottom: `${pctEstimation}%` }}
-        >
-          <span className="jauge-valeur jauge-valeur--forte">{cm(predicted)} cm</span>
-          <span className="jauge-libelle jauge-libelle--accent">ton estimation</span>
-        </div>
+        {estimationLisible && (
+          <div
+            className="jauge-repere jauge-repere--estimation"
+            style={{ bottom: `${pctEstimation}%` }}
+          >
+            <span className="jauge-valeur jauge-valeur--forte">{cm(predicted)} cm</span>
+            <span className="jauge-libelle jauge-libelle--accent">ton estimation</span>
+          </div>
+        )}
 
-        <div
-          className="jauge-repere jauge-repere--bas-fourchette"
-          style={{ bottom: `${pctBasFourchette}%` }}
-        >
-          <span className="jauge-libelle">{cm(rangeMin)} cm · bas de ta fourchette</span>
-        </div>
+        {/* La borne basse n'est affichée que si elle a la place de l'être.
+
+            Le serveur ramène cette borne à la taille du jour dès que la marge
+            passerait en dessous (on n'annonce à personne qu'il va rapetisser).
+            Pour tout profil proche de sa taille finale — les 18-22 ans qu'on
+            accepte désormais, et les filles de 15 ans et plus — la borne basse
+            VAUT donc la taille actuelle, et son étiquette se posait exactement
+            sur celle d'« aujourd'hui ».
+
+            Le seuil se mesure en pourcentage de la hauteur de la jauge parce
+            que c'est une contrainte de place, pas de centimètres : deux
+            étiquettes de deux lignes ont besoin d'un écart, quelle que soit
+            l'échelle. En dessous, l'information ne disparaît pas — elle est
+            déjà sous le grand chiffre, « entre X et Y cm ». */}
+        {pctBasFourchette > PLACE_MIN && (
+          <div
+            className="jauge-repere jauge-repere--bas-fourchette"
+            style={{ bottom: `${pctBasFourchette}%` }}
+          >
+            <span className="jauge-libelle">{cm(rangeMin)} cm · bas de ta fourchette</span>
+          </div>
+        )}
 
         <div className="jauge-repere jauge-repere--pied">
           <span className="jauge-valeur">{cm(current)} cm</span>
