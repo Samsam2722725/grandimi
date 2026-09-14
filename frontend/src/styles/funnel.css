@@ -881,3 +881,73 @@
   color: var(--funnel-muted);
   text-wrap: pretty;
 }
+
+/* ---------- Ecran « la verite brutale » ----------
+
+   Liste de consequences, une par ligne, chacune precedee d un signe d alerte.
+   Forme reprise de l ecran equivalent de Taller ; le contenu, lui, ne doit
+   comporter NI pourcentage NI montant NI allusion a la seduction — c est la
+   difference entre une liste verifiable et une liste qui vise l estime de soi
+   d un mineur.
+   ------------------------------------------------------------------ */
+
+.funnel-verite {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.verite-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.verite-ligne {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 14px;
+  align-items: center;
+  /* 13px et non 16 : a 16, les cinq rangees plus la ligne de pied depassaient
+     de douze pixels sous le bouton sur un ecran de 375 x 812 — mesure. La
+     phrase qui empeche l ecran de se lire comme un verdict doit etre visible
+     sans avoir a faire defiler. */
+  padding: 13px 18px;
+  border-radius: 999px;
+  background: rgba(255, 90, 31, 0.09);
+  font-size: clamp(14.5px, 4vw, 16.5px);
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--funnel-accent);
+  text-wrap: pretty;
+}
+
+/* Le signe est dessine en CSS plutot qu importe : un cercle et un point
+   d exclamation, c est une bordure et une lettre. Rien a charger. */
+.verite-signe {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--funnel-accent);
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* La ligne de pied n est pas une note de bas de page : sans elle l ecran se
+   lit comme un verdict sur la personne, alors qu une bonne partie des
+   visiteurs seront petits quoi qu ils fassent. Elle porte donc le meme poids
+   typographique qu un paragraphe ordinaire. */
+.verite-pied {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--funnel-muted);
+  text-wrap: pretty;
+}

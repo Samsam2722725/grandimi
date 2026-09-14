@@ -66,6 +66,7 @@ const ETAPES = [
   'sommeil',
   'nutrition',
   'activite',
+  'verite',
   'part-habitudes',
   'long-terme',
   'email',
@@ -559,6 +560,60 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          entre deux personnes, pas de leur taille. La note sous le
          graphique le dit, et le ramène à ce qu'il est vraiment : des
          centimètres, pas des dizaines. */
+      /* ---------- Ce que la taille change au quotidien ----------
+
+         Forme reprise de l'écran « La vérité brutale » de Taller : une liste
+         de conséquences, une par ligne, chacune précédée d'un signe d'alerte.
+         Le dispositif marche, il reste.
+
+         LE CONTENU EST ENTIÈREMENT DIFFÉRENT DU LEUR, et c'est le sujet.
+         Taller écrit « 40 % de matchs en moins », « les femmes te négligent »,
+         « chaque cm coûte 600 $ par an », « plus d'anxiété sociale » — à des
+         garçons de treize ans. Aucun de ces quatre chiffres n'est vérifiable,
+         et trois d'entre eux visent l'estime de soi plutôt qu'un fait. En
+         France, exploiter la vulnérabilité d'un mineur pour vendre est une
+         pratique commerciale déloyale (art. L121-1 du code de la
+         consommation).
+
+         Ces cinq lignes-ci sont des désagréments matériels et documentés :
+         rayonnages hors de portée, ourlets à reprendre, être pris pour plus
+         jeune, clichés professionnels, mobilier urbain calé sur d'autres.
+         Aucun pourcentage, aucun montant, rien sur la séduction. Elles se
+         vérifient en une journée par quiconque les vit, ce qui est exactement
+         ce qui manque à la liste d'en face.
+
+         La ligne de pied n'est pas décorative : sans elle, l'écran se lit
+         comme un verdict sur la personne. Or une bonne partie des visiteurs
+         seront petits quoi qu'ils fassent — leur annoncer une liste de
+         malheurs sans dire tout de suite sur quoi ils peuvent agir serait
+         gratuit, et se retournerait contre le produit. */
+      case 'verite':
+        return (
+          <div className="funnel-verite">
+            <ul className="verite-liste">
+              {[
+                'Les rayonnages du haut, hors de portée',
+                'Pantalons et manches à retoucher, systématiquement',
+                'Pris pour plus jeune que son âge',
+                'Les clichés sur l’autorité, au travail',
+                'Comptoirs, barres, interrupteurs : calés sur d’autres',
+              ].map((ligne) => (
+                <li className="verite-ligne" key={ligne}>
+                  <span className="verite-signe" aria-hidden="true">
+                    !
+                  </span>
+                  {ligne}
+                </li>
+              ))}
+            </ul>
+
+            <p className="verite-pied">
+              Rien là-dedans ne dépend de toi. Ce qui en dépend, c’est d’aller
+              chercher les centimètres qui sont encore sur la table — et il y en a.
+            </p>
+          </div>
+        )
+
       case 'part-habitudes':
         return (
           <div className="funnel-part">
@@ -648,7 +703,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           /* L'index suit ETAPES, il n'est pas décoratif : un écran ajouté ou
              retiré avant celui-ci décale la cible, et « Modifier » renvoie
              alors sur l'écran d'à côté. */
-          { label: 'E-mail', valeur: reponses.email, vers: 13 },
+          { label: 'E-mail', valeur: reponses.email, vers: 14 },
         ]
 
         return (
@@ -720,6 +775,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     activite: {
       titre: 'Tu bouges combien par jour ?',
       sous: 'L’activité stimule l’os pendant qu’il peut encore s’allonger.',
+    },
+    verite: {
+      titre: 'La vérité brutale sur la petite taille',
+      sous: 'Pas des statistiques de séduction : ce que ça change une journée ordinaire.',
     },
     'part-habitudes': {
       titre: 'Ce que tes habitudes pèsent vraiment',
