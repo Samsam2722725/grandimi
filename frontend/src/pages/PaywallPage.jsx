@@ -1,8 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
-import { ArrowLeft, Check, Lock } from 'lucide-react'
+import { ArrowLeft, Lock } from 'lucide-react'
 
-import { CarouselOffre } from '@/components/ui/carousel-offre'
-import { SLIDES_OFFRE } from '@/components/ui/offre-carousel'
+import { CardCarousel } from '@/components/ui/card-carousel'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
@@ -38,12 +37,29 @@ const PLANS_PAR_DEFAUT = {
   annual: { key: 'annual', label: 'Annuel', price_eur: 29.99, interval: 'year' },
 }
 
-const AVANTAGES = [
-  'Ton plan du mois : quoi faire chaque jour',
-  'Sommeil, nutrition, exercices — les trois leviers, détaillés',
-  'Suivi des progrès et re-mesure mensuelle',
-  'Résiliable en ligne à tout moment',
+/* Les trois supports de la marque, servis depuis public/offre en WebP.
+
+   Le nom de fichier porte le sujet plutôt qu'un numéro : il se retrouve tel
+   quel dans l'onglet réseau et dans le cache du navigateur, où
+   « image-3.webp » n'aurait rien dit à personne.
+
+   Les `alt` décrivent ce que montre l'image, pas son titre : un lecteur
+   d'écran ne tire rien de « Programme optimal » seul. */
+const VISUELS_OFFRE = [
+  {
+    src: '/offre/programme-optimal.webp',
+    alt: 'Programme optimal : la routine quotidienne, jour après jour',
+  },
+  {
+    src: '/offre/guide-pour-grandir.webp',
+    alt: 'Guide pour grandir : les leçons sur la croissance, débloquées une à une',
+  },
+  {
+    src: '/offre/optimise-la.webp',
+    alt: 'Optimise-la : les actions du jour, à cocher une par une',
+  },
 ]
+
 
 // 12 mensualités à 4,99 € : le seul repère auquel comparer l'annuel.
 // Jamais présenté comme un ancien prix, seulement comme le calcul qui
@@ -322,28 +338,20 @@ function PaywallPage({ onBackHome }) {
           </p>
         </section>
 
-        <ul className="paywall-features">
-          {AVANTAGES.map((avantage) => (
-            <li key={avantage}>
-              <Check size={18} aria-hidden="true" />
-              <span>{avantage}</span>
-            </li>
-          ))}
-        </ul>
+        {/* La liste à coches « ce que tu auras » est retirée à la demande du
+            client. Elle répétait en texte ce que l'aperçu du plan montre
+            juste au-dessus et ce que les trois visuels du carrousel montrent
+            juste en dessous — trois fois la même promesse sur le même écran,
+            dont une seule en montrant quelque chose. */}
 
-        {/* Le carrousel remplace la rangée de trois pastilles emoji
-            (😴 Sommeil / 🥗 Nutrition / 🏃 Exercices). Elles disaient les
-            trois mêmes choses sans rien montrer, et un emoji système n'est
-            pas une illustration : il change de dessin sur chaque appareil et
-            ne ressemble à aucun autre élément du site.
-
-            Trois cartes qui défilent, un visuel de produit dessiné dans
-            chacune. Pas de photo de banque d'images : sur un site vendu à des
-            mineurs dont l'argument est qu'on ne raconte rien de faux, un ado
-            souriant acheté sur Unsplash est exactement le signal qu'on évite
-            partout ailleurs. */}
+        {/* Les visuels dessinés cèdent la place aux vrais supports de la
+            marque, en coverflow : carte centrale de face, voisines en
+            perspective, avance automatique. Ils pesaient 6,2 Mo en PNG —
+            converti en WebP à 760 px de large, l'ensemble tient en 106 Ko,
+            ce qui est la différence entre une page de paiement utilisable en
+            4G et une page qui ne s'affiche jamais. */}
         <section aria-label="Ce que contient le plan">
-          <CarouselOffre slides={SLIDES_OFFRE} />
+          <CardCarousel images={VISUELS_OFFRE} />
         </section>
 
         {email && (
