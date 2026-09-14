@@ -381,3 +381,57 @@ func TestPredictHeightV2_PotentielSelonHabitudes(t *testing.T) {
 		t.Error("le potentiel ne doit jamais passer sous l estimation")
 	}
 }
+
+// Le milieu de la bande doit etre ATTEIGNABLE. Avant le passage au score, le
+// produit des coefficients saturait le plafond des qu on dormait et bougeait
+// correctement : « alimentation moyenne » et « alimentation tres suivie »
+// rendaient le meme centimetre, et le second scenario n avait plus rien a
+// montrer. C est la regression que ce test empeche de revenir.
+func TestCalculateHealthFactor_GradientLisible(t *testing.T) {
+	base := HeightPredictionV2Request{
+		Age: 14, Sex: MALE, HeightCM: 165, WeightKG: 55,
+		FatherHeightCM: 176, MotherHeightCM: 164, HeightVelocityCM: 5,
+	}
+
+	moyen := base
+	moyen.SleepHoursPerNight = 7.5
+	moyen.NutritionLevel = FAIR
+	moyen.ExerciseMinPerDay = 30
+
+	cible := base
+	cible.SleepHoursPerNight = 9
+	cible.NutritionLevel = EXCELLENT
+	cible.ExerciseMinPerDay = 60
+
+	degrade := base
+	degrade.SleepHoursPerNight = 6
+	degrade.NutritionLevel = POOR
+	degrade.ExerciseMinPerDay = 10
+
+	fMoyen := calculateHealthFactor(moyen)
+	fCible := calculateHealthFactor(cible)
+	fDegrade := calculateHealthFactor(degrade)
+
+	// L ordre doit etre strict : chaque palier se distingue du suivant.
+	if !(fDegrade < fMoyen && fMoyen < fCible) {
+		t.Errorf("les trois paliers doivent etre strictement ordonnes : degrade=%.4f moyen=%.4f cible=%.4f",
+			fDegrade, fMoyen, fCible)
+	}
+
+	// L enveloppe documentee ne bouge pas.
+	if fCible > 1.01 || fDegrade < 0.98 {
+		t.Errorf("enveloppe depassee : cible=%.4f (max 1.01), degrade=%.4f (min 0.98)", fCible, fDegrade)
+	}
+
+	// Ne rien declarer reste neutre : pas de penalite silencieuse.
+	if f := calculateHealthFactor(base); f != 1.0 {
+		t.Errorf("aucun levier declare : facteur attendu 1.0, obtenu %.4f", f)
+	}
+
+	// Un seul levier ameliore doit se voir, meme si les autres ne bougent pas.
+	nutritionMieux := moyen
+	nutritionMieux.NutritionLevel = EXCELLENT
+	if calculateHealthFactor(nutritionMieux) <= fMoyen {
+		t.Error("ameliorer la seule alimentation ne change rien : le plafond sature de nouveau")
+	}
+}

@@ -352,37 +352,94 @@ func calculateHealthFactor(req HeightPredictionV2Request) float64 {
 
 	   Le questionnaire n envoie jamais zero : les valeurs proposees
 	   sont 6 / 7,5 / 8,5 / 9,5 h et 10 / 30 / 60 / 120 min. Zero
-	   signifie donc toujours « non renseigne ». */
-	factor := 1.0
+	   signifie donc toujours « non renseigne ».
 
-	// Sleep factor: Growth hormone released during sleep
+	   ─────────────────────────────────────────────────────────────
+	   POURQUOI UN SCORE, ET PLUS UN PRODUIT DE COEFFICIENTS
+
+	   Les trois leviers se multipliaient (1.02 x 0.99 x 1.02 ...), et
+	   le produit etait ensuite ramene dans [0.98 ; 1.01]. Le plafond
+	   etait atteint bien avant le mode de vie ideal : un adolescent
+	   declarant 7,5 h de sommeil, une alimentation MOYENNE et 30 min
+	   d activite obtenait 1.030, donc 1.01 apres bornage — exactement
+	   le meme resultat que s il dormait 9 h, mangeait tres suivi et
+	   bougeait une heure.
+
+	   Mesure en production le 14/09/2026, garcon de 14 ans, 165 cm,
+	   parents 176/164 :
+	     habitudes degradees ....... 173,0 cm
+	     habitudes moyennes ........ 178,3 cm
+	     habitudes a la cible ...... 178,3 cm   <- identique
+
+	   Autrement dit le modele ne savait pas exprimer « tu gagnerais a
+	   mieux manger » pour quiconque dort et bouge correctement. C est
+	   une propriete du bornage, pas un fait biologique — et elle vide
+	   de son sens le second scenario (PotentialHeightCM), qui est
+	   justement ce que le plan vend.
+
+	   Chaque levier note maintenant de -1 (nettement sous la cible) a
+	   +1 (a la cible), la moyenne des leviers DECLARES est reportee
+	   sur la meme bande qu avant. L enveloppe ne bouge pas — au mieux
+	   +1 %, au pire -2 % — et l asymetrie voulue est conservee : de
+	   mauvaises habitudes coutent toujours deux fois ce que de bonnes
+	   rapportent. Seul le milieu de la bande devient atteignable.
+	   ───────────────────────────────────────────────────────────── */
+	scores := make([]float64, 0, 3)
+
+	// Sommeil : l hormone de croissance se libere en sommeil profond.
 	if req.SleepHoursPerNight > 0 {
-		if req.SleepHoursPerNight < 7 {
-			factor *= 0.97 // Insufficient sleep reduces growth
-		} else if req.SleepHoursPerNight <= 10 {
-			factor *= 1.02 // Optimal sleep
+		switch {
+		case req.SleepHoursPerNight < 7:
+			scores = append(scores, -1)
+		case req.SleepHoursPerNight < 8:
+			scores = append(scores, 0)
+		default:
+			// 8 h et plus : la cible pediatrique pour cette tranche d age.
+			scores = append(scores, 1)
 		}
 	}
 
-	// Nutrition factor
 	switch req.NutritionLevel {
 	case EXCELLENT:
-		factor *= 1.03
+		scores = append(scores, 1)
 	case GOOD:
-		factor *= 1.01
+		scores = append(scores, 1.0/3.0)
 	case FAIR:
-		factor *= 0.99
+		scores = append(scores, -1.0/3.0)
 	case POOR:
-		factor *= 0.95
+		scores = append(scores, -1)
 	}
 
-	// Exercise factor: Moderate exercise promotes growth
+	// Activite : la mise en charge stimule l os tant qu il peut s allonger.
 	if req.ExerciseMinPerDay > 0 {
-		if req.ExerciseMinPerDay < 30 {
-			factor *= 0.99
-		} else if req.ExerciseMinPerDay <= 120 {
-			factor *= 1.02 // Optimal activity
+		switch {
+		case req.ExerciseMinPerDay < 30:
+			scores = append(scores, -1)
+		case req.ExerciseMinPerDay < 60:
+			scores = append(scores, 0)
+		default:
+			scores = append(scores, 1)
 		}
+	}
+
+	/* Moyenne des leviers DECLARES uniquement. Ne rien savoir reste
+	   neutre : un questionnaire vide donne un score nul, donc un
+	   facteur de 1.0, et non une penalite silencieuse. */
+	score := 0.0
+	if len(scores) > 0 {
+		somme := 0.0
+		for _, s := range scores {
+			somme += s
+		}
+		score = somme / float64(len(scores))
+	}
+
+	// Bande asymetrique : +1 % au mieux, -2 % au pire.
+	factor := 1.0
+	if score >= 0 {
+		factor += score * 0.01
+	} else {
+		factor += score * 0.02
 	}
 
 	// Maternal health factors
@@ -396,6 +453,17 @@ func calculateHealthFactor(req HeightPredictionV2Request) float64 {
 	}
 
 	/* Bornes de l effet du mode de vie.
+
+	   Depuis le passage au score, le calcul des trois leviers ne peut
+	   plus sortir de la bande par lui-meme : il la parcourt. Ce bornage
+	   garde deux roles, tous deux necessaires — il rattrape les facteurs
+	   MEDICAUX appliques juste au-dessus (diabete maternel, maladie
+	   chronique), qui eux multiplient encore et peuvent pousser sous
+	   0.98 ; et il fixe noir sur blanc l enveloppe que le produit
+	   s interdit de depasser, quel que soit ce qu on ajoutera plus tard.
+
+	   L historique qui a conduit a ces deux valeurs, et qui reste la
+	   raison de les garder :
 
 	   Sans plafond, le cumul des bonus atteignait 1.072, soit +12.7 cm
 	   ajoutes a la cible genetique : un mode de vie sain ne fait pas

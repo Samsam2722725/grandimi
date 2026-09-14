@@ -1,6 +1,8 @@
 import { useRef, useState, useEffect } from 'react'
 import { ArrowLeft, Check, Lock } from 'lucide-react'
 
+import { OffreCarousel } from '@/components/ui/offre-carousel'
+
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
 import '../styles/funnel.css'
@@ -47,11 +49,7 @@ const AVANTAGES = [
 // justifie "économisez".
 const COUT_DOUZE_MENSUALITES = 12 * PLANS_PAR_DEFAUT.monthly.price_eur
 
-const PILIERS = [
-  { emoji: '😴', titre: 'Sommeil', detail: 'Heures cibles, routine du soir' },
-  { emoji: '🥗', titre: 'Nutrition', detail: 'Protéines, calcium, vitamine D' },
-  { emoji: '🏃', titre: 'Exercices', detail: 'Étirements, sauts, posture' },
-]
+
 
 /* L'écran du matin, tel qu'un abonné l'ouvre. Les deux premières lignes
    sont les vraies actions du plan (internal/planner/monthly_plan.go) —
@@ -332,16 +330,19 @@ function PaywallPage({ onBackHome }) {
           ))}
         </ul>
 
-        <section className="paywall-pillars" aria-label="Ce que contient le plan">
-          <div className="paywall-pillar-grid">
-            {PILIERS.map((pilier) => (
-              <div className="paywall-pillar" key={pilier.titre}>
-                <span aria-hidden="true">{pilier.emoji}</span>
-                <strong>{pilier.titre}</strong>
-                <em>{pilier.detail}</em>
-              </div>
-            ))}
-          </div>
+        {/* Le carrousel remplace la rangée de trois pastilles emoji
+            (😴 Sommeil / 🥗 Nutrition / 🏃 Exercices). Elles disaient les
+            trois mêmes choses sans rien montrer, et un emoji système n'est
+            pas une illustration : il change de dessin sur chaque appareil et
+            ne ressemble à aucun autre élément du site.
+
+            Trois cartes qui défilent, un visuel de produit dessiné dans
+            chacune. Pas de photo de banque d'images : sur un site vendu à des
+            mineurs dont l'argument est qu'on ne raconte rien de faux, un ado
+            souriant acheté sur Unsplash est exactement le signal qu'on évite
+            partout ailleurs. */}
+        <section aria-label="Ce que contient le plan">
+          <OffreCarousel />
         </section>
 
         {email && (

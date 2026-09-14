@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { ArrowLeft, Check, Lock, Share2 } from 'lucide-react'
 
 import { ageFinCroissance } from '@/components/ui/growth-chart'
-import { HeightGauge } from '@/components/ui/height-gauge'
+import { GrowthProjectionChart } from '@/components/ui/growth-projection-chart'
 import { HandwritingText } from '@/components/ui/handwriting-text'
 import { SpecialText } from '@/components/ui/special-text'
 
@@ -166,11 +166,17 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      à « le plan me rapporte quoi ? », question qu'on esquivait jusqu'ici
      derrière un cadenas.
 
-     POURQUOI CE N'EST PAS SUR LA JAUGE. L'écart vaut 1 à 5 cm quand la
-     croissance restante en vaut 12 et la marge ±5. Posés sur la même échelle,
-     les deux repères se chevauchent et la figure devient illisible — mesuré
-     en construisant la version à deux traits. Deux questions différentes, deux
-     figures : la jauge dit où il va, ce bloc dit ce qu'il laisse sur la table.
+     POURQUOI CE BLOC EXISTE ALORS QUE LA COURBE MONTRE DÉJÀ LES DEUX
+     TRAJECTOIRES. Parce qu'une figure ne donne pas un nombre à retenir. La
+     courbe dit la FORME — l'écart se creuse avec le temps, il se referme à la
+     fin de la croissance — et ce bloc dit le CHIFFRE. Les deux se renforcent
+     au lieu de se concurrencer, contrairement à deux figures qui porteraient
+     la même fourchette.
+
+     C'est aussi ce qui a condamné la version où l'écart était un simple
+     repère de plus sur une jauge verticale : 1 à 5 cm posés sur une échelle
+     qui en couvre 17, les étiquettes se chevauchaient et on ne lisait ni le
+     nombre ni la forme.
 
      Formulé en PERTE et non en gain. C'est ce que le modèle calcule
      littéralement (un facteur sous la cible), et c'est aussi ce qui se
@@ -291,39 +297,38 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </section>
         )}
 
-        {/* La jauge verticale remplace la courbe de trajectoire.
+        {/* UNE figure, et une seule, sur cet écran.
 
-            La courbe portait le temps en abscisse, donc l'urgence — et c'était
-            son intérêt. Mais elle demandait de comprendre un repère avant de
-            comprendre un chiffre, sur l'écran où l'on a le moins d'attention
-            disponible. Une taille est une hauteur : une barre verticale se lit
-            sans traduction, et surtout elle montre une DISTANCE À PARCOURIR
-            plutôt qu'une progression déjà écrite. C'est cette distance qu'on
-            vend.
+            Elle a changé deux fois, et les deux fois pour la même raison de
+            fond : montrer ce qui se joue plutôt que ce qui est déjà écrit.
 
-            L'urgence n'est pas perdue : elle passe en toutes lettres sous le
-            grand chiffre (« à prendre d'ici tes X ans »), où elle est lue plus
-            sûrement que sur un axe.
+            La trajectoire d'origine traçait une courbe unique vers
+            l'estimation — elle disait où il va, jamais ce qu'il peut y
+            changer. La jauge verticale qui l'a remplacée disait la distance à
+            parcourir, mais avait perdu le temps, donc l'échéance.
 
-            Les deux ne peuvent pas cohabiter : même fourchette, deux figures,
-            aucune des deux lue. */}
-        {tailleActuelle && confidence_range.max > tailleActuelle ? (
+            Cette version a les deux, et le second chiffre en plus : le passé
+            mesuré à gauche, aujourd'hui comme frontière, puis DEUX
+            trajectoires — celle des habitudes actuelles, celle des leviers à
+            la cible. L'aire entre les deux est littéralement ce que le plan
+            vend, et elle n'existait pas tant que l'estimateur ne renvoyait
+            qu'un seul nombre.
+
+            Ce qui disparaît avec la jauge : la fourchette dessinée. Elle
+            reste écrite en toutes lettres sous le grand chiffre (« entre X et
+            Y cm »), ce qui suffit — une troisième bande sur la même figure
+            aurait rendu les deux trajectoires illisibles. */}
+        {tailleActuelle ? (
           <section className="night-card">
-            <h2 className="night-card-title">Où tu en es</h2>
-            <HeightGauge
-              current={tailleActuelle}
+            <h2 className="night-card-title">Ta trajectoire</h2>
+            <GrowthProjectionChart
+              ageNow={predictionData.age}
+              heightNow={tailleActuelle}
               predicted={predicted_height_cm}
-              rangeMin={confidence_range.min}
-              rangeMax={confidence_range.max}
+              potentiel={potentiel}
+              velocityCM={predictionData.height_velocity_cm}
+              sex={predictionData.sex}
             />
-            {/* Dit noir sur blanc ce que la zone terne est, et ce qu'elle
-                n'est pas. Sans cette phrase, un lecteur pressé lit « je peux
-                faire 181 si je m'applique » — exactement le contresens que la
-                figure est construite pour éviter. */}
-            <p className="night-card-text jauge-avertissement">
-              La zone claire est la marge du calcul, pas un objectif : elle dit ce
-              que le modèle ignore, pas ce que tes habitudes peuvent ajouter.
-            </p>
           </section>
         ) : (
           <section className="night-card">

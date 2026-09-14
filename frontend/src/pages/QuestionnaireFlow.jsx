@@ -273,6 +273,13 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         sex: reponses.sex,
         current_height_cm: Number(reponses.height_cm),
         weight_kg: Number(reponses.weight_kg),
+        /* La courbe du résultat trace le point de l'an dernier en
+           soustrayant cette valeur à la taille du jour. Sans elle, le
+           graphique n'a pas de passé à montrer et démarre sec sur
+           « aujourd'hui ». `null` (« je ne sais pas ») se propage tel quel :
+           le composant ne trace alors rien plutôt que de reculer d'un an
+           sur une vitesse moyenne inventée. */
+        height_velocity_cm: reponses.height_velocity_cm,
         sleep_hours_per_night: reponses.sleep_hours_per_night,
         nutrition_level: reponses.nutrition_level,
         exercise_min_per_day: reponses.exercise_min_per_day,

@@ -741,3 +741,123 @@
 .paywall .paywall-scroll > .paywall-features {
   margin-top: 0;
 }
+
+/* ---------- Carrousel de l offre ----------
+
+   Remplace la rangee de trois pastilles emoji (Sommeil / Nutrition /
+   Exercices), qui disait les memes trois choses sans rien montrer.
+
+   Rail a defilement par accrochage plutot qu anneau 3D : sur un ecran de
+   paiement, ce qui bouge en continu prend l attention due au bouton, et une
+   rotation automatique deplace la carte qu on est en train de lire. Ici
+   l avance existe, mais elle s arrete au premier geste et ne reprend jamais.
+   ------------------------------------------------------------------ */
+
+.paywall .offre-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.paywall .offre-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* Le rail deborde volontairement des marges de la colonne pour que les
+     cartes voisines s amorcent au bord de l ecran — c est ce qui dit « ca
+     glisse » sans ajouter de fleche. */
+  margin: 0 -24px;
+  padding: 0 24px;
+  scrollbar-width: none;
+}
+
+.paywall .offre-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.paywall .offre-carte {
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid var(--funnel-line);
+  background: var(--funnel-surface);
+}
+
+.paywall .offre-visuel-cadre {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--funnel-bg);
+}
+
+.paywall .offre-visuel {
+  width: 100%;
+  max-width: 168px;
+  height: auto;
+  display: block;
+}
+
+.paywall .offre-carte-titre {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--funnel-text);
+}
+
+.paywall .offre-carte-texte {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--funnel-muted);
+  text-wrap: pretty;
+}
+
+.paywall .offre-pastilles {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+}
+
+/* Cible tactile de 24px autour d un point de 6px : le point seul serait sous
+   le minimum atteignable au pouce. */
+.paywall .offre-pastille {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paywall .offre-pastille::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--funnel-line);
+  transition:
+    background-color 0.2s ease,
+    width 0.2s ease;
+}
+
+.paywall .offre-pastille.est-active::before {
+  width: 18px;
+  background: var(--funnel-accent);
+}
+
+.paywall .offre-pastille:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+  border-radius: 999px;
+}

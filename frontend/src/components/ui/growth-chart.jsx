@@ -23,26 +23,36 @@
    pas (contraste mesuré 6,1:1 sur la surface des cartes).
    ============================================================ */
 
-const SERIE_SOUS_POTENTIEL = '#6f7ec9'
-const SERIE_POTENTIEL = '#e4692f'
+/* Exportées : la projection du résultat (growth-projection-chart.jsx) trace
+   les deux mêmes séries que l'illustration de la page d'accueil, et doit leur
+   donner le MÊME sens — orange = potentiel atteint, indigo = resté dessous.
+   Un visiteur qui a vu la landing lit la courbe de son résultat sans réappendre
+   le code couleur. Redéfinir la paire ailleurs la ferait diverger en silence,
+   et lui ferait surtout perdre sa validation daltonienne. */
+export const SERIE_SOUS_POTENTIEL = '#6f7ec9'
+export const SERIE_POTENTIEL = '#e4692f'
 const SERIE_TRAJECTOIRE = '#ff5a1f'
 
-/**
- * Courbe lissée passant par une liste de points.
- * Catmull-Rom converti en Bézier cubique : une polyligne donnerait des angles
- * là où la croissance ralentit progressivement.
- */
 /* Séparateur décimal français. Les âges du questionnaire avancent de demi
    en demi (13,5 / 14 / 14,5) et la fin de croissance tombe souvent sur un
    demi : les deux repères de l'axe écrivaient « 16.5 ans » au point
    anglais, à deux centimètres d'un résultat qui écrit « 16,5 ans » à la
    virgule. Deux typographies pour le même nombre sur le même écran, sur
    un produit dont l'argument est la rigueur. */
-function frAge(valeur) {
+export function frAge(valeur) {
   return String(valeur).replace('.', ',')
 }
 
-function lisser(points, sansDepart = false) {
+/**
+ * Courbe lissée passant par une liste de points.
+ * Catmull-Rom converti en Bézier cubique : une polyligne donnerait des angles
+ * là où la croissance ralentit progressivement.
+ *
+ * Exportée, avec `decelere`, pour growth-projection-chart.jsx : ce sont les
+ * primitives de tracé communes à toutes les figures de croissance du site, et
+ * les dupliquer ferait diverger la forme des courbes d'un écran à l'autre.
+ */
+export function lisser(points, sansDepart = false) {
   if (points.length < 2) return ''
   let d = sansDepart ? '' : `M ${points[0][0]} ${points[0][1]}`
   for (let i = 0; i < points.length - 1; i++) {
@@ -62,7 +72,7 @@ function lisser(points, sansDepart = false) {
 /* La croissance ralentit : la part de progression déjà faite suit une
    décélération, pas une droite. `1-(1-t)^2` reproduit cette forme sans
    prétendre modéliser quoi que ce soit — c'est une interpolation d'affichage. */
-const decelere = (t) => 1 - (1 - t) * (1 - t)
+export const decelere = (t) => 1 - (1 - t) * (1 - t)
 
 const AGE_FIN = { M: 18.5, F: 16.5 }
 
