@@ -46,6 +46,11 @@ type HeightPredictionV2Request struct {
 
 type HeightPredictionV2Response struct {
 	PredictedHeightCM  float64
+	// Estimation obtenue si les trois leviers de mode de vie (sommeil,
+	// alimentation, activite) etaient a la cible. Toujours superieure ou
+	// egale a PredictedHeightCM. L ecart entre les deux est ce que les
+	// habitudes actuelles coutent — et donc ce que le plan vise.
+	PotentialHeightCM  float64
 	ConfidenceRange    [2]float64
 	ConfidenceLevel    string
 	PubertyStage       string
@@ -117,6 +122,38 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	healthMultiplier := calculateHealthFactor(req)
 	finalHeight := midParentTarget * healthMultiplier
 
+	/* SECOND SCENARIO : le meme adolescent, ses trois leviers a la cible.
+
+	   C est la seule facon honnete de chiffrer ce que le plan vise. Jusqu
+	   ici la page de resultat disait « ton plan peut aller chercher des
+	   centimetres » sans jamais pouvoir dire combien — donc sans rien
+	   prouver. Ce chiffre-la sort du meme modele que l estimation
+	   affichee, avec la meme formule et les memes bornes : ce n est pas
+	   une promesse commerciale posee a cote du calcul, c est le calcul.
+
+	   Seuls les trois leviers que le plan travaille sont remis a la
+	   cible. Le diabete maternel et la maladie chronique restent tels
+	   quels : un programme quotidien ne les change pas, et les effacer
+	   ferait miroiter des centimetres qui ne sont pas a prendre.
+
+	   Les deux planchers s appliquent dans cet ordre : jamais sous la
+	   taille deja atteinte, et jamais sous l estimation courante. Le
+	   second protege d un cas de bord — un profil dont les facteurs
+	   declares depassent deja la cible — ou le « potentiel » sortirait
+	   sous la prediction et afficherait une perte a qui fait tout bien. */
+	reqOptimal := req
+	reqOptimal.SleepHoursPerNight = 9.0
+	reqOptimal.NutritionLevel = EXCELLENT
+	reqOptimal.ExerciseMinPerDay = 60
+
+	potentialHeight := midParentTarget * calculateHealthFactor(reqOptimal)
+	if potentialHeight < req.HeightCM {
+		potentialHeight = req.HeightCM
+	}
+	if potentialHeight < finalHeight {
+		potentialHeight = finalHeight
+	}
+
 	// La methode mi-parentale ne regarde que la taille des parents, jamais
 	// celle deja atteinte par l enfant. Elle annoncait donc 180,5 cm a un
 	// adolescent qui mesurait deja 183 cm — une taille adulte inferieure a
@@ -149,6 +186,7 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	)
 
 	resp.PredictedHeightCM = math.Round(finalHeight*10) / 10
+	resp.PotentialHeightCM = math.Round(potentialHeight*10) / 10
 	resp.ConfidenceRange = confidenceRange
 	resp.ConfidenceLevel = confidenceLevel
 	resp.PubertyStage = pubertyStage

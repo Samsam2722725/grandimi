@@ -172,6 +172,10 @@ func PredictHeightV2(c *gin.Context) {
 		"user_id":            user.ID,
 		"prediction_id":      pred.ID,
 		"predicted_height_cm": result.PredictedHeightCM,
+		// Estimation si les trois leviers de mode de vie etaient a la cible.
+		// L ecart avec predicted_height_cm est ce que le plan vise — chiffre
+		// par le meme modele que l estimation, pas par le marketing.
+		"potential_height_cm": result.PotentialHeightCM,
 		"confidence_range": gin.H{
 			"min": result.ConfidenceRange[0],
 			"max": result.ConfidenceRange[1],

@@ -17,6 +17,7 @@ import { lazy, Suspense, useEffect, useState } from 'react'
    mobile, ou l'ecran reste blanc tant que le JS n'est pas monte. */
 const CircularSplitRoll = lazy(() => import('@/components/ui/circular-split-roll'))
 import { HandwritingText } from '@/components/ui/handwriting-text'
+import { LogoGrandimi } from '@/components/ui/logo-grandimi'
 import { FaqSection } from '@/components/ui/faq-section'
 import { FluidParticlesBackground } from '@/components/ui/fluid-particles-background'
 import { PotentialComparisonChart } from '@/components/ui/growth-chart'
@@ -235,10 +236,14 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
       <header className="sticky top-0 z-50 border-b border-[color:var(--color-frost-gray)] bg-[color:var(--surface-page-canvas)]">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
           <a href="#" className="flex min-w-0 items-center gap-2.5 text-ink">
-            <span className="flex size-8 items-center justify-center rounded-full bg-brand">
-              <Ruler
-                className="size-4 text-[color:var(--color-on-brand)]"
-                aria-hidden="true"
+            {/* La marque remplace l'icône de règle générique. Le carré orange
+                est la forme du logo, pas une pastille décorative : c'est sous
+                cette vignette que le site sera reconnu dans un onglet, une
+                story ou un partage WhatsApp. */}
+            <span className="flex size-8 items-center justify-center rounded-[9px] bg-brand">
+              <LogoGrandimi
+                className="size-5 text-[color:var(--color-on-brand)]"
+                titre="Grandimi"
               />
             </span>
             <span className="truncate font-display text-xl font-semibold tracking-[-0.02em]">

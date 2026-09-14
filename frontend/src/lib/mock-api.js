@@ -14,11 +14,25 @@ export const mockPredictHeight = async (data) => {
       // Intervalle de confiance basé sur l'âge
       const confidenceRange = 4 + (18 - data.age) * 0.3;
 
+      /* Le simulacre doit reproduire le PLANCHER du serveur, sinon il rend
+         une taille adulte inférieure à la taille saisie et l'écran de
+         résultat se teste sur un cas que la production ne produit jamais. */
+      const estimation = Math.max(estimatedAdultHeight, data.height_cm)
+
+      /* Second scénario, comme le serveur : les trois leviers à la cible.
+         Le vrai calcul borne le facteur de mode de vie à [0,98 ; 1,01] ;
+         on reprend la borne haute pour que l'ordre de grandeur affiché en
+         local ressemble à celui de la production. */
+      const potentiel = Math.max(estimatedAdultHeight * 1.01, estimation)
+
       resolve({
-        predicted_height_cm: Math.round(estimatedAdultHeight * 10) / 10,
+        predicted_height_cm: Math.round(estimation * 10) / 10,
+        potential_height_cm: Math.round(potentiel * 10) / 10,
         confidence_range: {
-          min: Math.round((estimatedAdultHeight - confidenceRange) * 10) / 10,
-          max: Math.round((estimatedAdultHeight + confidenceRange) * 10) / 10,
+          // Même plancher que le serveur : la borne basse ne passe jamais
+          // sous la taille déjà atteinte.
+          min: Math.round(Math.max(estimation - confidenceRange, data.height_cm) * 10) / 10,
+          max: Math.round((estimation + confidenceRange) * 10) / 10,
         },
         confidence_level:
           data.age > 16

@@ -158,6 +158,35 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
   const aCorriger = leviers.filter((levier) => levier.sousCible)
   const pointsACorriger = aCorriger.length
 
+  /* Ce que les habitudes actuelles coûtent, en centimètres.
+
+     Le serveur renvoie `potential_height_cm` : la même estimation, calculée
+     avec les trois leviers à la cible. L'écart entre les deux sort donc du
+     modèle, pas d'un argumentaire — c'est la seule façon honnête de répondre
+     à « le plan me rapporte quoi ? », question qu'on esquivait jusqu'ici
+     derrière un cadenas.
+
+     POURQUOI CE N'EST PAS SUR LA JAUGE. L'écart vaut 1 à 5 cm quand la
+     croissance restante en vaut 12 et la marge ±5. Posés sur la même échelle,
+     les deux repères se chevauchent et la figure devient illisible — mesuré
+     en construisant la version à deux traits. Deux questions différentes, deux
+     figures : la jauge dit où il va, ce bloc dit ce qu'il laisse sur la table.
+
+     Formulé en PERTE et non en gain. C'est ce que le modèle calcule
+     littéralement (un facteur sous la cible), et c'est aussi ce qui se
+     retient — on protège plus volontiers ce qu'on a que ce qu'on pourrait
+     avoir.
+
+     L'écart se calcule sur les chiffres AFFICHÉS, pas sur les valeurs brutes
+     — même règle que `margeAffichee` plus haut, et pour la même raison. Sur
+     177,3 contre 176,5 la soustraction brute donne 0,8 → « −1 cm », pendant
+     que la phrase juste dessous écrit « 177 au lieu de 177 ». Le lecteur fait
+     la soustraction lui-même : les deux doivent tomber juste. */
+  const potentiel = Number(predictionData.potential_height_cm)
+  const coutHabitudes = Number.isFinite(potentiel)
+    ? Math.max(0, cm(potentiel) - cm(predicted_height_cm))
+    : 0
+
   /* Plus de libellé « Fiabilité : faible / moyenne ». Il inquiétait sans
      informer : « faible » ne dit pas de combien on peut se tromper, alors
      que le « ± X cm » juste à côté le dit exactement, en chiffres. Garder
@@ -356,13 +385,13 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             </div>
           </div>
 
-          <div className="analyse-verrou">
-            <span className="analyse-etiquette">Ce que ton plan peut aller chercher</span>
-            <span className="analyse-valeur analyse-valeur--verrouille">
-              <Lock size={18} aria-hidden="true" />
-              cm
-            </span>
-          </div>
+          {/* La ligne « Ce que ton plan peut aller chercher : 🔒 cm » est
+              retirée. Elle avait un sens tant que le chiffre n'existait pas —
+              elle posait la question pour donner envie de la réponse. Le
+              serveur renvoie maintenant cette réponse, et elle s'affiche dix
+              pixels plus bas : garder le cadenas revenait à cacher une chose
+              qu'on montre dans la même carte. Ce qui reste payant est ce qui
+              l'a toujours été — quoi faire, dans quel ordre, à quelle heure. */}
 
           {/* Le diagnostic nommé, levier par levier.
 
@@ -378,6 +407,37 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
               crédibilité du diagnostic. */}
           {leviers.length > 0 && (
             <div className="analyse-leviers">
+              {/* Le chiffre d'abord, la cause ensuite, la solution après :
+                  c'est l'ordre dans lequel on accepte une dépense. La liste
+                  des leviers qui suit n'est plus une liste de reproches, elle
+                  explique d'où sort ce nombre-là. */}
+              {coutHabitudes > 0 ? (
+                <div className="cout-habitudes">
+                  <p className="cout-chiffre">
+                    <span className="cout-valeur">−{coutHabitudes}</span>
+                    <span className="cout-unite">cm</span>
+                  </p>
+                  <p className="cout-texte">
+                    C’est ce que tes habitudes actuelles te coûtent, d’après tes
+                    réponses. Avec les trois leviers à la cible, le même calcul
+                    donne <strong>{cm(potentiel)} cm</strong> au lieu de{' '}
+                    {cm(predicted_height_cm)}.
+                  </p>
+                </div>
+              ) : (
+                /* Rien à aller chercher : le dire franchement vaut mieux que
+                   fabriquer un manque. Ça ne tue pas la vente — ça la déplace
+                   sur le seul argument qui reste vrai pour ce profil, qui est
+                   de ne pas perdre ce qu'il tient déjà. */
+                <div className="cout-habitudes cout-habitudes--ok">
+                  <p className="cout-texte">
+                    <strong>Tes habitudes ne te coûtent rien aujourd’hui.</strong> Le
+                    plan sert alors à tenir la position jusqu’au bout de ta
+                    croissance, pas à rattraper un retard.
+                  </p>
+                </div>
+              )}
+
               {pointsACorriger > 0 && (
                 <span className="analyse-badge">
                   {pointsACorriger} point{pointsACorriger > 1 ? 's' : ''} à corriger

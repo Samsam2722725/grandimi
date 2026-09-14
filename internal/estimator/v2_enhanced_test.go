@@ -324,3 +324,60 @@ func TestPredictHeightV2_Validation(t *testing.T) {
 		}
 	}
 }
+
+// Le second scenario chiffre ce que les habitudes actuelles coutent : c est
+// la seule justification honnete du plan payant, et elle doit sortir du meme
+// modele que l estimation affichee.
+func TestPredictHeightV2_PotentielSelonHabitudes(t *testing.T) {
+	base := HeightPredictionV2Request{
+		Age:              14.0,
+		Sex:              MALE,
+		HeightCM:         165.0,
+		WeightKG:         55.0,
+		FatherHeightCM:   176.0,
+		MotherHeightCM:   164.0,
+		HeightVelocityCM: 5.0,
+		EthnicBackground: CAUCASIAN,
+	}
+
+	// Habitudes degradees : le potentiel doit etre STRICTEMENT au-dessus de
+	// l estimation courante, sinon la page de resultat n a rien a montrer.
+	degrade := base
+	degrade.SleepHoursPerNight = 6.0
+	degrade.NutritionLevel = POOR
+	degrade.ExerciseMinPerDay = 10
+
+	rDegrade := PredictHeightV2(degrade)
+	if rDegrade.PotentialHeightCM <= rDegrade.PredictedHeightCM {
+		t.Errorf("habitudes degradees : potentiel %.1f devrait depasser l estimation %.1f",
+			rDegrade.PotentialHeightCM, rDegrade.PredictedHeightCM)
+	}
+
+	// L ecart reste borne par la bande de calculateHealthFactor. Au-dela de
+	// six centimetres, c est que le plafond a saute — et on se remettrait a
+	// promettre ce que le produit refuse de promettre.
+	ecart := rDegrade.PotentialHeightCM - rDegrade.PredictedHeightCM
+	if ecart > 6.0 {
+		t.Errorf("ecart de %.1f cm : trop large pour un effet de mode de vie", ecart)
+	}
+
+	// Habitudes deja a la cible : rien a aller chercher, les deux valeurs se
+	// rejoignent. L ecran doit alors dire « tes habitudes ne te coutent
+	// rien », pas inventer un manque.
+	optimal := base
+	optimal.SleepHoursPerNight = 9.0
+	optimal.NutritionLevel = EXCELLENT
+	optimal.ExerciseMinPerDay = 60
+
+	rOptimal := PredictHeightV2(optimal)
+	if rOptimal.PotentialHeightCM != rOptimal.PredictedHeightCM {
+		t.Errorf("habitudes optimales : potentiel %.1f et estimation %.1f devraient etre egaux",
+			rOptimal.PotentialHeightCM, rOptimal.PredictedHeightCM)
+	}
+
+	// Le potentiel ne descend jamais sous l estimation, quel que soit le
+	// profil : ce serait afficher une perte a qui fait deja tout bien.
+	if rOptimal.PotentialHeightCM < rOptimal.PredictedHeightCM {
+		t.Error("le potentiel ne doit jamais passer sous l estimation")
+	}
+}

@@ -761,3 +761,65 @@
 .jauge-avertissement {
   margin-top: 14px;
 }
+
+/* ---------- Ce que les habitudes coutent ----------
+
+   Le chiffre qui justifie le plan. Il sort de potential_height_cm, calcule
+   par le meme modele que l estimation — pas d un argumentaire pose a cote.
+
+   Volontairement PAS sur la jauge : l ecart vaut 1 a 5 cm quand la croissance
+   restante en vaut 12 et la marge +/-5. Sur la meme echelle les deux reperes
+   se chevauchent. Deux questions, deux figures.
+   ------------------------------------------------------------------ */
+
+.cout-habitudes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 90, 31, 0.4);
+  background: rgba(255, 90, 31, 0.07);
+}
+
+.cout-chiffre {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin: 0;
+  line-height: 1;
+}
+
+.cout-valeur {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--funnel-accent, #ff5a1f);
+  font-variant-numeric: tabular-nums;
+}
+
+.cout-unite {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--funnel-muted, rgba(255, 255, 255, 0.7));
+}
+
+.cout-texte {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--funnel-muted, rgba(255, 255, 255, 0.75));
+  text-wrap: pretty;
+}
+
+.cout-texte strong {
+  color: var(--funnel-text, #fff);
+  font-weight: 700;
+}
+
+/* Habitudes deja a la cible : ni alerte ni chiffre, c est un constat
+   favorable. Le vert le dit sans une ligne de texte de plus. */
+.cout-habitudes--ok {
+  border-color: rgba(52, 199, 89, 0.3);
+  background: rgba(52, 199, 89, 0.07);
+}
