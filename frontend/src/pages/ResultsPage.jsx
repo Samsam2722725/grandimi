@@ -250,12 +250,12 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             )}
           </div>
 
-          <AnalyseChart
-            ageNow={predictionData.age}
-            ageFin={ageFin}
-            heightNow={tailleActuelle}
-            predicted={predicted_height_cm}
-          />
+          {/* Aucune donnée passée, et c'est le sujet : cette courbe est un
+              aperçu verrouillé, pas la trajectoire de l'utilisateur. Y
+              brancher ses chiffres reviendrait à livrer en image ce que les
+              cadenas juste au-dessus disent garder — on lirait la forme, la
+              position du point et l'écart restant sans avoir payé. */}
+          <AnalyseChart />
         </section>
 
         {/* Taller met ici « Plus grand que 🔒 de ton âge ». Le percentile
