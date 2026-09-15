@@ -75,6 +75,9 @@ const DELAI_AVANT_MESSAGE_MS = 4000
 function PaywallPage({ onBackHome }) {
   const [email] = useState(() => localStorage.getItem('userEmail') || '')
   const [loading, setLoading] = useState(false)
+  /* Passe à vrai quand la redirection dépasse DELAI_AVANT_MESSAGE_MS, pour
+     nommer l'attente sous le bouton au lieu de la laisser tourner. */
+  const [attenteLongue, setAttenteLongue] = useState(false)
   const [erreur, setErreur] = useState(null)
   const [lienParentVisible, setLienParentVisible] = useState(false)
   const [lienCopie, setLienCopie] = useState(false)
@@ -108,6 +111,70 @@ function PaywallPage({ onBackHome }) {
       annule = true
     }
   }, [])
+
+  /* Déclaré ICI, au-dessus du préchargement, et non plus après : il figure
+     dans le tableau de dépendances de l'effet ci-dessous, et ce tableau est
+     évalué PENDANT le rendu. Plus bas, la constante était encore en zone
+     morte temporelle — le composant levait une ReferenceError et l'écran de
+     paiement restait blanc. */
+  const emailValide = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+  /* ---------- Préparer la sortie pendant qu'il lit ----------
+
+     Mesuré : notre appel de checkout prend 450 ms, et l'ouverture de la page
+     Whop 400 à 700 ms de plus, auxquels s'ajoutent DNS et TLS vers un domaine
+     que le navigateur n'a jamais contacté. Tout cela se payait au clic.
+
+     Rien n'oblige à attendre le clic. L'URL de paiement est une adresse
+     déterministe (identifiant de plan + e-mail), pas une session à usage
+     unique : la demander à l'affichage ne réserve rien et ne coûte rien.
+     Pendant que l'utilisateur lit le prix, on obtient donc l'URL ET on ouvre
+     la connexion vers whop.com.
+
+     Résultat : au clic il ne reste que la redirection elle-même. On ne peut
+     pas accélérer la page de Whop — 925 ko reconstruits côté navigateur —
+     mais on peut faire en sorte qu'elle commence à se charger une seconde
+     plus tôt. */
+  const [urlPrechargee, setUrlPrechargee] = useState(null)
+
+  useEffect(() => {
+    const lien = document.createElement('link')
+    lien.rel = 'preconnect'
+    lien.href = 'https://whop.com'
+    lien.crossOrigin = ''
+    document.head.appendChild(lien)
+    return () => lien.remove()
+  }, [])
+
+  /* Relancé quand l'offre change : les deux formules n'ont pas la même URL,
+     et servir celle de l'offre non retenue ferait payer le mauvais montant.
+     `annule` empêche une réponse lente d'écraser un choix plus récent. */
+  useEffect(() => {
+    if (!emailValide) return undefined
+    let annule = false
+    setUrlPrechargee(null)
+
+    const utilisateur = (() => {
+      try {
+        return JSON.parse(localStorage.getItem('user') || '{}')
+      } catch {
+        return {}
+      }
+    })()
+
+    apiClient
+      .createCheckout({ email, userId: utilisateur.id, plan: planChoisi })
+      .then((res) => {
+        if (!annule && res.checkout_url) setUrlPrechargee(res.checkout_url)
+      })
+      .catch(() => {
+        /* Sans conséquence : le clic refera l'appel, simplement sans l'avance. */
+      })
+
+    return () => {
+      annule = true
+    }
+  }, [planChoisi, email, emailValide])
 
   /* Dénominateur du seul taux que le brief demande de suivre :
      « paywall affichée → checkout Whop ouvert ». Sans cet
@@ -150,8 +217,6 @@ function PaywallPage({ onBackHome }) {
     }
   }
 
-  const emailValide = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-
   /**
    * Redirige vers la page de paiement hébergée par Whop.
    *
@@ -189,11 +254,20 @@ function PaywallPage({ onBackHome }) {
 
     try {
       const utilisateur = JSON.parse(localStorage.getItem('user') || '{}')
-      const { checkout_url: checkoutURL } = await apiClient.createCheckout({
-        email,
-        userId: utilisateur.id,
-        plan: planChoisi,
-      })
+
+      /* L'URL a presque toujours été obtenue pendant la lecture de l'écran.
+         Quand c'est le cas, il ne reste rien entre le doigt et Whop. Sinon —
+         premier rendu très rapide, réseau capricieux, e-mail arrivé tard — on
+         la demande ici, exactement comme avant. */
+      const checkoutURL =
+        urlPrechargee ||
+        (
+          await apiClient.createCheckout({
+            email,
+            userId: utilisateur.id,
+            plan: planChoisi,
+          })
+        ).checkout_url
 
       if (!checkoutURL) {
         throw new Error("Le serveur n'a pas renvoyé d'URL de paiement.")
