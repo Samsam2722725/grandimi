@@ -4,13 +4,13 @@ package estimator
 //
 // Source : WHO Growth Reference 2007 for school-aged children and
 // adolescents, indicateur height-for-age, tableaux etendus (z-scores).
-// Telecharges depuis cdn.who.int le 2026-09-15 ; colonnes Month / L / M / S
-// reprises telles quelles. Librement redistribuables.
+// Colonnes Month / L / M / S reprises telles quelles. Librement
+// redistribuables.
 //
 // Les mois vont de 61 (5 ans 1 mois) a 228 (19 ans), soit 168 points par sexe.
 //
-// L VAUT 1 SUR TOUTE LA TABLE — verifie sur les 336 lignes au moment de la
-// generation. La formule generale de Cole
+// L VAUT 1 SUR TOUTE LA TABLE — verifie a chaque generation, la generation
+// echoue sinon. La formule generale de Cole
 //
 //     z = ((X/M)^L - 1) / (L*S)
 //
@@ -25,7 +25,7 @@ package estimator
 // Un garcon de 14 ans mesurant 185 cm s entendait donc repondre qu il avait
 // fini de grandir. Voir percentile.go pour l usage.
 //
-// Fichier GENERE. Ne pas editer a la main.
+// FICHIER GENERE par scripts/generer-table-oms.cjs. Ne pas editer a la main.
 
 type pointLMS struct {
 	mois int
