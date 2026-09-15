@@ -69,21 +69,21 @@
   inset: 0;
   display: flex;
   flex-direction: column;
-  /* PAS de hauteur ici, et surtout pas en dvh.
+  /* 100svh : la hauteur du viewport AVEC la barre d URL affichee, et elle ne
+     bouge jamais. C est le seul des trois candidats qui tienne :
 
-     `inset: 0` sur un element `fixed` le dimensionne deja au viewport
-     visible. Ajouter une hauteur ecrase le `bottom: 0` et reintroduit une
-     mesure — or `dvh` se remesure a chaque apparition ou disparition de la
-     barre d'URL du navigateur mobile.
+       vh   ment de ~60px et poussait le bouton sous le pli ;
+       dvh  se remesure quand la barre apparait — donc au milieu du geste de
+            remontee, qui est justement celui qui la fait apparaitre ;
+       rien du tout (essai precedent) laisse bottom: 0 se resoudre sur le GRAND
+            viewport chez iOS : le conteneur devient plus haut que l ecran, le
+            contenu tient dedans, plus rien ne deborde, donc plus rien ne
+            defile — et le doigt ne fait plus que tirer la couche entiere, qui
+            revient au relachement.
 
-     Or le geste de REMONTEE est precisement celui qui fait reapparaitre
-     cette barre. Le conteneur se redimensionnait donc au milieu du
-     glissement, le contenu se recalait, et le navigateur abandonnait le
-     geste : on descendait sans pouvoir remonter.
-
-     Le commentaire precedent disait qu'on avait choisi dvh parce que vh
-     mentait de ~60px et poussait le bouton sous le pli. Le vrai correctif de
-     ce probleme-la, c est de ne fixer aucune hauteur. */
+     svh est stable par definition. On perd la bande de 60px quand la barre se
+     retracte ; on gagne un defilement qui ne se recalcule jamais. */
+  height: 100svh;
   background: var(--funnel-bg);
   color: var(--funnel-text);
   font-family: var(--font-dm-sans);
@@ -147,11 +147,16 @@
 /* ---------- Corps ---------- */
 
 .funnel-body {
-  /* Le geste reste DANS cette zone. Sans cela, arrive en butee il se
-     propage au document, et le navigateur mobile l interprete comme un tirage
-     de page : barre d URL qui reapparait, rafraichissement par traction, et
-     glissement abandonne en cours de route. */
-  overscroll-behavior: contain;
+  /* Valeur `none` et non `contain`, et la nuance compte ici :
+
+       contain  empeche la PROPAGATION au document, mais laisse le rebond
+                elastique local — le contenu suit le doigt puis revient au
+                relachement. C est exactement le symptome decrit.
+       none     supprime les deux.
+
+     Sur une surface plein ecran de type application, le rebond n apporte
+     rien et brouille la lecture du geste. */
+  overscroll-behavior: none;
 
   flex: 1;
   min-height: 0;
@@ -583,6 +588,12 @@
 .interstitial {
   position: fixed;
   inset: 0;
+  /* Même hauteur stable que les autres surfaces plein écran — cf. le bloc
+     `.funnel` plus haut pour le détail. Cet écran ne déborde jamais, donc il
+     ne souffrait pas du défaut de défilement ; il la reprend quand même pour
+     que les quatre surfaces se comportent identiquement, et qu'on n'ait pas à
+     se demander un jour pourquoi celle-ci fait exception. */
+  height: 100svh;
   background: var(--funnel-bg);
   color: var(--funnel-text);
   font-family: var(--font-dm-sans);
