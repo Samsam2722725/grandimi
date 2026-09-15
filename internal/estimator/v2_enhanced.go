@@ -116,11 +116,34 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 		midParentTarget -= 6.5
 	}
 
-	// Les facteurs de mode de vie modulent la cible dans une fourchette
+	/* SECONDE ANCRE : le couloir de croissance de l adolescent lui-meme.
+
+	   La mi-parentale seule ne regarde QUE les parents. Elle ramenait donc
+	   tout le monde vers la moyenne familiale : le grand etait ecrase vers le
+	   bas — et s il depassait deja sa cible, on lui annoncait que sa
+	   croissance etait finie — pendant que le petit repartait avec une
+	   promesse intenable. Mesure en production avant ce correctif : un garcon
+	   de 14 ans mesurant 185 cm se voyait annoncer 185 cm, soit « 0 cm
+	   restant ».
+
+	   Le suivi de percentile (percentile.go) apporte l information qui
+	   manquait : est-il grand ou petit POUR SON AGE. Les deux methodes sont
+	   independantes — l une regarde l heredite, l autre la trajectoire deja
+	   parcourue — et se trompent rarement dans le meme sens. Leur moyenne
+	   simple est plus sure que chacune prise seule, et c est la lecture que
+	   fait un generaliste devant une courbe de croissance.
+
+	   Moyenne NON PONDEREE, faute de quoi il faudrait justifier le poids.
+	   Les deux methodes ont des dispersions du meme ordre sur cette tranche
+	   d age ; inventer un 60/40 serait une precision qu on n a pas. */
+	trajectoire := tailleAdulteParPercentile(req.Age, req.Sex, req.HeightCM)
+	base := (midParentTarget + trajectoire) / 2
+
+	// Les facteurs de mode de vie modulent la base dans une fourchette
 	// etroite (calculateHealthFactor reste borne autour de 1.0). Ils ne
 	// peuvent pas deplacer l estimation de plusieurs dizaines de cm.
 	healthMultiplier := calculateHealthFactor(req)
-	finalHeight := midParentTarget * healthMultiplier
+	finalHeight := base * healthMultiplier
 
 	/* SECOND SCENARIO : le meme adolescent, ses trois leviers a la cible.
 
@@ -146,7 +169,7 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	reqOptimal.NutritionLevel = EXCELLENT
 	reqOptimal.ExerciseMinPerDay = 60
 
-	potentialHeight := midParentTarget * calculateHealthFactor(reqOptimal)
+	potentialHeight := base * calculateHealthFactor(reqOptimal)
 	if potentialHeight < req.HeightCM {
 		potentialHeight = req.HeightCM
 	}
@@ -170,7 +193,15 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	// grand, cela rend seulement la prediction plus sure.
 	pubertyStage := describeGrowthPhase(req.Age, req.HeightVelocityCM)
 
+	/* Le calcul doit rester lisible de bout en bout : d ou on part, ce qu on
+	   moyenne, de combien on module, ou on arrive. Les deux ancres sont
+	   exposees separement pour qu un ecart entre elles se voie — quand elles
+	   divergent de plus de dix centimetres, c est le signe d une puberte en
+	   avance ou en retard, exactement le cas que ce modele ne sait pas
+	   trancher sans age osseux. */
 	resp.Factors["mid_parent_target"] = midParentTarget
+	resp.Factors["percentile_projection"] = trajectoire
+	resp.Factors["blended_base"] = base
 	resp.Factors["health_multiplier"] = healthMultiplier
 	resp.Factors["final_prediction"] = finalHeight
 
@@ -531,12 +562,22 @@ func calculateV2Confidence(
 		rangeMargin *= 1.2
 	}
 
-	// Borne annoncee sur le site : +/-3 a +/-6 cm selon l age.
-	if rangeMargin < 3.0 {
-		rangeMargin = 3.0
+	/* Bornes alignees sur ce que le site annonce : « +/-4 a +/-8 cm selon
+	   l age ». Le plancher etait a 3,0 et le plafond a 8,5 — le calcul
+	   pouvait donc sortir une fourchette PLUS SERREE que la precision
+	   revendiquee publiquement, ce qui est la forme discrete du meme defaut
+	   que tout le reste de ce correctif : promettre une exactitude qu on n a
+	   pas.
+
+	   4 cm reste optimiste pour un modele sans age osseux. C est defendable
+	   maintenant que deux ancres independantes se corrigent l une l autre ;
+	   ca ne l etait pas avec la mi-parentale seule, dont la dispersion
+	   avoisine 8,5 cm a elle toute seule. */
+	if rangeMargin < 4.0 {
+		rangeMargin = 4.0
 	}
-	if rangeMargin > 8.5 {
-		rangeMargin = 8.5
+	if rangeMargin > 8.0 {
+		rangeMargin = 8.0
 	}
 
 	confidenceLevel := "low"

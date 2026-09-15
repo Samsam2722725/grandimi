@@ -231,7 +231,10 @@ func TestPredictHeightV2_EnsembleAccuracy(t *testing.T) {
 
 	// Le calcul doit etre lisible : d ou part-on, de combien module-t-on,
 	// ou arrive-t-on. C est ce que la page promet d expliquer.
-	for _, cle := range []string{"mid_parent_target", "health_multiplier", "final_prediction"} {
+	for _, cle := range []string{
+		"mid_parent_target", "percentile_projection", "blended_base",
+		"health_multiplier", "final_prediction",
+	} {
 		if resp.Factors[cle] == 0 {
 			t.Errorf("facteur %q absent de la reponse", cle)
 		}
@@ -246,19 +249,28 @@ func TestPredictHeightV2_EnsembleAccuracy(t *testing.T) {
 		}
 	}
 
-	// Le resultat annonce est bien la cible modulee, pas autre chose.
-	attendu := resp.Factors["mid_parent_target"] * resp.Factors["health_multiplier"]
+	// La base est bien la moyenne des DEUX ancres, pas la mi-parentale seule.
+	moyenne := (resp.Factors["mid_parent_target"] + resp.Factors["percentile_projection"]) / 2
+	if math.Abs(resp.Factors["blended_base"]-moyenne) > 0.01 {
+		t.Errorf("blended_base = %.2f, attendu %.2f (mi-parentale %.1f, percentile %.1f)",
+			resp.Factors["blended_base"], moyenne,
+			resp.Factors["mid_parent_target"], resp.Factors["percentile_projection"])
+	}
+
+	// Le resultat annonce est bien cette base modulee, pas autre chose.
+	attendu := resp.Factors["blended_base"] * resp.Factors["health_multiplier"]
 	if attendu < req.HeightCM {
 		attendu = req.HeightCM // plancher : on ne retrecit pas
 	}
 	if math.Abs(resp.Factors["final_prediction"]-attendu) > 0.01 {
-		t.Errorf("final_prediction = %.2f, attendu %.2f (cible %.2f x facteur %.4f)",
+		t.Errorf("final_prediction = %.2f, attendu %.2f (base %.2f x facteur %.4f)",
 			resp.Factors["final_prediction"], attendu,
-			resp.Factors["mid_parent_target"], resp.Factors["health_multiplier"])
+			resp.Factors["blended_base"], resp.Factors["health_multiplier"])
 	}
 
-	t.Logf("cible %.1f cm x %.4f = %.1f cm",
-		resp.Factors["mid_parent_target"], resp.Factors["health_multiplier"],
+	t.Logf("mi-parentale %.1f / percentile %.1f -> base %.1f x %.4f = %.1f cm",
+		resp.Factors["mid_parent_target"], resp.Factors["percentile_projection"],
+		resp.Factors["blended_base"], resp.Factors["health_multiplier"],
 		resp.Factors["final_prediction"])
 }
 
