@@ -96,7 +96,7 @@ const SOURCES = [
    l'argument est justement l'honnêteté. */
 const CHIFFRES = [
   { valeur: '±4–8 cm', label: 'la marge réelle du modèle, affichée avec chaque résultat' },
-  { valeur: '0 €', label: 'pour le questionnaire et l’estimation, sans compte' },
+  { valeur: '2', label: 'méthodes croisées : mi-parentale et percentile OMS' },
   { valeur: '11', label: 'actions par jour, du lever au coucher' },
   { valeur: '30', label: 'jours de plan, renouvelé chaque mois d’abonnement' },
 ]
@@ -112,15 +112,15 @@ const ETAPES = [
   {
     num: '02',
     icone: Ruler,
-    titre: 'Tu vois ton estimation',
-    texte: 'Ta taille adulte estimée et les centimètres qu’il te reste, marge d’erreur affichée. Gratuit, sans compte.',
+    titre: 'On croise deux méthodes',
+    texte: 'Ta cible génétique d’un côté, ton couloir de croissance OMS de l’autre. La marge d’erreur est affichée, jamais masquée.',
     teinte: 'var(--color-peach-wash)',
   },
   {
     num: '03',
     icone: Sparkles,
-    titre: 'Tu suis ton plan — c’est la partie payante',
-    texte: '11 actions à cocher chaque jour, réparties du lever au coucher. Chacune dit pourquoi elle est là et d’où elle vient. Renouvelées chaque mois.',
+    titre: 'Tu débloques ton analyse et ton plan',
+    texte: 'Ta taille adulte, ce que tes habitudes te coûtent, et 11 actions à cocher chaque jour. Chacune dit pourquoi elle est là et d’où elle vient.',
     teinte: 'var(--color-sage-wash)',
   },
 ]
@@ -128,9 +128,9 @@ const ETAPES = [
 const DIFFERENCES = [
   {
     icone: Eye,
-    titre: 'Le résultat avant le paiement',
+    titre: 'La méthode, écrite en entier',
     texte:
-      'Tu vois ton estimation complète, gratuitement. Tu décides ensuite si le plan t’intéresse. Aucun résultat flouté, aucune surprise.',
+      'Taille mi-parentale croisée avec les tables de croissance de l’OMS. C’est écrit noir sur blanc, vérifiable, et ça ne se résume pas à un pourcentage de précision inventé.',
   },
   {
     icone: ShieldCheck,
@@ -160,7 +160,7 @@ const FAQ = [
   {
     question: 'Faut-il payer pour voir mon estimation ?',
     answer:
-      'Non. Le questionnaire et l’estimation de ta taille adulte sont gratuits et visibles immédiatement. Seul le plan de croissance personnalisé est payant : 4,99 €/mois ou 29,99 €/an (soit près de 50 % d’économie), avec un nouveau plan chaque mois, résiliable quand tu veux.',
+      'Oui. Le questionnaire est libre d’accès, mais ton résultat — ta taille adulte estimée, ce que tes habitudes te coûtent et ton plan quotidien — est réservé aux abonnés : 4,99 €/mois ou 29,99 €/an, résiliable quand tu veux. Tu vois le prix avant de répondre à la première question, et la méthode de calcul est expliquée en entier sur cette page.',
   },
   {
     question: 'Mes données sont-elles conservées ?',
@@ -312,7 +312,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   className="size-3.5 text-[color:var(--color-indigo-bloom)]"
                   aria-hidden="true"
                 />
-                Plan quotidien · estimation gratuite pour commencer
+                Analyse de croissance · plan quotidien
               </span>
 
               <h1
@@ -364,7 +364,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   onClick={() => demarrer('hero')}
                   className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
                 >
-                  Commencer — estimation gratuite
+                  Commencer mon analyse
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </button>
 
@@ -381,7 +381,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 className="rise mt-5 text-sm text-muted-foreground"
                 style={{ animationDelay: '320ms' }}
               >
-                Gratuit · résultat immédiat · aucune carte bancaire
+16 questions · 4 minutes · résiliable à tout moment
               </p>
 
 
@@ -621,51 +621,22 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-base text-[color:var(--text-secondary)]">
                 Pas de période d’essai qui se transforme en abonnement, pas de palier
-                surprise. Deux choses, deux statuts.
+                surprise. Une offre, deux rythmes de paiement.
               </p>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-2">
-              {/* Gratuit — volontairement à gauche et sans accent : c'est
-                  l'offre qu'on assume de laisser gagner si elle suffit. */}
-              <div className="flex flex-col rounded-[26px] border border-[color:var(--color-frost-gray)] p-8">
-                <h3 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
-                  L’estimation
-                </h3>
-                <p className="mt-4 flex items-baseline gap-2">
-                  <span className="font-display text-[44px] leading-none font-medium tracking-[-0.03em] text-ink">
-                    0 €
-                  </span>
-                  <span className="text-sm text-[color:var(--text-meta)]">pour toujours</span>
-                </p>
-                <ul className="mt-7 flex flex-col gap-3">
-                  {[
-                    'Ta taille adulte estimée, tout de suite',
-                    'La fourchette et la marge, affichées',
-                    'Ta courbe de croissance',
-                    'Sans compte, sans carte bancaire',
-                  ].map((item) => (
-                    <li key={item} className="flex gap-3 text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">
-                      <Check className="mt-0.5 size-4 shrink-0 text-[color:var(--text-meta)]" aria-hidden="true" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                {/* `mt-auto` sur l'enveloppe, pas sur le bouton : les deux
-                    cartes n'ont pas le même nombre de lignes, et sans ça le
-                    bouton de gauche flottait à mi-hauteur avec du vide dessous
-                    pendant que celui de droite touchait le bas. */}
-                <div className="mt-auto pt-8">
-                  <button
-                    type="button"
-                    onClick={() => demarrer('prix-mensuel')}
-                    className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full border border-ink px-6 text-base font-medium text-ink transition-colors hover:bg-ink/10"
-                  >
-                    Commencer
-                  </button>
-                </div>
-              </div>
+            {/* UNE seule carte depuis que le resultat est payant.
 
+                La grille comptait deux colonnes : « L estimation — 0 € pour
+                toujours » a gauche, le plan a droite. La colonne gratuite
+                decrivait une offre qui n existe plus ; la laisser aurait fait
+                de la page une promesse que le tunnel dement quinze ecrans plus
+                loin, ce qui est la definition d une pratique trompeuse.
+
+                Carte centree et bornee en largeur : une carte unique etiree sur
+                cinq colonnes se lit comme une grille a laquelle il manque un
+                element. */}
+            <div className="mx-auto grid w-full max-w-md gap-5">
               {/* Payant — bordure orange, comme la carte retenue de la paywall.
                   Le visiteur retrouve exactement le même objet plus tard. */}
               <div className="relative flex flex-col rounded-[26px] border border-[color:var(--color-coral-pulse)] bg-[color:var(--color-peach-wash)] p-8">
@@ -685,6 +656,12 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 </p>
                 <ul className="mt-7 flex flex-col gap-3">
                   {[
+                    /* L'estimation ouvre la liste depuis qu'elle est payante :
+                       c'est ce que le visiteur vient chercher, et l'omettre
+                       ferait payer un plan pour un chiffre qu'il croirait
+                       obtenir ailleurs. */
+                    'Ta taille adulte estimée, avec sa marge',
+                    'Ce que tes habitudes te coûtent, en centimètres',
                     'Quoi faire chaque jour, sur 30 jours',
                     'Sommeil, nutrition, exercices — détaillés',
                     'Un plan différent à chaque mois d’abonnement',
@@ -703,11 +680,11 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     onClick={() => demarrer('prix-annuel')}
                     className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-6 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
                   >
-                    Voir mon estimation d’abord
+                    Commencer mon analyse
                     <ArrowRight className="size-4" aria-hidden="true" />
                   </button>
                   <p className="mt-4 text-center text-[13px] text-[color:var(--text-meta)]">
-                    Le plan n’est proposé qu’après ton résultat gratuit.
+                    Résiliable en ligne, à tout moment.
                   </p>
                 </div>
               </div>
@@ -740,16 +717,16 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             className="mx-auto w-full max-w-6xl overflow-hidden rounded-[32px] bg-[color:var(--surface-dark)] px-6 py-16 text-center sm:px-12"
           >
             <h2 className="mx-auto max-w-3xl font-display text-[clamp(30px,5vw,52px)] leading-[1.06] font-medium tracking-[-0.03em] text-white">
-              Ton estimation t’attend.
+              Ton analyse t’attend.
               <br />
               <span className="text-[color:var(--color-coral-pulse)]">
-                Elle est gratuite.
+                La fenêtre, elle, se referme.
               </span>
             </h2>
 
             <p className="mx-auto mt-5 max-w-xl text-base text-white/70">
-              Ton estimation tout de suite et gratuitement, puis 11 actions par jour
-              pour aller chercher les centimètres qui te restent.
+              Ta taille adulte estimée, ce que tes habitudes te coûtent, et 11 actions
+              par jour pour aller chercher les centimètres qui te restent.
             </p>
 
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -842,7 +819,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           onClick={() => demarrer('barre-mobile')}
           className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-6 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
         >
-          Commencer — gratuit
+          Commencer
           <ArrowRight className="size-4" aria-hidden="true" />
         </button>
       </div>
@@ -861,10 +838,13 @@ const RESTANT = 12
 /**
  * Maquette affichée dans le hero.
  *
- * Elle montre le PLAN, pas seulement l'estimation : l'estimation est
- * gratuite, elle ne peut donc pas illustrer ce qu'on vend. Le visiteur
- * doit voir en une image ce qu'il obtient en payant — la liste de ce
- * qu'il fait aujourd'hui, et sa série de jours tenus.
+ * Les chiffres sont ceux d'un EXEMPLE — « Théo, 14 ans », écrit dans la
+ * carte. Ce ne sont pas ceux du visiteur, qui n'a encore rien saisi.
+ *
+ * Elle montre l'estimation ET le plan, depuis que les deux sont derrière le
+ * paiement. C'est désormais le seul endroit du site où un visiteur voit à
+ * quoi ressemble un résultat avant d'avoir payé : ni la page ni le tunnel ne
+ * lui montreront le sien.
  */
 function ApercuResultat() {
   return (
@@ -884,8 +864,10 @@ function ApercuResultat() {
           L'ancienne version empilait le grand chiffre, la fourchette en
           texte ET une barre d'échelle : trois façons de dire la même
           chose, sur la première image que voit le visiteur. */}
-      {/* Une ligne, pas un bloc : l’estimation est gratuite, elle situe
-          l’enjeu mais ne peut pas être la vitrine de ce qu’on vend. */}
+      {/* Une ligne, pas un bloc. L’estimation fait partie de ce qu’on vend
+          depuis qu’elle est passée derrière le paiement, mais elle reste le
+          décor du plan : c’est la liste d’actions dessous qui montre à quoi
+          ressemble une journée d’abonné. */}
       <div className="rounded-[16px] bg-[color:var(--color-cream)] px-4 py-3">
         <p className="flex items-baseline gap-2 text-sm text-[color:var(--text-secondary)]">
           <span className="font-display text-[22px] leading-none font-medium tracking-[-0.03em] text-ink">
@@ -901,10 +883,10 @@ function ApercuResultat() {
       {/* ====================================================
           CE QUI EST RÉELLEMENT VENDU
           ====================================================
-          L'estimation est gratuite : elle ne peut pas être l'aperçu du
-          produit. Ce bloc montre donc la todo du jour — l'écran que
-          l'abonné ouvre chaque matin, et la seule chose qui justifie de
-          payer. Le visiteur voit d'un coup d'œil ce qu'il achète.
+          Ce bloc montre la todo du jour — l'écran que l'abonné ouvre chaque
+          matin. L'estimation seule ne suffirait pas à illustrer un
+          abonnement : elle se lit en trois secondes, alors que ce qui est
+          facturé tous les mois, c'est cette liste-là.
 
           Les trois cartes précédentes annonçaient « Percentile : 68e »
           (le produit ne calcule aucun percentile), « Sommeil : 8 h 40 »

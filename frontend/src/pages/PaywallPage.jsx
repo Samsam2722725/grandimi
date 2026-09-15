@@ -224,7 +224,7 @@ function PaywallPage({ onBackHome }) {
       <main className="paywall-scroll">
         <h1 className="paywall-title">Débloquer ton plan complet</h1>
         <p className="paywall-subtitle">
-          Ton estimation reste gratuite, pour toujours. Seul le plan de croissance est payant.
+          Ta taille adulte, ce que tes habitudes te coûtent, et tes 11 actions par jour.
         </p>
 
         {/* Les deux formules CÔTE À CÔTE, avant tout argument.
@@ -410,10 +410,11 @@ function PaywallPage({ onBackHome }) {
             </p>
           </details>
           <details>
-            <summary>L’estimation est-elle vraiment gratuite ?</summary>
+            <summary>Qu’est-ce que je débloque exactement ?</summary>
             <p>
-              Oui. Le questionnaire et ton estimation de taille adulte le restent. Seul
-              le plan personnalisé (mensuel ou annuel) est payant.
+              Ta taille adulte estimée avec sa marge d’erreur, ce que tes habitudes
+              actuelles te coûtent en centimètres, ton frein principal nommé, et les
+              11 actions quotidiennes de ton plan — renouvelé chaque mois d’abonnement.
             </p>
           </details>
           <details>

@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react'
-import { ArrowLeft, Lock, Share2 } from 'lucide-react'
+import { ArrowLeft, Lock } from 'lucide-react'
 
 import { AnalyseChart } from '@/components/ui/analyse-chart'
 import { Confetti } from '@/components/ui/confetti'
-import { ageFinCroissance } from '@/components/ui/growth-chart'
 
 import Spinner from '../components/Spinner'
-import { genererCarteResultat, partagerCarte } from '../lib/share-card'
-import { resultatPartage, resultatVu } from '../lib/analytics'
+import { resultatVu } from '../lib/analytics'
 import '../styles/funnel.css'
 import '../styles/results-page.css'
 import '../styles/analyse-page.css'
@@ -42,7 +40,6 @@ const cm = (valeur) => Math.round(Number(valeur))
 
 function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
   const [limitesVisibles, setLimitesVisibles] = useState(false)
-  const [etatPartage, setEtatPartage] = useState('pret')
 
   /* Le résultat est le pivot du tunnel : c'est ici que se décide la
      suite (payer, partager, partir). Il doit être compté séparément
@@ -61,38 +58,18 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
     return <Spinner size="page" label="Chargement de tes résultats..." />
   }
 
-  const { predicted_height_cm, confidence_range } = predictionData
+  /* La prediction elle-meme n est plus lue sur cet ecran : la taille adulte
+     est desormais sous cadenas. Le composant ne se sert que de ce que
+     l utilisateur a saisi lui-meme — sa taille du jour et ses trois leviers —
+     plus la garde de chargement ci-dessus.
 
-  /* La marge se lit sur la LARGEUR de l'intervalle, pas sur l'écart au
-     maximum. L'ancien calcul (max - estimation) devenait négatif dès que
-     l'estimation sortait de sa fourchette, et affichait littéralement
-     « ±-39.4 cm » à l'utilisateur. */
-  const largeur = Math.max(0, confidence_range.max - confidence_range.min)
-  const margeCm = Math.round(largeur / 2)
+     Le chiffre reste dans predictionData et part au paiement ; il est affiche
+     apres, sur le plan. */
 
   /* Le repli sur 170 cm fabriquait un chiffre : le champ lu n'existait pas,
      si bien qu'un adolescent de 183 cm se voyait annoncer « +16,2 cm » de
      croissance restante. Sans la taille saisie, on n'affiche rien. */
   const tailleActuelle = predictionData.current_height_cm
-  const margeRestante = tailleActuelle ? predicted_height_cm - tailleActuelle : 0
-
-  /* On décide sur le chiffre AFFICHÉ, pas sur la valeur brute.
-
-     La condition testait `margeRestante > 0` pendant que l'affichage
-     arrondissait au centimètre : un écart de 0,1 cm passait donc le test
-     et s'écrivait « +0 cm ». Vérifié en production le 13/09/2026 — fille
-     de 15 ans, 165 cm, parents de 176 et 164 : estimation 165,1 cm,
-     écart 0,1 cm, écran « Il te reste encore +0 cm ».
-
-     Ça tombe surtout sur les filles : elles finissent de grandir vers
-     16 ans, donc leur estimation est souvent à quelques millimètres de
-     leur taille du jour. Le défaut n'est pas dans le calcul, il est
-     dans le seuil.
-
-     Le même nombre part vers l'image de partage, qui arrondissait au
-     dixième et annonçait « +0,1 cm » : deux écritures différentes du
-     même non-sens. Une seule décision, ici, pour les deux. */
-  const margeAffichee = cm(margeRestante)
 
   /* Les trois leviers, d'apres SES réponses. Un champ vide ou nul veut
      dire « pas renseigné » et ne compte pas.
@@ -146,9 +123,9 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      dont un inventé. */
   const pointsACorriger = leviers.filter((levier) => levier.sousCible).length
 
-  /* Le potentiel optimisé (potential_height_cm) n''est plus affiché en clair
-     sur cet écran : il est passé derrière le cadenas « Optimise jusqu''à 🔒 cm »,
-     qui est précisément ce que l''abonnement ouvre. Le chiffre existe côté
+  /* Le potentiel optimisé (potential_height_cm) n’est plus affiché en clair
+     sur cet écran : il est passé derrière le cadenas « Optimise jusqu’à 🔒 cm »,
+     qui est précisément ce que l’abonnement ouvre. Le chiffre existe côté
      serveur, il est donc livrable après paiement — un cadenas ne doit jamais
      promettre une valeur que le produit ne sait pas produire. */
 
@@ -156,34 +133,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      informer : « faible » ne dit pas de combien on peut se tromper, alors
      que le « ± X cm » juste à côté le dit exactement, en chiffres. Garder
      les deux revenait à répéter la même idée, la version vague en plus. */
-
-  const ageFin = ageFinCroissance(predictionData.age, predictionData.sex)
-
-  const partager = async () => {
-    setEtatPartage('generation')
-    try {
-      const image = await genererCarteResultat({
-        predicted: predicted_height_cm,
-        rangeMin: confidence_range.min,
-        rangeMax: confidence_range.max,
-        margeCm,
-        croissanceRestante: margeAffichee,
-        ageFin,
-      })
-      const issue = await partagerCarte(
-        image,
-        `Ma taille adulte estimée : ${fr(predicted_height_cm)} cm (± ${fr(margeCm)} cm).`,
-      )
-      // Partage natif ou téléchargement : deux gestes différents, le
-      // second n'atteint personne tant que le fichier n'est pas envoyé.
-      resultatPartage(issue)
-      setEtatPartage(issue === 'telechargement' ? 'telecharge' : 'pret')
-    } catch {
-      // Canvas indisponible, mémoire, navigateur exotique : on le dit, on ne
-      // laisse pas un bouton qui ne répond à rien.
-      setEtatPartage('erreur')
-    }
-  }
 
   return (
     <div className="night results analyse">
@@ -205,25 +154,30 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           Analyse prête <span aria-hidden="true">👀</span>
         </h1>
 
-        {/* Deux cartes, la seconde accentuée.
+        {/* La taille adulte passe derriere le cadenas.
 
-            Chez Taller, cette seconde carte est verrouillée : la taille adulte
-            elle-même est le produit qu'on achète. Ici elle est LISIBLE, et ce
-            n'est pas un oubli — la page d'accueil promet quatre fois que
-            l'estimation est gratuite et qu'aucun résultat n'est flouté. La
-            verrouiller demanderait de réécrire ces quatre promesses le même
-            jour.
+            Decision du client : plus rien de gratuit sur le site. Les neuf
+            promesses de gratuite de la page d'accueil ont ete reecrites dans
+            le meme commit — verrouiller le resultat en laissant le site
+            annoncer qu'il est offert serait une pratique commerciale
+            trompeuse, pas un oubli de copie.
 
-            Ce qui passe derrière le cadenas est ce qui est réellement payant :
-            le potentiel optimisé, juste en dessous. */}
+            « Taille actuelle » reste EN CLAIR, et ce n'est pas une
+            inconsequence : c'est le nombre que l'utilisateur a saisi lui-meme
+            six ecrans plus tot. Le masquer ne protegerait rien — il le
+            connait — et donnerait un ecran entierement cadenasse, qui ne
+            donne envie de rien. Il sert de point d'appui : c'est parce qu'il
+            voit d'ou il part qu'il a envie de savoir ou il arrive. */}
         <div className="analyse-duo">
           <div className="analyse-case">
             <span className="analyse-case-label">Taille actuelle</span>
             <span className="analyse-case-valeur">{cm(tailleActuelle)} cm</span>
           </div>
           <div className="analyse-case analyse-case--accent">
-            <span className="analyse-case-label">Taille adulte estimée</span>
-            <span className="analyse-case-valeur">{cm(predicted_height_cm)} cm</span>
+            <span className="analyse-case-label">Ta taille adulte</span>
+            <span className="analyse-case-valeur">
+              <Lock size={22} aria-hidden="true" />
+            </span>
           </div>
         </div>
 
@@ -258,12 +212,15 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           <AnalyseChart />
         </section>
 
-        {/* Taller met ici « Plus grand que 🔒 de ton âge ». Le percentile
-            demande de vraies tables de référence (OMS, taille-pour-âge), que
-            ce produit n'a pas : promettre derrière un cadenas un chiffre qu'on
-            ne saura pas livrer après paiement est la seule chose qu'un
-            cadenas ne doit jamais faire. La ligne garde sa forme, avec ce que
-            le plan produit réellement. */}
+        {/* Cette ligne portait « Ton frein principal » parce que le percentile
+            de Taller (« Plus grand que X % de ton âge ») demandait des tables
+            de référence que le produit n'avait pas — et qu'un cadenas ne doit
+            jamais promettre un chiffre qu'on ne saura pas livrer.
+
+            Ces tables existent depuis l'import OMS (who_hfa_table.go) : le
+            percentile est desormais calculable et donc livrable. La ligne
+            pourra basculer dessus quand l'API le renverra ; en attendant elle
+            garde le frein principal, qui est livre par le plan. */}
         <div className="analyse-ligne analyse-ligne--verrou">
           <span>Ton frein principal</span>
           <Lock size={17} aria-hidden="true" />
@@ -277,30 +234,22 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
               <Lock size={20} aria-hidden="true" />
             </span>
           </div>
-          <div className="analyse-case">
-            <span className="analyse-case-label">Croissance finie</span>
-            <span className="analyse-case-valeur">{fr(ageFin)} ans</span>
+          <div className="analyse-case analyse-case--verrou">
+            <span className="analyse-case-label">Fin de ta croissance</span>
+            <span className="analyse-case-valeur">
+              <Lock size={20} aria-hidden="true" />
+            </span>
           </div>
         </div>
 
-        <section className="results-share">
-          <button
-            type="button"
-            className="results-share-button"
-            onClick={partager}
-            disabled={etatPartage === 'generation'}
-          >
-            <Share2 size={18} aria-hidden="true" />
-            {etatPartage === 'generation' ? 'Préparation…' : 'Partager mon résultat'}
-          </button>
-          <p className="results-share-note" role="status">
-            {etatPartage === 'telecharge'
-              ? 'Image enregistrée dans tes téléchargements.'
-              : etatPartage === 'erreur'
-                ? 'L’image n’a pas pu être créée sur cet appareil.'
-                : 'Une image prête pour tes stories. La marge d’erreur part avec.'}
-          </p>
-        </section>
+        {/* Le partage a disparu de cet écran. Il produisait une image portant
+            la taille adulte estimée — c'est-à-dire exactement ce que la carte
+            du haut vient de verrouiller. Un bouton qui contourne le paywall
+            deux écrans plus bas n'est pas un oubli, c'est une fuite.
+
+            La fonction reste entière dans lib/share-card.js : sa place est
+            désormais APRÈS le paiement, sur le plan, où l'utilisateur a le
+            droit de partager le chiffre qu'il a acheté. */}
 
         {/* La mention reste. Elle n'est sur aucune des captures de référence,
             mais elle est due : le produit s'adresse à des mineurs et touche à
