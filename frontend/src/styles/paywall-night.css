@@ -16,7 +16,21 @@
 .paywall {
   position: fixed;
   inset: 0;
-  height: 100dvh;
+  /* PAS de hauteur ici, et surtout pas en dvh.
+
+     `inset: 0` sur un element `fixed` le dimensionne deja au viewport
+     visible. Ajouter une hauteur ecrase le `bottom: 0` et reintroduit une
+     mesure — or `dvh` se remesure a chaque apparition ou disparition de la
+     barre d'URL du navigateur mobile.
+
+     Or le geste de REMONTEE est precisement celui qui fait reapparaitre
+     cette barre. Le conteneur se redimensionnait donc au milieu du
+     glissement, le contenu se recalait, et le navigateur abandonnait le
+     geste : on descendait sans pouvoir remonter.
+
+     Le commentaire precedent disait qu'on avait choisi dvh parce que vh
+     mentait de ~60px et poussait le bouton sous le pli. Le vrai correctif de
+     ce probleme-la, c est de ne fixer aucune hauteur. */
   display: flex;
   flex-direction: column;
   background: var(--funnel-bg);
@@ -30,6 +44,12 @@
 }
 
 .paywall .paywall-scroll {
+  /* Le geste reste DANS cette zone. Sans cela, arrive en butee il se
+     propage au document, et le navigateur mobile l interprete comme un tirage
+     de page : barre d URL qui reapparait, rafraichissement par traction, et
+     glissement abandonne en cours de route. */
+  overscroll-behavior: contain;
+
   flex: 1;
   min-height: 0;
   overflow-y: auto;
