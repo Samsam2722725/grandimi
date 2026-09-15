@@ -523,7 +523,19 @@
    secondes : sur l'offre gratuite Render l'instance s'endort, et un
    bouton qui tourne en silence pendant une minute se lit comme un
    bouton casse. */
-.paywall .parent-attente {
+/* Message d attente sous le bouton, partage par les DEUX ecrans de paiement :
+   parent-attente habille celui du parent, paywall-attente celui de l enfant.
+   Meme role, meme rendu, une seule regle a maintenir.
+
+   Il ne s affiche qu apres quatre secondes. Notre appel au serveur prend
+   450 ms mesures ; ce qui suit ne nous appartient pas — le reveil eventuel de
+   l instance Render sur l offre gratuite, puis la page Whop qui fait 925 ko et
+   ne contient aucun prix dans son HTML, donc se reconstruit entierement cote
+   navigateur. C est cette derniere etape que l utilisateur voit en rectangles
+   gris, et elle est hors de notre portee : tout ce qu on peut faire, c est la
+   nommer. */
+.paywall .parent-attente,
+.paywall .paywall-attente {
   margin: 0;
   font-size: 13px;
   line-height: 1.5;

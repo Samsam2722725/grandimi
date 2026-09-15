@@ -66,24 +66,11 @@ const VISUELS_OFFRE = [
 // justifie "économisez".
 const COUT_DOUZE_MENSUALITES = 12 * PLANS_PAR_DEFAUT.monthly.price_eur
 
+/* Au-delà de ce délai, on nomme l'attente au lieu de la laisser tourner.
+   Même valeur que ParentPage : les deux écrans mènent au même Whop. */
+const DELAI_AVANT_MESSAGE_MS = 4000
 
 
-/* L'écran du matin, tel qu'un abonné l'ouvre. Les deux premières lignes
-   sont les vraies actions du plan (internal/planner/monthly_plan.go) —
-   pas un échantillon flatteur : les deux premières de la journée, dans
-   l'ordre. Les suivantes sont sous cadenas.
-
-   Les horaires ne sont pas affichés ici : ceux du plan réel sont calés
-   sur les heures de lever et de coucher demandées APRÈS le paiement
-   (PlanSetupPage). En inventer sur cet écran serait promettre un
-   ajustement qu'on n'a pas encore les moyens de faire. */
-const APERCU_ACTIONS = [
-  { moment: 'Au réveil', texte: 'Suspension à la barre : 5 × 15 s', verrouille: false },
-  { moment: 'Petit-déjeuner', texte: '25 g de protéines avant de partir', verrouille: false },
-  { moment: 'Journée', texte: '', verrouille: true },
-  { moment: 'Le soir', texte: '', verrouille: true },
-  { moment: 'Au coucher', texte: '', verrouille: true },
-]
 
 function PaywallPage({ onBackHome }) {
   const [email] = useState(() => localStorage.getItem('userEmail') || '')
@@ -181,6 +168,25 @@ function PaywallPage({ onBackHome }) {
     setErreur(null)
     setLoading(true)
 
+    /* Passé quatre secondes, on NOMME l'attente au lieu de la laisser
+       tourner. ParentPage le fait déjà ; cet écran-ci ne le faisait pas.
+
+       Mesuré : notre appel prend 450 ms à instance chaude. Ce n'est donc
+       pas lui le sujet. Ce sont les deux étapes qui suivent, et qu'on ne
+       contrôle ni l'une ni l'autre — le réveil éventuel de l'instance
+       Render sur l'offre gratuite, puis la page de paiement de Whop, qui
+       fait 925 ko et n'a aucun prix dans son HTML : tout y est reconstruit
+       côté navigateur, d'où les rectangles gris.
+
+       Un bouton qui tourne en silence pendant ce temps-là se lit comme un
+       bouton cassé. Une phrase qui dit où l'on va se lit comme une
+       redirection. */
+    const minuterie = setTimeout(() => setAttenteLongue(true), DELAI_AVANT_MESSAGE_MS)
+    const finir = () => {
+      clearTimeout(minuterie)
+      setAttenteLongue(false)
+    }
+
     try {
       const utilisateur = JSON.parse(localStorage.getItem('user') || '{}')
       const { checkout_url: checkoutURL } = await apiClient.createCheckout({
@@ -200,6 +206,7 @@ function PaywallPage({ onBackHome }) {
       checkoutOuvert(planChoisi)
       window.location.href = checkoutURL
     } catch (err) {
+      finir()
       checkoutEchoue(planChoisi, err.message)
       setErreur(
         err.message || "Impossible d'ouvrir la page de paiement. Réessaie dans un instant.",
@@ -291,52 +298,14 @@ function PaywallPage({ onBackHome }) {
           })}
         </section>
 
-        {/* ---------- Montrer le produit, pas le décrire ----------
+        {/* L apercu du plan du matin (« TON PLAN D AUJOURD HUI », cinq lignes
+            dont trois sous cadenas) est retire a la demande du client.
 
-            La page listait quatre avantages en texte, puis trois
-            pastilles emoji. Aucun des deux ne dit à quoi ressemble la
-            chose qu'on achète — et sur un abonnement à un écran
-            quotidien, c'est précisément la seule question.
-
-            Ce bloc montre donc l'écran du matin, avec les actions
-            réelles du plan (internal/planner/monthly_plan.go, les mêmes
-            que sur la page d'accueil). Deux sont lisibles, le reste est
-            sous cadenas : le visiteur juge la qualité sur celles qu'il
-            voit et achète celles qu'il ne voit pas.
-
-            Les deux lignes en clair ne sont pas un échantillon choisi
-            pour impressionner — ce sont les deux premières de la
-            journée, dans l'ordre où le plan les donne. */}
+            Ce que le visiteur voit maintenant entre le prix et le bouton : la
+            phrase d annonce, puis les trois visuels du carrousel. C est la
+            seule demonstration qui reste, et elle porte desormais seule le
+            travail de montrer ce qu on achete. */}
         <p className="paywall-voici">Voici ce que tu obtiens :</p>
-
-        <section className="paywall-apercu" aria-label="Aperçu du plan quotidien">
-          <div className="apercu-tete">
-            <span className="apercu-titre">Ton plan d’aujourd’hui</span>
-            <span className="apercu-compte">0 / 11 faites</span>
-          </div>
-
-          <ul className="apercu-liste">
-            {APERCU_ACTIONS.map((action) => (
-              <li
-                key={action.texte}
-                className={`apercu-ligne ${action.verrouille ? 'apercu-ligne--verrouille' : ''}`}
-              >
-                <span className="apercu-case" aria-hidden="true">
-                  {action.verrouille ? <Lock size={12} /> : null}
-                </span>
-                <span className="apercu-moment">{action.moment}</span>
-                <span className="apercu-texte">
-                  {action.verrouille ? '—' : action.texte}
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <p className="apercu-pied">
-            <strong>11 actions par jour</strong>, renouvelées chaque mois. Chacune dit
-            pourquoi elle est là et d’où elle vient.
-          </p>
-        </section>
 
         {/* La liste à coches « ce que tu auras » est retirée à la demande du
             client. Elle répétait en texte ce que l'aperçu du plan montre
@@ -451,6 +420,16 @@ function PaywallPage({ onBackHome }) {
             }`
           )}
         </button>
+
+        {/* `role="status"` et non un paragraphe muet : le message apparaît
+            plusieurs secondes après le clic, donc un lecteur d'écran doit
+            l'annoncer sans que l'utilisateur ait à aller le chercher. */}
+        {attenteLongue && (
+          <p className="paywall-attente" role="status">
+            On ouvre la page de paiement sécurisée de Whop. Ça peut prendre
+            quelques secondes — ne ferme pas.
+          </p>
+        )}
 
         {/* Deuxième action de plein droit, pas un lien replié au milieu de la
             page. L'utilisateur type a 14 ans et pas de carte bancaire : lui
