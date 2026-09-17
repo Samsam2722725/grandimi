@@ -218,7 +218,7 @@ export async function genererCarteResultat({
 
   ctx.fillStyle = ACCENT
   ctx.font = `700 40px ${POLICE}`
-  ctx.fillText('Fais la tienne, gratuitement', marge, H - 150)
+  ctx.fillText('Fais la tienne', marge, H - 150)
 
   ctx.fillStyle = BLANC
   ctx.font = `600 44px ${POLICE}`

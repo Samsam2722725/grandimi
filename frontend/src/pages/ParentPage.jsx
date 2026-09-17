@@ -161,14 +161,20 @@ function ParentPage({ childUserId }) {
 
         <section className="paywall-pillars" aria-label="Ce que vous payez">
           <h2 className="paywall-section-title">Ce que vous payez</h2>
+          {/* Cette page annonçait « cette partie est et reste gratuite » à
+              propos de l'estimation. Ce n'est plus vrai : la taille adulte
+              est passée sous cadenas, et c'est l'abonnement qui l'ouvre.
+              Laisser la phrase, c'était promettre au payeur un produit qui
+              n'existe plus sous cette forme. */}
           <p className="parent-texte">
-            Votre enfant a répondu à un questionnaire et reçu <strong>gratuitement</strong>{' '}
-            une estimation de sa taille adulte, avec sa marge d’erreur. Cette partie est et
-            reste gratuite.
+            Votre enfant a répondu à un questionnaire — âge, taille, poids, la vôtre et
+            celle de l’autre parent, puis son sommeil, son alimentation et son activité.
+            Le calcul est fait, son analyse l’attend.
           </p>
           <p className="parent-texte">
-            Ce qui est payant, c’est la suite : un accompagnement quotidien — sommeil,
-            alimentation, activité physique — renouvelé chaque mois selon sa progression.
+            L’abonnement lui ouvre <strong>son estimation de taille adulte</strong> avec sa
+            marge d’erreur, et l’accompagnement qui va avec : sommeil, alimentation,
+            activité physique, renouvelé chaque mois selon sa progression.
           </p>
 
           <ul className="paywall-features">
