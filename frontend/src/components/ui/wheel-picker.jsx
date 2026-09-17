@@ -32,6 +32,22 @@ export function WheelPicker({
   visibleCount = 5,
   className,
 }) {
+  /* LE PLUS GRAND EN HAUT.
+
+     La liste allait du plus petit au plus grand, de haut en bas. Pour
+     annoncer une taille plus grande, il fallait donc descendre — l'inverse
+     du geste qu'on fait devant une toise, où l'on monte. Le composant sert
+     surtout à saisir des tailles (la sienne, celle de chaque parent), et sur
+     une mesure verticale le sens de lecture n'est pas neutre.
+
+     L'ordre décroissant corrige aussi un vrai défaut d'accessibilité. Le
+     conteneur s'annonce `spinbutton`, où la flèche du haut DOIT augmenter la
+     valeur ; elle la diminuait, puisqu'elle recule d'un cran dans une liste
+     croissante. Le même changement remet les deux dans le bon sens.
+
+     On construit toujours en croissant avant de retourner : c'est cette
+     boucle-là qui neutralise la dérive en virgule flottante des pas
+     fractionnaires, et l'inverser rouvrirait le problème. */
   const options = useMemo(() => {
     const out = []
     // Arrondi à 4 décimales : les pas fractionnaires (0.5, 0.1) accumulent
@@ -39,6 +55,7 @@ export function WheelPicker({
     for (let v = min; v <= max + 1e-9; v += step) {
       out.push(Math.round(v * 10000) / 10000)
     }
+    out.reverse()
     return out
   }, [min, max, step])
 
