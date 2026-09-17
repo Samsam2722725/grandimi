@@ -82,6 +82,12 @@ export function WheelPicker({
 
   const scrollerRef = useRef(null)
   const emittedRef = useRef(null)
+  /* Vrai pendant qu'on place la molette nous-mêmes : le défilement
+     déclenché par ce placement ne doit pas être pris pour un geste. */
+  const positionnementRef = useRef(false)
+  /* Passe à vrai au premier geste réel. Tant qu'il est faux, la molette
+     n'appartient encore à personne et on peut la replacer librement. */
+  const gesteRef = useRef(false)
   const [activeIndex, setActiveIndex] = useState(() => nearestIndex(value))
 
   const height = itemHeight * visibleCount
@@ -99,13 +105,95 @@ export function WheelPicker({
   /* Positionnement initial, et resynchronisation si la valeur change depuis
      l'extérieur (retour arrière, changement d'unité). On ignore le cas où la
      valeur vient de notre propre défilement, sinon la molette se bat avec le
-     doigt de l'utilisateur. */
+     doigt de l'utilisateur.
+
+     LA COURSE QUI FAISAIT BASCULER LA VALEUR SUR LE MINIMUM
+
+     `scrollTop` ne peut pas dépasser la hauteur réellement disposée. Tant que
+     le conteneur n'a pas la sienne — première frame, police encore en
+     chargement, onglet restauré en arrière-plan — l'affectation est ramenée à
+     zéro en silence. L'événement de défilement qui suit lit alors l'index 0 et
+     le COMMET : le questionnaire s'ouvrait sur « 8 ans » au lieu de « 14 »,
+     et la valeur partait vraiment à 8, pas seulement l'affichage.
+
+     Constaté sur capture le 17/09/2026. Le défaut est intermittent par
+     nature : au même moment, la même page se plaçait correctement sur un
+     autre poste.
+
+     Deux garde-fous :
+       - le défilement est ignoré pendant qu'on se place, donc une position
+         transitoire ne peut plus écrire de valeur ;
+       - on vérifie que la position a PRIS, et on réessaie à la frame suivante
+         sinon. Poser la valeur et espérer ne suffisait pas. */
   useEffect(() => {
     if (emittedRef.current === value) return
+
     const index = nearestIndex(value)
     setActiveIndex(index)
-    scrollToIndex(index, 'auto')
-  }, [value, nearestIndex, scrollToIndex])
+
+    positionnementRef.current = true
+    let annule = false
+    let essais = 0
+
+    const placer = () => {
+      if (annule) return
+      const el = scrollerRef.current
+      if (!el) {
+        positionnementRef.current = false
+        return
+      }
+
+      const cible = index * itemHeight
+      el.scrollTop = cible
+      essais += 1
+
+      /* Dix frames, soit un sixième de seconde : au-delà, ce n'est plus une
+         disposition en retard, et insister ferait tourner la boucle pour
+         rien. */
+      if (Math.abs(el.scrollTop - cible) > 1 && essais < 10) {
+        requestAnimationFrame(placer)
+        return
+      }
+      positionnementRef.current = false
+    }
+
+    requestAnimationFrame(placer)
+
+    return () => {
+      annule = true
+      positionnementRef.current = false
+    }
+  }, [value, nearestIndex, itemHeight])
+
+  /* La disposition peut arriver APRÈS le placement initial.
+
+     Le retour de la police, un onglet restauré en arrière-plan, une
+     fenêtre redimensionnée : le conteneur prend sa hauteur plus tard, et
+     le `scrollTop` posé avant ne valait rien — il avait été ramené à
+     zéro. Réessayer pendant dix frames ne suffit pas quand le retard
+     dépasse ce délai ; mesuré en local, la molette affichait encore le
+     minimum une seconde et demie après l'ouverture de l'écran.
+
+     On écoute donc le moment où la taille change vraiment, plutôt que de
+     parier sur un délai. Le replacement cesse dès le premier geste :
+     repositionner sous le doigt de quelqu'un serait pire que le défaut
+     qu'on corrige. */
+  useEffect(() => {
+    const el = scrollerRef.current
+    if (!el || typeof ResizeObserver === 'undefined') return undefined
+
+    const observateur = new ResizeObserver(() => {
+      if (gesteRef.current) return
+      positionnementRef.current = true
+      el.scrollTop = activeIndex * itemHeight
+      requestAnimationFrame(() => {
+        positionnementRef.current = false
+      })
+    })
+
+    observateur.observe(el)
+    return () => observateur.disconnect()
+  }, [activeIndex, itemHeight])
 
   const commit = useCallback(
     (index) => {
@@ -125,6 +213,8 @@ export function WheelPicker({
   )
 
   const handleScroll = () => {
+    if (positionnementRef.current) return
+    gesteRef.current = true
     const el = scrollerRef.current
     if (!el) return
     const index = Math.max(
