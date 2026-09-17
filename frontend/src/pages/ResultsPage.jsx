@@ -162,10 +162,22 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      reconstituer la taille adulte, qui est justement sous cadenas —
      165 / 0,89 donne 185,4. Par tranches de cinq, la meme division ouvre
      une fourchette de dix centimetres, trop large pour remplacer ce que
-     l'abonnement livre. */
+     l'abonnement livre.
+
+     LE DENOMINATEUR EST LE POTENTIEL, PAS L ESTIMATION.
+
+     Rapporte a l'estimation — celle que ses habitudes actuelles
+     produisent — le chiffre disait « tu as fait 95 % de ta croissance »
+     juste sous « tes habitudes te coutent 5,4 cm ». Les deux lignes se
+     contredisaient : s'il ne reste que 5 % a faire, il n'y a pas 5 cm a
+     recuperer. Le denominateur qui a du sens est son plafond, celui que
+     le plan vise ; la part parcourue tombe alors a 92 %, et les deux
+     chiffres racontent la meme histoire. */
+  const cibleCroissance =
+    Number.isFinite(potentielCm) && potentielCm > 0 ? potentielCm : estimeeCm
   const partCroissance =
-    Number.isFinite(estimeeCm) && estimeeCm > 0 && tailleActuelle > 0
-      ? Math.min(95, Math.round((tailleActuelle / estimeeCm) * 20) * 5)
+    Number.isFinite(cibleCroissance) && cibleCroissance > 0 && tailleActuelle > 0
+      ? Math.min(95, Math.round((tailleActuelle / cibleCroissance) * 20) * 5)
       : 0
 
   const auMoinsUnLevier = leviers.some((levier) => levier.renseigne)
