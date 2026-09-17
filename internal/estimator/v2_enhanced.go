@@ -464,9 +464,16 @@ func calculateV2Confidence(
 		case req.HeightVelocityCM <= 2.0:
 			rangeMargin *= 0.70 // croissance qui s arrete : estimation sure
 		}
-	} else {
-		// Donnee non renseignee : on elargit plutot que de faire semblant
-		// d etre precis. La question est facultative cote questionnaire.
+	} else if _, maturiteConnue := indiceMaturite(req); !maturiteConnue {
+		/* On ne sait RIEN de la maturite : ni la croissance de l annee, ni
+		   la pointure. On elargit plutot que de faire semblant d etre
+		   precis — les deux questions sont facultatives.
+
+		   La pointure suffit a lever cette penalite, et c est le point :
+		   avant, elle etait infligee a quelqu un qui avait pourtant donne
+		   un signal de maturite, simplement parce que ce n etait pas
+		   celui-la. Elle ne resserre pas la marge pour autant : savoir
+		   quelque chose n est pas savoir la meme chose. */
 		rangeMargin *= 1.10
 	}
 

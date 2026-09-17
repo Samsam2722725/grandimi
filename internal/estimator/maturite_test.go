@@ -351,3 +351,31 @@ func TestBalayageMaturite_PlancherSousUnPourcent(t *testing.T) {
 		t.Errorf("le plancher se declenche sur %.2f %% des profils (seuil 1 %%) : la correction de maturite est trop forte, baisser coefficientMaturite. Pire ecart %.1f cm, sur %s", part, pire, pireNom)
 	}
 }
+
+/* La pointure leve la penalite « on ne sait rien de la maturite » sur la
+   largeur de l intervalle.
+
+   Avant, seule la vitesse comptait : quelqu un qui declarait sa pointure
+   sans declarer sa croissance recevait quand meme les 10 % d elargissement
+   reserves a l ignorance complete. Il avait pourtant donne un signal de
+   maturite — simplement pas celui-la. */
+func TestMarge_LaPointureLeveLaPenaliteDIgnorance(t *testing.T) {
+	rien := PredictHeightV2(profilNeutre(12.5, MALE, 153, 47, 178, 164))
+
+	avecPointure := profilNeutre(12.5, MALE, 153, 47, 178, 164)
+	avecPointure.ShoeSizeEU, avecPointure.ShoeSizeEU1Y = 40, 39 // variation ordinaire, indice neutre
+	resp := PredictHeightV2(avecPointure)
+
+	if resp.MargeCM >= rien.MargeCM {
+		t.Errorf("pointure declaree : marge %.1f cm, attendue plus etroite que sans aucun signal (%.1f cm)",
+			resp.MargeCM, rien.MargeCM)
+	}
+
+	// Savoir quelque chose n est pas savoir la meme chose : la pointure
+	// leve la penalite, elle ne resserre pas au-dela.
+	if resp.MargeCM < 6.0 {
+		t.Errorf("pointure seule : marge %.1f cm, trop etroite — elle ne doit que lever la penalite", resp.MargeCM)
+	}
+
+	t.Logf("marge : aucun signal %.1f cm | pointure declaree %.1f cm", rien.MargeCM, resp.MargeCM)
+}
