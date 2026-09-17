@@ -106,7 +106,7 @@ const ETAPES = [
     num: '01',
     icone: ScanLine,
     titre: 'Tu réponds',
-    texte: '14 questions, une par écran : ton âge, ta taille, celle de tes parents, tes habitudes. Compte 3 à 4 minutes.',
+    texte: 'Une question par écran : ton âge, ta taille, celle de tes parents, tes habitudes. Rien à taper, tout se choisit.',
     teinte: 'var(--color-cream)',
   },
   {
@@ -381,7 +381,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 className="rise mt-5 text-sm text-muted-foreground"
                 style={{ animationDelay: '320ms' }}
               >
-16 questions · 4 minutes · résiliable à tout moment
+                Résultat immédiat · résiliable à tout moment
               </p>
 
 
