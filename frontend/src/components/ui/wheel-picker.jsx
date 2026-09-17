@@ -32,22 +32,27 @@ export function WheelPicker({
   visibleCount = 5,
   className,
 }) {
-  /* LE PLUS GRAND EN HAUT.
+  /* MONTER AUGMENTE, DESCENDRE DIMINUE — QUEL QUE SOIT LE GESTE.
 
-     La liste allait du plus petit au plus grand, de haut en bas. Pour
-     annoncer une taille plus grande, il fallait donc descendre — l'inverse
-     du geste qu'on fait devant une toise, où l'on monte. Le composant sert
-     surtout à saisir des tailles (la sienne, celle de chaque parent), et sur
-     une mesure verticale le sens de lecture n'est pas neutre.
+     Le piège : la molette et le doigt vont dans des sens OPPOSÉS sur un
+     même conteneur. Rouler la molette vers le haut fait descendre le
+     contenu, alors que glisser le doigt vers le haut le fait monter. Aucun
+     ordre de liste ne peut donc satisfaire les deux — inverser l'ordre
+     corrige l'ordinateur et casse le téléphone, ce qui est exactement ce
+     qui s'est passé.
 
-     L'ordre décroissant corrige aussi un vrai défaut d'accessibilité. Le
-     conteneur s'annonce `spinbutton`, où la flèche du haut DOIT augmenter la
-     valeur ; elle la diminuait, puisqu'elle recule d'un cran dans une liste
-     croissante. Le même changement remet les deux dans le bon sens.
+     La seule sortie est de traiter les deux gestes séparément :
 
-     On construit toujours en croissant avant de retourner : c'est cette
-     boucle-là qui neutralise la dérive en virgule flottante des pas
-     fractionnaires, et l'inverser rouvrirait le problème. */
+       doigt     l'ordre croissant suffit. Glisser vers le haut fait défiler
+                 vers le bas de la liste, donc vers les grandes valeurs.
+       molette   interceptée plus bas, parce que son sens naturel donnerait
+                 l'inverse.
+       clavier   flèche du haut = +1 cran. Le conteneur s'annonce
+                 `spinbutton`, une norme où la flèche du haut DOIT
+                 augmenter ; elle diminuait jusqu'ici.
+
+     La liste reste donc croissante, et c'est aussi cette boucle-là qui
+     neutralise la dérive en virgule flottante des pas fractionnaires. */
   const options = useMemo(() => {
     const out = []
     // Arrondi à 4 décimales : les pas fractionnaires (0.5, 0.1) accumulent
@@ -55,7 +60,6 @@ export function WheelPicker({
     for (let v = min; v <= max + 1e-9; v += step) {
       out.push(Math.round(v * 10000) / 10000)
     }
-    out.reverse()
     return out
   }, [min, max, step])
 
@@ -133,20 +137,51 @@ export function WheelPicker({
     }
   }
 
-  const move = (delta) => {
-    const index = Math.max(0, Math.min(options.length - 1, activeIndex + delta))
-    if (index === activeIndex) return
-    setActiveIndex(index)
-    commit(index)
-    scrollToIndex(index, 'smooth')
-  }
+  const move = useCallback(
+    (delta) => {
+      const index = Math.max(0, Math.min(options.length - 1, activeIndex + delta))
+      if (index === activeIndex) return
+      setActiveIndex(index)
+      commit(index)
+      scrollToIndex(index, 'smooth')
+    },
+    [options.length, activeIndex, commit, scrollToIndex],
+  )
+
+  /* Molette : un cran vers le haut = une valeur de plus.
+
+     Son sens naturel donnerait l'inverse — rouler vers le haut fait
+     descendre le contenu, donc reculer dans une liste croissante. On
+     l'intercepte et on avance nous-mêmes.
+
+     Écouteur posé à la main plutôt que par onWheel : React attache
+     `wheel` en passif, où preventDefault() est ignoré. Sans lui, le
+     défilement natif s'ajouterait au nôtre et la valeur sauterait de
+     deux crans.
+
+     Un cran de molette = une valeur, jamais plus : sur un sélecteur de
+     mesure, dépasser sa taille et revenir coûte plus cher que monter
+     d'un cran de trop. */
+  useEffect(() => {
+    const el = scrollerRef.current
+    if (!el) return undefined
+
+    const surMolette = (evenement) => {
+      if (Math.abs(evenement.deltaY) < 1) return
+      evenement.preventDefault()
+      move(evenement.deltaY < 0 ? 1 : -1)
+    }
+
+    el.addEventListener('wheel', surMolette, { passive: false })
+    return () => el.removeEventListener('wheel', surMolette)
+  }, [move])
 
   const handleKeyDown = (event) => {
     const jumps = {
-      ArrowUp: -1,
-      ArrowDown: 1,
-      PageUp: -5,
-      PageDown: 5,
+      ArrowUp: 1,
+      ArrowDown: -1,
+      PageUp: 5,
+      PageDown: -5,
     }
     if (event.key in jumps) {
       event.preventDefault()
