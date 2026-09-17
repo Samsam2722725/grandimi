@@ -176,6 +176,8 @@ func PredictHeightV2(c *gin.Context) {
 		// L ecart avec predicted_height_cm est ce que le plan vise — chiffre
 		// par le meme modele que l estimation, pas par le marketing.
 		"potential_height_cm": result.PotentialHeightCM,
+		// Rang parmi les jeunes du meme age et du meme sexe, tables OMS.
+		"percentile_age":      result.PercentileAge,
 		"confidence_range": gin.H{
 			"min": result.ConfidenceRange[0],
 			"max": result.ConfidenceRange[1],

@@ -149,6 +149,25 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
       ? Math.round((potentielCm - estimeeCm) * 10) / 10
       : 0
 
+  /* Rang parmi les jeunes du meme age, calcule par le serveur sur les
+     tables OMS. Il ne se derive d'aucune valeur verrouillee : on peut
+     l'afficher sans ouvrir la porte. */
+  const percentileAge = Number(predictionData.percentile_age)
+  const percentileAffichable = Number.isFinite(percentileAge) && percentileAge > 0
+
+  /* Part de croissance deja parcourue.
+
+     ARRONDI A 5 % ET PAS AU POINT PRES, VOLONTAIREMENT. La taille du jour
+     est affichee juste au-dessus : un pourcentage exact laisserait
+     reconstituer la taille adulte, qui est justement sous cadenas —
+     165 / 0,89 donne 185,4. Par tranches de cinq, la meme division ouvre
+     une fourchette de dix centimetres, trop large pour remplacer ce que
+     l'abonnement livre. */
+  const partCroissance =
+    Number.isFinite(estimeeCm) && estimeeCm > 0 && tailleActuelle > 0
+      ? Math.min(95, Math.round((tailleActuelle / estimeeCm) * 20) * 5)
+      : 0
+
   const auMoinsUnLevier = leviers.some((levier) => levier.renseigne)
   const coutAffichable = auMoinsUnLevier && ecartHabitudes > 0
   const dejaAuMaximum = auMoinsUnLevier && ecartHabitudes === 0
@@ -256,6 +275,24 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
               position du point et l'écart restant sans avoir payé. */}
           <AnalyseChart />
         </section>
+
+        {percentileAffichable && (
+          <div className="analyse-ligne analyse-ligne--fait">
+            <span className="analyse-perte-label">
+              Plus grand que {percentileAge} % des jeunes de ton âge
+            </span>
+            <span aria-hidden="true">🌍</span>
+          </div>
+        )}
+
+        {partCroissance > 0 && (
+          <div className="analyse-ligne analyse-ligne--fait">
+            <span className="analyse-perte-label">
+              Tu as fait {partCroissance} % de ta croissance
+            </span>
+            <span aria-hidden="true">📈</span>
+          </div>
+        )}
 
         {/* Cette ligne portait « Ton frein principal » parce que le percentile
             de Taller (« Plus grand que X % de ton âge ») demandait des tables

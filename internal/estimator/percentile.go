@@ -108,6 +108,27 @@ func zTaillePourAge(ageAnnees float64, sexe string, tailleCM float64) float64 {
 }
 
 /*
+percentileTaillePourAge rend le rang de l adolescent parmi ceux de son age
+et de son sexe, en pourcentage : 60 signifie qu il depasse 60 % d entre eux.
+
+Le score-z suit une loi normale une fois la transformation LMS appliquee,
+donc le rang est sa fonction de repartition — d ou l erreur de Gauss.
+
+Meme bornage a +/- 3 que la projection : au-dela on quitte la variation
+normale pour le domaine pathologique, que ce produit ne modelise pas. Le
+resultat est ensuite ramene dans 1-99 : « plus grand que 0 % » et « plus
+grand que 100 % » ne veulent rien dire pour un lecteur, et surestiment
+tous deux la precision d une table de reference.
+*/
+func percentileTaillePourAge(ageAnnees float64, sexe string, tailleCM float64) float64 {
+	z := zTaillePourAge(ageAnnees, sexe, tailleCM)
+	z = math.Max(-3, math.Min(3, z))
+
+	rang := 100 * 0.5 * (1 + math.Erf(z/math.Sqrt2))
+	return math.Max(1, math.Min(99, math.Round(rang)))
+}
+
+/*
 tailleAdulteParPercentile rend la taille a 19 ans d un adolescent qui resterait
 sur son couloir actuel.
 

@@ -51,6 +51,10 @@ type HeightPredictionV2Response struct {
 	// egale a PredictedHeightCM. L ecart entre les deux est ce que les
 	// habitudes actuelles coutent — et donc ce que le plan vise.
 	PotentialHeightCM  float64
+	// Rang parmi les jeunes du meme age et du meme sexe, en pourcentage,
+	// d'apres les tables OMS. Sert l'ecran d'analyse : « plus grand que
+	// X % des jeunes de ton age ».
+	PercentileAge      float64
 	ConfidenceRange    [2]float64
 	ConfidenceLevel    string
 	PubertyStage       string
@@ -201,6 +205,7 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	   trancher sans age osseux. */
 	resp.Factors["mid_parent_target"] = midParentTarget
 	resp.Factors["percentile_projection"] = trajectoire
+	resp.PercentileAge = percentileTaillePourAge(req.Age, req.Sex, req.HeightCM)
 	resp.Factors["blended_base"] = base
 	resp.Factors["health_multiplier"] = healthMultiplier
 	resp.Factors["final_prediction"] = finalHeight

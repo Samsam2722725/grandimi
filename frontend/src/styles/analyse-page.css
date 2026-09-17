@@ -219,3 +219,12 @@
 .analyse .analyse-ligne--acquis .analyse-perte-valeur {
   color: #34c759;
 }
+
+/* Lignes de constat : un fait mesure, ni perte ni cadenas. Neutres a
+   dessein — l orange est reserve a ce qui coute, le vert a ce qui est
+   acquis, et les multiplier viderait les deux de leur sens. */
+.analyse .analyse-ligne--fait {
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+}
