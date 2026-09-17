@@ -980,3 +980,38 @@
   color: var(--funnel-muted);
   text-wrap: pretty;
 }
+
+/* Deux molettes côte à côte, pour la question pointure.
+
+   Côte à côte et non l'une sous l'autre : la valeur de l'an dernier ne
+   veut rien dire seule, c'est l'écart entre les deux qu'on demande de
+   lire. Les empiler obligerait à faire défiler l'écran pour comparer
+   deux nombres qui doivent se voir d'un coup d'œil.
+
+   `min-width: 0` sur les enfants : sans lui, un élément flex refuse de
+   passer sous la largeur de son contenu et la ligne déborde sur un
+   téléphone étroit. */
+.funnel-pointure {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.funnel-pointure > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.funnel-pointure-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.funnel-pointure-legende {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.55);
+}

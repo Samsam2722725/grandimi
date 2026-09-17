@@ -217,8 +217,8 @@ func TestPredictHeightV2_GrowthVelocity(t *testing.T) {
 
 	// Vitesse non renseignee : ni bonus ni malus, la correction est nulle.
 	sansVitesse := PredictHeightV2(baseReq)
-	if sansVitesse.Factors["correction_vitesse"] != 0 {
-		t.Errorf("vitesse non renseignee : correction %.2f cm, attendu 0", sansVitesse.Factors["correction_vitesse"])
+	if sansVitesse.Factors["correction_maturite"] != 0 {
+		t.Errorf("aucun signal de maturite : correction %.2f cm, attendu 0", sansVitesse.Factors["correction_maturite"])
 	}
 
 	t.Logf("12,5 ans : 2 cm/an -> %.1f cm | 7 cm/an -> %.1f cm | ecart %.1f cm",
@@ -273,12 +273,12 @@ func TestPredictHeightV2_EnsembleAccuracy(t *testing.T) {
 	   La cible mi-parentale reste exposee, mais elle n entre PLUS dans le
 	   calcul : c est precisement le correctif. */
 	moyenne := (resp.Factors["khamis_roche"]+resp.Factors["percentile_projection"])/2 +
-		resp.Factors["correction_vitesse"]
+		resp.Factors["correction_maturite"]
 	if math.Abs(resp.Factors["blended_base"]-moyenne) > 0.01 {
-		t.Errorf("blended_base = %.2f, attendu %.2f (Khamis-Roche %.1f, percentile %.1f, correction vitesse %+.2f)",
+		t.Errorf("blended_base = %.2f, attendu %.2f (Khamis-Roche %.1f, percentile %.1f, correction maturite %+.2f)",
 			resp.Factors["blended_base"], moyenne,
 			resp.Factors["khamis_roche"], resp.Factors["percentile_projection"],
-			resp.Factors["correction_vitesse"])
+			resp.Factors["correction_maturite"])
 	}
 
 	ancienne := (resp.Factors["mid_parent_target"] + resp.Factors["percentile_projection"]) / 2

@@ -36,6 +36,11 @@ type PredictHeightV2Request struct {
 	MotherHeightCM     float64 `json:"mother_height_cm" binding:"required,gt=140,lt=210"`
 	BMI                float64 `json:"bmi"`                      // Optional, calculated if not provided
 	HeightVelocityCM   float64 `json:"height_velocity_cm"`       // cm/year
+	// Pointure europeenne, aujourd'hui et il y a un an. Facultatives :
+	// c'est la VARIATION qui porte le signal de maturite, et une absence
+	// reste strictement neutre (cf. internal/estimator/maturite.go).
+	ShoeSizeEU         float64 `json:"shoe_size_eu"`
+	ShoeSizeEU1Y       float64 `json:"shoe_size_eu_1y"`
 	EthnicBackground   string  `json:"ethnic_background"`        // caucasian, asian, african, hispanic, mixed
 	NutritionLevel     string  `json:"nutrition_level"`          // excellent, good, fair, poor
 	SleepHoursPerNight float64 `json:"sleep_hours_per_night"`    // 4-14 hours
@@ -128,6 +133,8 @@ func PredictHeightV2(c *gin.Context) {
 		MotherHeightCM:  req.MotherHeightCM,
 		BMI:             req.BMI,
 		HeightVelocityCM: req.HeightVelocityCM,
+		ShoeSizeEU:       req.ShoeSizeEU,
+		ShoeSizeEU1Y:     req.ShoeSizeEU1Y,
 		EthnicBackground: ethnic,
 		NutritionLevel:   nutrition,
 		SleepHoursPerNight: req.SleepHoursPerNight,

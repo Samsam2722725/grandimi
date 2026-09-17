@@ -63,6 +63,7 @@ const ETAPES = [
   'pere',
   'mere',
   'vitesse',
+  'pointure',
   'sommeil',
   'nutrition',
   'activite',
@@ -83,6 +84,11 @@ const REPONSES_INITIALES = {
   mother_height_cm: 164,
   // null = « je ne sais pas », distinct de 0 cm pris dans l'année.
   height_velocity_cm: 5,
+  /* Pointure du jour et d'il y a un an. `null` par défaut, et non une
+     valeur plausible : la question est facultative, et pré-remplir deux
+     pointures enverrait au serveur un signal que personne n'a donné. */
+  shoe_size_eu: null,
+  shoe_size_eu_1y: null,
   sleep_hours_per_night: null,
   nutrition_level: '',
   exercise_min_per_day: null,
@@ -153,6 +159,11 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
   const [unite, setUnite] = useState(() => reprise?.unite || 'metric')
   const [vitesseInconnue, setVitesseInconnue] = useState(
     () => reprise?.reponses?.height_velocity_cm === null,
+  )
+  /* Part à « je ne sais pas », contrairement à la vitesse : tant que
+     personne n'a touché une molette, il n'y a pas de réponse à envoyer. */
+  const [pointureInconnue, setPointureInconnue] = useState(
+    () => (reprise?.reponses?.shoe_size_eu ?? null) === null,
   )
   const [chargement, setChargement] = useState(false)
   const [erreur, setErreur] = useState(null)
@@ -247,6 +258,11 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         mother_height_cm: Number(reponses.mother_height_cm),
         // Le serveur traite 0 comme « non renseigné » et élargit la fourchette.
         height_velocity_cm: reponses.height_velocity_cm ?? 0,
+        /* Même convention : 0 vaut « non renseigné » côté serveur, qui
+           traite alors l'absence comme strictement neutre plutôt que
+           comme une pénalité (internal/estimator/maturite.go). */
+        shoe_size_eu: reponses.shoe_size_eu ?? 0,
+        shoe_size_eu_1y: reponses.shoe_size_eu_1y ?? 0,
         nutrition_level: reponses.nutrition_level,
         sleep_hours_per_night: reponses.sleep_hours_per_night,
         exercise_min_per_day: reponses.exercise_min_per_day,
@@ -467,7 +483,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                   setVitesseInconnue(false)
                   definir('height_velocity_cm', v)
                 }}
-                format={(v) => `${v} cm`}
+                format={(v) => `${fr(v)} cm`}
               />
             </div>
             <ChoiceCard
@@ -479,6 +495,79 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 const inconnu = !vitesseInconnue
                 setVitesseInconnue(inconnu)
                 definir('height_velocity_cm', inconnu ? null : 5)
+              }}
+            />
+          </>
+        )
+
+      /* POINTURE — le second signal de maturité, et le seul ajout de ce
+         brief au questionnaire.
+
+         C'est la VARIATION qui porte l'information, pas la pointure du
+         jour : l'augmentation de pointure s'arrête au moment du pic de
+         taille. Un pied qui n'a pas bougé depuis un an dit que le pic est
+         passé ; un pied qui grimpe encore dit qu'il est devant. Demander
+         seulement la pointure actuelle, comme le fait la concurrence, ne
+         capte presque rien.
+
+         FACULTATIVE, ET PAR DÉFAUT NON RENSEIGNÉE. Le serveur traite
+         l'absence comme strictement neutre. C'est ce qui permet de poser
+         la question sans allonger le tunnel pour ceux qui n'ont pas la
+         réponse — et sans jamais leur coûter un centimètre. */
+      case 'pointure':
+        return (
+          <>
+            <div
+              className="funnel-pointure"
+              style={{ opacity: pointureInconnue ? 0.35 : 1 }}
+            >
+              {/* Les légendes sont VISIBLES et pas seulement accessibles :
+                  deux colonnes de chiffres côte à côte, sans rien pour les
+                  distinguer, ne se lisent pas. Le titre de l'écran suffit
+                  quand il n'y a qu'une molette, jamais quand il y en a deux. */}
+              <div className="funnel-pointure-col">
+                <span className="funnel-pointure-legende">Aujourd’hui</span>
+                <WheelPicker
+                  label="Pointure aujourd’hui"
+                  min={28}
+                  max={50}
+                  step={1}
+                  value={Number(reponses.shoe_size_eu ?? 39)}
+                  onChange={(v) => {
+                    setPointureInconnue(false)
+                    definir('shoe_size_eu', v)
+                    if (reponses.shoe_size_eu_1y === null) definir('shoe_size_eu_1y', v - 1)
+                  }}
+                  format={(v) => String(v)}
+                />
+              </div>
+              <div className="funnel-pointure-col">
+                <span className="funnel-pointure-legende">Il y a un an</span>
+                <WheelPicker
+                  label="Pointure il y a un an"
+                  min={28}
+                  max={50}
+                  step={1}
+                  value={Number(reponses.shoe_size_eu_1y ?? 38)}
+                  onChange={(v) => {
+                    setPointureInconnue(false)
+                    definir('shoe_size_eu_1y', v)
+                    if (reponses.shoe_size_eu === null) definir('shoe_size_eu', v + 1)
+                  }}
+                  format={(v) => String(v)}
+                />
+              </div>
+            </div>
+            <ChoiceCard
+              role="checkbox"
+              title="Je ne sais pas"
+              hint="Cette question est facultative"
+              selected={pointureInconnue}
+              onSelect={() => {
+                const inconnu = !pointureInconnue
+                setPointureInconnue(inconnu)
+                definir('shoe_size_eu', inconnu ? null : 39)
+                definir('shoe_size_eu_1y', inconnu ? null : 38)
               }}
             />
           </>
@@ -717,10 +806,18 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 : `${fr(reponses.height_velocity_cm)} cm`,
             vers: 7,
           },
+          {
+            label: 'Pointure',
+            valeur:
+              reponses.shoe_size_eu === null
+                ? 'Non renseignée'
+                : `${fr(reponses.shoe_size_eu)} (${fr(reponses.shoe_size_eu_1y)} il y a un an)`,
+            vers: 8,
+          },
           /* L'index suit ETAPES, il n'est pas décoratif : un écran ajouté ou
              retiré avant celui-ci décale la cible, et « Modifier » renvoie
              alors sur l'écran d'à côté. */
-          { label: 'E-mail', valeur: reponses.email, vers: 14 },
+          { label: 'E-mail', valeur: reponses.email, vers: 15 },
         ]
 
         return (
@@ -780,6 +877,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     vitesse: {
       titre: 'Tu as grandi de combien depuis l’an dernier ?',
       sous: 'Compare avec une vieille photo, une toise, ou demande à tes parents.',
+    },
+    pointure: {
+      titre: 'Quelle est ta pointure ?',
+      sous: 'Le pied arrête de grandir avant la taille : comparer avec l’an dernier dit où tu en es. Facultatif.',
     },
     sommeil: {
       titre: 'Tu dors combien, en général ?',

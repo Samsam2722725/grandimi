@@ -37,6 +37,13 @@ type HeightPredictionV2Request struct {
 	// Enhanced data (v2)
 	BMI                float64            // kg/m² - captures nutrition/health
 	HeightVelocityCM   float64            // cm/year - growth rate
+	/* Pointure europeenne du jour et d il y a un an. C est la VARIATION
+	   qui porte le signal de maturite, pas la valeur absolue : une
+	   pointure seule n apprend presque rien. Facultatives toutes les
+	   deux ; zero ou hors des bornes de plausibilite vaut « non
+	   renseigne », jamais une penalite. Voir maturite.go. */
+	ShoeSizeEU         float64
+	ShoeSizeEU1Y       float64
 	EthnicBackground   EthnicBackground   // Population-specific coefficients
 	NutritionLevel     NutritionLevel     // Health factor
 	SleepHoursPerNight float64            // Growth happens during sleep
@@ -133,17 +140,22 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	   precision qu on n a pas. */
 	trajectoire := tailleAdulteParPercentile(req.Age, req.Sex, req.HeightCM)
 
-	/* CORRECTION DE MATURITE — voir vitesse.go pour le raisonnement, qui
-	   va dans le sens INVERSE de l intuition : grandir vite pour son age,
-	   c est surtout etre en avance pubertaire, donc finir plus tot, donc
-	   etre SURESTIME par l ancre trajectoire qui suppose le couloir tenu
+	/* CORRECTION DE MATURITE — voir maturite.go, dont le raisonnement va
+	   dans le sens INVERSE de l intuition : etre en avance pubertaire,
+	   c est avoir son pic derriere soi et finir plus tot, donc etre
+	   SURESTIME par l ancre trajectoire qui suppose le couloir tenu
 	   jusqu a 19 ans.
+
+	   UN SEUL indice, alimente par la vitesse de croissance ET la
+	   variation de pointure, qui mesurent le meme phenomene. Les
+	   appliquer separement les compterait deux fois — l erreur exacte qui
+	   a casse 19,8 % des profils avec la mi-parentale.
 
 	   Elle s ajoute a la base et non a une seule ancre : c est la
 	   trajectoire qu elle corrige, mais l appliquer avant la moyenne
-	   doublerait son effet a chaque fois qu on rebalancerait les deux
-	   ancres. Nulle si la vitesse n est pas renseignee. */
-	correction := correctionVitesse(req.Age, req.Sex, req.HeightVelocityCM)
+	   doublerait son effet le jour ou on rebalancerait les deux ancres.
+	   Nulle si aucun signal n est renseigne. */
+	correction, indice := correctionMaturite(req)
 	base := (khamisRoche+trajectoire)/2 + correction
 
 	/* La cible mi-parentale ne sert plus qu au diagnostic : un ecart
@@ -233,7 +245,8 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	   trancher sans age osseux. */
 	resp.Factors["khamis_roche"] = khamisRoche
 	resp.Factors["percentile_projection"] = trajectoire
-	resp.Factors["correction_vitesse"] = correction
+	resp.Factors["indice_maturite"] = indice
+	resp.Factors["correction_maturite"] = correction
 	resp.Factors["vitesse_attendue"] = vitesseAttendue(req.Age, req.Sex)
 	resp.Factors["mid_parent_target"] = midParentTarget
 	resp.PercentileAge = percentileTaillePourAge(req.Age, req.Sex, req.HeightCM)
