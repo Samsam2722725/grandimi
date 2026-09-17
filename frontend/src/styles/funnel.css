@@ -931,23 +931,24 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 7px;
 }
 
 .verite-ligne {
   display: grid;
-  grid-template-columns: 34px 1fr;
-  gap: 14px;
+  grid-template-columns: 28px 1fr;
+  gap: 12px;
   align-items: center;
-  /* 13px et non 16 : a 16, les cinq rangees plus la ligne de pied depassaient
-     de douze pixels sous le bouton sur un ecran de 375 x 812 — mesure. La
-     phrase qui empeche l ecran de se lire comme un verdict doit etre visible
-     sans avoir a faire defiler. */
-  padding: 13px 18px;
+  /* Resserre a 10px : la liste est passee de cinq a six lignes, dont deux
+     tiennent sur deux lignes de texte. A 13px de rembourrage, le texte de
+     bascule finissait 74 pixels sous le bouton sur un ecran de 390 x 844 —
+     mesure. Cette phrase nomme le doute sur lequel le produit agit : la
+     cacher derriere le bouton retire a l ecran sa raison d exister. */
+  padding: 10px 16px;
   border-radius: 999px;
   background: rgba(255, 90, 31, 0.09);
-  font-size: clamp(14.5px, 4vw, 16.5px);
-  line-height: 1.3;
+  font-size: clamp(14px, 3.8vw, 15.5px);
+  line-height: 1.28;
   font-weight: 600;
   color: var(--funnel-accent);
   text-wrap: pretty;
@@ -959,9 +960,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: 2px solid var(--funnel-accent);
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--funnel-accent);
   border-radius: 999px;
   font-size: 16px;
   font-weight: 800;
@@ -974,8 +975,8 @@
    typographique qu un paragraphe ordinaire. */
 .verite-pied {
   margin: 0;
-  font-size: 14.5px;
-  line-height: 1.55;
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--funnel-muted);
   text-wrap: pretty;
 }

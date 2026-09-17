@@ -587,16 +587,28 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          seront petits quoi qu'ils fassent — leur annoncer une liste de
          malheurs sans dire tout de suite sur quoi ils peuvent agir serait
          gratuit, et se retournerait contre le produit. */
+      /* DOULEUR, PUIS BASCULE, PUIS CE QU'ON VEND.
+
+         Les cinq premières lignes sont des faits de la vie ordinaire, pas
+         des statistiques : personne n'a à les croire sur parole, on les a
+         vécues ou non. C'est ce qui les rend défendables là où un « 40 %
+         de matchs en moins » ne l'est pas.
+
+         La sixième change de nature. Les cinq premières décrivent ce qu'on
+         subit ; celle-là nomme le doute, et c'est le seul point de la liste
+         sur lequel le produit peut quelque chose. Elle est donc la
+         charnière, et le texte en dessous ne fait que la prolonger. */
       case 'verite':
         return (
           <div className="funnel-verite">
             <ul className="verite-liste">
               {[
                 'Les rayonnages du haut, hors de portée',
-                'Pantalons et manches à retoucher, systématiquement',
-                'Pris pour plus jeune que son âge',
-                'Les clichés sur l’autorité, au travail',
-                'Comptoirs, barres, interrupteurs : calés sur d’autres',
+                'Pantalons et manches à retoucher, presque systématiquement',
+                'Être pris pour plus jeune que son âge',
+                'Les clichés sur l’autorité ou la crédibilité',
+                'Comptoirs, barres, équipements pensés pour d’autres gabarits',
+                'Et cette question qui revient : « Est-ce que j’aurais pu être plus grand ? »',
               ].map((ligne) => (
                 <li className="verite-ligne" key={ligne}>
                   <span className="verite-signe" aria-hidden="true">
@@ -608,8 +620,8 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
             </ul>
 
             <p className="verite-pied">
-              Rien là-dedans ne dépend de toi. Ce qui en dépend, c’est d’aller
-              chercher les centimètres qui sont encore sur la table — et il y en a.
+              Le vrai problème, ce n’est pas seulement la taille. C’est de ne pas
+              savoir si tu exploites vraiment ton potentiel de croissance.
             </p>
           </div>
         )
@@ -778,7 +790,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     verite: {
       titre: 'La vérité brutale sur la petite taille',
-      sous: 'Pas des statistiques de séduction : ce que ça change une journée ordinaire.',
+      sous: 'Pas des statistiques de séduction. Juste ce que ça change dans une journée ordinaire.',
     },
     'part-habitudes': {
       titre: 'Ce que tes habitudes pèsent vraiment',
@@ -841,7 +853,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           </FunnelButton>
         ) : (
           <FunnelButton onClick={avancer} disabled={!peutContinuer}>
-            Suivant
+            {etape === 'verite' ? 'Voir ce que je peux encore optimiser' : 'Suivant'}
           </FunnelButton>
         )
       }
