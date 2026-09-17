@@ -123,6 +123,13 @@ func main() {
 	   avant de gener qui que ce soit. */
 	router.POST("/api/v1/tunnel", api.RateLimit(600, time.Hour), api.EnregistrerEtapeTunnel)
 
+	/* La page qui lit cette mesure, sans passer par Supabase dont la
+	   session expire sans arret. Publique parce qu elle ne contient
+	   aucun chiffre : un champ qui demande ADMIN_TOKEN, et c est tout.
+	   Les chiffres, eux, sont dans le groupe admin plus bas.
+	   Voir internal/api/tunnel_rapport.go. */
+	router.GET("/api/v1/tunnel/rapport", api.PageRapportTunnel)
+
 	/* Routes portant des données personnelles : session obligatoire.
 	   Elles répondaient auparavant à un ?user_id= ou ?email= arbitraire,
 	   sans authentification. */
@@ -143,6 +150,10 @@ func main() {
 	admin.Use(api.AdminAuthMiddleware())
 	{
 		admin.GET("/stats", api.AdminStats)
+
+		// Ou les visiteurs s arretent, ecran par ecran. Lue par la
+		// page /api/v1/tunnel/rapport.
+		admin.GET("/tunnel", api.RapportTunnelJSON)
 		admin.GET("/users", api.AdminUsers)
 		admin.GET("/subscriptions", api.AdminSubscriptions)
 		admin.GET("/webhooks", api.AdminWebhookLogs)
