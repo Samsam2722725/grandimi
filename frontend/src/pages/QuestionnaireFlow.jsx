@@ -589,26 +589,31 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          gratuit, et se retournerait contre le produit. */
       /* DOULEUR, PUIS BASCULE, PUIS CE QU'ON VEND.
 
-         Les cinq premières lignes sont des faits de la vie ordinaire, pas
-         des statistiques : personne n'a à les croire sur parole, on les a
-         vécues ou non. C'est ce qui les rend défendables là où un « 40 %
-         de matchs en moins » ne l'est pas.
+         Les quatre premières lignes décrivent ce que le lecteur ressent
+         déjà, à la deuxième personne : on ne lui apprend rien, on nomme ce
+         qu'il connaît. Aucune n'est un chiffre à croire sur parole, et
+         c'est ce qui les rend défendables là où un « 40 % de matchs en
+         moins » ne l'est pas.
 
-         La sixième change de nature. Les cinq premières décrivent ce qu'on
-         subit ; celle-là nomme le doute, et c'est le seul point de la liste
-         sur lequel le produit peut quelque chose. Elle est donc la
-         charnière, et le texte en dessous ne fait que la prolonger. */
+         Elles ont aussi l'âge du lecteur : des rayonnages hors de portée et
+         des clichés sur l'autorité au travail parlaient à un adulte de
+         trente ans, pas à quelqu'un qui en a quatorze.
+
+         La cinquième change de nature — « ne pas savoir si tu as déjà
+         atteint ta taille finale ». Les quatre premières décrivent ce
+         qu'on subit ; celle-là nomme le doute, et c'est le seul point sur
+         lequel le produit peut quelque chose. Elle est la charnière, et le
+         texte en dessous ne fait que la prolonger. */
       case 'verite':
         return (
           <div className="funnel-verite">
             <ul className="verite-liste">
               {[
-                'Les rayonnages du haut, hors de portée',
-                'Pantalons et manches à retoucher, presque systématiquement',
-                'Être pris pour plus jeune que son âge',
-                'Les clichés sur l’autorité ou la crédibilité',
-                'Comptoirs, barres, équipements pensés pour d’autres gabarits',
-                'Et cette question qui revient : « Est-ce que j’aurais pu être plus grand ? »',
+                'On te donne souvent moins que ton âge',
+                'Tu te sens moins imposant à côté des autres',
+                'Tu regardes la taille des autres presque automatiquement',
+                'Voir tes potes grandir pendant que toi tu stagnes',
+                'Ne pas savoir si tu as déjà atteint ta taille finale',
               ].map((ligne) => (
                 <li className="verite-ligne" key={ligne}>
                   <span className="verite-signe" aria-hidden="true">
@@ -790,7 +795,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     verite: {
       titre: 'La vérité brutale sur la petite taille',
-      sous: 'Pas des statistiques de séduction. Juste ce que ça change dans une journée ordinaire.',
+      sous: 'Pas des statistiques. Juste ce que tu vis déjà.',
     },
     'part-habitudes': {
       titre: 'Ce que tes habitudes pèsent vraiment',
