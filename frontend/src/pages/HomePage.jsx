@@ -83,7 +83,7 @@ const PILIERS = [
 /* Le pendant honnête d'un bandeau de logos : les références réellement
    utilisées par le calcul, pas des marques partenaires qui n'existent pas. */
 const SOURCES = [
-  { nom: 'Tanner', detail: 'Méthode mi-parentale, référence en pédiatrie' },
+  { nom: 'Khamis-Roche', detail: 'Taille adulte prédite sans radiographie, 1994' },
   { nom: 'PubMed', detail: 'Littérature clinique citée dans les guides' },
   { nom: 'OMS', detail: 'Courbes de croissance de référence' },
   { nom: 'AAP', detail: 'Recommandations de sommeil de l’American Academy of Pediatrics' },
@@ -96,7 +96,7 @@ const SOURCES = [
    l'argument est justement l'honnêteté. */
 const CHIFFRES = [
   { valeur: '±4–8 cm', label: 'la marge réelle du modèle, affichée avec chaque résultat' },
-  { valeur: '2', label: 'méthodes croisées : mi-parentale et percentile OMS' },
+  { valeur: '2', label: 'méthodes croisées : Khamis-Roche et percentile OMS' },
   { valeur: '11', label: 'actions par jour, du lever au coucher' },
   { valeur: '30', label: 'jours de plan, renouvelé chaque mois d’abonnement' },
 ]
@@ -130,7 +130,7 @@ const DIFFERENCES = [
     icone: Eye,
     titre: 'La méthode, écrite en entier',
     texte:
-      'Taille mi-parentale croisée avec les tables de croissance de l’OMS. C’est écrit noir sur blanc, vérifiable, et ça ne se résume pas à un pourcentage de précision inventé.',
+      'Khamis-Roche — ta taille, ton poids et celle de tes parents — croisée avec les tables de croissance de l’OMS. C’est écrit noir sur blanc, vérifiable, et ça ne se résume pas à un pourcentage de précision inventé.',
   },
   {
     icone: ShieldCheck,

@@ -6,7 +6,8 @@
 export const mockPredictHeight = async (data) => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      // Même méthode que le serveur : taille mi-parentale (Tanner).
+      // Le serveur utilise Khamis-Roche croisé avec le percentile OMS ; ce
+      // mock ne sert qu au developpement hors ligne et reste approximatif.
       const midParentHeight = (data.father_height_cm + data.mother_height_cm) / 2;
       const adjustment = data.sex === 'M' ? 6.5 : -6.5;
       const estimatedAdultHeight = midParentHeight + adjustment;
@@ -46,7 +47,7 @@ export const mockPredictHeight = async (data) => {
            parent » n'apparaît pas. Le simulacre doit le renvoyer aussi, sinon
            ce chemin est intestable en local. */
         user_id: 'mock-user-0001',
-        model_used: 'Taille mi-parentale (Tanner) — mock',
+        model_used: 'Khamis-Roche + percentile OMS — mock approximatif',
         message: 'Prédiction générée en mode développement',
       });
     }, 1500); // Simule un délai réseau

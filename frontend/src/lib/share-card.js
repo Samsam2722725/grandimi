@@ -202,7 +202,7 @@ export async function genererCarteResultat({
   ctx.font = `400 28px ${POLICE}`
   const mention = decouper(
     ctx,
-    'Estimation d\'après la taille des parents (méthode Tanner), pas une garantie. La marge est affichée.',
+    'Estimation d\'après ta taille, ton poids et celle de tes parents (méthode Khamis-Roche), pas une garantie. La marge est affichée.',
     L - marge * 2,
   )
   for (const ligne of mention) {

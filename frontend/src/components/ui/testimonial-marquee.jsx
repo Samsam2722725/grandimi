@@ -5,25 +5,28 @@ import { Marquee } from '@/components/ui/marquee'
    Pas d'avis fictifs, mais la preuve que ça marche.
 
    Ces libellés doivent décrire le calcul RÉELLEMENT effectué par
-   internal/estimator/v2_enhanced.go — c'est-à-dire la méthode
-   mi-parentale de Tanner, modulée par les facteurs de mode de vie.
-   Les versions précédentes annonçaient « Algorithme Khamis-Roche V2 »
-   et « modèle ML-Enhanced » : le serveur ne fait ni l'un ni l'autre
-   (aucun apprentissage automatique nulle part, et la sortie
-   Khamis-Roche est calculée puis jetée). Sur un produit dont l'argument
-   est l'honnêteté, et destiné à des mineurs, annoncer une méthode qu'on
-   n'applique pas est le pire endroit où mentir. */
+   internal/estimator/v2_enhanced.go — c'est-à-dire Khamis-Roche moyenné
+   avec le suivi de percentile OMS, puis modulé par les facteurs de mode
+   de vie.
+
+   Ce fichier a déjà annoncé deux méthodes que le serveur n'appliquait
+   pas : « modèle ML-Enhanced » (il n'y a aucun apprentissage automatique
+   nulle part), puis la méthode mi-parentale, restée affichée après son
+   remplacement. Sur un produit dont l'argument est l'honnêteté, et
+   destiné à des mineurs, annoncer une méthode qu'on n'applique pas est
+   le pire endroit où mentir : ces libellés se relisent à chaque fois que
+   le moteur change. */
 const SOURCES_CREDIBILITE = [
   {
-    titre: 'Méthode mi-parentale (Tanner)',
-    description: 'Taille cible calculée depuis celle des deux parents — référence en pédiatrie',
-    lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=mid-parental+height+target',
+    titre: 'Méthode Khamis-Roche (1994)',
+    description: 'Taille adulte prédite sans radiographie, depuis la taille, le poids et celle des parents',
+    lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+adult+height+prediction',
     icone: '📊',
   },
   {
-    titre: 'Données Tanner et Whitehouse',
-    description: 'Études longitudinales de croissance publiées par l\'Endocrine Society',
-    lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=tanner+whitehouse+height',
+    titre: 'Courbes de croissance OMS',
+    description: 'Taille pour âge de 5 à 19 ans : le couloir de croissance que suit le calcul',
+    lien: 'https://www.who.int/tools/growth-reference-data-for-5to19-years',
     icone: '📈',
   },
   {

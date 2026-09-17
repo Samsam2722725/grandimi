@@ -155,7 +155,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
   const percentileAge = Number(predictionData.percentile_age)
   const percentileAffichable = Number.isFinite(percentileAge) && percentileAge > 0
 
-  /* Part de croissance deja parcourue.
+  /* Part de croissance qui reste a faire.
 
      ARRONDI A 5 % ET PAS AU POINT PRES, VOLONTAIREMENT. La taille du jour
      est affichee juste au-dessus : un pourcentage exact laisserait
@@ -175,11 +175,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      chiffres racontent la meme histoire. */
   const cibleCroissance =
     Number.isFinite(potentielCm) && potentielCm > 0 ? potentielCm : estimeeCm
-  const partCroissance =
-    Number.isFinite(cibleCroissance) && cibleCroissance > 0 && tailleActuelle > 0
-      ? Math.min(95, Math.round((tailleActuelle / cibleCroissance) * 20) * 5)
-      : 0
-
   /* CE QUI RESTE, PAS CE QUI EST FAIT.
 
      « Tu as fait 90 % de ta croissance » est exact et demotivant : le
@@ -189,10 +184,33 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      l'abonnement adresse. Aucun des deux n'est plus vrai que l'autre ;
      l'un ferme la porte, l'autre l'ouvre.
 
-     Plancher a 5 % : en dessous, l'arrondi par tranches de cinq
-     afficherait « 0 % », ce qui reviendrait a dire a un adolescent de
-     quinze ans que tout est termine — faux, et invendable. */
-  const resteCroissance = partCroissance > 0 ? Math.max(5, 100 - partCroissance) : 0
+     TROIS ETATS, ET PAS DEUX. Le calcul portait un plancher a 5 % : en
+     dessous, l'arrondi par tranches de cinq affichait « 0 % ». Ce
+     plancher soignait un symptome — le modele rendait une taille adulte
+     EGALE a la taille du jour pour un profil sur cinq (voir
+     internal/estimator/khamis_roche_table.go), et sans lui ces ecrans
+     annoncaient « 0 % » a des adolescents de quinze ans.
+
+     Le modele est repare, mais le plancher ne peut pas simplement
+     disparaitre : les tranches de cinq arrondissent a zero quelqu'un a
+     qui il reste encore quatre centimetres. Il y a donc trois cas, et
+     chacun dit la verite :
+
+       plus rien a prendre ....... la ligne ne s'affiche pas
+       moins de 5 % ............... « moins de 5 % » (voir plus bas)
+       au-dela .................... le pourcentage, par tranches de cinq
+
+     Le seuil est en CENTIMETRES et non en pourcentage : un centimetre
+     restant est un centimetre, quelle que soit la taille sur laquelle on
+     le rapporte. */
+  const centimetresRestants =
+    Number.isFinite(cibleCroissance) && cibleCroissance > 0 && tailleActuelle > 0
+      ? cibleCroissance - tailleActuelle
+      : 0
+  const resteCroissance =
+    centimetresRestants >= 1
+      ? Math.round((centimetresRestants / cibleCroissance) * 20) * 5
+      : 0
   const auMoinsUnLevier = leviers.some((levier) => levier.renseigne)
   const coutAffichable = auMoinsUnLevier && ecartHabitudes > 0
   const dejaAuMaximum = auMoinsUnLevier && ecartHabitudes === 0
@@ -316,10 +334,14 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </div>
         )}
 
-        {resteCroissance > 0 && (
+        {centimetresRestants >= 1 && (
           <div className="analyse-ligne analyse-ligne--fait">
             <span className="analyse-perte-label">
-              Il te reste {resteCroissance} % de ta croissance à faire
+              {/* « moins de 5 % » plutot que « 5 % » : arrondir 1,4 % a 5 %
+                  serait surestimer ce qui reste, sur l'ecran meme qui sert
+                  a decider d'un achat. */}
+              Il te reste {resteCroissance > 0 ? `${resteCroissance} %` : 'moins de 5 %'} de
+              ta croissance à faire
             </span>
             <span aria-hidden="true">📈</span>
           </div>
@@ -401,22 +423,24 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
                   déclarative. Si elle est imprécise, l’estimation l’est aussi.
                 </li>
                 <li>
-                  <strong>Variation ethnique :</strong> le modèle inclut des ajustements,
-                  mais reste construit sur des données majoritairement occidentales.
+                  <strong>Population de référence :</strong> la méthode a été ajustée sur
+                  des enfants américains en bonne santé. Pour une autre population, c’est
+                  une extrapolation — et le modèle ne fait aucun ajustement ethnique.
                 </li>
               </ul>
 
               <h3>Sources &amp; méthodologie</h3>
               <p>
-                <strong>Méthode :</strong> taille mi-parentale (Tanner) — la moyenne des
-                tailles de tes deux parents, +6,5 cm pour un garçon, −6,5 cm pour une
-                fille — ajustée par tes réponses sur le sommeil, l’alimentation et
-                l’activité, et jamais inférieure à la taille que tu fais déjà.
+                <strong>Méthode :</strong> Khamis-Roche (1994) — ta taille, ton poids et la
+                moyenne des tailles de tes parents, avec des coefficients qui changent tous
+                les six mois d’âge — moyennée avec ton couloir de croissance OMS, puis
+                ajustée par tes réponses sur le sommeil, l’alimentation et l’activité.
+                Jamais inférieure à la taille que tu fais déjà.
                 <br />
                 <strong>Précision moyenne :</strong> ±4 à ±8 cm selon l’âge et la croissance récente
               </p>
               <a
-                href="https://pubmed.ncbi.nlm.nih.gov/?term=mid-parental+height+target"
+                href="https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+adult+height+prediction"
                 target="_blank"
                 rel="noopener noreferrer"
               >
