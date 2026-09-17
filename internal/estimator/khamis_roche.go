@@ -59,10 +59,11 @@ func PredictHeight(req HeightPredictionRequest) HeightPredictionResponse {
 
 	/* Un seul moteur pour les deux routes.
 
-	   Les coefficients getCoefficients ci-dessous ne sont pas calibres :
-	   sur ce meme profil ils rendaient 217 cm. On delegue donc au moteur
-	   que le site utilise reellement, et cette route cesse de publier un
-	   chiffre que le README lui-meme qualifie de faux.
+	   Cette route calculait autrefois elle-meme, avec une table intitulee
+	   « Simplified Khamis-Roche » qui n etait pas la table Khamis-Roche et
+	   qui rendait 217 cm sur ce profil. Elle a ete supprimee ; la vraie
+	   table, en pouces et en livres, est dans khamis_roche_table.go et
+	   c est le moteur v2 qui s en sert. Cette route delegue.
 
 	   Les champs de mode de vie ne sont volontairement pas remplis : la
 	   requete v1 ne les collecte pas, et les inventer serait pire que de
@@ -90,75 +91,6 @@ func PredictHeight(req HeightPredictionRequest) HeightPredictionResponse {
 	resp.Message = "Height prediction successful"
 
 	return resp
-}
-
-type Coefficients struct {
-	Intercept     float64
-	HeightCoeff   float64
-	WeightCoeff   float64
-	MidParentCoeff float64
-}
-
-// getCoefficients returns Khamis-Roche coefficients based on age and sex
-func getCoefficients(age float64, sex string) Coefficients {
-	// Simplified Khamis-Roche coefficients (real values from research)
-	coefficients := map[int]map[string]Coefficients{
-		8: {
-			MALE: {Intercept: -21.2, HeightCoeff: 0.67, WeightCoeff: 0.05, MidParentCoeff: 0.54},
-			FEMALE: {Intercept: -21.2, HeightCoeff: 0.67, WeightCoeff: 0.05, MidParentCoeff: 0.54},
-		},
-		9: {
-			MALE: {Intercept: -18.1, HeightCoeff: 0.63, WeightCoeff: 0.07, MidParentCoeff: 0.58},
-			FEMALE: {Intercept: -18.1, HeightCoeff: 0.63, WeightCoeff: 0.07, MidParentCoeff: 0.58},
-		},
-		10: {
-			MALE: {Intercept: -13.4, HeightCoeff: 0.60, WeightCoeff: 0.08, MidParentCoeff: 0.61},
-			FEMALE: {Intercept: -11.1, HeightCoeff: 0.59, WeightCoeff: 0.10, MidParentCoeff: 0.61},
-		},
-		11: {
-			MALE: {Intercept: -8.0, HeightCoeff: 0.57, WeightCoeff: 0.10, MidParentCoeff: 0.64},
-			FEMALE: {Intercept: -3.9, HeightCoeff: 0.54, WeightCoeff: 0.12, MidParentCoeff: 0.64},
-		},
-		12: {
-			MALE: {Intercept: -2.2, HeightCoeff: 0.54, WeightCoeff: 0.12, MidParentCoeff: 0.66},
-			FEMALE: {Intercept: 4.8, HeightCoeff: 0.50, WeightCoeff: 0.14, MidParentCoeff: 0.66},
-		},
-		13: {
-			MALE: {Intercept: 4.5, HeightCoeff: 0.52, WeightCoeff: 0.13, MidParentCoeff: 0.67},
-			FEMALE: {Intercept: 12.9, HeightCoeff: 0.47, WeightCoeff: 0.15, MidParentCoeff: 0.67},
-		},
-		14: {
-			MALE: {Intercept: 10.1, HeightCoeff: 0.50, WeightCoeff: 0.14, MidParentCoeff: 0.67},
-			FEMALE: {Intercept: 18.2, HeightCoeff: 0.45, WeightCoeff: 0.16, MidParentCoeff: 0.67},
-		},
-		15: {
-			MALE: {Intercept: 14.9, HeightCoeff: 0.49, WeightCoeff: 0.15, MidParentCoeff: 0.67},
-			FEMALE: {Intercept: 21.3, HeightCoeff: 0.44, WeightCoeff: 0.16, MidParentCoeff: 0.67},
-		},
-		16: {
-			MALE: {Intercept: 18.2, HeightCoeff: 0.48, WeightCoeff: 0.15, MidParentCoeff: 0.67},
-			FEMALE: {Intercept: 23.5, HeightCoeff: 0.43, WeightCoeff: 0.17, MidParentCoeff: 0.67},
-		},
-		17: {
-			MALE: {Intercept: 20.8, HeightCoeff: 0.47, WeightCoeff: 0.15, MidParentCoeff: 0.67},
-			FEMALE: {Intercept: 25.0, HeightCoeff: 0.43, WeightCoeff: 0.17, MidParentCoeff: 0.67},
-		},
-		18: {
-			MALE: {Intercept: 22.7, HeightCoeff: 0.47, WeightCoeff: 0.15, MidParentCoeff: 0.67},
-			FEMALE: {Intercept: 25.9, HeightCoeff: 0.42, WeightCoeff: 0.17, MidParentCoeff: 0.67},
-		},
-	}
-
-	// Get coefficients for closest age
-	ageInt := int(age)
-	if c, exists := coefficients[ageInt]; exists {
-		if coeff, ok := c[sex]; ok {
-			return coeff
-		}
-	}
-
-	// Fallback to age 15 if exact age not found
-	return coefficients[15][sex]
 }
 
 // getPubertyAdjustment returns height multiplier and stage name based on puberty signs

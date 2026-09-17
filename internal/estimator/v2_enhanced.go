@@ -1,6 +1,7 @@
 package estimator
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -61,6 +62,11 @@ type HeightPredictionV2Response struct {
 	Message            string
 	ModelUsed          string // Which ensemble model
 	Factors            map[string]float64 // Contribution of each factor
+	// Vrai quand le modele a rendu une taille adulte inferieure a la taille
+	// deja atteinte, et que le plancher a du la rattraper. C est un signal
+	// de panne du modele, pas une donnee produit : il n est pas expose dans
+	// la reponse HTTP, il sert aux tests et au journal du serveur.
+	PlancherDeclenche bool
 }
 
 // PredictHeightV2 uses ensemble learning for 97-98% accuracy
@@ -76,72 +82,57 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 		return resp
 	}
 
-	// Calculate BMI if not provided
-	bmi := req.BMI
-	if bmi == 0 {
-		bmi = req.WeightKG / ((req.HeightCM / 100) * (req.HeightCM / 100))
-	}
+	// L IMC ne sert plus : Khamis-Roche prend le poids directement, avec
+	// un coefficient ajuste par demi-annee (b2). Le recalculer pour le
+	// jeter ensuite ne ferait que laisser croire qu il entre quelque part.
 
-	// Les trois modeles lineaires restent calcules pour diagnostic, mais
-	// ne servent PLUS de predicteurs : leurs coefficients ne forment pas
-	// un jeu calibre.
-	//
-	// Mesure sur un garcon de 14 ans, 165 cm, 50 kg, parents 178/164 :
-	//   pred1 Khamis-Roche  = 218.5 cm
-	//   pred2 ethnique      = 218.5 cm (meme formule)
-	//   pred3 velocite      = 167.5 cm (suppose qu un ado de 14 ans
-	//                         devrait deja mesurer sa taille adulte)
-	//   ensemble x puberte  = ~219.9 cm affiche a l utilisateur
-	//
-	// Recalibrer ces coefficients demande de vraies tables de reference
-	// (Khamis-Roche publie, ou age osseux). Tant qu on ne les a pas, on
-	// n invente pas de chiffres : on utilise une methode documentee.
-	// Seule la CONFIANCE de ces trois methodes sert encore (largeur de
-	// l intervalle). Leurs hauteurs sont fausses et volontairement
-	// ignorees — cf. le releve ci-dessus.
-	//
-	// Elles ne sont plus exposees dans la reponse : "_diag_khamis_roche"
-	// renvoyait 219 cm en clair a chaque appel, visible par quiconque
-	// ouvre la reponse JSON. Un chiffre absurde publie a cote d un
-	// produit qui vend la rigueur coute plus cher qu il ne rapporte, et
-	// il n a aucune utilite pour le client.
-	pred1 := predictKhamisRocheV2(req, bmi)
-	pred2 := predictEthnicAdjusted(req, bmi)
-	pred3 := predictGrowthVelocity(req, bmi)
+	/* PREMIERE ANCRE : Khamis-Roche, qui regarde l adolescent lui-meme.
 
-	// ANCRE : methode mi-parentale (Tanner).
-	// Taille cible = moyenne des parents +6.5 cm (garcon) / -6.5 cm (fille).
-	// Methode de reference en pediatrie, verifiable, et coherente avec la
-	// promesse du produit : on explique d ou vient le chiffre.
+	   Elle remplace la cible mi-parentale (Tanner), qui ne regardait que
+	   les parents et rendait une taille adulte INFERIEURE a la taille du
+	   jour pour 19,8 % des profils realistes — plus d une fille sur deux
+	   a partir de quinze ans. Le detail du defaut, de sa cause et des
+	   cinq combinaisons mesurees est dans khamis_roche_table.go.
+
+	   La mi-parentale n a pas disparu du calcul : b3 EST son coefficient,
+	   ajuste par demi-annee au lieu d etre applique a 1,0. La rajouter a
+	   cote la compterait deux fois, et c est ce double comptage qui
+	   ecrasait les grands adolescents. Elle reste exposee plus bas comme
+	   valeur de diagnostic, non plus comme predicteur. */
+	khamisRoche := tailleAdulteKhamisRoche(
+		req.Age, req.Sex, req.HeightCM, req.WeightKG,
+		req.FatherHeightCM, req.MotherHeightCM,
+	)
+
+	/* SECONDE ANCRE : le couloir de croissance de l adolescent.
+
+	   Le suivi de percentile (percentile.go) dit s il est grand ou petit
+	   POUR SON AGE, en gardant son ecart a la mediane jusqu a 19 ans.
+	   C est la lecture que fait un generaliste devant une courbe.
+
+	   Les deux ancres restent utiles ensemble parce qu elles echouent sur
+	   des cas differents : Khamis-Roche sort de son domaine d ajustement
+	   au-dela de 17,5 ans, la trajectoire se trompe quand la puberte est
+	   en avance ou en retard — le seul cas que l age osseux trancherait.
+	   Elles se trompent rarement dans le meme sens.
+
+	   Moyenne NON PONDEREE. Sur les 2 450 profils de reference, un
+	   2/3-1/3 en faveur de Khamis-Roche ne fait pas mieux (1,2 % de
+	   sous-taille contre 0,3 %) : inventer une ponderation serait une
+	   precision qu on n a pas. */
+	trajectoire := tailleAdulteParPercentile(req.Age, req.Sex, req.HeightCM)
+	base := (khamisRoche + trajectoire) / 2
+
+	/* La cible mi-parentale ne sert plus qu au diagnostic : un ecart
+	   important entre elle et la base dit que l adolescent s ecarte
+	   nettement de sa famille, ce qui est une information pour qui lit
+	   les facteurs, pas une raison de deplacer le chiffre. */
 	midParentTarget := (req.FatherHeightCM + req.MotherHeightCM) / 2
 	if req.Sex == MALE {
 		midParentTarget += 6.5
 	} else {
 		midParentTarget -= 6.5
 	}
-
-	/* SECONDE ANCRE : le couloir de croissance de l adolescent lui-meme.
-
-	   La mi-parentale seule ne regarde QUE les parents. Elle ramenait donc
-	   tout le monde vers la moyenne familiale : le grand etait ecrase vers le
-	   bas — et s il depassait deja sa cible, on lui annoncait que sa
-	   croissance etait finie — pendant que le petit repartait avec une
-	   promesse intenable. Mesure en production avant ce correctif : un garcon
-	   de 14 ans mesurant 185 cm se voyait annoncer 185 cm, soit « 0 cm
-	   restant ».
-
-	   Le suivi de percentile (percentile.go) apporte l information qui
-	   manquait : est-il grand ou petit POUR SON AGE. Les deux methodes sont
-	   independantes — l une regarde l heredite, l autre la trajectoire deja
-	   parcourue — et se trompent rarement dans le meme sens. Leur moyenne
-	   simple est plus sure que chacune prise seule, et c est la lecture que
-	   fait un generaliste devant une courbe de croissance.
-
-	   Moyenne NON PONDEREE, faute de quoi il faudrait justifier le poids.
-	   Les deux methodes ont des dispersions du meme ordre sur cette tranche
-	   d age ; inventer un 60/40 serait une precision qu on n a pas. */
-	trajectoire := tailleAdulteParPercentile(req.Age, req.Sex, req.HeightCM)
-	base := (midParentTarget + trajectoire) / 2
 
 	// Les facteurs de mode de vie modulent la base dans une fourchette
 	// etroite (calculateHealthFactor reste borne autour de 1.0). Ils ne
@@ -181,12 +172,26 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 		potentialHeight = finalHeight
 	}
 
-	// La methode mi-parentale ne regarde que la taille des parents, jamais
-	// celle deja atteinte par l enfant. Elle annoncait donc 180,5 cm a un
-	// adolescent qui mesurait deja 183 cm — une taille adulte inferieure a
-	// sa taille actuelle. On ne retrecit pas a l adolescence : la taille
-	// deja atteinte est un plancher, pas une variable.
+	/* PLANCHER — et surtout, DETECTEUR DE PANNE DU MODELE.
+
+	   On ne retrecit pas a l adolescence : la taille deja atteinte est un
+	   plancher, pas une variable. Il reste necessaire pour une poignee de
+	   profils (0,3 % des 2 450 de reference, tous des grands de dix-sept
+	   ans qui ont effectivement fini).
+
+	   Mais il etait silencieux, et c est ce silence qui a laisse passer le
+	   defaut pendant des semaines : il etait le SEUL endroit du code qui
+	   savait que le modele venait d echouer, et il ne le disait a
+	   personne. L utilisateur recevait sa propre taille saisie, presentee
+	   comme une prediction, et tout avait l air normal.
+
+	   Il le dit desormais. Si ce compteur depasse 1 % des appels, quelque
+	   chose a casse dans le modele — c est le seuil retenu par les tests
+	   (TestBalayage_PlancherSousUnPourcent). */
 	if finalHeight < req.HeightCM {
+		resp.PlancherDeclenche = true
+		fmt.Printf("[estimateur] plancher declenche : age=%.1f sexe=%s taille=%.1f modele=%.1f (khamis=%.1f trajectoire=%.1f)\n",
+			req.Age, req.Sex, req.HeightCM, finalHeight, khamisRoche, trajectoire)
 		finalHeight = req.HeightCM
 	}
 
@@ -203,8 +208,9 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	   divergent de plus de dix centimetres, c est le signe d une puberte en
 	   avance ou en retard, exactement le cas que ce modele ne sait pas
 	   trancher sans age osseux. */
-	resp.Factors["mid_parent_target"] = midParentTarget
+	resp.Factors["khamis_roche"] = khamisRoche
 	resp.Factors["percentile_projection"] = trajectoire
+	resp.Factors["mid_parent_target"] = midParentTarget
 	resp.PercentileAge = percentileTaillePourAge(req.Age, req.Sex, req.HeightCM)
 	resp.Factors["blended_base"] = base
 	resp.Factors["health_multiplier"] = healthMultiplier
@@ -217,156 +223,17 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	// sur la taille mi-parentale brute, sans jamais regarder la valeur
 	// predite : on affichait "219.9 cm" avec un intervalle "174.5-180.5",
 	// soit un point estime hors de son propre intervalle.
-	confidenceLevel, confidenceRange := calculateV2Confidence(req, finalHeight,
-		pred1.confidence, pred2.confidence, pred3.confidence,
-	)
+	confidenceLevel, confidenceRange := calculateV2Confidence(req, finalHeight)
 
 	resp.PredictedHeightCM = math.Round(finalHeight*10) / 10
 	resp.PotentialHeightCM = math.Round(potentialHeight*10) / 10
 	resp.ConfidenceRange = confidenceRange
 	resp.ConfidenceLevel = confidenceLevel
 	resp.PubertyStage = pubertyStage
-	resp.ModelUsed = "Taille mi-parentale (Tanner) + facteurs de mode de vie"
+	resp.ModelUsed = "Khamis-Roche + suivi de percentile OMS + facteurs de mode de vie"
 	resp.Message = "Height prediction successful (v2 ML-enhanced)"
 
 	return resp
-}
-
-type predictionResult struct {
-	height     float64
-	confidence float64
-}
-
-// predictKhamisRocheV2 - Improved Khamis-Roche with BMI factor
-func predictKhamisRocheV2(req HeightPredictionV2Request, bmi float64) predictionResult {
-	midParentHeight := (req.FatherHeightCM + req.MotherHeightCM) / 2
-	if req.Sex == MALE {
-		midParentHeight += 6.5
-	} else {
-		midParentHeight -= 6.5
-	}
-
-	coefficients := getCoefficientsV2(req.Age, req.Sex)
-
-	// Original formula
-	predictedHeight := coefficients.Intercept +
-		coefficients.HeightCoeff*req.HeightCM +
-		coefficients.WeightCoeff*req.WeightKG +
-		coefficients.MidParentCoeff*midParentHeight
-
-	// Add BMI factor (new in v2)
-	// Normal BMI (18-24): no adjustment
-	// High BMI (>25): slightly reduces growth potential
-	// Low BMI (<18): indicates nutrition issues
-	bmiFactor := 1.0
-	if bmi < 18.0 {
-		bmiFactor = 0.97 // Malnutrition reduces growth
-	} else if bmi > 27.0 {
-		bmiFactor = 0.98 // Obesity slightly reduces growth
-	}
-	predictedHeight *= bmiFactor
-
-	// Add height velocity factor (new in v2)
-	// If growing fast: likely will be taller
-	// If growing slow: might plateau lower
-	if req.HeightVelocityCM > 0 {
-		velocityFactor := 1.0 + (req.HeightVelocityCM / 100.0)
-		velocityFactor = math.Min(velocityFactor, 1.08) // Cap at 8%
-		predictedHeight *= velocityFactor
-	}
-
-	confidence := 0.92 + (0.06 * bmiFactor) // 92-98% base confidence
-
-	return predictionResult{
-		height:     predictedHeight,
-		confidence: confidence,
-	}
-}
-
-// predictEthnicAdjusted - Apply ethnic-specific coefficients
-func predictEthnicAdjusted(req HeightPredictionV2Request, bmi float64) predictionResult {
-	midParentHeight := (req.FatherHeightCM + req.MotherHeightCM) / 2
-	if req.Sex == MALE {
-		midParentHeight += 6.5
-	} else {
-		midParentHeight -= 6.5
-	}
-
-	// Ethnic-specific coefficients (based on growth studies)
-	ethnicCoefficients := getEthnicCoefficients(req.Age, req.Sex, req.EthnicBackground)
-
-	predictedHeight := ethnicCoefficients.Intercept +
-		ethnicCoefficients.HeightCoeff*req.HeightCM +
-		ethnicCoefficients.WeightCoeff*req.WeightKG +
-		ethnicCoefficients.MidParentCoeff*midParentHeight
-
-	// Ethnic-specific BMI adjustment
-	bmiFactor := 1.0
-	if bmi < 18.0 {
-		bmiFactor = 0.97
-	} else if bmi > 27.0 {
-		bmiFactor = 0.98
-	}
-	predictedHeight *= bmiFactor
-
-	// Higher confidence for ethnic groups with better data
-	confidence := 0.88
-	if req.EthnicBackground == CAUCASIAN {
-		confidence = 0.94 // Most research on Caucasians
-	} else if req.EthnicBackground == ASIAN {
-		confidence = 0.91
-	} else if req.EthnicBackground == AFRICAN {
-		confidence = 0.89
-	}
-
-	return predictionResult{
-		height:     predictedHeight,
-		confidence: confidence,
-	}
-}
-
-// predictGrowthVelocity - Use growth rate to predict final height
-func predictGrowthVelocity(req HeightPredictionV2Request, bmi float64) predictionResult {
-	// Method: Roche et al. velocity-based prediction
-	// Growth decelerates with age - faster growers become taller
-
-	midParentHeight := (req.FatherHeightCM + req.MotherHeightCM) / 2
-
-	// Baseline from mid-parent
-	baseHeight := midParentHeight
-	if req.Sex == MALE {
-		baseHeight += 6.5
-	} else {
-		baseHeight -= 6.5
-	}
-
-	// Add current height influence
-	heightDifference := req.HeightCM - baseHeight
-	adjustment := heightDifference * 0.8 // Regression to mean (80% of advantage keeps)
-
-	// Velocity-based adjustment
-	velocityAdjustment := 0.0
-	if req.HeightVelocityCM > 0 {
-		// Fast growers at optimal ages become taller
-		if req.Age >= 10 && req.Age <= 15 {
-			velocityAdjustment = req.HeightVelocityCM * 2.5
-		} else if req.Age > 15 {
-			velocityAdjustment = req.HeightVelocityCM * 1.2
-		}
-	}
-
-	predictedHeight := baseHeight + adjustment + velocityAdjustment
-
-	// Confidence higher if we have velocity data
-	confidence := 0.85
-	if req.HeightVelocityCM > 0 {
-		confidence = 0.93
-	}
-
-	return predictionResult{
-		height:     predictedHeight,
-		confidence: confidence,
-	}
 }
 
 // calculateHealthFactor - Multiply by health/lifestyle factors
@@ -527,18 +394,17 @@ func calculateHealthFactor(req HeightPredictionV2Request) float64 {
 func calculateV2Confidence(
 	req HeightPredictionV2Request,
 	predictedHeight float64,
-	conf1, conf2, conf3 float64,
 ) (string, [2]float64) {
-	// conf1/conf2/conf3 viennent des modeles lineaires devenus purement
-	// diagnostiques : ils ne renseignent plus la fiabilite du resultat.
-	// La marge depend donc de ce qui la determine reellement, c est-a-dire
-	// la quantite de croissance qu il reste a parcourir.
-	_ = conf1
-	_ = conf2
-	_ = conf3
+	/* La marge ne depend plus que de ce qui la determine reellement : la
+	   quantite de croissance qu il reste a parcourir. Les trois
+	   "confiances" des anciens modeles lineaires entraient ici en
+	   parametres et etaient jetees a la ligne suivante (_ = conf1). Elles
+	   ont disparu avec les modeles. */
 
-	// La methode mi-parentale a une dispersion d environ +/-8.5 cm a 95 %.
-	// On part de la et on resserre a mesure que la croissance se termine.
+	// Khamis-Roche a une erreur moyenne d environ 5,3 cm chez le garcon et
+	// 4,3 cm chez la fille dans l echantillon d origine ; la mi-parentale
+	// tournait autour de +/-8,5 cm a 95 %. On part de 6,5 et on resserre a
+	// mesure que la croissance se termine.
 	rangeMargin := 6.5
 
 	// La vitesse de croissance remplace le stade de Tanner comme
@@ -653,39 +519,6 @@ type ValidationError struct {
 func (e *ValidationError) Error() string {
 	return e.Message
 }
-
-// getCoefficientsV2 - Improved Khamis-Roche coefficients with BMI integration
-func getCoefficientsV2(age float64, sex string) Coefficients {
-	// Same as v1 (already optimized)
-	return getCoefficients(age, sex)
-}
-
-// getEthnicCoefficients - Ethnic-specific growth coefficients
-func getEthnicCoefficients(age float64, sex string, ethnic EthnicBackground) Coefficients {
-	// Population-specific adjustment factors
-	// Based on WHO growth studies and ethnic research
-	adjustments := map[EthnicBackground]float64{
-		CAUCASIAN: 1.0,   // Reference population
-		ASIAN:     0.97,  // Typically slightly shorter
-		AFRICAN:   1.02,  // Typically slightly taller
-		HISPANIC:  0.99,  // Close to Caucasian average
-		MIXED:     1.0,   // Average of mix
-	}
-
-	baseCoeff := getCoefficients(age, sex)
-	adjFactor := adjustments[ethnic]
-
-	// Apply adjustment to intercept (shifts prediction up/down)
-	adjusted := Coefficients{
-		Intercept:     baseCoeff.Intercept * adjFactor,
-		HeightCoeff:   baseCoeff.HeightCoeff,
-		WeightCoeff:   baseCoeff.WeightCoeff,
-		MidParentCoeff: baseCoeff.MidParentCoeff,
-	}
-
-	return adjusted
-}
-
 
 // describeGrowthPhase - libelle lisible de la phase de croissance,
 // deduit de l age et de la vitesse. Remplace la stadification de Tanner,

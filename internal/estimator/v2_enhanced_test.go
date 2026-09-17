@@ -232,8 +232,8 @@ func TestPredictHeightV2_EnsembleAccuracy(t *testing.T) {
 	// Le calcul doit etre lisible : d ou part-on, de combien module-t-on,
 	// ou arrive-t-on. C est ce que la page promet d expliquer.
 	for _, cle := range []string{
-		"mid_parent_target", "percentile_projection", "blended_base",
-		"health_multiplier", "final_prediction",
+		"khamis_roche", "percentile_projection", "mid_parent_target",
+		"blended_base", "health_multiplier", "final_prediction",
 	} {
 		if resp.Factors[cle] == 0 {
 			t.Errorf("facteur %q absent de la reponse", cle)
@@ -242,19 +242,29 @@ func TestPredictHeightV2_EnsembleAccuracy(t *testing.T) {
 
 	/* Les trois predicteurs lineaires non calibres ne doivent PAS
 	   ressortir. Ils rendaient 218 cm sur cet enfant, et la reponse les
-	   publiait en clair a chaque appel. */
-	for _, cle := range []string{"khamis_roche", "ethnic_adjusted", "growth_velocity", "ensemble_prediction", "_diag_khamis_roche"} {
+	   publiait en clair a chaque appel. Ils ont depuis ete supprimes du
+	   code ; "khamis_roche" ci-dessus est la VRAIE methode, en unites
+	   imperiales (khamis_roche_table.go), et non l ancienne table mal
+	   nommee qui portait ce nom. */
+	for _, cle := range []string{"ethnic_adjusted", "growth_velocity", "ensemble_prediction", "_diag_khamis_roche"} {
 		if _, present := resp.Factors[cle]; present {
 			t.Errorf("le facteur non calibre %q est reexpose dans la reponse", cle)
 		}
 	}
 
-	// La base est bien la moyenne des DEUX ancres, pas la mi-parentale seule.
-	moyenne := (resp.Factors["mid_parent_target"] + resp.Factors["percentile_projection"]) / 2
+	/* La base est la moyenne de Khamis-Roche et de la trajectoire OMS.
+	   La cible mi-parentale reste exposee, mais elle n entre PLUS dans le
+	   calcul : c est precisement le correctif. */
+	moyenne := (resp.Factors["khamis_roche"] + resp.Factors["percentile_projection"]) / 2
 	if math.Abs(resp.Factors["blended_base"]-moyenne) > 0.01 {
-		t.Errorf("blended_base = %.2f, attendu %.2f (mi-parentale %.1f, percentile %.1f)",
+		t.Errorf("blended_base = %.2f, attendu %.2f (Khamis-Roche %.1f, percentile %.1f)",
 			resp.Factors["blended_base"], moyenne,
-			resp.Factors["mid_parent_target"], resp.Factors["percentile_projection"])
+			resp.Factors["khamis_roche"], resp.Factors["percentile_projection"])
+	}
+
+	ancienne := (resp.Factors["mid_parent_target"] + resp.Factors["percentile_projection"]) / 2
+	if math.Abs(resp.Factors["blended_base"]-ancienne) < 0.01 {
+		t.Errorf("blended_base vaut encore la moyenne mi-parentale + trajectoire (%.2f) : l ancre mi-parentale est revenue dans le calcul", ancienne)
 	}
 
 	// Le resultat annonce est bien cette base modulee, pas autre chose.
@@ -268,8 +278,8 @@ func TestPredictHeightV2_EnsembleAccuracy(t *testing.T) {
 			resp.Factors["blended_base"], resp.Factors["health_multiplier"])
 	}
 
-	t.Logf("mi-parentale %.1f / percentile %.1f -> base %.1f x %.4f = %.1f cm",
-		resp.Factors["mid_parent_target"], resp.Factors["percentile_projection"],
+	t.Logf("Khamis-Roche %.1f / percentile %.1f -> base %.1f x %.4f = %.1f cm",
+		resp.Factors["khamis_roche"], resp.Factors["percentile_projection"],
 		resp.Factors["blended_base"], resp.Factors["health_multiplier"],
 		resp.Factors["final_prediction"])
 }
