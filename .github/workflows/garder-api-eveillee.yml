@@ -1,0 +1,69 @@
+name: Garder l'API éveillée
+
+# POURQUOI CE FICHIER EXISTE
+#
+# L'offre gratuite de Render endort l'instance après un quart d'heure
+# sans requête, et le réveil prend jusqu'à une minute. Avec le trafic
+# actuel, l'instance dort donc l'essentiel de la journée — et c'est le
+# visiteur qui clique sur « Régler » qui paie ce réveil, au pire moment
+# possible du parcours.
+#
+# Les deux pages de paiement appellent déjà /api/v1/plans à l'ouverture,
+# ce qui réveille l'instance pendant que la personne lit. Ça ne couvre
+# pas tout : quelqu'un qui arrive directement sur la page, décide vite et
+# clique avant la fin du réveil attend quand même.
+#
+# CE QUE CE PING CHANGE, ET CE QU'IL NE CHANGE PAS
+#
+# Il maintient l'instance éveillée pendant les heures où il y a du
+# trafic. Ce n'est pas une solution définitive : la vraie correction est
+# une offre payante chez Render. Tant que le service ne le justifie pas,
+# ce fichier fait le travail.
+#
+# POURQUOI PAS 24 HEURES SUR 24
+#
+# L'offre gratuite accorde 750 heures d'instance par mois, et un mois en
+# compte environ 730 : rester éveillé en permanence consommerait
+# pratiquement tout le quota, sans marge pour les redéploiements. La
+# plage ci-dessous couvre environ seize heures par jour, soit à peu près
+# 480 heures par mois.
+#
+# Les horaires sont en UTC : 6h-21h UTC correspond à 8h-23h à Paris en
+# été, 7h-22h en hiver.
+#
+# Le déclenchement programmé de GitHub n'est pas garanti à la minute et
+# peut être retardé aux heures de pointe. L'intervalle de dix minutes
+# laisse de la marge avant les quinze minutes au bout desquelles Render
+# endort l'instance.
+
+on:
+  schedule:
+    - cron: '*/10 6-21 * * *'
+  workflow_dispatch:
+
+# Deux pings simultanés ne servent à rien : si un tour déborde, on
+# annule le précédent plutôt que d'empiler.
+concurrency:
+  group: garder-api-eveillee
+  cancel-in-progress: true
+
+jobs:
+  reveiller:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Appeler /health
+        run: |
+          # --max-time 90 : un réveil à froid dépasse largement le délai
+          # par défaut de curl, et un échec ici ferait passer le workflow
+          # au rouge alors que le service fonctionne.
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 90 \
+            https://grandimi-api.onrender.com/health)
+          echo "HTTP $code"
+
+          # On ne fait pas échouer le workflow sur une réponse inattendue :
+          # ce ping n'est pas une surveillance, et un rouge récurrent dans
+          # l'historique finirait par être ignoré — y compris le jour où il
+          # signalerait une vraie panne.
+          if [ "$code" != "200" ]; then
+            echo "::warning::/health a répondu $code au lieu de 200"
+          fi

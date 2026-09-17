@@ -90,9 +90,6 @@ export function WheelPicker({
   /* Vrai pendant qu'on place la molette nous-mêmes : le défilement
      déclenché par ce placement ne doit pas être pris pour un geste. */
   const positionnementRef = useRef(false)
-  /* Passe à vrai au premier geste réel. Tant qu'il est faux, la molette
-     n'appartient encore à personne et on peut la replacer librement. */
-  const gesteRef = useRef(false)
   /* L'index courant, hors du cycle de rendu.
 
      `activeIndex` ne change qu'au rendu suivant : deux crans de molette
@@ -200,44 +197,20 @@ export function WheelPicker({
     }
   }, [value, nearestIndex, itemHeight])
 
-  /* La disposition peut arriver APRÈS le placement initial.
+  /* PAS D'OBSERVATEUR DE TAILLE ICI, ET C'EST UN RETRAIT DELIBERE.
 
-     Le retour de la police, un onglet restauré en arrière-plan, une
-     fenêtre redimensionnée : le conteneur prend sa hauteur plus tard, et
-     le `scrollTop` posé avant ne valait rien — il avait été ramené à
-     zéro. Réessayer pendant dix frames ne suffit pas quand le retard
-     dépasse ce délai ; mesuré en local, la molette affichait encore le
-     minimum une seconde et demie après l'ouverture de l'écran.
+     Un ResizeObserver replacait la molette a chaque changement de taille
+     du conteneur. Sur telephone, la barre d'adresse du navigateur se
+     retracte PENDANT le defilement : elle redimensionne la fenetre, donc
+     elle declenchait ce replacement au milieu du geste. La liste repartait
+     en arriere sous le doigt, et il fallait rester appuye pour lutter
+     contre elle. Signale par le client, et c est bien ce que le code
+     faisait.
 
-     On écoute donc le moment où la taille change vraiment, plutôt que de
-     parier sur un délai. Le replacement cesse dès le premier geste :
-     repositionner sous le doigt de quelqu'un serait pire que le défaut
-     qu'on corrige. */
-  useEffect(() => {
-    const el = scrollerRef.current
-    if (!el || typeof ResizeObserver === 'undefined') return undefined
-
-    const observateur = new ResizeObserver(() => {
-      if (gesteRef.current) return
-      /* AUCUN DRAPEAU ICI, ET C'EST DELIBERE.
-
-         Cette fonction posait `positionnementRef` puis le relachait dans
-         une frame d'animation. Quand cette frame ne s'execute pas — onglet
-         en arriere-plan, rendu differe — le drapeau restait vrai, et le
-         lecteur de position, qui commence par le verifier, se taisait
-         definitivement. Mesure : la fleche du haut deplacait bien la
-         position a 780, et la valeur restait sur 14.
-
-         Le drapeau n'a de sens que pour ignorer une position TRANSITOIRE.
-         Ici la position posee est celle qui fait autorite : la relire
-         rend le meme index, donc il n'y a rien a ignorer. */
-      el.scrollTop = indexRef.current * itemHeight
-    })
-
-    observateur.observe(el)
-    return () => observateur.disconnect()
-  }, [activeIndex, itemHeight])
-
+     Il avait ete ajoute pour rattraper une disposition arrivant en retard.
+     Le placement synchrone pose juste au-dessus, avec sa reprise sur dix
+     frames et son filet a 400 ms, couvre ce cas sans jamais toucher a la
+     position une fois l'ecran affiche. */
   const commit = useCallback(
     (index) => {
       const next = options[index]
@@ -260,7 +233,6 @@ export function WheelPicker({
 
   const handleScroll = () => {
     if (positionnementRef.current) return
-    gesteRef.current = true
     const el = scrollerRef.current
     if (!el) return
     const index = Math.max(
