@@ -458,7 +458,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           <>
             <div style={{ opacity: vitesseInconnue ? 0.35 : 1 }}>
               <WheelPicker
-                label="Centimètres pris depuis l’an dernier"
+                label="Centimètres grandis depuis l’an dernier"
                 min={0}
                 max={20}
                 step={0.5}
@@ -693,7 +693,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           { label: 'Père', valeur: `${fr(reponses.father_height_cm)} cm`, vers: 5 },
           { label: 'Mère', valeur: `${fr(reponses.mother_height_cm)} cm`, vers: 6 },
           {
-            label: 'Pris cette année',
+            label: 'Grandi cette année',
             valeur:
               reponses.height_velocity_cm === null
                 ? 'Je ne sais pas'
@@ -761,7 +761,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       sous: 'Avec celle de ton père, c’est la base du calcul.',
     },
     vitesse: {
-      titre: 'Combien as-tu pris depuis l’an dernier ?',
+      titre: 'Tu as grandi de combien depuis l’an dernier ?',
       sous: 'Compare avec une vieille photo, une toise, ou demande à tes parents.',
     },
     sommeil: {
