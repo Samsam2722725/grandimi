@@ -88,19 +88,22 @@ export function WheelPicker({
   /* Passe à vrai au premier geste réel. Tant qu'il est faux, la molette
      n'appartient encore à personne et on peut la replacer librement. */
   const gesteRef = useRef(false)
+  /* L'index courant, hors du cycle de rendu.
+
+     `activeIndex` ne change qu'au rendu suivant : deux crans de molette
+     arrives dans la meme frame partaient donc du MEME index perime, et le
+     second ne faisait rien. Mesure sur le site : deux crans vers le bas ne
+     deplacaient que d'une valeur, et la position visuelle restait sur
+     l'ancienne — la molette paraissait coincee.
+
+     Cette reference est mise a jour dans le geste lui-meme, donc chaque
+     cran compte. */
+  const indexRef = useRef(nearestIndex(value))
   const [activeIndex, setActiveIndex] = useState(() => nearestIndex(value))
 
   const height = itemHeight * visibleCount
   const pad = (height - itemHeight) / 2
 
-  const scrollToIndex = useCallback(
-    (index, behavior) => {
-      const el = scrollerRef.current
-      if (!el) return
-      el.scrollTo({ top: index * itemHeight, behavior })
-    },
-    [itemHeight],
-  )
 
   /* Positionnement initial, et resynchronisation si la valeur change depuis
      l'extérieur (retour arrière, changement d'unité). On ignore le cas où la
@@ -129,6 +132,7 @@ export function WheelPicker({
     if (emittedRef.current === value) return
 
     const index = nearestIndex(value)
+    indexRef.current = index
     setActiveIndex(index)
 
     positionnementRef.current = true
@@ -185,7 +189,7 @@ export function WheelPicker({
     const observateur = new ResizeObserver(() => {
       if (gesteRef.current) return
       positionnementRef.current = true
-      el.scrollTop = activeIndex * itemHeight
+      el.scrollTop = indexRef.current * itemHeight
       requestAnimationFrame(() => {
         positionnementRef.current = false
       })
@@ -198,7 +202,10 @@ export function WheelPicker({
   const commit = useCallback(
     (index) => {
       const next = options[index]
-      if (next === undefined || next === value) return
+      /* Comparaison a la DERNIERE valeur emise, pas a la prop `value` :
+         pendant une rafale de crans, la prop retarde et bloquait les
+         emissions suivantes. */
+      if (next === undefined || next === emittedRef.current) return
       emittedRef.current = next
       /* Retour haptique court sur les appareils qui le supportent : c'est ce
          qui donne la sensation de cran d'un picker natif. Ignoré ailleurs. */
@@ -209,7 +216,7 @@ export function WheelPicker({
       }
       onChange(next)
     },
-    [options, value, onChange],
+    [options, onChange],
   )
 
   const handleScroll = () => {
@@ -222,20 +229,41 @@ export function WheelPicker({
       Math.min(options.length - 1, Math.round(el.scrollTop / itemHeight)),
     )
     if (index !== activeIndex) {
+      indexRef.current = index
       setActiveIndex(index)
       commit(index)
     }
   }
 
-  const move = useCallback(
+  /* UNE SEULE SOURCE DE VERITE : LA POSITION DE DEFILEMENT.
+
+     La version precedente faisait travailler trois mecanismes sur la meme
+     molette — un defilement anime lance par nous, l'accrochage natif, et
+     le lecteur de position qui validait une valeur en plein vol. Ils se
+     contredisaient : mesure sur le site, trois crans vers le haut ne
+     deplacaient que d'une valeur, et la pilule surlignait « 14 ans »
+     pendant que la position, elle, montrait 14,5.
+
+     Ici, un geste ne fait qu'UNE chose : deplacer `scrollTop`. C'est
+     ensuite `handleScroll` — et lui seul — qui en deduit la valeur et
+     l'emet. Plus personne ne se bat, et chaque cran compte puisque
+     chacun lit la position reelle au moment ou il arrive, jamais un etat
+     de rendu en retard.
+
+     L'affectation est instantanee et non animee : une animation en cours
+     serait a nouveau une seconde verite, et c'est precisement ce qu'on
+     vient de retirer. L'accrochage natif suffit a rendre le mouvement
+     propre. */
+  const deplacer = useCallback(
     (delta) => {
-      const index = Math.max(0, Math.min(options.length - 1, activeIndex + delta))
-      if (index === activeIndex) return
-      setActiveIndex(index)
-      commit(index)
-      scrollToIndex(index, 'smooth')
+      const el = scrollerRef.current
+      if (!el) return
+      const depart = Math.round(el.scrollTop / itemHeight)
+      const cible = Math.max(0, Math.min(options.length - 1, depart + delta))
+      if (cible === depart) return
+      el.scrollTop = cible * itemHeight
     },
-    [options.length, activeIndex, commit, scrollToIndex],
+    [itemHeight, options.length],
   )
 
   /* Molette : un cran vers le haut = une valeur de plus.
@@ -259,12 +287,12 @@ export function WheelPicker({
     const surMolette = (evenement) => {
       if (Math.abs(evenement.deltaY) < 1) return
       evenement.preventDefault()
-      move(evenement.deltaY < 0 ? 1 : -1)
+      deplacer(evenement.deltaY < 0 ? 1 : -1)
     }
 
     el.addEventListener('wheel', surMolette, { passive: false })
     return () => el.removeEventListener('wheel', surMolette)
-  }, [move])
+  }, [deplacer])
 
   const handleKeyDown = (event) => {
     const jumps = {
@@ -275,21 +303,16 @@ export function WheelPicker({
     }
     if (event.key in jumps) {
       event.preventDefault()
-      move(jumps[event.key])
+      deplacer(jumps[event.key])
       return
     }
-    if (event.key === 'Home') {
+    /* Debut = la plus petite valeur, Fin = la plus grande, comme l'exige
+       le role spinbutton — independamment du sens des fleches. */
+    if (event.key === 'Home' || event.key === 'End') {
       event.preventDefault()
-      setActiveIndex(0)
-      commit(0)
-      scrollToIndex(0, 'smooth')
-    }
-    if (event.key === 'End') {
-      event.preventDefault()
-      const last = options.length - 1
-      setActiveIndex(last)
-      commit(last)
-      scrollToIndex(last, 'smooth')
+      const el = scrollerRef.current
+      if (!el) return
+      el.scrollTop = (event.key === 'Home' ? 0 : options.length - 1) * itemHeight
     }
   }
 
