@@ -34,25 +34,29 @@ export function WheelPicker({
 }) {
   /* MONTER AUGMENTE, DESCENDRE DIMINUE — QUEL QUE SOIT LE GESTE.
 
-     Le piège : la molette et le doigt vont dans des sens OPPOSÉS sur un
-     même conteneur. Rouler la molette vers le haut fait descendre le
-     contenu, alors que glisser le doigt vers le haut le fait monter. Aucun
-     ordre de liste ne peut donc satisfaire les deux — inverser l'ordre
-     corrige l'ordinateur et casse le téléphone, ce qui est exactement ce
-     qui s'est passé.
+     LE SENS DEMANDE : REMONTER LA LISTE AUGMENTE.
 
-     La seule sortie est de traiter les deux gestes séparément :
+     Demande du client, formulee sur telephone : « si tu scrolles de haut
+     en bas, c'est plus ». Glisser le doigt VERS LE BAS fait remonter dans
+     la liste. Et rouler la molette VERS LE HAUT y remonte aussi — les deux
+     gestes vont dans le meme sens, contrairement a ce que j'avais conclu.
 
-       doigt     l'ordre croissant suffit. Glisser vers le haut fait défiler
-                 vers le bas de la liste, donc vers les grandes valeurs.
-       molette   interceptée plus bas, parce que son sens naturel donnerait
-                 l'inverse.
-       clavier   flèche du haut = +1 cran. Le conteneur s'annonce
-                 `spinbutton`, une norme où la flèche du haut DOIT
-                 augmenter ; elle diminuait jusqu'ici.
+     Il suffit donc que le HAUT de la liste porte les grandes valeurs, et
+     tout suit sans qu'on intercepte quoi que ce soit :
 
-     La liste reste donc croissante, et c'est aussi cette boucle-là qui
-     neutralise la dérive en virgule flottante des pas fractionnaires. */
+       doigt vers le bas   remonte la liste   -> valeur plus grande
+       molette vers le haut remonte la liste  -> valeur plus grande
+       fleche du haut      recule d'un cran   -> valeur plus grande
+
+     L'interception de la molette qui existait ici a ete retiree : avec cet
+     ordre elle inversait ce que le geste natif faisait deja correctement.
+     Le navigateur garde son inertie et son accrochage, que rien ne
+     remplace aussi bien.
+
+     La construction reste croissante AVANT retournement : c'est cette
+     boucle qui neutralise la derive en virgule flottante des pas
+     fractionnaires (0,5 an, 0,5 cm), et l'inverser rouvrirait le
+     probleme. */
   const options = useMemo(() => {
     const out = []
     // Arrondi à 4 décimales : les pas fractionnaires (0.5, 0.1) accumulent
@@ -60,6 +64,7 @@ export function WheelPicker({
     for (let v = min; v <= max + 1e-9; v += step) {
       out.push(Math.round(v * 10000) / 10000)
     }
+    out.reverse()
     return out
   }, [min, max, step])
 
@@ -135,36 +140,62 @@ export function WheelPicker({
     indexRef.current = index
     setActiveIndex(index)
 
+    const el = scrollerRef.current
+    if (!el) return undefined
+
+    const cible = index * itemHeight
     positionnementRef.current = true
+
+    /* PREMIERE TENTATIVE SYNCHRONE, ET NON DANS UNE FRAME D'ANIMATION.
+
+       La version precedente confiait TOUT a requestAnimationFrame, y
+       compris la liberation du drapeau. Quand la frame ne s'execute pas —
+       onglet en arriere-plan, economiseur d'energie, rendu differe — le
+       drapeau restait vrai indefiniment : la molette ne placait rien ET le
+       lecteur de position se taisait, puisqu'il commence par verifier ce
+       meme drapeau. Mesure : valeur « 14 » affichee sur une liste calee
+       sur 22, et aucun geste ne la rattrapait.
+
+       Poser la position tout de suite reussit dans le cas courant — verifie
+       a la main sur le composant, l'affectation prend et tient. La frame
+       d'animation ne sert plus qu'a rattraper une disposition en retard. */
+    el.scrollTop = cible
+
     let annule = false
     let essais = 0
 
-    const placer = () => {
+    const reessayer = () => {
       if (annule) return
-      const el = scrollerRef.current
-      if (!el) {
+      const courant = scrollerRef.current
+      if (!courant) {
         positionnementRef.current = false
         return
       }
 
-      const cible = index * itemHeight
-      el.scrollTop = cible
-      essais += 1
-
       /* Dix frames, soit un sixième de seconde : au-delà, ce n'est plus une
          disposition en retard, et insister ferait tourner la boucle pour
          rien. */
-      if (Math.abs(el.scrollTop - cible) > 1 && essais < 10) {
-        requestAnimationFrame(placer)
+      if (Math.abs(courant.scrollTop - cible) > 1 && essais < 10) {
+        courant.scrollTop = cible
+        essais += 1
+        requestAnimationFrame(reessayer)
         return
       }
       positionnementRef.current = false
     }
 
-    requestAnimationFrame(placer)
+    requestAnimationFrame(reessayer)
+
+    /* Filet de securite : le drapeau se libere de toute facon. Aucun etat
+       du composant ne doit dependre d'une frame qui pourrait ne jamais
+       venir — c'est precisement ce qui a tue le lecteur de position. */
+    const filet = setTimeout(() => {
+      positionnementRef.current = false
+    }, 400)
 
     return () => {
       annule = true
+      clearTimeout(filet)
       positionnementRef.current = false
     }
   }, [value, nearestIndex, itemHeight])
@@ -188,11 +219,19 @@ export function WheelPicker({
 
     const observateur = new ResizeObserver(() => {
       if (gesteRef.current) return
-      positionnementRef.current = true
+      /* AUCUN DRAPEAU ICI, ET C'EST DELIBERE.
+
+         Cette fonction posait `positionnementRef` puis le relachait dans
+         une frame d'animation. Quand cette frame ne s'execute pas — onglet
+         en arriere-plan, rendu differe — le drapeau restait vrai, et le
+         lecteur de position, qui commence par le verifier, se taisait
+         definitivement. Mesure : la fleche du haut deplacait bien la
+         position a 780, et la valeur restait sur 14.
+
+         Le drapeau n'a de sens que pour ignorer une position TRANSITOIRE.
+         Ici la position posee est celle qui fait autorite : la relire
+         rend le meme index, donc il n'y a rien a ignorer. */
       el.scrollTop = indexRef.current * itemHeight
-      requestAnimationFrame(() => {
-        positionnementRef.current = false
-      })
     })
 
     observateur.observe(el)
@@ -262,44 +301,34 @@ export function WheelPicker({
       const cible = Math.max(0, Math.min(options.length - 1, depart + delta))
       if (cible === depart) return
       el.scrollTop = cible * itemHeight
+
+      /* On n'attend PAS l'evenement de defilement pour emettre.
+
+         Une affectation programmee de `scrollTop` n en emet pas toujours
+         un — mesure : la fleche du haut deplacait bien la position, et la
+         valeur ne bougeait pas. Le clavier annonce donc lui-meme.
+
+         Sans risque de double ecriture : si l evenement finit par arriver,
+         le lecteur recalcule le MEME index depuis la meme position et
+         n'emet rien. Le defilement au doigt, lui, continue de passer
+         uniquement par le lecteur. */
+      indexRef.current = cible
+      setActiveIndex(cible)
+      commit(cible)
     },
-    [itemHeight, options.length],
+    [itemHeight, options.length, commit],
   )
 
-  /* Molette : un cran vers le haut = une valeur de plus.
-
-     Son sens naturel donnerait l'inverse — rouler vers le haut fait
-     descendre le contenu, donc reculer dans une liste croissante. On
-     l'intercepte et on avance nous-mêmes.
-
-     Écouteur posé à la main plutôt que par onWheel : React attache
-     `wheel` en passif, où preventDefault() est ignoré. Sans lui, le
-     défilement natif s'ajouterait au nôtre et la valeur sauterait de
-     deux crans.
-
-     Un cran de molette = une valeur, jamais plus : sur un sélecteur de
-     mesure, dépasser sa taille et revenir coûte plus cher que monter
-     d'un cran de trop. */
-  useEffect(() => {
-    const el = scrollerRef.current
-    if (!el) return undefined
-
-    const surMolette = (evenement) => {
-      if (Math.abs(evenement.deltaY) < 1) return
-      evenement.preventDefault()
-      deplacer(evenement.deltaY < 0 ? 1 : -1)
-    }
-
-    el.addEventListener('wheel', surMolette, { passive: false })
-    return () => el.removeEventListener('wheel', surMolette)
-  }, [deplacer])
 
   const handleKeyDown = (event) => {
+    /* Liste decroissante : la valeur augmente quand on RECULE dans le
+       tableau. La fleche du haut doit augmenter — c'est ce qu'exige le
+       role spinbutton — donc elle recule. */
     const jumps = {
-      ArrowUp: 1,
-      ArrowDown: -1,
-      PageUp: 5,
-      PageDown: -5,
+      ArrowUp: -1,
+      ArrowDown: 1,
+      PageUp: -5,
+      PageDown: 5,
     }
     if (event.key in jumps) {
       event.preventDefault()
@@ -312,7 +341,7 @@ export function WheelPicker({
       event.preventDefault()
       const el = scrollerRef.current
       if (!el) return
-      el.scrollTop = (event.key === 'Home' ? 0 : options.length - 1) * itemHeight
+      el.scrollTop = (event.key === 'Home' ? options.length - 1 : 0) * itemHeight
     }
   }
 
