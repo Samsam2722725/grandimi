@@ -228,3 +228,26 @@
   gap: 12px;
   text-align: left;
 }
+
+/* Habitudes deja bonnes : la ligne porte un constat ET ce qui reste en
+   jeu, donc elle passe sur deux niveaux. Sans le second, l ecran se
+   terminait sur « 0 cm » — un constat juste, mais une impasse. */
+.analyse .analyse-ligne--acquis-bloc {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.analyse .analyse-acquis-tete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.analyse .analyse-acquis-note {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--funnel-muted);
+}

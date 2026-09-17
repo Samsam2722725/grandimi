@@ -180,6 +180,19 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
       ? Math.min(95, Math.round((tailleActuelle / cibleCroissance) * 20) * 5)
       : 0
 
+  /* CE QUI RESTE, PAS CE QUI EST FAIT.
+
+     « Tu as fait 90 % de ta croissance » est exact et demotivant : le
+     lecteur en conclut que c'est joue, et il a raison de le conclure —
+     c'est ce que la phrase dit. Le meme nombre, pris par l'autre bout,
+     designe ce qui est encore en jeu, c'est-a-dire precisement ce que
+     l'abonnement adresse. Aucun des deux n'est plus vrai que l'autre ;
+     l'un ferme la porte, l'autre l'ouvre.
+
+     Plancher a 5 % : en dessous, l'arrondi par tranches de cinq
+     afficherait « 0 % », ce qui reviendrait a dire a un adolescent de
+     quinze ans que tout est termine — faux, et invendable. */
+  const resteCroissance = partCroissance > 0 ? Math.max(5, 100 - partCroissance) : 0
   const auMoinsUnLevier = leviers.some((levier) => levier.renseigne)
   const coutAffichable = auMoinsUnLevier && ecartHabitudes > 0
   const dejaAuMaximum = auMoinsUnLevier && ecartHabitudes === 0
@@ -249,9 +262,15 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
         )}
 
         {dejaAuMaximum && (
-          <div className="analyse-ligne analyse-ligne--acquis">
-            <span className="analyse-perte-label">Tes habitudes ne te coûtent rien</span>
-            <strong className="analyse-perte-valeur">0 cm</strong>
+          <div className="analyse-ligne analyse-ligne--acquis analyse-ligne--acquis-bloc">
+            <div className="analyse-acquis-tete">
+              <span className="analyse-perte-label">Tes habitudes ne te coûtent rien</span>
+              <strong className="analyse-perte-valeur">0 cm</strong>
+            </div>
+            <p className="analyse-acquis-note">
+              Tu es déjà sur ta meilleure trajectoire. Le risque n’est plus de mal
+              faire — c’est de lâcher avant la fin. Le plan sert à tenir jusque-là.
+            </p>
           </div>
         )}
 
@@ -297,10 +316,10 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </div>
         )}
 
-        {partCroissance > 0 && (
+        {resteCroissance > 0 && (
           <div className="analyse-ligne analyse-ligne--fait">
             <span className="analyse-perte-label">
-              Tu as fait {partCroissance} % de ta croissance
+              Il te reste {resteCroissance} % de ta croissance à faire
             </span>
             <span aria-hidden="true">📈</span>
           </div>
