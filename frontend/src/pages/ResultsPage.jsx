@@ -123,6 +123,35 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      dont un inventé. */
   const pointsACorriger = leviers.filter((levier) => levier.sousCible).length
 
+  /* CE QUE SES HABITUDES LUI COUTENT, EN CLAIR.
+
+     C'est le seul argument de cet écran qui soit à la fois SON chiffre,
+     une perte en cours, et réparable par ce qu'on vend. Il était caché
+     derrière « Optimise jusqu'à 🔒 cm » : on cachait l'enjeu ET le
+     remède, donc il ne restait aucune raison d'ouvrir.
+
+     Le modèle produit deux scénarios — l'estimation avec les habitudes
+     déclarées, et le potentiel si elles étaient à la cible. Mesuré en
+     production le 17/09/2026, garçon de 14 ans, 165 cm, parents 176/164 :
+
+       habitudes dégradées ... 173,8  potentiel 179,2  ->  5,4 cm
+       habitudes moyennes .... 177,0  potentiel 179,2  ->  2,2 cm
+       habitudes à la cible .. 179,2  potentiel 179,2  ->  0 cm
+
+     L'écart vaut zéro quand il n'y a rien à gagner, et on le dit alors
+     — c'est ce qui sépare ce chiffre d'une urgence fabriquée. Sans
+     aucune réponse de mode de vie, il ne veut rien dire : le bloc
+     retombe sur le cadenas. */
+  const estimeeCm = Number(predictionData.predicted_height_cm)
+  const potentielCm = Number(predictionData.potential_height_cm)
+  const ecartHabitudes =
+    Number.isFinite(estimeeCm) && Number.isFinite(potentielCm) && potentielCm > estimeeCm
+      ? Math.round((potentielCm - estimeeCm) * 10) / 10
+      : 0
+
+  const auMoinsUnLevier = leviers.some((levier) => levier.renseigne)
+  const coutAffichable = auMoinsUnLevier && ecartHabitudes > 0
+  const dejaAuMaximum = auMoinsUnLevier && ecartHabitudes === 0
   /* Le potentiel optimisé (potential_height_cm) n’est plus affiché en clair
      sur cet écran : il est passé derrière le cadenas « Optimise jusqu’à 🔒 cm »,
      qui est précisément ce que l’abonnement ouvre. Le chiffre existe côté
@@ -181,12 +210,28 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </div>
         </div>
 
-        <div className="analyse-ligne analyse-ligne--verrou">
-          <span>Optimise jusqu’à</span>
-          <Lock size={17} aria-hidden="true" />
-          <span>cm</span>
-          <span aria-hidden="true">📈</span>
-        </div>
+        {coutAffichable && (
+          <div className="analyse-ligne analyse-ligne--perte">
+            <span className="analyse-perte-label">Tes habitudes te coûtent</span>
+            <strong className="analyse-perte-valeur">−{fr(ecartHabitudes)} cm</strong>
+          </div>
+        )}
+
+        {dejaAuMaximum && (
+          <div className="analyse-ligne analyse-ligne--acquis">
+            <span className="analyse-perte-label">Tes habitudes ne te coûtent rien</span>
+            <strong className="analyse-perte-valeur">0 cm</strong>
+          </div>
+        )}
+
+        {!coutAffichable && !dejaAuMaximum && (
+          <div className="analyse-ligne analyse-ligne--verrou">
+            <span>Optimise jusqu’à</span>
+            <Lock size={17} aria-hidden="true" />
+            <span>cm</span>
+            <span aria-hidden="true">📈</span>
+          </div>
+        )}
 
         <section className="analyse-carte-graphe">
           <div className="analyse-graphe-tete">
