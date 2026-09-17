@@ -187,6 +187,12 @@ func PredictHeightV2(c *gin.Context) {
 			"max": result.ConfidenceRange[1],
 		},
 		"confidence_level": result.ConfidenceLevel,
+		/* La marge en centimetres, a cote du mot. Sur trente jours de
+		   production, "confidence_level" vaut "low" dans 93,2 % des cas —
+		   ce qui est vrai, pas casse : sans la croissance de l annee
+		   declaree, l incertitude est genuinement d environ 7 cm. Le mot
+		   resume mal ce que le nombre dit exactement. */
+		"margin_cm":        result.MargeCM,
 		"puberty_stage":    result.PubertyStage,
 		"model_used":       result.ModelUsed,
 		"message":          result.Message,

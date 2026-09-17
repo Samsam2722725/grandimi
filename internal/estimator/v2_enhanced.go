@@ -58,6 +58,17 @@ type HeightPredictionV2Response struct {
 	PercentileAge      float64
 	ConfidenceRange    [2]float64
 	ConfidenceLevel    string
+	/* La demi-largeur de l intervalle, en centimetres — l information
+	   reelle, dont ConfidenceLevel n est qu un resume a trois valeurs.
+
+	   Mesure sur trente jours de production : « low » sort sur 93,2 % des
+	   estimations, « medium » 5,4 %, « high » 1,4 %. Ce n est pas un bug,
+	   c est la verite : quelqu un qui n a pas declare sa croissance de
+	   l annee est genuinement incertain a environ 7 cm. Requalifier ces
+	   7 cm en « moyenne » serait maquiller le meme nombre — exactement ce
+	   que le produit reproche a la concurrence. On publie donc le nombre
+	   a cote du mot, et c est lui qu il faut lire. */
+	MargeCM float64
 	PubertyStage       string
 	Message            string
 	ModelUsed          string // Which ensemble model
@@ -121,7 +132,19 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	   sous-taille contre 0,3 %) : inventer une ponderation serait une
 	   precision qu on n a pas. */
 	trajectoire := tailleAdulteParPercentile(req.Age, req.Sex, req.HeightCM)
-	base := (khamisRoche + trajectoire) / 2
+
+	/* CORRECTION DE MATURITE — voir vitesse.go pour le raisonnement, qui
+	   va dans le sens INVERSE de l intuition : grandir vite pour son age,
+	   c est surtout etre en avance pubertaire, donc finir plus tot, donc
+	   etre SURESTIME par l ancre trajectoire qui suppose le couloir tenu
+	   jusqu a 19 ans.
+
+	   Elle s ajoute a la base et non a une seule ancre : c est la
+	   trajectoire qu elle corrige, mais l appliquer avant la moyenne
+	   doublerait son effet a chaque fois qu on rebalancerait les deux
+	   ancres. Nulle si la vitesse n est pas renseignee. */
+	correction := correctionVitesse(req.Age, req.Sex, req.HeightVelocityCM)
+	base := (khamisRoche+trajectoire)/2 + correction
 
 	/* La cible mi-parentale ne sert plus qu au diagnostic : un ecart
 	   important entre elle et la base dit que l adolescent s ecarte
@@ -210,6 +233,8 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	   trancher sans age osseux. */
 	resp.Factors["khamis_roche"] = khamisRoche
 	resp.Factors["percentile_projection"] = trajectoire
+	resp.Factors["correction_vitesse"] = correction
+	resp.Factors["vitesse_attendue"] = vitesseAttendue(req.Age, req.Sex)
 	resp.Factors["mid_parent_target"] = midParentTarget
 	resp.PercentileAge = percentileTaillePourAge(req.Age, req.Sex, req.HeightCM)
 	resp.Factors["blended_base"] = base
@@ -229,6 +254,11 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	resp.PotentialHeightCM = math.Round(potentialHeight*10) / 10
 	resp.ConfidenceRange = confidenceRange
 	resp.ConfidenceLevel = confidenceLevel
+	/* La marge lue sur la borne HAUTE et non la basse : la borne basse
+	   est ramenee a la taille deja atteinte quand l intervalle passerait
+	   dessous, elle ne mesure donc plus l incertitude a cet instant. */
+	resp.MargeCM = math.Round((confidenceRange[1]-resp.PredictedHeightCM)*10) / 10
+	resp.Factors["marge_cm"] = resp.MargeCM
 	resp.PubertyStage = pubertyStage
 	resp.ModelUsed = "Khamis-Roche + suivi de percentile OMS + facteurs de mode de vie"
 	resp.Message = "Height prediction successful (v2 ML-enhanced)"

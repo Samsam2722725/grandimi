@@ -196,16 +196,33 @@ func TestPredictHeightV2_GrowthVelocity(t *testing.T) {
 	slowReq.HeightVelocityCM = 2.0
 	slowResp := PredictHeightV2(slowReq)
 
-	velocityDifference := fastResp.PredictedHeightCM - slowResp.PredictedHeightCM
+	/* LE SENS EST L INVERSE DE L INTUITION, ET C EST TOUT L INTERET DU
+	   TEST. Grandir vite pour son age, c est surtout etre en avance
+	   pubertaire : le pic est en cours, la croissance finira plus tot, et
+	   l ancre trajectoire — qui suppose le couloir tenu jusqu a 19 ans —
+	   surestime. Le rapide doit donc recevoir MOINS que le lent.
 
-	if velocityDifference < 2 {
-		t.Logf("Note: Growth velocity impact: %.2f cm", velocityDifference)
+	   Ce test n assertait rien avant : il mesurait un ecart puis le
+	   passait a t.Logf quel qu il soit. Il valait exactement zero, et la
+	   vitesse ne deplacait effectivement pas le chiffre. */
+	if fastResp.PredictedHeightCM >= slowResp.PredictedHeightCM {
+		t.Errorf("a 12,5 ans, 7 cm/an (%.1f) devrait rendre MOINS que 2 cm/an (%.1f) : en avance pubertaire, la croissance finit plus tot",
+			fastResp.PredictedHeightCM, slowResp.PredictedHeightCM)
 	}
 
-	t.Logf("Velocity impact: Fast grower=%.1f vs Slow=%.1f (diff: %.2f cm)",
-		fastResp.PredictedHeightCM,
-		slowResp.PredictedHeightCM,
-		velocityDifference)
+	ecart := slowResp.PredictedHeightCM - fastResp.PredictedHeightCM
+	if ecart > 4 {
+		t.Errorf("ecart de %.1f cm entre les deux vitesses : trop fort pour un signal auto-declare, baisser coefficientVitesse", ecart)
+	}
+
+	// Vitesse non renseignee : ni bonus ni malus, la correction est nulle.
+	sansVitesse := PredictHeightV2(baseReq)
+	if sansVitesse.Factors["correction_vitesse"] != 0 {
+		t.Errorf("vitesse non renseignee : correction %.2f cm, attendu 0", sansVitesse.Factors["correction_vitesse"])
+	}
+
+	t.Logf("12,5 ans : 2 cm/an -> %.1f cm | 7 cm/an -> %.1f cm | ecart %.1f cm",
+		slowResp.PredictedHeightCM, fastResp.PredictedHeightCM, ecart)
 }
 
 func TestPredictHeightV2_EnsembleAccuracy(t *testing.T) {
@@ -233,7 +250,7 @@ func TestPredictHeightV2_EnsembleAccuracy(t *testing.T) {
 	// ou arrive-t-on. C est ce que la page promet d expliquer.
 	for _, cle := range []string{
 		"khamis_roche", "percentile_projection", "mid_parent_target",
-		"blended_base", "health_multiplier", "final_prediction",
+		"vitesse_attendue", "blended_base", "health_multiplier", "final_prediction",
 	} {
 		if resp.Factors[cle] == 0 {
 			t.Errorf("facteur %q absent de la reponse", cle)
@@ -255,11 +272,13 @@ func TestPredictHeightV2_EnsembleAccuracy(t *testing.T) {
 	/* La base est la moyenne de Khamis-Roche et de la trajectoire OMS.
 	   La cible mi-parentale reste exposee, mais elle n entre PLUS dans le
 	   calcul : c est precisement le correctif. */
-	moyenne := (resp.Factors["khamis_roche"] + resp.Factors["percentile_projection"]) / 2
+	moyenne := (resp.Factors["khamis_roche"]+resp.Factors["percentile_projection"])/2 +
+		resp.Factors["correction_vitesse"]
 	if math.Abs(resp.Factors["blended_base"]-moyenne) > 0.01 {
-		t.Errorf("blended_base = %.2f, attendu %.2f (Khamis-Roche %.1f, percentile %.1f)",
+		t.Errorf("blended_base = %.2f, attendu %.2f (Khamis-Roche %.1f, percentile %.1f, correction vitesse %+.2f)",
 			resp.Factors["blended_base"], moyenne,
-			resp.Factors["khamis_roche"], resp.Factors["percentile_projection"])
+			resp.Factors["khamis_roche"], resp.Factors["percentile_projection"],
+			resp.Factors["correction_vitesse"])
 	}
 
 	ancienne := (resp.Factors["mid_parent_target"] + resp.Factors["percentile_projection"]) / 2
