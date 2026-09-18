@@ -178,7 +178,19 @@ func coefficientsKR(age float64, sexe string) coefficientKR {
    La taille mi-parentale entre BRUTE, moyenne des deux parents, SANS le
    +/- 6,5 cm de Tanner. Cet ajustement appartient a la methode mi-
    parentale ; b3 a ete ajuste sur la moyenne nue. */
-func tailleAdulteKhamisRoche(age float64, sexe string, tailleCM, poidsKG, pereCM, mereCM float64) float64 {
+/* khamisRocheBrut rend la regression PUBLIEE, sans aucun bornage.
+
+   Separee de tailleAdulteKhamisRoche a dessein : c est elle que les cas
+   de controle de la documentation verifient. Ces cas testent la
+   transcription de la table et la conversion d unites, pas la politique
+   de bornage du produit — et l un d eux (garcon de 10,5 ans a 170 cm,
+   201,5 cm attendus) est justement un profil hors domaine, donc raboté
+   par le plafond. Les faire passer sur la version bornee reviendrait a
+   ne plus verifier ce qu ils servent a verifier.
+
+   N appeler ailleurs que dans les tests : le modele passe par la version
+   bornee. */
+func khamisRocheBrut(age float64, sexe string, tailleCM, poidsKG, pereCM, mereCM float64) float64 {
 	/* Le poids n est pas valide en entree et peut arriver a zero. Un zero
 	   passerait silencieusement dans la formule : b2 etant negatif, il
 	   GONFLERAIT le resultat, de pres de 8 cm chez une fille de 10 ans. On
@@ -206,22 +218,30 @@ func tailleAdulteKhamisRoche(age float64, sexe string, tailleCM, poidsKG, pereCM
 		return tailleCM
 	}
 
-	/* GARDE-FOU HAUT ET BAS — la borne qui manquait.
+	return resultat
+}
 
-	   Ceci est une REGRESSION LINEAIRE. Hors de son domaine d ajustement
-	   elle extrapole sans rien pour l arreter : mesure en production le
-	   18/09/2026, un garcon de 11 ans a 180 cm (z = 5,5) en sortait
-	   203,8 cm, et la moyenne avec la trajectoire — elle plafonnee a
-	   198,4 cm — affichait 201,1 cm a l utilisateur.
+/* tailleAdulteKhamisRoche est la version que le modele utilise : la
+   regression, ramenee dans les tailles que ce produit s autorise a
+   annoncer.
 
-	   On la ramene donc dans la MEME bande que la trajectoire, mediane a
-	   19 ans plus ou moins trois ecarts-types. Sans quoi l une des deux
-	   ancres est bornee et l autre non, et c est la non bornee qui emporte
-	   la moyenne — le defaut symetrique de celui repare en septembre.
+   GARDE-FOU HAUT ET BAS — la borne qui manquait.
 
-	   Le bornage ne suffit pas a lui seul : sur ces profils le chiffre
-	   reste faux, seulement moins spectaculairement. C est pourquoi
-	   horsDomaineModele le signale en plus (voir v2_enhanced.go). */
+   Ceci est une REGRESSION LINEAIRE. Hors de son domaine d ajustement
+   elle extrapole sans rien pour l arreter : mesure en production le
+   18/09/2026, un garcon de 11 ans a 180 cm (z = 5,5) en sortait
+   203,8 cm, et la moyenne avec la trajectoire — elle plafonnee a
+   198,4 cm — affichait 201,1 cm a l utilisateur.
+
+   On la ramene donc dans la MEME bande que la trajectoire, mediane a
+   19 ans plus ou moins trois ecarts-types. Sans quoi l une des deux
+   ancres est bornee et l autre non, et c est la non bornee qui emporte
+   la moyenne — le defaut symetrique de celui repare en septembre.
+
+   Le bornage ne suffit pas a lui seul : sur ces profils le chiffre
+   reste faux, seulement moins spectaculairement. C est pourquoi
+   horsDomaineModele le signale en plus (voir v2_enhanced.go). */
+func tailleAdulteKhamisRoche(age float64, sexe string, tailleCM, poidsKG, pereCM, mereCM float64) float64 {
 	bas, haut := bornesTaillePlausible(sexe)
-	return math.Max(bas, math.Min(haut, resultat))
+	return math.Max(bas, math.Min(haut, khamisRocheBrut(age, sexe, tailleCM, poidsKG, pereCM, mereCM)))
 }

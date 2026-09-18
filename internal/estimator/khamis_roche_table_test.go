@@ -68,11 +68,28 @@ func TestKhamisRoche_CasDeControle(t *testing.T) {
 		{"garcon 10,5 ans", 10.5, MALE, 170, 60, 185, 168, 201.5},
 	}
 
+	/* Sur khamisRocheBrut et non sur la version bornee : ces cas
+	   verifient la transcription de la table et la conversion d unites,
+	   pas la politique de bornage du produit. Le troisieme est d ailleurs
+	   un profil hors domaine — un garcon de 10,5 ans a 170 cm — que le
+	   plafond rabote a 198,4 cm, et c est le comportement voulu. */
 	for _, c := range cas {
-		obtenu := tailleAdulteKhamisRoche(c.age, c.sexe, c.taille, c.poids, c.pere, c.mere)
+		obtenu := khamisRocheBrut(c.age, c.sexe, c.taille, c.poids, c.pere, c.mere)
 		if math.Abs(obtenu-c.attendu) > 0.1 {
 			t.Errorf("%s : %.2f cm, attendu %.1f cm (ecart %.2f)", c.nom, obtenu, c.attendu, obtenu-c.attendu)
 		}
+	}
+
+	/* Et la preuve que le bornage s applique bien par-dessus : le meme
+	   troisieme cas, passe par la version que le modele utilise, ne doit
+	   plus ressortir a 201,5 cm. */
+	_, plafond := bornesTaillePlausible(MALE)
+	borne := tailleAdulteKhamisRoche(10.5, MALE, 170, 60, 185, 168)
+	if borne > plafond+0.01 {
+		t.Errorf("cas hors domaine : %.2f cm apres bornage, plafond %.2f", borne, plafond)
+	}
+	if math.Abs(borne-plafond) > 0.01 {
+		t.Errorf("cas hors domaine : %.2f cm, attendu exactement le plafond %.2f", borne, plafond)
 	}
 }
 
