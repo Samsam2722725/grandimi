@@ -601,10 +601,25 @@ func calculateV2Confidence(
 		borneBasse = math.Round(req.HeightCM*10) / 10
 	}
 
-	return confidenceLevel, [2]float64{
-		borneBasse,
-		math.Round((predictedHeight+rangeMargin)*10) / 10,
+	/* LA BORNE HAUTE OBEIT AU MEME PLAFOND QUE L ESTIMATION.
+
+	   Sans ca, l elargissement hors domaine reintroduisait par la fenetre
+	   ce que le plafond venait de chasser par la porte : releve en
+	   production juste apres le correctif, un garcon de 11 ans a 180 cm
+	   recevait « 198,4 cm » — bornes — dans un intervalle qui montait a
+	   216,3 cm. Un chiffre que le produit declare lui-meme impossible,
+	   affiche a cote de celui qu il vient de corriger.
+
+	   L exception est la meme que partout ailleurs : quelqu un qui mesure
+	   deja plus que le plafond n est pas ramene en dessous. */
+	_, plafond := bornesTaillePlausible(req.Sex)
+	limiteHaute := math.Max(plafond, req.HeightCM)
+	borneHaute := math.Round((predictedHeight+rangeMargin)*10) / 10
+	if borneHaute > limiteHaute {
+		borneHaute = math.Round(limiteHaute*10) / 10
 	}
+
+	return confidenceLevel, [2]float64{borneBasse, borneHaute}
 }
 
 func validateV2Input(req HeightPredictionV2Request) error {
