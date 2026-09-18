@@ -6,6 +6,12 @@ que le serveur ne répond pas.
 
 Classé par rendement décroissant. Le point 1 conditionne tout le reste.
 
+> **Le moteur d'estimation fait l'objet d'un brief séparé et prioritaire :**
+> [`BRIEF-BACKEND-ESTIMATEUR.md`](BRIEF-BACKEND-ESTIMATEUR.md). Il rend sa propre
+> taille saisie à 19,8 % des utilisateurs, mesuré en production. Rien de ce qui
+> suit ne sert à grand-chose tant que le chiffre vendu est faux pour un
+> utilisateur sur cinq.
+
 ---
 
 ## 1. Second produit Whop : un paiement unique

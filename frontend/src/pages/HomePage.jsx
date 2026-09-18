@@ -1,156 +1,93 @@
 import { motion } from 'framer-motion'
 import {
   ArrowRight,
-  BookOpenCheck,
-  Check,
-  Eye,
+  Bot,
+  Flame,
+  HeartPulse,
+  ListChecks,
   Ruler,
-  ScanLine,
-  ShieldCheck,
-  Sparkles,
+  TrendingUp,
+  Users,
 } from 'lucide-react'
 
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-/* GSAP (~70 kB) ne sert qu'a ce carrousel, situe tres bas dans la page.
-   Le charger dans le bundle initial retardait l'affichage du hero sur
-   mobile, ou l'ecran reste blanc tant que le JS n'est pas monte. */
-const CircularSplitRoll = lazy(() => import('@/components/ui/circular-split-roll'))
 import { HandwritingText } from '@/components/ui/handwriting-text'
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
 import { FaqSection } from '@/components/ui/faq-section'
 import { FluidParticlesBackground } from '@/components/ui/fluid-particles-background'
-import { PotentialComparisonChart } from '@/components/ui/growth-chart'
+import { HeroPhones } from '@/components/ui/hero-phones'
 import '../styles/theme-night.css'
-import TestimonialMarquee from '@/components/ui/testimonial-marquee'
 
 import { tunnelDemarre } from '../lib/analytics'
 
-/* Piliers du plan de croissance. Les photos passent par Unsplash ;
-   si l'une ne charge pas, CircularSplitRoll retombe sur l'aplat
-   `tint` — jamais d'image cassée à l'écran. */
-const PILIERS = [
-  {
-    id: 'sommeil',
-    title: 'Sommeil',
-    alt: 'Chambre calme au petit matin',
-    image:
-      'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=700&q=80&auto=format&fit=crop',
-    tint: 'var(--color-sky-wash)',
-  },
-  {
-    id: 'nutrition',
-    title: 'Nutrition',
-    alt: 'Assiette de légumes frais',
-    image:
-      'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=700&q=80&auto=format&fit=crop',
-    tint: 'var(--color-sage-wash)',
-  },
-  {
-    id: 'sport',
-    title: 'Sport',
-    alt: 'Ballon de basket sur un terrain extérieur',
-    image:
-      'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=700&q=80&auto=format&fit=crop',
-    tint: 'var(--color-peach-wash)',
-  },
-  {
-    id: 'posture',
-    title: 'Posture',
-    alt: 'Séance d’étirements au sol',
-    image:
-      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=700&q=80&auto=format&fit=crop',
-    tint: 'var(--color-cream)',
-  },
-  {
-    id: 'hydratation',
-    title: 'Hydratation',
-    alt: 'Verre d’eau posé sur une table',
-    image:
-      'https://images.unsplash.com/photo-1502740479091-635887520276?w=700&q=80&auto=format&fit=crop',
-    tint: 'var(--color-sky-wash)',
-  },
-  {
-    id: 'suivi',
-    title: 'Suivi',
-    alt: 'Personne qui court au lever du jour',
-    image:
-      'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=700&q=80&auto=format&fit=crop',
-    tint: 'var(--color-sage-wash)',
-  },
-]
+/* Grille de fonctionnalités, reprise de « Unlock your full potential ».
+   Six cases, trois colonnes, un filet entre chacune.
 
-/* Le pendant honnête d'un bandeau de logos : les références réellement
-   utilisées par le calcul, pas des marques partenaires qui n'existent pas. */
-const SOURCES = [
-  { nom: 'Khamis-Roche', detail: 'Taille adulte prédite sans radiographie, 1994' },
-  { nom: 'PubMed', detail: 'Littérature clinique citée dans les guides' },
-  { nom: 'OMS', detail: 'Courbes de croissance de référence' },
-  { nom: 'AAP', detail: 'Recommandations de sommeil de l’American Academy of Pediatrics' },
-  { nom: 'ANSES', detail: 'Repères nutritionnels français' },
-]
+   Quatre existent aujourd'hui, deux portent « bientôt ». Le badge n'est pas un
+   ornement : il est ce qui sépare une feuille de route d'une promesse
+   mensongère, et il n'est honnête que si la case est réellement prévue. Deux
+   « bientôt » sur six, c'est le maximum tenable — au-delà, la grille annonce un
+   produit qui n'existe pas encore et le visiteur le sent.
 
-/* Quatre chiffres VÉRIFIABLES sur le site même. Pas de compteur d'utilisateurs
-   en temps réel, pas de « 21 298 personnes aujourd'hui » : un chiffre qu'on ne
-   peut pas prouver coûte plus cher qu'il ne rapporte sur un produit dont
-   l'argument est justement l'honnêteté. */
-const CHIFFRES = [
-  { valeur: '±4–8 cm', label: 'la marge réelle du modèle, affichée avec chaque résultat' },
-  { valeur: '2', label: 'méthodes croisées : Khamis-Roche et percentile OMS' },
-  { valeur: '11', label: 'actions par jour, du lever au coucher' },
-  { valeur: '30', label: 'jours de plan, renouvelé chaque mois d’abonnement' },
-]
-
-const ETAPES = [
+   Volontairement absente : la recommandation de compléments alimentaires, que
+   les concurrents affichent en « soon ». Vendre du supplément à un public de 10
+   à 22 ans relève d'un autre régime réglementaire que le nôtre. */
+const FONCTIONS = [
   {
-    num: '01',
-    icone: ScanLine,
-    titre: 'Tu réponds',
-    texte: 'Une question par écran : ton âge, ta taille, celle de tes parents, tes habitudes. Rien à taper, tout se choisit.',
-    teinte: 'var(--color-cream)',
-  },
-  {
-    num: '02',
-    icone: Ruler,
-    titre: 'On croise deux méthodes',
-    texte: 'Ta cible génétique d’un côté, ton couloir de croissance OMS de l’autre. La marge d’erreur est affichée, jamais masquée.',
-    teinte: 'var(--color-peach-wash)',
-  },
-  {
-    num: '03',
-    icone: Sparkles,
-    titre: 'Tu débloques ton analyse et ton plan',
-    texte: 'Ta taille adulte, ce que tes habitudes te coûtent, et 11 actions à cocher chaque jour. Chacune dit pourquoi elle est là et d’où elle vient.',
-    teinte: 'var(--color-sage-wash)',
-  },
-]
-
-const DIFFERENCES = [
-  {
-    icone: Eye,
-    titre: 'La méthode, écrite en entier',
+    icone: TrendingUp,
+    titre: 'Estimation qui se met à jour',
     texte:
-      'Khamis-Roche — ta taille, ton poids et celle de tes parents — croisée avec les tables de croissance de l’OMS. C’est écrit noir sur blanc, vérifiable, et ça ne se résume pas à un pourcentage de précision inventé.',
+      'Ta taille adulte estimée, recalculée à chaque re-mesure mensuelle, toujours accompagnée de sa marge.',
   },
   {
-    icone: ShieldCheck,
-    titre: 'La marge d’erreur affichée',
+    icone: ListChecks,
+    titre: 'Plan quotidien',
     texte:
-      'Une prédiction de taille n’est jamais exacte. On affiche la fourchette (±4 à ±8 cm selon l’âge) et on explique d’où elle vient.',
+      'Onze actions à cocher, du lever au coucher, choisies à partir de tes réponses — pas une liste générique.',
   },
   {
-    icone: BookOpenCheck,
-    titre: 'Des sources vérifiables',
+    icone: HeartPulse,
+    titre: 'Sommeil, nutrition, exercices',
     texte:
-      'Chaque recommandation renvoie à une étude. Tu peux cliquer et lire d’où vient l’info, plutôt que de nous croire sur parole.',
+      'Chaque levier détaillé : combien d’heures dormir, quoi mettre dans l’assiette, quels mouvements faire.',
+  },
+  {
+    icone: Flame,
+    titre: 'Suivi et série',
+    texte:
+      'Tu coches, ta série monte, ton mois se remplit. Ce qui se mesure est ce qui se tient.',
+  },
+  {
+    icone: Users,
+    titre: 'Communauté',
+    bientot: true,
+    texte:
+      'Un espace pour comparer, demander, et voir que les autres passent par les mêmes doutes.',
+  },
+  {
+    icone: Bot,
+    titre: 'Coach IA',
+    bientot: true,
+    texte:
+      'Poser une question à toute heure sur ton sommeil, ta posture ou une action du plan, et avoir la réponse.',
   },
 ]
 
+/* La FAQ porte désormais seule ce que six sections expliquaient avant elle :
+   la méthode, la marge, le prix, l'âge utile et la limite médicale. Ces
+   réponses ne sont donc plus un complément — c'est là que le visiteur qui
+   veut vérifier avant de payer doit trouver de quoi le faire. */
 const FAQ = [
   {
     question: 'Est-ce que Grandimi peut me faire grandir plus ?',
     answer:
       'Personne ne peut te faire dépasser ton potentiel génétique — ni nous, ni un complément, ni un programme. Mais beaucoup d’ados finissent en dessous du leur : nuits trop courtes, apports insuffisants, au moment précis où l’os peut encore s’allonger. Ces centimètres-là se jouent vraiment, et c’est exactement ce que le plan cible. Pas un de plus.',
+  },
+  {
+    question: 'Comment le calcul marche ?',
+    answer:
+      'On croise deux méthodes : Khamis-Roche — ton âge, ta taille, ton poids et la taille de tes parents — et ton couloir de croissance sur les tables de l’OMS. Pas de radio, pas de prise de sang. La fourchette d’erreur est affichée avec ton résultat, jamais masquée.',
   },
   {
     question: 'À quel point l’estimation est-elle fiable ?',
@@ -160,7 +97,7 @@ const FAQ = [
   {
     question: 'Faut-il payer pour voir mon estimation ?',
     answer:
-      'Oui. Le questionnaire est libre d’accès, mais ton résultat — ta taille adulte estimée, ce que tes habitudes te coûtent et ton plan quotidien — est réservé aux abonnés : 4,99 €/mois ou 29,99 €/an, résiliable quand tu veux. Tu vois le prix avant de répondre à la première question, et la méthode de calcul est expliquée en entier sur cette page.',
+      'Oui. Le questionnaire est libre d’accès, mais ton résultat — ta taille adulte estimée, ce que tes habitudes te coûtent et ton plan quotidien — est réservé aux abonnés : 4,99 €/mois ou 29,99 €/an, résiliable quand tu veux. Aucun prélèvement ne part avant que tu aies choisi ton offre.',
   },
   {
     question: 'Mes données sont-elles conservées ?',
@@ -175,15 +112,15 @@ const FAQ = [
   {
     question: 'Est-ce que ça remplace un médecin ?',
     answer:
-      'Non, et ce n’est pas le but. Grandimi est un outil d’information. Si tu as une inquiétude réelle sur ta croissance, un pédiatre ou un endocrinologue reste le bon interlocuteur — lui seul peut poser un diagnostic.',
+      'Non, et ce n’est pas le but. Grandimi n’est pas un dispositif médical : c’est un outil d’information. Si tu as une inquiétude réelle sur ta croissance, un pédiatre ou un endocrinologue reste le bon interlocuteur — lui seul peut poser un diagnostic.',
   },
 ]
 
 function HomePage({ onStartQuestionnaire, onLogin }) {
-  /* La page compte sept boutons qui mènent tous au même questionnaire.
-     Agrégés, ils ne disent rien : on sait combien de gens démarrent, pas
-     ce qui les a décidés, donc pas quelle section mérite d'exister.
-     Chaque bouton déclare son emplacement avant de déléguer. */
+  /* Les boutons de la page mènent tous au même questionnaire. Agrégés, ils ne
+     disent rien : on sait combien de gens démarrent, pas ce qui les a décidés,
+     donc pas quelle section mérite d'exister. Chaque bouton déclare son
+     emplacement avant de déléguer. */
   const demarrer = (emplacement) => {
     tunnelDemarre(emplacement)
     onStartQuestionnaire()
@@ -194,11 +131,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
      sans remonter : le bouton de l'en-tête est réduit sur petit écran et le
      reste de la page est long. Une barre basse remet l'action sous le pouce
      pendant toute la lecture — c'est le motif qui fait la différence sur les
-     tunnels mobiles.
-
-     IntersectionObserver plutôt qu'un écouteur de scroll : pas de calcul à
-     chaque frame, et le seuil suit le bouton même si la hauteur du hero
-     change. */
+     tunnels mobiles. */
   const [barreVisible, setBarreVisible] = useState(false)
 
   /* La barre apparaît passé un seuil de défilement.
@@ -269,8 +202,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               onClick={() => demarrer('en-tete')}
               className="hidden min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:inline-flex sm:px-5"
             >
-              <span className="sm:hidden">Commencer</span>
-              <span className="hidden sm:inline">Commencer</span>
+              Commencer
               <ArrowRight className="hidden size-4 sm:block" aria-hidden="true" />
             </button>
           </div>
@@ -307,58 +239,48 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-12 lg:gap-10">
             {/* --- Colonne texte --- */}
             <div className="lg:col-span-7">
-              <span className="rise inline-flex items-center gap-2 rounded-full border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] px-4 py-1.5 text-xs font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase">
-                <Sparkles
-                  className="size-3.5 text-[color:var(--color-indigo-bloom)]"
-                  aria-hidden="true"
-                />
-                Analyse de croissance · plan quotidien
-              </span>
-
               <h1
-                className="rise night-title-gradient mt-6 font-display text-[clamp(40px,6.2vw,72px)] leading-[1.02] font-medium tracking-[-0.035em] text-balance"
+                className="rise night-title-gradient font-display text-[clamp(40px,6.2vw,72px)] leading-[1.02] font-medium tracking-[-0.035em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
-                Prends {' '}
+                Prédis et{' '}
                 {/* Le mot est tracé au stylo plutôt que posé en couleur : c'est
                     la promesse du site — une estimation écrite à la main pour
                     toi — et ça donne au titre un point de fixation que le
                     surlignage orange n'obtenait pas. Si la police distante ne
                     répond pas, le composant retombe sur du texte simple. */}
                 <HandwritingText
-                  text="tous"
+                  text="maximise"
                   height="0.92em"
                   strokeWidth={1.4}
                   className="align-baseline text-[color:var(--color-brand-display)]"
                 />{' '}
-                les centimètres qu’il te reste.
+                ta taille.
               </h1>
 
               <p
                 className="rise mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
                 style={{ animationDelay: '160ms' }}
               >
-                {/* UNE phrase, pas trois.
+                {/* Première phrase reprise de l'argument des concurrents
+                    (Taller, GoTall) : c'est la seule formulation que ce marché
+                    a validée à coups de dizaines de milliers d'euros d'ads, et
+                    elle est vraie. Ce qu'on NE reprend pas : leur « 500 000+
+                    men agree » — on n'a pas d'utilisateurs à compter, et un
+                    chiffre inventé est une pratique commerciale trompeuse.
 
-                    Le hero empilait trois paragraphes séparés par des sauts de
-                    ligne doubles : la promesse, ce qui est vendu, ce qui est
-                    gratuit. Trois blocs à lire avant d'atteindre le bouton, sur
-                    un écran où le visiteur arrive de TikTok et décide en trois
-                    secondes.
-
-                    Les deux blocs retirés ne sont pas perdus : « 11 actions par
-                    jour » est déjà le troisième des quatre chiffres du bandeau
-                    juste dessous ET le titre de la carte de droite ; « estimation
-                    gratuite » est déjà dans le badge au-dessus du titre, dans le
-                    libellé du bouton, et dans la ligne qui le suit. On les disait
-                    quatre fois chacun. */}
-                Ta génétique fixe un plafond. Tes habitudes décident si tu l’atteins.
+                    La seconde phrase nomme le livrable. C'était le trou du
+                    hero : on annonçait une promesse sans jamais dire ce que le
+                    visiteur repart avec. */}
+                Tu ne contrôles pas tes gènes, mais tu peux optimiser ta croissance.
+                Grandimi te dit où tu en es, et quoi faire chaque jour.
               </p>
 
-              <div
-                className="rise mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
-                style={{ animationDelay: '240ms' }}
-              >
+              {/* Un seul bouton. Le jumeau « Voir comment ça marche »
+                  renvoyait vers une section de la même page : deux actions de
+                  poids visuel proche, dont une qui ne fait que faire défiler.
+                  Sur un fold, chaque choix supplémentaire coûte des départs. */}
+              <div className="rise mt-9" style={{ animationDelay: '240ms' }}>
                 <button
                   type="button"
                   onClick={() => demarrer('hero')}
@@ -367,157 +289,65 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   Commencer mon analyse
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </button>
-
-                {/* Jumeau systématique du bouton orange. */}
-                <a
-                  href="#comment-ca-marche"
-                  className="inline-flex min-h-13 items-center justify-center rounded-full border border-ink px-8 text-base font-medium text-ink transition-colors hover:bg-ink/6"
-                >
-                  Voir comment ça marche
-                </a>
               </div>
-
-              <p
-                className="rise mt-5 text-sm text-muted-foreground"
-                style={{ animationDelay: '320ms' }}
-              >
-                Résultat immédiat · résiliable à tout moment
-              </p>
-
-
             </div>
 
-            {/* --- Colonne visuelle : le moment magique, au-dessus du fold --- */}
-            <div
-              className="rise lg:col-span-5"
-              style={{ animationDelay: '200ms', perspective: '1400px' }}
-            >
-              <div className="origin-center transition-transform duration-500 ease-out lg:[transform:rotateY(-7deg)_rotateX(3deg)] lg:hover:[transform:rotateY(0deg)_rotateX(0deg)]">
-                <ApercuResultat />
-              </div>
+            {/* --- Colonne visuelle : le moment magique, au-dessus du fold ---
+                Trois téléphones plutôt qu'une carte. La carte disait la même
+                chose, mais elle se lisait comme un encadré de site web ; c'est
+                le cadre de téléphone qui fait comprendre en un dixième de
+                seconde qu'il y a un produit derrière. Tous les concurrents de
+                ce marché ouvrent là-dessus, et aucun ne s'en passe. */}
+            <div className="rise lg:col-span-5" style={{ animationDelay: '200ms' }}>
+              <HeroPhones />
             </div>
           </div>
         </section>
         </FluidParticlesBackground>
 
-        {/* ============ SUR QUOI ON S'APPUIE ============
-            L'équivalent honnête du bandeau de logos partenaires : ici ce ne
-            sont pas des clients ni des outils, mais les sources du calcul.
-            Sur ce marché, c'est le seul « ils nous font confiance » qu'on
-            puisse écrire sans mentir. */}
-        <section className="border-b border-[color:var(--color-frost-gray)] px-5 py-10 sm:px-8">
-          <div className="mx-auto w-full max-w-6xl">
-            <p className="text-center text-[11px] font-semibold tracking-[0.18em] text-[color:var(--text-meta)] uppercase">
-              Ce sur quoi le calcul s’appuie
-            </p>
-            <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-center">
-              {SOURCES.map((source) => (
-                <li
-                  key={source.nom}
-                  className="text-lg font-semibold tracking-[-0.01em] text-[color:var(--text-secondary)]"
-                  title={source.detail}
-                >
-                  {source.nom}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* ============ CHIFFRES ============ */}
-        <section className="px-5 py-14 sm:px-8">
-          <dl className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-y-10 border-b border-[color:var(--color-frost-gray)] pb-14 lg:grid-cols-4 lg:gap-y-0">
-            {CHIFFRES.map((chiffre, i) => (
-              <div
-                key={chiffre.label}
-                className={`px-2 sm:px-6 ${
-                  /* Filets verticaux entre colonnes, jamais avant la première
-                     ni sur la première de chaque rangée en mobile. */
-                  i % 2 === 1 ? 'border-l border-[color:var(--color-frost-gray)]' : ''
-                } ${i > 0 ? 'lg:border-l lg:border-[color:var(--color-frost-gray)]' : 'lg:border-l-0'}`}
-              >
-                <dd className="font-display text-[clamp(30px,5vw,44px)] leading-none font-medium tracking-[-0.03em] text-ink">
-                  {chiffre.valeur}
-                </dd>
-                <dt className="mt-3 text-sm leading-[1.45] text-[color:var(--text-secondary)]">
-                  {chiffre.label}
-                </dt>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        {/* ============ CE QUI SE JOUE (figure) ============ */}
+        {/* ============ CE QUE TU OBTIENS (grille) ============
+            Titre centré et grille à filets : la mise en page de « Unlock your
+            full potential », qui est le bloc que tous les concurrents de ce
+            marché placent juste après le fold. Elle répond à la seule question
+            qui reste une fois la promesse lue — qu'est-ce que je reçois. */}
         <section className="px-5 pb-20 sm:px-8">
-          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            <div>
-              <span className="text-[11px] font-semibold tracking-[0.18em] text-[color:var(--color-indigo-bloom)] uppercase">
-                Ce qui se joue vraiment
-              </span>
-              <h2 className="mt-5 font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-                Ta génétique fixe le plafond. Tes habitudes décident si tu le touches.
-              </h2>
-              <p className="mt-5 max-w-lg text-base leading-[1.55] text-[color:var(--text-secondary)]">
-                Environ 80 % de ta taille adulte est écrite dans tes gènes. Le reste —
-                sommeil, apports, activité — ne s’ajoute pas au plafond : il détermine si
-                tu l’atteins ou si tu t’arrêtes en dessous. C’est tout l’écart entre les
-                deux courbes, et c’est le seul terrain où un plan sert à quelque chose.
-              </p>
-              <button
-                type="button"
-                onClick={() => demarrer('ce-qui-se-joue')}
-                className="mt-8 inline-flex min-h-13 items-center gap-2 rounded-full border border-ink px-7 text-base font-medium text-ink transition-colors hover:bg-ink/10"
-              >
-                Voir où j’en suis
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </button>
-            </div>
-
-            <div className="rounded-[26px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6 sm:p-8">
-              <PotentialComparisonChart />
-            </div>
-          </div>
-        </section>
-
-        {/* ============ COMMENT ÇA MARCHE ============ */}
-        <section id="comment-ca-marche" className="px-5 py-20 sm:px-8">
           <div className="mx-auto w-full max-w-6xl">
-            {/* Aligné à gauche : le hero est asymétrique, cette section
-                enchaîne sur le même axe plutôt que de recentrer. */}
-            <div className="mb-12 max-w-2xl">
+            <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-                Trois étapes
+                Débloque ton potentiel.
               </h2>
               <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-                Aucune mesure compliquée à prendre. Ce que tu sais déjà suffit.
+                On calcule ce qu’il te reste à prendre, et on te donne le plan qui va
+                le chercher.
               </p>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-3">
-              {ETAPES.map((etape, i) => {
-                const Icone = etape.icone
+            <div className="grid gap-px overflow-hidden bg-[color:var(--color-frost-gray)] sm:grid-cols-2 lg:grid-cols-3">
+              {FONCTIONS.map((fonction, i) => {
+                const Icone = fonction.icone
                 return (
                   <motion.article
-                    key={etape.num}
-                    initial={{ opacity: 0, y: 24 }}
+                    key={fonction.titre}
+                    initial={{ opacity: 0, y: 18 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-60px' }}
-                    transition={{ duration: 0.5, delay: i * 0.1 }}
-                    className="rounded-[24px] p-8"
-                    style={{ backgroundColor: etape.teinte }}
+                    transition={{ duration: 0.45, delay: (i % 3) * 0.08 }}
+                    className="bg-[color:var(--surface-page-canvas)] px-6 py-9 sm:px-8"
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="flex size-11 items-center justify-center rounded-full bg-[color:var(--surface-card)]">
-                        <Icone className="size-5 text-ink" aria-hidden="true" />
-                      </span>
-                      <span className="font-display text-2xl text-ink/25">{etape.num}</span>
-                    </div>
-
-                    <h3 className="mt-6 font-display text-2xl font-medium tracking-[-0.02em] text-ink">
-                      {etape.titre}
+                    <Icone
+                      className="size-6 text-[color:var(--color-coral-pulse)]"
+                      aria-hidden="true"
+                    />
+                    <h3 className="mt-5 flex flex-wrap items-center gap-2 font-display text-xl font-medium tracking-[-0.02em] text-ink">
+                      {fonction.titre}
+                      {fonction.bientot && (
+                        <span className="rounded-full border border-[color:var(--color-indigo-bloom)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-[color:var(--color-indigo-bloom)] uppercase">
+                          bientôt
+                        </span>
+                      )}
                     </h3>
-                    <p className="mt-2 text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">
-                      {etape.texte}
+                    <p className="mt-2.5 text-[15px] leading-[1.55] text-[color:var(--text-secondary)]">
+                      {fonction.texte}
                     </p>
                   </motion.article>
                 )
@@ -526,169 +356,207 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           </div>
         </section>
 
-        {/* ============ LES PILIERS (carrousel circulaire GSAP) ============ */}
-        <section className="px-5 pt-8 sm:px-8">
-          <div className="mx-auto mb-4 max-w-2xl text-center">
-            <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-ink">
-              Ce sur quoi tu peux <span className="text-brand">agir</span>
-            </h2>
-            <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-              La génétique fixe le plafond. Ces six leviers décident si tu l’atteins.
-            </p>
-          </div>
-        </section>
+        {/* ============ PRÉDIS TA TAILLE (figure à gauche) ============ */}
+        <section className="px-5 pb-20 sm:px-8">
+          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            <CourbePrediction />
 
-        <Suspense fallback={<div className="min-h-[40vh]" aria-hidden="true" />}>
-          <CircularSplitRoll items={PILIERS} radius={480} cardSize={210} sectionHeight={90} />
-        </Suspense>
-
-        {/* ============ NOTRE DIFFÉRENCE ============
-            Deux colonnes, titre collant à gauche. Volontairement
-            différent de la grille de « Trois étapes » : trois blocs de
-            cartes identiques d'affilée, c'est la signature d'un
-            template. Ici la page change de rythme. */}
-        <section className="px-5 py-20 sm:px-8">
-          <div className="mx-auto grid w-full max-w-6xl gap-12 lg:grid-cols-12 lg:gap-16">
-            <div className="lg:col-span-5">
-              <div className="lg:sticky lg:top-28">
-                <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-                  Pourquoi nous croire
-                </h2>
-                <p className="mt-4 max-w-sm text-base text-[color:var(--text-secondary)]">
-                  Trois engagements, vérifiables sur le site avant même de payer.
-                </p>
-              </div>
-            </div>
-
-            {/* Liste éditoriale : un filet 1px plutôt qu'une carte.
-                La profondeur vient du papier, pas d'une boîte. */}
-            <ul className="lg:col-span-7">
-              {DIFFERENCES.map((item, i) => {
-                const Icone = item.icone
-                return (
-                  <motion.li
-                    key={item.titre}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-60px' }}
-                    transition={{ duration: 0.5, delay: i * 0.08 }}
-                    className="flex gap-5 border-t border-[color:var(--color-frost-gray)] py-8 first:border-t-0 first:pt-0"
-                  >
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[color:var(--color-peach-wash)]">
-                      <Icone className="size-5 text-ink" aria-hidden="true" />
-                    </span>
-
-                    <div>
-                      <h3 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
-                        {item.titre}
-                      </h3>
-                      <p className="mt-2 text-[15px] leading-[1.55] text-[color:var(--text-secondary)]">
-                        {item.texte}
-                      </p>
-                    </div>
-                  </motion.li>
-                )
-              })}
-            </ul>
-          </div>
-        </section>
-
-        {/* ============ AVIS ============ */}
-        <section className="overflow-hidden py-20">
-          <div className="mx-auto mb-12 max-w-2xl px-5 text-center sm:px-8">
-            <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-ink">
-              D’où viennent les chiffres
-            </h2>
-            <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-              Pas de témoignages : nous n’avons pas encore de clients à citer.
-              Des études, que tu peux ouvrir et lire.
-            </p>
-          </div>
-
-          <TestimonialMarquee />
-        </section>
-
-        {/* ============ PRIX ============
-            Le prix n'apparaissait nulle part sur la landing : il fallait aller
-            le chercher dans une réponse de FAQ. Un tarif qu'on ne trouve pas se
-            lit comme un tarif qu'on cache, et ça se paie au moment de la
-            paywall — c'est là que le visiteur découvrait le chiffre. */}
-        <section id="prix" className="px-5 py-20 sm:px-8">
-          <div className="mx-auto w-full max-w-5xl">
-            <div className="mb-12 text-center">
-              <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-                Un prix, écrit en entier
+            <div>
+              <h2 className="font-display text-[clamp(28px,4vw,40px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
+                Prédis ta taille adulte
               </h2>
-              <p className="mx-auto mt-4 max-w-xl text-base text-[color:var(--text-secondary)]">
-                Pas de période d’essai qui se transforme en abonnement, pas de palier
-                surprise. Une offre, deux rythmes de paiement.
+              <p className="mt-5 max-w-lg text-base leading-[1.55] text-[color:var(--text-secondary)]">
+                Ton âge, ta taille, ton poids et celle de tes parents, croisés avec les
+                tables de croissance de l’OMS. Pas de radio, pas de prise de sang. Le
+                chiffre arrive avec sa fourchette, et il se resserre à chaque re-mesure
+                mensuelle.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ============ MAXIMISE TON POTENTIEL (figure à gauche) ============
+            Même sens de lecture que la section précédente, comme chez eux : la
+            figure tient la colonne gauche deux fois de suite. Alterner ferait
+            « site de template » ; répéter fait « chapitre ». */}
+        <section className="px-5 pb-20 sm:px-8">
+          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            <ListeActions />
+
+            <div>
+              <h2 className="font-display text-[clamp(28px,4vw,40px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
+                Maximise ton potentiel
+              </h2>
+              <p className="mt-5 max-w-lg text-base leading-[1.55] text-[color:var(--text-secondary)]">
+                Des exercices de posture à la nutrition, chaque habitude est choisie pour
+                ton profil et change d’un mois à l’autre. Tu coches ce que tu as fait, ta
+                série monte, et tu vois noir sur blanc les jours où tu as tenu.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ============ COMMENT ÇA MARCHE ============
+            Quatre étapes, une ligne chacune. La version précédente occupait un
+            écran entier avec trois cartes teintées et un paragraphe par carte :
+            c'est ce volume-là qui ne servait à rien, pas l'information. Un
+            numéro et une phrase suffisent à répondre à « je fais quoi,
+            concrètement », qui est la dernière question avant le bouton. */}
+        <section className="px-5 pb-24 sm:px-8">
+          <div className="mx-auto w-full max-w-6xl">
+            <div className="mx-auto mb-14 max-w-2xl text-center">
+              <h2 className="font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-ink">
+                Comment ça marche
+              </h2>
+              <p className="mt-4 text-base text-[color:var(--text-secondary)]">
+                Quatre étapes. La première prend quelques minutes, les trois autres
+                durent tant que tu grandis.
               </p>
             </div>
 
-            {/* UNE seule carte depuis que le resultat est payant.
+            {/* Le fil qui relie les quatre pastilles.
+                Sans lui, quatre colonnes numérotées se lisent comme quatre
+                options au choix ; avec lui, comme une suite. Il est posé en
+                absolu derrière la grille et s'arrête aux centres des pastilles
+                extrêmes (12,5 % et 87,5 % de la largeur), sinon il dépassait
+                des deux côtés. Masqué sous `lg`, où les étapes s'empilent. */}
+            <div className="relative">
+              <span
+                aria-hidden="true"
+                className="absolute top-[22px] left-[12.5%] hidden h-px w-[75%] bg-[color:var(--color-frost-gray)] lg:block"
+              />
 
-                La grille comptait deux colonnes : « L estimation — 0 € pour
-                toujours » a gauche, le plan a droite. La colonne gratuite
-                decrivait une offre qui n existe plus ; la laisser aurait fait
-                de la page une promesse que le tunnel dement quinze ecrans plus
-                loin, ce qui est la definition d une pratique trompeuse.
-
-                Carte centree et bornee en largeur : une carte unique etiree sur
-                cinq colonnes se lit comme une grille a laquelle il manque un
-                element. */}
-            <div className="mx-auto grid w-full max-w-md gap-5">
-              {/* Payant — bordure orange, comme la carte retenue de la paywall.
-                  Le visiteur retrouve exactement le même objet plus tard. */}
-              <div className="relative flex flex-col rounded-[26px] border border-[color:var(--color-coral-pulse)] bg-[color:var(--color-peach-wash)] p-8">
-                <span className="absolute -top-3 left-8 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-[color:var(--color-on-brand)]">
-                  Le plan
-                </span>
-                <h3 className="font-display text-2xl font-medium tracking-[-0.02em] text-ink">
-                  Le plan de croissance
-                </h3>
-                <p className="mt-4 flex items-baseline gap-2">
-                  <span className="font-display text-[44px] leading-none font-medium tracking-[-0.03em] text-ink">
-                    4,99 €
-                  </span>
-                  <span className="text-sm text-[color:var(--text-secondary)]">
-                    /mois, ou 29,99 €/an
-                  </span>
-                </p>
-                <ul className="mt-7 flex flex-col gap-3">
-                  {[
-                    /* L'estimation ouvre la liste depuis qu'elle est payante :
-                       c'est ce que le visiteur vient chercher, et l'omettre
-                       ferait payer un plan pour un chiffre qu'il croirait
-                       obtenir ailleurs. */
-                    'Ta taille adulte estimée, avec sa marge',
-                    'Ce que tes habitudes te coûtent, en centimètres',
-                    'Quoi faire chaque jour, sur 30 jours',
-                    'Sommeil, nutrition, exercices — détaillés',
-                    'Un plan différent à chaque mois d’abonnement',
-                    'Re-mesure mensuelle et suivi',
-                    'Résiliable en ligne, à tout moment',
-                  ].map((item) => (
-                    <li key={item} className="flex gap-3 text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">
-                      <Check className="mt-0.5 size-4 shrink-0 text-[color:var(--color-indigo-bloom)]" aria-hidden="true" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-auto pt-8">
-                  <button
-                    type="button"
-                    onClick={() => demarrer('prix-annuel')}
-                    className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-6 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
+              <ol className="relative grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+                {[
+                  {
+                    num: '01',
+                    titre: 'Réponds',
+                    /* Pas de nombre de questions : tu l'avais fait retirer du
+                       hero, et le réintroduire ici ferait revenir par la
+                       fenêtre ce qu'on a sorti par la porte. « Rien à taper »
+                       est la vraie objection levée. */
+                    texte:
+                      'Une question par écran. Rien à taper, rien à faire mesurer chez le médecin.',
+                  },
+                  {
+                    num: '02',
+                    titre: 'Découvre ton chiffre',
+                    texte:
+                      'Ta taille adulte estimée, avec sa fourchette. Et ce que tes habitudes te coûtent, en centimètres.',
+                  },
+                  {
+                    num: '03',
+                    titre: 'Coche ton plan',
+                    texte:
+                      'Onze actions par jour, du lever au coucher. Ta série monte à chaque journée tenue.',
+                  },
+                  {
+                    num: '04',
+                    titre: 'Re-mesure-toi',
+                    texte:
+                      'Un mois plus tard, l’estimation se resserre et le plan change. Puis on recommence.',
+                  },
+                ].map((etape, i) => (
+                  <motion.li
+                    key={etape.num}
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.45, delay: i * 0.1 }}
+                    className="text-center sm:text-left lg:text-center"
                   >
-                    Commencer mon analyse
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </button>
-                  <p className="mt-4 text-center text-[13px] text-[color:var(--text-meta)]">
-                    Résiliable en ligne, à tout moment.
-                  </p>
-                </div>
-              </div>
+                    {/* Fond opaque et non transparent : la pastille doit
+                        masquer le fil derrière elle, pas le laisser traverser
+                        le chiffre. */}
+                    <span className="relative inline-flex size-11 items-center justify-center rounded-full bg-brand font-display text-lg font-medium text-[color:var(--color-on-brand)]">
+                      {etape.num}
+                    </span>
+                    <h3 className="mt-5 font-display text-xl font-medium tracking-[-0.02em] text-ink">
+                      {etape.titre}
+                    </h3>
+                    <p className="mx-auto mt-2 max-w-xs text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">
+                      {etape.texte}
+                    </p>
+                  </motion.li>
+                ))}
+              </ol>
             </div>
+
+            {/* Le bouton qui manquait. Depuis le retrait de « Ce qui se joue »,
+                il ne restait plus une seule action entre le hero et le pied de
+                page : sur ordinateur, où la barre collante ne s'affiche pas,
+                le visiteur devait remonter tout en haut. */}
+            <div className="mt-14 text-center">
+              <button
+                type="button"
+                onClick={() => demarrer('comment-ca-marche')}
+                className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
+              >
+                Commencer mon analyse
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* ============ SUR QUOI ÇA REPOSE ============
+            L'équivalent de « Built on Science. Informed by Data. », que les
+            deux concurrents placent avant leur mode d'emploi.
+
+            Ce n'est pas la bande de logos qu'on avait retirée : celle-là
+            alignait OMS · AAP · ANSES · PubMed sans rien en dire, ce qui se
+            lisait comme un bandeau de partenaires — et laissait entendre une
+            caution que personne ne nous a donnée. Ici les références sont
+            nommées pour ce qu'elles sont : des travaux publics auxquels on se
+            réfère.
+
+            La mention de non-affiliation n'est pas de la prudence excessive.
+            Citer l'OMS sur une page qui vend un abonnement, sans préciser
+            qu'elle ne nous cautionne pas, c'est laisser s'installer une
+            caution officielle qu'on n'a pas. Les concurrents écrivent la même
+            note sous leur paragraphe sur le CDC. */}
+        <section className="border-t border-[color:var(--color-frost-gray)] px-5 py-20 sm:px-8">
+          <div className="mx-auto w-full max-w-3xl text-center">
+            <span className="mx-auto flex size-12 items-center justify-center rounded-[14px] bg-brand">
+              <LogoGrandimi
+                className="size-7 text-[color:var(--color-on-brand)]"
+                titre="Grandimi"
+              />
+            </span>
+
+            <h2 className="mt-7 font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
+              Des méthodes publiées. Pas des promesses.
+            </h2>
+
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-[1.6] text-[color:var(--text-secondary)]">
+              Ton estimation croise <strong className="font-semibold text-ink">Khamis-Roche</strong>,
+              une méthode de prédiction de la taille adulte sans radiographie publiée en
+              1994, avec les <strong className="font-semibold text-ink">courbes de
+              croissance de l’OMS</strong>. Les actions du plan suivent les repères de
+              sommeil de l’<strong className="font-semibold text-ink">American Academy of
+              Pediatrics</strong> et les repères nutritionnels de
+              l’<strong className="font-semibold text-ink">ANSES</strong>. Tout est
+              public, et tu peux aller le lire.
+            </p>
+
+            {/* Lien de recherche plutôt qu'une référence précise : il reste
+                valide quelle que soit l'édition citée, là où un identifiant
+                d'article recopié de mémoire peut pointer vers autre chose. */}
+            <a
+              href="https://pubmed.ncbi.nlm.nih.gov/?term=Khamis-Roche+adult+stature"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-7 inline-flex items-center gap-2 border-b border-[color:var(--color-coral-pulse)] pb-0.5 text-base font-semibold text-brand transition-opacity hover:opacity-80"
+            >
+              Lire la méthode sur PubMed
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </a>
+
+            <p className="mx-auto mt-8 max-w-xl text-[13px] leading-[1.5] text-[color:var(--text-meta)]">
+              <strong className="font-semibold">Note :</strong> Grandimi n’est ni affilié
+              ni approuvé par l’OMS, l’American Academy of Pediatrics ou l’ANSES. Ces
+              travaux sont publics ; nous nous y référons, ils ne nous cautionnent pas.
+            </p>
           </div>
         </section>
 
@@ -697,14 +565,6 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           title="Les questions qu’on nous pose"
           description="Et les réponses honnêtes, y compris quand elles ne nous arrangent pas."
           items={FAQ}
-          contactInfo={{
-            title: 'Une autre question ?',
-            description: 'On répond sous 48 h, par un humain.',
-            buttonText: 'Nous écrire',
-            onContact: () => {
-              window.location.href = 'mailto:grandimi14@gmail.com'
-            },
-          }}
         />
 
         {/* ============ CTA FINAL ============ */}
@@ -729,7 +589,10 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               par jour pour aller chercher les centimètres qui te restent.
             </p>
 
-            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            {/* Le second bouton renvoyait vers « Revoir le fonctionnement »,
+                section supprimée : un lien mort au bas de la page. Il ne
+                manque pas — arrivé ici, le visiteur a fini de lire. */}
+            <div className="mt-9">
               <button
                 type="button"
                 onClick={() => demarrer('cta-final')}
@@ -738,31 +601,8 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 Commencer maintenant
                 <ArrowRight className="size-4" aria-hidden="true" />
               </button>
-
-              <a
-                href="#comment-ca-marche"
-                className="inline-flex min-h-13 w-full items-center justify-center rounded-full border border-white/60 px-8 text-base font-medium text-white transition-colors hover:bg-white/12 sm:w-auto"
-              >
-                Revoir le fonctionnement
-              </a>
             </div>
           </motion.div>
-        </section>
-
-        {/* ============ AVERTISSEMENT ============ */}
-        <section className="px-5 pb-16 sm:px-8">
-          <div className="mx-auto flex w-full max-w-3xl items-start gap-4 rounded-[20px] bg-[color:var(--color-peach-wash)] p-6">
-            <ShieldCheck
-              className="mt-0.5 size-5 shrink-0 text-[color:var(--color-indigo-bloom)]"
-              aria-hidden="true"
-            />
-            <p className="text-[15px] leading-[1.5] text-ink">
-              <strong className="font-semibold">Grandimi n’est pas un dispositif médical.</strong>{' '}
-              Les estimations et recommandations sont fournies à titre informatif et ne
-              remplacent pas l’avis d’un professionnel de santé. En cas d’inquiétude sur ta
-              croissance, parles-en à un médecin.
-            </p>
-          </div>
         </section>
       </main>
 
@@ -827,132 +667,152 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
   )
 }
 
-/* Chiffres de la maquette du hero. Cohérents entre eux : un garçon de
-   14 ans mesurant 166 cm, estimé à 178 cm — il lui reste donc 12 cm.
-   Tous ces nombres sont produits par le vrai calcul, aucun n'est une
-   métrique inventée pour la vitrine. */
-const ESTIMATION = 178
-const MARGE = 5
-const RESTANT = 12
+/**
+ * Courbe de prédiction — la figure de « Predict your future height ».
+ *
+ * Une seule courbe, une bulle, un axe d'âges : c'est un objet de vitrine, pas
+ * un graphe de données. D'où la mention en bas — la trajectoire dessinée est
+ * celle de l'exemple du hero (14 ans, 166 cm, estimé à 178), pas une promesse
+ * faite au visiteur, qui n'a encore rien saisi.
+ *
+ * SVG inline plutôt qu'une bibliothèque : la page en charge déjà une pour le
+ * graphe à deux courbes plus bas, et cette figure-ci n'a ni axe calculé, ni
+ * infobulle, ni données à parcourir.
+ */
+function CourbePrediction() {
+  const ages = [14, 15, 16, 17, 18, 19, 20, 21]
+
+  return (
+    <div className="rounded-[26px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6 sm:p-8">
+      <div className="relative">
+        {/* La bulle est posée en HTML au-dessus du SVG : dans le SVG, elle
+            aurait suivi la mise à l'échelle du viewBox et son texte aurait
+            grossi avec la carte. */}
+        <div className="absolute -top-1 left-[46%] z-10 -translate-x-1/2">
+          <span className="block rounded-lg bg-brand px-3 py-1 text-sm font-semibold text-[color:var(--color-on-brand)]">
+            178 cm
+          </span>
+          <span
+            aria-hidden="true"
+            className="mx-auto block size-2.5 -translate-y-1 rotate-45 bg-brand"
+          />
+        </div>
+
+        <svg viewBox="0 0 400 220" className="w-full" role="img" aria-label="Courbe de croissance estimée, de 14 à 21 ans">
+          <defs>
+            <linearGradient id="remplissage-courbe" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="var(--color-coral-pulse)" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="var(--color-coral-pulse)" stopOpacity="0.02" />
+            </linearGradient>
+          </defs>
+
+          {/* Filets horizontaux pointillés, comme sur leur figure. */}
+          {[40, 90, 140, 190].map((y) => (
+            <line
+              key={y}
+              x1="10"
+              y1={y}
+              x2="390"
+              y2={y}
+              stroke="var(--color-frost-gray)"
+              strokeWidth="1"
+              strokeDasharray="2 5"
+            />
+          ))}
+
+          <path
+            d="M10 196 C 70 178, 120 140, 184 104 C 250 68, 320 46, 390 38 L 390 196 Z"
+            fill="url(#remplissage-courbe)"
+          />
+          <path
+            d="M10 196 C 70 178, 120 140, 184 104 C 250 68, 320 46, 390 38"
+            fill="none"
+            stroke="var(--color-coral-pulse)"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+
+          <line
+            x1="184"
+            y1="6"
+            x2="184"
+            y2="196"
+            stroke="rgba(255,255,255,0.22)"
+            strokeWidth="1"
+            strokeDasharray="3 4"
+          />
+          <circle cx="184" cy="104" r="14" fill="var(--color-coral-pulse)" opacity="0.22" />
+          <circle cx="184" cy="104" r="7" fill="#fff" />
+        </svg>
+
+        <div className="mt-3 flex justify-between px-1 text-xs text-[color:var(--text-meta)]">
+          {ages.map((an) => (
+            <span key={an}>{an}</span>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  )
+}
 
 /**
- * Maquette affichée dans le hero.
+ * Liste d'actions — la figure de « Maximize your potential ».
  *
- * Les chiffres sont ceux d'un EXEMPLE — « Théo, 14 ans », écrit dans la
- * carte. Ce ne sont pas ceux du visiteur, qui n'a encore rien saisi.
- *
- * Elle montre l'estimation ET le plan, depuis que les deux sont derrière le
- * paiement. C'est désormais le seul endroit du site où un visiteur voit à
- * quoi ressemble un résultat avant d'avoir payé : ni la page ni le tunnel ne
- * lui montreront le sien.
+ * Les quatre lignes sont extraites du plan réel (cf. internal/planner) : une
+ * vitrine qui invente des exercices est une vitrine qui vend autre chose que ce
+ * qu'elle livre.
  */
-function ApercuResultat() {
+function ListeActions() {
+  /* La durée à droite de chaque ligne, comme sur l'écran d'exercices des
+     concurrents. Ce n'est pas un ornement : « séance du mois » se lit comme un
+     devoir, « séance du mois · 10 min » se lit comme quelque chose de faisable
+     avant le dîner. Le plan réel porte bien une durée par bloc
+     (cf. daily_routine[].duree_min), donc la colonne ne promet rien de neuf. */
+  const actions = [
+    { texte: 'Suspension à la barre 🤸', duree: '5 × 15 s', faite: true },
+    { texte: 'Petit-déjeuner avec protéines 🍳', duree: '—', faite: false },
+    { texte: 'Séance du mois : dos et hanches 🏋️', duree: '10 min', faite: false },
+    { texte: 'Écrans coupés 45 min avant 🌙', duree: '22 h', faite: false },
+  ]
+
   return (
-    <div className="flex w-full flex-col gap-4 rounded-[26px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-5 text-left shadow-[0_24px_60px_-24px_rgba(23,18,14,0.22)] sm:p-6">
-      <div className="flex items-center justify-between">
-        <span className="inline-flex items-center gap-2 rounded-full bg-[color:var(--color-sage-wash)] px-3 py-1 text-xs font-semibold text-ink">
-          <Sparkles className="size-3" aria-hidden="true" />
-          Ton plan Grandimi
-        </span>
-        <span className="text-xs text-muted-foreground">Théo, 14 ans</span>
-      </div>
+    <div className="rounded-[26px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6 sm:p-8">
+      <ul className="flex flex-col gap-3">
+        {actions.map(({ texte, duree, faite }) => (
+          <motion.li
+            key={texte}
+            initial={{ opacity: 0, x: -14 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.4 }}
+            className="flex items-center gap-3.5 rounded-[18px] bg-[color:var(--surface-page-canvas)] px-4 py-4"
+          >
+            <span
+              className={`flex size-6 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${
+                faite
+                  ? 'bg-brand text-[color:var(--color-on-brand)]'
+                  : 'border border-[color:var(--color-frost-gray)]'
+              }`}
+              aria-hidden="true"
+            >
+              {faite ? '✓' : ''}
+            </span>
+            <span
+              className={`flex-1 text-[15px] leading-tight ${
+                faite ? 'text-[color:var(--text-meta)] line-through' : 'text-ink'
+              }`}
+            >
+              {texte}
+            </span>
+            <span className="shrink-0 text-[13px] tabular-nums text-[color:var(--text-meta)]">
+              {duree}
+            </span>
+          </motion.li>
+        ))}
+      </ul>
 
-      {/* Le chiffre mis en avant est celui sur lequel on peut encore agir.
-          La taille adulte est un état de fait ; les centimètres restants
-          sont ce que le plan sert à ne pas perdre — et donc ce qu'on vend.
-
-          L'ancienne version empilait le grand chiffre, la fourchette en
-          texte ET une barre d'échelle : trois façons de dire la même
-          chose, sur la première image que voit le visiteur. */}
-      {/* Une ligne, pas un bloc. L’estimation fait partie de ce qu’on vend
-          depuis qu’elle est passée derrière le paiement, mais elle reste le
-          décor du plan : c’est la liste d’actions dessous qui montre à quoi
-          ressemble une journée d’abonné. */}
-      <div className="rounded-[16px] bg-[color:var(--color-cream)] px-4 py-3">
-        <p className="flex items-baseline gap-2 text-sm text-[color:var(--text-secondary)]">
-          <span className="font-display text-[22px] leading-none font-medium tracking-[-0.03em] text-ink">
-            +{RESTANT} cm
-          </span>
-          encore à prendre
-        </p>
-        <p className="mt-1 text-xs text-[color:var(--text-secondary)]">
-          Taille adulte estimée : {ESTIMATION} cm (± {MARGE} cm)
-        </p>
-      </div>
-
-      {/* ====================================================
-          CE QUI EST RÉELLEMENT VENDU
-          ====================================================
-          Ce bloc montre la todo du jour — l'écran que l'abonné ouvre chaque
-          matin. L'estimation seule ne suffirait pas à illustrer un
-          abonnement : elle se lit en trois secondes, alors que ce qui est
-          facturé tous les mois, c'est cette liste-là.
-
-          Les trois cartes précédentes annonçaient « Percentile : 68e »
-          (le produit ne calcule aucun percentile), « Sommeil : 8 h 40 »
-          (le questionnaire ne propose que 6 / 7,5 / 8,5 / 9,5 h) et
-          « Marge : +4 cm » qui confondait marge d'erreur et croissance
-          restante. Trois chiffres inventés sur une page dont l'argument
-          est qu'on ne cache rien.
-
-          Toutes les lignes ci-dessous existent telles quelles dans le
-          plan réel (cf. internal/planner/monthly_plan.go). */}
-      <div className="rounded-[20px] bg-[color:var(--color-sage-wash)] p-4">
-        <div className="flex items-baseline justify-between">
-          <p className="text-[11px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase">
-            Ton plan d’aujourd’hui
-          </p>
-          <p className="text-[11px] font-semibold text-ink">4 / 11 faites</p>
-        </div>
-
-        <ul className="mt-3 flex flex-col gap-2">
-          {[
-            { texte: 'Matin — suspension à la barre : 5 × 15 s', faite: true },
-            { texte: 'Matin — petit-déjeuner avec des protéines', faite: true },
-            { texte: 'Journée — marcher 2 min par heure assise', faite: true },
-            { texte: 'Soir — séance du mois : dos et hanches', faite: false },
-            { texte: 'Coucher — écrans coupés 45 min avant', faite: false },
-          ].map(({ texte, faite }) => (
-            <li key={texte} className="flex items-center gap-2.5">
-              <span
-                className={`flex size-[18px] shrink-0 items-center justify-center rounded-[6px] text-[11px] font-bold ${
-                  faite
-                    ? 'bg-brand text-[color:var(--color-on-brand)]'
-                    : 'border-2 border-[color:var(--color-frost-gray)]'
-                }`}
-                aria-hidden="true"
-              >
-                {faite ? '✓' : ''}
-              </span>
-              <span
-                className={`text-[13px] leading-tight ${
-                  faite
-                    ? 'text-[color:var(--text-secondary)] line-through'
-                    : 'text-ink'
-                }`}
-              >
-                {texte}
-              </span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-3 flex items-center gap-2 border-t border-[color:var(--color-frost-gray)] pt-3">
-          <span className="flex gap-1" aria-hidden="true">
-            {[true, true, true, true, true, false, false].map((rempli, i) => (
-              <span
-                key={i}
-                className={`size-2 rounded-full ${
-                  rempli ? 'bg-brand' : 'bg-[color:var(--color-cloud-gray)]'
-                }`}
-              />
-            ))}
-          </span>
-          <span className="text-[11px] text-[color:var(--text-secondary)]">
-            5 jours d’affilée · + 6 autres actions aujourd’hui
-          </span>
-        </div>
-      </div>
+      <p className="mt-5 text-xs text-[color:var(--text-meta)]">+ 7 autres actions aujourd’hui</p>
     </div>
   )
 }
