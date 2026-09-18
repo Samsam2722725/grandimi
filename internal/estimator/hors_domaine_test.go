@@ -220,65 +220,38 @@ func TestBalayageExtreme_LeGardeFouTient(t *testing.T) {
 	}
 }
 
-/* L intervalle ne doit pas reintroduire ce que le plafond vient de
-   chasser.
+/* L estimation doit toujours tomber DANS son propre intervalle.
 
-   Releve en production juste apres le premier correctif : l estimation
-   etait bien bornee a 198,4 cm, mais l elargissement hors domaine
-   poussait la borne haute a 216,3 cm. Un chiffre que le produit declare
-   lui-meme impossible, affiche a cote de celui qu il vient de corriger. */
-func TestHorsDomaine_LaBorneHauteResteePlausible(t *testing.T) {
-	for _, c := range []struct {
-		nom                       string
-		age                       float64
-		sexe                      string
-		taille, poids, pere, mere float64
-	}{
-		{"M 11 ans, 180 cm", 11, MALE, 180, 60, 178, 165},
-		{"M 11 ans, 170 cm", 11, MALE, 170, 55, 178, 165},
-		{"F 10 ans, 170 cm", 10, FEMALE, 170, 50, 178, 165},
-	} {
-		resp := PredictHeightV2(profilNeutre(c.age, c.sexe, c.taille, c.poids, c.pere, c.mere))
-		_, plafond := bornesTaillePlausible(c.sexe)
-		limite := math.Max(plafond, c.taille)
-
-		if resp.ConfidenceRange[1] > limite+0.05 {
-			t.Errorf("%s : borne haute %.1f cm, au-dessus de la limite plausible %.1f",
-				c.nom, resp.ConfidenceRange[1], limite)
-		}
-		if resp.ConfidenceRange[0] < c.taille-0.05 {
-			t.Errorf("%s : borne basse %.1f cm, sous sa taille actuelle %.1f",
-				c.nom, resp.ConfidenceRange[0], c.taille)
-		}
-		if resp.ConfidenceRange[1] < resp.PredictedHeightCM {
-			t.Errorf("%s : estimation %.1f hors de son propre intervalle [%.1f ; %.1f]",
-				c.nom, resp.PredictedHeightCM, resp.ConfidenceRange[0], resp.ConfidenceRange[1])
-		}
-	}
-}
-
-/* Sur TOUS les profils, pas seulement les extremes : aucune borne
-   affichee ne doit sortir de ce que le produit declare possible. */
-func TestBalayage_AucuneBorneImplausible(t *testing.T) {
+   Sur les profils hors domaine, la borne haute depasse le plafond
+   plausible — volontairement, voir calculateV2Confidence : la plafonner
+   reduisait l intervalle a zero pile sur les profils ou le modele ne
+   sait rien, ce qui affichait une certitude parfaite. Ce test verifie ce
+   qui compte vraiment : que le point estime reste encadre, et que la
+   borne basse ne descende jamais sous la taille deja atteinte. */
+func TestBalayage_LEstimationResteDansSonIntervalle(t *testing.T) {
 	for _, sexe := range []string{MALE, FEMALE} {
-		_, plafond := bornesTaillePlausible(sexe)
-
 		for age := 8.0; age <= 22.0; age += 0.5 {
 			for taille := 105.0; taille <= 209.0; taille += 4 {
 				for _, parents := range [][2]float64{{150, 145}, {178, 165}, {200, 185}} {
 					poids := 19 * (taille / 100) * (taille / 100)
 					resp := PredictHeightV2(profilNeutre(age, sexe, taille, poids, parents[0], parents[1]))
 
-					limite := math.Max(plafond, taille)
-					if resp.ConfidenceRange[1] > limite+0.05 {
-						t.Fatalf("%s %.1f ans a %.0f cm : borne haute %.1f cm, au-dessus de %.1f",
-							sexe, age, taille, resp.ConfidenceRange[1], limite)
-					}
 					if resp.PredictedHeightCM < resp.ConfidenceRange[0]-0.05 ||
 						resp.PredictedHeightCM > resp.ConfidenceRange[1]+0.05 {
 						t.Fatalf("%s %.1f ans a %.0f cm : estimation %.1f hors de [%.1f ; %.1f]",
 							sexe, age, taille, resp.PredictedHeightCM,
 							resp.ConfidenceRange[0], resp.ConfidenceRange[1])
+					}
+					if resp.ConfidenceRange[0] < taille-0.05 {
+						t.Fatalf("%s %.1f ans a %.0f cm : borne basse %.1f sous sa taille actuelle",
+							sexe, age, taille, resp.ConfidenceRange[0])
+					}
+					/* Un intervalle de largeur nulle affiche une certitude
+					   parfaite. C est ce que produisait le plafonnement de
+					   la borne haute, et c est pire que la borne laide. */
+					if resp.ConfidenceRange[1]-resp.ConfidenceRange[0] < 0.1 {
+						t.Fatalf("%s %.1f ans a %.0f cm : intervalle de largeur nulle [%.1f ; %.1f]",
+							sexe, age, taille, resp.ConfidenceRange[0], resp.ConfidenceRange[1])
 					}
 				}
 			}
