@@ -206,5 +206,22 @@ func tailleAdulteKhamisRoche(age float64, sexe string, tailleCM, poidsKG, pereCM
 		return tailleCM
 	}
 
-	return resultat
+	/* GARDE-FOU HAUT ET BAS — la borne qui manquait.
+
+	   Ceci est une REGRESSION LINEAIRE. Hors de son domaine d ajustement
+	   elle extrapole sans rien pour l arreter : mesure en production le
+	   18/09/2026, un garcon de 11 ans a 180 cm (z = 5,5) en sortait
+	   203,8 cm, et la moyenne avec la trajectoire — elle plafonnee a
+	   198,4 cm — affichait 201,1 cm a l utilisateur.
+
+	   On la ramene donc dans la MEME bande que la trajectoire, mediane a
+	   19 ans plus ou moins trois ecarts-types. Sans quoi l une des deux
+	   ancres est bornee et l autre non, et c est la non bornee qui emporte
+	   la moyenne — le defaut symetrique de celui repare en septembre.
+
+	   Le bornage ne suffit pas a lui seul : sur ces profils le chiffre
+	   reste faux, seulement moins spectaculairement. C est pourquoi
+	   horsDomaineModele le signale en plus (voir v2_enhanced.go). */
+	bas, haut := bornesTaillePlausible(sexe)
+	return math.Max(bas, math.Min(haut, resultat))
 }

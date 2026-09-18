@@ -94,6 +94,11 @@ func PredictHeight(c *gin.Context) {
 		"confidence_level": result.ConfidenceLevel,
 		"puberty_stage":    result.PubertyStage,
 		"message":          result.Message,
+		/* Vide dans le cas ordinaire. Rempli quand la taille saisie sort
+		   des courbes de reference : le chiffre rendu ne vaut alors pas
+		   les autres, et les deux routes doivent le dire pareil. */
+		"warning":       result.Avertissement,
+		"out_of_domain": result.HorsDomaine,
 		// Le meme libelle que la v2 : les deux routes tournent sur le meme
 		// moteur, et annoncer deux methodes differentes pour un chiffre
 		// identique serait un mensonge de plus a corriger un jour.
@@ -200,6 +205,11 @@ func PredictHeightV2(c *gin.Context) {
 		   declaree, l incertitude est genuinement d environ 7 cm. Le mot
 		   resume mal ce que le nombre dit exactement. */
 		"margin_cm":        result.MargeCM,
+		/* Vide dans le cas ordinaire. Rempli quand la taille saisie sort
+		   des courbes de reference : l estimation reste affichee, mais
+		   accompagnee de ce qu elle vaut reellement. */
+		"warning":          result.Avertissement,
+		"out_of_domain":    result.HorsDomaine,
 		"puberty_stage":    result.PubertyStage,
 		"model_used":       result.ModelUsed,
 		"message":          result.Message,

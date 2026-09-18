@@ -85,6 +85,18 @@ type HeightPredictionV2Response struct {
 	// de panne du modele, pas une donnee produit : il n est pas expose dans
 	// la reponse HTTP, il sert aux tests et au journal du serveur.
 	PlancherDeclenche bool
+	/* Vrai quand la taille du jour sort de plus de trois ecarts-types de
+	   la mediane de son age : l adolescent est hors de ce que la table de
+	   reference decrit, et le modele ne sait pas le decrire non plus.
+
+	   Second detecteur de panne, symetrique de PlancherDeclenche. Celui-ci
+	   a une consequence VISIBLE, elle : l intervalle s elargit fortement
+	   et Avertissement renvoie vers un medecin, parce qu afficher un
+	   chiffre au dixieme sur ces profils serait une fausse precision. */
+	HorsDomaine bool
+	/* Message a montrer a l utilisateur quand le modele sort de son
+	   domaine. Vide le reste du temps. */
+	Avertissement string
 }
 
 // PredictHeightV2 uses ensemble learning for 97-98% accuracy
@@ -207,6 +219,46 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 		potentialHeight = finalHeight
 	}
 
+	/* PLAFOND — le garde-fou symetrique du plancher.
+
+	   Les deux ancres sont maintenant bornees a la meme bande (mediane a
+	   19 ans +/- 3 ecarts-types), mais le multiplicateur de mode de vie
+	   s applique APRES : sur un profil deja au plafond, un +1 % suffit a
+	   ressortir de la bande. On reborne donc ici, sur la valeur finale.
+
+	   L ordre compte : on plafonne AVANT le plancher. Un adolescent qui
+	   mesure deja plus que le plafond — cela existe, a 199 cm — doit
+	   recevoir sa taille du jour, pas le plafond : on ne retrecit pas. */
+	_, plafond := bornesTaillePlausible(req.Sex)
+	if finalHeight > plafond {
+		finalHeight = plafond
+	}
+	if potentialHeight > plafond {
+		potentialHeight = plafond
+	}
+
+	/* HORS DOMAINE — le second detecteur de panne.
+
+	   Au-dela de trois ecarts-types, on a quitte la variation normale pour
+	   le domaine pathologique. Borner ne rend pas le chiffre juste : ca le
+	   rend seulement moins spectaculairement faux. Ce qu il faut dire a
+	   cet utilisateur, c est qu il doit voir un medecin — pas lui servir
+	   une estimation au dixieme de centimetre.
+
+	   Mesure en production le 18/09/2026, avant ce correctif : un garcon
+	   de 11 ans a 180 cm (z = 5,5) recevait « 201,1 cm » avec un intervalle
+	   de +/-7 cm, presente exactement comme n importe quel autre resultat. */
+	if horsDomaineModele(req.Age, req.Sex, req.HeightCM) {
+		resp.HorsDomaine = true
+		resp.Avertissement = "Ta taille sort nettement des courbes de référence pour ton âge. " +
+			"Ce n'est pas forcément un problème, mais ce calcul n'est pas fait pour ce cas : " +
+			"l'estimation ci-dessous est très approximative. Parles-en à un médecin, " +
+			"c'est le seul moyen d'avoir une vraie réponse."
+		fmt.Printf("[estimateur] hors domaine : age=%.1f sexe=%s taille=%.1f z=%.2f modele=%.1f\n",
+			req.Age, req.Sex, req.HeightCM,
+			zTaillePourAge(req.Age, req.Sex, req.HeightCM), finalHeight)
+	}
+
 	/* PLANCHER — et surtout, DETECTEUR DE PANNE DU MODELE.
 
 	   On ne retrecit pas a l adolescence : la taille deja atteinte est un
@@ -228,6 +280,19 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 		fmt.Printf("[estimateur] plancher declenche : age=%.1f sexe=%s taille=%.1f modele=%.1f (khamis=%.1f trajectoire=%.1f)\n",
 			req.Age, req.Sex, req.HeightCM, finalHeight, khamisRoche, trajectoire)
 		finalHeight = req.HeightCM
+	}
+
+	/* Le potentiel se recale APRES le plafond et le plancher, et pas
+	   seulement avant.
+
+	   Cas de bord qui l impose : un adolescent qui mesure DEJA plus que le
+	   plafond plausible. Le plafond vient de raboter son potentiel a
+	   198,4 cm pendant que le plancher remontait son estimation a sa
+	   taille du jour, 199 cm. Sans ce recalage, la page afficherait un
+	   « potentiel » inferieur a l estimation — donc une perte de
+	   centimetres a quelqu un qui ferait tout bien. */
+	if potentialHeight < finalHeight {
+		potentialHeight = finalHeight
 	}
 
 	// Plus de stadification de Tanner : le champ n est plus collecte.
@@ -499,6 +564,21 @@ func calculateV2Confidence(
 	}
 	if rangeMargin > 8.0 {
 		rangeMargin = 8.0
+	}
+
+	/* HORS DOMAINE : on cesse de pretendre.
+
+	   Au-dela de trois ecarts-types, l intervalle n est plus un intervalle
+	   de confiance calcule — c est un refus de revendiquer une precision
+	   qu on n a pas. Les 2,5 et le plancher a 15 cm ne sortent d aucune
+	   statistique, et c est assume : leur seul role est de rendre visible,
+	   sur l ecran, que ce chiffre-la ne vaut pas les autres. Le message
+	   d Avertissement dit le reste.
+
+	   Le bornage a 8 cm est volontairement ignore ici : c est la borne du
+	   domaine ou le modele fonctionne, et on en est sorti. */
+	if horsDomaineModele(req.Age, req.Sex, req.HeightCM) {
+		rangeMargin = math.Max(rangeMargin*2.5, 15.0)
 	}
 
 	confidenceLevel := "low"

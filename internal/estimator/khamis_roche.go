@@ -24,6 +24,11 @@ type HeightPredictionResponse struct {
 	ConfidenceLevel   string     // "high", "medium", "low"
 	Message           string
 	PubertyStage      string
+	// Repris tel quel du moteur v2. Vide dans le cas ordinaire ; rempli
+	// quand la taille saisie sort des courbes de reference, auquel cas le
+	// chiffre rendu ne vaut pas les autres et doit le dire.
+	Avertissement string
+	HorsDomaine   bool
 }
 
 const (
@@ -88,6 +93,8 @@ func PredictHeight(req HeightPredictionRequest) HeightPredictionResponse {
 	resp.ConfidenceRange = resultat.ConfidenceRange
 	resp.ConfidenceLevel = resultat.ConfidenceLevel
 	resp.PubertyStage = pubertyStage
+	resp.Avertissement = resultat.Avertissement
+	resp.HorsDomaine = resultat.HorsDomaine
 	resp.Message = "Height prediction successful"
 
 	return resp

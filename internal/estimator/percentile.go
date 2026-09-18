@@ -148,3 +148,56 @@ func tailleAdulteParPercentile(ageAnnees float64, sexe string, tailleCM float64)
 
 	return fin.m * (1 + z*fin.s)
 }
+
+/*
+bornesTaillePlausible rend l intervalle de tailles adultes que ce modele
+accepte de produire, pour un sexe donne : la mediane a 19 ans, plus ou
+moins trois ecarts-types.
+
+C EST LA MEME BORNE QUE CELLE QUE LA TRAJECTOIRE S IMPOSE DEJA, et c est
+tout l interet : tailleAdulteParPercentile borne son z-score a +/-3, donc
+elle ne peut structurellement pas sortir de cette bande. Khamis-Roche, en
+revanche, est une REGRESSION LINEAIRE : hors de son domaine d ajustement
+elle extrapole sans limite, et rien ne l arretait.
+
+Mesure sur l API en production le 18/09/2026, garcon de 11 ans a 180 cm
+(z = 5,5, tres au-dela de ce que la table decrit) :
+
+	Khamis-Roche ....... 203,8 cm   (extrapolation libre)
+	trajectoire ........ 198,4 cm   (plafonnee a z = +3)
+	moyenne affichee ... 201,1 cm
+
+Un adolescent recevait donc 2,01 m annonces avec le meme aplomb que tout
+le reste. C est le defaut SYMETRIQUE de celui repare en septembre, ou la
+cible mi-parentale rendait une taille adulte inferieure a la taille du
+jour : dans les deux cas une ancre non bornee emportait la moyenne.
+
+Au-dela de +/-3 ecarts-types, on quitte la variation normale pour le
+domaine pathologique — deficit en hormone de croissance, syndrome de
+Marfan, puberte precoce. Ce produit ne sait pas le modeliser et n a pas a
+pretendre le faire : il borne, il le SIGNALE (voir HorsDomaine), et il
+renvoie vers un medecin.
+
+Valeurs au 18/09/2026 : garcons 154,6-198,4 cm, filles 143,5-182,8 cm.
+Elles sont derivees de la table a chaque appel et non ecrites en dur :
+une revision OMS les deplace sans qu on ait a s en souvenir.
+*/
+func bornesTaillePlausible(sexe string) (float64, float64) {
+	table := tablePourSexe(sexe)
+	fin := table[len(table)-1]
+	return fin.m * (1 - 3*fin.s), fin.m * (1 + 3*fin.s)
+}
+
+/*
+horsDomaineModele dit si l adolescent sort de ce que la table de reference
+decrit, c est-a-dire si son ecart a la mediane depasse trois ecarts-types.
+
+C est un DETECTEUR DE PANNE, au meme titre que PlancherDeclenche : sur ces
+profils, le modele ne borne pas par prudence, il borne parce qu il ne sait
+pas. La difference doit se voir dans la reponse et dans les journaux,
+faute de quoi on publie un chiffre faussement precis sans que personne ne
+s en apercoive — exactement ce qui vient d arriver.
+*/
+func horsDomaineModele(ageAnnees float64, sexe string, tailleCM float64) bool {
+	return math.Abs(zTaillePourAge(ageAnnees, sexe, tailleCM)) > 3
+}
