@@ -689,8 +689,12 @@ function CourbePrediction() {
             aurait suivi la mise à l'échelle du viewBox et son texte aurait
             grossi avec la carte. */}
         <div className="absolute -top-1 left-[46%] z-10 -translate-x-1/2">
+          {/* Même valeur que la carte du hero, qui a été corrigée à 179 cm
+              après vérification sur l'API de production. La bulle était restée
+              à 178 : le même profil de démonstration affichait donc deux
+              tailles adultes différentes sur la même page. */}
           <span className="block rounded-lg bg-brand px-3 py-1 text-sm font-semibold text-[color:var(--color-on-brand)]">
-            178 cm
+            179 cm
           </span>
           <span
             aria-hidden="true"
