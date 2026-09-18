@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 /* design-system-v2.css n'est plus importé ici : il l'est depuis
    index.css, dans @layer base (cf. commentaire là-bas). L'importer
    à nouveau ici le remettrait hors couche. */
@@ -6,18 +6,33 @@ import './App.css';
 import apiClient from './lib/api';
 import Spinner from './components/Spinner';
 import { capturePageview } from './lib/analytics';
+/* UNE SEULE PAGE EST CHARGEE TOUT DE SUITE : CELLE QU ON VOIT.
+
+   Les douze pages etaient importees d un bloc, donc empaquetees
+   ensemble : un visiteur qui arrive sur l accueil telechargeait le
+   questionnaire, la paywall, le plan, l espace parent — et le panneau
+   d administration, 444 lignes qu aucun adolescent n ouvrira jamais.
+   Mesure avant decoupage : 266 ko compresses, 868 ko reels, a
+   telecharger ET a executer avant que le premier pixel s affiche,
+   parce que index.html ne contient qu un <div id="root"> vide.
+
+   React.lazy coupe chaque page en morceau separe, charge au moment ou
+   elle s affiche. L accueil reste en import direct : la differer
+   ajouterait un aller-retour reseau devant le contenu qu on vient
+   justement d accelerer. */
 import HomePage from './pages/HomePage';
-import QuestionnaireFlow from './pages/QuestionnaireFlow';
-import ResultsPage from './pages/ResultsPage';
-import PaywallPage from './pages/PaywallPage';
-import GrowthPlanPage from './pages/GrowthPlanPage';
-import AuthPage from './pages/AuthPage';
-import SetPasswordPage from './pages/SetPasswordPage';
-import AdminPage from './pages/AdminPage';
-import ParentPage from './pages/ParentPage';
-import GiftConfirmedPage from './pages/GiftConfirmedPage';
-import PlanSetupPage from './pages/PlanSetupPage';
-import AccountPage from './pages/AccountPage';
+
+const QuestionnaireFlow = lazy(() => import('./pages/QuestionnaireFlow'));
+const ResultsPage = lazy(() => import('./pages/ResultsPage'));
+const PaywallPage = lazy(() => import('./pages/PaywallPage'));
+const GrowthPlanPage = lazy(() => import('./pages/GrowthPlanPage'));
+const AuthPage = lazy(() => import('./pages/AuthPage'));
+const SetPasswordPage = lazy(() => import('./pages/SetPasswordPage'));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
+const ParentPage = lazy(() => import('./pages/ParentPage'));
+const GiftConfirmedPage = lazy(() => import('./pages/GiftConfirmedPage'));
+const PlanSetupPage = lazy(() => import('./pages/PlanSetupPage'));
+const AccountPage = lazy(() => import('./pages/AccountPage'));
 
 /* Reconnaît un retour de paiement Whop.
 
@@ -432,6 +447,10 @@ function App() {
 
   return (
     <div className="app">
+      {/* Le temps qu un morceau de page arrive, on montre le meme
+          indicateur que partout ailleurs. Sur une connexion correcte il
+          n apparait pas : le morceau fait quelques dizaines de ko. */}
+      <Suspense fallback={<Spinner size="page" label="Chargement..." />}>
       {currentPage === 'paiement' && (
         <div className="account-page">
           <Spinner size="page" label="Paiement confirmé — on prépare ton accès..." />
@@ -514,6 +533,7 @@ function App() {
 
       {/* Admin Panel */}
       {currentPage === 'admin' && <AdminPage />}
+      </Suspense>
     </div>
   );
 }

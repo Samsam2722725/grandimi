@@ -127,17 +127,48 @@ export function HandwritingText({
     return () => clearInterval(id)
   }, [cycle, interval, reduceMotion])
 
+  /* LA POLICE ATTEND QUE LA PAGE SOIT AFFICHEE.
+
+     caveat.ttf pèse 214 ko et opentype.js s'ajoute par-dessus, le tout
+     pour animer UN mot du titre. Mesuré sur la production le 18/09/2026 :
+     43 % des octets de la page d'accueil, et 769 ms de bande passante
+     disputée au paquet JavaScript qui, lui, conditionne l'affichage du
+     premier pixel.
+
+     Le repli en texte brut existe déjà quelques lignes plus bas et rend
+     le mot lisible tout de suite. On ne perd donc rien à charger la
+     police APRÈS que le navigateur ait fini l'essentiel : le visiteur
+     voit sa page, puis le mot s'encre.
+
+     requestIdleCallback quand il existe, sinon un setTimeout — Safari ne
+     l'implémente toujours pas, et s'en passer y ferait retomber le
+     chargement sur le chemin critique, précisément là où on ne le veut
+     plus. */
   useEffect(() => {
     let cancelled = false
-    loadFont(fontUrl)
-      .then((f) => {
-        if (!cancelled) setFont(f)
-      })
-      .catch(() => {
-        /* retombe sur le texte brut plus bas */
-      })
+    let annuler
+
+    const demarrer = () => {
+      loadFont(fontUrl)
+        .then((f) => {
+          if (!cancelled) setFont(f)
+        })
+        .catch(() => {
+          /* retombe sur le texte brut plus bas */
+        })
+    }
+
+    if (typeof window !== 'undefined' && window.requestIdleCallback) {
+      const id = window.requestIdleCallback(demarrer, { timeout: 2500 })
+      annuler = () => window.cancelIdleCallback(id)
+    } else {
+      const id = setTimeout(demarrer, 300)
+      annuler = () => clearTimeout(id)
+    }
+
     return () => {
       cancelled = true
+      annuler()
     }
   }, [fontUrl])
 
@@ -199,63 +230,79 @@ export function HandwritingText({
 
   const count = Math.max(1, geom.contours.length)
 
+  /* Le mot doit exister en TEXTE, pas seulement en tracé.
+
+     Ce composant sert un mot au milieu du <h1> de l'accueil. Tant qu'il ne
+     rendait qu'un <svg aria-label="maximise">, le seul titre du seul document
+     du site se lisait « Prédis et ta taille. » pour un robot d'indexation :
+     le mot porteur manquait, et un `aria-label` n'est pas du contenu.
+
+     Le doublon est donc rendu en texte masqué visuellement (`sr-only` :
+     hors écran, mais présent dans le document), et le SVG passe décoratif —
+     `aria-hidden`, plus de `role` ni de `aria-label`. Sans ça le mot serait
+     annoncé deux fois par un lecteur d'écran.
+
+     Ce n'est pas du texte caché au sens que Google sanctionne : le mot
+     masqué est exactement celui que le tracé affiche. */
   return (
-    <svg
-      key={current}
-      viewBox={`${geom.x} ${geom.y} ${geom.w} ${geom.h}`}
-      role="img"
-      aria-label={current}
-      className={['inline-block', className].filter(Boolean).join(' ')}
-      style={{
-        height,
-        width: `calc(${height} * ${(geom.w / geom.h).toFixed(4)})`,
-        overflow: 'visible',
-      }}
-    >
-      {fill && (
-        <path
-          d={geom.full}
-          fill="currentColor"
-          stroke="none"
-          style={{
-            opacity: drawn ? 1 : 0,
-            transition:
-              drawn && !reduceMotion
-                ? `opacity 0.45s ease-out ${(delay + duration * 0.72).toFixed(3)}s`
-                : 'none',
-          }}
-        />
-      )}
-      {geom.contours.map((d, i) => {
-        const length = lengths[i] || 0
-        // Les contours se chevauchent légèrement pour que le trait se lise
-        // comme un mouvement continu, pas comme des lettres qui s'allument.
-        const each = (duration / count) * 2.4
-        const start = delay + (i / count) * duration
-        return (
+    <>
+      <span className="sr-only">{current}</span>
+      <svg
+        key={current}
+        viewBox={`${geom.x} ${geom.y} ${geom.w} ${geom.h}`}
+        aria-hidden="true"
+        className={['inline-block', className].filter(Boolean).join(' ')}
+        style={{
+          height,
+          width: `calc(${height} * ${(geom.w / geom.h).toFixed(4)})`,
+          overflow: 'visible',
+        }}
+      >
+        {fill && (
           <path
-            key={i}
-            ref={(el) => {
-              pathRefs.current[i] = el
-            }}
-            d={d}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            d={geom.full}
+            fill="currentColor"
+            stroke="none"
             style={{
-              strokeDasharray: length || 1,
-              strokeDashoffset: drawn ? 0 : length || 1,
+              opacity: drawn ? 1 : 0,
               transition:
                 drawn && !reduceMotion
-                  ? `stroke-dashoffset ${each.toFixed(3)}s ease-out ${start.toFixed(3)}s`
+                  ? `opacity 0.45s ease-out ${(delay + duration * 0.72).toFixed(3)}s`
                   : 'none',
             }}
           />
-        )
-      })}
-    </svg>
+        )}
+        {geom.contours.map((d, i) => {
+          const length = lengths[i] || 0
+          // Les contours se chevauchent légèrement pour que le trait se lise
+          // comme un mouvement continu, pas comme des lettres qui s'allument.
+          const each = (duration / count) * 2.4
+          const start = delay + (i / count) * duration
+          return (
+            <path
+              key={i}
+              ref={(el) => {
+                pathRefs.current[i] = el
+              }}
+              d={d}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={strokeWidth}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{
+                strokeDasharray: length || 1,
+                strokeDashoffset: drawn ? 0 : length || 1,
+                transition:
+                  drawn && !reduceMotion
+                    ? `stroke-dashoffset ${each.toFixed(3)}s ease-out ${start.toFixed(3)}s`
+                    : 'none',
+              }}
+            />
+          )
+        })}
+      </svg>
+    </>
   )
 }
 
