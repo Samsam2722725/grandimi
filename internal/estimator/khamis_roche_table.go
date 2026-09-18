@@ -225,7 +225,7 @@ func khamisRocheBrut(age float64, sexe string, tailleCM, poidsKG, pereCM, mereCM
    regression, ramenee dans les tailles que ce produit s autorise a
    annoncer.
 
-   GARDE-FOU HAUT ET BAS — la borne qui manquait.
+   GARDE-FOU HAUT SEULEMENT, ET C EST DELIBERE.
 
    Ceci est une REGRESSION LINEAIRE. Hors de son domaine d ajustement
    elle extrapole sans rien pour l arreter : mesure en production le
@@ -240,8 +240,25 @@ func khamisRocheBrut(age float64, sexe string, tailleCM, poidsKG, pereCM, mereCM
 
    Le bornage ne suffit pas a lui seul : sur ces profils le chiffre
    reste faux, seulement moins spectaculairement. C est pourquoi
-   horsDomaineModele le signale en plus (voir v2_enhanced.go). */
+   horsDomaineModele le signale en plus (voir v2_enhanced.go).
+
+   PAS DE BORNE BASSE, EN REVANCHE. Elle a existe quelques heures, et
+   elle detruisait l ordre : un garcon de 15 ans mesurant 125, 135 ou
+   145 cm, parents 150/145, recevait 154,6 cm dans les trois cas. Trois
+   adolescents tres differents, un seul chiffre.
+
+   L asymetrie est voulue, parce que les deux cotes ne sont pas
+   symetriques : en HAUT, rien d autre n arrete l extrapolation. En BAS,
+   la regle « jamais sous la taille deja atteinte » couvre deja le seul
+   resultat vraiment incoherent — annoncer a quelqu un qu il va
+   rapetisser. Une borne basse n ajoutait donc pas de securite, elle ne
+   faisait que remplacer de l information par une constante.
+
+   Mesure apres retrait, sur 18 270 points couvrant 105-209 cm, tous les
+   ages et les deux sexes : aucune inversion, et les paliers plats
+   tombent de 5 707 a 1 282 — le reste venant du plafond haut et du
+   bornage de la trajectoire, tous deux voulus. */
 func tailleAdulteKhamisRoche(age float64, sexe string, tailleCM, poidsKG, pereCM, mereCM float64) float64 {
-	bas, haut := bornesTaillePlausible(sexe)
-	return math.Max(bas, math.Min(haut, khamisRocheBrut(age, sexe, tailleCM, poidsKG, pereCM, mereCM)))
+	_, haut := bornesTaillePlausible(sexe)
+	return math.Min(haut, khamisRocheBrut(age, sexe, tailleCM, poidsKG, pereCM, mereCM))
 }

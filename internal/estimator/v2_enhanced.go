@@ -170,6 +170,37 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	correction, indice := correctionMaturite(req)
 	base := (khamisRoche+trajectoire)/2 + correction
 
+	/* CE QUE CE CALCUL SURESTIME ENCORE, ET DE COMBIEN.
+
+	   Un reste connu ne s absorbe pas en silence. Celui-ci vient du
+	   bornage de la trajectoire a z = -3 : sous ce seuil elle rend une
+	   constante — 154,6 cm chez le garcon, 143,5 chez la fille — alors que
+	   la vraie projection du couloir serait bien plus basse. Comme elle
+	   pese la moitie de la base, elle tire le resultat vers le haut.
+
+	   Mesure le 18/09/2026, garcon de 17,5 ans mesurant 105 cm,
+	   parents 200/185 (z = -9,4) :
+
+	       Khamis-Roche brut ............ 100,2 cm
+	       trajectoire bornee (z = -3) .. 154,6 cm
+	       trajectoire non bornee ....... 108,2 cm
+	       rendu ........................ 127,4 cm
+
+	   Soit une SURESTIMATION DE 23,2 cm sur ce profil. Plus haut dans la
+	   plage elle se resorbe : 17,9 cm pour une fille de 16 ans a 105 cm,
+	   9,6 cm pour un garcon de 15 ans a 125 cm, et zero des que
+	   z >= -3, c est-a-dire pour tout profil realiste.
+
+	   POURQUOI ON LA GARDE MALGRE TOUT. Debornger la trajectoire
+	   reintroduirait le defaut symetrique en haut — un adolescent de
+	   13 ans a 195 cm recevrait plus de 2,10 m, cf. percentile.go — et
+	   surtout ces profils sont TOUS signales hors domaine, avec un
+	   intervalle elargi et un renvoi vers un medecin. Le produit ne
+	   pretend pas les estimer ; il dit qu il ne sait pas.
+
+	   Ce qui serait fautif, c est de laisser croire que le chiffre est
+	   bon. Il ne l est pas, et de combien est ecrit ci-dessus. */
+
 	/* La cible mi-parentale ne sert plus qu au diagnostic : un ecart
 	   important entre elle et la base dit que l adolescent s ecarte
 	   nettement de sa famille, ce qui est une information pour qui lit
