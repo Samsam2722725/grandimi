@@ -251,3 +251,34 @@
   line-height: 1.5;
   color: var(--funnel-muted);
 }
+
+/* Avertissement « hors des courbes de référence ».
+
+   Il arrive AVANT les chiffres, et pas en petit en bas de page : sur ces
+   profils c'est l'information principale, l'estimation n'est qu'un ordre
+   de grandeur. Ambre plutôt que rouge — ce n'est pas une erreur de
+   l'utilisateur, et la formulation dit déjà que ce n'est pas forcément un
+   problème. */
+.analyse-alerte {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin: 0 0 20px;
+  padding: 14px 16px;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 14px;
+  background: rgba(245, 158, 11, 0.09);
+}
+
+.analyse-alerte p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.analyse-alerte-icone {
+  flex: none;
+  font-size: 18px;
+  line-height: 1.35;
+}

@@ -245,6 +245,24 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           Analyse prête <span aria-hidden="true">👀</span>
         </h1>
 
+        {/* HORS DES COURBES DE RÉFÉRENCE.
+
+            Le serveur signale les profils dont la taille s'écarte de plus de
+            trois écarts-types de la médiane de leur âge. Sur ceux-là le
+            modèle ne sait rien : il borne son chiffre et le dit.
+
+            Relevé en production le 18/09/2026, avant le correctif : un
+            garçon de 11 ans à 180 cm recevait « 201,1 cm » présenté
+            exactement comme n'importe quel autre résultat, à côté d'un
+            bouton d'abonnement. C'est le seul endroit du produit où il faut
+            renvoyer ailleurs plutôt que vendre. */}
+        {predictionData.out_of_domain && predictionData.warning && (
+          <div className="analyse-alerte" role="status">
+            <span className="analyse-alerte-icone" aria-hidden="true">⚕️</span>
+            <p>{predictionData.warning}</p>
+          </div>
+        )}
+
         {/* La taille adulte passe derriere le cadenas.
 
             Decision du client : plus rien de gratuit sur le site. Les neuf
