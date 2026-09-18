@@ -184,6 +184,31 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             </span>
           </a>
 
+          {/* Navigation d'ancres, à partir de `md` seulement.
+              La page est passée de trois à sept sections : sans repères, le
+              visiteur qui cherche le prix ou la méthode n'a que la molette.
+              Deux entrées suffisent — ce sont les deux seules questions qui
+              font remonter quelqu'un dans une page : « qu'est-ce que j'ai
+              exactement » et « et si j'ai une objection ».
+
+              Pas de sélecteur de langue tant qu'il n'y a qu'une langue : un
+              menu déroulant qui ne propose rien est un bouton mort, et un
+              drapeau « FR » laisse entendre qu'une version anglaise existe. */}
+          <nav className="hidden items-center gap-7 md:flex">
+            <a
+              href="#fonctionnalites"
+              className="text-[13px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase transition-colors hover:text-ink"
+            >
+              Fonctionnalités
+            </a>
+            <a
+              href="#faq"
+              className="text-[13px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase transition-colors hover:text-ink"
+            >
+              FAQ
+            </a>
+          </nav>
+
           {/* Sous 640px, les deux boutons pleins ne tenaient pas : la barre
               débordait de 10px et « Se connecter » passait par-dessus le
               logotype. On dégraisse au lieu de rétrécir la cible tactile —
@@ -310,7 +335,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             full potential », qui est le bloc que tous les concurrents de ce
             marché placent juste après le fold. Elle répond à la seule question
             qui reste une fois la promesse lue — qu'est-ce que je reçois. */}
-        <section className="px-5 pb-20 sm:px-8">
+        <section id="fonctionnalites" className="scroll-mt-24 px-5 pb-20 sm:px-8">
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
@@ -352,6 +377,21 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   </motion.article>
                 )
               })}
+            </div>
+
+            {/* La grille se terminait sur les deux cases « bientôt », donc sur
+                ce que le produit ne fait pas encore, et laissait un écran vide
+                avant la figure suivante. Le bouton referme la section sur ce
+                qui existe. */}
+            <div className="mt-14 text-center">
+              <button
+                type="button"
+                onClick={() => demarrer('fonctionnalites')}
+                className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
+              >
+                Commencer mon analyse
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </button>
             </div>
           </div>
         </section>
@@ -561,11 +601,15 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
         </section>
 
         {/* ============ FAQ ============ */}
+        {/* La marge de defilement evite que, l'ancre amene le titre pile sous
+            l'en-tête collant, qui le recouvrait. */}
+        <div id="faq" className="scroll-mt-24">
         <FaqSection
           title="Les questions qu’on nous pose"
           description="Et les réponses honnêtes, y compris quand elles ne nous arrangent pas."
           items={FAQ}
         />
+        </div>
 
         {/* ============ CTA FINAL ============ */}
         <section className="px-5 pb-20 sm:px-8">
