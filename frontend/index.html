@@ -155,10 +155,33 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- LA FEUILLE DE STYLE DES POLICES NE BLOQUE PLUS LE RENDU.
+
+         Mesure PageSpeed du 19/09/2026, Moto G Power en 4G lente : score
+         64, dont 1 260 ms perdus en « requetes de blocage du rendu ».
+         Cette feuille en fait partie — le navigateur ouvre une connexion
+         vers fonts.googleapis.com et attend sa reponse avant de peindre
+         quoi que ce soit.
+
+         media="print" la fait charger sans bloquer ; onload la rebascule
+         sur "all" des qu'elle est la. Le noscript garde le cas sans
+         JavaScript. Les polices portent deja display=swap, donc le texte
+         s'affiche dans la police de repli puis bascule — ce qui se
+         produisait deja, seulement plus tard.
+
+         A SURVEILLER : le CLS vaut 0 aujourd'hui, soit 25 points sur 100.
+         Si la bascule de police se met a decaler la mise en page, ce
+         changement coute plus qu'il ne rapporte et doit etre annule. -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" />
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet" />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>
