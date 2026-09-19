@@ -344,6 +344,15 @@ th {
   color: var(--meta);
 }
 
+/* Ligne d'attribution sous le titre : qui édite, quand c'est à jour,
+   où écrire. Sur un sujet de santé, ces trois informations pèsent plus
+   que n'importe quel mot-clé — et elles n'étaient nulle part. */
+.signature {
+  margin: 14px 0 0;
+  font-size: 14px;
+  color: var(--meta);
+}
+
 /* Sommaire d'une page de questions : les ancres tiennent lieu de plan,
    et donnent des liens profonds partageables vers une réponse. */
 .sommaire {

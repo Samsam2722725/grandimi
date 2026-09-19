@@ -713,6 +713,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
 
             <div>
               <p className="mb-3 font-semibold text-ink">Grandimi</p>
+              <a href="/methode/" className="mb-2 block hover:text-ink transition-colors">Notre méthode</a>
               <a href="mailto:grandimi14@gmail.com" className="mb-2 block hover:text-ink transition-colors">Contact</a>
               <a href="/mentions-legales.html" className="mb-2 block hover:text-ink transition-colors">Mentions légales</a>
               <a href="/cgv.html" className="mb-2 block hover:text-ink transition-colors">CGV</a>
