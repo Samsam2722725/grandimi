@@ -670,6 +670,16 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             </div>
 
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              {/* Lien de contenu, pas un lien légal.
+                  Une page servie en dur que rien ne pointe depuis le site est
+                  une page orpheline : le plan de site la déclare, mais aucun
+                  lien ne lui transmet quoi que ce soit. Un lien depuis
+                  l'accueil — la seule page qui compte aujourd'hui — vaut
+                  beaucoup plus qu'une ligne de sitemap. Le pied de page
+                  complet viendra quand il y aura plusieurs guides à ranger. */}
+              <a href="/calculer-sa-taille-adulte/" className="hover:text-ink transition-colors">Calculer sa taille adulte</a>
+              <a href="/questions-croissance/" className="hover:text-ink transition-colors">Questions sur la croissance</a>
+              <a href="/methodes-taille-adulte/" className="hover:text-ink transition-colors">Les 4 méthodes</a>
               <a href="/mentions-legales.html" className="hover:text-ink transition-colors">Mentions légales</a>
               <a href="/cgv.html" className="hover:text-ink transition-colors">CGV</a>
               <a href="/privacy.html" className="hover:text-ink transition-colors">Confidentialité</a>

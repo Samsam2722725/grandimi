@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ChevronDown, Mail } from 'lucide-react'
 import * as React from 'react'
 
@@ -96,20 +96,44 @@ const FaqItem = ({ question, answer, index }) => {
         </motion.span>
       </button>
 
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            id={panelId}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1, transition: { duration: 0.2, ease: 'easeOut' } }}
-            exit={{ height: 0, opacity: 0, transition: { duration: 0.2, ease: 'easeIn' } }}
-          >
-            <p className="px-6 pt-1 pb-5 text-[15px] leading-relaxed text-muted-foreground">
-              {answer}
-            </p>
-          </motion.div>
+      {/* La réponse est TOUJOURS rendue, repliée par la hauteur.
+
+          Elle vivait auparavant dans `{isOpen && ...}` : fermée, le <p>
+          n'existait pas dans le document. Or ces réponses sont le seul vrai
+          contenu rédigé du site — la méthode, la marge d'erreur, l'âge utile —
+          et le site n'a qu'une page. Elles n'étaient donc indexables nulle
+          part : un moteur qui ne clique pas ne voyait que sept titres de
+          questions suivis de rien.
+
+          Le repli se fait en CSS pur, par `grid-template-rows` de `0fr` à
+          `1fr`, plutôt que par une hauteur animée en JavaScript. Garder le
+          panneau monté en permanence obligeait sinon à animer vers
+          `height: 'auto'`, ce qui suppose de mesurer le contenu à chaque
+          ouverture ; la piste de grille se dimensionne toute seule. Rien à
+          mesurer, rien qui puisse échouer. La durée et la courbe sont celles
+          d'avant.
+
+          Le `overflow: hidden` vit sur l'enfant, pas sur la piste de grille :
+          c'est lui qui rogne le texte pendant que la rangée se referme.
+
+          `inert` quand c'est fermé — même motif que la barre d'action mobile
+          de l'accueil : le texte replié ne doit être ni tabulable ni annoncé
+          par un lecteur d'écran, alors qu'il reste lisible par un robot
+          d'indexation, qui ignore cet attribut. */}
+      <div
+        id={panelId}
+        inert={!isOpen}
+        className={cn(
+          'grid transition-[grid-template-rows,opacity] duration-200',
+          isOpen ? 'grid-rows-[1fr] opacity-100 ease-out' : 'grid-rows-[0fr] opacity-0 ease-in',
         )}
-      </AnimatePresence>
+      >
+        <div className="overflow-hidden">
+          <p className="px-6 pt-1 pb-5 text-[15px] leading-relaxed text-muted-foreground">
+            {answer}
+          </p>
+        </div>
+      </div>
     </motion.div>
   )
 }
