@@ -526,6 +526,7 @@ function App() {
           ongletInitial="grandir"
           onQuitter={handleBackHome}
           onGoToAccount={handleGoToAccount}
+          onReglages={() => setCurrentPage('plan-setup')}
         />
       )}
 

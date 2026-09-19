@@ -36,6 +36,7 @@ function AppShell({
   ongletInitial = 'accueil',
   onQuitter,
   onGoToAccount,
+  onReglages,
 }) {
   const [onglet, setOnglet] = useState(() =>
     ongletValide(ongletInitial) ? ongletInitial : 'accueil',
@@ -53,7 +54,13 @@ function AppShell({
 
   return (
     <div className="night app-shell">
-      <EnteteApp onCompte={onGoToAccount} onReglages={onGoToAccount} />
+      {/* La roue crantée ouvre les horaires du plan (lever, coucher,
+          jours de sport) : c'est le seul écran de réglage qui existe, et
+          le plan entier en dépend. L'avatar ouvre le compte, d'où l'on
+          ressort vers l'accueil marchand — c'est aujourd'hui la seule
+          sortie de l'application, puisque l'en-tête du plan qui portait
+          « ← Accueil » est masqué ici. */}
+      <EnteteApp onCompte={onGoToAccount} onReglages={onReglages} />
 
       <main className="app-contenu">
         <Suspense fallback={<Spinner size="page" label="Chargement..." />}>

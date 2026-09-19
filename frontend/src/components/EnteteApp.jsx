@@ -9,6 +9,11 @@ import { LogoGrandimi } from './ui/logo-grandimi';
    collant, il participe encore au flux, donc le contenu commence dessous
    naturellement et on n'a pas à lui réserver une marge haute qu'on
    oubliera de mettre à jour le jour où l'en-tête grandit. */
+/* Les deux boutons mènent à DEUX endroits différents, et c'est le seul
+   point à vérifier si l'un d'eux est rebranché un jour. Écrits vers la
+   même destination — ce qu'ils étaient au premier jet — ils donnent une
+   barre à deux boutons dont un ne sert à rien, et l'utilisateur met
+   plusieurs essais à comprendre qu'il n'a pas raté quelque chose. */
 function EnteteApp({ onCompte, onReglages }) {
   /* Le filet du bas n'apparaît qu'une fois le contenu passé dessous.
      Affiché en permanence, il trace une ligne en travers d'un écran vide ;

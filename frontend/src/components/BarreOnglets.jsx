@@ -1,4 +1,4 @@
-import { MessageCircle } from 'lucide-react';
+import { CircleQuestionMark } from 'lucide-react';
 import { ONGLETS } from '../lib/onglets';
 
 /* Barre d'onglets basse.
@@ -48,13 +48,21 @@ function BarreOnglets({ actif, onChange, onAssistance, nonLus = 0 }) {
         );
       })}
 
+      {/* Une bulle de discussion, chez le concurrent, ouvre une
+          discussion. Ici il n'y en a pas avant l'étape 8, et poser
+          l'icône quand même reviendrait à faire exactement ce qu'on
+          refuse pour l'onglet Communauté : promettre un écran qui
+          n'existe pas. Un point d'interrogation qui ouvre la page où
+          l'on trouve son abonnement et de quoi nous écrire tient sa
+          promesse — l'icône changera le jour où la discussion sera
+          derrière. */}
       <button
         type="button"
         className="app-tabbar__fab"
         onClick={onAssistance}
-        aria-label="Poser une question"
+        aria-label="Aide"
       >
-        <MessageCircle size={24} aria-hidden="true" />
+        <CircleQuestionMark size={24} aria-hidden="true" />
       </button>
     </nav>
   );
