@@ -9,18 +9,44 @@
 // - session recording coupé (aucune vidéo des formulaires),
 // - autocapture laissé actif, mais il n'enregistre jamais le contenu
 //   saisi dans les champs, seulement les clics et les libellés.
-import posthog from 'posthog-js';
 import { API_BASE } from './api';
 
 const CLE = import.meta.env.VITE_POSTHOG_KEY;
 const HOTE = import.meta.env.VITE_POSTHOG_HOST || 'https://eu.i.posthog.com';
 
+/* POSTHOG N'EST PLUS DANS LE PAQUET D'ENTRÉE.
+
+   Il y était par un import statique, et il y pesait lourd : 114 des
+   occurrences de bibliothèque relevées dans les 660 ko que le téléphone
+   doit avaler avant d'afficher le premier pixel. Différer son
+   DÉMARRAGE, comme je l'avais fait, ne changeait rien au
+   TÉLÉCHARGEMENT — le code voyageait quand même.
+
+   L'import dynamique le sort dans son propre morceau, chargé au moment
+   où initAnalytics() s'exécute, c'est-à-dire après l'affichage.
+
+   `posthog` reste null tant que ce morceau n'est pas arrivé. Tous les
+   appels ci-dessous passent déjà par un garde `if (!actif) return` :
+   un évènement émis pendant ce court intervalle est simplement perdu
+   côté PostHog — et pas côté nous, puisque la même mesure part vers
+   notre propre base par sendBeacon, sans dépendre de cette
+   bibliothèque. */
+let posthog = null;
 let actif = false;
 
-export function initAnalytics() {
+export async function initAnalytics() {
   // Sans clé (dev local, ou variable absente du build), on ne charge
   // rien : pas d'erreur, pas de requête réseau.
   if (actif || !CLE) return;
+
+  /* Le module n'est chargé qu'ici. Un échec réseau ne doit pas casser
+     la page : on abandonne la mesure tierce, pas la navigation. */
+  try {
+    const module = await import('posthog-js');
+    posthog = module.default;
+  } catch {
+    return;
+  }
 
   posthog.init(CLE, {
     api_host: HOTE,
