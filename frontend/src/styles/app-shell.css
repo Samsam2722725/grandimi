@@ -1,0 +1,417 @@
+/* ============================================
+   COQUE DE L'APPLICATION
+   ============================================
+   En-tête fixe en haut, barre d'onglets fixe en bas, contenu qui défile
+   entre les deux. C'est la structure de toutes les applications de suivi
+   quotidien, et elle existe pour une raison précise : les trois gestes
+   qu'on répète chaque jour (voir où j'en suis, cocher, noter) doivent
+   être à un pouce du bas de l'écran, pas derrière un menu.
+
+   AUCUNE COULEUR N'EST ÉCRITE ICI. Tout passe par les jetons `--funnel-*`
+   portés par `.night` (cf. styles/funnel.css). Deux conséquences voulues :
+   la coque suit le thème sombre déjà mesuré pour le contraste, et changer
+   l'orange de marque reste un seul endroit à toucher.
+
+   Le vert de la concurrence n'est volontairement pas repris : l'accent de
+   Grandimi est l'orange `--funnel-accent`, et son couple avec l'encre
+   `--funnel-on-accent` est déjà validé. Copier une palette qu'on n'a pas
+   mesurée, c'est importer des problèmes de lisibilité sans importer le
+   travail qui les a résolus.
+   ============================================ */
+
+/* ---------- Mesures partagées ----------
+   La hauteur de la barre est déclarée une fois : le contenu s'en sert pour
+   réserver sa marge basse. Écrites en double, les deux valeurs finissent
+   par diverger et la dernière carte passe sous la barre. */
+.app-shell {
+  --app-tabbar-h: 64px;
+  /* 40px de bouton + 2×12px de padding. Déclarée parce que les sous-
+     onglets du plan viennent se coller JUSTE dessous : écrite en dur dans
+     leur `top`, la valeur se désynchronise à la première retouche de
+     l'en-tête et les deux barres se recouvrent. */
+  --app-entete-h: 64px;
+  /* `max()` plutôt que `env()` seul : sans `viewport-fit=cover` dans
+     index.html, l'encoche vaut 0 et la barre collerait au bord. On garde
+     donc un plancher de 10px, et la valeur réelle prendra le dessus le
+     jour où la page passera en plein écran. */
+  --app-safe-bottom: max(10px, env(safe-area-inset-bottom, 0px));
+  /* La colonne de lecture. Au-delà, une application mobile étirée sur
+     1600px devient illisible : les cibles tactiles s'éloignent les unes
+     des autres et l'œil perd la colonne. */
+  --app-colonne: 480px;
+
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh; /* exclut la barre d'adresse mobile, qui se rétracte */
+  background: var(--funnel-bg);
+  color: var(--funnel-text);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- En-tête ---------- */
+.app-entete {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  /* Trois colonnes de largeur égale plutôt qu'un `space-between` : c'est
+     la seule façon que le logo soit centré sur l'ÉCRAN et pas centré
+     entre deux boutons de largeurs différentes. */
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: var(--app-colonne);
+  margin: 0 auto;
+  padding: 12px 16px;
+  background: color-mix(in srgb, var(--funnel-bg) 88%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+}
+
+/* Le filet n'apparaît qu'une fois le contenu passé dessous : posé en
+   permanence, il coupe l'écran en deux dès le premier pixel. */
+.app-entete[data-defile='oui'] {
+  border-bottom-color: var(--funnel-line);
+}
+
+.app-entete__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+
+.app-entete__action:hover,
+.app-entete__action:focus-visible {
+  background: var(--funnel-surface-high);
+}
+
+/* Deuxième colonne : le bouton de droite se colle au bord. */
+.app-entete__action--fin {
+  margin-left: auto;
+}
+
+.app-entete__marque {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.app-entete__logo {
+  width: 26px;
+  height: 26px;
+  padding: 4px;
+  border-radius: 8px;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+}
+
+/* ---------- Contenu ---------- */
+.app-contenu {
+  flex: 1;
+  width: 100%;
+  max-width: var(--app-colonne);
+  margin: 0 auto;
+  padding: 8px 16px 0;
+  /* Réserve la place de la barre basse. Sans cette marge, le dernier
+     élément de chaque onglet est inatteignable : il existe, il est
+     simplement recouvert. */
+  padding-bottom: calc(var(--app-tabbar-h) + var(--app-safe-bottom) + 24px);
+}
+
+/* ---------- Barre d'onglets ---------- */
+.app-tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 4px;
+  width: 100%;
+  max-width: var(--app-colonne);
+  height: calc(var(--app-tabbar-h) + var(--app-safe-bottom));
+  padding: 0 8px var(--app-safe-bottom);
+  background: color-mix(in srgb, var(--funnel-bg) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--funnel-line);
+}
+
+.app-tabbar__item {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  /* 44px : la plus petite cible tactile qu'Apple et le WCAG acceptent.
+     Les icônes font 22px ; c'est la zone cliquable autour qui compte. */
+  min-height: 44px;
+  padding: 6px 2px;
+  border: 0;
+  background: none;
+  color: var(--funnel-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: color 160ms ease;
+}
+
+.app-tabbar__item:hover {
+  color: var(--funnel-text);
+}
+
+.app-tabbar__item[aria-current='page'] {
+  color: var(--funnel-text);
+}
+
+/* L'onglet actif se signale par DEUX choses : la couleur et la pastille
+   sous l'icône. La couleur seule ne suffit pas — un daltonien deutan ne
+   distingue pas ce blanc de ce gris à cette taille. */
+.app-tabbar__item[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--funnel-accent);
+}
+
+.app-tabbar__icone {
+  width: 22px;
+  height: 22px;
+}
+
+/* Compteur de non-lus. `min-width` et non `width` : à trois chiffres la
+   pastille doit s'allonger, pas rogner le nombre. */
+.app-tabbar__pastille {
+  position: absolute;
+  top: 2px;
+  left: calc(50% + 4px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: #e5484d;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ---------- Bouton d'assistance ----------
+   Il sort de la barre vers le haut : c'est l'action qu'on veut trouver
+   sans lire, depuis n'importe quel onglet. */
+.app-tabbar__fab {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  /* Marge HAUTE négative, pas basse. Écrite en bas, elle poussait le
+     bouton sous la barre au lieu de l'en faire dépasser : il finissait à
+     cheval sur le bord de l'écran, à moitié sous l'indicateur d'accueil
+     de l'iPhone. C'est le contraire qu'on veut — il doit émerger vers le
+     haut, et sa bordure de 3px couleur fond découpe le filet de la barre
+     pour que le relief se lise. */
+  margin: -18px 4px 0;
+  border: 3px solid var(--funnel-bg);
+  border-radius: 50%;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  cursor: pointer;
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--funnel-accent) 35%, transparent);
+  transition: transform 160ms ease;
+}
+
+.app-tabbar__fab:hover,
+.app-tabbar__fab:focus-visible {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-tabbar__fab {
+    transition: none;
+  }
+  .app-tabbar__fab:hover,
+  .app-tabbar__fab:focus-visible {
+    transform: none;
+  }
+}
+
+/* ---------- État vide d'un onglet pas encore construit ----------
+   Un onglet qui renvoie un écran blanc se lit comme une panne. Celui-ci
+   dit ce qui arrive et n'a pas l'air cassé. */
+.app-vide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 55dvh;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.app-vide__icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--funnel-surface);
+  color: var(--funnel-accent);
+}
+
+.app-vide__titre {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.app-vide__texte {
+  max-width: 30ch;
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ---------- Onglet Accueil (squelette) ----------
+   L'anneau segmenté de l'étape 2 remplacera cette carte. Ce qui reste
+   vrai après l'étape 2 : le chiffre est la seule chose grosse de l'écran,
+   et l'intervalle est collé dessous plutôt que relégué plus bas. */
+.app-accueil {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.app-accueil__carte {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 32px 20px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 24px;
+  background: var(--funnel-surface);
+  text-align: center;
+}
+
+.app-accueil__label {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.app-accueil__chiffre {
+  margin: 0;
+  /* `clamp` plutôt qu'une taille fixe : à 320px de large (iPhone SE), un
+     68px fixe déborde dès que le nombre passe à trois chiffres. */
+  font-size: clamp(52px, 16vw, 72px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.app-accueil__unite {
+  margin-left: 6px;
+  color: var(--funnel-muted);
+  font-size: 0.32em;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.app-accueil__intervalle {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 14px;
+}
+
+.app-accueil__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ============================================
+   LE PLAN, REÇU DANS LA COQUE
+   ============================================
+   GrowthPlanPage a été écrite comme une page PLEINE : elle se réserve
+   toute la hauteur, son propre fond et ses propres marges basses. Reçue
+   à l'intérieur d'un onglet, chacune de ces trois décisions devient un
+   défaut. On les annule ici plutôt que dans growth-plan.css, parce que
+   la page doit continuer de fonctionner seule — c'est encore ainsi qu'on
+   y arrive depuis le tunnel de paiement.
+
+   Son habillage sombre (`.night.growth-plan-page`, growth-plan.css l.463
+   et suivantes) continue de s'appliquer : les deux classes sont sur le
+   même élément, la coque ne casse pas le sélecteur.
+   ============================================ */
+.app-contenu .growth-plan-page {
+  min-height: 0;
+  padding-bottom: 0;
+  background: transparent;
+}
+
+/* Le conflit qui se voit tout de suite : les sous-onglets du plan sont
+   `sticky; top: 0; z-index: 50`, l'en-tête de la coque est `sticky;
+   top: 0; z-index: 20`. Les deux se collaient au même pixel, et le
+   z-index le plus fort gagnant, les sous-onglets passaient PAR-DESSUS le
+   logo. On les descend d'une hauteur d'en-tête et on les fait passer
+   dessous. */
+.app-contenu .night.growth-plan-page .plan-tabs {
+  top: var(--app-entete-h);
+  z-index: 10;
+}
+
+/* La coque pose déjà 16px de chaque côté ; le plan en posait autant. Les
+   cartes se retrouvaient dans une colonne de 32px plus étroite que le
+   reste de l'application, ce qui se lit comme un décalage, pas comme une
+   marge. On rend au plan la largeur pleine de l'onglet. */
+.app-contenu .growth-plan-page .plan-content {
+  padding-left: 0;
+  padding-right: 0;
+}

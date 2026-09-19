@@ -25,7 +25,6 @@ import HomePage from './pages/HomePage';
 const QuestionnaireFlow = lazy(() => import('./pages/QuestionnaireFlow'));
 const ResultsPage = lazy(() => import('./pages/ResultsPage'));
 const PaywallPage = lazy(() => import('./pages/PaywallPage'));
-const GrowthPlanPage = lazy(() => import('./pages/GrowthPlanPage'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
 const SetPasswordPage = lazy(() => import('./pages/SetPasswordPage'));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
@@ -33,6 +32,10 @@ const ParentPage = lazy(() => import('./pages/ParentPage'));
 const GiftConfirmedPage = lazy(() => import('./pages/GiftConfirmedPage'));
 const PlanSetupPage = lazy(() => import('./pages/PlanSetupPage'));
 const AccountPage = lazy(() => import('./pages/AccountPage'));
+/* La coque de l'application connectée : en-tête, onglets du bas, et les
+   écrans qui vivent dedans. Elle remplace l'accès direct à
+   GrowthPlanPage — celle-ci est désormais l'onglet « Grandir ». */
+const AppShell = lazy(() => import('./pages/AppShell'));
 
 /* Reconnaît un retour de paiement Whop.
 
@@ -512,11 +515,16 @@ function App() {
         <PaywallPage onBackHome={handleBackHome} />
       )}
 
-      {/* Growth Plan (after payment) */}
+      {/* L'application connectée (après paiement).
+
+          `ongletInitial='grandir'` : on arrive ici par « Voir mon plan »,
+          et atterrir sur un tableau de bord alors qu'on a cliqué sur un
+          plan se lit comme un bug. L'onglet Accueil reste à un geste. */}
       {currentPage === 'plan' && predictionData && isPaid && (
-        <GrowthPlanPage
+        <AppShell
           predictionData={predictionData}
-          onBackHome={handleBackHome}
+          ongletInitial="grandir"
+          onQuitter={handleBackHome}
           onGoToAccount={handleGoToAccount}
         />
       )}

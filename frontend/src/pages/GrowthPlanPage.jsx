@@ -16,7 +16,13 @@ function dateDuJour(decalageJours = 0) {
   return `${d.getFullYear()}-${mois}-${jour}`;
 }
 
-function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
+/* `avecEntete` : dans la coque d'application (AppShell), l'en-tête est
+   déjà posé en haut de l'écran. Empiler celui-ci par-dessus mangeait un
+   tiers de la hauteur utile sur un téléphone, pour afficher deux fois le
+   même bouton « Mon compte ». La page reste utilisable seule — c'est
+   encore ainsi qu'on y accède depuis le tunnel — d'où la valeur par
+   défaut. */
+function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, avecEntete = true }) {
   const [plan, setPlan] = useState(null);
   const [monthlyPlan, setMonthlyPlan] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -164,22 +170,24 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
   return (
     <div className="night growth-plan-page">
       {/* Header */}
-      <header className="plan-header">
-        <button className="btn-tertiary" onClick={onBackHome}>
-          ← Accueil
-        </button>
-        {onGoToAccount && (
-          <button className="btn-tertiary" onClick={onGoToAccount} style={{ float: 'right' }}>
-            Mon compte
+      {avecEntete && (
+        <header className="plan-header">
+          <button className="btn-tertiary" onClick={onBackHome}>
+            ← Accueil
           </button>
-        )}
-        <h1>Ton plan de croissance personnalisé</h1>
-        <p className="subtitle">
-          {monthlyPlan
-            ? `Mois ${monthlyPlan.month} · ${monthlyPlan.focus} — quoi faire chaque jour`
-            : 'Quoi faire chaque jour pour maximiser ton potentiel'}
-        </p>
-      </header>
+          {onGoToAccount && (
+            <button className="btn-tertiary" onClick={onGoToAccount} style={{ float: 'right' }}>
+              Mon compte
+            </button>
+          )}
+          <h1>Ton plan de croissance personnalisé</h1>
+          <p className="subtitle">
+            {monthlyPlan
+              ? `Mois ${monthlyPlan.month} · ${monthlyPlan.focus} — quoi faire chaque jour`
+              : 'Quoi faire chaque jour pour maximiser ton potentiel'}
+          </p>
+        </header>
+      )}
 
       {/* Tabs */}
       <nav className="plan-tabs" aria-label="Sections du plan">
