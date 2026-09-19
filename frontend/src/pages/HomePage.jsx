@@ -700,6 +700,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               <p className="mb-3 font-semibold text-ink">Outils</p>
               <a href="/" className="mb-2 block hover:text-ink transition-colors">Faire l’estimation</a>
               <a href="/calculer-sa-taille-adulte/" className="mb-2 block hover:text-ink transition-colors">Calculer sa taille adulte</a>
+              <a href="/comparatif-calculateurs-taille/" className="mb-2 block hover:text-ink transition-colors">Comparatif des calculateurs</a>
             </div>
 
             <div>
