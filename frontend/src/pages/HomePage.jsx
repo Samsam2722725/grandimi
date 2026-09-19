@@ -207,6 +207,19 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             >
               FAQ
             </a>
+            {/* Troisième entrée, et la seule qui sorte de la page.
+                Les deux ancres au-dessus déplacent le visiteur DANS l'accueil ;
+                six pages de contenu existent désormais à côté, et rien en haut
+                de l'écran ne laissait deviner qu'elles existaient — le seul
+                chemin passait par le pied de page, entre « CGV » et
+                « Confidentialité ». Une entrée de menu suffit à ouvrir le
+                groupe, puisque ces six pages se lient toutes entre elles. */}
+            <a
+              href="/questions-croissance/"
+              className="text-[13px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase transition-colors hover:text-ink"
+            >
+              Guides
+            </a>
           </nav>
 
           {/* Sous 640px, les deux boutons pleins ne tenaient pas : la barre
@@ -656,38 +669,64 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           cliquables une fois arrivé en bas. */}
       <footer className="border-t border-[color:var(--color-frost-gray)] px-5 pt-10 pb-28 sm:px-8 md:pb-10">
         <div className="mx-auto w-full max-w-6xl">
-          <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-center">
-            <div className="flex items-center gap-2.5 text-ink">
-              <span className="flex size-7 items-center justify-center rounded-full bg-brand">
-                <Ruler
-                  className="size-3.5 text-[color:var(--color-on-brand)]"
-                  aria-hidden="true"
-                />
-              </span>
-              <span className="font-display text-lg font-semibold tracking-[-0.02em]">
-                Grandimi
-              </span>
+          {/* Onze liens rangés en trois colonnes, identiques à ceux des pages
+              statiques.
+
+              La rangée à plat d'avant mélangeait « Calculer sa taille adulte »
+              et « CGV » sur la même ligne : un lecteur ne distinguait pas un
+              guide d'une mention légale, et six pages de contenu se lisaient
+              comme du remplissage juridique. Les colonnes disent ce que chaque
+              lien est avant même qu'on le lise.
+
+              Le même bloc partout, c'est ce qui fait la différence entre un
+              pied de page et un pied de page utile : présent sur chaque page,
+              il pousse en permanence vers les pages qui doivent se positionner.
+
+              L'avertissement médical n'est pas décoratif non plus. Sur un site
+              de santé qui s'adresse à des mineurs, dire qui édite, comment le
+              joindre et que ce n'est pas un avis médical est un critère
+              d'évaluation à part entière — et la moindre des choses. */}
+          <div className="flex items-center gap-2.5 text-ink">
+            <span className="flex size-7 items-center justify-center rounded-full bg-brand">
+              <Ruler className="size-3.5 text-[color:var(--color-on-brand)]" aria-hidden="true" />
+            </span>
+            <span className="font-display text-lg font-semibold tracking-[-0.02em]">
+              Grandimi
+            </span>
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 gap-8 text-sm text-muted-foreground sm:grid-cols-3">
+            <div>
+              <p className="mb-3 font-semibold text-ink">Outils</p>
+              <a href="/" className="mb-2 block hover:text-ink transition-colors">Faire l’estimation</a>
+              <a href="/calculer-sa-taille-adulte/" className="mb-2 block hover:text-ink transition-colors">Calculer sa taille adulte</a>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-              {/* Lien de contenu, pas un lien légal.
-                  Une page servie en dur que rien ne pointe depuis le site est
-                  une page orpheline : le plan de site la déclare, mais aucun
-                  lien ne lui transmet quoi que ce soit. Un lien depuis
-                  l'accueil — la seule page qui compte aujourd'hui — vaut
-                  beaucoup plus qu'une ligne de sitemap. Le pied de page
-                  complet viendra quand il y aura plusieurs guides à ranger. */}
-              <a href="/calculer-sa-taille-adulte/" className="hover:text-ink transition-colors">Calculer sa taille adulte</a>
-              <a href="/questions-croissance/" className="hover:text-ink transition-colors">Questions sur la croissance</a>
-              <a href="/methodes-taille-adulte/" className="hover:text-ink transition-colors">Les 4 méthodes</a>
-              <a href="/mentions-legales.html" className="hover:text-ink transition-colors">Mentions légales</a>
-              <a href="/cgv.html" className="hover:text-ink transition-colors">CGV</a>
-              <a href="/privacy.html" className="hover:text-ink transition-colors">Confidentialité</a>
-              <a href="mailto:grandimi14@gmail.com" className="hover:text-ink transition-colors">Contact</a>
+            <div>
+              <p className="mb-3 font-semibold text-ink">Guides</p>
+              <a href="/questions-croissance/" className="mb-2 block hover:text-ink transition-colors">Questions sur la croissance</a>
+              <a href="/methodes-taille-adulte/" className="mb-2 block hover:text-ink transition-colors">Prédire sa taille adulte</a>
+              <a href="/que-faire-pour-grandir/" className="mb-2 block hover:text-ink transition-colors">Que faire pour grandir</a>
+              <a href="/croissance-terminee/" className="mb-2 block hover:text-ink transition-colors">Savoir si on a fini de grandir</a>
+              <a href="/poussee-de-croissance/" className="mb-2 block hover:text-ink transition-colors">La poussée de croissance</a>
+            </div>
+
+            <div>
+              <p className="mb-3 font-semibold text-ink">Grandimi</p>
+              <a href="mailto:grandimi14@gmail.com" className="mb-2 block hover:text-ink transition-colors">Contact</a>
+              <a href="/mentions-legales.html" className="mb-2 block hover:text-ink transition-colors">Mentions légales</a>
+              <a href="/cgv.html" className="mb-2 block hover:text-ink transition-colors">CGV</a>
+              <a href="/privacy.html" className="mb-2 block hover:text-ink transition-colors">Confidentialité</a>
             </div>
           </div>
 
-          <p className="mt-6 text-xs text-muted-foreground">
+          <p className="mt-8 border-t border-[color:var(--color-frost-gray)] pt-5 text-xs leading-relaxed text-muted-foreground">
+            Grandimi n’est pas un dispositif médical et ne pose aucun diagnostic. Les
+            estimations et les repères publiés ici sont statistiques, et ne remplacent pas
+            l’avis d’un pédiatre ou d’un endocrinologue.
+          </p>
+
+          <p className="mt-3 text-xs text-muted-foreground">
             © {new Date().getFullYear()} Grandimi · Fait en France · Science, pas promesses
           </p>
         </div>

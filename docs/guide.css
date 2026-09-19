@@ -83,17 +83,66 @@ header.site .enveloppe {
   font-size: 16px;
 }
 
+/* ---------- Pied de page ----------
+
+   Trois colonnes, et le MÊME bloc sur toutes les pages. C'est ce qui en
+   fait autre chose qu'une rangée de liens légaux : présent partout, il
+   pousse en permanence vers les pages qui doivent se positionner, et il
+   porte les signaux qu'un site de santé doit afficher — qui édite,
+   comment le joindre, et le fait que ce n'est pas un avis médical.
+
+   Onze liens, pas trente. Un pied de page qui liste tout ne transmet
+   plus rien : chaque lien supplémentaire dilue les autres. */
+
 footer.site {
   border-top: 1px solid var(--filet);
   margin-top: 56px;
-  padding: 26px 0 40px;
+  padding: 34px 0 40px;
   font-size: 14px;
   color: var(--meta);
 }
-footer.site a {
+
+.pied-colonnes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+@media (max-width: 620px) {
+  .pied-colonnes {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.pied-titre {
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+.pied-colonnes a {
   color: var(--meta);
-  margin-right: 16px;
-  display: inline-block;
+  display: block;
+  margin-bottom: 7px;
+  text-decoration: none;
+  line-height: 1.45;
+}
+.pied-colonnes a:hover {
+  color: var(--ink);
+}
+
+.pied-avertissement {
+  margin: 30px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--filet);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.pied-legal {
+  margin: 12px 0 0;
+  font-size: 13px;
 }
 
 nav.fil {

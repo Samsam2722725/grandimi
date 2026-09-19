@@ -118,7 +118,39 @@
         "operatingSystem": "Web",
         "inLanguage": "fr-FR",
         "description": "Estimation de la taille adulte par la méthode Khamis-Roche croisée avec les tables de croissance de l’OMS, suivie d’un plan quotidien de 11 actions renouvelé chaque mois.",
-        "audience": { "@type": "PeopleAudience", "suggestedMinAge": 10, "suggestedMaxAge": 22 }
+        "audience": { "@type": "PeopleAudience", "suggestedMinAge": 10, "suggestedMaxAge": 22 },
+        "publisher": { "@id": "https://grandimi.com/#organisation" }
+      }
+    </script>
+
+    <!-- L'éditeur, déclaré comme entité.
+
+         Les six pages de contenu se disent toutes publiées par « Grandimi ».
+         Tant que cette organisation n'est déclarée nulle part, ce nom n'est
+         qu'une chaîne de caractères répétée sept fois : rien ne dit qu'il
+         s'agit du même éditeur, ni qui il est. L'`@id` ci-dessous est ce qui
+         relie les sept déclarations à une entité unique.
+
+         Sur un sujet de santé qui s'adresse à des mineurs, savoir QUI publie
+         est un critère d'évaluation, pas une décoration.
+
+         Deux champs manquent sciemment :
+         - `logo`, qui demande un vrai logotype carré en PNG. og-image.png est
+           une bannière 1200 × 630 : la donner ici serait déclarer un logo
+           faux plutôt que pas de logo ;
+         - `sameAs`, qui relierait les comptes TikTok et Instagram. C'est le
+           gain le plus rapide qui reste sur cette page — mais il demande les
+           vraies URL, et une URL inventée vaut moins que rien. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": "https://grandimi.com/#organisation",
+        "name": "Grandimi",
+        "url": "https://grandimi.com/",
+        "email": "grandimi14@gmail.com",
+        "foundingLocation": { "@type": "Country", "name": "France" },
+        "description": "Éditeur de Grandimi, outil d’estimation de la taille adulte et de plan de croissance quotidien pour les 10-22 ans."
       }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -127,9 +159,9 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
       rel="stylesheet"
     />
-    <script type="module" crossorigin src="/assets/index-J3dW5igg.js"></script>
+    <script type="module" crossorigin src="/assets/index-DSXPwMqK.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/jsx-runtime-Cltr0gcK.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-ChjksGSL.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-sgTvMVpT.css">
   </head>
   <body>
     <div id="root"></div>
