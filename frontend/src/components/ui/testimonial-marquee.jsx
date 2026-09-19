@@ -1,5 +1,9 @@
-import { Card, CardContent } from '@/components/ui/card'
-import { Marquee } from '@/components/ui/marquee'
+/* Icônes Lucide, comme partout ailleurs sur le site.
+   Ces quatre entrées portaient des emoji (📊 📈 🔬 📉). Un emoji est rendu
+   par la police système : il change de dessin, de graisse et de couleur
+   entre iOS, Android et Windows, et ne peut pas prendre la couleur de
+   marque. Posé à côté de composants Lucide, il signe le patchwork. */
+import { ArrowLeftRight, BookOpenCheck, Ruler, TrendingUp } from 'lucide-react'
 
 /* Sources scientifiques vérifiables : le fondement du positionnement.
    Pas d'avis fictifs, mais la preuve que ça marche.
@@ -21,67 +25,36 @@ const SOURCES_CREDIBILITE = [
     titre: 'Méthode Khamis-Roche (1994)',
     description: 'Taille adulte prédite sans radiographie, depuis la taille, le poids et celle des parents',
     lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+adult+height+prediction',
-    icone: '📊',
+    Icone: Ruler,
   },
   {
     titre: 'Courbes de croissance OMS',
     description: 'Taille pour âge de 5 à 19 ans : le couloir de croissance que suit le calcul',
     lien: 'https://www.who.int/tools/growth-reference-data-for-5to19-years',
-    icone: '📈',
+    Icone: TrendingUp,
   },
   {
     titre: 'Facteurs de croissance (nutrition, sommeil, exercice)',
     description: 'Revue systématique : Arch Dis Child Fetal Neonatal Ed',
     lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=child+growth+factors+systematic+review',
-    icone: '🔬',
+    Icone: BookOpenCheck,
   },
   {
     titre: 'Marge d\'erreur affichée',
     description: '±4 à 8 cm selon l\'âge : l\'incertitude réelle de la méthode, jamais masquée',
+    /* Une flèche à deux têtes dit l'intervalle. L'emoji précédent (📉)
+       montrait une courbe qui chute, ce qui décrit une baisse, pas une
+       marge d'erreur. */
     lien: 'https://pubmed.ncbi.nlm.nih.gov/?term=adult+height+prediction+accuracy',
-    icone: '📉',
+    Icone: ArrowLeftRight,
   },
 ]
 
-const TEINTES = {
-  peach: 'bg-[var(--color-peach-wash)]',
-  cream: 'bg-[var(--color-cream)]',
-  sand: 'bg-[var(--color-sand)]',
-}
-
-function initiales(nom) {
-  return nom
-    .split(' ')
-    .map((mot) => mot[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
-}
-
-function CarteAvis({ nom, meta, corps, teinte }) {
-  return (
-    <Card className="h-full w-[300px] shrink-0 border-[color:var(--color-frost-gray)] bg-card p-5 sm:w-[340px]">
-      <CardContent className="flex h-full flex-col gap-4 p-0">
-        <p className="text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">
-          {corps}
-        </p>
-
-        <div className="mt-auto flex flex-row items-center gap-3 pt-1">
-          <span
-            className={`flex size-10 shrink-0 items-center justify-center rounded-full text-[13px] font-semibold text-ink ${TEINTES[teinte]}`}
-            aria-hidden="true"
-          >
-            {initiales(nom)}
-          </span>
-          <div className="flex flex-col">
-            <p className="text-sm font-semibold text-ink">{nom}</p>
-            <p className="text-xs text-muted-foreground">{meta}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
+/* CarteAvis, TEINTES et initiales() ont été retirés ici : ils
+   construisaient la carte d'un témoignage (nom, initiales, pastille de
+   couleur), forme abandonnée avec les faux avis. Ils n'étaient plus
+   appelés, mais restaient lus comme la preuve qu'un carrousel d'avis
+   existe encore quelque part. */
 
 export default function TestimonialMarquee() {
   return (
@@ -96,24 +69,31 @@ export default function TestimonialMarquee() {
 
       {/* Grille de sources */}
       <div className="grid grid-cols-1 gap-4 w-full max-w-2xl sm:grid-cols-2">
-        {SOURCES_CREDIBILITE.map((source) => (
+        {SOURCES_CREDIBILITE.map(({ titre, description, lien, Icone }) => (
           <a
-            key={source.titre}
-            href={source.lien}
+            key={titre}
+            href={lien}
             target="_blank"
             rel="noopener noreferrer"
             className="group relative overflow-hidden rounded-lg border border-[color:var(--color-frost-gray)] bg-card p-4 hover:border-[color:var(--color-primary)] transition-colors"
           >
             <div className="flex flex-col gap-2">
-              <div className="text-3xl">{source.icone}</div>
+              <Icone
+                className="size-6 text-[color:var(--color-primary)]"
+                aria-hidden="true"
+              />
               <h3 className="font-semibold text-sm text-ink group-hover:text-[color:var(--color-primary)] transition-colors">
-                {source.titre}
+                {titre}
               </h3>
               <p className="text-xs text-muted-foreground leading-snug">
-                {source.description}
+                {description}
               </p>
+              {/* Le libellé nomme la destination réelle. Les quatre cartes
+                  annonçaient « Lire sur PubMed », or l'une d'elles ouvre
+                  l'OMS : sur une section dont l'argument est la
+                  vérifiabilité, dire où mène le lien est le minimum. */}
               <span className="text-xs text-[color:var(--color-primary)] font-medium group-hover:underline">
-                Lire sur PubMed →
+                Lire sur {lien.includes('who.int') ? 'who.int' : 'PubMed'} →
               </span>
             </div>
           </a>
@@ -122,9 +102,14 @@ export default function TestimonialMarquee() {
 
       {/* Note transparence */}
       <div className="mt-4 text-center text-xs text-muted-foreground max-w-2xl">
+        {/* Le lien « Voir nos références complètes » pointait sur href="#",
+            c'est-à-dire nulle part, dans la phrase même qui promet des
+            sources vérifiables. Il n'existe pas de page de références à
+            lui donner : la phrase se termine sur les quatre sources
+            ci-dessus, qui sont les références complètes. */}
         <p>
-          Nous n'avons pas encore d'avis clients vérifiés. Mais chaque affirmation de ce site s'appuie sur
-          une étude scientifique. <a href="#" className="underline text-[color:var(--color-primary)]">Voir nos références complètes</a>.
+          Nous n'avons pas encore d'avis clients vérifiés. Mais chaque affirmation de ce
+          site s'appuie sur une étude scientifique, et les voici toutes les quatre.
         </p>
       </div>
     </div>
