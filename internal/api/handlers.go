@@ -41,6 +41,9 @@ type PredictHeightV2Request struct {
 	// reste strictement neutre (cf. internal/estimator/maturite.go).
 	ShoeSizeEU         float64 `json:"shoe_size_eu"`
 	ShoeSizeEU1Y       float64 `json:"shoe_size_eu_1y"`
+	// Filles de 15 ans et plus uniquement (filtre cote questionnaire).
+	MenarcheSurvenue   bool    `json:"menarche_survenue"`
+	AgeMenarcheAnnees  float64 `json:"age_menarche_annees"`
 	EthnicBackground   string  `json:"ethnic_background"`        // caucasian, asian, african, hispanic, mixed
 	NutritionLevel     string  `json:"nutrition_level"`          // excellent, good, fair, poor
 	SleepHoursPerNight float64 `json:"sleep_hours_per_night"`    // 4-14 hours
@@ -140,6 +143,8 @@ func PredictHeightV2(c *gin.Context) {
 		HeightVelocityCM: req.HeightVelocityCM,
 		ShoeSizeEU:       req.ShoeSizeEU,
 		ShoeSizeEU1Y:     req.ShoeSizeEU1Y,
+		MenarcheSurvenue:  req.MenarcheSurvenue,
+		AgeMenarcheAnnees: req.AgeMenarcheAnnees,
 		EthnicBackground: ethnic,
 		NutritionLevel:   nutrition,
 		SleepHoursPerNight: req.SleepHoursPerNight,

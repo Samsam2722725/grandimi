@@ -44,6 +44,13 @@ type HeightPredictionV2Request struct {
 	   renseigne », jamais une penalite. Voir maturite.go. */
 	ShoeSizeEU         float64
 	ShoeSizeEU1Y       float64
+
+	// Filles, 15 ans et plus uniquement : les premieres regles datent la
+	// fin de la croissance. Voir menarche.go — pourquoi c est une ancre et
+	// non un signal de maturite de plus, et pourquoi le questionnaire ne
+	// pose la question qu a partir de quinze ans.
+	MenarcheSurvenue   bool
+	AgeMenarcheAnnees  float64
 	EthnicBackground   EthnicBackground   // Population-specific coefficients
 	NutritionLevel     NutritionLevel     // Health factor
 	SleepHoursPerNight float64            // Growth happens during sleep
@@ -168,7 +175,24 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	   doublerait son effet le jour ou on rebalancerait les deux ancres.
 	   Nulle si aucun signal n est renseigne. */
 	correction, indice := correctionMaturite(req)
-	base := (khamisRoche+trajectoire)/2 + correction
+	/* TROISIEME ANCRE, quand elle existe : la menarche.
+
+	   Elle rejoint la moyenne au meme rang que les deux autres, et non
+	   comme une correction posee par-dessus — elle mesure directement la
+	   croissance restante, pas une avance ou un retard. Absente ou
+	   eteinte (plus de 2,5 ans), la moyenne porte sur deux ancres et le
+	   resultat est exactement celui d avant. Voir menarche.go. */
+	ancres := []float64{khamisRoche, trajectoire}
+	parMenarche, menarcheUtile := tailleAdulteParMenarche(req)
+	if menarcheUtile {
+		ancres = append(ancres, parMenarche)
+	}
+
+	sommeAncres := 0.0
+	for _, a := range ancres {
+		sommeAncres += a
+	}
+	base := sommeAncres/float64(len(ancres)) + correction
 
 	/* CE QUE CE CALCUL SURESTIME ENCORE, ET DE COMBIEN.
 
@@ -341,6 +365,11 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	   trancher sans age osseux. */
 	resp.Factors["khamis_roche"] = khamisRoche
 	resp.Factors["percentile_projection"] = trajectoire
+	if menarcheUtile {
+		// Exposee seulement quand elle a servi : une cle a zero laisserait
+		// croire que l ancre a tire le resultat vers le bas.
+		resp.Factors["menarche_projection"] = parMenarche
+	}
 	resp.Factors["indice_maturite"] = indice
 	resp.Factors["correction_maturite"] = correction
 	resp.Factors["vitesse_attendue"] = vitesseAttendue(req.Age, req.Sex)
