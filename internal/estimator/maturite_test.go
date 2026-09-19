@@ -130,11 +130,19 @@ func TestScores_Bornes(t *testing.T) {
 		}
 	}
 
-	// Un pied qui « retrecit » est une erreur de saisie, pas un signal.
-	quiRetrecit, ok := scorePointure(38, 40)
-	stable, _ := scorePointure(40, 40)
-	if !ok || quiRetrecit != stable {
-		t.Errorf("pointure en recul : score %+.2f, attendu le meme qu une variation nulle (%+.2f)", quiRetrecit, stable)
+	/* Un pied qui « retrecit » est une erreur de saisie, pas un signal.
+
+	   Cette assertion exigeait auparavant le MEME score qu une variation
+	   nulle. Mais une variation nulle est le signal le PLUS FORT du
+	   bareme — +1, correction maximale vers le bas : exiger l egalite
+	   revenait a faire valoir une faute de frappe autant qu un pied
+	   reellement fige depuis un an. Le commentaire disait deja l inverse
+	   de ce que la ligne verifiait, des l origine.
+
+	   Le cas complet est couvert par
+	   TestScorePointure_UnePointureQuiReculeEstNonRenseignee. */
+	if _, ok := scorePointure(38, 40); ok {
+		t.Error("pointure en recul : devrait compter comme non renseignee")
 	}
 }
 
