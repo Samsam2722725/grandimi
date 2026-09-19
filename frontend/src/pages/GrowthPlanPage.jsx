@@ -297,6 +297,26 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
               );
             })}
 
+            {/* HORS DES COURBES DE RÉFÉRENCE — l'avertissement suit le CHIFFRE.
+
+                Il s'affichait sur l'écran de résultat, où la taille adulte est
+                cadenassée, et nulle part ici, où elle est enfin révélée après
+                paiement. Un profil signalé lisait donc « Ta taille estimée :
+                198,4 cm » sans un mot, juste après avoir payé pour l'obtenir —
+                l'avertissement existait exactement là où le nombre n'était pas,
+                et manquait exactement là où il apparaît.
+
+                Le chiffre reste affiché : il a été payé, le masquer après coup
+                serait pire. Mais il ne s'affiche plus seul. */}
+            {predictionData.out_of_domain && predictionData.warning && (
+              <div className="alert alert-warning" style={{ marginTop: '24px' }} role="status">
+                <div>
+                  <span aria-hidden="true">⚕️ </span>
+                  {predictionData.warning}
+                </div>
+              </div>
+            )}
+
             <div className="alert alert-info" style={{ marginTop: '24px' }}>
               <div>
                 <strong>Ta taille estimée :</strong> {predictionData.predicted_height_cm} cm.
