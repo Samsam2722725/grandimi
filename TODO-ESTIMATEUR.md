@@ -1,6 +1,6 @@
 # To-do — état au 19 septembre 2026
 
-Production sur `c373292`, vérifiée.
+Production sur `457da36`, vérifiée.
 
 ---
 
@@ -81,12 +81,23 @@ Le moteur est fini. Un seul point reste, et il touche la base.
 
 ## 🏗️ Le chantier qui vaut le plus
 
-- [ ] **La mesure mensuelle.** Demander une taille chaque mois, la stocker,
-      faire rétrécir la fourchette à chaque relevé. Trois effets : la précision
-      monte réellement, l'abonné revient voir sa fourchette se resserrer, et tu
-      accumules la seule donnée que personne sur ce marché ne possède — du
-      suivi réel. C'est ce qui te permettra un jour de publier un taux de
-      couverture mesuré, là où la concurrence n'a qu'un chiffre nu.
+- [x] **Le stockage des mesures est fait** (`457da36`) : table `mesures`,
+      deux routes derrière authentification, et `VitesseDepuisMesures`, fonction
+      pure testée. Elle refuse de conclure sous trois mois d'observation, sur une
+      taille qui recule, ou sur une date future.
+
+- [ ] **APPLIQUER `migrations/010_mesures.sql` sur Supabase.** À toi : je ne lance
+      pas de migration sur une base de production. Tant que ce n'est pas fait, les
+      deux routes renvoient une erreur ; le reste du site n'est pas affecté.
+
+- [ ] **Exploiter les mesures dans le modèle.** Volontairement pas fait : la
+      vitesse mesurée remplacera la vitesse déclarée et resserrera la fourchette,
+      mais autant la calibrer sur de vraies séries que sur mes suppositions. Les
+      données s'accumulent dès le déploiement — c'est la seule partie qui se
+      perdait à attendre, et elle est faite.
+
+- [ ] **L'écran de re-mesure** côté front, et la relance mensuelle par e-mail
+      (qui dépend du fournisseur d'e-mails, toujours pas branché).
 
 ---
 
