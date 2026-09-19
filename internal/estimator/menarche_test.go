@@ -31,7 +31,9 @@ func TestMenarche_AbsenceStrictementNeutre(t *testing.T) {
 		{"age aberrant (3 ans)", profilFille(16, 163, 3, true)},
 		{"age aberrant (25 ans)", profilFille(16, 163, 25, true)},
 		{"posterieure a l age declare", profilFille(16, 163, 17, true)},
-		{"eteinte : reglee il y a 5 ans", profilFille(17, 163, 12, true)},
+		// Meme age que la reference : sinon on compare deux profils
+		// differents et le test echoue pour la mauvaise raison.
+		{"eteinte : reglee il y a 3 ans", profilFille(16, 163, 13, true)},
 	} {
 		got := PredictHeightV2(cas.req)
 		if got.PredictedHeightCM != sans.PredictedHeightCM {
