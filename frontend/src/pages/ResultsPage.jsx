@@ -25,7 +25,8 @@ import '../styles/analyse-page.css'
      bulle « Chance du rêve : 🔒 % » .................... GoTall
      « Plus grand que 🔒 de ton âge 🌍 » ................ les deux
      Taille souhaitée 🔒 | Croissance finie 🔒 .......... Taller
-     un seul bouton ..................................... les deux
+     un seul bouton : « Voir mes résultats » de Taller,
+     le chevron de GoTall ............................... les deux
 
    Ce qui n'est sur aucune des deux captures n'est plus sur l'écran :
    la mention « pas un dispositif médical », le dépliant limites et
@@ -275,7 +276,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
       <footer className="funnel-footer">
         <button type="button" className="funnel-cta" onClick={onViewPlan}>
-          Voir mon potentiel
+          Voir mes résultats
           <ChevronRight size={20} aria-hidden="true" />
         </button>
       </footer>
