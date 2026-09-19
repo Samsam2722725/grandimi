@@ -172,8 +172,9 @@ func scoreVitesse(ageAnnees float64, sexe string, vitesseDeclareeCM float64) (fl
    score NEGATIF = en retard = correction vers le haut.
 
    Une pointure qui recule d une annee sur l autre est une erreur de
-   saisie ou un souvenir approximatif, pas un pied qui retrecit : on la
-   traite comme une variation nulle plutot que d en tirer un signal. */
+   saisie ou un souvenir approximatif, pas un pied qui retrecit : elle
+   est traitee comme NON RENSEIGNEE. Voir le corps de la fonction, le
+   detail compte. */
 func scorePointure(pointureEU, pointureEUilYaUnAn float64) (float64, bool) {
 	if pointureEU < pointureMin || pointureEU > pointureMax {
 		return 0, false
@@ -182,7 +183,26 @@ func scorePointure(pointureEU, pointureEUilYaUnAn float64) (float64, bool) {
 		return 0, false
 	}
 
-	variation := math.Max(0, pointureEU-pointureEUilYaUnAn)
+	/* UNE POINTURE QUI RECULE N EST PAS UNE VARIATION NULLE.
+
+	   Elle etait ramenee a zero par un math.Max(0, ...). Mais une
+	   variation nulle n est pas l absence de signal : c est le signal le
+	   PLUS FORT du bareme — indice +1, soit la correction maximale vers
+	   le bas. Une faute de frappe valait donc autant qu un pied
+	   reellement fige depuis un an.
+
+	   Mesure avant correction, garcon de 13 ans :
+	     42 -> 42 (pied fige) ........ indice 1,00   -1,50 cm
+	     41 apres 42 (faute) ......... indice 1,00   -1,50 cm
+	     38 apres 43 (grosse faute) .. indice 1,00   -1,50 cm
+
+	   On la traite donc comme non renseignee, ce que le commentaire
+	   d origine annoncait deja faire. */
+	if pointureEU < pointureEUilYaUnAn {
+		return 0, false
+	}
+
+	variation := pointureEU - pointureEUilYaUnAn
 	return borner1((pointureAttendueParAn - variation) / pointureAttendueParAn), true
 }
 
