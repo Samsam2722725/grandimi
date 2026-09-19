@@ -1,12 +1,17 @@
 /* ============================================
    ÉCRAN D'ANALYSE — grille de cartes, valeurs sous cadenas
    ============================================
-   Repris de l'écran « Analyse prête » de Taller : un titre court, une grille
-   de cartes dont certaines sont verrouillées, un graphique au milieu, une
-   salve de confettis au montage.
+   La mise en page réunit les deux captures de référence : la grille de
+   cartes et la carte graphe de Taller, le bloc « Ce qui te freine » et la
+   bulle posée sur la courbe de GoTall.
 
-   Tout est scopé sous `.analyse` : `results-page.css` habille encore le
-   partage, la mention et les limites, qui restent sur cet écran.
+   Les couleurs, elles, ne viennent d'aucune des deux : les jetons
+   (--funnel-*) portent l'orange Grandimi. Le violet de l'une et le vert de
+   l'autre ne se mélangent pas, et une couleur de marque ne se décide pas
+   sur une capture de concurrent.
+
+   Tout est scopé sous `.analyse`, sauf l'avertissement hors-domaine qui
+   doit pouvoir servir ailleurs.
    ============================================ */
 
 .analyse .analyse-titre {
@@ -57,10 +62,12 @@
 
 /* La carte accentuée porte le chiffre que l'écran existe pour donner. Aplat
    plein et non bordure teintée : c'est le seul élément de la grille qui doit
-   se voir avant tous les autres. */
+   se voir avant tous les autres. Le halo vient de GoTall — il désigne la
+   carte à ouvrir sans ajouter un mot. */
 .analyse .analyse-case--accent {
   background: var(--funnel-accent);
   border-color: var(--funnel-accent);
+  box-shadow: 0 0 28px rgba(255, 90, 31, 0.32);
 }
 
 .analyse .analyse-case--accent .analyse-case-label,
@@ -70,6 +77,17 @@
 
 .analyse .analyse-case--verrou .analyse-case-valeur {
   color: var(--funnel-muted);
+}
+
+/* Jauge morte au pied des deux cartes du bas, comme sur la capture Taller :
+   une barre sans remplissage dit qu'il y a une mesure ici, et qu'elle n'est
+   pas encore affichée. */
+.analyse .analyse-case-jauge {
+  display: block;
+  height: 8px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: var(--funnel-surface-high);
 }
 
 /* ---------- Ligne pleine largeur, verrouillée ---------- */
@@ -89,9 +107,83 @@
   text-align: center;
 }
 
+/* Chaque fragment reste d'un bloc : sans cela, « Plus grand que » se coupait
+   après « grand » et la ligne passait sur deux niveaux, ce qu'aucune des deux
+   captures ne fait. */
+.analyse .analyse-ligne > span {
+  white-space: nowrap;
+}
+
 .analyse .analyse-ligne--verrou svg {
   color: var(--funnel-accent);
   flex-shrink: 0;
+}
+
+/* ---------- Ce qui te freine ----------
+
+   Le compte est vrai, le contenu est fermé. Les barres sont floutées et
+   non vides : une barre vide ne dit rien, une barre floutée dit qu'il y a
+   quelque chose à lire.
+   -------------------------------------- */
+
+.analyse .analyse-freins {
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--funnel-surface);
+  border: 1px solid var(--funnel-line);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.analyse .analyse-freins-tete {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Titre et pastille sur la MÊME ligne, comme sur la capture GoTall : la
+   pastille renvoyée à la ligne suivante se lisait comme un second bloc. */
+.analyse .analyse-freins-titre {
+  min-width: 0;
+  margin: 0;
+  /* Un cran sous les lignes verrouillées : à 17 px, « Ce qui te freine : »
+     et la pastille ne tiennent pas côte à côte sur un écran de 390 px, et
+     le titre se coupait en deux. */
+  font-size: clamp(14px, 3.9vw, 15.5px);
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--funnel-text);
+}
+
+.analyse .analyse-freins-liste {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.analyse .analyse-frein-barre {
+  display: block;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--funnel-surface-high);
+  filter: blur(1.5px);
+}
+
+.analyse .analyse-frein-barre--courte {
+  width: 72%;
+}
+
+/* Le cadenas est posé AU CENTRE des barres, pas à côté : il porte sur la
+   liste entière, pas sur une ligne. */
+.analyse .analyse-freins-verrou {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--funnel-accent);
 }
 
 /* ---------- Carte du graphique ---------- */
@@ -132,6 +224,7 @@
 /* Pastille cadenas posée au-dessus de la courbe, à la façon d'une infobulle
    qui n'aurait pas encore le droit de s'ouvrir. */
 .analyse .analyse-graphe-verrou {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -142,10 +235,57 @@
   color: var(--funnel-on-accent);
 }
 
+/* La pointe de l'infobulle, comme sur la capture Taller. */
+.analyse .analyse-graphe-verrou::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--funnel-accent);
+}
+
+/* Bulle « Chance du rêve : 🔒 % », de la capture GoTall. Alignée à droite
+   et pointant vers la courbe : elle commente la figure, elle ne la titre
+   pas. */
+.analyse .analyse-graphe-bulle {
+  position: relative;
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 4px;
+  padding: 9px 14px;
+  border-radius: 14px;
+  background: var(--funnel-surface-high);
+  border: 1px solid var(--funnel-line);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--funnel-text);
+}
+
+.analyse .analyse-graphe-bulle svg {
+  color: var(--funnel-accent);
+  flex-shrink: 0;
+}
+
+.analyse .analyse-graphe-bulle::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 18px;
+  border: 6px solid transparent;
+  border-top-color: var(--funnel-surface-high);
+}
+
+/* ---------- Pastille de comptage ---------- */
+
 /* Rouge et non orange de marque : c'est une alerte, pas une action. Le fond
    sourd garde le texte lisible sans allumer un second accent. */
-.analyse .analyse-alerte {
+.analyse .analyse-pastille {
   margin-left: auto;
+  flex-shrink: 0;
   padding: 5px 11px;
   border-radius: 999px;
   background: rgba(214, 69, 47, 0.16);
@@ -169,108 +309,27 @@
   z-index: 40;
 }
 
-/* ---------- Le cout des habitudes, en clair ----------
-
-   Seule valeur non verrouillee de l ecran apres la taille du jour, et
-   c est voulu : c est l enjeu. On montre ce qu il perd, on garde sous
-   cadenas ce qu il faut faire pour le recuperer.
-
-   Le chiffre est accentue, pas alarmiste : un fond rouge sur une perte
-   de 2 cm surjouerait ce que la mesure dit vraiment.
-   ------------------------------------------------------------------ */
-
-.analyse .analyse-ligne--perte {
-  justify-content: space-between;
-  gap: 14px;
-  border-color: rgba(255, 90, 31, 0.45);
-  background: rgba(255, 90, 31, 0.08);
-  text-align: left;
-}
-
-/* Habitudes deja a la cible : l ecart vaut zero et on le dit. Sans ce
-   cas, le bloc n aurait jamais d autre valeur que negative, ce qui en
-   ferait une urgence fabriquee plutot qu une mesure. */
-.analyse .analyse-ligne--acquis {
-  justify-content: space-between;
-  gap: 14px;
-  border-color: rgba(52, 199, 89, 0.4);
-  background: rgba(52, 199, 89, 0.08);
-  text-align: left;
-}
-
-.analyse .analyse-perte-label {
-  font-size: clamp(14px, 4vw, 15.5px);
-  font-weight: 600;
-  line-height: 1.3;
-  color: var(--funnel-text);
-}
-
-.analyse .analyse-perte-valeur {
-  flex-shrink: 0;
-  font-size: clamp(22px, 6.5vw, 28px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-
-.analyse .analyse-ligne--perte .analyse-perte-valeur {
-  color: var(--funnel-accent);
-}
-
-.analyse .analyse-ligne--acquis .analyse-perte-valeur {
-  color: #34c759;
-}
-
-/* Lignes de constat : un fait mesure, ni perte ni cadenas. Neutres a
-   dessein — l orange est reserve a ce qui coute, le vert a ce qui est
-   acquis, et les multiplier viderait les deux de leur sens. */
-.analyse .analyse-ligne--fait {
-  justify-content: space-between;
-  gap: 12px;
-  text-align: left;
-}
-
-/* Habitudes deja bonnes : la ligne porte un constat ET ce qui reste en
-   jeu, donc elle passe sur deux niveaux. Sans le second, l ecran se
-   terminait sur « 0 cm » — un constat juste, mais une impasse. */
-.analyse .analyse-ligne--acquis-bloc {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 8px;
-}
-
-.analyse .analyse-acquis-tete {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.analyse .analyse-acquis-note {
-  margin: 0;
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: var(--funnel-muted);
-}
-
-/* Avertissement « hors des courbes de référence ».
+/* ---------- Avertissement « hors des courbes de référence » ----------
 
    Il arrive AVANT les chiffres, et pas en petit en bas de page : sur ces
    profils c'est l'information principale, l'estimation n'est qu'un ordre
    de grandeur. Ambre plutôt que rouge — ce n'est pas une erreur de
    l'utilisateur, et la formulation dit déjà que ce n'est pas forcément un
-   problème. */
-.analyse-alerte {
+   problème.
+   --------------------------------------------------------------------- */
+
+.analyse-alerte-domaine {
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  margin: 0 0 20px;
+  margin: 0 0 4px;
   padding: 14px 16px;
   border: 1px solid rgba(245, 158, 11, 0.45);
   border-radius: 14px;
   background: rgba(245, 158, 11, 0.09);
 }
 
-.analyse-alerte p {
+.analyse-alerte-domaine p {
   margin: 0;
   font-size: 14px;
   line-height: 1.5;

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { ArrowLeft, Lock } from 'lucide-react'
+import { useEffect } from 'react'
+import { ArrowLeft, ChevronRight, Lock } from 'lucide-react'
 
 import { AnalyseChart } from '@/components/ui/analyse-chart'
 import { Confetti } from '@/components/ui/confetti'
@@ -11,36 +11,47 @@ import '../styles/results-page.css'
 import '../styles/analyse-page.css'
 
 /* ============================================================
-   RÉSULTAT — un seul chiffre, et sa marge à côté
+   RÉSULTAT — l'écran des deux références, et rien d'autre
    ============================================================
-   L'écran arrive juste après 14 écrans sombres : il reste sombre. Repasser au
-   papier crème ici produisait un flash blanc au moment précis où l'utilisateur
-   fixe l'écran pour lire son chiffre.
+   L'écran reprend exactement ce que montrent les deux captures de
+   référence, Taller (violet) et GoTall (vert), réunies :
 
-   Le chiffre est mis en scène comme le fait la concurrence — display géant,
-   annotation manuscrite — mais l'annotation dit « ± 4 cm », pas « 98,5 % de
-   précision ». C'est la même grammaire visuelle au service de l'inverse :
-   ces applis cachent l'incertitude, Grandimi la met au même niveau typographique
-   que le résultat. Retirer ce contraste reviendrait à retirer l'argument.
+     en-tête retour + barre de progression pleine ....... GoTall
+     « Analyse prête 👀 » ............................... Taller
+     Taille actuelle | Taille potentielle 🔒 ............ les deux
+     « Optimise jusqu'à 🔒 cm 📈 » ...................... les deux
+     « Ce qui te freine : » + N problème(s) trouvé(s) ... GoTall
+     carte graphe « Taille / Âge » + N points à corriger  Taller
+     bulle « Chance du rêve : 🔒 % » .................... GoTall
+     « Plus grand que 🔒 de ton âge 🌍 » ................ les deux
+     Taille souhaitée 🔒 | Croissance finie 🔒 .......... Taller
+     un seul bouton ..................................... les deux
 
-   Tout le contenu de fond (limites, sources, avertissement) est conservé tel
-   quel : c'est ce qui distingue le produit, pas un remplissage à alléger.
+   Ce qui n'est sur aucune des deux captures n'est plus sur l'écran :
+   la mention « pas un dispositif médical », le dépliant limites et
+   sources, le coût des habitudes en clair, la part de croissance
+   restante, le percentile en clair, le lien « Plus tard ».
+   Décision du client, prise en connaissance du risque juridique —
+   produit de santé adressé à des mineurs — qui lui a été exposé.
+
+   Reste l'avertissement « hors des courbes de référence », qui
+   n'apparaît que sur les profils où le modèle borne son chiffre : il
+   n'est sur aucune capture parce qu'aucune capture n'est ce profil-là.
+
+   Les unités restent métriques : les captures affichent des pieds et
+   des pouces parce que ces applis s'adressent au marché américain.
+
+   L'accent reste l'orange Grandimi. Le violet de Taller et le vert de
+   GoTall ne se mélangent pas, et la couleur de marque ne se décide pas
+   sur une capture de concurrent.
    ============================================================ */
 
-/* Séparateur décimal français. Le backend renvoie des nombres JS — « 176.5 »
-   s'affichait avec un point sur toute la page, et la carte partageable, elle,
-   écrivait déjà « 176,5 ». Deux typographies pour la même valeur sur le même
-   écran, c'est le genre de détail qui fait amateur. */
-const fr = (valeur) => String(valeur).replace('.', ',')
-
-/* Arrondi d’affichage. Une estimation donnée à ±8 cm n’a pas de
+/* Arrondi d'affichage. Une estimation donnée à ±8 cm n'a pas de
    dixième de centimètre à revendiquer ; l'écrire quand même se lit
    comme une fausse précision. */
 const cm = (valeur) => Math.round(Number(valeur))
 
 function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
-  const [limitesVisibles, setLimitesVisibles] = useState(false)
-
   /* Le résultat est le pivot du tunnel : c'est ici que se décide la
      suite (payer, partager, partir). Il doit être compté séparément
      de l'estimation obtenue — l'appel peut réussir sans que l'écran
@@ -58,177 +69,50 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
     return <Spinner size="page" label="Chargement de tes résultats..." />
   }
 
-  /* La prediction elle-meme n est plus lue sur cet ecran : la taille adulte
-     est desormais sous cadenas. Le composant ne se sert que de ce que
-     l utilisateur a saisi lui-meme — sa taille du jour et ses trois leviers —
-     plus la garde de chargement ci-dessus.
+  /* La prédiction elle-même n'est pas lue sur cet écran : la taille adulte,
+     le potentiel optimisé, le percentile et le frein principal sont tous
+     sous cadenas. Le composant ne se sert que de ce que l'utilisateur a
+     saisi lui-même — sa taille du jour, son âge, ses trois leviers.
 
-     Le chiffre reste dans predictionData et part au paiement ; il est affiche
-     apres, sur le plan. */
+     Le chiffre reste dans predictionData et part au paiement ; il est
+     affiché après, sur le plan. */
 
   /* Le repli sur 170 cm fabriquait un chiffre : le champ lu n'existait pas,
      si bien qu'un adolescent de 183 cm se voyait annoncer « +16,2 cm » de
      croissance restante. Sans la taille saisie, on n'affiche rien. */
   const tailleActuelle = predictionData.current_height_cm
 
-  /* Les trois leviers, d'apres SES réponses. Un champ vide ou nul veut
-     dire « pas renseigné » et ne compte pas.
+  /* Âge saisi, posé sous le repère du graphe comme sur la capture GoTall.
+     Il est affichable pour la même raison que la taille du jour : c'est SA
+     réponse, pas une valeur que le modèle produit. */
+  const ageSaisi = Number(predictionData.age)
+  const agePastille = Number.isFinite(ageSaisi) && ageSaisi > 0 ? Math.round(ageSaisi) : null
 
-     Le détail levier par levier a été retiré de l'écran : il ne reste
-     de cette liste que le test « au moins un levier renseigné », qui
-     conditionne l'affichage du coût des habitudes. Sans aucune réponse
-     de mode de vie, ce coût ne veut rien dire et le bloc disparaît. */
+  /* Les trois leviers, d'après SES réponses. Un champ vide ou nul veut
+     dire « pas renseigné » et ne compte pas : deux points vrais valent
+     mieux que trois dont un inventé.
+
+     Le détail levier par levier n'est pas affiché — les barres de
+     « Ce qui te freine » sont floutées, c'est précisément ce que le plan
+     ouvre. Il ne reste de ce calcul que le NOMBRE, qui alimente les deux
+     pastilles rouges des deux captures. */
   const heuresSommeil = Number(predictionData.sleep_hours_per_night)
   const minutesSport = Number(predictionData.exercise_min_per_day)
 
-  const NUTRITION_LABEL = {
-    poor: 'irrégulière',
-    fair: 'moyenne',
-    good: 'correcte',
-    excellent: 'très suivie',
-  }
-
-  const leviers = [
-    {
-      cle: 'sommeil',
-      nom: 'Sommeil',
-      renseigne: Number.isFinite(heuresSommeil) && heuresSommeil > 0,
-      sousCible: Number.isFinite(heuresSommeil) && heuresSommeil > 0 && heuresSommeil < 8,
-      valeur: Number.isFinite(heuresSommeil) ? `${fr(heuresSommeil)} h par nuit` : '',
-      cible: '8 à 10 h à ton âge',
-      enjeu: 'L’hormone de croissance se libère surtout en sommeil profond.',
-    },
-    {
-      cle: 'nutrition',
-      nom: 'Alimentation',
-      renseigne: Boolean(NUTRITION_LABEL[predictionData.nutrition_level]),
-      sousCible: ['poor', 'fair'].includes(predictionData.nutrition_level),
-      valeur: NUTRITION_LABEL[predictionData.nutrition_level] || '',
-      cible: 'protéines et calcium à chaque repas',
-      enjeu: 'L’os ne s’allonge pas avec ce qu’il n’a pas reçu.',
-    },
-    {
-      cle: 'activite',
-      nom: 'Activité',
-      renseigne: Number.isFinite(minutesSport) && minutesSport > 0,
-      sousCible: Number.isFinite(minutesSport) && minutesSport > 0 && minutesSport < 30,
-      valeur: Number.isFinite(minutesSport) ? `${minutesSport} min par jour` : '',
-      cible: '30 min minimum',
-      enjeu: 'La mise en charge stimule le cartilage tant qu’il est ouvert.',
-    },
-  ].filter((levier) => levier.renseigne)
-
-  /* Nombre de leviers sous la cible. Sert la pastille rouge du graphe.
-     Un champ vide ne compte pas : deux points vrais valent mieux que trois
-     dont un inventé. */
-  const pointsACorriger = leviers.filter((levier) => levier.sousCible).length
-
-  /* CE QUE SES HABITUDES LUI COUTENT, EN CLAIR.
-
-     C'est le seul argument de cet écran qui soit à la fois SON chiffre,
-     une perte en cours, et réparable par ce qu'on vend. Il était caché
-     derrière « Optimise jusqu'à 🔒 cm » : on cachait l'enjeu ET le
-     remède, donc il ne restait aucune raison d'ouvrir.
-
-     Le modèle produit deux scénarios — l'estimation avec les habitudes
-     déclarées, et le potentiel si elles étaient à la cible. Mesuré en
-     production le 17/09/2026, garçon de 14 ans, 165 cm, parents 176/164 :
-
-       habitudes dégradées ... 173,8  potentiel 179,2  ->  5,4 cm
-       habitudes moyennes .... 177,0  potentiel 179,2  ->  2,2 cm
-       habitudes à la cible .. 179,2  potentiel 179,2  ->  0 cm
-
-     L'écart vaut zéro quand il n'y a rien à gagner, et on le dit alors
-     — c'est ce qui sépare ce chiffre d'une urgence fabriquée. Sans
-     aucune réponse de mode de vie, il ne veut rien dire : le bloc
-     retombe sur le cadenas. */
-  const estimeeCm = Number(predictionData.predicted_height_cm)
-  const potentielCm = Number(predictionData.potential_height_cm)
-  const ecartHabitudes =
-    Number.isFinite(estimeeCm) && Number.isFinite(potentielCm) && potentielCm > estimeeCm
-      ? Math.round((potentielCm - estimeeCm) * 10) / 10
-      : 0
-
-  /* Rang parmi les jeunes du meme age, calcule par le serveur sur les
-     tables OMS. Il ne se derive d'aucune valeur verrouillee : on peut
-     l'afficher sans ouvrir la porte. */
-  const percentileAge = Number(predictionData.percentile_age)
-  const percentileAffichable = Number.isFinite(percentileAge) && percentileAge > 0
-
-  /* Part de croissance qui reste a faire.
-
-     ARRONDI A 5 % ET PAS AU POINT PRES, VOLONTAIREMENT. La taille du jour
-     est affichee juste au-dessus : un pourcentage exact laisserait
-     reconstituer la taille adulte, qui est justement sous cadenas —
-     165 / 0,89 donne 185,4. Par tranches de cinq, la meme division ouvre
-     une fourchette de dix centimetres, trop large pour remplacer ce que
-     l'abonnement livre.
-
-     LE DENOMINATEUR EST LE POTENTIEL, PAS L ESTIMATION.
-
-     Rapporte a l'estimation — celle que ses habitudes actuelles
-     produisent — le chiffre disait « tu as fait 95 % de ta croissance »
-     juste sous « tes habitudes te coutent 5,4 cm ». Les deux lignes se
-     contredisaient : s'il ne reste que 5 % a faire, il n'y a pas 5 cm a
-     recuperer. Le denominateur qui a du sens est son plafond, celui que
-     le plan vise ; la part parcourue tombe alors a 92 %, et les deux
-     chiffres racontent la meme histoire. */
-  const cibleCroissance =
-    Number.isFinite(potentielCm) && potentielCm > 0 ? potentielCm : estimeeCm
-  /* CE QUI RESTE, PAS CE QUI EST FAIT.
-
-     « Tu as fait 90 % de ta croissance » est exact et demotivant : le
-     lecteur en conclut que c'est joue, et il a raison de le conclure —
-     c'est ce que la phrase dit. Le meme nombre, pris par l'autre bout,
-     designe ce qui est encore en jeu, c'est-a-dire precisement ce que
-     l'abonnement adresse. Aucun des deux n'est plus vrai que l'autre ;
-     l'un ferme la porte, l'autre l'ouvre.
-
-     TROIS ETATS, ET PAS DEUX. Le calcul portait un plancher a 5 % : en
-     dessous, l'arrondi par tranches de cinq affichait « 0 % ». Ce
-     plancher soignait un symptome — le modele rendait une taille adulte
-     EGALE a la taille du jour pour un profil sur cinq (voir
-     internal/estimator/khamis_roche_table.go), et sans lui ces ecrans
-     annoncaient « 0 % » a des adolescents de quinze ans.
-
-     Le modele est repare, mais le plancher ne peut pas simplement
-     disparaitre : les tranches de cinq arrondissent a zero quelqu'un a
-     qui il reste encore quatre centimetres. Il y a donc trois cas, et
-     chacun dit la verite :
-
-       plus rien a prendre ....... la ligne ne s'affiche pas
-       moins de 5 % ............... « moins de 5 % » (voir plus bas)
-       au-dela .................... le pourcentage, par tranches de cinq
-
-     Le seuil est en CENTIMETRES et non en pourcentage : un centimetre
-     restant est un centimetre, quelle que soit la taille sur laquelle on
-     le rapporte. */
-  const centimetresRestants =
-    Number.isFinite(cibleCroissance) && cibleCroissance > 0 && tailleActuelle > 0
-      ? cibleCroissance - tailleActuelle
-      : 0
-  const resteCroissance =
-    centimetresRestants >= 1
-      ? Math.round((centimetresRestants / cibleCroissance) * 20) * 5
-      : 0
-  const auMoinsUnLevier = leviers.some((levier) => levier.renseigne)
-  const coutAffichable = auMoinsUnLevier && ecartHabitudes > 0
-  const dejaAuMaximum = auMoinsUnLevier && ecartHabitudes === 0
-  /* Le potentiel optimisé (potential_height_cm) n’est plus affiché en clair
-     sur cet écran : il est passé derrière le cadenas « Optimise jusqu’à 🔒 cm »,
-     qui est précisément ce que l’abonnement ouvre. Le chiffre existe côté
-     serveur, il est donc livrable après paiement — un cadenas ne doit jamais
-     promettre une valeur que le produit ne sait pas produire. */
-
-  /* Plus de libellé « Fiabilité : faible / moyenne ». Il inquiétait sans
-     informer : « faible » ne dit pas de combien on peut se tromper, alors
-     que le « ± X cm » juste à côté le dit exactement, en chiffres. Garder
-     les deux revenait à répéter la même idée, la version vague en plus. */
+  const sousCible = [
+    Number.isFinite(heuresSommeil) && heuresSommeil > 0 && heuresSommeil < 8,
+    ['poor', 'fair'].includes(predictionData.nutrition_level),
+    Number.isFinite(minutesSport) && minutesSport > 0 && minutesSport < 30,
+  ]
+  const pointsACorriger = sousCible.filter(Boolean).length
 
   return (
     <div className="night results analyse">
       <Confetti />
 
+      {/* En-tête de GoTall : la flèche de retour et la barre de progression,
+          pleine parce que le questionnaire est fini. Elle ne mesure plus une
+          avance, elle la clôt. */}
       <header className="results-top">
         <button
           type="button"
@@ -238,6 +122,17 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
         >
           <ArrowLeft size={20} aria-hidden="true" />
         </button>
+        <div
+          className="funnel-progress"
+          role="progressbar"
+          aria-valuenow={100}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Questionnaire terminé"
+        >
+          <div className="funnel-progress-fill" style={{ width: '100%' }} />
+        </div>
+        <span className="funnel-header-spacer" aria-hidden="true" />
       </header>
 
       <main className="results-scroll">
@@ -257,67 +152,64 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             bouton d'abonnement. C'est le seul endroit du produit où il faut
             renvoyer ailleurs plutôt que vendre. */}
         {predictionData.out_of_domain && predictionData.warning && (
-          <div className="analyse-alerte" role="status">
+          <div className="analyse-alerte-domaine" role="status">
             <span className="analyse-alerte-icone" aria-hidden="true">⚕️</span>
             <p>{predictionData.warning}</p>
           </div>
         )}
 
-        {/* La taille adulte passe derriere le cadenas.
-
-            Decision du client : plus rien de gratuit sur le site. Les neuf
-            promesses de gratuite de la page d'accueil ont ete reecrites dans
-            le meme commit — verrouiller le resultat en laissant le site
-            annoncer qu'il est offert serait une pratique commerciale
-            trompeuse, pas un oubli de copie.
-
-            « Taille actuelle » reste EN CLAIR, et ce n'est pas une
-            inconsequence : c'est le nombre que l'utilisateur a saisi lui-meme
-            six ecrans plus tot. Le masquer ne protegerait rien — il le
-            connait — et donnerait un ecran entierement cadenasse, qui ne
+        {/* « Taille actuelle » reste EN CLAIR, et ce n'est pas une
+            inconséquence : c'est le nombre que l'utilisateur a saisi lui-même
+            six écrans plus tôt. Le masquer ne protégerait rien — il le
+            connaît — et donnerait un écran entièrement cadenassé, qui ne
             donne envie de rien. Il sert de point d'appui : c'est parce qu'il
-            voit d'ou il part qu'il a envie de savoir ou il arrive. */}
+            voit d'où il part qu'il a envie de savoir où il arrive. */}
         <div className="analyse-duo">
           <div className="analyse-case">
             <span className="analyse-case-label">Taille actuelle</span>
             <span className="analyse-case-valeur">{cm(tailleActuelle)} cm</span>
           </div>
           <div className="analyse-case analyse-case--accent">
-            <span className="analyse-case-label">Ta taille adulte</span>
+            <span className="analyse-case-label">Taille potentielle</span>
             <span className="analyse-case-valeur">
               <Lock size={22} aria-hidden="true" />
             </span>
           </div>
         </div>
 
-        {coutAffichable && (
-          <div className="analyse-ligne analyse-ligne--perte">
-            <span className="analyse-perte-label">Tes habitudes te coûtent</span>
-            <strong className="analyse-perte-valeur">−{fr(ecartHabitudes)} cm</strong>
-          </div>
-        )}
+        <div className="analyse-ligne analyse-ligne--verrou">
+          <span>Optimise jusqu’à</span>
+          <Lock size={17} aria-hidden="true" />
+          <span>cm</span>
+          <span aria-hidden="true">📈</span>
+        </div>
 
-        {dejaAuMaximum && (
-          <div className="analyse-ligne analyse-ligne--acquis analyse-ligne--acquis-bloc">
-            <div className="analyse-acquis-tete">
-              <span className="analyse-perte-label">Tes habitudes ne te coûtent rien</span>
-              <strong className="analyse-perte-valeur">0 cm</strong>
-            </div>
-            <p className="analyse-acquis-note">
-              Tu es déjà sur ta meilleure trajectoire. Le risque n’est plus de mal
-              faire — c’est de lâcher avant la fin. Le plan sert à tenir jusque-là.
-            </p>
-          </div>
-        )}
+        {/* CE QUI TE FREINE — bloc de GoTall.
 
-        {!coutAffichable && !dejaAuMaximum && (
-          <div className="analyse-ligne analyse-ligne--verrou">
-            <span>Optimise jusqu’à</span>
-            <Lock size={17} aria-hidden="true" />
-            <span>cm</span>
-            <span aria-hidden="true">📈</span>
+            Les barres sont vides et floutées, et le nombre au-dessus est
+            vrai : il vient de ses propres réponses. C'est ce couple qui
+            fait travailler le bloc — un compte exact, un contenu fermé.
+            Une barre floutée dit qu'il y a quelque chose d'illisible, là où
+            une barre vide ne dirait rien du tout. */}
+        <section className="analyse-freins">
+          <div className="analyse-freins-tete">
+            <h2 className="analyse-freins-titre">Ce qui te freine :</h2>
+            {pointsACorriger > 0 && (
+              <span className="analyse-pastille">
+                {pointsACorriger} problème{pointsACorriger > 1 ? 's' : ''} trouvé
+                {pointsACorriger > 1 ? 's' : ''}
+              </span>
+            )}
           </div>
-        )}
+          <div className="analyse-freins-liste" aria-hidden="true">
+            <span className="analyse-frein-barre" />
+            <span className="analyse-frein-barre" />
+            <span className="analyse-frein-barre analyse-frein-barre--courte" />
+            <span className="analyse-freins-verrou">
+              <Lock size={22} />
+            </span>
+          </div>
+        </section>
 
         <section className="analyse-carte-graphe">
           <div className="analyse-graphe-tete">
@@ -329,152 +221,62 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
               <Lock size={14} />
             </span>
             {pointsACorriger > 0 && (
-              <span className="analyse-alerte">
+              <span className="analyse-pastille">
                 {pointsACorriger} point{pointsACorriger > 1 ? 's' : ''} à corriger
               </span>
             )}
           </div>
 
-          {/* Aucune donnée passée, et c'est le sujet : cette courbe est un
-              aperçu verrouillé, pas la trajectoire de l'utilisateur. Y
-              brancher ses chiffres reviendrait à livrer en image ce que les
-              cadenas juste au-dessus disent garder — on lirait la forme, la
-              position du point et l'écart restant sans avoir payé. */}
-          <AnalyseChart />
+          {/* La bulle de GoTall, posée au-dessus de la courbe comme une
+              infobulle qui n'aurait pas encore le droit de s'ouvrir. */}
+          <div className="analyse-graphe-bulle">
+            <span>Chance du rêve :</span>
+            <Lock size={14} aria-hidden="true" />
+            <span>%</span>
+          </div>
+
+          {/* Aucune donnée passée hormis l'âge saisi, et c'est le sujet :
+              cette courbe est un aperçu verrouillé, pas la trajectoire de
+              l'utilisateur. Y brancher ses chiffres reviendrait à livrer en
+              image ce que les cadenas juste au-dessus disent garder — on
+              lirait la forme, la position du point et l'écart restant sans
+              avoir payé. */}
+          <AnalyseChart age={agePastille} />
         </section>
 
-        {percentileAffichable && (
-          <div className="analyse-ligne analyse-ligne--fait">
-            <span className="analyse-perte-label">
-              Plus grand que {percentileAge} % des jeunes de ton âge
-            </span>
-            <span aria-hidden="true">🌍</span>
-          </div>
-        )}
-
-        {centimetresRestants >= 1 && (
-          <div className="analyse-ligne analyse-ligne--fait">
-            <span className="analyse-perte-label">
-              {/* « moins de 5 % » plutot que « 5 % » : arrondir 1,4 % a 5 %
-                  serait surestimer ce qui reste, sur l'ecran meme qui sert
-                  a decider d'un achat. */}
-              Il te reste {resteCroissance > 0 ? `${resteCroissance} %` : 'moins de 5 %'} de
-              ta croissance à faire
-            </span>
-            <span aria-hidden="true">📈</span>
-          </div>
-        )}
-
-        {/* Cette ligne portait « Ton frein principal » parce que le percentile
-            de Taller (« Plus grand que X % de ton âge ») demandait des tables
-            de référence que le produit n'avait pas — et qu'un cadenas ne doit
-            jamais promettre un chiffre qu'on ne saura pas livrer.
-
-            Ces tables existent depuis l'import OMS (who_hfa_table.go) : le
-            percentile est desormais calculable et donc livrable. La ligne
-            pourra basculer dessus quand l'API le renverra ; en attendant elle
-            garde le frein principal, qui est livre par le plan. */}
+        {/* Verrouillé sur les DEUX captures, alors que le serveur sait le
+            calculer depuis l'import OMS. Il est donc livrable après
+            paiement : un cadenas ne doit jamais promettre une valeur que le
+            produit ne sait pas produire. */}
         <div className="analyse-ligne analyse-ligne--verrou">
-          <span>Ton frein principal</span>
+          <span>Plus grand que</span>
           <Lock size={17} aria-hidden="true" />
-          <span aria-hidden="true">🎯</span>
+          <span>de ton âge</span>
+          <span aria-hidden="true">🌍</span>
         </div>
 
         <div className="analyse-duo">
           <div className="analyse-case analyse-case--verrou">
-            <span className="analyse-case-label">Tes 11 actions du jour</span>
+            <span className="analyse-case-label">Taille souhaitée</span>
             <span className="analyse-case-valeur">
               <Lock size={20} aria-hidden="true" />
             </span>
+            <span className="analyse-case-jauge" aria-hidden="true" />
           </div>
           <div className="analyse-case analyse-case--verrou">
-            <span className="analyse-case-label">Fin de ta croissance</span>
+            <span className="analyse-case-label">Croissance finie</span>
             <span className="analyse-case-valeur">
               <Lock size={20} aria-hidden="true" />
             </span>
+            <span className="analyse-case-jauge" aria-hidden="true" />
           </div>
         </div>
-
-        {/* Le partage a disparu de cet écran. Il produisait une image portant
-            la taille adulte estimée — c'est-à-dire exactement ce que la carte
-            du haut vient de verrouiller. Un bouton qui contourne le paywall
-            deux écrans plus bas n'est pas un oubli, c'est une fuite.
-
-            La fonction reste entière dans lib/share-card.js : sa place est
-            désormais APRÈS le paiement, sur le plan, où l'utilisateur a le
-            droit de partager le chiffre qu'il a acheté. */}
-
-        {/* La mention reste. Elle n'est sur aucune des captures de référence,
-            mais elle est due : le produit s'adresse à des mineurs et touche à
-            la santé. Elle est petite et après la décision, pas avant. */}
-        <p className="results-mention">
-          Une estimation n’est pas une garantie : elle repose sur des modèles
-          statistiques et sur les données que tu as saisies. Grandimi n’est pas un
-          dispositif médical et ne remplace pas l’avis d’un professionnel de santé.
-        </p>
-
-        <section className="results-limits">
-          <button
-            type="button"
-            className="results-limits-toggle"
-            onClick={() => setLimitesVisibles((visible) => !visible)}
-            aria-expanded={limitesVisibles}
-          >
-            {limitesVisibles ? 'Masquer les limites' : 'Voir les limites de ce calcul'}
-          </button>
-
-          {limitesVisibles && (
-            <div className="results-limits-body">
-              <h3>Limites de cette estimation</h3>
-              <ul>
-                <li>
-                  <strong>Imprécision à l’adolescence :</strong> en plein pic de
-                  croissance, l’estimation peut varier de ±8 cm. Passé 16 ans, quand
-                  la croissance ralentit, elle se resserre autour de ±4 cm.
-                </li>
-                <li>
-                  <strong>Facteurs non mesurés :</strong> hormones, maladies, traitements —
-                  tous affectent la croissance sans être prévisibles ici.
-                </li>
-                <li>
-                  <strong>Données parentales :</strong> la taille des parents est
-                  déclarative. Si elle est imprécise, l’estimation l’est aussi.
-                </li>
-                <li>
-                  <strong>Population de référence :</strong> la méthode a été ajustée sur
-                  des enfants américains en bonne santé. Pour une autre population, c’est
-                  une extrapolation — et le modèle ne fait aucun ajustement ethnique.
-                </li>
-              </ul>
-
-              <h3>Sources &amp; méthodologie</h3>
-              <p>
-                <strong>Méthode :</strong> Khamis-Roche (1994) — ta taille, ton poids et la
-                moyenne des tailles de tes parents, avec des coefficients qui changent tous
-                les six mois d’âge — moyennée avec ton couloir de croissance OMS, puis
-                ajustée par tes réponses sur le sommeil, l’alimentation et l’activité.
-                Jamais inférieure à la taille que tu fais déjà.
-                <br />
-                <strong>Précision moyenne :</strong> ±4 à ±8 cm selon l’âge et la croissance récente
-              </p>
-              <a
-                href="https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+adult+height+prediction"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Lire les publications scientifiques
-              </a>
-            </div>
-          )}
-        </section>
       </main>
 
       <footer className="funnel-footer">
         <button type="button" className="funnel-cta" onClick={onViewPlan}>
-          Débloquer mon potentiel
-        </button>
-        <button type="button" className="funnel-link" onClick={onBackHome}>
-          Plus tard
+          Voir mon potentiel
+          <ChevronRight size={20} aria-hidden="true" />
         </button>
       </footer>
     </div>
