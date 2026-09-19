@@ -1,13 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Info } from 'lucide-react'
 
+import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
+import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ChoiceCard } from '@/components/ui/choice-card'
+import { FeuilleInfo } from '@/components/ui/feuille-info'
 import { FunnelButton, FunnelShell } from '@/components/ui/funnel-shell'
 import { Interstitial } from '@/components/ui/interstitial'
 import { LongTermeChart } from '@/components/ui/long-terme-chart'
+import { ReseauNeurones } from '@/components/ui/reseau-neurones'
+import { RuchePotentiel } from '@/components/ui/ruche-potentiel'
 import { SegmentedControl } from '@/components/ui/segmented-control'
 import { WheelPicker } from '@/components/ui/wheel-picker'
 
-import Spinner from '../components/Spinner'
 import '../styles/funnel.css'
 import apiClient from '../lib/api'
 import { mockPredictHeight } from '../lib/mock-api'
@@ -27,24 +32,60 @@ import {
    ouvrait le clavier, cachait la moitié de l'écran, et demandait de viser des
    champs numériques les uns après les autres. C'est là que les gens partent.
 
-   Ici : 14 écrans, mais un seul geste par écran, et presque aucune frappe au
-   clavier. Le total de gestes baisse, la charge par écran s'effondre, et la
-   barre de progression rend l'effort restant lisible en permanence.
+   Ici : un seul geste par écran, et presque aucune frappe au clavier. Le
+   total de gestes baisse, la charge par écran s'effondre, et la barre de
+   progression rend l'effort restant lisible en permanence.
 
-   Trois choix méritent d'être justifiés :
+   ─────────────────────────────────────────────────────────────
+   POURQUOI CE TUNNEL EST LONG, ET POURQUOI C'EST VOULU
 
-   1. Les molettes sont pré-remplies sur une valeur plausible. Un picker vide
-      oblige à faire défiler depuis une extrémité ; pré-rempli, l'écart à
-      parcourir est de quelques crans. Le risque — valider sans regarder —
-      existe, mais il est plus faible que celui d'abandonner.
+   Trente écrans, là où la version précédente en comptait dix-sept. Ce
+   n'est pas un dérapage : c'est la contrepartie d'un mécanisme que les
+   tunnels concurrents (GoTall, Taller) exploitent tous, et qui tient en
+   une phrase — LA PRÉCISION PERÇUE D'UNE ESTIMATION EST PROPORTIONNELLE
+   À CE QU'ELLE A COÛTÉ À OBTENIR.
 
-   2. Sommeil, nutrition et activité sont DEMANDÉS. Ils étaient jusqu'ici
-      codés en dur ('good', 8 h, 30 min) et envoyés au modèle, qui s'en sert
-      réellement (cf. internal/estimator/v2_enhanced.go). Autrement dit,
-      l'estimation intégrait des réponses que personne n'avait données.
+   Quelqu'un qui a répondu à trente questions sur son corps ne reçoit pas
+   le même chiffre que quelqu'un qui en a rempli six, même si le calcul
+   est identique au centimètre près. Il l'a payé, donc il y croit, donc il
+   le lit — et le coût déjà engagé le porte jusqu'à la page de paiement au
+   lieu de l'en détourner.
 
-   3. Les réponses sont conservées en localStorage à chaque changement. Un
-      rechargement au 11e écran ne renvoie plus à la case départ.
+   CE QUE ÇA NE DISPENSE PAS DE FAIRE. Un écran long n'est pas un écran
+   gratuit : chaque question ajoutée doit soit nourrir le calcul, soit
+   nourrir le plan, soit nourrir la conviction — et on doit pouvoir dire
+   laquelle. Les questions de maturité (voix, pilosité, épaules, odeur,
+   acné) nourrissent la conviction et, pour deux d'entre elles, le champ
+   `puberty_signs` déjà prévu par l'API. Elles sont TOUTES munies d'une
+   sortie (« je ne sais pas », « je préfère ne pas répondre ») : la
+   longueur ne doit jamais devenir un mur.
+
+   ─────────────────────────────────────────────────────────────
+   LES QUATRE ÉCRANS DE PREUVE
+
+   « modèle », « précision », « potentiel » et « aide » ne demandent rien.
+   Ils sont copiés dans leur FORME sur le tunnel de GoTall (captures du
+   19/09/2026), parce que cette forme convertit : on alterne effort et
+   récompense, et on répond à l'objection au moment exact où elle se pose
+   (« pourquoi je remplis tout ça ? » juste après quatre mesures ;
+   « et ça vaut quoi ? » juste après la génétique).
+
+   Leur CONTENU diffère sur les points où celui de GoTall ne passerait pas
+   en France, et le détail est dans chaque composant : le superlatif
+   invérifiable (badge-precision.jsx), les écussons Harvard/CDC/NIH qui
+   suggèrent une caution jamais donnée (idem), le « 98,7 % » qui
+   contredirait la marge réelle du moteur.
+
+   ─────────────────────────────────────────────────────────────
+   CE QUI A ÉTÉ RETIRÉ
+
+   L'écran « part-habitudes » (deux barres 80 % génétique / 20 %
+   habitudes) est supprimé à la demande du client : il ne travaillait pas.
+   L'hypothèse la plus probable est qu'il se retourne contre le produit —
+   dire à quelqu'un que 80 % du résultat lui échappe, juste avant de lui
+   vendre les 20 % restants, désamorce l'achat au lieu de le motiver.
+   L'écran « long-terme », qui montre le même écart en trajectoires plutôt
+   qu'en pourcentages, dit la même chose sans poser le plafond.
    ============================================================ */
 
 const CM_PAR_POUCE = 2.54
@@ -54,25 +95,92 @@ const STOCKAGE = 'grandimi:questionnaire'
 /* Séparateur décimal français, comme sur la page de résultat. */
 const fr = (valeur) => String(valeur).replace('.', ',')
 
-const ETAPES = [
+/* ─────────────────────────────────────────────────────────────
+   L'ORIGINE FAMILIALE : UN INTERRUPTEUR, ET POURQUOI IL EXISTE
+
+   GoTall pose cette question, et elle est tentante : elle allonge le
+   tunnel et elle a l'air savante. Sur le marché français elle est la
+   SEULE question de ce fichier où « ça ne sert à rien » devient un
+   problème juridique et pas seulement un écran de trop.
+
+   L'origine ethnique est une donnée de l'article 9 du RGPD (catégorie
+   particulière). La collecter chez un mineur exige un consentement
+   explicite ET une finalité réelle : l'article 5.1.c interdit de
+   recueillir une donnée dont on ne fait rien. Or `ethnic_background`
+   existe déjà dans l'API (internal/api/handlers.go, ligne 44) et
+   `v2_enhanced.go` ne le lit JAMAIS. En l'état, la question serait de la
+   collecte sensible à vide.
+
+   CE QUI LA REND DÉFENDABLE, et c'est la version implémentée ici : elle
+   sert à ÉLARGIR LA MARGE, pas à déplacer l'estimation. Les coefficients
+   Khamis-Roche sont dérivés de la Fels Longitudinal Study, un échantillon
+   blanc nord-américain ; les appliquer à d'autres populations ajoute une
+   erreur qu'on ne sait pas chiffrer. Le dire, et élargir en conséquence,
+   est à la fois vrai, utile à l'utilisateur, et une finalité que la CNIL
+   peut lire.
+
+   Tant que le moteur ne fait pas cet élargissement (le champ part, il
+   n'est pas encore consommé — voir docs/TUNNEL-ONBOARDING.md), cet
+   écran reste en collecte facultative avec consentement explicite. Si
+   tu préfères ne pas le poser du tout, un seul booléen le retire du
+   tunnel, sans autre modification nulle part.
+   ───────────────────────────────────────────────────────────── */
+const COLLECTE_ORIGINE = true
+
+/* Ordre complet des écrans. Certains ne concernent qu'un sexe : la liste
+   réellement parcourue est dérivée plus bas, jamais celle-ci. */
+const TOUTES_ETAPES = [
+  'profil',
+  'motivation',
   'sexe',
   'age',
   'taille',
   'poids',
+  'modele',
   'pause-genetique',
   'pere',
   'mere',
+  'proches',
+  'origine',
+  'precision',
   'vitesse',
   'pointure',
+  'voix',
+  'pilosite-visage',
+  'pilosite-aisselles',
+  'epaules',
+  'regles',
+  'odeur',
+  'acne',
+  'potentiel',
   'sommeil',
   'nutrition',
   'activite',
+  'aide',
   'verite',
-  'part-habitudes',
   'long-terme',
+  'taille-reve',
   'email',
   'recapitulatif',
+  'analyse',
 ]
+
+const ETAPES_GARCON = new Set(['voix', 'pilosite-visage', 'epaules'])
+const ETAPES_FILLE = new Set(['regles'])
+
+/* La liste parcourue dépend du sexe déclaré. Tous les écrans conditionnés
+   se trouvent APRÈS l'écran « sexe » : le préfixe de la liste est donc
+   identique dans les trois cas (garçon, fille, pas encore répondu), et
+   l'index courant ne se décale jamais sous les pieds de l'utilisateur
+   quand il revient changer sa réponse. */
+function etapesPour(sexe) {
+  return TOUTES_ETAPES.filter((etape) => {
+    if (etape === 'origine' && !COLLECTE_ORIGINE) return false
+    if (ETAPES_GARCON.has(etape)) return sexe === 'M'
+    if (ETAPES_FILLE.has(etape)) return sexe === 'F'
+    return true
+  })
+}
 
 const REPONSES_INITIALES = {
   email: '',
@@ -92,6 +200,25 @@ const REPONSES_INITIALES = {
   sleep_hours_per_night: null,
   nutrition_level: '',
   exercise_min_per_day: null,
+
+  /* ---------- Ajouts de cette révision ----------
+     Aucun de ces champs n'entre aujourd'hui dans le calcul de la taille.
+     Deux partent vers l'API (`origine` et les deux signaux que
+     `puberty_signs` accepte déjà) ; les autres restent en local et
+     serviront à personnaliser le plan. C'est dit ici plutôt que découvert
+     six mois plus tard en cherchant où ils sont consommés. */
+  profil: '',
+  motivations: [],
+  proches_plus_grands: '',
+  origine: '',
+  voix: '',
+  pilosite_visage: '',
+  pilosite_aisselles: '',
+  epaules: '',
+  regles: '',
+  odeur: '',
+  acne: '',
+  taille_reve: 180,
 }
 
 const OPTIONS_SOMMEIL = [
@@ -113,6 +240,61 @@ const OPTIONS_ACTIVITE = [
   { valeur: 30, titre: 'Un peu', indice: 'Environ 30 min par jour', icone: '🚶' },
   { valeur: 60, titre: 'Régulièrement', indice: '1 h par jour, sport ou marche', icone: '🏃' },
   { valeur: 120, titre: 'Beaucoup', indice: '2 h ou plus, entraînement', icone: '🏋️' },
+]
+
+/* Les motivations ne changent aucun calcul. Elles font deux choses, et
+   elles les font bien : elles obligent le visiteur à FORMULER ce qu'il
+   vient chercher dès le deuxième écran — ce qui est le meilleur
+   prédicteur d'achèvement d'un tunnel — et elles donnent au plan de quoi
+   s'ouvrir sur la raison exacte pour laquelle il a été demandé. */
+const OPTIONS_MOTIVATION = [
+  { valeur: 'taille_finale', titre: 'Savoir quelle taille je ferai', icone: '📏' },
+  { valeur: 'derniers_cm', titre: 'Gagner les derniers centimètres possibles', icone: '📈' },
+  { valeur: 'fini', titre: 'Savoir si j’ai fini de grandir', icone: '⏳' },
+  { valeur: 'confiance', titre: 'Arrêter de me comparer aux autres', icone: '🫂' },
+  { valeur: 'suivi', titre: 'Suivre ma croissance mois après mois', icone: '🗓️' },
+]
+
+/* Les libellés sont ceux d'un adolescent qui se regarde, pas ceux d'un
+   carnet de santé. « Stade 2 de Tanner » ne veut rien dire pour lui, et
+   la question posée dans ces termes ferait fermer l'application. */
+const OPTIONS_PILOSITE = [
+  { valeur: 'none', titre: 'Aucune', icone: '🚫' },
+  { valeur: 'light', titre: 'Un peu, fine', icone: '🌱' },
+  { valeur: 'developed', titre: 'Bien présente', icone: '✅' },
+  { valeur: 'prefer_not', titre: 'Je préfère ne pas répondre', icone: '🤐' },
+]
+
+const OPTIONS_ECHELLE_3 = (libelles) => [
+  { valeur: 'no', titre: libelles[0], icone: '🚫' },
+  { valeur: 'starting', titre: libelles[1], icone: '🌗' },
+  { valeur: 'yes', titre: libelles[2], icone: '✅' },
+  { valeur: 'unknown', titre: 'Je ne sais pas', icone: '🤔' },
+]
+
+const OPTIONS_ACNE = [
+  { valeur: 'none', titre: 'Aucune', icone: '✨' },
+  { valeur: 'light', titre: 'Quelques boutons', icone: '🙂' },
+  { valeur: 'moderate', titre: 'Régulièrement', icone: '😕' },
+  { valeur: 'important', titre: 'Beaucoup', icone: '😣' },
+]
+
+/* ORIGINE FAMILIALE — libellés et correspondance avec l'API.
+
+   Les intitulés parlent de l'origine de la FAMILLE et non de la
+   « race » : c'est la formulation que retient la statistique publique
+   française quand elle est autorisée à poser la question, et c'est aussi
+   la seule qui soit à peu près répondable par quelqu'un de quatorze ans.
+
+   Les valeurs envoyées, elles, sont celles que l'API attend déjà
+   (handlers.go ligne 44 : caucasian, asian, african, hispanic, mixed). */
+const OPTIONS_ORIGINE = [
+  { valeur: 'caucasian', titre: 'Europe', icone: '🌍' },
+  { valeur: 'african', titre: 'Afrique, Antilles', icone: '🌍' },
+  { valeur: 'asian', titre: 'Asie', icone: '🌏' },
+  { valeur: 'hispanic', titre: 'Amérique latine', icone: '🌎' },
+  { valeur: 'mixed', titre: 'Plusieurs origines', icone: '🧬' },
+  { valeur: 'prefer_not', titre: 'Je préfère ne pas répondre', icone: '🤐' },
 ]
 
 /** 172 → 5'8". Le pouce est arrondi, jamais affiché avec des décimales. */
@@ -141,12 +323,6 @@ function chargerReponses() {
 function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
   const reprise = useMemo(() => chargerReponses(), [])
 
-  const [index, setIndex] = useState(() => {
-    const repris = Number(reprise?.index)
-    // Jamais reprendre sur le récapitulatif : on y arriverait avec des
-    // réponses partiellement effacées si le format a changé entre deux visites.
-    return Number.isInteger(repris) && repris > 0 && repris < ETAPES.length - 1 ? repris : 0
-  })
   /* L'e-mail n'est PAS repris de localStorage. Il y restait d'une session
      précédente, si bien que l'écran « entre ton e-mail » arrivait déjà
      rempli avec l'adresse de quelqu'un d'autre sur un appareil partagé —
@@ -156,6 +332,19 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     ...REPONSES_INITIALES,
     ...(reprise?.reponses || {}),
   }))
+
+  const etapes = useMemo(() => etapesPour(reponses.sex), [reponses.sex])
+
+  const [index, setIndex] = useState(() => {
+    const repris = Number(reprise?.index)
+    /* Jamais reprendre sur le récapitulatif ni sur l'écran d'analyse : on
+       y arriverait avec des réponses partiellement effacées si le format a
+       changé entre deux visites, et l'analyse relancerait un appel réseau
+       avant même que l'utilisateur ait vu l'application. */
+    const dernierRepricable = etapesPour(reprise?.reponses?.sex || '').length - 2
+    return Number.isInteger(repris) && repris > 0 && repris < dernierRepricable ? repris : 0
+  })
+
   const [unite, setUnite] = useState(() => reprise?.unite || 'metric')
   const [vitesseInconnue, setVitesseInconnue] = useState(
     () => reprise?.reponses?.height_velocity_cm === null,
@@ -165,11 +354,22 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
   const [pointureInconnue, setPointureInconnue] = useState(
     () => (reprise?.reponses?.shoe_size_eu ?? null) === null,
   )
-  const [chargement, setChargement] = useState(false)
   const [erreur, setErreur] = useState(null)
+  /* Le panneau « comment ça marche » de l'écran « modèle ». */
+  const [feuilleOuverte, setFeuilleOuverte] = useState(false)
+  /* La réponse du serveur, mise de côté le temps que l'écran d'analyse
+     finisse de se dérouler. `null` tant qu'elle n'est pas arrivée. */
+  const [resultat, setResultat] = useState(null)
 
   const minuterie = useRef(null)
-  const etape = ETAPES[index]
+  /* Un verrou, et pas un état : `onPredictionComplete` crée le compte et
+     écrit `predictionData`. L'appeler deux fois ouvrirait deux comptes
+     pour la même prédiction. L'écran d'analyse appelle `onFini` depuis un
+     effet — une seule fois dans les faits, mais c'est le genre de
+     garantie qu'on ne veut pas devoir redémontrer à chaque révision de
+     React. */
+  const dejaLivre = useRef(false)
+  const etape = etapes[index] || etapes[0]
 
   // Sauvegarde continue : le tunnel survit à un rechargement ou à un appel
   // entrant qui décharge l'onglet.
@@ -182,16 +382,27 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
   }, [index, reponses, unite])
 
   /* Une vue par écran. C'est la seule mesure qui dit OÙ on perd les
-     gens : quatorze écrans, et jusqu'ici un seul $pageview pour les
-     quatorze. Le rang est envoyé avec le nom pour que l'entonnoir
-     reste lisible si l'ordre des écrans change un jour. */
+     gens. Le rang est envoyé avec le nom pour que l'entonnoir reste
+     lisible si l'ordre des écrans change un jour — ce qui vient
+     justement d'arriver. */
   useEffect(() => {
-    tunnelEtapeVue(etape, index + 1, ETAPES.length)
-  }, [etape, index])
+    tunnelEtapeVue(etape, index + 1, etapes.length)
+  }, [etape, index, etapes.length])
 
   useEffect(() => () => clearTimeout(minuterie.current), [])
 
   const definir = (champ, valeur) => setReponses((prec) => ({ ...prec, [champ]: valeur }))
+
+  const basculer = (champ, valeur) =>
+    setReponses((prec) => {
+      const courant = Array.isArray(prec[champ]) ? prec[champ] : []
+      return {
+        ...prec,
+        [champ]: courant.includes(valeur)
+          ? courant.filter((v) => v !== valeur)
+          : [...courant, valeur],
+      }
+    })
 
   const avancer = () => {
     /* L'adresse est le seul champ qu'on demande sans rien donner en
@@ -200,7 +411,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
        jamais vers PostHog. */
     if (etape === 'email') emailSaisi()
     clearTimeout(minuterie.current)
-    setIndex((i) => Math.min(ETAPES.length - 1, i + 1))
+    setIndex((i) => Math.min(etapes.length - 1, i + 1))
   }
 
   const reculer = () => {
@@ -226,8 +437,36 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
 
   const peutContinuer = (() => {
     switch (etape) {
+      case 'profil':
+        return Boolean(reponses.profil)
+      /* Au moins une motivation. La question sert à faire formuler une
+         intention : la passer à vide la viderait de son seul effet. */
+      case 'motivation':
+        return reponses.motivations.length > 0
       case 'sexe':
         return Boolean(reponses.sex)
+      case 'proches':
+        return Boolean(reponses.proches_plus_grands)
+      /* L'origine est la SEULE question sans réponse obligatoire, y
+         compris sans « je préfère ne pas répondre » coché : un
+         consentement qu'on ne peut pas refuser sans se déclarer n'en est
+         pas un. Passer l'écran sans rien toucher vaut refus. */
+      case 'origine':
+        return true
+      case 'voix':
+        return Boolean(reponses.voix)
+      case 'pilosite-visage':
+        return Boolean(reponses.pilosite_visage)
+      case 'pilosite-aisselles':
+        return Boolean(reponses.pilosite_aisselles)
+      case 'epaules':
+        return Boolean(reponses.epaules)
+      case 'regles':
+        return Boolean(reponses.regles)
+      case 'odeur':
+        return Boolean(reponses.odeur)
+      case 'acne':
+        return Boolean(reponses.acne)
       case 'sommeil':
         return reponses.sleep_hours_per_night !== null
       case 'nutrition':
@@ -241,77 +480,144 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     }
   })()
 
-  const envoyer = async () => {
-    setChargement(true)
-    setErreur(null)
+  /* L'appel part dès l'ENTRÉE sur l'écran d'analyse, en parallèle de
+     l'animation, et non à sa fin. C'est tout l'intérêt de cet écran :
+     les quatre secondes et demie de déroulé couvrent la latence réseau
+     au lieu de s'y ajouter. Sur une API chaude l'utilisateur ne voit que
+     l'animation ; sur une API endormie (offre gratuite Render, jusqu'à
+     une minute) il voit l'animation PUIS le message d'attente, et non un
+     bouton grisé pendant une minute. */
+  useEffect(() => {
+    if (etape !== 'analyse' || resultat || erreur) return undefined
+
+    let annule = false
     estimationDemandee()
 
-    try {
-      const utiliserAPI = import.meta.env.VITE_USE_REAL_API !== 'false'
-      const charge = {
-        email: reponses.email,
-        age: Number(reponses.age),
-        sex: reponses.sex,
-        height_cm: Number(reponses.height_cm),
-        weight_kg: Number(reponses.weight_kg),
-        father_height_cm: Number(reponses.father_height_cm),
-        mother_height_cm: Number(reponses.mother_height_cm),
-        // Le serveur traite 0 comme « non renseigné » et élargit la fourchette.
-        height_velocity_cm: reponses.height_velocity_cm ?? 0,
-        /* Même convention : 0 vaut « non renseigné » côté serveur, qui
-           traite alors l'absence comme strictement neutre plutôt que
-           comme une pénalité (internal/estimator/maturite.go). */
-        shoe_size_eu: reponses.shoe_size_eu ?? 0,
-        shoe_size_eu_1y: reponses.shoe_size_eu_1y ?? 0,
-        nutrition_level: reponses.nutrition_level,
-        sleep_hours_per_night: reponses.sleep_hours_per_night,
-        exercise_min_per_day: reponses.exercise_min_per_day,
-      }
-
-      const resultat = utiliserAPI
-        ? await apiClient.predictHeightV2(charge)
-        : await mockPredictHeight(charge)
-
-      /* La réponse du serveur ne réémet ni l'e-mail ni les mesures saisies :
-         on les rattache ici. Sans l'e-mail, la paywall et l'écran parent
-         n'identifient plus le compte ; sans les mesures, le plan de croissance
-         n'a rien à personnaliser. */
-      estimationObtenue({
-        age: Number(reponses.age),
-        sexe: reponses.sex,
-        confiance: resultat.confidence_level,
-      })
-
-      onPredictionComplete({
-        ...resultat,
-        email: reponses.email,
-        age: Number(reponses.age),
-        sex: reponses.sex,
-        current_height_cm: Number(reponses.height_cm),
-        weight_kg: Number(reponses.weight_kg),
-        /* La courbe du résultat trace le point de l'an dernier en
-           soustrayant cette valeur à la taille du jour. Sans elle, le
-           graphique n'a pas de passé à montrer et démarre sec sur
-           « aujourd'hui ». `null` (« je ne sais pas ») se propage tel quel :
-           le composant ne trace alors rien plutôt que de reculer d'un an
-           sur une vitesse moyenne inventée. */
-        height_velocity_cm: reponses.height_velocity_cm,
-        sleep_hours_per_night: reponses.sleep_hours_per_night,
-        nutrition_level: reponses.nutrition_level,
-        exercise_min_per_day: reponses.exercise_min_per_day,
-      })
-
-      // Le tunnel est terminé : garder le brouillon rouvrirait un questionnaire
-      // à moitié rempli au prochain passage.
+    const partir = async () => {
       try {
-        localStorage.removeItem(STOCKAGE)
-      } catch {
-        /* sans conséquence */
+        const utiliserAPI = import.meta.env.VITE_USE_REAL_API !== 'false'
+        const charge = {
+          email: reponses.email,
+          age: Number(reponses.age),
+          sex: reponses.sex,
+          height_cm: Number(reponses.height_cm),
+          weight_kg: Number(reponses.weight_kg),
+          father_height_cm: Number(reponses.father_height_cm),
+          mother_height_cm: Number(reponses.mother_height_cm),
+          // Le serveur traite 0 comme « non renseigné » et élargit la fourchette.
+          height_velocity_cm: reponses.height_velocity_cm ?? 0,
+          /* Même convention : 0 vaut « non renseigné » côté serveur, qui
+             traite alors l'absence comme strictement neutre plutôt que
+             comme une pénalité (internal/estimator/maturite.go). */
+          shoe_size_eu: reponses.shoe_size_eu ?? 0,
+          shoe_size_eu_1y: reponses.shoe_size_eu_1y ?? 0,
+          nutrition_level: reponses.nutrition_level,
+          sleep_hours_per_night: reponses.sleep_hours_per_night,
+          exercise_min_per_day: reponses.exercise_min_per_day,
+
+          /* L'origine part vide quand elle est refusée ou non posée. Le
+             serveur retombe alors sur `caucasian` (handlers.go l. 123),
+             ce qui est aujourd'hui sans effet — aucun coefficient n'en
+             dépend. Le champ voyage pour que l'élargissement de marge
+             décrit dans docs/TUNNEL-ONBOARDING.md n'ait qu'un seul
+             endroit à modifier, côté moteur. */
+          ethnic_background:
+            reponses.origine && reponses.origine !== 'prefer_not' ? reponses.origine : '',
+
+          /* Les deux seuls signaux de puberté que l'API accepte déjà
+             (handlers.go l. 50-56). Les autres — voix, visage, épaules,
+             odeur, acné — n'ont pas de champ et restent en local ; les
+             inventer ici les ferait silencieusement jeter par le
+             décodeur JSON.
+
+             AUCUN DES DEUX NE DÉPLACE L'ESTIMATION AUJOURD'HUI :
+             getPubertyAdjustment n'est appelé que par le chemin v1, et
+             son multiplicateur y est jeté (khamis_roche.go l. 90).
+             C'est écrit ici pour que personne ne croie, en lisant cette
+             charge utile, que ces questions pèsent sur le chiffre. */
+          puberty_signs: {
+            axillary_hair:
+              reponses.pilosite_aisselles === 'prefer_not'
+                ? ''
+                : reponses.pilosite_aisselles,
+            menarche: reponses.regles === 'yes',
+          },
+        }
+
+        const reponse = utiliserAPI
+          ? await apiClient.predictHeightV2(charge)
+          : await mockPredictHeight(charge)
+
+        if (annule) return
+
+        estimationObtenue({
+          age: Number(reponses.age),
+          sexe: reponses.sex,
+          confiance: reponse.confidence_level,
+        })
+        setResultat(reponse)
+      } catch (err) {
+        if (annule) return
+        estimationEchouee(err.message)
+        setErreur(err.message)
       }
-    } catch (err) {
-      estimationEchouee(err.message)
-      setErreur(err.message)
-      setChargement(false)
+    }
+
+    partir()
+    return () => {
+      annule = true
+    }
+  }, [etape, resultat, erreur, reponses])
+
+  /* Appelé par l'écran d'analyse quand SES deux conditions sont réunies :
+     le déroulé est allé au bout et la réponse est arrivée. */
+  const livrerResultat = () => {
+    if (!resultat || dejaLivre.current) return
+    dejaLivre.current = true
+
+    /* La réponse du serveur ne réémet ni l'e-mail ni les mesures saisies :
+       on les rattache ici. Sans l'e-mail, la paywall et l'écran parent
+       n'identifient plus le compte ; sans les mesures, le plan de croissance
+       n'a rien à personnaliser. */
+    onPredictionComplete({
+      ...resultat,
+      email: reponses.email,
+      age: Number(reponses.age),
+      sex: reponses.sex,
+      current_height_cm: Number(reponses.height_cm),
+      weight_kg: Number(reponses.weight_kg),
+      /* La courbe du résultat trace le point de l'an dernier en
+         soustrayant cette valeur à la taille du jour. Sans elle, le
+         graphique n'a pas de passé à montrer et démarre sec sur
+         « aujourd'hui ». `null` (« je ne sais pas ») se propage tel quel :
+         le composant ne trace alors rien plutôt que de reculer d'un an
+         sur une vitesse moyenne inventée. */
+      height_velocity_cm: reponses.height_velocity_cm,
+      sleep_hours_per_night: reponses.sleep_hours_per_night,
+      nutrition_level: reponses.nutrition_level,
+      exercise_min_per_day: reponses.exercise_min_per_day,
+
+      /* Transmis au reste de l'application parce que la page de résultat
+         et la paywall en ont besoin :
+           - `profil` décide à qui la paywall s'adresse (un parent a une
+             carte, un adolescent n'en a pas — cf. le bouton « faire payer
+             par un parent ») ;
+           - `motivations` donne au plan la raison exacte pour laquelle il
+             a été demandé ;
+           - `taille_reve` est l'écart que la page de résultat compare à
+             l'estimation, et c'est le seul chiffre de tout le tunnel que
+             l'utilisateur a choisi lui-même. */
+      profil: reponses.profil,
+      motivations: reponses.motivations,
+      taille_reve: Number(reponses.taille_reve),
+    })
+
+    // Le tunnel est terminé : garder le brouillon rouvrirait un questionnaire
+    // à moitié rempli au prochain passage.
+    try {
+      localStorage.removeItem(STOCKAGE)
+    } catch {
+      /* sans conséquence */
     }
   }
 
@@ -327,12 +633,67 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     )
   }
 
+  if (etape === 'analyse') {
+    return (
+      <AnalyseEnCours
+        pret={Boolean(resultat)}
+        erreur={erreur}
+        onFini={livrerResultat}
+        /* Effacer l'erreur suffit à relancer : l'effet qui appelle l'API
+           se redéclenche dès que `erreur` retombe à null, et l'animation
+           repart du même écran. Rien à remonter, rien à ressaisir. */
+        onReessayer={() => setErreur(null)}
+      />
+    )
+  }
+
   // ---------- Écrans encadrés ----------
 
-  const progression = (index + 1) / ETAPES.length
+  const progression = (index + 1) / etapes.length
 
   const contenu = () => {
     switch (etape) {
+      /* QUI RÉPOND. Posée en premier parce qu'elle change la suite du
+         parcours sans changer une seule question : c'est elle qui décide
+         à qui la page de paiement s'adresse. Un adolescent de quatorze
+         ans n'a pas de carte bancaire — lui présenter le même écran qu'à
+         un parent, c'est lui demander de renoncer. */
+      case 'profil':
+        return (
+          <div className="funnel-choices" role="radiogroup" aria-label="Qui répond">
+            <ChoiceCard
+              icon="🧑"
+              title="C’est pour moi"
+              hint="J’ai entre 8 et 22 ans"
+              selected={reponses.profil === 'ado'}
+              onSelect={() => repondreEtAvancer('profil', 'ado')}
+            />
+            <ChoiceCard
+              icon="👨‍👩‍👦"
+              title="C’est pour mon enfant"
+              hint="Les questions parleront de lui ou d’elle"
+              selected={reponses.profil === 'parent'}
+              onSelect={() => repondreEtAvancer('profil', 'parent')}
+            />
+          </div>
+        )
+
+      case 'motivation':
+        return (
+          <div className="funnel-choices" role="group" aria-label="Tes raisons">
+            {OPTIONS_MOTIVATION.map((option) => (
+              <ChoiceCard
+                key={option.valeur}
+                role="checkbox"
+                icon={option.icone}
+                title={option.titre}
+                selected={reponses.motivations.includes(option.valeur)}
+                onSelect={() => basculer('motivations', option.valeur)}
+              />
+            ))}
+          </div>
+        )
+
       case 'sexe':
         return (
           <div className="funnel-choices" role="radiogroup" aria-label="Sexe">
@@ -469,6 +830,111 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           </>
         )
 
+      /* ÉCRAN DE PREUVE 1 — le modèle.
+
+         Placé juste après les quatre mesures de base, c'est-à-dire au
+         premier moment où le visiteur a donné quelque chose sans encore
+         rien recevoir. La question qu'il se pose à cet instant est
+         « pourquoi je remplis tout ça ? », et cet écran y répond avant
+         qu'elle ne devienne « je ferme ». */
+      case 'modele':
+        return (
+          <div className="funnel-preuve">
+            <ReseauNeurones className="funnel-reseau" />
+            <button
+              type="button"
+              className="funnel-lien-info"
+              onClick={() => setFeuilleOuverte(true)}
+            >
+              <Info size={17} aria-hidden="true" />
+              Comment ça marche ?
+            </button>
+          </div>
+        )
+
+      /* LES PROCHES PLUS GRANDS QUE LES PARENTS.
+
+         Elle a l'air anodine et elle est la plus habile du tunnel : elle
+         rouvre le plafond que la question précédente vient de poser. Un
+         adolescent qui vient de saisir 176 et 164 a déjà fait le calcul
+         dans sa tête et s'est résigné ; lui rappeler qu'un grand-père
+         d'1,90 m existe dans la famille lui rend la raison de continuer.
+
+         Elle est vraie, aussi : la taille adulte n'est pas la moyenne des
+         parents, elle est tirée d'un patrimoine plus large, et c'est
+         exactement pourquoi Khamis-Roche regarde l'adolescent lui-même
+         plutôt que ses seuls parents. Elle n'entre dans aucun calcul —
+         et ne DOIT pas y entrer tant qu'aucun coefficient ne la pèse. */
+      case 'proches':
+        return (
+          <div className="funnel-choices" role="radiogroup" aria-label="Proches plus grands">
+            <ChoiceCard
+              icon="📏"
+              title="Oui, nettement"
+              hint="Un grand-parent, un oncle, un frère ou une sœur"
+              selected={reponses.proches_plus_grands === 'yes'}
+              onSelect={() => repondreEtAvancer('proches_plus_grands', 'yes')}
+            />
+            <ChoiceCard
+              icon="↔️"
+              title="Un peu plus grands"
+              selected={reponses.proches_plus_grands === 'slightly'}
+              onSelect={() => repondreEtAvancer('proches_plus_grands', 'slightly')}
+            />
+            <ChoiceCard
+              icon="🚫"
+              title="Non, tout le monde est dans la même fourchette"
+              selected={reponses.proches_plus_grands === 'no'}
+              onSelect={() => repondreEtAvancer('proches_plus_grands', 'no')}
+            />
+            <ChoiceCard
+              icon="🤔"
+              title="Je ne sais pas"
+              selected={reponses.proches_plus_grands === 'unknown'}
+              onSelect={() => repondreEtAvancer('proches_plus_grands', 'unknown')}
+            />
+          </div>
+        )
+
+      /* ORIGINE FAMILIALE — voir le long commentaire en tête de fichier.
+         Facultative, refusable sans se déclarer, et accompagnée de la
+         raison exacte pour laquelle on la pose. Ces trois propriétés ne
+         sont pas du confort : ce sont les conditions de l'article 9 du
+         RGPD, et la question ne peut pas rester dans le tunnel sans
+         elles. */
+      case 'origine':
+        return (
+          <>
+            <div className="funnel-choices" role="radiogroup" aria-label="Origine familiale">
+              {OPTIONS_ORIGINE.map((option) => (
+                <ChoiceCard
+                  key={option.valeur}
+                  icon={option.icone}
+                  title={option.titre}
+                  selected={reponses.origine === option.valeur}
+                  onSelect={() => repondreEtAvancer('origine', option.valeur)}
+                />
+              ))}
+            </div>
+            <p className="funnel-help">
+              Facultatif. Nos coefficients de référence sont calibrés sur une
+              population nord-américaine : savoir d’où vient ta famille sert à
+              élargir la fourchette quand elle s’applique moins bien, jamais à
+              monter ou baisser ton estimation. Tu peux passer sans répondre.
+            </p>
+          </>
+        )
+
+      /* ÉCRAN DE PREUVE 2 — ce que vaut l'estimation.
+
+         Posé juste après le bloc génétique, au moment où le visiteur
+         vient de comprendre que le calcul repose surtout sur ses
+         parents. L'objection qui monte est « donc c'est juste une
+         moyenne ? » — et la réponse est un chiffre de marge, pas un
+         adjectif. */
+      case 'precision':
+        return <BadgePrecision />
+
       case 'vitesse':
         return (
           <>
@@ -500,8 +966,8 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           </>
         )
 
-      /* POINTURE — le second signal de maturité, et le seul ajout de ce
-         brief au questionnaire.
+      /* POINTURE — le second signal de maturité qui entre VRAIMENT dans
+         le calcul (maturite.go), et le seul de tout le bloc suivant.
 
          C'est la VARIATION qui porte l'information, pas la pointure du
          jour : l'augmentation de pointure s'arrête au moment du pic de
@@ -573,6 +1039,186 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           </>
         )
 
+      /* ---------- LE BLOC MATURITÉ ----------
+
+         Six à huit écrans selon le sexe, et la partie la plus délicate de
+         cette révision. Ce qu'ils font, dans l'ordre d'importance :
+
+         1. ILS CONVAINQUENT. C'est leur rôle principal et il est assumé.
+            Une application qui demande si ta voix a mué ne ressemble plus
+            à un calculateur en ligne ; elle ressemble à un examen. C'est
+            le mécanisme décrit en tête de fichier, et c'est ce que font
+            tous les tunnels de ce marché.
+
+         2. ILS PRÉPARENT LE PLAN. Un adolescent en début de puberté et un
+            adolescent qui l'a terminée n'ont pas le même plan à suivre,
+            et ces réponses sont ce qui permettra de les distinguer.
+
+         3. ILS NE DÉPLACENT PAS L'ESTIMATION. Aujourd'hui, aucun. Deux
+            partent vers `puberty_signs`, que le chemin v2 n'exploite pas.
+            Tant que ce sera le cas, AUCUN texte de ces écrans ne doit
+            laisser entendre le contraire : le sous-titre parle de
+            « comprendre où tu en es », jamais de « affiner ton chiffre ».
+            C'est la limite entre un tunnel long et un tunnel menteur.
+
+         CE QU'ON NE DEMANDE PAS, et qui manque délibérément à cette
+         liste : la pilosité pubienne et le développement génital, que
+         l'échelle de Tanner utilise et que l'API accepte encore
+         (`pubic_hair`, `genitalia`). Le moteur a explicitement renoncé à
+         les collecter — « sans demander à un mineur d'auto-évaluer sa
+         pilosité pubienne ou son développement génital (donnée de santé
+         sensible au RGPD) », v2_enhanced.go l. 551. Allonger le tunnel
+         ne rouvre pas cette porte-là. */
+      case 'voix':
+        return (
+          <div className="funnel-choices" role="radiogroup" aria-label="Mue de la voix">
+            {OPTIONS_ECHELLE_3([
+              'Pas encore',
+              'Elle commence à changer',
+              'Oui, elle a mué',
+            ]).map((option) => (
+              <ChoiceCard
+                key={option.valeur}
+                icon={option.icone}
+                title={option.titre}
+                selected={reponses.voix === option.valeur}
+                onSelect={() => repondreEtAvancer('voix', option.valeur)}
+              />
+            ))}
+          </div>
+        )
+
+      case 'pilosite-visage':
+        return (
+          <div className="funnel-choices" role="radiogroup" aria-label="Pilosité du visage">
+            {OPTIONS_PILOSITE.map((option) => (
+              <ChoiceCard
+                key={option.valeur}
+                icon={option.icone}
+                title={option.titre}
+                selected={reponses.pilosite_visage === option.valeur}
+                onSelect={() => repondreEtAvancer('pilosite_visage', option.valeur)}
+              />
+            ))}
+          </div>
+        )
+
+      case 'pilosite-aisselles':
+        return (
+          <div className="funnel-choices" role="radiogroup" aria-label="Pilosité sous les bras">
+            {OPTIONS_PILOSITE.map((option) => (
+              <ChoiceCard
+                key={option.valeur}
+                icon={option.icone}
+                title={option.titre}
+                selected={reponses.pilosite_aisselles === option.valeur}
+                onSelect={() => repondreEtAvancer('pilosite_aisselles', option.valeur)}
+              />
+            ))}
+          </div>
+        )
+
+      case 'epaules':
+        return (
+          <div className="funnel-choices" role="radiogroup" aria-label="Élargissement des épaules">
+            {OPTIONS_ECHELLE_3([
+              'Pas vraiment',
+              'Un peu, depuis quelques mois',
+              'Oui, nettement',
+            ]).map((option) => (
+              <ChoiceCard
+                key={option.valeur}
+                icon={option.icone}
+                title={option.titre}
+                selected={reponses.epaules === option.valeur}
+                onSelect={() => repondreEtAvancer('epaules', option.valeur)}
+              />
+            ))}
+          </div>
+        )
+
+      /* LES PREMIÈRES RÈGLES. La seule question de ce bloc dont la
+         littérature donne un repère net : la croissance résiduelle après
+         la ménarche tourne autour de 6 à 8 cm. Elle part vers
+         `puberty_signs.menarche`, qu'aucun calcul ne lit aujourd'hui —
+         c'est la première que le moteur devrait exploiter le jour où il
+         en exploitera une. */
+      case 'regles':
+        return (
+          <div className="funnel-choices" role="radiogroup" aria-label="Premières règles">
+            <ChoiceCard
+              icon="🚫"
+              title="Pas encore"
+              selected={reponses.regles === 'no'}
+              onSelect={() => repondreEtAvancer('regles', 'no')}
+            />
+            <ChoiceCard
+              icon="✅"
+              title="Oui"
+              selected={reponses.regles === 'yes'}
+              onSelect={() => repondreEtAvancer('regles', 'yes')}
+            />
+            <ChoiceCard
+              icon="🤐"
+              title="Je préfère ne pas répondre"
+              selected={reponses.regles === 'prefer_not'}
+              onSelect={() => repondreEtAvancer('regles', 'prefer_not')}
+            />
+          </div>
+        )
+
+      case 'odeur':
+        return (
+          <div className="funnel-choices" role="radiogroup" aria-label="Odeur corporelle">
+            {OPTIONS_ECHELLE_3([
+              'Non, pas vraiment',
+              'Depuis peu',
+              'Oui, j’utilise un déodorant',
+            ]).map((option) => (
+              <ChoiceCard
+                key={option.valeur}
+                icon={option.icone}
+                title={option.titre}
+                selected={reponses.odeur === option.valeur}
+                onSelect={() => repondreEtAvancer('odeur', option.valeur)}
+              />
+            ))}
+          </div>
+        )
+
+      case 'acne':
+        return (
+          <div className="funnel-choices" role="radiogroup" aria-label="Acné">
+            {OPTIONS_ACNE.map((option) => (
+              <ChoiceCard
+                key={option.valeur}
+                icon={option.icone}
+                title={option.titre}
+                selected={reponses.acne === option.valeur}
+                onSelect={() => repondreEtAvancer('acne', option.valeur)}
+              />
+            ))}
+          </div>
+        )
+
+      /* ÉCRANS DE PREUVE 3 ET 4 — le problème, puis le produit.
+
+         Deux écrans construits sur la même figure, et c'est le
+         mécanisme : le premier montre trois leviers autour d'un centre
+         vide, le second remet le même dessin avec Grandimi à la place du
+         centre. Voir ruche-potentiel.jsx.
+
+         Ils encadrent les trois questions d'habitudes (sommeil,
+         nutrition, activité) plutôt que de les suivre : on annonce ce
+         qu'on va demander, on le demande, puis on dit ce qu'on en fera.
+         Posés tous les deux après, ils se liraient comme deux écrans de
+         publicité de suite. */
+      case 'potentiel':
+        return <RuchePotentiel variante="ruche" className="funnel-ruche" />
+
+      case 'aide':
+        return <RuchePotentiel variante="convergence" className="funnel-ruche" />
+
       case 'sommeil':
         return (
           <div className="funnel-choices" role="radiogroup" aria-label="Heures de sommeil">
@@ -621,34 +1267,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           </div>
         )
 
-      /* Contrepoint honnête à l'écran « 98,5 % de précision » des applis
-         concurrentes : on affiche la marge réelle du modèle, pas un score
-         inventé. C'est aussi l'argument de vente de Grandimi — autant le poser
-         avant le résultat plutôt que de le cacher dans une note de bas de page. */
-      /* ---------- Écrans de pression ----------
-
-         Copiés dans leur forme sur le tunnel de Taller (captures du
-         13/09/2026) : une liste de conséquences à puces alarmées, puis
-         un graphique à deux barres génétique / habitudes. Cette forme
-         travaille, elle reste.
-
-         Le CONTENU, lui, diffère sur deux points, et pas par pudeur.
-
-         Taller écrit « 40 % de matchs en moins », « les femmes te
-         négligent », « chaque cm coûte 600 $ par an » à des garçons de
-         13 ans. En France, une pratique commerciale qui exploite la
-         vulnérabilité d'un mineur pour vendre est une pratique
-         commerciale déloyale (art. L121-1 et suivants du code de la
-         consommation). Les mêmes écrans, retournés vers l'échéance
-         biologique — qui est le vrai sujet du produit — gardent leur
-         force sans reposer sur l'estime de soi d'un adolescent.
-
-         Taller écrit aussi « jusqu'à 20 % de ta taille finale est
-         déterminée par tes habitudes ». Sur 170 cm, cela ferait 34 cm,
-         ce qui est faux. Le chiffre réel décrit la part de l'ÉCART
-         entre deux personnes, pas de leur taille. La note sous le
-         graphique le dit, et le ramène à ce qu'il est vraiment : des
-         centimètres, pas des dizaines. */
       /* ---------- Ce que la taille change au quotidien ----------
 
          Forme reprise de l'écran « La vérité brutale » de Taller : une liste
@@ -664,29 +1282,13 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          pratique commerciale déloyale (art. L121-1 du code de la
          consommation).
 
-         Ces cinq lignes-ci sont des désagréments matériels et documentés :
-         rayonnages hors de portée, ourlets à reprendre, être pris pour plus
-         jeune, clichés professionnels, mobilier urbain calé sur d'autres.
-         Aucun pourcentage, aucun montant, rien sur la séduction. Elles se
-         vérifient en une journée par quiconque les vit, ce qui est exactement
-         ce qui manque à la liste d'en face.
-
-         La ligne de pied n'est pas décorative : sans elle, l'écran se lit
-         comme un verdict sur la personne. Or une bonne partie des visiteurs
-         seront petits quoi qu'ils fassent — leur annoncer une liste de
-         malheurs sans dire tout de suite sur quoi ils peuvent agir serait
-         gratuit, et se retournerait contre le produit. */
-      /* DOULEUR, PUIS BASCULE, PUIS CE QU'ON VEND.
+         DOULEUR, PUIS BASCULE, PUIS CE QU'ON VEND.
 
          Les quatre premières lignes décrivent ce que le lecteur ressent
          déjà, à la deuxième personne : on ne lui apprend rien, on nomme ce
          qu'il connaît. Aucune n'est un chiffre à croire sur parole, et
          c'est ce qui les rend défendables là où un « 40 % de matchs en
          moins » ne l'est pas.
-
-         Elles ont aussi l'âge du lecteur : des rayonnages hors de portée et
-         des clichés sur l'autorité au travail parlaient à un adulte de
-         trente ans, pas à quelqu'un qui en a quatorze.
 
          La cinquième change de nature — « ne pas savoir si tu as déjà
          atteint ta taille finale ». Les quatre premières décrivent ce
@@ -720,30 +1322,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           </div>
         )
 
-      case 'part-habitudes':
-        return (
-          <div className="funnel-part">
-            <div className="funnel-part-barres">
-              <div className="funnel-part-colonne">
-                <span className="funnel-part-nom">Génétique</span>
-                <div className="funnel-part-barre funnel-part-barre--forte">
-                  <span>80 %</span>
-                </div>
-              </div>
-              <div className="funnel-part-colonne">
-                <span className="funnel-part-nom">Tes habitudes</span>
-                <div className="funnel-part-barre funnel-part-barre--faible">
-                  <span>20 %</span>
-                </div>
-              </div>
-            </div>
-            <p className="funnel-part-note">
-              Ces 20 % ne se comptent pas en dizaines de centimètres. Ils se comptent en
-              centimètres — et ce sont les seuls sur lesquels tu peux encore agir.
-            </p>
-          </div>
-        )
-
       /* ---------- Ce que le plan change, sur la durée ----------
 
          Copie de l'écran « résultats à long terme » du tunnel de Taller :
@@ -753,9 +1331,64 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          Posé ICI, avant le calcul, et non sur la page de résultat : à cet
          instant aucun chiffre n'existe encore, donc la figure ne peut pas
          être prise pour un pronostic personnel. Elle dit une chose vraie et
-         générale, et la légende sous le dessin le précise. */
+         générale, et la légende sous le dessin le précise.
+
+         C'est aussi lui qui porte, désormais seul, ce que disait l'écran
+         « part-habitudes » retiré de ce tunnel — l'écart entre subir ses
+         habitudes et les tenir — mais en trajectoires plutôt qu'en un
+         « 20 % » qui posait surtout un plafond de 80 % juste avant de
+         demander de payer. */
       case 'long-terme':
         return <LongTermeChart className="funnel-longterme" />
+
+      /* LA TAILLE DE RÊVE.
+
+         Le seul chiffre de tout le tunnel que l'utilisateur CHOISIT au
+         lieu de le constater. C'est ce qui en fait le plus utile des
+         écrans de conviction : il ne lui dit rien, il lui fait dire.
+
+         Posé juste avant l'e-mail, c'est-à-dire au dernier moment où on
+         demande quelque chose de gratuit — et l'écart entre ce nombre et
+         l'estimation qui arrive trois écrans plus loin est exactement ce
+         que la page de résultat, puis la paywall, ont à travailler.
+
+         Il n'entre dans aucun calcul, et le sous-titre le dit. Un objectif
+         qui déplacerait l'estimation ne serait plus une estimation. */
+      case 'taille-reve':
+        return (
+          <>
+            {unite === 'metric' ? (
+              <WheelPicker
+                label="Taille rêvée en centimètres"
+                min={140}
+                max={215}
+                step={1}
+                value={Math.round(Number(reponses.taille_reve))}
+                onChange={(v) => definir('taille_reve', v)}
+                format={(v) => `${v} cm`}
+              />
+            ) : (
+              <WheelPicker
+                label="Taille rêvée en pieds et pouces"
+                min={versPouces(140)}
+                max={versPouces(215)}
+                step={1}
+                value={versPouces(Number(reponses.taille_reve))}
+                onChange={(v) => definir('taille_reve', Math.round(v * CM_PAR_POUCE * 10) / 10)}
+                format={formatPiedsPouces}
+              />
+            )}
+            <SegmentedControl
+              label="Unité de mesure"
+              value={unite}
+              onChange={setUnite}
+              options={[
+                { value: 'metric', label: 'Métrique' },
+                { value: 'imperial', label: 'Impérial' },
+              ]}
+            />
+          </>
+        )
 
       case 'email':
         return (
@@ -785,26 +1418,38 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         )
 
       case 'recapitulatif': {
+        /* Les cibles de « Modifier » sont RÉSOLUES PAR NOM, plus par un
+           index écrit à la main.
+
+           L'ancienne version portait des nombres (« vers: 15 ») avec un
+           commentaire avertissant qu'un écran ajouté les décalerait tous.
+           Ce tunnel vient de passer de dix-sept à trente et un écrans, et
+           le nombre d'écrans dépend maintenant du SEXE déclaré : ces
+           nombres ne pouvaient pas survivre, et un « Modifier » qui ouvre
+           l'écran d'à côté est le genre de défaut qu'on ne voit qu'en
+           production. */
+        const vers = (nom) => etapes.indexOf(nom)
+
         const lignes = [
-          { label: 'Sexe', valeur: reponses.sex === 'M' ? 'Garçon' : 'Fille', vers: 0 },
+          { label: 'Sexe', valeur: reponses.sex === 'M' ? 'Garçon' : 'Fille', vers: vers('sexe') },
           /* `fr` sur toutes les valeurs numériques : l'âge, le poids et la
              croissance de l'année avancent de demi en demi, et le
              récapitulatif est l'écran où l'on demande justement de RELIRE
              ses réponses. Les y afficher au point anglais, juste avant un
              résultat qui écrit tout à la virgule, était la seule page où
              les deux écritures se croisaient ligne à ligne. */
-          { label: 'Âge', valeur: `${fr(reponses.age)} ans`, vers: 1 },
-          { label: 'Ta taille', valeur: `${fr(reponses.height_cm)} cm`, vers: 2 },
-          { label: 'Ton poids', valeur: `${fr(reponses.weight_kg)} kg`, vers: 3 },
-          { label: 'Père', valeur: `${fr(reponses.father_height_cm)} cm`, vers: 5 },
-          { label: 'Mère', valeur: `${fr(reponses.mother_height_cm)} cm`, vers: 6 },
+          { label: 'Âge', valeur: `${fr(reponses.age)} ans`, vers: vers('age') },
+          { label: 'Ta taille', valeur: `${fr(reponses.height_cm)} cm`, vers: vers('taille') },
+          { label: 'Ton poids', valeur: `${fr(reponses.weight_kg)} kg`, vers: vers('poids') },
+          { label: 'Père', valeur: `${fr(reponses.father_height_cm)} cm`, vers: vers('pere') },
+          { label: 'Mère', valeur: `${fr(reponses.mother_height_cm)} cm`, vers: vers('mere') },
           {
             label: 'Grandi cette année',
             valeur:
               reponses.height_velocity_cm === null
                 ? 'Je ne sais pas'
                 : `${fr(reponses.height_velocity_cm)} cm`,
-            vers: 7,
+            vers: vers('vitesse'),
           },
           {
             label: 'Pointure',
@@ -812,41 +1457,61 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
               reponses.shoe_size_eu === null
                 ? 'Non renseignée'
                 : `${fr(reponses.shoe_size_eu)} (${fr(reponses.shoe_size_eu_1y)} il y a un an)`,
-            vers: 8,
+            vers: vers('pointure'),
           },
-          /* L'index suit ETAPES, il n'est pas décoratif : un écran ajouté ou
-             retiré avant celui-ci décale la cible, et « Modifier » renvoie
-             alors sur l'écran d'à côté. */
-          { label: 'E-mail', valeur: reponses.email, vers: 15 },
+          {
+            label: 'Taille rêvée',
+            valeur: `${fr(reponses.taille_reve)} cm`,
+            vers: vers('taille-reve'),
+          },
+          { label: 'E-mail', valeur: reponses.email, vers: vers('email') },
         ]
 
+        /* Le bloc maturité n'est pas déplié ligne à ligne : six à huit
+           réponses de plus feraient de cet écran un mur à faire défiler,
+           juste avant le bouton qui compte. Une ligne qui dit combien de
+           signaux ont été donnés suffit à rassurer, et « Modifier » ouvre
+           le début du bloc pour qui veut y revenir. */
+        const signauxMaturite = [
+          reponses.voix,
+          reponses.pilosite_visage,
+          reponses.pilosite_aisselles,
+          reponses.epaules,
+          reponses.regles,
+          reponses.odeur,
+          reponses.acne,
+        ].filter((valeur) => valeur && valeur !== 'prefer_not' && valeur !== 'unknown').length
+
+        if (signauxMaturite > 0) {
+          lignes.splice(8, 0, {
+            label: 'Développement',
+            valeur: `${signauxMaturite} signal${signauxMaturite > 1 ? 'ux' : ''} renseigné${
+              signauxMaturite > 1 ? 's' : ''
+            }`,
+            vers: vers(reponses.sex === 'M' ? 'voix' : 'pilosite-aisselles'),
+          })
+        }
+
         return (
-          <>
-            {erreur && (
-              <p className="funnel-error" role="alert">
-                {erreur}
-              </p>
-            )}
-            <dl className="funnel-review">
-              {lignes.map((ligne) => (
-                <div className="funnel-review-row" key={ligne.label}>
-                  <dt>{ligne.label}</dt>
-                  <dd>{ligne.valeur}</dd>
-                  <button
-                    type="button"
-                    className="funnel-review-edit"
-                    onClick={() => setIndex(ligne.vers)}
-                  >
-                    {/* Le libellé visible reste court ; le nom accessible dit
-                        QUOI on modifie, sinon un lecteur d'écran annonce huit
-                        boutons « Modifier » indiscernables. */}
-                    <span aria-hidden="true">Modifier</span>
-                    <span className="sr-only">Modifier : {ligne.label}</span>
-                  </button>
-                </div>
-              ))}
-            </dl>
-          </>
+          <dl className="funnel-review">
+            {lignes.map((ligne) => (
+              <div className="funnel-review-row" key={ligne.label}>
+                <dt>{ligne.label}</dt>
+                <dd>{ligne.valeur}</dd>
+                <button
+                  type="button"
+                  className="funnel-review-edit"
+                  onClick={() => setIndex(ligne.vers)}
+                >
+                  {/* Le libellé visible reste court ; le nom accessible dit
+                      QUOI on modifie, sinon un lecteur d'écran annonce dix
+                      boutons « Modifier » indiscernables. */}
+                  <span aria-hidden="true">Modifier</span>
+                  <span className="sr-only">Modifier : {ligne.label}</span>
+                </button>
+              </div>
+            ))}
+          </dl>
         )
       }
 
@@ -855,7 +1520,56 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     }
   }
 
+  /* ============================================================
+     LES TEXTES
+     ============================================================
+     Titre et sous-titre de chaque écran. Trois d'entre eux sont repris
+     quasi mot pour mot du tunnel français de GoTall (« Quelle est la
+     précision de notre prédiction de taille ? », « Optimise tout ton
+     potentiel de taille », « GoTall t'aide pour ça ») : ce sont des
+     formulations d'interface courtes et factuelles, elles marchent, et
+     les reprendre ne coûte rien.
+
+     LES DEUX ÉCRANS ANGLAIS, EUX, NE SONT PAS TRADUITS TELS QUELS, et
+     il faut dire pourquoi plutôt que de le laisser deviner.
+
+     GoTall titre « The World's Best Height Prediction Model ». Un
+     superlatif publicitaire doit pouvoir être étayé pour être diffusé en
+     France (art. L121-2 du code de la consommation) : « le meilleur au
+     monde » ne s'étaye pas, et sur un produit de santé vendu à des
+     mineurs c'est le premier grief qu'on récolte. La version retenue
+     garde l'argument qui porte réellement — des mois de travail, un vrai
+     modèle, pas une moyenne de parents — et laisse tomber le superlatif,
+     qui n'a jamais été ce qui convainc.
+
+     De même « over 22 million kids » : Grandimi n'a pas vingt-deux
+     millions de dossiers. Ce qu'il a est vérifiable et se dit mieux —
+     deux modèles indépendants, des tables de référence publiées, une
+     marge affichée. L'argument est plus fort parce qu'un lecteur peut
+     aller le vérifier.
+
+     SI TU VEUX QUAND MÊME LA VERSION MOT POUR MOT, elle est ici, en
+     commentaire, et ne demande qu'un copier-coller :
+
+         modele: {
+           titre: 'Le meilleur modèle de prédiction de taille au monde',
+           sous: "Une équipe d'ingénieurs Grandimi a passé des mois à " +
+                 "construire le meilleur moteur de prédiction de taille " +
+                 'au monde.',
+         }
+
+     Le risque décrit plus haut est à toi, pas au code. Il est écrit ici
+     pour qu'il soit pris en connaissance de cause.
+     ============================================================ */
   const TEXTES = {
+    profil: {
+      titre: 'Tu réponds pour toi, ou pour ton enfant ?',
+      sous: 'Les questions sont les mêmes. Ça change juste à qui on s’adresse à la fin.',
+    },
+    motivation: {
+      titre: 'Pourquoi tu veux utiliser Grandimi ?',
+      sous: 'Plusieurs réponses possibles. On s’en sert pour ouvrir ton plan sur ce qui t’amène.',
+    },
     sexe: {
       titre: 'Tu es un garçon ou une fille ?',
       sous: 'Les courbes de croissance diffèrent, le calcul aussi.',
@@ -866,6 +1580,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     taille: { titre: 'Combien mesures-tu ?', sous: 'Sans chaussures, dos au mur.' },
     poids: { titre: 'Combien pèses-tu ?', sous: 'Une valeur approchée suffit.' },
+    modele: {
+      titre: 'Le modèle de prédiction Grandimi',
+      sous: 'Des mois de travail pour un seul chiffre — et pour la marge qui va avec.',
+    },
     pere: {
       titre: 'Combien mesure ton père ?',
       sous: 'La taille des parents pèse le plus lourd dans l’estimation.',
@@ -874,6 +1592,18 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       titre: 'Combien mesure ta mère ?',
       sous: 'Avec celle de ton père, c’est la base du calcul.',
     },
+    proches: {
+      titre: 'As-tu des proches plus grands que tes parents ?',
+      sous: 'Ta taille ne vient pas que de ton père et de ta mère. Un grand-parent compte aussi.',
+    },
+    origine: {
+      titre: 'D’où vient ta famille ?',
+      sous: 'Question facultative, et tu peux la passer sans répondre.',
+    },
+    precision: {
+      titre: 'Quelle est la précision de notre prédiction de taille ?',
+      sous: 'On combine des mesures clés et des facteurs environnementaux pour estimer ton potentiel.',
+    },
     vitesse: {
       titre: 'Tu as grandi de combien depuis l’an dernier ?',
       sous: 'Compare avec une vieille photo, une toise, ou demande à tes parents.',
@@ -881,6 +1611,43 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     pointure: {
       titre: 'Quelle est ta pointure ?',
       sous: 'Le pied arrête de grandir avant la taille : comparer avec l’an dernier dit où tu en es. Facultatif.',
+    },
+    /* Les sous-titres du bloc maturité disent tous la même chose sous
+       une forme différente : « ça situe où tu en es ». Aucun ne promet
+       que la réponse affine le chiffre, parce qu'aucune ne le fait
+       aujourd'hui. Le jour où l'une d'elles entrera dans le calcul, son
+       sous-titre changera le même jour. */
+    voix: {
+      titre: 'Est-ce que ta voix a mué ?',
+      sous: 'La mue arrive tard dans la puberté. Elle situe où tu en es sur ta courbe.',
+    },
+    'pilosite-visage': {
+      titre: 'As-tu de la pilosité sur le visage ?',
+      sous: 'Un repère de plus pour situer ton avancement.',
+    },
+    'pilosite-aisselles': {
+      titre: 'As-tu de la pilosité sous les bras ?',
+      sous: 'Elle apparaît à peu près au moment du pic de croissance.',
+    },
+    epaules: {
+      titre: 'Tes épaules se sont-elles élargies ?',
+      sous: 'L’élargissement des épaules accompagne la dernière phase de croissance.',
+    },
+    regles: {
+      titre: 'As-tu déjà eu tes premières règles ?',
+      sous: 'C’est le repère le plus net chez la fille. Tu peux ne pas répondre.',
+    },
+    odeur: {
+      titre: 'As-tu remarqué une odeur corporelle nouvelle ?',
+      sous: 'Elle apparaît tôt, souvent avant tout le reste.',
+    },
+    acne: {
+      titre: 'Comment est ta peau en ce moment ?',
+      sous: 'L’acné suit les mêmes hormones que la poussée de croissance.',
+    },
+    potentiel: {
+      titre: 'Optimise tout ton potentiel de taille',
+      sous: 'Pour grandir au maximum, dors bien, mange bien et reste actif.',
     },
     sommeil: {
       titre: 'Tu dors combien, en général ?',
@@ -894,17 +1661,21 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       titre: 'Tu bouges combien par jour ?',
       sous: 'L’activité stimule l’os pendant qu’il peut encore s’allonger.',
     },
+    aide: {
+      titre: 'Grandimi t’aide pour ça',
+      sous: 'On te guide vers ton plein potentiel avec des étapes simples et efficaces.',
+    },
     verite: {
       titre: 'La vérité brutale sur la petite taille',
       sous: 'Pas des statistiques. Juste ce que tu vis déjà.',
     },
-    'part-habitudes': {
-      titre: 'Ce que tes habitudes pèsent vraiment',
-      sous: 'La génétique fixe ton plafond. Le reste décide si tu l’atteins, ou si tu t’arrêtes en dessous.',
-    },
     'long-terme': {
       titre: 'Grandimi joue sur la durée',
       sous: 'Beaucoup n’atteignent pas leur plein potentiel de taille à cause d’habitudes non optimisées.',
+    },
+    'taille-reve': {
+      titre: 'Quelle taille tu rêves de faire ?',
+      sous: 'Ça ne change pas le calcul. Ça dit juste où tu voudrais arriver.',
     },
     email: {
       /* « Où t'envoyer ton estimation ? » promettait un e-mail que rien
@@ -919,15 +1690,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          obtenue sans dire ce qu'on en fera, auprès d'un mineur, est
          précisément ce que le RGPD refuse. Si un second type d'envoi
          est ajouté un jour, cette phrase change le même jour. */
-      /* Deux blocs disaient la même chose à deux centimètres l'un de
-         l'autre — le sous-titre, puis l'aide sous le champ — pour un
-         total de soixante mots. Plus on se justifie de demander une
-         adresse, plus la demande paraît louche, et c'est le 13e écran
-         sur 15 : un abandon ici coûte les douze précédents.
-
-         La substance que le RGPD impose y est toujours, dite une fois :
-         à quoi elle sert, combien d'envois, comment en sortir, et que
-         rien n'est revendu (cette dernière partie sous le champ). */
       titre: 'Ton adresse e-mail',
       sous: 'Ton résultat s’affiche tout de suite. Un seul e-mail ensuite : dans un mois, pour te re-mesurer.',
     },
@@ -939,33 +1701,73 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
 
   const texte = TEXTES[etape] || {}
 
+  /* Le libellé du bouton dépend de l'écran. Sur les écrans de preuve,
+     « Suivant » sonne comme un formulaire alors qu'on vient de donner
+     quelque chose à lire — le verbe reprend ce que l'écran vient de
+     dire, ce qui est la seule différence entre un bouton qu'on presse et
+     un bouton qu'on subit. */
+  const libelleBouton = (() => {
+    switch (etape) {
+      case 'modele':
+        return 'Continuer'
+      case 'precision':
+        return 'Continuer'
+      case 'verite':
+        return 'Voir ce que je peux encore optimiser'
+      case 'aide':
+        return 'On y va'
+      case 'recapitulatif':
+        return 'Analyser mes réponses'
+      default:
+        return 'Suivant'
+    }
+  })()
+
   return (
-    <FunnelShell
-      onBack={reculer}
-      progress={progression}
-      title={texte.titre}
-      subtitle={texte.sous}
-      footer={
-        etape === 'recapitulatif' ? (
-          <FunnelButton onClick={envoyer} disabled={chargement}>
-            {chargement ? (
-              <>
-                <Spinner />
-                Analyse en cours…
-              </>
-            ) : (
-              'Analyser mes réponses'
-            )}
-          </FunnelButton>
-        ) : (
+    <>
+      <FunnelShell
+        onBack={reculer}
+        progress={progression}
+        title={texte.titre}
+        subtitle={texte.sous}
+        footer={
           <FunnelButton onClick={avancer} disabled={!peutContinuer}>
-            {etape === 'verite' ? 'Voir ce que je peux encore optimiser' : 'Suivant'}
+            {libelleBouton}
           </FunnelButton>
-        )
-      }
-    >
-      {contenu()}
-    </FunnelShell>
+        }
+      >
+        {contenu()}
+      </FunnelShell>
+
+      {/* Le panneau « comment ça marche » de l'écran « modèle ».
+
+          Monté au-dessus du tunnel et non dedans : il doit couvrir le
+          bouton « Continuer », sans quoi on peut avancer d'un écran
+          pendant qu'il est ouvert.
+
+          Les quatre points reprennent la STRUCTURE d'argumentation de
+          GoTall — ce n'est pas une devinette / voici sur quoi c'est
+          construit / les méthodes courantes n'utilisent que deux ou
+          trois chiffres et rendent une grande fourchette / nous
+          combinons tout et resserrons — avec les chiffres de Grandimi,
+          qui ont l'avantage d'être exacts et vérifiables dans le dépôt :
+          ±8,5 cm pour la seule mi-parentale et ±4 cm au mieux pour le
+          modèle complet sont écrits dans v2_enhanced.go. */}
+      {feuilleOuverte && (
+        <FeuilleInfo
+          titre="Comment marche la prédiction"
+          intro="Ce n’est pas une estimation au doigt mouillé. Grandimi fait tourner un vrai modèle de croissance, construit sur des données de référence publiées."
+          points={[
+            'Chaque estimation croise deux modèles indépendants : Khamis–Roche, qui regarde ta taille, ton poids et tes parents, et le suivi de ton couloir de croissance sur les courbes OMS.',
+            'Ces courbes de référence sont établies sur des dizaines de milliers d’enfants mesurés pendant des années.',
+            'La méthode que tout le monde utilise — la moyenne de la taille des parents — ne prend que deux chiffres et rend une fourchette d’environ ± 8,5 cm.',
+            'Grandimi y ajoute ta taille, ton poids, ta vitesse de croissance et ta maturité, et resserre la fourchette jusqu’à ± 4 cm. Cette marge est affichée sur ton résultat, pas cachée en bas de page.',
+          ]}
+          cta="Compris"
+          onFermer={() => setFeuilleOuverte(false)}
+        />
+      )}
+    </>
   )
 }
 

@@ -743,72 +743,6 @@
   margin: 12px 0 0;
 }
 
-/* ---------- Part génétique / habitudes ---------- */
-
-.funnel-part {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.funnel-part-barres {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  align-items: end;
-  height: 260px;
-  padding: 18px;
-  border-radius: 22px;
-  background: var(--funnel-surface);
-}
-
-.funnel-part-colonne {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 10px;
-  height: 100%;
-}
-
-.funnel-part-nom {
-  text-align: center;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--funnel-muted);
-}
-
-.funnel-part-barre {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 12px;
-  border-radius: 16px;
-  font-size: 17px;
-  font-weight: 800;
-}
-
-/* La hauteur EST la donnée : 80 contre 20. Les deux barres partagent la
-   même colonne, donc le rapport se lit sans avoir à comparer des
-   chiffres. */
-.funnel-part-barre--forte {
-  height: 80%;
-  background: var(--funnel-accent);
-  color: var(--funnel-on-accent);
-}
-
-.funnel-part-barre--faible {
-  height: 20%;
-  background: var(--funnel-surface-high);
-  color: var(--funnel-text);
-}
-
-.funnel-part-note {
-  margin: 0;
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: var(--funnel-muted);
-}
-
 /* ---------- Réglage du plan : les jours de sport ----------
 
    Sept pastilles sur une ligne, pas une liste a cocher : l'ecran se
@@ -1014,4 +948,617 @@
   font-weight: 600;
   letter-spacing: 0.02em;
   color: rgba(255, 255, 255, 0.55);
+}
+
+/* ============================================================
+   ÉCRANS DE PREUVE — le réseau, la précision, la ruche
+   ============================================================
+   Quatre écrans qui ne demandent rien et qui ont donc un problème
+   commun : ils doivent tenir sans défilement sur un téléphone, entre un
+   en-tête et un bouton fixes. Le budget est d'environ 360 px de haut sur
+   un iPhone SE. Chaque figure ci-dessous est dimensionnée pour ça, et
+   c'est la raison de tous les `max-height` qui suivent.
+   ============================================================ */
+
+.funnel-preuve {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.funnel-reseau {
+  width: 100%;
+  max-width: 420px;
+}
+
+.reseau {
+  width: 100%;
+  height: auto;
+  /* Le halo est porté par le conteneur et non par chaque nœud : soixante
+     `filter: drop-shadow` sur un SVG animé font tomber le rendu sous
+     30 images par seconde sur un téléphone d'entrée de gamme. */
+  filter: drop-shadow(0 0 26px rgba(255, 90, 31, 0.22));
+}
+
+.reseau-arete {
+  stroke: var(--funnel-accent);
+  stroke-width: 0.7;
+  transition: opacity 0.45s ease;
+}
+
+.reseau-arete.est-active {
+  stroke-width: 1.1;
+}
+
+.reseau-poids {
+  fill: rgba(255, 255, 255, 0.34);
+  font-family: var(--font-dm-sans);
+  font-size: 6.5px;
+  font-weight: 600;
+}
+
+.reseau-noeud {
+  fill: var(--funnel-bg);
+  stroke: var(--funnel-accent);
+  stroke-width: 1.6;
+  transition:
+    fill 0.45s ease,
+    stroke-width 0.45s ease;
+}
+
+.reseau-noeud.est-active {
+  fill: var(--funnel-accent);
+  stroke-width: 2.2;
+}
+
+/* Le lien « Comment ça marche ? » : discret par construction. Il ne
+   doit pas concurrencer le bouton du bas, qui est la seule action
+   attendue de cet écran. */
+.funnel-lien-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--funnel-muted);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.funnel-lien-info:hover {
+  color: var(--funnel-text);
+}
+
+.funnel-lien-info:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+}
+
+/* ---------- La feuille d'information ---------- */
+
+.feuille-voile {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(0, 0, 0, 0.62);
+  animation: feuille-voile-entre 0.2s ease-out;
+}
+
+.feuille {
+  width: 100%;
+  max-height: 86svh;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 22px calc(18px + env(safe-area-inset-bottom));
+  border-radius: 26px 26px 0 0;
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  font-family: var(--font-dm-sans);
+  animation: feuille-monte 0.26s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.feuille-poignee {
+  width: 42px;
+  height: 4px;
+  margin: 0 auto 14px;
+  border-radius: 999px;
+  background: var(--funnel-line);
+}
+
+.feuille-entete {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.feuille-titre {
+  margin: 0;
+  font-size: clamp(22px, 6vw, 27px);
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.feuille-fermer {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--funnel-muted);
+  cursor: pointer;
+}
+
+.feuille-fermer:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+}
+
+.feuille-corps {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin-top: 14px;
+  /* Le défilement s'arrête à la feuille et ne se propage pas au tunnel
+     resté monté derrière. Sans ça, arriver en bas de la liste fait
+     défiler la page du dessous sur iOS. */
+  overscroll-behavior: contain;
+}
+
+.feuille-intro {
+  margin: 0 0 18px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--funnel-muted);
+}
+
+.feuille-points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feuille-points li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 15px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* La puce est dessinée en CSS : un rond orange de 7 px, aligné sur la
+   première ligne de texte quel que soit le nombre de lignes. */
+.feuille-points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--funnel-accent);
+}
+
+.feuille-pied {
+  padding-top: 16px;
+  border-top: 1px solid var(--funnel-line);
+  margin-top: 16px;
+}
+
+@keyframes feuille-monte {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes feuille-voile-entre {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- L'écran de précision ---------- */
+
+.precision {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 8px 0;
+}
+
+/* La toise en filigrane. Elle est décorative et le reste : à 0,06
+   d'opacité elle donne un contexte de mesure sans jamais entrer en
+   concurrence avec le chiffre, qui est le seul élément que cet écran a
+   pour mission de faire lire. */
+.precision-toise {
+  position: absolute;
+  top: 0;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.precision-toise span {
+  width: 26px;
+  height: 2px;
+  background: var(--funnel-text);
+}
+
+.precision-toise span.est-longue {
+  width: 62px;
+}
+
+.precision-pastille {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 26px 20px;
+  border: 1px solid rgba(255, 90, 31, 0.35);
+  border-radius: 28px;
+  background: rgba(255, 90, 31, 0.07);
+  box-shadow: 0 0 60px rgba(255, 90, 31, 0.18);
+}
+
+.precision-valeur {
+  font-size: clamp(44px, 13vw, 60px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--funnel-accent);
+}
+
+.precision-libelle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--funnel-accent);
+}
+
+.precision-detail {
+  position: relative;
+  margin: 0;
+  max-width: 30ch;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--funnel-muted);
+  text-wrap: pretty;
+}
+
+/* La bande de sources remplace la rangée d'écussons de l'original.
+   Trois cartes de texte : le nom en blanc, ce qu'on en tire en gris.
+   Voir badge-precision.jsx pour la raison — les logos CDC, Harvard et
+   NIH suggéreraient une caution jamais donnée. */
+.precision-sources {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.precision-sources li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 10px;
+  border-radius: 16px;
+  background: var(--funnel-surface);
+  text-align: center;
+}
+
+.precision-sources strong {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--funnel-text);
+}
+
+.precision-sources span {
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--funnel-muted);
+  text-wrap: pretty;
+}
+
+/* ---------- La ruche : les trois leviers ---------- */
+
+.funnel-ruche {
+  width: 100%;
+}
+
+.ruche {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ruche-tuiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+/* Les tuiles sont des hexagones, comme sur l'original. `clip-path`
+   plutôt qu'une image : le contour suit la tuile quelle que soit la
+   largeur de l'écran, et il n'y a rien à charger. */
+.ruche-tuile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  aspect-ratio: 0.88;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: var(--funnel-surface);
+  color: var(--funnel-muted);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+/* Au milieu, allumé : le potentiel de croissance, c'est-à-dire ce vers
+   quoi les trois leviers convergent. C'est la seule tuile en couleur de
+   l'écran, et c'est ce qui fait lire la figure dans le bon sens. */
+.ruche-centre {
+  display: grid;
+  place-items: center;
+  width: 38%;
+  aspect-ratio: 0.88;
+  margin-top: -6%;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: linear-gradient(150deg, rgba(255, 90, 31, 0.95), rgba(255, 140, 60, 0.75));
+  color: var(--funnel-on-accent);
+  box-shadow: 0 0 60px rgba(255, 90, 31, 0.3);
+}
+
+.ruche-liens {
+  width: 100%;
+  max-width: 300px;
+  height: 78px;
+  margin-top: -4px;
+}
+
+.ruche-liens path {
+  fill: none;
+  stroke: var(--funnel-line);
+  stroke-width: 2;
+}
+
+.ruche-marque {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: -10px;
+  padding: 12px 22px;
+  border-radius: 18px;
+  background: var(--funnel-surface-high);
+  box-shadow: 0 0 50px rgba(255, 90, 31, 0.22);
+}
+
+.ruche-marque span {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--funnel-text);
+}
+
+.ruche-marque svg {
+  padding: 5px;
+  border-radius: 9px;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+}
+
+/* ============================================================
+   L'ÉCRAN QUI RÉFLÉCHIT
+   ============================================================
+   Pleine page, sans en-tête ni bouton : rien à faire pendant qu'il
+   tourne, donc rien d'autre à l'écran. C'est la même règle que
+   l'interstitiel.
+   ============================================================ */
+
+.analyse {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  height: 100svh;
+  padding: 32px 26px calc(32px + env(safe-area-inset-bottom));
+  background: var(--funnel-bg);
+  color: var(--funnel-text);
+  font-family: var(--font-dm-sans);
+}
+
+.analyse-anneau {
+  position: relative;
+  width: 132px;
+  height: 132px;
+}
+
+.analyse-anneau svg {
+  width: 100%;
+  height: 100%;
+  /* L'arc démarre en haut et non à droite : un anneau de progression
+     qui commence à 3 heures se lit comme une horloge décalée. */
+  transform: rotate(-90deg);
+}
+
+.analyse-piste {
+  fill: none;
+  stroke: var(--funnel-surface-high);
+  stroke-width: 7;
+}
+
+.analyse-arc {
+  fill: none;
+  stroke: var(--funnel-accent);
+  stroke-width: 7;
+  stroke-linecap: round;
+  /* La transition dure un peu moins que l'intervalle entre deux étapes
+     (880 ms) : l'arc arrive à sa cible juste avant que la suivante ne
+     parte, ce qui donne une progression continue plutôt qu'un à-coup. */
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.35, 0, 0.25, 1);
+}
+
+.analyse-pourcent {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.analyse-titre {
+  margin: 0;
+  font-size: clamp(26px, 7vw, 33px);
+  font-weight: 800;
+  line-height: 1.12;
+  text-align: center;
+  letter-spacing: -0.03em;
+}
+
+.analyse-etapes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.analyse-etapes li {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 12px;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 600;
+  transition:
+    color 0.35s ease,
+    opacity 0.35s ease;
+}
+
+.analyse-etapes .est-faite {
+  color: var(--funnel-text);
+}
+
+.analyse-etapes .est-en-cours {
+  color: var(--funnel-accent);
+}
+
+/* Les étapes à venir restent LISIBLES et pas seulement suggérées : à
+   0,3 d'opacité sur fond noir elles tombaient sous le seuil de
+   contraste, et la liste se lisait comme trois lignes abîmées plutôt
+   que comme un programme annoncé. */
+.analyse-etapes .est-a-venir {
+  color: var(--funnel-muted);
+  opacity: 0.6;
+}
+
+.analyse-puce {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+}
+
+.est-faite .analyse-puce {
+  border-color: var(--funnel-accent);
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+}
+
+/* La puce de l'étape en cours pulse : c'est le seul élément de l'écran
+   qui dit que quelque chose se passe encore. */
+.est-en-cours .analyse-puce {
+  animation: analyse-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes analyse-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.82);
+    opacity: 0.55;
+  }
+}
+
+.analyse-attente {
+  margin: 0;
+  max-width: 32ch;
+  font-size: 13.5px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--funnel-muted);
+  text-wrap: pretty;
+}
+
+.analyse-echec {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 340px;
+}
+
+/* Le réglage système « réduire les animations » coupe tout ce qui
+   tourne en boucle. L'anneau garde sa transition — elle porte une
+   information (l'avancement), elle n'est pas décorative. */
+@media (prefers-reduced-motion: reduce) {
+  .est-en-cours .analyse-puce {
+    animation: none;
+  }
+
+  .feuille,
+  .feuille-voile {
+    animation: none;
+  }
 }

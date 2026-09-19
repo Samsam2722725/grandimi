@@ -72,8 +72,38 @@ const DELAI_AVANT_MESSAGE_MS = 4000
 
 
 
+/* Ce que le questionnaire a mis de côté pour cet écran.
+
+   Deux champs seulement, et ils viennent tous les deux d'une question
+   que le visiteur a répondue lui-même :
+
+     `taille_reve` — le seul chiffre de tout le tunnel qu'il a CHOISI.
+       L'écart entre ce nombre et l'estimation qu'il vient de lire est
+       exactement ce que cette page a à travailler. Un titre générique
+       (« Débloquer ton plan complet ») ne dit rien à personne ; le même
+       titre avec ses centimètres à lui nomme la raison pour laquelle il
+       est encore sur cette page.
+
+     `profil` — qui remplit le formulaire. Un parent n'a pas besoin qu'on
+       lui propose de « faire payer par un parent », et cette proposition
+       faite à un adulte muni d'une carte bancaire n'est pas neutre :
+       elle suggère qu'il y a un obstacle là où il n'y en a pas.
+
+   Lecture défensive de bout en bout : cette page s'affiche aussi pour
+   quelqu'un arrivé d'une session antérieure, dont le stockage local ne
+   contient pas encore ces champs. */
+function lireLaPrediction() {
+  try {
+    const brut = JSON.parse(localStorage.getItem('predictionData') || '{}')
+    return brut && typeof brut === 'object' ? brut : {}
+  } catch {
+    return {}
+  }
+}
+
 function PaywallPage({ onBackHome }) {
   const [email] = useState(() => localStorage.getItem('userEmail') || '')
+  const prediction = useState(lireLaPrediction)[0]
   const [loading, setLoading] = useState(false)
   /* Passe à vrai quand la redirection dépasse DELAI_AVANT_MESSAGE_MS, pour
      nommer l'attente sous le bouton au lieu de la laisser tourner. */
@@ -289,6 +319,37 @@ function PaywallPage({ onBackHome }) {
     }
   }
 
+  /* Le titre nomme l'écart quand on le connaît, et retombe sur la
+     formulation générique sinon.
+
+     L'écart n'est affiché QUE s'il est positif et plausible. Deux cas à
+     écarter, et ils sont l'un et l'autre fréquents :
+
+       — l'estimation dépasse déjà la taille rêvée. Lui annoncer qu'il
+         lui « manque -3 cm » serait absurde ; et lui dire qu'il a déjà
+         gagné n'est pas le travail de cette page.
+       — un écart énorme (un garçon d'1,60 m qui a mis 2,10 m sur la
+         molette). Le nommer donnerait à la page l'air de promettre un
+         demi-mètre, ce que le plan ne fait évidemment pas. Au-delà de
+         15 cm on revient au titre générique. */
+  const ecartReve = (() => {
+    const reve = Number(prediction.taille_reve)
+    const estimee = Number(prediction.predicted_height_cm)
+    if (!Number.isFinite(reve) || !Number.isFinite(estimee)) return null
+    const ecart = Math.round(reve - estimee)
+    return ecart > 0 && ecart <= 15 ? ecart : null
+  })()
+
+  const titre = ecartReve
+    ? `Il te manque ${ecartReve} cm pour ta taille rêvée`
+    : 'Débloquer ton plan complet'
+
+  /* Un parent est le payeur : lui proposer de faire payer un parent n'a
+     pas de sens. Le lien reste offert à tous les autres, y compris quand
+     le profil n'a pas été renseigné (session antérieure au tunnel actuel)
+     — c'est le défaut le moins coûteux des deux. */
+  const proposerLeParent = prediction.profil !== 'parent'
+
   return (
     <div className="night paywall">
       <header className="paywall-top">
@@ -303,7 +364,7 @@ function PaywallPage({ onBackHome }) {
       </header>
 
       <main className="paywall-scroll">
-        <h1 className="paywall-title">Débloquer ton plan complet</h1>
+        <h1 className="paywall-title">{titre}</h1>
         <p className="paywall-subtitle">
           Ta taille adulte, ce que tes habitudes te coûtent, et tes 11 actions par jour.
         </p>
@@ -414,7 +475,7 @@ function PaywallPage({ onBackHome }) {
         {/* Un seul contrôle pour ce bloc : le bouton du pied de page. Deux
             boutons ouvrant la même chose, l'un en bas l'autre au milieu,
             c'était une commande de trop. */}
-        {lienParent && (
+        {lienParent && proposerLeParent && (
           <section className="paywall-parent" ref={blocParentRef}>
             {lienParentVisible && (
               <div className="paywall-parent-body">
@@ -509,7 +570,7 @@ function PaywallPage({ onBackHome }) {
             page. L'utilisateur type a 14 ans et pas de carte bancaire : lui
             faire chercher ce chemin, c'est le perdre. Contour et non aplat —
             la hiérarchie reste lisible. */}
-        {lienParent && (
+        {lienParent && proposerLeParent && (
           <button
             type="button"
             className="paywall-parent-cta"
