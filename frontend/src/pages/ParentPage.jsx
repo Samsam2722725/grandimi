@@ -44,7 +44,7 @@ const AVANTAGES = [
    getPlans() ne fait que les confirmer, le montant réel restant décidé
    par le plan Whop choisi côté serveur. */
 const PLANS_PAR_DEFAUT = {
-  monthly: { key: 'monthly', label: 'Mensuel', price_eur: 4.99, interval: 'month' },
+  monthly: { key: 'monthly', label: 'Mensuel', price_eur: 9.99, interval: 'month' },
   annual: { key: 'annual', label: 'Annuel', price_eur: 29.99, interval: 'year' },
 };
 const COUT_DOUZE_MENSUALITES = 12 * PLANS_PAR_DEFAUT.monthly.price_eur;

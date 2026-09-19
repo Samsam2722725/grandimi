@@ -33,7 +33,7 @@ import {
    et n'a pas de second produit Whop configuré. À traiter comme une
    décision produit séparée, pas un détail d'implémentation. */
 const PLANS_PAR_DEFAUT = {
-  monthly: { key: 'monthly', label: 'Mensuel', price_eur: 4.99, interval: 'month' },
+  monthly: { key: 'monthly', label: 'Mensuel', price_eur: 9.99, interval: 'month' },
   annual: { key: 'annual', label: 'Annuel', price_eur: 29.99, interval: 'year' },
 }
 
