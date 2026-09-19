@@ -33,11 +33,27 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#fbf7f2" />
+    <!-- Titre et description : écrits pour la recherche, pas pour la marque.
+
+         « Grandimi — Le plan pour atteindre ta taille adulte » ne contenait
+         aucun mot que quelqu’un tape. Sur un domaine sans notoriété, un titre
+         de marque ne se positionne sur rien : personne ne cherche « Grandimi ».
+         Le titre porte donc maintenant la requête que le produit sert
+         exactement — calculer sa taille adulte — et garde la marque en queue,
+         là où elle coûte peu de caractères.
+
+         Longueur visée : moins de ~60 caractères pour le titre et ~155 pour la
+         description, au-delà Google tronque et la fin est perdue.
+
+         Les balises og:/twitter: plus bas ne suivent PAS cette réécriture,
+         volontairement : elles servent le partage entre ados sur TikTok et
+         WhatsApp, où une promesse vaut mieux qu’un mot-clé. Deux canaux, deux
+         accroches. -->
     <meta
       name="description"
-      content="Ta taille adulte estimée par deux méthodes croisées, et 11 actions par jour pour aller chercher les centimètres qu’il te reste. Dès 4,99 €/mois."
+      content="Quelle sera ta taille adulte ? Estimation en 2 minutes par la méthode Khamis-Roche croisée aux courbes OMS, marge d’erreur affichée. Dès 4,99 €/mois."
     />
-    <title>Grandimi — Le plan pour atteindre ta taille adulte</title>
+    <title>Calculer sa taille adulte : estimation en 2 min — Grandimi</title>
 
     <link rel="canonical" href="https://grandimi.com/" />
 
@@ -102,7 +118,39 @@
         "operatingSystem": "Web",
         "inLanguage": "fr-FR",
         "description": "Estimation de la taille adulte par la méthode Khamis-Roche croisée avec les tables de croissance de l’OMS, suivie d’un plan quotidien de 11 actions renouvelé chaque mois.",
-        "audience": { "@type": "PeopleAudience", "suggestedMinAge": 10, "suggestedMaxAge": 22 }
+        "audience": { "@type": "PeopleAudience", "suggestedMinAge": 10, "suggestedMaxAge": 22 },
+        "publisher": { "@id": "https://grandimi.com/#organisation" }
+      }
+    </script>
+
+    <!-- L'éditeur, déclaré comme entité.
+
+         Les six pages de contenu se disent toutes publiées par « Grandimi ».
+         Tant que cette organisation n'est déclarée nulle part, ce nom n'est
+         qu'une chaîne de caractères répétée sept fois : rien ne dit qu'il
+         s'agit du même éditeur, ni qui il est. L'`@id` ci-dessous est ce qui
+         relie les sept déclarations à une entité unique.
+
+         Sur un sujet de santé qui s'adresse à des mineurs, savoir QUI publie
+         est un critère d'évaluation, pas une décoration.
+
+         Deux champs manquent sciemment :
+         - `logo`, qui demande un vrai logotype carré en PNG. og-image.png est
+           une bannière 1200 × 630 : la donner ici serait déclarer un logo
+           faux plutôt que pas de logo ;
+         - `sameAs`, qui relierait les comptes TikTok et Instagram. C'est le
+           gain le plus rapide qui reste sur cette page — mais il demande les
+           vraies URL, et une URL inventée vaut moins que rien. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": "https://grandimi.com/#organisation",
+        "name": "Grandimi",
+        "url": "https://grandimi.com/",
+        "email": "grandimi14@gmail.com",
+        "foundingLocation": { "@type": "Country", "name": "France" },
+        "description": "Éditeur de Grandimi, outil d’estimation de la taille adulte et de plan de croissance quotidien pour les 10-22 ans."
       }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
