@@ -1,5 +1,6 @@
 import { lazy, Suspense, useRef, useState } from 'react';
 import Spinner from '../components/Spinner';
+import CarteAbonnement from '../components/CarteAbonnement';
 import EnteteApp from '../components/EnteteApp';
 import BarreOnglets from '../components/BarreOnglets';
 import { ONGLETS, ongletValide } from '../lib/onglets';
@@ -35,9 +36,11 @@ const GrowthPlanPage = lazy(() => import('./GrowthPlanPage'));
 function AppShell({
   predictionData,
   ongletInitial = 'accueil',
-  onQuitter,
   onGoToAccount,
   onReglages,
+  abonne = true,
+  onAbonner,
+  idEnfant,
 }) {
   /* L'onglet survit au rechargement.
 
@@ -97,10 +100,14 @@ function AppShell({
     <div className="night app-shell">
       {/* La roue crantée ouvre les horaires du plan (lever, coucher,
           jours de sport) : c'est le seul écran de réglage qui existe, et
-          le plan entier en dépend. L'avatar ouvre le compte, d'où l'on
-          ressort vers l'accueil marchand — c'est aujourd'hui la seule
-          sortie de l'application, puisque l'en-tête du plan qui portait
-          « ← Accueil » est masqué ici. */}
+          le plan entier en dépend.
+
+          L'avatar ouvre le compte, d'où l'on ressort vers l'accueil
+          marchand : c'est la seule sortie de l'application. Une prop
+          `onQuitter` traînait ici depuis l'étape 0 ; elle ne servait plus
+          depuis que le plan du mois se referme sur lui-même, et personne
+          ne l'appelait. Retirée plutôt que laissée à faire croire qu'une
+          seconde sortie existe. */}
       <EnteteApp onCompte={onGoToAccount} onReglages={onReglages} />
 
       {/* `tabIndex={-1}` : la zone devient une cible de focus programmée
@@ -116,12 +123,22 @@ function AppShell({
         aria-label={ONGLETS.find((o) => o.id === onglet)?.label}
       >
         <Suspense fallback={<Spinner size="page" label="Chargement..." />}>
-          {onglet === 'accueil' && (
-            <AccueilPage
-              predictionData={predictionData}
-              onAllerAuPlan={() => changerOnglet('grandir')}
-            />
-          )}
+          {/* L'accueil d'un non-abonné garde son estimation — la page
+              d'accueil du site promet « aucun résultat flouté », et la
+              flouter ici vendrait une chose pour en livrer une autre sur
+              la même marque. C'est le SUIVI quotidien qui est payant. */}
+          {onglet === 'accueil' &&
+            (abonne ? (
+              <AccueilPage
+                predictionData={predictionData}
+                onAllerAuPlan={() => changerOnglet('grandir')}
+              />
+            ) : (
+              <>
+                <ApercuLibre predictionData={predictionData} />
+                <CarteAbonnement zone="accueil" onAbonner={onAbonner} idEnfant={idEnfant} />
+              </>
+            ))}
 
           {/* L'onglet Grandir est maintenant la SÉANCE du jour : six
               exercices, un bandeau de sept jours, un écran
@@ -136,10 +153,14 @@ function AppShell({
               nutrition et le sommeil ; ce qui restera sera le plan
               mensuel seul. */}
           {onglet === 'grandir' && !planComplet && (
-            <GrandirOnglet onVoirPlanComplet={() => setPlanComplet(true)} />
+            abonne ? (
+              <GrandirOnglet onVoirPlanComplet={() => setPlanComplet(true)} />
+            ) : (
+              <CarteAbonnement zone="exercices" onAbonner={onAbonner} idEnfant={idEnfant} />
+            )
           )}
 
-          {onglet === 'grandir' && planComplet && (
+          {onglet === 'grandir' && planComplet && abonne && (
             <GrowthPlanPage
               predictionData={predictionData}
               avecEntete={false}
@@ -148,7 +169,12 @@ function AppShell({
             />
           )}
 
-          {onglet === 'apercus' && <ApercusPage />}
+          {onglet === 'apercus' &&
+            (abonne ? (
+              <ApercusPage />
+            ) : (
+              <CarteAbonnement zone="apercus" onAbonner={onAbonner} idEnfant={idEnfant} />
+            ))}
 
           {onglet === 'communaute' && <CommunautePage />}
         </Suspense>
@@ -167,3 +193,29 @@ function AppShell({
 }
 
 export default AppShell;
+
+/* L'estimation seule, pour un compte non abonné.
+
+   Volontairement minuscule : ce n'est pas l'accueil amputé, c'est le
+   seul chiffre auquel il a droit — et il y a droit entièrement, sans
+   flou ni cadenas, parce que la page d'accueil du site le promet. */
+function ApercuLibre({ predictionData }) {
+  const estimation = predictionData?.predicted_height_cm;
+  const intervalle = predictionData?.confidence_range;
+  if (!estimation) return null;
+
+  return (
+    <div className="libre">
+      <p className="libre__label">Taille projetée</p>
+      <p className="libre__chiffre">
+        {Math.round(estimation)}
+        <span className="libre__unite">cm</span>
+      </p>
+      {intervalle?.min != null && intervalle?.max != null && (
+        <p className="libre__intervalle">
+          entre {Math.round(intervalle.min)} et {Math.round(intervalle.max)} cm
+        </p>
+      )}
+    </div>
+  );
+}

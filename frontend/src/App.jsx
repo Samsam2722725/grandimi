@@ -37,6 +37,19 @@ const AccountPage = lazy(() => import('./pages/AccountPage'));
    GrowthPlanPage — celle-ci est désormais l'onglet « Grandir ». */
 const AppShell = lazy(() => import('./pages/AppShell'));
 
+/* L'identifiant du compte local, pour construire le lien `?parent=<id>`.
+
+   Lu à l'affichage et non gardé dans un état : il est écrit par le
+   questionnaire puis par la connexion, et une copie prise au montage
+   serait périmée pour quelqu'un qui vient de finir le questionnaire. */
+function idUtilisateurLocal() {
+  try {
+    return JSON.parse(localStorage.getItem('user') || '{}').id || '';
+  } catch {
+    return '';
+  }
+}
+
 /* Reconnaît un retour de paiement Whop.
 
    L'adresse de retour se règle dans le tableau de bord Whop (« Redirect
@@ -190,9 +203,21 @@ function App() {
     }
   };
 
+  /* « Voir mon plan » ouvre l'APPLICATION, abonné ou non.
+
+     Elle envoyait jusqu'ici tout compte non premium sur la paywall, donc
+     sur un argumentaire pour un produit qu'il n'avait jamais vu. Il entre
+     désormais dans la coque : il voit les onglets, la structure, et à la
+     place du contenu payant une carte qui dit ce qu'il y a derrière.
+     C'est le même mur, montré de l'intérieur.
+
+     Ce qui reste protégé l'est CÔTÉ SERVEUR : toutes les routes du
+     programme sont derrière PremiumMiddleware, et aucune n'est appelée
+     dans cet état. La carte remplace l'appel, elle ne masque pas une
+     réponse. */
   const handleViewPlan = () => {
     if (!isPaid) {
-      setCurrentPage('paywall');
+      setCurrentPage('plan');
       return;
     }
     ouvrirPlan();
@@ -520,13 +545,19 @@ function App() {
           `ongletInitial='grandir'` : on arrive ici par « Voir mon plan »,
           et atterrir sur un tableau de bord alors qu'on a cliqué sur un
           plan se lit comme un bug. L'onglet Accueil reste à un geste. */}
-      {currentPage === 'plan' && predictionData && isPaid && (
+      {currentPage === 'plan' && predictionData && (
         <AppShell
           predictionData={predictionData}
-          ongletInitial="grandir"
-          onQuitter={handleBackHome}
+          /* Un non-abonné arrive sur l'ACCUEIL, pas sur « Grandir ».
+             Grandir est entièrement verrouillé pour lui : l'y déposer,
+             c'est le faire atterrir sur un mur. L'accueil lui montre son
+             estimation, qui est à lui et qui est gratuite. */
+          ongletInitial={isPaid ? 'grandir' : 'accueil'}
           onGoToAccount={handleGoToAccount}
           onReglages={() => setCurrentPage('plan-setup')}
+          abonne={isPaid}
+          onAbonner={() => setCurrentPage('paywall')}
+          idEnfant={idUtilisateurLocal()}
         />
       )}
 

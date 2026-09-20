@@ -2129,3 +2129,144 @@
 @media (prefers-reduced-motion: reduce) {
   .rang__barre-remplie { transition: none; }
 }
+
+/* ============================================
+   ÉTAT NON ABONNÉ
+   ============================================
+   Ce qui est payant, c'est le PROGRAMME quotidien. L'estimation reste
+   entière et visible : la page d'accueil du site promet « aucun résultat
+   flouté », et la flouter ici vendrait une chose pour en livrer une
+   autre sur la même marque, à deux clics d'écart.
+   ============================================ */
+
+.libre {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 16px;
+  padding: 28px 20px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 24px;
+  background: var(--funnel-surface);
+  text-align: center;
+}
+
+.libre__label {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.libre__chiffre {
+  margin: 0;
+  font-size: clamp(48px, 15vw, 64px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.libre__unite { margin-left: 6px; color: var(--funnel-muted); font-size: 0.3em; font-weight: 700; }
+
+.libre__intervalle { margin: 0; color: var(--funnel-muted); font-size: 14px; }
+
+/* ---------- La carte de verrouillage ---------- */
+
+.verrou {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 26px 20px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 24px;
+  background: var(--funnel-surface);
+  text-align: center;
+}
+
+.verrou__icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--funnel-surface-high);
+  color: var(--funnel-accent);
+}
+
+.verrou__titre {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.verrou__soustitre { margin: 0; color: var(--funnel-muted); font-size: 14px; }
+
+.verrou__liste {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  margin: 6px 0 4px;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.verrou__liste li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 8px;
+  color: var(--funnel-muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.verrou__liste svg { margin-top: 2px; color: var(--funnel-accent); }
+
+.verrou__principal {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Le partage est SECONDAIRE, visuellement comme juridiquement : l'action
+   principale est de regarder l'offre. L'enfant n'est jamais invité à
+   acheter ni à convaincre — il partage un résultat, et c'est la page du
+   parent qui présente l'abonnement, à un adulte. */
+.verrou__partage {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 9999px;
+  background: none;
+  color: var(--funnel-text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.verrou__note {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
