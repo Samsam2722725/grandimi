@@ -715,3 +715,257 @@
   padding-left: 0;
   padding-right: 0;
 }
+
+/* ============================================
+   MESURE GUIDÉE
+   ============================================
+   Un écran entier, en plein cadre, pour un seul nombre. C'est
+   proportionné à ce qui en dépend : la vitesse de croissance, donc la
+   courbe, donc tout l'onglet Aperçus. Une mesure prise n'importe comment
+   ne produit pas une courbe approximative, elle produit du bruit.
+   ============================================ */
+
+.mesure {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--app-colonne, 480px);
+  margin: 0 auto;
+  padding: 12px 16px calc(24px + env(safe-area-inset-bottom, 0px));
+  background: var(--funnel-bg);
+  color: var(--funnel-text);
+  overflow-y: auto;
+}
+
+.mesure__entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mesure__retour {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  cursor: pointer;
+}
+
+.mesure__pas {
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.mesure__corps {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 14px;
+  /* Le contenu se pose au tiers haut, pas centré : centré, il remonte et
+     redescend à chaque étape selon la longueur du texte, et l'écran
+     semble sauter entre deux consignes qui se suivent. */
+  padding-top: 28px;
+}
+
+.mesure__numero {
+  margin: 0;
+  color: var(--funnel-accent);
+  font-size: 15px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.mesure__titre {
+  margin: 0;
+  font-size: clamp(24px, 7vw, 30px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.mesure__texte {
+  margin: 0;
+  max-width: 34ch;
+  color: var(--funnel-muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* ---------- Les trois champs ---------- */
+
+.mesure__champs {
+  display: grid;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.mesure__champ {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.mesure__champ-nom {
+  color: var(--funnel-muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.mesure__champ-boite {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 4px;
+  /* Largeur FIXE, pas dimensionnée en `ch`.
+     Écrite `width: 4.5ch` sur le champ, elle ne laissait pas la place de
+     « 172,4 » : le nombre se faisait rogner et l'utilisateur voyait
+     « 2,5 » à l'écran après avoir tapé 172,5. Une taille en `ch` se
+     calcule sur le glyphe « 0 », qui à 800 de graisse ne mesure pas ce
+     que mesurent cinq caractères dont une virgule.
+
+     168px, et la valeur est mesurée, pas estimée : « 172,4 » en DM Sans
+     800 à 22px occupe 102px. Retirer les 28px de padding, les 23px du
+     « cm » et les 4px d'écart laisse 113px au champ. Une première
+     tentative à 148px n'en laissait que 93 et rognait le dernier
+     chiffre — sur un écran dont le seul travail est d'afficher un
+     nombre juste. */
+  width: 168px;
+  padding: 10px 14px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 14px;
+  background: var(--funnel-surface);
+}
+
+.mesure__champ-boite:focus-within {
+  border-color: var(--funnel-accent);
+}
+
+.mesure__champ-boite input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  color: var(--funnel-text);
+  font-size: 22px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  /* L'encadré de focus est porté par la BOÎTE (:focus-within), pas par le
+     champ. Laissés tous les deux, ils dessinaient deux rectangles
+     arrondis emboîtés. `appearance: none` retire en plus le fond et le
+     liseré que Chromium pose de lui-même sur un champ texte. */
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.mesure__unite {
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ---------- Moment de la mesure ---------- */
+
+.mesure__moment {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.mesure__moment legend {
+  margin-bottom: 8px;
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mesure__choix {
+  flex: 1;
+  min-height: 44px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 12px;
+  background: var(--funnel-surface);
+  color: var(--funnel-muted);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mesure__choix--actif {
+  border-color: var(--funnel-accent);
+  color: var(--funnel-text);
+}
+
+/* ---------- Verdict de dispersion ---------- */
+
+.mesure__verdict {
+  display: flex;
+  /* L'icône se cale en haut, pas au milieu : sur un message qui tient
+     sur deux lignes, centrée, elle flotte entre les deux. */
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--funnel-surface);
+  color: var(--funnel-muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.mesure__verdict strong { color: var(--funnel-text); }
+
+/* L'alerte porte une icône EN PLUS de sa couleur : l'orange d'alerte et
+   l'orange de marque sont la même teinte, et seule la couleur ne
+   distinguerait donc rien du tout. */
+.mesure__verdict--alerte {
+  color: var(--funnel-accent);
+}
+
+.mesure__erreur {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: color-mix(in srgb, #e5484d 16%, transparent);
+  color: #ff9ba0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* ---------- Bouton principal ----------
+   `margin-top: auto` le colle en bas de l'écran quel que soit le texte
+   au-dessus : le pouce le retrouve au même endroit à chaque étape. */
+
+.mesure__principal {
+  margin-top: auto;
+  min-height: 52px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mesure__principal:disabled {
+  background: var(--funnel-surface-high);
+  color: var(--funnel-muted);
+  cursor: not-allowed;
+}

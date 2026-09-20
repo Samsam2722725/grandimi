@@ -19,9 +19,13 @@ function ApercusPage() {
         <Sparkles size={26} aria-hidden="true" />
       </span>
       <h2 className="app-vide__titre">Tes aperçus arrivent</h2>
+      {/* La porte est nommée. Écrit « dès que tu auras deux mesures » sans
+          dire où les prendre, cet écran promettait quelque chose sans
+          donner le moyen de l'obtenir — l'utilisateur ne peut que
+          refermer l'onglet. */}
       <p className="app-vide__texte">
-        Dès que tu auras enregistré deux mesures de taille, on affichera ici
-        ta courbe et ta vitesse de croissance.
+        Prends ta mesure de la semaine depuis l’onglet Accueil. Dès la
+        deuxième, ta courbe et ta vitesse de croissance s’affichent ici.
       </p>
     </div>
   );

@@ -5,6 +5,7 @@ import Spinner from '../components/Spinner';
 import AnneauCroissance from '../components/AnneauCroissance';
 import CompteARebours from '../components/CompteARebours';
 import SerieConnexions from '../components/SerieConnexions';
+import MesureGuidee from '../components/MesureGuidee';
 
 /* Le jour LOCAL du téléphone, au format ISO.
 
@@ -23,6 +24,7 @@ function AccueilPage({ predictionData, onAllerAuPlan }) {
   const [tableau, setTableau] = useState(null);
   const [chargement, setChargement] = useState(true);
   const [panne, setPanne] = useState(false);
+  const [mesureOuverte, setMesureOuverte] = useState(false);
 
   const charger = useCallback(() => {
     let annule = false;
@@ -61,6 +63,27 @@ function AccueilPage({ predictionData, onAllerAuPlan }) {
     return <Spinner size="page" label="Chargement de ton suivi..." />;
   }
 
+  /* L'écran de mesure remplace l'accueil au lieu de se poser dessus.
+     Une feuille par-dessus laisserait le rebours et l'anneau visibles
+     derrière quatre consignes de posture, alors que c'est justement le
+     moment où l'on veut qu'il ne reste plus qu'une chose à faire. */
+  if (mesureOuverte) {
+    return (
+      <MesureGuidee
+        onFerme={() => setMesureOuverte(false)}
+        onEnregistre={() => {
+          setMesureOuverte(false);
+          /* On relit le tableau : la mesure vient de reverrouiller la
+             semaine et de remplir le pilier « Suivi de taille ». Garder
+             l'ancien état afficherait un rebours à zéro sur un bouton
+             qui refuserait maintenant. */
+          setChargement(true);
+          charger();
+        }}
+      />
+    );
+  }
+
   return (
     <section className="accueil">
       {/* ---------- Prochaine mesure ----------
@@ -75,7 +98,7 @@ function AccueilPage({ predictionData, onAllerAuPlan }) {
           </p>
           <CompteARebours
             secondes={tableau?.secondes_avant_mesure || 0}
-            onDeverrouiller={onAllerAuPlan}
+            onDeverrouiller={() => setMesureOuverte(true)}
           />
         </div>
       )}
