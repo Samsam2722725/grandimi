@@ -1,8 +1,8 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useRef, useState } from 'react';
 import Spinner from '../components/Spinner';
 import EnteteApp from '../components/EnteteApp';
 import BarreOnglets from '../components/BarreOnglets';
-import { ongletValide } from '../lib/onglets';
+import { ONGLETS, ongletValide } from '../lib/onglets';
 /* funnel.css porte les jetons `--funnel-*` sur `.night` ; app-shell.css ne
    fait que les consommer. Sans le premier, le second n'a aucune valeur à
    résoudre et la coque s'affiche en noir sur noir. L'ordre compte. */
@@ -38,18 +38,51 @@ function AppShell({
   onGoToAccount,
   onReglages,
 }) {
-  const [onglet, setOnglet] = useState(() =>
-    ongletValide(ongletInitial) ? ongletInitial : 'accueil',
-  );
+  /* L'onglet survit au rechargement.
+
+     Sur un téléphone, recharger n'est pas un geste rare : revenir sur
+     l'onglet du navigateur après quelques minutes suffit souvent à
+     refaire tourner la page. Sans ceci, on retombait à chaque fois sur
+     l'onglet d'arrivée, en perdant l'endroit où l'on était.
+
+     `sessionStorage` et non `localStorage` : c'est le fil d'une visite,
+     pas une préférence. Revenir demain doit rouvrir l'onglet d'arrivée,
+     pas le dernier écran consulté la veille. L'accès est enveloppé : en
+     navigation privée, le simple fait de lire peut lever. */
+  const [onglet, setOnglet] = useState(() => {
+    try {
+      const garde = sessionStorage.getItem('grandimi:onglet');
+      if (garde && ongletValide(garde)) return garde;
+    } catch {
+      // Stockage indisponible : on retombe sur l'onglet d'arrivée.
+    }
+    return ongletValide(ongletInitial) ? ongletInitial : 'accueil';
+  });
+
+  /* Où poser le focus après un changement d'onglet.
+
+     Sans ça, un utilisateur au clavier reste sur le bouton d'onglet et
+     doit retraverser tout l'en-tête pour atteindre le contenu qu'il
+     vient d'ouvrir ; un lecteur d'écran, lui, n'annonce rien du tout —
+     l'écran a changé sans qu'aucun mot ne le dise. */
+  const zoneContenu = useRef(null);
 
   const changerOnglet = (id) => {
     setOnglet(id);
+    try {
+      sessionStorage.setItem('grandimi:onglet', id);
+    } catch {
+      // Écriture refusée : l'onglet marche quand même, il ne survivra
+      // simplement pas au rechargement.
+    }
+
     /* On remonte en haut à chaque changement. Sans ça, passer d'un onglet
        long défilé à un onglet court affiche ce dernier par le bas, parfois
        entièrement vide — l'utilisateur croit que l'onglet ne marche pas.
        `instant` et non `smooth` : ce n'est pas un déplacement dans une
        page, c'est un changement d'écran. */
     window.scrollTo({ top: 0, behavior: 'instant' });
+    zoneContenu.current?.focus();
   };
 
   return (
@@ -62,7 +95,18 @@ function AppShell({
           « ← Accueil » est masqué ici. */}
       <EnteteApp onCompte={onGoToAccount} onReglages={onReglages} />
 
-      <main className="app-contenu">
+      {/* `tabIndex={-1}` : la zone devient une cible de focus programmée
+          sans entrer dans l'ordre de tabulation. `key` force React à la
+          remonter à chaque onglet, pour que le lecteur d'écran reparte
+          du début du nouvel écran plutôt que de rester au milieu de
+          l'ancien. */}
+      <main
+        className="app-contenu"
+        key={onglet}
+        ref={zoneContenu}
+        tabIndex={-1}
+        aria-label={ONGLETS.find((o) => o.id === onglet)?.label}
+      >
         <Suspense fallback={<Spinner size="page" label="Chargement..." />}>
           {onglet === 'accueil' && (
             <AccueilPage

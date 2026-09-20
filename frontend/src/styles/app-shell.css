@@ -303,63 +303,363 @@
   line-height: 1.5;
 }
 
-/* ---------- Onglet Accueil (squelette) ----------
-   L'anneau segmenté de l'étape 2 remplacera cette carte. Ce qui reste
-   vrai après l'étape 2 : le chiffre est la seule chose grosse de l'écran,
-   et l'intervalle est collé dessous plutôt que relégué plus bas. */
-.app-accueil {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding-top: 16px;
-}
+/* ============================================
+   ONGLET ACCUEIL
+   ============================================
+   L'écran qu'on ouvre le plus souvent, donc celui qui décide du retour.
+   Trois choses y tiennent, dans cet ordre de lecture : quand a lieu la
+   prochaine mesure, où j'en suis, et depuis combien de jours je tiens.
+   ============================================ */
 
-.app-accueil__carte {
+.accueil {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 32px 20px;
-  border: 1px solid var(--funnel-line);
-  border-radius: 24px;
-  background: var(--funnel-surface);
-  text-align: center;
+  gap: 20px;
+  padding-top: 12px;
 }
 
-.app-accueil__label {
+/* ---------- Prochaine mesure ---------- */
+
+.accueil__rebours-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 24px;
+  /* Un halo d'accent plutôt qu'un aplat : le bandeau vert plein du
+     concurrent occupe un quart de l'écran pour porter une seule
+     information. Ici la teinte signale la zone sans la remplir. */
+  background: radial-gradient(
+    120% 100% at 50% 0%,
+    color-mix(in srgb, var(--funnel-accent) 16%, transparent) 0%,
+    transparent 70%
+  );
+}
+
+.accueil__rebours-label {
   margin: 0;
   color: var(--funnel-muted);
   font-size: 13px;
+  font-weight: 600;
+}
+
+.rebours {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 18px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 9999px;
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  font-size: 16px;
+  font-weight: 700;
+  /* Chiffres à chasse fixe : sans cela, « 6j 8h 43m » se décale
+     latéralement à chaque minute qui passe, parce qu'un 1 est plus
+     étroit qu'un 8. Le rebours vibre sous l'œil au lieu de décompter. */
+  font-variant-numeric: tabular-nums;
+}
+
+/* Rebours terminé : la pilule EST le bouton. Deux éléments distincts
+   auraient laissé une pilule morte à côté du bouton vivant. */
+.rebours--pret {
+  border-color: transparent;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  cursor: pointer;
+}
+
+/* ---------- Anneau ---------- */
+
+.anneau {
+  position: relative;
+  width: min(232px, 62vw);
+  aspect-ratio: 1;
+}
+
+.anneau__svg {
+  width: 100%;
+  height: 100%;
+}
+
+.anneau__rail {
+  stroke: var(--funnel-surface-high);
+}
+
+/* Pilier pas encore suivi : pointillés, jamais une part à zéro. Une part
+   vide se lit « tu as échoué » ; des pointillés se lisent « ça arrive ».
+
+   SEULE LA COULEUR EST ICI. Le motif pointillé est calculé en JS, dans
+   AnneauCroissance.jsx. Écrit ici en CSS, il écrasait le `stroke-dasharray`
+   qui découpe l'arc — un attribut de présentation SVG perd contre toute
+   règle CSS — et les trois rails redevenaient des cercles entiers
+   pointillés superposés aux arcs pleins : l'anneau ressortait strié de
+   part en part. Ne pas remettre de `stroke-dasharray` dans ce fichier. */
+.anneau__rail--futur {
+  stroke: var(--funnel-line);
+}
+
+.anneau__part {
+  stroke: var(--funnel-accent);
+  transition: stroke-dasharray 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anneau__part { transition: none; }
+}
+
+/* Le centre est en position absolue et ne reçoit PAS les événements :
+   posé au-dessus du SVG, il intercepterait sinon les clics destinés à
+   ce qu'on y mettra plus tard. */
+.anneau__centre {
+  position: absolute;
+  inset: 22%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.accueil__label {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
-.app-accueil__chiffre {
+.accueil__chiffre {
   margin: 0;
-  /* `clamp` plutôt qu'une taille fixe : à 320px de large (iPhone SE), un
-     68px fixe déborde dès que le nombre passe à trois chiffres. */
-  font-size: clamp(52px, 16vw, 72px);
+  font-size: clamp(38px, 12vw, 52px);
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.04em;
 }
 
-.app-accueil__unite {
-  margin-left: 6px;
-  color: var(--funnel-muted);
-  font-size: 0.32em;
-  font-weight: 700;
-  letter-spacing: 0;
-}
-
-.app-accueil__intervalle {
+/* L'intervalle est collé sous le chiffre, pas relégué plus bas.
+   La méthode mi-parentale a un écart-type d'environ 5 cm : le point seul
+   promet une précision que le calcul n'a pas, et les deux doivent donc se
+   lire d'un même regard. */
+.accueil__intervalle {
   margin: 0;
   color: var(--funnel-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.accueil__progression {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 15px;
+}
+
+.accueil__progression strong {
+  color: var(--funnel-text);
+  font-size: 19px;
+}
+
+/* ---------- Les six piliers ---------- */
+
+.piliers {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 24px;
+  background: var(--funnel-surface);
+  list-style: none;
+}
+
+.pilier {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 12px;
+  align-items: center;
   font-size: 14px;
 }
 
-.app-accueil__cta {
+.pilier--futur {
+  color: var(--funnel-muted);
+}
+
+.pilier__nom { font-weight: 600; }
+
+.pilier__valeur {
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pilier__barre {
+  grid-column: 1 / -1;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--funnel-surface-high);
+  overflow: hidden;
+}
+
+.pilier__barre-remplie {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--funnel-accent);
+  transition: width 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pilier--futur .pilier__barre {
+  /* Pointillés, comme sur l'anneau : les deux représentations du même
+     pilier doivent dire la même chose. */
+  background: repeating-linear-gradient(
+    90deg, var(--funnel-line) 0 3px, transparent 3px 8px
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pilier__barre-remplie { transition: none; }
+}
+
+/* ---------- Série de connexions ---------- */
+
+.serie {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 20px 16px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 24px;
+  background: var(--funnel-surface);
+}
+
+.serie__flamme {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--funnel-surface-high);
+  color: var(--funnel-muted);
+}
+
+.serie__flamme--vive {
+  background: color-mix(in srgb, var(--funnel-accent) 18%, transparent);
+  color: var(--funnel-accent);
+}
+
+.serie__titre {
+  margin: 0;
+  font-size: 15px;
+  color: var(--funnel-muted);
+}
+
+.serie__titre strong {
+  color: var(--funnel-text);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.serie__jours {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.serie__jour {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 2px 6px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--funnel-surface-high);
+}
+
+.serie__jour--aujourdhui {
+  border-color: var(--funnel-text);
+}
+
+.serie__jour-nom {
+  color: var(--funnel-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.serie__jour-num {
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Le point double la couleur du fond : à cette taille, la seule
+   différence de teinte entre un jour fait et un jour manqué ne se
+   distingue pas pour un daltonien deutan. */
+.serie__jour-point {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--funnel-line);
+}
+
+.serie__jour--fait .serie__jour-point {
+  background: var(--funnel-accent);
+}
+
+.serie__record {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 13px;
+}
+
+/* ---------- Panne de chargement ---------- */
+
+.accueil__panne {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 20px 16px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 24px;
+  color: var(--funnel-muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.accueil__reessayer {
+  min-height: 40px;
+  padding: 0 18px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 9999px;
+  background: none;
+  color: var(--funnel-text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- Appel à l'action ---------- */
+
+.accueil__cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;

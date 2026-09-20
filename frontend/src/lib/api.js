@@ -236,6 +236,32 @@ class APIClient {
     return this.request(`/api/v1/tasks/history?days=${days}`);
   }
 
+  // ---------- Accueil de l'application ----------
+
+  /** Tout l'onglet Accueil en un appel : mesure, verrou hebdomadaire,
+   *  série de connexions et les six piliers.
+   *
+   *  `jour` est le jour LOCAL du téléphone. Sans lui, le serveur compte
+   *  en UTC : quelqu'un qui ouvre l'application à 0 h 30 en France l'été
+   *  verrait sa connexion rattachée à la veille, et perdrait sa série le
+   *  lendemain. */
+  async getDashboard(jour) {
+    const qs = jour ? `?jour=${encodeURIComponent(jour)}` : '';
+    return this.request(`/api/v1/dashboard${qs}`);
+  }
+
+  /** Enregistre une séance de mesure.
+   *
+   *  On envoie les TROIS relevés, pas leur médiane : c'est le serveur qui
+   *  tranche, et leur dispersion est la seule façon de savoir si la
+   *  séance vaut quelque chose. */
+  async ajouterMesure({ mesures, moment, jour }) {
+    return this.request('/api/v1/mesures', {
+      method: 'POST',
+      body: JSON.stringify({ mesures, moment, jour }),
+    });
+  }
+
   // ---------- Mon compte / Abonnement ----------
 
   /** Offre en cours, prochaine date de paiement, état de résiliation. */

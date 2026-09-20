@@ -55,6 +55,12 @@ func main() {
 		paye.GET("/nutrition-guide", api.GetNutritionGuide)
 		paye.GET("/sleep-optimization", api.GetSleepOptimization)
 
+		/* L'accueil de l'application : mesure, verrou hebdomadaire, série
+		   de connexions et les six piliers, en un seul appel. Ouvrir cet
+		   écran EST la connexion du jour — la série n'a pas de bouton. */
+		paye.GET("/dashboard", api.GetDashboard)
+		paye.POST("/mesures", api.AjouterMesure)
+
 		// Todo-liste quotidienne : cocher/décocher une tâche du jour, lire
 		// l'état du jour, et l'historique pour le calendrier de série.
 		paye.POST("/tasks/toggle", api.ToggleTaskCompletion)
