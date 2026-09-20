@@ -250,6 +250,40 @@ class APIClient {
     return this.request(`/api/v1/dashboard${qs}`);
   }
 
+  // ---------- Exercices ----------
+
+  /** Les six exercices du jour et leur état fait / pas fait. */
+  async getSeanceDuJour(jour) {
+    const qs = jour ? `?jour=${encodeURIComponent(jour)}` : '';
+    return this.request(`/api/v1/exercices/jour${qs}`);
+  }
+
+  /** Les sept jours du bandeau, à partir de `debut`. */
+  async getSemaineSeances(debut) {
+    const qs = debut ? `?debut=${encodeURIComponent(debut)}` : '';
+    return this.request(`/api/v1/exercices/semaine${qs}`);
+  }
+
+  /** Coche plusieurs exercices d'un coup.
+   *
+   *  Une séance se termine d'un bloc : six appels séparés, c'est six
+   *  occasions qu'un seul échoue et laisse la journée à 5 sur 6 sans
+   *  que personne ne sache lequel manque. */
+  async validerSeance({ slugs, jour }) {
+    return this.request('/api/v1/exercices/valider', {
+      method: 'POST',
+      body: JSON.stringify({ slugs, jour }),
+    });
+  }
+
+  /** Coche ou décoche un exercice isolé, pour qui valide au fil de l'eau. */
+  async basculerExercice({ slug, jour }) {
+    return this.request('/api/v1/exercices/basculer', {
+      method: 'POST',
+      body: JSON.stringify({ slug, jour }),
+    });
+  }
+
   /** Enregistre une séance de mesure.
    *
    *  On envoie les TROIS relevés, pas leur médiane : c'est le serveur qui

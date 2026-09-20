@@ -969,3 +969,351 @@
   color: var(--funnel-muted);
   cursor: not-allowed;
 }
+
+/* ============================================
+   ONGLET GRANDIR — SÉANCE DU JOUR
+   ============================================ */
+
+.grandir {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 12px;
+}
+
+.grandir__entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.grandir__pct { margin: 0; }
+
+.grandir__pct strong {
+  font-size: clamp(38px, 12vw, 48px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.grandir__compte {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 14px;
+  text-align: right;
+}
+
+.grandir__duree { margin-left: 6px; }
+
+.grandir__barre {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--funnel-surface-high);
+  overflow: hidden;
+}
+
+.grandir__barre-remplie {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--funnel-accent);
+  transition: width 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grandir__barre-remplie { transition: none; }
+}
+
+.grandir__cta,
+.grandir__lien {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 9999px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.grandir__cta {
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+}
+
+.grandir__lien {
+  min-height: 46px;
+  border: 1px solid var(--funnel-line);
+  background: none;
+  color: var(--funnel-muted);
+  font-size: 14px;
+}
+
+/* ---------- Bandeau de sept jours ---------- */
+
+.bandeau {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bandeau__jour {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+  /* 44px de haut minimum : sept cibles sur la largeur d'un téléphone
+     font déjà moins de 44px de large, la hauteur compense. */
+  min-height: 56px;
+  padding: 8px 2px 6px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  cursor: pointer;
+}
+
+.bandeau__jour--actif { border-color: var(--funnel-text); }
+
+.bandeau__jour--futur { opacity: 0.45; }
+
+.bandeau__nom {
+  color: var(--funnel-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.bandeau__num {
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* La pastille double la couleur du fond : à cette taille, un daltonien
+   deutan ne distingue pas un jour fait d'un jour manqué à la teinte. */
+.bandeau__point {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--funnel-line);
+}
+
+.bandeau__jour--entame .bandeau__point { background: var(--funnel-muted); }
+.bandeau__jour--complet .bandeau__point { background: var(--funnel-accent); }
+
+/* ---------- Liste d'exercices ---------- */
+
+.exos {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.exo {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 18px;
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.exo--fait { border-color: var(--funnel-accent); }
+
+.exo__case {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--funnel-line);
+  border-radius: 8px;
+  color: var(--funnel-on-accent);
+}
+
+.exo--fait .exo__case {
+  border-color: var(--funnel-accent);
+  background: var(--funnel-accent);
+}
+
+.exo__texte {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.exo__nom { font-size: 15px; font-weight: 700; }
+
+.exo__benefice {
+  color: var(--funnel-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.exo__duree {
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================
+   ÉCRAN D'ENTRAÎNEMENT
+   ============================================
+   Un exercice à la fois. Pendant une séance on est par terre, le
+   téléphone posé à côté : le seul texte lisible est celui qu'on peut
+   prendre d'un coup d'œil en tenant une position.
+   ============================================ */
+
+.seance {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--app-colonne, 480px);
+  margin: 0 auto;
+  padding: 12px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+  background: var(--funnel-bg);
+  color: var(--funnel-text);
+}
+
+.seance__entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.seance__retour {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  cursor: pointer;
+}
+
+.seance__pas {
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.seance__corps {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.seance__categorie {
+  margin: 0;
+  color: var(--funnel-accent);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.seance__nom {
+  margin: 0;
+  font-size: clamp(24px, 7vw, 32px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.seance__minuteur {
+  position: relative;
+  width: min(220px, 58vw);
+  aspect-ratio: 1;
+  margin: 4px 0;
+}
+
+.seance__minuteur svg { width: 100%; height: 100%; }
+
+.seance__rail { stroke: var(--funnel-surface-high); }
+
+.seance__arc {
+  stroke: var(--funnel-accent);
+  /* Pas de transition : l'arc avance d'un pas par seconde, et une
+     transition de 500ms sur un pas de 1000ms rend l'aiguille molle,
+     toujours en retard sur le chiffre affiché à côté. */
+}
+
+.seance__chiffre {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(40px, 13vw, 54px);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+.seance__consigne {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.seance__commandes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.seance__bouton {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 56px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 16px;
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.seance__bouton--valide {
+  border-color: transparent;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+}

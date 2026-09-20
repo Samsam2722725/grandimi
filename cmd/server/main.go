@@ -61,6 +61,16 @@ func main() {
 		paye.GET("/dashboard", api.GetDashboard)
 		paye.POST("/mesures", api.AjouterMesure)
 
+		/* La séance du jour : six exercices tirés d'un cycle de sept
+		   jours. Les exercices faits sont enregistrés dans
+		   task_completions sous la clé « exercice-<slug> » — un exercice
+		   fait EST une tâche faite, et une seconde table de complétion
+		   aurait imposé deux compteurs à garder cohérents. */
+		paye.GET("/exercices/jour", api.GetSeanceDuJour)
+		paye.GET("/exercices/semaine", api.GetSemaineSeances)
+		paye.POST("/exercices/valider", api.ValiderSeance)
+		paye.POST("/exercices/basculer", api.BasculerExercice)
+
 		// Todo-liste quotidienne : cocher/décocher une tâche du jour, lire
 		// l'état du jour, et l'historique pour le calendrier de série.
 		paye.POST("/tasks/toggle", api.ToggleTaskCompletion)

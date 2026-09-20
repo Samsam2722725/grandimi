@@ -14,6 +14,7 @@ import '../styles/app-shell.css';
    onglets, dont un qui embarque des graphiques. Le premier onglet affiché
    est le seul à être demandé au réseau. */
 const AccueilPage = lazy(() => import('./AccueilPage'));
+const GrandirPage = lazy(() => import('./GrandirPage'));
 const ApercusPage = lazy(() => import('./ApercusPage'));
 const CommunautePage = lazy(() => import('./CommunautePage'));
 const GrowthPlanPage = lazy(() => import('./GrowthPlanPage'));
@@ -67,8 +68,15 @@ function AppShell({
      l'écran a changé sans qu'aucun mot ne le dise. */
   const zoneContenu = useRef(null);
 
+  /* Le plan du mois est un écran DANS l'onglet Grandir, pas un onglet.
+     Il se referme au changement d'onglet : revenir sur Grandir depuis
+     l'accueil doit rouvrir la séance du jour, pas l'écran où l'on était
+     parti il y a dix minutes. */
+  const [planComplet, setPlanComplet] = useState(false);
+
   const changerOnglet = (id) => {
     setOnglet(id);
+    setPlanComplet(false);
     try {
       sessionStorage.setItem('grandimi:onglet', id);
     } catch {
@@ -115,20 +123,27 @@ function AppShell({
             />
           )}
 
-          {/* L'onglet Grandir réutilise le plan existant tel quel, sans son
-              en-tête : la coque en pose déjà un, et deux en-têtes empilés
-              mangent un tiers de l'écran sur un téléphone.
+          {/* L'onglet Grandir est maintenant la SÉANCE du jour : six
+              exercices, un bandeau de sept jours, un écran
+              d'entraînement. C'est ce qui fait disparaître la double
+              navigation signalée à l'audit — la barre du bas plus les six
+              sous-onglets du plan faisaient neuf cibles sur un écran de
+              téléphone.
 
-              Il garde ses propres sous-onglets (Aujourd'hui / Exercices /
-              Nutrition / Sommeil) pour l'instant. Les étapes 3 à 5 les
-              sortiront en écrans à part entière ; les déplacer maintenant
-              casserait un écran qui fonctionne pour ne rien livrer de
-              plus. */}
-          {onglet === 'grandir' && (
+              Le plan du mois n'est pas supprimé pour autant : c'est le
+              produit payant, et il reste à un geste, derrière « Voir le
+              plan du mois en entier ». Les étapes 4 et 5 en sortiront la
+              nutrition et le sommeil ; ce qui restera sera le plan
+              mensuel seul. */}
+          {onglet === 'grandir' && !planComplet && (
+            <GrandirPage onVoirPlanComplet={() => setPlanComplet(true)} />
+          )}
+
+          {onglet === 'grandir' && planComplet && (
             <GrowthPlanPage
               predictionData={predictionData}
               avecEntete={false}
-              onBackHome={onQuitter}
+              onBackHome={() => setPlanComplet(false)}
               onGoToAccount={onGoToAccount}
             />
           )}
