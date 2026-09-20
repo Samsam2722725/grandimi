@@ -1920,3 +1920,212 @@
   line-height: 1.55;
   text-align: center;
 }
+
+/* ============================================
+   APERÇUS
+   ============================================ */
+
+.apercus { display: flex; flex-direction: column; gap: 14px; }
+
+.apercus__titre {
+  margin: 8px 0 0;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.apercus__attente,
+.apercus__note {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.apercus__note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12px;
+}
+
+/* ---------- Courbe ----------
+   Une seule série : aucune légende, le titre au-dessus la nomme. */
+
+.courbe {
+  margin: 0;
+  padding: 14px 12px 10px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 24px;
+  background: var(--funnel-surface);
+}
+
+.courbe__svg { width: 100%; height: auto; display: block; }
+
+/* Réglets et graduations RÉCESSIFS : ils situent, ils ne se lisent pas. */
+.courbe__reglet { stroke: var(--funnel-line); stroke-width: 1; }
+
+.courbe__graduation {
+  fill: var(--funnel-muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.courbe__trait {
+  stroke: var(--funnel-accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.courbe__point {
+  fill: var(--funnel-accent);
+  /* L'anneau de fond détache le marqueur du trait qui passe dessous. */
+  stroke: var(--funnel-surface);
+  stroke-width: 2;
+}
+
+.courbe__bornes {
+  display: flex;
+  justify-content: space-between;
+  color: var(--funnel-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ---------- Vitesse ---------- */
+
+.vitesse {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px 16px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 24px;
+  background: var(--funnel-surface);
+  text-align: center;
+}
+
+.vitesse__label {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.vitesse__chiffre {
+  margin: 0;
+  font-size: clamp(40px, 13vw, 52px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.vitesse__unite { color: var(--funnel-muted); font-size: 0.34em; font-weight: 700; }
+
+/* La marge n'est PAS une note de bas de page : elle est posée juste
+   sous le chiffre, dans la même colonne de lecture. Une vitesse sans son
+   incertitude se lit comme une mesure exacte. */
+.vitesse__marge {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.vitesse__refus {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* ---------- Pilier à travailler ---------- */
+
+.focus {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 16px;
+  border: 1px solid var(--funnel-accent);
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--funnel-accent) 10%, var(--funnel-surface));
+}
+
+.focus__nom { margin: 0; font-size: 17px; font-weight: 800; letter-spacing: -0.02em; }
+
+.focus__pct {
+  margin: 0;
+  color: var(--funnel-accent);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.focus__action { margin: 4px 0 0; font-size: 14px; line-height: 1.5; }
+
+/* ---------- Classement ---------- */
+
+.classement {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 24px;
+  background: var(--funnel-surface);
+  list-style: none;
+}
+
+.rang {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 12px;
+  font-size: 14px;
+}
+
+.rang--inconnu { color: var(--funnel-muted); }
+
+.rang__nom { font-weight: 600; }
+
+.rang__pct {
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.rang__barre {
+  grid-column: 1 / -1;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--funnel-surface-high);
+  overflow: hidden;
+}
+
+.rang__barre-remplie {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--funnel-accent);
+  transition: width 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Même traitement que sur l'accueil : un pilier sans donnée se dessine
+   en pointillés, jamais en barre à zéro. */
+.rang--inconnu .rang__barre {
+  background: repeating-linear-gradient(
+    90deg, var(--funnel-line) 0 3px, transparent 3px 8px
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rang__barre-remplie { transition: none; }
+}

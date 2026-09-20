@@ -89,6 +89,13 @@ func main() {
 		paye.POST("/sommeil", api.PostSommeil)
 		paye.DELETE("/sommeil", api.DeleteSommeil)
 
+		/* L'onglet Aperçus : la courbe des mesures, la vitesse de
+		   croissance et les piliers classés du plus faible au plus fort.
+		   Les piliers passent par le MÊME code que l'accueil — deux
+		   calculs qui doivent donner le même pourcentage finissent par
+		   diverger. */
+		paye.GET("/apercus", api.GetApercus)
+
 		// Todo-liste quotidienne : cocher/décocher une tâche du jour, lire
 		// l'état du jour, et l'historique pour le calendrier de série.
 		paye.POST("/tasks/toggle", api.ToggleTaskCompletion)

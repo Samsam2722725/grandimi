@@ -69,10 +69,10 @@ type ReponseDashboard struct {
 /*
 Les six piliers de l'anneau, dans l'ordre d'affichage.
 
-	Trois sont alimentés aujourd'hui. Les trois autres sont déclarés ici
-	pour que l'anneau ait sa forme définitive dès maintenant : un anneau
-	qui passe de trois à six parts entre deux versions se lit comme un
-	changement de score, pas comme un ajout de fonctionnalité.
+	Tous les six ont désormais une source. `Suivi` à true ne veut pas dire
+	« noté » : il veut dire « mesurable ». Trois d'entre eux (sommeil,
+	nutrition, posture) repassent en non suivi quand le compte n'a encore
+	rien enregistré — un pilier sans donnée est inconnu, pas à zéro.
 */
 var piliers = []struct {
 	Cle     string
@@ -83,8 +83,8 @@ var piliers = []struct {
 	{"exercice", "Exercices", true},      // task_completions
 	{"mesures", "Suivi de taille", true}, // height_logs
 	{"sommeil", "Sommeil", true},         // sleep_logs
-	{"nutrition", "Nutrition", false},    // étape 4
-	{"posture", "Posture", false},        // étape 3
+	{"nutrition", "Nutrition", true},     // meal_logs
+	{"posture", "Posture", true},         // exercices de catégorie posture
 }
 
 // GetDashboard sert l'onglet Accueil.
@@ -145,7 +145,14 @@ func GetDashboard(c *gin.Context) {
 		nuits = nil
 	}
 
-	segments := construireSegments(serie, historique, derniere, nuits)
+	/* Nutrition et posture, sur la même fenêtre de sept jours. Une
+	   panne de lecture laisse le pilier non noté, ce qui est exact :
+	   on ne sait rien, on n'affiche pas zéro. */
+	nutriPct, nutriNote := db.ScoreNutrition7j(userID, debutSemaine, aujourdhui)
+	postPct, postNote := db.ScorePosture7j(userID, debutSemaine, aujourdhui)
+
+	segments := construireSegments(serie, historique, derniere, nuits,
+		nutriPct, nutriNote, postPct, postNote)
 
 	c.JSON(http.StatusOK, ReponseDashboard{
 		DerniereMesure:    derniere,
@@ -180,9 +187,10 @@ func etatDuVerrou(derniere *db.Mesure, aujourdhui string) (bool, string) {
 	return true, ouverture.Format("2006-01-02")
 }
 
-// construireSegments note les trois piliers alimentés et laisse les trois
-// autres en creux.
-func construireSegments(serie db.Serie, historique []db.JourHistorique, derniere *db.Mesure, nuits []db.NuitSommeil) []Segment {
+// construireSegments note les six piliers, et laisse en creux ceux dont
+// le compte n'a encore aucune donnée.
+func construireSegments(serie db.Serie, historique []db.JourHistorique, derniere *db.Mesure,
+	nuits []db.NuitSommeil, nutriPct int, nutriNote bool, postPct int, postNote bool) []Segment {
 	// Régularité : jours d'ouverture sur les sept derniers.
 	regularite := len(serie.Jours) * 100 / 7
 
@@ -217,13 +225,24 @@ func construireSegments(serie db.Serie, historique []db.JourHistorique, derniere
 		"exercice":   exercice,
 		"mesures":    mesures,
 		"sommeil":    sommeil,
+		"nutrition":  nutriPct,
+		"posture":    postPct,
+	}
+
+	// Un pilier n'est « suivi » que s'il a au moins une donnée. Sans
+	// cela, un compte neuf afficherait quatre zéros et deux pointillés
+	// au lieu de six pointillés.
+	notes := map[string]bool{
+		"sommeil":   sommeilNote,
+		"nutrition": nutriNote,
+		"posture":   postNote,
 	}
 
 	out := make([]Segment, 0, len(piliers))
 	for _, p := range piliers {
 		suivi := p.Suivi
-		if p.Cle == "sommeil" {
-			suivi = sommeilNote
+		if note, existe := notes[p.Cle]; existe {
+			suivi = note
 		}
 		out = append(out, Segment{
 			Cle:     p.Cle,

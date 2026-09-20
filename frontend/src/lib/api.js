@@ -346,6 +346,19 @@ class APIClient {
     });
   }
 
+  // ---------- Aperçus ----------
+
+  /** Courbe des mesures, vitesse de croissance et piliers classés.
+   *
+   *  La vitesse porte un drapeau `fiable` et, quand il est faux, la
+   *  raison du refus. L'écran ne doit jamais afficher `cm_par_an` sans
+   *  regarder `fiable` : sur une période courte, l'erreur de mesure
+   *  dépasse la croissance réelle et le chiffre est du bruit. */
+  async getApercus(jour) {
+    const qs = jour ? `?jour=${encodeURIComponent(jour)}` : '';
+    return this.request(`/api/v1/apercus${qs}`);
+  }
+
   /** Enregistre une séance de mesure.
    *
    *  On envoie les TROIS relevés, pas leur médiane : c'est le serveur qui
