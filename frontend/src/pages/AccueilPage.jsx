@@ -97,7 +97,7 @@ function AccueilPage({ predictionData, onAllerAuPlan }) {
             {tableau?.verrouille ? 'Prochaine mesure dans' : 'Ta mesure de la semaine'}
           </p>
           <CompteARebours
-            secondes={tableau?.secondes_avant_mesure || 0}
+            dateOuverture={tableau?.prochaine_mesure_le || ''}
             onDeverrouiller={() => setMesureOuverte(true)}
           />
         </div>

@@ -44,23 +44,36 @@ type ReponseDashboard struct {
 	// derrière PremiumMiddleware.
 	Verrouille bool `json:"verrouille"`
 
-	// Secondes restantes avant la prochaine mesure. Le serveur envoie une
-	// DURÉE, pas une date butoir : l'horloge d'un téléphone peut être
-	// décalée de plusieurs minutes, et un compte à rebours calculé sur une
-	// date absolue afficherait alors un temps faux, parfois négatif.
-	SecondesAvantMesure int64 `json:"secondes_avant_mesure"`
+	/* Le JOUR où la mesure se rouvre (ISO), vide quand elle est déjà
+	   ouverte.
+
+	   Une date, et non un nombre de secondes. La première version
+	   renvoyait une durée, ce qui semblait plus sûr — sauf que les deux
+	   bornes du calcul sont des dates à minuit : la durée valait donc
+	   toujours un multiple de 24 h. Contre une vraie base, le rebours
+	   annonçait « 604800 » secondes, soit « 7j 0h 0m » affiché toute la
+	   journée, puis un saut d'un bloc à minuit. Jamais une heure ni une
+	   minute qui bouge.
+
+	   La règle est un jour, pas un instant : c'est donc le jour qu'on
+	   transmet, et le téléphone en déduit le temps restant jusqu'à SON
+	   minuit local. Il est le seul à connaître son fuseau, et c'est déjà
+	   lui qui fournit le jour courant plus haut. */
+	ProchaineMesureLe string `json:"prochaine_mesure_le"`
 
 	Serie       db.Serie  `json:"serie"`
 	Segments    []Segment `json:"segments"`
 	Progression int       `json:"progression_pct"`
 }
 
-/* Les six piliers de l'anneau, dans l'ordre d'affichage.
+/*
+Les six piliers de l'anneau, dans l'ordre d'affichage.
 
-   Trois sont alimentés aujourd'hui. Les trois autres sont déclarés ici
-   pour que l'anneau ait sa forme définitive dès maintenant : un anneau
-   qui passe de trois à six parts entre deux versions se lit comme un
-   changement de score, pas comme un ajout de fonctionnalité. */
+	Trois sont alimentés aujourd'hui. Les trois autres sont déclarés ici
+	pour que l'anneau ait sa forme définitive dès maintenant : un anneau
+	qui passe de trois à six parts entre deux versions se lit comme un
+	changement de score, pas comme un ajout de fonctionnalité.
+*/
 var piliers = []struct {
 	Cle     string
 	Libelle string
@@ -110,7 +123,7 @@ func GetDashboard(c *gin.Context) {
 		return
 	}
 
-	verrouille, restant := etatDuVerrou(derniere, aujourdhui)
+	verrouille, ouvertureLe := etatDuVerrou(derniere, aujourdhui)
 
 	historique, err := db.GetHistory(userID, 7)
 	if err != nil {
@@ -122,36 +135,36 @@ func GetDashboard(c *gin.Context) {
 	segments := construireSegments(serie, historique, derniere)
 
 	c.JSON(http.StatusOK, ReponseDashboard{
-		DerniereMesure:      derniere,
-		Verrouille:          verrouille,
-		SecondesAvantMesure: restant,
-		Serie:               serie,
-		Segments:            segments,
-		Progression:         progression(segments),
+		DerniereMesure:    derniere,
+		Verrouille:        verrouille,
+		ProchaineMesureLe: ouvertureLe,
+		Serie:             serie,
+		Segments:          segments,
+		Progression:       progression(segments),
 	})
 }
 
-// etatDuVerrou dit si une nouvelle mesure est permise, et dans combien de
-// temps sinon. Sans aucune mesure, rien n'est verrouillé : le premier
+// etatDuVerrou dit si une nouvelle mesure est permise, et à partir de
+// quel jour sinon. Sans aucune mesure, rien n'est verrouillé : le premier
 // geste ne doit jamais attendre.
-func etatDuVerrou(derniere *db.Mesure, aujourdhui string) (bool, int64) {
+func etatDuVerrou(derniere *db.Mesure, aujourdhui string) (bool, string) {
 	if derniere == nil {
-		return false, 0
+		return false, ""
 	}
 	precedente, err := time.Parse("2006-01-02", derniere.Date)
 	if err != nil {
-		return false, 0
+		return false, ""
 	}
 	ref, err := time.Parse("2006-01-02", aujourdhui)
 	if err != nil {
-		return false, 0
+		return false, ""
 	}
 
 	ouverture := precedente.AddDate(0, 0, db.JoursEntreMesures)
 	if !ref.Before(ouverture) {
-		return false, 0
+		return false, ""
 	}
-	return true, int64(ouverture.Sub(ref).Seconds())
+	return true, ouverture.Format("2006-01-02")
 }
 
 // construireSegments note les trois piliers alimentés et laisse les trois
