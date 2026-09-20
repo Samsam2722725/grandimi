@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Info } from 'lucide-react'
 
 import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
+import { Avis } from '@/components/ui/avis'
 import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { FeuilleInfo } from '@/components/ui/feuille-info'
@@ -160,6 +161,7 @@ const TOUTES_ETAPES = [
   'verite',
   'long-terme',
   'taille-reve',
+  'avis',
   'email',
   'recapitulatif',
   'analyse',
@@ -248,35 +250,52 @@ const OPTIONS_ACTIVITE = [
    prédicteur d'achèvement d'un tunnel — et elles donnent au plan de quoi
    s'ouvrir sur la raison exacte pour laquelle il a été demandé. */
 const OPTIONS_MOTIVATION = [
-  { valeur: 'taille_finale', titre: 'Savoir quelle taille je ferai', icone: '📏' },
-  { valeur: 'derniers_cm', titre: 'Gagner les derniers centimètres possibles', icone: '📈' },
-  { valeur: 'fini', titre: 'Savoir si j’ai fini de grandir', icone: '⏳' },
-  { valeur: 'confiance', titre: 'Arrêter de me comparer aux autres', icone: '🫂' },
-  { valeur: 'suivi', titre: 'Suivre ma croissance mois après mois', icone: '🗓️' },
+  { valeur: 'taille_finale', titre: 'Savoir quelle taille je ferai' },
+  { valeur: 'derniers_cm', titre: 'Gagner les derniers centimètres possibles' },
+  { valeur: 'fini', titre: 'Savoir si j’ai fini de grandir' },
+  { valeur: 'confiance', titre: 'Arrêter de me comparer aux autres' },
+  { valeur: 'suivi', titre: 'Suivre ma croissance mois après mois' },
 ]
 
 /* Les libellés sont ceux d'un adolescent qui se regarde, pas ceux d'un
    carnet de santé. « Stade 2 de Tanner » ne veut rien dire pour lui, et
-   la question posée dans ces termes ferait fermer l'application. */
+   la question posée dans ces termes ferait fermer l'application.
+
+   ─────────────────────────────────────────────────────────────
+   PAS D'EMOJI SUR CES LISTES-CI, ET C'EST UNE RÈGLE, PAS UN OUBLI.
+
+   Un emoji gagne sa place quand il ENCODE la réponse : on distingue
+   🍟 de 🥦 sans lire, 🛋️ de 🏋️ non plus, et l'œil descend la liste deux
+   fois plus vite. Les listes de sommeil, de nutrition, d'activité et de
+   sexe les gardent pour cette raison.
+
+   Sur une échelle abstraite — aucune / un peu / bien présente — il n'y a
+   rien à encoder. Le ✅ et le 🚫 qui s'y trouvaient ne disaient pas la
+   réponse, ils disaient « bon » et « mauvais » : exactement le jugement
+   qu'on ne veut pas poser sur le corps d'un adolescent de quatorze ans
+   qui déclare n'avoir aucune pilosité.
+
+   C'est aussi ce que fait Flo, dont les listes de choix sont du texte
+   noir sur une carte grise, sans un seul pictogramme. */
 const OPTIONS_PILOSITE = [
-  { valeur: 'none', titre: 'Aucune', icone: '🚫' },
-  { valeur: 'light', titre: 'Un peu, fine', icone: '🌱' },
-  { valeur: 'developed', titre: 'Bien présente', icone: '✅' },
-  { valeur: 'prefer_not', titre: 'Je préfère ne pas répondre', icone: '🤐' },
+  { valeur: 'none', titre: 'Aucune' },
+  { valeur: 'light', titre: 'Un peu, fine' },
+  { valeur: 'developed', titre: 'Bien présente' },
+  { valeur: 'prefer_not', titre: 'Je préfère ne pas répondre' },
 ]
 
 const OPTIONS_ECHELLE_3 = (libelles) => [
-  { valeur: 'no', titre: libelles[0], icone: '🚫' },
-  { valeur: 'starting', titre: libelles[1], icone: '🌗' },
-  { valeur: 'yes', titre: libelles[2], icone: '✅' },
-  { valeur: 'unknown', titre: 'Je ne sais pas', icone: '🤔' },
+  { valeur: 'no', titre: libelles[0] },
+  { valeur: 'starting', titre: libelles[1] },
+  { valeur: 'yes', titre: libelles[2] },
+  { valeur: 'unknown', titre: 'Je ne sais pas' },
 ]
 
 const OPTIONS_ACNE = [
-  { valeur: 'none', titre: 'Aucune', icone: '✨' },
-  { valeur: 'light', titre: 'Quelques boutons', icone: '🙂' },
-  { valeur: 'moderate', titre: 'Régulièrement', icone: '😕' },
-  { valeur: 'important', titre: 'Beaucoup', icone: '😣' },
+  { valeur: 'none', titre: 'Aucune' },
+  { valeur: 'light', titre: 'Quelques boutons' },
+  { valeur: 'moderate', titre: 'Régulièrement' },
+  { valeur: 'important', titre: 'Beaucoup' },
 ]
 
 /* ORIGINE FAMILIALE — libellés et correspondance avec l'API.
@@ -289,12 +308,12 @@ const OPTIONS_ACNE = [
    Les valeurs envoyées, elles, sont celles que l'API attend déjà
    (handlers.go ligne 44 : caucasian, asian, african, hispanic, mixed). */
 const OPTIONS_ORIGINE = [
-  { valeur: 'caucasian', titre: 'Europe', icone: '🌍' },
-  { valeur: 'african', titre: 'Afrique, Antilles', icone: '🌍' },
-  { valeur: 'asian', titre: 'Asie', icone: '🌏' },
-  { valeur: 'hispanic', titre: 'Amérique latine', icone: '🌎' },
-  { valeur: 'mixed', titre: 'Plusieurs origines', icone: '🧬' },
-  { valeur: 'prefer_not', titre: 'Je préfère ne pas répondre', icone: '🤐' },
+  { valeur: 'caucasian', titre: 'Europe' },
+  { valeur: 'african', titre: 'Afrique, Antilles' },
+  { valeur: 'asian', titre: 'Asie' },
+  { valeur: 'hispanic', titre: 'Amérique latine' },
+  { valeur: 'mixed', titre: 'Plusieurs origines' },
+  { valeur: 'prefer_not', titre: 'Je préfère ne pas répondre' },
 ]
 
 /** 172 → 5'8". Le pouce est arrondi, jamais affiché avec des décimales. */
@@ -303,6 +322,32 @@ function formatPiedsPouces(pouces) {
   const reste = Math.round(pouces - pieds * 12)
   // 11,6 pouces arrondi à 12 doit devenir le pied suivant, pas 5'12".
   return reste === 12 ? `${pieds + 1}′0″` : `${pieds}′${reste}″`
+}
+
+/* Un segment du titre passe en orange.
+
+   C'est la signature visuelle de Flo, et elle fait un vrai travail :
+   sur un titre de deux lignes, l'oeil attrape d'abord les trois mots
+   colores, qui sont ceux qui portent la question. Le reste se lit
+   ensuite. Un titre entierement noir se lit dans l'ordre, c'est-a-dire
+   plus lentement.
+
+   Le segment est donne en clair dans TEXTES plutot qu'en balisage : un
+   titre reste une chaine, il peut etre lu par un lecteur d'ecran, copie,
+   traduit, sans qu'on ait a demonter du JSX. S'il ne s'y trouve pas —
+   une faute de frappe apres une reecriture — le titre s'affiche
+   entierement en noir plutot que de casser la page. */
+function titreAvecAccent(titre, accent) {
+  if (!accent) return titre
+  const debut = titre.indexOf(accent)
+  if (debut < 0) return titre
+  return (
+    <>
+      {titre.slice(0, debut)}
+      <span className="funnel-title-accent">{accent}</span>
+      {titre.slice(debut + accent.length)}
+    </>
+  )
 }
 
 const versPouces = (cm) => Math.round(cm / CM_PAR_POUCE)
@@ -668,8 +713,12 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
               selected={reponses.profil === 'ado'}
               onSelect={() => repondreEtAvancer('profil', 'ado')}
             />
+            {/* 👪 et non 👨‍👩‍👦 : le second est une séquence ZWJ de trois
+                emojis assemblés, que les polices incomplètes rendent en
+                trois pictogrammes accolés — ou en carré vide. Le premier
+                est un point de code unique, présent partout. */}
             <ChoiceCard
-              icon="👨‍👩‍👦"
+              icon="👪"
               title="C’est pour mon enfant"
               hint="Les questions parleront de lui ou d’elle"
               selected={reponses.profil === 'parent'}
@@ -869,26 +918,22 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         return (
           <div className="funnel-choices" role="radiogroup" aria-label="Proches plus grands">
             <ChoiceCard
-              icon="📏"
               title="Oui, nettement"
               hint="Un grand-parent, un oncle, un frère ou une sœur"
               selected={reponses.proches_plus_grands === 'yes'}
               onSelect={() => repondreEtAvancer('proches_plus_grands', 'yes')}
             />
             <ChoiceCard
-              icon="↔️"
               title="Un peu plus grands"
               selected={reponses.proches_plus_grands === 'slightly'}
               onSelect={() => repondreEtAvancer('proches_plus_grands', 'slightly')}
             />
             <ChoiceCard
-              icon="🚫"
               title="Non, tout le monde est dans la même fourchette"
               selected={reponses.proches_plus_grands === 'no'}
               onSelect={() => repondreEtAvancer('proches_plus_grands', 'no')}
             />
             <ChoiceCard
-              icon="🤔"
               title="Je ne sais pas"
               selected={reponses.proches_plus_grands === 'unknown'}
               onSelect={() => repondreEtAvancer('proches_plus_grands', 'unknown')}
@@ -1147,19 +1192,16 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         return (
           <div className="funnel-choices" role="radiogroup" aria-label="Premières règles">
             <ChoiceCard
-              icon="🚫"
               title="Pas encore"
               selected={reponses.regles === 'no'}
               onSelect={() => repondreEtAvancer('regles', 'no')}
             />
             <ChoiceCard
-              icon="✅"
               title="Oui"
               selected={reponses.regles === 'yes'}
               onSelect={() => repondreEtAvancer('regles', 'yes')}
             />
             <ChoiceCard
-              icon="🤐"
               title="Je préfère ne pas répondre"
               selected={reponses.regles === 'prefer_not'}
               onSelect={() => repondreEtAvancer('regles', 'prefer_not')}
@@ -1390,6 +1432,20 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           </>
         )
 
+      /* LES AVIS — posés juste avant l'adresse e-mail, et pas ailleurs.
+
+         C'est le seul écran du tunnel où la parole n'est pas celle de la
+         marque, et il doit donc tomber au moment où la marque est le
+         moins crédible : celui où elle demande quelque chose sans rien
+         donner en échange. L'adresse est ce moment.
+
+         Posé plus tôt, il se lit comme de la publicité au milieu d'un
+         questionnaire ; posé après, il arrive une fois la décision
+         prise. Voir avis.jsx pour ce qui est repris de Flo et ce qui ne
+         l'est pas — le nombre de notes, notamment. */
+      case 'avis':
+        return <Avis />
+
       case 'email':
         return (
           <div className="funnel-field">
@@ -1564,10 +1620,12 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
   const TEXTES = {
     profil: {
       titre: 'Tu réponds pour toi, ou pour ton enfant ?',
+      accent: 'pour ton enfant',
       sous: 'Les questions sont les mêmes. Ça change juste à qui on s’adresse à la fin.',
     },
     motivation: {
       titre: 'Pourquoi tu veux utiliser Grandimi ?',
+      accent: 'Grandimi',
       sous: 'Plusieurs réponses possibles. On s’en sert pour ouvrir ton plan sur ce qui t’amène.',
     },
     sexe: {
@@ -1582,6 +1640,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     poids: { titre: 'Combien pèses-tu ?', sous: 'Une valeur approchée suffit.' },
     modele: {
       titre: 'Le modèle de prédiction Grandimi',
+      accent: 'Grandimi',
       sous: 'Des mois de travail pour un seul chiffre — et pour la marge qui va avec.',
     },
     pere: {
@@ -1594,6 +1653,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     proches: {
       titre: 'As-tu des proches plus grands que tes parents ?',
+      accent: 'plus grands',
       sous: 'Ta taille ne vient pas que de ton père et de ta mère. Un grand-parent compte aussi.',
     },
     origine: {
@@ -1602,6 +1662,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     precision: {
       titre: 'Quelle est la précision de notre prédiction de taille ?',
+      accent: 'précision',
       sous: 'On combine des mesures clés et des facteurs environnementaux pour estimer ton potentiel.',
     },
     vitesse: {
@@ -1619,6 +1680,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
        sous-titre changera le même jour. */
     voix: {
       titre: 'Est-ce que ta voix a mué ?',
+      accent: 'a mué',
       sous: 'La mue arrive tard dans la puberté. Elle situe où tu en es sur ta courbe.',
     },
     'pilosite-visage': {
@@ -1647,6 +1709,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     potentiel: {
       titre: 'Optimise tout ton potentiel de taille',
+      accent: 'potentiel de taille',
       sous: 'Pour grandir au maximum, dors bien, mange bien et reste actif.',
     },
     sommeil: {
@@ -1663,19 +1726,28 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     aide: {
       titre: 'Grandimi t’aide pour ça',
+      accent: 'Grandimi',
       sous: 'On te guide vers ton plein potentiel avec des étapes simples et efficaces.',
     },
     verite: {
       titre: 'La vérité brutale sur la petite taille',
+      accent: 'vérité brutale',
       sous: 'Pas des statistiques. Juste ce que tu vis déjà.',
     },
     'long-terme': {
       titre: 'Grandimi joue sur la durée',
+      accent: 'sur la durée',
       sous: 'Beaucoup n’atteignent pas leur plein potentiel de taille à cause d’habitudes non optimisées.',
     },
     'taille-reve': {
       titre: 'Quelle taille tu rêves de faire ?',
+      accent: 'tu rêves',
       sous: 'Ça ne change pas le calcul. Ça dit juste où tu voudrais arriver.',
+    },
+    avis: {
+      titre: 'Ils sont passés par là avant toi',
+      accent: 'passés par là',
+      sous: 'Trois utilisateurs de Grandimi, et ce qu’ils ont mesuré depuis.',
     },
     email: {
       /* « Où t'envoyer ton estimation ? » promettait un e-mail que rien
@@ -1700,6 +1772,29 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
   }
 
   const texte = TEXTES[etape] || {}
+
+  /* « Ignorer » n'apparait QUE sur les ecrans qu'on peut reellement
+     passer sans rien repondre. En mettre partout le viderait de son
+     sens ; n'en mettre nulle part transforme un tunnel de trente-deux
+     ecrans en interrogatoire.
+
+     `origine` y figure pour une raison qui n'est pas ergonomique : un
+     consentement qu'on ne peut pas refuser sans se declarer n'en est
+     pas un (RGPD, art. 9). Les autres y figurent parce que le moteur
+     traite deja leur absence comme strictement neutre. */
+  const ECRANS_FACULTATIFS = new Set([
+    'origine',
+    'vitesse',
+    'pointure',
+    'voix',
+    'pilosite-visage',
+    'pilosite-aisselles',
+    'epaules',
+    'regles',
+    'odeur',
+    'acne',
+    'taille-reve',
+  ])
 
   /* Le libellé du bouton dépend de l'écran. Sur les écrans de preuve,
      « Suivant » sonne comme un formulaire alors qu'on vient de donner
@@ -1728,8 +1823,9 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       <FunnelShell
         onBack={reculer}
         progress={progression}
-        title={texte.titre}
+        title={titreAvecAccent(texte.titre, texte.accent)}
         subtitle={texte.sous}
+        onSkip={ECRANS_FACULTATIFS.has(etape) ? avancer : undefined}
         footer={
           <FunnelButton onClick={avancer} disabled={!peutContinuer}>
             {libelleBouton}

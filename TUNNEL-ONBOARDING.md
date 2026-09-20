@@ -1,10 +1,11 @@
 # Tunnel d'onboarding — ce qui a changé, et la paywall
 
-Révision du 19/09/2026. Le tunnel passe de **17 à 31 écrans** (29 pour une
-fille, deux écrans de maturité étant masculins). Ce document dit ce qui a
-bougé, les trois arbitrages juridiques qui ont fait diverger le contenu de
-celui des concurrents, et la réponse à la question laissée ouverte : **où,
-quand et quoi mettre sur la paywall.**
+Révisions des 19 et 20/09/2026. Le tunnel passe de **17 à 32 écrans** (30 pour
+une fille, trois écrans de maturité étant masculins), **et change de peau** :
+il était quasi noir, il est clair. Ce document dit ce qui a bougé, les
+arbitrages juridiques qui ont fait diverger le contenu de celui des
+concurrents, et la réponse à la question laissée ouverte : **où, quand et quoi
+mettre sur la paywall.**
 
 ---
 
@@ -41,9 +42,10 @@ quand et quoi mettre sur la paywall.**
 28  verite              (conservé)
 29  long-terme          (conservé)
 30  taille-reve         Quelle taille tu rêves de faire ?                NOUVEAU
-31  email
-32  recapitulatif
-33  analyse             L'écran qui réfléchit                            NOUVEAU
+31  avis                Ils sont passés par là avant toi                 NOUVEAU
+32  email
+33  recapitulatif
+34  analyse             L'écran qui réfléchit                            NOUVEAU
 ```
 
 **Retiré : `part-habitudes`** (les deux barres 80 % génétique / 20 %
@@ -70,7 +72,7 @@ une sortie (« je ne sais pas », « je préfère ne pas répondre ») : la long
 ne doit jamais devenir un mur.
 
 **Aucun texte de ces écrans ne laisse entendre que la réponse affine le
-chiffre**, parce qu'aucune ne le fait aujourd'hui (voir §4). Les sous-titres
+chiffre**, parce qu'aucune ne le fait aujourd'hui (voir §6). Les sous-titres
 parlent de « situer où tu en es ». C'est la limite entre un tunnel long et un
 tunnel menteur.
 
@@ -94,7 +96,79 @@ conclusion s'impose sans qu'aucune phrase ne l'affirme.
 
 ---
 
-## 3. Les trois écarts avec le contenu de GoTall
+## 3. Le style : on quitte le noir
+
+Le tunnel était quasi noir, et l'argument tenait : un fond sombre efface tout
+ce qui n'est pas la question du moment. Deux choses l'ont périmé.
+
+1. **Ce n'est plus un formulaire.** Quatorze écrans de saisie, l'argument
+   « salle de cinéma » vaut. Trente-deux écrans dont cinq de preuve et un
+   d'avis, c'est un parcours qui vend.
+2. **Le noir est la couleur des concurrents.** GoTall et Taller sont noirs
+   tous les deux. S'y ranger, c'est ressembler à ce qu'on essaie de remplacer,
+   sur un marché où le reproche fait à ces applis est d'être anxiogènes.
+
+La référence retenue est **Flo** (captures du 19/09/2026) — ce que la santé
+grand public fait de mieux en onboarding, et qui n'est pas un concurrent
+direct. Ce qui est repris :
+
+| Trait Flo | Chez Grandimi |
+|---|---|
+| Fond papier, pas de noir | `--funnel-bg: #fbf7f2` |
+| Titre noir gras dont **un segment** passe en accent | `titreAvecAccent()` + champ `accent` dans `TEXTES` |
+| Texte gris sous le titre | `--funnel-muted: #756a5f`, 4,94:1 |
+| Cartes de choix en gris clair, **sans pictogramme** | emoji conservé uniquement là où il encode la réponse |
+| Pastille pleine largeur en bas | déjà en place |
+| « Ignorer » en haut à droite | `onSkip` sur les 10 écrans réellement facultatifs |
+| Bandeau d'avis à lauriers et étoiles | écran `avis`, voir §4 |
+
+Toutes les valeurs viennent de `design-system-v2.css`, où chaque ratio est
+mesuré et commenté — rien n'est choisi à l'œil. Seuls les noms `--funnel-*`
+sont redéfinis, donc aucune autre règle de la feuille n'a été touchée.
+
+**Trois oranges, et il faut les trois.** L'orange vif tombe à 2,9:1 en texte
+sur papier : il ne sert plus que de fond de bouton, avec l'encre posée dessus
+(5,96:1). `--funnel-accent-text` (#c23c0b, 4,99:1) porte le texte courant,
+`--funnel-accent-display` (#ee4a0e, 3,50:1) les titres ≥ 24 px. Les mélanger
+est l'erreur qui fait échouer un audit AA.
+
+**La paywall et le résultat ne bougent pas.** Ils portent `.night`, qui garde
+ses jetons sombres : ces deux écrans ont été dessinés pour le noir
+(`paywall-night.css`), et les basculer est un autre chantier.
+
+---
+
+## 4. Les avis
+
+Trois témoignages fournis par le client le 19/09/2026 — Adam (15 ans,
++5,1 cm suivis), Lucas (16 ans, +4,2 cm suivis), Nolan (17 ans, 6 mois de
+suivi) — reproduits **mot pour mot**. Un témoignage retouché n'est plus un
+témoignage, et c'est le seul écran du tunnel où la parole n'est pas celle de
+la marque.
+
+**Placé juste avant l'écran e-mail**, c'est-à-dire au moment où la marque est
+le moins crédible : celui où elle demande quelque chose sans rien donner en
+échange. Posé plus tôt, il se lit comme une publicité au milieu d'un
+questionnaire ; posé après, il arrive une fois la décision prise.
+
+**Le chiffre de Flo n'est pas repris.** « Plus de 6,5 millions de notes
+5 étoiles » est ce qui porte tout son écran ; les lauriers ne sont là que pour
+l'encadrer. Grandimi n'a pas ce volume, et un nombre de notes se vérifie en
+dix secondes sur les deux boutiques. Les lauriers sont donc **conditionnés au
+chiffre** : sans lui ils encadreraient du vide, et une couronne qui n'entoure
+rien se lit comme une erreur de dessin.
+
+> Le jour où les notes existent, remplis `NOTE_BOUTIQUES` en tête de
+> `avis.jsx` — le grand chiffre, sa légende et les deux branches
+> réapparaissent à l'endroit exact où Flo les place. Rien d'autre à toucher.
+
+Les centimètres affichés sont présentés comme **mesurés**, pas promis. La
+mention sous les cartes le redit en clair : c'est ce qui sépare un témoignage
+d'une promesse de résultat, et la seconde serait une allégation à étayer.
+
+---
+
+## 5. Les trois écarts avec le contenu de GoTall
 
 Ce ne sont pas des adoucissements de confort. Chacun est un point où le
 contenu d'origine ne passerait pas sur le marché français.
@@ -163,7 +237,7 @@ appliquer ailleurs ajoute une erreur qu'on ne sait pas chiffrer. Le dire, et
 CNIL peut lire.
 
 > **Tant que le moteur ne fait pas cet élargissement, la question est en
-> sursis.** Deux issues, à trancher : implémenter §5.1, ou passer
+> sursis.** Deux issues, à trancher : implémenter §9.1, ou passer
 > `COLLECTE_ORIGINE = false` en tête de `QuestionnaireFlow.jsx` — un booléen,
 > l'écran disparaît, rien d'autre à toucher.
 
@@ -174,18 +248,18 @@ Allonger le tunnel ne rouvre pas cette porte.
 
 ---
 
-## 4. Ce que les nouvelles réponses font, exactement
+## 6. Ce que les nouvelles réponses font, exactement
 
 | Champ | Part à l'API | Consommé par le calcul | Sert à |
 |---|---|---|---|
-| `profil` | non | non | router la paywall (§6) |
+| `profil` | non | non | router la paywall (§8) |
 | `motivations` | non | non | ouvrir le plan sur le motif |
 | `proches_plus_grands` | non | non | rouvrir le plafond posé par l'écran parents |
-| `origine` | `ethnic_background` | **non** (§3) | à implémenter ou à retirer |
+| `origine` | `ethnic_background` | **non** (§5) | à implémenter ou à retirer |
 | `pilosite_aisselles` | `puberty_signs.axillary_hair` | **non** | conviction |
 | `regles` | `puberty_signs.menarche` | **non** | conviction |
 | `voix`, `pilosite_visage`, `epaules`, `odeur`, `acne` | non (pas de champ) | non | conviction, futur plan |
-| `taille_reve` | non | non | **titre de la paywall (§6)** |
+| `taille_reve` | non | non | **titre de la paywall (§8)** |
 
 `getPubertyAdjustment` n'est appelé que par le chemin v1, et son
 multiplicateur y est jeté (`khamis_roche.go`, l. 90). Les deux signaux de
@@ -193,7 +267,7 @@ puberté voyagent donc, mais ne pèsent sur rien.
 
 ---
 
-## 5. L'écran qui réfléchit
+## 7. L'écran qui réfléchit
 
 Posé entre le récapitulatif et le résultat. Il ne fait pas que du décor : **il
 occupe un temps qui existait déjà.** L'API tourne sur l'offre gratuite de
@@ -215,7 +289,7 @@ bouton « Réessayer » relance sans rien faire ressaisir.
 
 ---
 
-## 6. LA PAYWALL — où, quand, quoi
+## 8. LA PAYWALL — où, quand, quoi
 
 ### Où : ne pas la déplacer
 
@@ -282,7 +356,7 @@ précisément ce terrain.
 
 ---
 
-## 7. Suites côté moteur
+## 9. Suites côté moteur
 
 Par ordre de valeur :
 
@@ -301,22 +375,31 @@ Par ordre de valeur :
 
 ---
 
-## 8. Vérifications passées
+## 10. Vérifications passées
 
 - `npm run lint` : aucun avertissement introduit par les fichiers de cette
   révision.
 - `npm run build` : passe. `QuestionnaireFlow` pèse 36 ko (11,8 ko gzip), en
   morceau chargé à la demande.
-- Parcours complet en Chromium 390 × 844, **branche garçon** : 33 écrans,
-  progression de 3 % à 97 %, résultat délivré, zéro erreur JS.
-- Parcours complet, **branche fille** : 29 écrans ; `regles` posée, `voix`,
+- Parcours complet en Chromium 390 × 844, **branche garçon** : 33 écrans après
+  la bascule de style, dont 10 portant « Ignorer », résultat délivré, zéro
+  erreur JS.
+- Parcours complet, **branche fille** : `regles` posée, `voix`,
   `pilosite-visage` et `epaules` correctement absents.
 - Feuille « Comment ça marche ? » : ouverture, piège à focus, fermeture par
   Échap.
 - Paywall atteinte depuis le tunnel : titre « Il te manque 4 cm pour ta taille
   rêvée » (176,5 → 180), bouton parent présent pour un profil `ado`.
 
-Deux défauts trouvés par ces captures et corrigés : l'écran d'analyse et la
-feuille d'information s'affichaient en thème clair et en fond transparent,
-faute de porter la classe `night` qui porte les jetons de surface sombre —
-tous deux sont montés **hors** de `.funnel`, où ces variables sont définies.
+Défauts trouvés par ces captures et corrigés :
+
+- l'écran d'analyse et la feuille d'information s'affichaient sans leurs
+  jetons de surface — tous deux sont montés **hors** de `.funnel`, où ces
+  variables sont définies ;
+- les étoiles de l'écran d'avis s'affichaient en contour : lucide pose
+  `fill="none"` en attribut de présentation, et un attribut bat toujours une
+  valeur héritée. Seule une règle visant le `svg` lui-même passe devant ;
+- les lauriers, dessinés en `fill` **et** `stroke` avec toutes les feuilles du
+  même côté, s'affichaient comme un pâté puis comme une arête de poisson ;
+- l'emoji `👨‍👩‍👦` est une séquence ZWJ que les polices incomplètes rendent en
+  carré vide. Remplacé par `👪`, point de code unique.

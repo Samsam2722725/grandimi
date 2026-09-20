@@ -21,6 +21,15 @@ export function FunnelShell({
   children,
   footer,
   className,
+  /* Quand il est fourni, « Ignorer » remplace la reserve de droite.
+
+     Ce n'est pas un ornement sur un tunnel de trente-deux ecrans : une
+     question facultative dont on ne voit pas qu'elle l'est se lit comme
+     un mur. Le libelle le dit donc a l'endroit ou l'oeil cherche une
+     sortie — en haut a droite, comme chez Flo — plutot que dans une
+     note sous le bouton, que personne ne lit avant d'avoir deja
+     hesite. */
+  onSkip,
 }) {
   return (
     <div className={cn('funnel', className)}>
@@ -48,9 +57,15 @@ export function FunnelShell({
           />
         </div>
 
-        {/* Place réservée au futur sélecteur de langue, pour que le titre
-            reste optiquement centré entre deux masses égales. */}
-        <span className="funnel-header-spacer" aria-hidden="true" />
+        {onSkip ? (
+          <button type="button" className="funnel-skip" onClick={onSkip}>
+            Ignorer
+          </button>
+        ) : (
+          /* Place réservée au futur sélecteur de langue, pour que le titre
+             reste optiquement centré entre deux masses égales. */
+          <span className="funnel-header-spacer" aria-hidden="true" />
+        )}
       </header>
 
       <main className="funnel-body">

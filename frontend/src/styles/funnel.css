@@ -21,12 +21,65 @@
 
 .funnel,
 .interstitial,
+.analyse,
+.feuille-voile {
+  /* ---------- LE TUNNEL EST CLAIR, ET C EST LE CHOIX DE DIFFERENCIATION
+     ----------------------------------------------------------------
+
+     Il etait quasi noir, et pour une raison qui se defendait : un fond
+     sombre efface tout ce qui n est pas la question du moment. Deux
+     choses ont change depuis.
+
+     1. CE N EST PLUS UN FORMULAIRE. Le tunnel comptait quatorze ecrans
+        de saisie ; il en compte trente-deux, dont cinq ecrans de preuve
+        et un ecran d avis. L argument « salle de cinema » vaut pour une
+        molette a faire tourner, pas pour un parcours qui vend.
+
+     2. LE NOIR EST LA COULEUR DES CONCURRENTS. GoTall et Taller sont
+        noirs tous les deux. S y ranger, c est ressembler a ce qu on
+        essaie de remplacer — sur un marche ou le reproche fait a ces
+        applis est precisement d etre anxiogenes.
+
+     La reference retenue est Flo (captures du 19/09/2026), qui est ce
+     que le marche de la sante grand public fait de mieux en onboarding :
+     fond papier, grande illustration, titre noir gras dont UN segment
+     passe en accent, texte gris centre, pastille pleine largeur en bas.
+     Rien de tout cela n est emprunte a la concurrence directe.
+
+     Et surtout : la landing de Grandimi est DEJA claire. Le tunnel noir
+     etait le seul endroit du produit ou la marque changeait de peau au
+     milieu du parcours.
+
+     LES VALEURS VIENNENT DE design-system-v2.css, pas d un tirage a
+     l oeil : chaque ratio y est mesure et commente. On ne redefinit ici
+     que les noms --funnel-*, pour que tout le reste de cette feuille
+     continue de fonctionner sans etre touche.
+
+     LA PAYWALL ET LE RESULTAT NE BOUGENT PAS. Ils portent `.night`,
+     declare juste en dessous, et gardent leurs jetons sombres : ces deux
+     ecrans ont ete dessines pour le noir (paywall-night.css) et les
+     basculer serait un autre chantier. */
+  --funnel-bg: #fbf7f2;
+  --funnel-surface: #f4eee6;
+  --funnel-surface-high: #ebdcc6;
+  --funnel-line: #e6ddd2;
+  --funnel-text: #17120e;
+  --funnel-muted: #756a5f;
+
+  /* TROIS oranges, et il faut les trois. L orange vif ne passe pas en
+     texte courant (2.9:1 sur papier) : il ne sert que de FOND de bouton,
+     avec l encre posee dessus. Les deux autres sont les versions
+     lisibles, l une pour le texte courant, l autre pour les gros titres.
+     Melanger les trois est l erreur qui fait echouer un audit AA. */
+  --funnel-accent: #ff5a1f;          /* fond de bouton uniquement      */
+  --funnel-accent-text: #c23c0b;     /* texte courant — 4.99:1         */
+  --funnel-accent-display: #ee4a0e;  /* titres >= 24px — 3.50:1        */
+  --funnel-on-accent: #17120e;       /* encre sur orange — 5.96:1      */
+}
+
+/* La surface sombre, conservee telle quelle pour le resultat et la
+   paywall. C est le porte-jetons partage de ces deux ecrans. */
 .night {
-  /* Ces variables ne sont volontairement PAS dans :root : elles ne doivent
-     valoir que sur les surfaces sombres. Redéfinir --surface-page-canvas
-     globalement retournerait la landing et l'admin par effet de bord.
-     `.night` est le porte-jetons partagé : le résultat et la paywall
-     l'utilisent sans hériter de la mise en page du tunnel. */
   --funnel-bg: #0a0a0a;
   --funnel-surface: #141414;
   --funnel-surface-high: #1c1c1c;
@@ -34,6 +87,11 @@
   --funnel-text: #ffffff;
   --funnel-muted: #9a9a9a;
   --funnel-accent: #ff5a1f;
+  /* Sur fond noir l orange vif passe en texte (6.35:1) : les trois
+     roles pointent donc sur la meme valeur, et les composants partages
+     n ont pas a savoir sur quelle surface ils sont poses. */
+  --funnel-accent-text: #ff5a1f;
+  --funnel-accent-display: #ff5a1f;
   --funnel-on-accent: #17120e;
 }
 
@@ -51,13 +109,13 @@
    `.results-growth` (même spécificité, déclarée avant) et repeignait en blanc
    un chiffre volontairement orange. À spécificité nulle, la moindre classe
    reprend la main. */
-:where(.night, .funnel, .interstitial) :where(h1, h2, h3, h4) {
+:where(.night, .funnel, .interstitial, .analyse, .feuille-voile) :where(h1, h2, h3, h4) {
   color: var(--funnel-text);
   font-family: var(--font-dm-sans);
   letter-spacing: -0.02em;
 }
 
-:where(.night, .funnel, .interstitial) :where(p) {
+:where(.night, .funnel, .interstitial, .analyse, .feuille-voile) :where(p) {
   color: inherit;
   /* Les écarts sont donnés par les `gap` des conteneurs flex : une marge
      basse implicite les décalait tous d'un cran. */
@@ -93,7 +151,10 @@
 
 .funnel-header {
   display: grid;
-  grid-template-columns: 48px 1fr 48px;
+  /* La troisieme colonne s'ajuste : « Ignorer » est plus large qu'une
+     pastille de 48 px, et un `minmax` evite que la barre de progression
+     se fasse ecraser sur un telephone etroit. */
+  grid-template-columns: 48px 1fr minmax(48px, auto);
   align-items: center;
   gap: 16px;
   padding: 14px 20px;
@@ -115,7 +176,7 @@
 }
 
 .funnel-back:hover {
-  background: #262626;
+  background: var(--funnel-line);
 }
 
 .funnel-back:focus-visible {
@@ -236,9 +297,10 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  /* La lueur est ce qui décolle le bouton du noir. Sans elle, un aplat orange
-     sur fond noir paraît collé au bas de l'écran. */
-  box-shadow: 0 8px 32px rgba(255, 90, 31, 0.28);
+  /* L ombre decolle le bouton du pied de page. Elle est tiree de
+     l accent lui-meme et reste discrete : sur papier, une lueur de
+     32 px se lit comme une bavure d impression. */
+  box-shadow: 0 6px 20px rgba(255, 90, 31, 0.26);
   transition:
     transform 0.12s ease,
     opacity 0.15s ease;
@@ -254,8 +316,10 @@
   box-shadow: none;
 }
 
+/* Le contour de focus etait blanc : invisible sur papier. L encre le
+   rend lisible sur les deux surfaces, le tunnel comme la paywall. */
 .funnel-cta:focus-visible {
-  outline: 2px solid #ffffff;
+  outline: 2px solid var(--funnel-text);
   outline-offset: 3px;
 }
 
@@ -412,7 +476,7 @@
 }
 
 .choice-card:hover {
-  border-color: #3d3d3d;
+  border-color: var(--funnel-muted);
 }
 
 .choice-card.is-selected {
@@ -491,7 +555,7 @@
 }
 
 .funnel-field input::placeholder {
-  color: #5f5f5f;
+  color: var(--funnel-muted);
 }
 
 .funnel-field input:focus {
@@ -884,7 +948,7 @@
   font-size: clamp(14px, 3.8vw, 15.5px);
   line-height: 1.28;
   font-weight: 600;
-  color: var(--funnel-accent);
+  color: var(--funnel-accent-text);
   text-wrap: pretty;
 }
 
@@ -896,7 +960,7 @@
   justify-content: center;
   width: 26px;
   height: 26px;
-  border: 1.5px solid var(--funnel-accent);
+  border: 1.5px solid var(--funnel-accent-text);
   border-radius: 999px;
   font-size: 16px;
   font-weight: 800;
@@ -947,7 +1011,7 @@
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--funnel-muted);
 }
 
 /* ============================================================
@@ -978,7 +1042,8 @@
   /* Le halo est porté par le conteneur et non par chaque nœud : soixante
      `filter: drop-shadow` sur un SVG animé font tomber le rendu sous
      30 images par seconde sur un téléphone d'entrée de gamme. */
-  filter: drop-shadow(0 0 26px rgba(255, 90, 31, 0.22));
+  /* La lueur portait le halo du fond noir. Sur papier elle salit le
+     trait : on la remplace par rien, le contraste du trait suffit. */
 }
 
 .reseau-arete {
@@ -992,7 +1057,9 @@
 }
 
 .reseau-poids {
-  fill: rgba(255, 255, 255, 0.34);
+  /* Etait un blanc translucide, donc invisible sur papier. L encre
+     attenuee tient sur les deux surfaces. */
+  fill: color-mix(in srgb, var(--funnel-text) 38%, transparent);
   font-family: var(--font-dm-sans);
   font-size: 6.5px;
   font-weight: 600;
@@ -1202,7 +1269,9 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  opacity: 0.06;
+  /* 0,06 valait pour un trait blanc sur fond noir. Sur papier, l encre
+     a cette valeur ne se voit plus du tout. */
+  opacity: 0.12;
   pointer-events: none;
 }
 
@@ -1235,13 +1304,13 @@
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.04em;
-  color: var(--funnel-accent);
+  color: var(--funnel-accent-display);
 }
 
 .precision-libelle {
   font-size: 15px;
   font-weight: 700;
-  color: var(--funnel-accent);
+  color: var(--funnel-accent-text);
 }
 
 .precision-detail {
@@ -1485,7 +1554,7 @@
 }
 
 .analyse-etapes .est-en-cours {
-  color: var(--funnel-accent);
+  color: var(--funnel-accent-text);
 }
 
 /* Les étapes à venir restent LISIBLES et pas seulement suggérées : à
@@ -1561,4 +1630,212 @@
   .feuille-voile {
     animation: none;
   }
+}
+
+
+/* ---------- « Ignorer » ---------- */
+
+.funnel-skip {
+  border: 0;
+  background: none;
+  padding: 10px 4px;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--funnel-muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.funnel-skip:hover {
+  color: var(--funnel-text);
+}
+
+.funnel-skip:focus-visible {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Le segment colore du titre. `--funnel-accent-display` et pas
+   `--funnel-accent` : a cette taille l orange vif tombe a 2,9:1 sur
+   papier, celui-ci tient 3,50:1, ce qui est le seuil du grand texte.
+   Ne jamais reprendre cette classe sous 24 px. */
+.funnel-title-accent {
+  color: var(--funnel-accent-display);
+}
+
+/* ============================================================
+   LES AVIS
+   ============================================================ */
+
+.avis {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.avis-couronne {
+  display: flex;
+  justify-content: center;
+}
+
+/* Trois colonnes seulement quand les branches sont la. Sans elles, une
+   grille `auto 1fr auto` laisserait deux colonnes vides et decentrerait
+   optiquement les etoiles. */
+.avis-couronne.a-couronne {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  justify-items: center;
+  gap: 4px;
+}
+
+.avis-laurier {
+  width: 40px;
+  height: 84px;
+}
+
+.avis-feuille {
+  fill: var(--funnel-accent);
+}
+
+/* La tige est un trait, pas une forme pleine : sans `fill: none` le
+   navigateur remplit la surface fermee par la courbe et la branche
+   devient un aplat. */
+.avis-tige {
+  fill: none;
+  stroke: var(--funnel-accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.avis-laurier--droite {
+  transform: scaleX(-1);
+}
+
+.avis-couronne-texte {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.avis-chiffre {
+  font-size: clamp(30px, 8.5vw, 40px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--funnel-accent-display);
+}
+
+.avis-legende {
+  font-size: clamp(17px, 4.6vw, 21px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--funnel-text);
+}
+
+.avis-etoiles {
+  display: inline-flex;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+/* Les etoiles sont PLEINES : une etoile en contour se lit comme une note
+   incomplete, ce qui est l inverse du message.
+
+   La regle vise le `svg` et pas le conteneur : lucide pose `fill="none"`
+   en attribut de presentation sur l element, et un attribut bat toujours
+   une valeur heritee. Seule une regle qui cible l element lui-meme passe
+   devant. */
+.avis-etoiles svg {
+  fill: #f5a623;
+  stroke: #f5a623;
+}
+
+.avis-boutiques {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--funnel-muted);
+}
+
+.avis-cartes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Empilees et non cote a cote, contrairement a Flo : ses citations font
+   deux lignes, les trois d ici en font quatre. Sur 390 px de large, deux
+   colonnes les reduiraient a une bande de dix-sept caracteres — c est
+   la que le temoignage cesse d etre lu. */
+.avis-carte {
+  padding: 16px 18px;
+  border-radius: 20px;
+  border: 1.5px solid var(--funnel-line);
+  background: var(--funnel-surface);
+}
+
+.avis-entete {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avis-pastille {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.avis-identite {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.avis-identite strong {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--funnel-text);
+}
+
+/* Le centimetre est ce qui fait lire le temoignage : il est traite
+   comme une donnee, pas comme une ligne de texte. */
+.avis-suivi {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--funnel-accent-text);
+}
+
+.avis-texte {
+  margin: 12px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--funnel-text);
+  text-wrap: pretty;
+}
+
+/* La mention n est pas une decharge qu on planque : c est elle qui
+   separe un temoignage d une promesse de resultat. Elle garde donc un
+   contraste lisible et ne descend pas sous 12 px. */
+.avis-mention {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--funnel-muted);
+  text-wrap: pretty;
 }
