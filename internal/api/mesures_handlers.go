@@ -33,7 +33,7 @@ func EnregistrerMesure(c *gin.Context) {
 	if date == "" {
 		date = time.Now().Format("2006-01-02")
 	} else if _, err := time.Parse("2006-01-02", date); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "mesuree_le doit etre au format AAAA-MM-JJ"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "la date de mesure doit être au format AAAA-MM-JJ"})
 		return
 	}
 
@@ -41,7 +41,7 @@ func EnregistrerMesure(c *gin.Context) {
 	   que d enregistrer : elle deviendrait la « derniere » mesure et
 	   fausserait la vitesse pour tous les calculs suivants. */
 	if date > time.Now().Format("2006-01-02") {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "la date de mesure ne peut pas etre dans le futur"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "la date de mesure ne peut pas être dans le futur"})
 		return
 	}
 

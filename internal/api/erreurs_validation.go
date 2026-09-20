@@ -81,7 +81,11 @@ func libelle(champJSON string) string {
 func messageDeValidation(err error) string {
 	var typeErr *json.UnmarshalTypeError
 	if errors.As(err, &typeErr) {
-		return fmt.Sprintf("le champ %s n'a pas le bon type", libelle(typeErr.Field))
+		/* Pas de « le champ » devant : les libellés portent déjà leur
+		   article (« la taille »), et le préfixe donnait « le champ la
+		   taille n'a pas le bon type ». Un champ sans libellé garde son
+		   nom JSON, qui se lit sans article. */
+		return fmt.Sprintf("%s n'a pas le bon type", libelle(typeErr.Field))
 	}
 
 	var erreurs validator.ValidationErrors

@@ -98,4 +98,11 @@ func TestMauvaisTypeNommeLeChampSansCiterLeTypeGo(t *testing.T) {
 	if !strings.Contains(message, "la taille") {
 		t.Errorf("le champ fautif doit etre nomme, obtenu : %s", message)
 	}
+	/* Les libelles portent deja leur article. Un prefixe « le champ »
+	   produisait « le champ la taille n a pas le bon type », qui est
+	   passe les tests une premiere fois parce qu on ne verifiait que la
+	   presence du nom. */
+	if strings.Contains(message, "le champ la") || strings.Contains(message, "le champ l'") {
+		t.Errorf("double article dans le message : %s", message)
+	}
 }
