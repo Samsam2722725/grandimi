@@ -2270,3 +2270,115 @@
   font-size: 12px;
   line-height: 1.5;
 }
+
+/* ============================================
+   PRISE EN MAIN
+   ============================================
+   Trois bulles, et seulement sur ce qui ne se devine pas. Le concurrent
+   en enchaîne onze avant le premier geste utile ; passé la troisième,
+   plus personne ne lit.
+   ============================================ */
+
+.coach {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+}
+
+/* La découpe : un cadre vide entouré d'une ombre portée immense. C'est
+   ce qui éclaire la cible sans masque SVG, et cela épouse n'importe
+   quelle forme grâce au rayon. */
+.coach__decoupe {
+  position: fixed;
+  border-radius: 16px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.78);
+  /* La cible reste VISIBLE mais pas cliquable : un geste pendant le tour
+     déplacerait l'écran sous la bulle qui le décrit. */
+  pointer-events: none;
+}
+
+.coach__voile {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+}
+
+.coach__bulle {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  max-width: calc(var(--app-colonne, 480px) - 32px);
+  margin: 0 auto;
+  padding: 18px;
+  border-radius: 20px;
+  /* Une bulle BLANCHE sur une application sombre : c'est la seule
+     surface claire du produit, et c'est voulu — elle doit se lire comme
+     une voix extérieure, pas comme un écran de plus. */
+  background: #fff;
+  color: #111;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* La flèche, dessinée en losange tourné. Du côté de la cible. */
+.coach__bulle::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  background: #fff;
+  transform: rotate(45deg);
+}
+
+.coach__bulle--bas::before { top: -6px; }
+.coach__bulle--haut::before { bottom: -6px; }
+
+.coach__texte {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.coach__pied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.coach__compteur {
+  color: #6b6b6b;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.coach__boutons { display: flex; align-items: center; gap: 8px; }
+
+/* « Passer » est visible dès la première bulle. Un tour qu'on ne peut
+   pas quitter est une rançon, pas une présentation. */
+.coach__passer {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 9999px;
+  background: none;
+  color: #6b6b6b;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.coach__suivant {
+  min-height: 44px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 9999px;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}

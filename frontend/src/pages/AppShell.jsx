@@ -1,6 +1,8 @@
 import { lazy, Suspense, useRef, useState } from 'react';
 import Spinner from '../components/Spinner';
 import CarteAbonnement from '../components/CarteAbonnement';
+import CoachMark from '../components/CoachMark';
+import { ETAPES_TOUR, useTourPriseEnMain } from '../hooks/useTourPriseEnMain';
 import EnteteApp from '../components/EnteteApp';
 import BarreOnglets from '../components/BarreOnglets';
 import { ONGLETS, ongletValide } from '../lib/onglets';
@@ -76,6 +78,17 @@ function AppShell({
      l'accueil doit rouvrir la séance du jour, pas l'écran où l'on était
      parti il y a dix minutes. */
   const [planComplet, setPlanComplet] = useState(false);
+
+  /* Le tour ne se joue QUE pour un abonné, et QUE sur l'accueil.
+
+     Deux de ses trois bulles désignent l'anneau et le compte à rebours,
+     qui n'existent pas dans l'état verrouillé : jouées là, elles
+     pointeraient le vide. Un non-abonné a de toute façon une carte qui
+     lui explique l'application en toutes lettres — c'est une meilleure
+     présentation qu'un tour guidé. */
+  const { ouvert: tourOuvert, terminer: finirTour } = useTourPriseEnMain(
+    abonne && onglet === 'accueil',
+  );
 
   const changerOnglet = (id) => {
     setOnglet(id);
@@ -179,6 +192,8 @@ function AppShell({
           {onglet === 'communaute' && <CommunautePage />}
         </Suspense>
       </main>
+
+      {tourOuvert && <CoachMark etapes={ETAPES_TOUR} onFini={finirTour} />}
 
       <BarreOnglets
         actif={onglet}

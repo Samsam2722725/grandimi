@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { reinitialiserTour } from '../hooks/useTourPriseEnMain';
 import Spinner from '../components/Spinner';
 import apiClient from '../lib/api';
 import '../styles/account-page.css';
@@ -27,6 +28,13 @@ function formatPrix(valeur) {
    Whop) — jamais de façon optimiste, pour ne jamais annoncer une
    résiliation qui n'aurait pas réellement eu lieu côté facturation. */
 function AccountPage({ onBackHome }) {
+  const [presentationRelancee, setPresentationRelancee] = useState(false);
+
+  const rejouerPresentation = () => {
+    reinitialiserTour();
+    setPresentationRelancee(true);
+  };
+
   const [loading, setLoading] = useState(true);
   const [erreur, setErreur] = useState(null);
   const [abonnement, setAbonnement] = useState(null);
@@ -200,6 +208,22 @@ function AccountPage({ onBackHome }) {
             )}
           </div>
         )}
+      </section>
+
+      {/* Rejouer la présentation.
+
+          Posé ici et non dans l'application : c'est le seul écran de
+          réglages qui existe, et quelqu'un qui cherche à revoir les
+          explications y va naturellement. Le bouton ne rejoue pas le
+          tour sur place — il efface la trace, et le tour repart à la
+          prochaine ouverture de l'accueil, là où ses trois cibles
+          existent. */}
+      <section className="account-section">
+        <button type="button" className="btn-tertiary" onClick={rejouerPresentation}>
+          {presentationRelancee
+            ? 'À la prochaine ouverture de l’application'
+            : 'Revoir la présentation'}
+        </button>
       </section>
 
       {confirmationOuverte && (
