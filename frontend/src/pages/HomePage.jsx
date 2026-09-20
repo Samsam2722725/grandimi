@@ -12,10 +12,8 @@ import {
 
 import { useEffect, useState } from 'react'
 
-import { HandwritingText } from '@/components/ui/handwriting-text'
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
 import { FaqSection } from '@/components/ui/faq-section'
-import { FluidParticlesBackground } from '@/components/ui/fluid-particles-background'
 import { HeroPhones } from '@/components/ui/hero-phones'
 import '../styles/theme-night.css'
 
@@ -254,19 +252,16 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             le moment magique (la carte résultat) sous la ligne de
             flottaison. Ici il est visible tout de suite.
             Entrées en CSS (.rise) et non en JS : cf. index.css. */}
-        <FluidParticlesBackground
-          className="border-b border-[color:var(--color-frost-gray)]"
-          /* Réglages resserrés par rapport aux valeurs par défaut du
-             composant : une densité plus faible et une trace qui s'efface
-             deux fois plus vite. Au réglage d'origine, les points laissaient
-             de longs filaments et le fond se lisait comme une texture de
-             cheveux plutôt que comme une poussière. */
-          density={1 / 2600}
-          maxParticles={900}
-          trail="rgba(10, 10, 10, 0.30)"
-          particleSize={{ min: 0.4, max: 1.5 }}
-        >
-        <section className="relative px-5 pt-12 pb-16 sm:px-8 lg:pt-20">
+        {/* Le fond à particules animées a été retiré.
+            C'est le composant le plus reconnaissable des bibliothèques dont
+            se servent les générateurs de sites : posé derrière un titre, il
+            annonce « site fait à la chaîne » avant que le texte ait le temps
+            de dire quoi que ce soit. Sur un marché où chaque concurrent se
+            vend comme « IA à 99 % de précision », ressembler à un site
+            généré range Grandimi avec eux — c'est-à-dire exactement à
+            l'opposé de ce que le contenu de cette page défend.
+            Le halo orange ci-dessous suffit à détacher le hero. */}
+        <section className="relative border-b border-[color:var(--color-frost-gray)] px-5 pt-12 pb-16 sm:px-8 lg:pt-20">
           {/* Halo orange derrière le titre. Sur noir il remplace l'ombre
               portée : c'est lui qui détache le hero du reste de la page. */}
           <div
@@ -282,17 +277,17 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 style={{ animationDelay: '80ms' }}
               >
                 Prédis et{' '}
-                {/* Le mot est tracé au stylo plutôt que posé en couleur : c'est
-                    la promesse du site — une estimation écrite à la main pour
-                    toi — et ça donne au titre un point de fixation que le
-                    surlignage orange n'obtenait pas. Si la police distante ne
-                    répond pas, le composant retombe sur du texte simple. */}
-                <HandwritingText
-                  text="maximise"
-                  height="0.92em"
-                  strokeWidth={1.4}
-                  className="align-baseline text-[color:var(--color-brand-display)]"
-                />{' '}
+                {/* Le mot était tracé au stylo par une animation d'écriture.
+                    Texte manuscrit animé, machine à écrire et fond à
+                    particules forment la signature du même catalogue de
+                    composants : ensemble, ils datent une page au premier
+                    coup d'œil.
+
+                    Le mot est identique, seule sa mise en forme change : il
+                    porte la couleur de marque, qui tient 6,3:1 sur ce fond
+                    et reste lisible là où un tracé au stylo dépendait du
+                    chargement d'une police distante. */}
+                <span className="text-[color:var(--color-brand-display)]">maximise</span>{' '}
                 ta taille.
               </h1>
 
@@ -341,7 +336,6 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             </div>
           </div>
         </section>
-        </FluidParticlesBackground>
 
         {/* ============ CE QUE TU OBTIENS (grille) ============
             Titre centré et grille à filets : la mise en page de « Unlock your
