@@ -1317,3 +1317,361 @@
   background: var(--funnel-accent);
   color: var(--funnel-on-accent);
 }
+
+/* ============================================
+   SECTIONS DE L'ONGLET GRANDIR
+   ============================================ */
+
+.sections {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0 16px;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--funnel-surface);
+}
+
+.section {
+  flex: 1;
+  min-height: 40px;
+  /* `padding` DÉCLARÉ, et ce n'est pas superflu : design-system-v2.css
+     pose `padding: 48px 0` sur l'élément `button` dans @layer base. Toute
+     classe de bouton qui ne le redéclare pas hérite de ces 48px — ici le
+     sélecteur faisait 115px de haut au lieu de 40, soit un quart de
+     l'écran pour deux mots. Les autres boutons de ce fichier posent tous
+     leur padding ; c'était le seul oubli, et il ne se voyait qu'à
+     l'écran. */
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--funnel-muted);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.section--actif {
+  background: var(--funnel-surface-high);
+  color: var(--funnel-text);
+}
+
+/* ============================================
+   NUTRITION
+   ============================================ */
+
+.nutri {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.compteurs {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 24px;
+  background: var(--funnel-surface);
+  list-style: none;
+}
+
+.compteur {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 4px 10px;
+}
+
+.compteur__emoji { font-size: 16px; }
+
+.compteur__nom { font-size: 14px; font-weight: 600; }
+
+.compteur__valeur {
+  font-size: 15px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.compteur__cible {
+  color: var(--funnel-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.compteur__barre {
+  grid-column: 1 / -1;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--funnel-surface-high);
+  overflow: hidden;
+}
+
+.compteur__barre-remplie {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--funnel-accent);
+  transition: width 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Le dépassement se signale par une couleur ET par le chiffre, qui n'est
+   jamais plafonné : une barre bloquée à 100 % cacherait exactement ce
+   qu'il faut voir. */
+.compteur--depasse .compteur__barre-remplie { background: #e5484d; }
+.compteur--depasse .compteur__valeur { color: #ff9ba0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .compteur__barre-remplie { transition: none; }
+}
+
+.nutri__note,
+.nutri__vide {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.nutri__vide { font-size: 14px; padding: 16px 0; }
+
+.repas {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.repas__ligne {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 16px;
+  background: var(--funnel-surface);
+}
+
+.repas__texte { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+.repas__nom { font-size: 15px; font-weight: 700; }
+
+.repas__detail { color: var(--funnel-muted); font-size: 12px; }
+
+.repas__supprimer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 44px : la cible tactile minimale. L'icône fait 16px, c'est la zone
+     autour qui compte — surtout pour une action destructive qu'on ne
+     doit pas déclencher par erreur, mais qu'on doit pouvoir viser. */
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--funnel-muted);
+  cursor: pointer;
+}
+
+.nutri__ajouter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- Ajout d'un aliment ---------- */
+
+.ajout {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: var(--app-colonne, 480px);
+  margin: 0 auto;
+  padding: 12px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+  background: var(--funnel-bg);
+  color: var(--funnel-text);
+  overflow-y: auto;
+}
+
+.ajout__entete { display: flex; align-items: center; gap: 12px; }
+
+.ajout__retour {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 50%;
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  cursor: pointer;
+}
+
+.ajout__titre {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.ajout__recherche {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 14px;
+  background: var(--funnel-surface);
+  color: var(--funnel-muted);
+}
+
+.ajout__recherche input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  color: var(--funnel-text);
+  font-size: 16px; /* 16px minimum : en dessous, iOS zoome sur le champ */
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+}
+
+.ajout__rien {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ajout__liste { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+
+.ajout__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  min-height: 56px;
+  padding: 10px 14px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 14px;
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.ajout__item-nom { font-size: 15px; font-weight: 700; }
+
+.ajout__item-valeurs { color: var(--funnel-muted); font-size: 12px; }
+
+.ajout__reglage { display: flex; flex-direction: column; gap: 14px; }
+
+.ajout__quantite {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--funnel-muted);
+}
+
+.ajout__quantite-boite {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 4px;
+  /* Largeur fixe, mesurée comme celle de l'écran de mesure : « 1000 » en
+     800 de graisse à 22px ne tient pas dans une largeur en `ch`. */
+  width: 140px;
+  padding: 10px 14px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 14px;
+  background: var(--funnel-surface);
+}
+
+.ajout__quantite-boite:focus-within { border-color: var(--funnel-accent); }
+
+.ajout__quantite-boite input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  color: var(--funnel-text);
+  font-size: 22px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+}
+
+.ajout__unite { color: var(--funnel-muted); font-size: 13px; font-weight: 700; }
+
+.ajout__portion { margin: 0; color: var(--funnel-muted); font-size: 13px; }
+
+.ajout__moments { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; border: 0; }
+
+.ajout__moments legend {
+  width: 100%;
+  margin-bottom: 8px;
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ajout__moment {
+  flex: 1 1 0;
+  min-width: 78px;
+  min-height: 44px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 12px;
+  background: var(--funnel-surface);
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ajout__moment--actif { border-color: var(--funnel-accent); color: var(--funnel-text); }
+
+.ajout__valider {
+  margin-top: auto;
+  min-height: 52px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ajout__valider:disabled {
+  background: var(--funnel-surface-high);
+  color: var(--funnel-muted);
+  cursor: not-allowed;
+}

@@ -284,6 +284,43 @@ class APIClient {
     });
   }
 
+  // ---------- Nutrition ----------
+
+  /** Journal du jour, totaux et objectifs, en un appel.
+   *
+   *  Les totaux viennent du serveur et ne sont pas recalculés ici :
+   *  deux additions qui doivent donner le même résultat finissent par
+   *  diverger, et c'est l'écran qui aurait tort. */
+  async getNutritionJour(jour) {
+    const qs = jour ? `?jour=${encodeURIComponent(jour)}` : '';
+    return this.request(`/api/v1/nutrition/jour${qs}`);
+  }
+
+  /** Recherche d'aliments par préfixe. */
+  async chercherAliments(q) {
+    return this.request(`/api/v1/nutrition/aliments?q=${encodeURIComponent(q)}`);
+  }
+
+  async ajouterRepas({ slug, quantiteG, moment, jour }) {
+    return this.request('/api/v1/nutrition/repas', {
+      method: 'POST',
+      body: JSON.stringify({ slug, quantite_g: quantiteG, moment, jour }),
+    });
+  }
+
+  async supprimerRepas(id) {
+    return this.request(`/api/v1/nutrition/repas/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async enregistrerObjectifs({ kcal, proteines_g, calcium_mg, vit_d_ui }) {
+    return this.request('/api/v1/nutrition/objectifs', {
+      method: 'PUT',
+      body: JSON.stringify({ kcal, proteines_g, calcium_mg, vit_d_ui }),
+    });
+  }
+
   /** Enregistre une séance de mesure.
    *
    *  On envoie les TROIS relevés, pas leur médiane : c'est le serveur qui

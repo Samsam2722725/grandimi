@@ -14,7 +14,7 @@ import '../styles/app-shell.css';
    onglets, dont un qui embarque des graphiques. Le premier onglet affiché
    est le seul à être demandé au réseau. */
 const AccueilPage = lazy(() => import('./AccueilPage'));
-const GrandirPage = lazy(() => import('./GrandirPage'));
+const GrandirOnglet = lazy(() => import('./GrandirOnglet'));
 const ApercusPage = lazy(() => import('./ApercusPage'));
 const CommunautePage = lazy(() => import('./CommunautePage'));
 const GrowthPlanPage = lazy(() => import('./GrowthPlanPage'));
@@ -136,7 +136,7 @@ function AppShell({
               nutrition et le sommeil ; ce qui restera sera le plan
               mensuel seul. */}
           {onglet === 'grandir' && !planComplet && (
-            <GrandirPage onVoirPlanComplet={() => setPlanComplet(true)} />
+            <GrandirOnglet onVoirPlanComplet={() => setPlanComplet(true)} />
           )}
 
           {onglet === 'grandir' && planComplet && (

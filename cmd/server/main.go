@@ -71,6 +71,17 @@ func main() {
 		paye.POST("/exercices/valider", api.ValiderSeance)
 		paye.POST("/exercices/basculer", api.BasculerExercice)
 
+		/* Nutrition : quatre compteurs (énergie, protéines, calcium,
+		   vitamine D), un journal, un catalogue d'aliments. Les
+		   objectifs sont calculés depuis le poids du questionnaire puis
+		   modifiables — 150 g de protéines pour tout le monde, ce qu'
+		   affiche le concurrent, convient à quelqu'un de 110 kg. */
+		paye.GET("/nutrition/jour", api.GetNutritionJour)
+		paye.GET("/nutrition/aliments", api.GetAliments)
+		paye.POST("/nutrition/repas", api.PostRepas)
+		paye.DELETE("/nutrition/repas/:id", api.DeleteRepas)
+		paye.PUT("/nutrition/objectifs", api.PutObjectifs)
+
 		// Todo-liste quotidienne : cocher/décocher une tâche du jour, lire
 		// l'état du jour, et l'historique pour le calendrier de série.
 		paye.POST("/tasks/toggle", api.ToggleTaskCompletion)
