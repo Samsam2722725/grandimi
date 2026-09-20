@@ -16,6 +16,22 @@
 # Go workspace file
 go.work
 
+# go.sum — ABSENT DU DEPOT, ET C'EST VOULU
+#
+# Le Dockerfile et verifier-le-backend.yml lancent tous deux `go mod tidy`
+# avant de construire : le fichier est regenere a chaque build. L'intention
+# etait ecrite en commentaire dans le workflow mais rien ne l'appliquait,
+# alors toute personne lancant `go build` en local se retrouvait avec un
+# fichier non suivi qu'elle risquait de committer par reflexe.
+#
+# A SAVOIR AVANT DE RETIRER CETTE LIGNE : go.sum porte les empreintes des
+# dependances. Ne pas le versionner signifie qu'aucune verification
+# d'integrite ne protege les builds — si une version publiee est remplacee
+# en amont, rien ne le detecte. Le versionner serait plus sur, mais c'est
+# un changement de politique qui touche le Dockerfile et la CI, pas une
+# ligne de .gitignore.
+go.sum
+
 # IDE
 .vscode/
 .idea/
