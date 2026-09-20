@@ -25,7 +25,7 @@ type enregistrerMesureRequest struct {
 func EnregistrerMesure(c *gin.Context) {
 	var req enregistrerMesureRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": messageDeValidation(err)})
 		return
 	}
 

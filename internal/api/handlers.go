@@ -65,7 +65,7 @@ func PredictHeight(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+			"error": messageDeValidation(err),
 		})
 		return
 	}
@@ -116,7 +116,7 @@ func PredictHeightV2(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+			"error": messageDeValidation(err),
 		})
 		return
 	}
@@ -232,7 +232,7 @@ type SignupRequest struct {
 func Signup(c *gin.Context) {
 	var req SignupRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": messageDeValidation(err)})
 		return
 	}
 
@@ -307,7 +307,7 @@ type LoginRequest struct {
 func Login(c *gin.Context) {
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": messageDeValidation(err)})
 		return
 	}
 
