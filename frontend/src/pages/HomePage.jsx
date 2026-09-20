@@ -165,7 +165,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           semi-transparence par-dessus le contenu suivant. Le fond plein
           supprime la cause. */}
       <header className="sticky top-0 z-50 border-b border-[color:var(--color-frost-gray)] bg-[color:var(--surface-page-canvas)]">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 sm:px-8">
           <a href="#" className="flex min-w-0 items-center gap-2.5 text-ink">
             {/* La marque remplace l'icône de règle générique. Le carré orange
                 est la forme du logo, pas une pastille décorative : c'est sous
@@ -192,7 +192,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               Pas de sélecteur de langue tant qu'il n'y a qu'une langue : un
               menu déroulant qui ne propose rien est un bouton mort, et un
               drapeau « FR » laisse entendre qu'une version anglaise existe. */}
-          <nav className="hidden items-center gap-7 md:flex">
+          <nav className="hidden items-center gap-8 md:flex">
             <a
               href="#fonctionnalites"
               className="text-[13px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase transition-colors hover:text-ink"
@@ -228,7 +228,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             <button
               type="button"
               onClick={onLogin}
-              className="inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-sm font-semibold whitespace-nowrap text-ink transition-colors hover:bg-ink/6 sm:border sm:border-ink sm:px-5"
+              className="inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-sm font-semibold whitespace-nowrap text-ink transition-colors hover:bg-ink/6 sm:border sm:border-ink sm:px-6"
             >
               Se connecter
             </button>
@@ -236,7 +236,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             <button
               type="button"
               onClick={() => demarrer('en-tete')}
-              className="hidden min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:inline-flex sm:px-5"
+              className="hidden min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:inline-flex sm:px-6"
             >
               Commencer
               <ArrowRight className="hidden size-4 sm:block" aria-hidden="true" />
@@ -267,7 +267,12 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             visible avant venait de la traînée des particules, pas de lui.
             Corrigé ci-dessous — c'est maintenant lui qui donne au hero sa
             profondeur, sans texture ni animation. */}
-        <section className="relative border-b border-[color:var(--color-frost-gray)] px-6 pt-12 pb-16 sm:px-8 lg:pt-20">
+        {/* `overflow-hidden` : le halo est un cercle de 620px décalé de 80px
+            hors du bord droit. Sans découpe, il pousse la largeur du
+            document à 455px sur un écran de 375 et la page défile
+            latéralement — mesuré, puis corrigé. La découpe ne change rien à
+            son rendu à l'intérieur de la section. */}
+        <section className="relative overflow-hidden border-b border-[color:var(--color-frost-gray)] px-6 pt-12 pb-16 sm:px-8 lg:pt-20">
           {/* Halo orange derrière le titre. Sur noir il remplace l'ombre
               portée : c'est lui qui détache le hero du reste de la page.
               `z-0` et non `-z-10` : le conteneur racine peint un fond, donc
@@ -361,7 +366,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             full potential », qui est le bloc que tous les concurrents de ce
             marché placent juste après le fold. Elle répond à la seule question
             qui reste une fois la promesse lue — qu'est-ce que je reçois. */}
-        <section id="fonctionnalites" className="scroll-mt-24 px-5 pb-20 sm:px-8">
+        <section id="fonctionnalites" className="scroll-mt-24 px-6 pb-20 sm:px-8">
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
@@ -383,13 +388,13 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-60px' }}
                     transition={{ duration: 0.45, delay: (i % 3) * 0.08 }}
-                    className="bg-[color:var(--surface-page-canvas)] px-6 py-9 sm:px-8"
+                    className="bg-[color:var(--surface-page-canvas)] px-6 py-10 sm:px-8"
                   >
                     <Icone
                       className="size-6 text-[color:var(--color-coral-pulse)]"
                       aria-hidden="true"
                     />
-                    <h3 className="mt-5 flex flex-wrap items-center gap-2 font-display text-xl font-medium tracking-[-0.02em] text-ink">
+                    <h3 className="mt-6 flex flex-wrap items-center gap-2 font-display text-xl font-medium tracking-[-0.02em] text-ink">
                       {fonction.titre}
                       {fonction.bientot && (
                         <span className="rounded-full border border-[color:var(--color-indigo-bloom)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-[color:var(--color-indigo-bloom)] uppercase">
@@ -423,7 +428,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
         </section>
 
         {/* ============ PRÉDIS TA TAILLE (figure à gauche) ============ */}
-        <section className="px-5 pb-20 sm:px-8">
+        <section className="px-6 pb-20 sm:px-8">
           <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <CourbePrediction />
 
@@ -431,7 +436,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               <h2 className="font-display text-[clamp(28px,4vw,40px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
                 Prédis ta taille adulte
               </h2>
-              <p className="mt-5 max-w-lg text-base leading-[1.55] text-[color:var(--text-secondary)]">
+              <p className="mt-6 max-w-lg text-base leading-[1.55] text-[color:var(--text-secondary)]">
                 Ton âge, ta taille, ton poids et celle de tes parents, croisés avec les
                 tables de croissance de l’OMS. Pas de radio, pas de prise de sang. Le
                 chiffre arrive avec sa fourchette, et il se resserre à chaque re-mesure
@@ -445,7 +450,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             Même sens de lecture que la section précédente, comme chez eux : la
             figure tient la colonne gauche deux fois de suite. Alterner ferait
             « site de template » ; répéter fait « chapitre ». */}
-        <section className="px-5 pb-20 sm:px-8">
+        <section className="px-6 pb-20 sm:px-8">
           <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <ListeActions />
 
@@ -453,7 +458,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               <h2 className="font-display text-[clamp(28px,4vw,40px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
                 Maximise ton potentiel
               </h2>
-              <p className="mt-5 max-w-lg text-base leading-[1.55] text-[color:var(--text-secondary)]">
+              <p className="mt-6 max-w-lg text-base leading-[1.55] text-[color:var(--text-secondary)]">
                 Des exercices de posture à la nutrition, chaque habitude est choisie pour
                 ton profil et change d’un mois à l’autre. Tu coches ce que tu as fait, ta
                 série monte, et tu vois noir sur blanc les jours où tu as tenu.
@@ -468,7 +473,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             c'est ce volume-là qui ne servait à rien, pas l'information. Un
             numéro et une phrase suffisent à répondre à « je fais quoi,
             concrètement », qui est la dernière question avant le bouton. */}
-        <section className="px-5 pb-24 sm:px-8">
+        <section className="px-6 pb-24 sm:px-8">
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-ink">
@@ -537,7 +542,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     <span className="relative inline-flex size-11 items-center justify-center rounded-full bg-brand font-display text-lg font-medium text-[color:var(--color-on-brand)]">
                       {etape.num}
                     </span>
-                    <h3 className="mt-5 font-display text-xl font-medium tracking-[-0.02em] text-ink">
+                    <h3 className="mt-6 font-display text-xl font-medium tracking-[-0.02em] text-ink">
                       {etape.titre}
                     </h3>
                     <p className="mx-auto mt-2 max-w-xs text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">
@@ -581,7 +586,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             qu'elle ne nous cautionne pas, c'est laisser s'installer une
             caution officielle qu'on n'a pas. Les concurrents écrivent la même
             note sous leur paragraphe sur le CDC. */}
-        <section className="border-t border-[color:var(--color-frost-gray)] px-5 py-20 sm:px-8">
+        <section className="border-t border-[color:var(--color-frost-gray)] px-6 py-20 sm:px-8">
           <div className="mx-auto w-full max-w-3xl text-center">
             <span className="mx-auto flex size-12 items-center justify-center rounded-[14px] bg-brand">
               <LogoGrandimi
@@ -590,11 +595,11 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               />
             </span>
 
-            <h2 className="mt-7 font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
+            <h2 className="mt-8 font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
               Des méthodes publiées. Pas des promesses.
             </h2>
 
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-[1.6] text-[color:var(--text-secondary)]">
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-[1.6] text-[color:var(--text-secondary)]">
               Ton estimation croise <strong className="font-semibold text-ink">Khamis-Roche</strong>,
               une méthode de prédiction de la taille adulte sans radiographie publiée en
               1994, avec les <strong className="font-semibold text-ink">courbes de
@@ -612,7 +617,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               href="https://pubmed.ncbi.nlm.nih.gov/?term=Khamis-Roche+adult+stature"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-7 inline-flex items-center gap-2 border-b border-[color:var(--color-coral-pulse)] pb-0.5 text-base font-semibold text-brand transition-opacity hover:opacity-80"
+              className="mt-8 inline-flex items-center gap-2 border-b border-[color:var(--color-coral-pulse)] pb-0.5 text-base font-semibold text-brand transition-opacity hover:opacity-80"
             >
               Lire la méthode sur PubMed
               <ArrowRight className="size-4" aria-hidden="true" />
@@ -638,7 +643,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
         </div>
 
         {/* ============ CTA FINAL ============ */}
-        <section className="px-5 pb-20 sm:px-8">
+        <section className="px-6 pb-20 sm:px-8">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -654,7 +659,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               </span>
             </h2>
 
-            <p className="mx-auto mt-5 max-w-xl text-base text-white/70">
+            <p className="mx-auto mt-6 max-w-xl text-base text-white/70">
               Ta taille adulte estimée, ce que tes habitudes te coûtent, et 11 actions
               par jour pour aller chercher les centimètres qui te restent.
             </p>
@@ -662,7 +667,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             {/* Le second bouton renvoyait vers « Revoir le fonctionnement »,
                 section supprimée : un lien mort au bas de la page. Il ne
                 manque pas — arrivé ici, le visiteur a fini de lire. */}
-            <div className="mt-9">
+            <div className="mt-10">
               <button
                 type="button"
                 onClick={() => demarrer('cta-final')}
@@ -680,7 +685,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
       {/* Réserve basse permanente sur mobile : la barre d'action se pose
           par-dessus le pied de page, et les liens légaux doivent rester
           cliquables une fois arrivé en bas. */}
-      <footer className="border-t border-[color:var(--color-frost-gray)] px-5 pt-10 pb-28 sm:px-8 md:pb-10">
+      <footer className="border-t border-[color:var(--color-frost-gray)] px-6 pt-10 pb-28 sm:px-8 md:pb-10">
         <div className="mx-auto w-full max-w-6xl">
           {/* Onze liens rangés en trois colonnes, identiques à ceux des pages
               statiques.
@@ -733,7 +738,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             </div>
           </div>
 
-          <p className="mt-8 border-t border-[color:var(--color-frost-gray)] pt-5 text-xs leading-relaxed text-muted-foreground">
+          <p className="mt-8 border-t border-[color:var(--color-frost-gray)] pt-6 text-xs leading-relaxed text-muted-foreground">
             Grandimi n’est pas un dispositif médical et ne pose aucun diagnostic. Les
             estimations et les repères publiés ici sont statistiques, et ne remplacent pas
             l’avis d’un pédiatre ou d’un endocrinologue.
@@ -922,7 +927,7 @@ function ListeActions() {
         ))}
       </ul>
 
-      <p className="mt-5 text-xs text-[color:var(--text-meta)]">+ 7 autres actions aujourd’hui</p>
+      <p className="mt-6 text-xs text-[color:var(--text-meta)]">+ 7 autres actions aujourd’hui</p>
     </div>
   )
 }
