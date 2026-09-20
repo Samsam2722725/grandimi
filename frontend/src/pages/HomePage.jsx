@@ -260,20 +260,37 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             vend comme « IA à 99 % de précision », ressembler à un site
             généré range Grandimi avec eux — c'est-à-dire exactement à
             l'opposé de ce que le contenu de cette page défend.
-            Le halo orange ci-dessous suffit à détacher le hero. */}
-        <section className="relative border-b border-[color:var(--color-frost-gray)] px-5 pt-12 pb-16 sm:px-8 lg:pt-20">
+
+            Ce que le retrait a révélé : le halo orange, qui était censé
+            prendre le relais, ne s'affichait pas. Posé en `-z-10`, il
+            passait DERRIÈRE le fond de page et n'éclairait rien. La chaleur
+            visible avant venait de la traînée des particules, pas de lui.
+            Corrigé ci-dessous — c'est maintenant lui qui donne au hero sa
+            profondeur, sans texture ni animation. */}
+        <section className="relative border-b border-[color:var(--color-frost-gray)] px-6 pt-12 pb-16 sm:px-8 lg:pt-20">
           {/* Halo orange derrière le titre. Sur noir il remplace l'ombre
-              portée : c'est lui qui détache le hero du reste de la page. */}
+              portée : c'est lui qui détache le hero du reste de la page.
+              `z-0` et non `-z-10` : le conteneur racine peint un fond, donc
+              tout indice négatif disparaît dessous. Le contenu repasse
+              au-dessus en `z-10`. */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -top-40 -right-24 -z-10 size-[560px] rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.13] blur-[120px]"
+            className="pointer-events-none absolute -top-32 -right-20 z-0 size-[620px] rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.16] blur-[130px]"
           />
 
-          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-12 lg:gap-10">
+          <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-12 lg:gap-10">
             {/* --- Colonne texte --- */}
             <div className="lg:col-span-7">
               <h1
-                className="rise night-title-gradient font-display text-[clamp(40px,6.2vw,72px)] leading-[1.02] font-medium tracking-[-0.035em] text-balance"
+                /* L'impact vient de l'échelle et du serrage, pas de la
+                   graisse. Une condensée massive aurait rangé la page avec
+                   les sites du secteur qui en abusent ; Fraunces est la
+                   seule chose ici qu'aucun concurrent n'a. On la pousse donc
+                   plus loin : 88px au lieu de 72 en plein écran, interligne
+                   sous 1 pour que les deux lignes forment un bloc, et
+                   interlettrage à -0,045em — un display serré se tient, un
+                   display lâche se lit comme du corps de texte agrandi. */
+                className="rise night-title-gradient font-display text-[clamp(44px,7.2vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
                 Prédis et{' '}
@@ -313,7 +330,9 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   renvoyait vers une section de la même page : deux actions de
                   poids visuel proche, dont une qui ne fait que faire défiler.
                   Sur un fold, chaque choix supplémentaire coûte des départs. */}
-              <div className="rise mt-9" style={{ animationDelay: '240ms' }}>
+              {/* 40px et non 36 : tous les espacements du hero tombent
+                  désormais sur des multiples de 8. */}
+              <div className="rise mt-10" style={{ animationDelay: '240ms' }}>
                 <button
                   type="button"
                   onClick={() => demarrer('hero')}
