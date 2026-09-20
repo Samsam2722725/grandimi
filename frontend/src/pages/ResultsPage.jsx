@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ArrowLeft, Lock } from 'lucide-react'
 
 import { AnalyseChart } from '@/components/ui/analyse-chart'
+import { BalloonsPopBackground } from '@/components/ui/balloons-pop-background'
 import { Confetti } from '@/components/ui/confetti'
 
 import Spinner from '../components/Spinner'
@@ -227,6 +228,17 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
   return (
     <div className="night results analyse">
+      {/* Le fond de ballons est posé EN PREMIER et en `position: absolute`
+          dans `.results`, qui est déjà la surface plein écran de cet
+          écran. Le composant d'origine s'habillait d'un `fixed inset-0
+          bg-zinc-950` : un second calque opaque par-dessus aurait
+          simplement recouvert le résultat.
+
+          Il ne remplace pas les confettis, qui font autre chose : une
+          salve unique au montage, puis plus rien. Les ballons, eux,
+          restent — c'est un décor de fond, pas une célébration. */}
+      <BalloonsPopBackground className="results-ballons" />
+
       <Confetti />
 
       <header className="results-top">

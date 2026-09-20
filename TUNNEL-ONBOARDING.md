@@ -403,3 +403,67 @@ Défauts trouvés par ces captures et corrigés :
   même côté, s'affichaient comme un pâté puis comme une arête de poisson ;
 - l'emoji `👨‍👩‍👦` est une séquence ZWJ que les polices incomplètes rendent en
   carré vide. Remplacé par `👪`, point de code unique.
+
+
+---
+
+## 11. Le fond de ballons (page de résultat)
+
+Composant fourni le 20/09/2026, monté derrière le contenu de `ResultsPage`.
+
+**Le projet n'est ni TypeScript ni shadcn-CLI.** `frontend/` n'a ni `tsconfig`
+ni dépendance `typescript` ni un seul fichier `.ts` ; il n'a pas non plus de
+`components.json`, donc la CLI shadcn n'est pas câblée. Ce qui existe déjà et
+qui suffisait : **Tailwind v4** (`@tailwindcss/vite`), l'alias `@` → `./src`
+(vite.config.js), le helper `cn` (`src/lib/utils.js`), et la convention
+`src/components/ui/` que tous les composants du tunnel suivent déjà. Le
+composant a donc été **porté en `.jsx`** plutôt que d'imposer TypeScript à tout
+le paquet pour un fichier.
+
+**Ce qui n'a pas été repris.** Le fichier contenait un `Component` exporté —
+un compteur « + / − » titré « Component Example ». C'est le gabarit du
+générateur, sans rapport avec les ballons et sans appelant : le copier aurait
+ajouté un composant mort dans `components/ui`. Le conteneur d'origine
+(`fixed inset-0 bg-zinc-950`) n'est pas repris non plus : `.results` est
+**déjà** une surface `fixed inset-0` avec son fond, et un second calque opaque
+par-dessus aurait simplement recouvert le résultat.
+
+**Six correctifs, dont quatre ne sont pas des préférences :**
+
+| Défaut d'origine | Conséquence | Correctif |
+|---|---|---|
+| `requestAnimationFrame` jamais annulé | boucle vivante sur un canvas démonté, à chaque visite de l'écran | `cancelAnimationFrame` au nettoyage |
+| `mousemove` seul | le seul geste du composant n'existait pour personne sur téléphone | `pointermove` (souris + doigt + stylet) |
+| `createRadialGradient` par ballon **par image** | 30 objets alloués 60 fois par seconde | dégradé construit une fois par ballon |
+| `resize` recréait toute la scène | la barre d'URL iOS déclenche `resize` pendant le défilement | le canvas est redimensionné, les ballons restent |
+| `clearRect(0, 0, canvas.width, …)` après `setTransform(dpr)` | efface dpr² fois la surface utile | dimensions en pixels CSS |
+| `prefers-reduced-motion` ignoré | — | l'animation ne démarre pas |
+
+Le nombre de ballons suit la surface (10 à 30) : 30 était réglé pour un écran
+d'ordinateur et donnait une purée sur 390 × 844.
+
+**Le voile.** L'empilement était correct dès le départ — `elementFromPoint`
+rendait bien le contenu. Le défaut était ailleurs : les cartes de cette page
+ont un fond translucide, et un ballon vert passant derrière « Tes habitudes te
+coûtent −1,8 cm » rendait le chiffre illisible. `.results::after` s'intercale
+entre le canvas et le contenu (`::after` et pas `::before` : à `z-index` égal
+c'est l'ordre du document qui tranche, et `::before` se serait peint **sous**
+les ballons).
+
+**Palette.** L'arc-en-ciel d'origine est conservé — il tient sur le quasi-noir
+de cette page — mais il jure avec le principe d'accent unique du système de
+design. La variante aux couleurs de la marque est en commentaire en tête du
+fichier, une ligne à échanger.
+
+**Vérifié** en Chromium 390 × 844, par instrumentation du contexte 2D du
+canvas plutôt que de `requestAnimationFrame` (la paywall fait tourner son
+propre carrousel, qui polluait la mesure) : 91 images en 1,5 s sur le
+résultat, **0 en 2 s après la sortie de l'écran**, 800 particules dessinées au
+passage du pointeur, zéro erreur JS. En mode « animation réduite » : canvas
+vierge, aucune image.
+
+> **Réserve de ton.** Cet écran est celui où un adolescent peut lire qu'il
+> fera 168 cm. Des ballons en fond y sont ambiants plutôt que festifs, donc
+> défendables — mais les confettis qui se déclenchent au même moment, eux,
+> partent sans condition. Si l'un des deux doit sauter sur un résultat bas,
+> c'est la salve, pas le décor.

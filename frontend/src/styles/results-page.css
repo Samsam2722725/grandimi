@@ -495,3 +495,61 @@
   border-color: rgba(52, 199, 89, 0.3);
   background: rgba(52, 199, 89, 0.07);
 }
+
+
+/* ---------- Le fond de ballons ----------
+
+   `absolute` dans `.results` (qui est `fixed inset-0`) et pas `fixed` :
+   une couche fixe supplementaire se positionnerait par rapport au
+   viewport et non par rapport a cet ecran, ce qui la ferait deborder
+   des qu une autre page se monte par-dessus pendant une transition.
+
+   `z-index: 0` avec l en-tete et le corps remontes a 1 : le canvas passe
+   derriere le contenu sans qu aucun des deux n ait besoin d un fond
+   opaque — le degrade de `.results` reste visible a travers.
+
+   `pointer-events: none` est ce qui rend l effet utilisable sur
+   telephone : le doigt traverse le canvas, la page defile normalement,
+   et l ecouteur pose sur `window` fait quand meme eclater les ballons
+   croises au passage. */
+.results-ballons {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.results > .results-top,
+.results > .results-scroll,
+.results > .funnel-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Le voile, et pourquoi il n est pas negociable ----------
+
+   L empilement etait correct des le depart — `elementFromPoint` au milieu
+   de l ecran rend bien le contenu, pas le canvas. Le defaut etait
+   ailleurs : les cartes de cette page ont un fond TRANSLUCIDE. Un ballon
+   vert passant derriere « Tes habitudes te coutent -1,8 cm » traversait
+   la carte et rendait le chiffre illisible — c est-a-dire exactement la
+   ligne que cette page existe pour faire lire.
+
+   Le voile s intercale entre le canvas et le contenu. `::after` et pas
+   `::before` : les deux valent `z-index: 0` comme le canvas, et a
+   z-index egal c est l ordre du document qui tranche. `::before` est
+   genere en PREMIER enfant, il se serait donc peint SOUS les ballons.
+
+   0,62 est le reglage : au-dessous le chiffre reste sali, au-dessus les
+   ballons disparaissent et on paie une boucle de rendu pour rien. */
+.results::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: color-mix(in srgb, var(--funnel-bg) 62%, transparent);
+  pointer-events: none;
+}
