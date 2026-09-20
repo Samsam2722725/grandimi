@@ -82,6 +82,13 @@ func main() {
 		paye.DELETE("/nutrition/repas/:id", api.DeleteRepas)
 		paye.PUT("/nutrition/objectifs", api.PutObjectifs)
 
+		/* Sommeil. Les jours SANS saisie sont renvoyés tels quels, avec
+		   un drapeau : une nuit non notée n'est pas une nuit de zéro
+		   heure, et le graphe doit pouvoir faire la différence. */
+		paye.GET("/sommeil/semaine", api.GetSemaineSommeil)
+		paye.POST("/sommeil", api.PostSommeil)
+		paye.DELETE("/sommeil", api.DeleteSommeil)
+
 		// Todo-liste quotidienne : cocher/décocher une tâche du jour, lire
 		// l'état du jour, et l'historique pour le calendrier de série.
 		paye.POST("/tasks/toggle", api.ToggleTaskCompletion)

@@ -82,7 +82,7 @@ var piliers = []struct {
 	{"regularite", "Régularité", true},   // connexions
 	{"exercice", "Exercices", true},      // task_completions
 	{"mesures", "Suivi de taille", true}, // height_logs
-	{"sommeil", "Sommeil", false},        // étape 5
+	{"sommeil", "Sommeil", true},         // sleep_logs
 	{"nutrition", "Nutrition", false},    // étape 4
 	{"posture", "Posture", false},        // étape 3
 }
@@ -132,7 +132,20 @@ func GetDashboard(c *gin.Context) {
 		historique = nil
 	}
 
-	segments := construireSegments(serie, historique, derniere)
+	/* Le sommeil des sept derniers jours, pour noter son pilier.
+	   Une panne de lecture ne doit pas emporter l'écran entier : on
+	   passe alors un tableau vide, et le pilier reste non noté — ce qui
+	   est exact, puisqu'on ne sait rien. */
+	debutSemaine := aujourdhui
+	if d, err := time.Parse("2006-01-02", aujourdhui); err == nil {
+		debutSemaine = d.AddDate(0, 0, -6).Format("2006-01-02")
+	}
+	nuits, err := db.SemaineSommeil(userID, debutSemaine)
+	if err != nil {
+		nuits = nil
+	}
+
+	segments := construireSegments(serie, historique, derniere, nuits)
 
 	c.JSON(http.StatusOK, ReponseDashboard{
 		DerniereMesure:    derniere,
@@ -169,7 +182,7 @@ func etatDuVerrou(derniere *db.Mesure, aujourdhui string) (bool, string) {
 
 // construireSegments note les trois piliers alimentés et laisse les trois
 // autres en creux.
-func construireSegments(serie db.Serie, historique []db.JourHistorique, derniere *db.Mesure) []Segment {
+func construireSegments(serie db.Serie, historique []db.JourHistorique, derniere *db.Mesure, nuits []db.NuitSommeil) []Segment {
 	// Régularité : jours d'ouverture sur les sept derniers.
 	regularite := len(serie.Jours) * 100 / 7
 
@@ -193,19 +206,30 @@ func construireSegments(serie db.Serie, historique []db.JourHistorique, derniere
 		mesures = 100
 	}
 
+	/* Sommeil : noté sur les SEULES nuits saisies. Diviser par sept quand
+	   trois nuits sont notées ferait chuter le score parce que rien n'a
+	   été saisi, pas parce qu'on a mal dormi. Aucune saisie : le pilier
+	   bascule en non suivi — il n'est pas à zéro, il est inconnu. */
+	sommeil, sommeilNote := db.ScoreSommeil(nuits)
+
 	valeurs := map[string]int{
 		"regularite": regularite,
 		"exercice":   exercice,
 		"mesures":    mesures,
+		"sommeil":    sommeil,
 	}
 
 	out := make([]Segment, 0, len(piliers))
 	for _, p := range piliers {
+		suivi := p.Suivi
+		if p.Cle == "sommeil" {
+			suivi = sommeilNote
+		}
 		out = append(out, Segment{
 			Cle:     p.Cle,
 			Libelle: p.Libelle,
 			Pct:     valeurs[p.Cle], // 0 pour les piliers non suivis
-			Suivi:   p.Suivi,
+			Suivi:   suivi,
 		})
 	}
 	return out

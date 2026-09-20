@@ -14,18 +14,12 @@ import Spinner from '../components/Spinner';
 
 const SeanceExercices = lazy(() => import('./GrandirPage'));
 const NutritionPage = lazy(() => import('./NutritionPage'));
-
-/* Le sommeil arrive à l'étape 5 et sa section est DÉCLARÉE mais éteinte,
-   pour la même raison que l'onglet Communauté : un bouton qui n'ouvre
-   que « bientôt » apprend à l'utilisateur que certains boutons ne
-   servent à rien, et il ne l'oubliera pas le jour où celui-là marchera.
-   La bascule tient en un mot. */
-const SOMMEIL_ACTIF = false;
+const SommeilPage = lazy(() => import('./SommeilPage'));
 
 const SECTIONS = [
   { id: 'exercices', label: 'Exercices' },
   { id: 'nutrition', label: 'Nutrition' },
-  ...(SOMMEIL_ACTIF ? [{ id: 'sommeil', label: 'Sommeil' }] : []),
+  { id: 'sommeil', label: 'Sommeil' },
 ];
 
 function GrandirOnglet({ onVoirPlanComplet }) {
@@ -57,6 +51,7 @@ function GrandirOnglet({ onVoirPlanComplet }) {
           <SeanceExercices onVoirPlanComplet={onVoirPlanComplet} />
         )}
         {section === 'nutrition' && <NutritionPage />}
+        {section === 'sommeil' && <SommeilPage />}
       </Suspense>
     </>
   );

@@ -321,6 +321,31 @@ class APIClient {
     });
   }
 
+  // ---------- Sommeil ----------
+
+  /** Les sept nuits, celles sans saisie comprises.
+   *
+   *  Le serveur renvoie un drapeau `saisi` par jour : une nuit non
+   *  notée n'est pas une nuit de zéro heure, et le graphe a besoin de
+   *  la différence pour ne pas dessiner sept barres à zéro. */
+  async getSemaineSommeil(debut) {
+    const qs = debut ? `?debut=${encodeURIComponent(debut)}` : '';
+    return this.request(`/api/v1/sommeil/semaine${qs}`);
+  }
+
+  async enregistrerSommeil({ heures, jour }) {
+    return this.request('/api/v1/sommeil', {
+      method: 'POST',
+      body: JSON.stringify({ heures, jour }),
+    });
+  }
+
+  async supprimerSommeil(jour) {
+    return this.request(`/api/v1/sommeil?jour=${encodeURIComponent(jour)}`, {
+      method: 'DELETE',
+    });
+  }
+
   /** Enregistre une séance de mesure.
    *
    *  On envoie les TROIS relevés, pas leur médiane : c'est le serveur qui

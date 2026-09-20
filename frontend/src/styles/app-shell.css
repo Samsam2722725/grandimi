@@ -1675,3 +1675,248 @@
   color: var(--funnel-muted);
   cursor: not-allowed;
 }
+
+/* ============================================
+   SOMMEIL
+   ============================================ */
+
+.dodo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Titre et score EMPILÉS, pas côte à côte.
+
+   Sur deux colonnes à 390 px, « Tes sept dernières nuits » et « 83 % de
+   ton objectif » se coupaient chacun en deux lignes décalées : quatre
+   lignes pour deux informations courtes. Empilés, chacun tient sur la
+   sienne et l'en-tête est plus court qu'avant. */
+.dodo__entete {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dodo__titre {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.dodo__score { margin: 0; color: var(--funnel-muted); font-size: 13px; }
+.dodo__score strong { color: var(--funnel-text); font-size: 17px; font-weight: 800; }
+.dodo__score--vide { font-size: 12px; }
+
+/* ---------- Le graphe ----------
+   Une seule série : aucune légende, le titre au-dessus la nomme. */
+
+.graphe { margin: 0; }
+
+.graphe__cadre {
+  position: relative;
+  height: 180px;
+  padding: 0 2px;
+  border-bottom: 1px solid var(--funnel-line);
+}
+
+/* La ligne d'objectif est un REPÈRE, pas une donnée : pointillés,
+   couleur de filet, posée derrière les barres. Une grille complète à 2,
+   4, 6, 8, 10 h ajouterait cinq traits pour une information que
+   personne ne lit — ce qui compte est au-dessus ou en dessous. */
+.graphe__objectif {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed var(--funnel-line);
+  pointer-events: none;
+}
+
+.graphe__objectif-valeur {
+  position: absolute;
+  top: -8px;
+  right: 0;
+  padding-left: 6px;
+  background: var(--funnel-bg);
+  color: var(--funnel-muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.graphe__barres {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  /* 2px d'écart entre deux barres voisines : elles doivent se lire comme
+     sept objets, pas comme un bloc découpé. */
+  gap: 2px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.graphe__colonne {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+/* La cible tactile occupe toute la colonne, pas seulement la barre :
+   viser une barre de 20 px de haut au doigt est impossible. */
+.graphe__cible {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.graphe__barre {
+  display: block;
+  width: 100%;
+  /* Extrémité haute arrondie, base carrée : la barre est ancrée à la
+     ligne de zéro, et un arrondi en bas la ferait flotter. */
+  border-radius: 4px 4px 0 0;
+  background: color-mix(in srgb, var(--funnel-accent) 55%, var(--funnel-surface-high));
+}
+
+.graphe__barre--atteint { background: var(--funnel-accent); }
+
+/* Nuit NON SAISIE : un creux au ras de la ligne de base, jamais une
+   barre à zéro. Une barre à zéro se lit « tu as dormi zéro heure » ;
+   un creux se lit « rien de noté ». */
+.graphe__creux {
+  display: block;
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--funnel-line);
+}
+
+.graphe__cible--auj .graphe__barre,
+.graphe__cible--auj .graphe__creux {
+  outline: 2px solid var(--funnel-text);
+  outline-offset: 2px;
+}
+
+.graphe__valeur {
+  height: 14px;
+  color: var(--funnel-text);
+  font-size: 11px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.graphe__jour {
+  padding-top: 6px;
+  color: var(--funnel-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.graphe__jour--auj { color: var(--funnel-text); }
+
+/* ---------- Saisie ---------- */
+
+.dodo__saisie {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 16px;
+  border: 1px solid var(--funnel-line);
+  border-radius: 24px;
+  background: var(--funnel-surface);
+}
+
+.dodo__label {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.dodo__reglage {
+  display: grid;
+  grid-template-columns: 56px 1fr 56px;
+  align-items: center;
+  gap: 12px;
+}
+
+.dodo__pas {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 1px solid var(--funnel-line);
+  border-radius: 50%;
+  background: var(--funnel-surface-high);
+  color: var(--funnel-text);
+  cursor: pointer;
+}
+
+.dodo__pas:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.dodo__heures {
+  margin: 0;
+  font-size: clamp(38px, 12vw, 48px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.dodo__unite { margin-left: 4px; color: var(--funnel-muted); font-size: 0.4em; }
+
+.dodo__valider {
+  min-height: 52px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--funnel-accent);
+  color: var(--funnel-on-accent);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dodo__valider:disabled {
+  background: var(--funnel-surface-high);
+  color: var(--funnel-muted);
+  cursor: not-allowed;
+}
+
+.dodo__effacer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 9999px;
+  background: none;
+  color: var(--funnel-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dodo__note {
+  margin: 0;
+  color: var(--funnel-muted);
+  font-size: 12px;
+  line-height: 1.55;
+  text-align: center;
+}
