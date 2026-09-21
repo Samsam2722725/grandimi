@@ -64,6 +64,7 @@ const ETAPES = [
   'mere',
   'vitesse',
   'pointure',
+  'menarche',
   'sommeil',
   'nutrition',
   'activite',
@@ -73,6 +74,22 @@ const ETAPES = [
   'email',
   'recapitulatif',
 ]
+
+/* Toutes les etapes ne concernent pas tout le monde.
+
+   La date des premieres regles est une donnee de sante. En France le
+   consentement d une mineure ne suffit pas avant quinze ans : il faut
+   celui du titulaire de l autorite parentale. On ne pose donc la
+   question qu a partir de quinze ans, ce qui evite d avoir a construire
+   un recueil de consentement parental au milieu du tunnel.
+
+   C est un filtre d ECRAN, pas de modele : internal/estimator/menarche.go
+   accepte n importe quel age valide. Si la decision produit change un
+   jour, il n y a que cette fonction a toucher. */
+function etapeApplicable(nom, reponses) {
+  if (nom !== 'menarche') return true
+  return reponses.sex === 'F' && Number(reponses.age) >= 15
+}
 
 const REPONSES_INITIALES = {
   email: '',
@@ -89,6 +106,11 @@ const REPONSES_INITIALES = {
      pointures enverrait au serveur un signal que personne n'a donné. */
   shoe_size_eu: null,
   shoe_size_eu_1y: null,
+
+  /* Filles de 15 ans et plus uniquement — voir etapeApplicable.
+     null vaut « non repondu » et reste strictement neutre. */
+  menarche_survenue: null,
+  age_menarche_annees: null,
   sleep_hours_per_night: null,
   nutrition_level: '',
   exercise_min_per_day: null,
@@ -157,6 +179,9 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     ...(reprise?.reponses || {}),
   }))
   const [unite, setUnite] = useState(() => reprise?.unite || 'metric')
+  const [menarcheInconnue, setMenarcheInconnue] = useState(
+    () => (reprise?.reponses?.menarche_survenue ?? null) !== true,
+  )
   const [vitesseInconnue, setVitesseInconnue] = useState(
     () => reprise?.reponses?.height_velocity_cm === null,
   )
@@ -193,6 +218,17 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
 
   const definir = (champ, valeur) => setReponses((prec) => ({ ...prec, [champ]: valeur }))
 
+  /* Avance ou recule jusqu a la prochaine etape qui concerne ce profil.
+     Sans ce saut, une fille de treize ans verrait un ecran vide, et un
+     garcon aussi. */
+  const suivantApplicable = (depuis, pas) => {
+    let j = depuis + pas
+    while (j > 0 && j < ETAPES.length - 1 && !etapeApplicable(ETAPES[j], reponses)) {
+      j += pas
+    }
+    return Math.max(0, Math.min(ETAPES.length - 1, j))
+  }
+
   const avancer = () => {
     /* L'adresse est le seul champ qu'on demande sans rien donner en
        échange à cet instant : savoir combien la franchissent dit si
@@ -200,7 +236,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
        jamais vers PostHog. */
     if (etape === 'email') emailSaisi()
     clearTimeout(minuterie.current)
-    setIndex((i) => Math.min(ETAPES.length - 1, i + 1))
+    setIndex((i) => suivantApplicable(i, 1))
   }
 
   const reculer = () => {
@@ -210,7 +246,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       onCancel()
       return
     }
-    setIndex((i) => Math.max(0, i - 1))
+    setIndex((i) => suivantApplicable(i, -1))
   }
 
   /* Sur une question à choix unique, le tap EST la réponse : demander en plus
@@ -263,6 +299,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
            comme une pénalité (internal/estimator/maturite.go). */
         shoe_size_eu: reponses.shoe_size_eu ?? 0,
         shoe_size_eu_1y: reponses.shoe_size_eu_1y ?? 0,
+        /* false et 0 valent « non renseigne » : le serveur n applique
+           alors aucune ancre menarche (internal/estimator/menarche.go). */
+        menarche_survenue: reponses.menarche_survenue === true,
+        age_menarche_annees: reponses.age_menarche_annees ?? 0,
         nutrition_level: reponses.nutrition_level,
         sleep_hours_per_night: reponses.sleep_hours_per_night,
         exercise_min_per_day: reponses.exercise_min_per_day,
@@ -573,6 +613,47 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           </>
         )
 
+      case 'menarche':
+        return (
+          <>
+            <div style={{ opacity: menarcheInconnue ? 0.35 : 1 }}>
+              <WheelPicker
+                label="Âge aux premières règles"
+                min={9}
+                max={18}
+                step={0.5}
+                value={Number(reponses.age_menarche_annees ?? 12.5)}
+                onChange={(v) => {
+                  setMenarcheInconnue(false)
+                  definir('menarche_survenue', true)
+                  definir('age_menarche_annees', v)
+                }}
+                format={(v) => `${fr(v)} ans`}
+              />
+            </div>
+            {/* Un seul refus, volontairement : « pas encore » et « je préfère
+                ne pas répondre » produisent exactement le même calcul — aucune
+                ancre ménarche. Deux cartes pour un seul effet donneraient
+                l'illusion d'un choix qui n'en est pas un.
+
+                « Pas encore » à quinze ans EST une information — c'est une
+                maturation tardive — mais le modèle ne l'exploite pas encore.
+                Le jour où il le fera, il faudra séparer les deux cartes. */}
+            <ChoiceCard
+              role="checkbox"
+              title="Pas encore, ou je préfère ne pas répondre"
+              hint="Cette question est facultative"
+              selected={menarcheInconnue}
+              onSelect={() => {
+                const inconnu = !menarcheInconnue
+                setMenarcheInconnue(inconnu)
+                definir('menarche_survenue', inconnu ? null : true)
+                definir('age_menarche_annees', inconnu ? null : 12.5)
+              }}
+            />
+          </>
+        )
+
       case 'sommeil':
         return (
           <div className="funnel-choices" role="radiogroup" aria-label="Heures de sommeil">
@@ -786,25 +867,25 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
 
       case 'recapitulatif': {
         const lignes = [
-          { label: 'Sexe', valeur: reponses.sex === 'M' ? 'Garçon' : 'Fille', vers: 0 },
+          { label: 'Sexe', valeur: reponses.sex === 'M' ? 'Garçon' : 'Fille', vers: ETAPES.indexOf('sexe') },
           /* `fr` sur toutes les valeurs numériques : l'âge, le poids et la
              croissance de l'année avancent de demi en demi, et le
              récapitulatif est l'écran où l'on demande justement de RELIRE
              ses réponses. Les y afficher au point anglais, juste avant un
              résultat qui écrit tout à la virgule, était la seule page où
              les deux écritures se croisaient ligne à ligne. */
-          { label: 'Âge', valeur: `${fr(reponses.age)} ans`, vers: 1 },
-          { label: 'Ta taille', valeur: `${fr(reponses.height_cm)} cm`, vers: 2 },
-          { label: 'Ton poids', valeur: `${fr(reponses.weight_kg)} kg`, vers: 3 },
-          { label: 'Père', valeur: `${fr(reponses.father_height_cm)} cm`, vers: 5 },
-          { label: 'Mère', valeur: `${fr(reponses.mother_height_cm)} cm`, vers: 6 },
+          { label: 'Âge', valeur: `${fr(reponses.age)} ans`, vers: ETAPES.indexOf('age') },
+          { label: 'Ta taille', valeur: `${fr(reponses.height_cm)} cm`, vers: ETAPES.indexOf('taille') },
+          { label: 'Ton poids', valeur: `${fr(reponses.weight_kg)} kg`, vers: ETAPES.indexOf('poids') },
+          { label: 'Père', valeur: `${fr(reponses.father_height_cm)} cm`, vers: ETAPES.indexOf('pere') },
+          { label: 'Mère', valeur: `${fr(reponses.mother_height_cm)} cm`, vers: ETAPES.indexOf('mere') },
           {
             label: 'Grandi cette année',
             valeur:
               reponses.height_velocity_cm === null
                 ? 'Je ne sais pas'
                 : `${fr(reponses.height_velocity_cm)} cm`,
-            vers: 7,
+            vers: ETAPES.indexOf('vitesse'),
           },
           {
             label: 'Pointure',
@@ -812,12 +893,24 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
               reponses.shoe_size_eu === null
                 ? 'Non renseignée'
                 : `${fr(reponses.shoe_size_eu)} (${fr(reponses.shoe_size_eu_1y)} il y a un an)`,
-            vers: 8,
+            vers: ETAPES.indexOf('pointure'),
           },
           /* L'index suit ETAPES, il n'est pas décoratif : un écran ajouté ou
              retiré avant celui-ci décale la cible, et « Modifier » renvoie
              alors sur l'écran d'à côté. */
-          { label: 'E-mail', valeur: reponses.email, vers: 15 },
+          ...(etapeApplicable('menarche', reponses)
+            ? [
+                {
+                  label: 'Premières règles',
+                  valeur:
+                    reponses.menarche_survenue === true
+                      ? `${fr(reponses.age_menarche_annees)} ans`
+                      : 'Non renseigné',
+                  vers: ETAPES.indexOf('menarche'),
+                },
+              ]
+            : []),
+          { label: 'E-mail', valeur: reponses.email, vers: ETAPES.indexOf('email') },
         ]
 
         return (
@@ -881,6 +974,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     pointure: {
       titre: 'Quelle est ta pointure ?',
       sous: 'Le pied arrête de grandir avant la taille : comparer avec l’an dernier dit où tu en es. Facultatif.',
+    },
+    menarche: {
+      titre: 'À quel âge as-tu eu tes premières règles ?',
+      sous: 'Elles datent la fin de la croissance mieux que tout le reste. Facultatif.',
     },
     sommeil: {
       titre: 'Tu dors combien, en général ?',

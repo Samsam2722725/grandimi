@@ -95,7 +95,7 @@ const FAQ = [
   {
     question: 'Faut-il payer pour voir mon estimation ?',
     answer:
-      'Oui. Le questionnaire est libre d’accès, mais ton résultat — ta taille adulte estimée, ce que tes habitudes te coûtent et ton plan quotidien — est réservé aux abonnés : 4,99 €/mois ou 29,99 €/an, résiliable quand tu veux. Aucun prélèvement ne part avant que tu aies choisi ton offre.',
+      'Oui. Le questionnaire est libre d’accès, mais ton résultat — ta taille adulte estimée, ce que tes habitudes te coûtent et ton plan quotidien — est réservé aux abonnés : 9,99 €/mois ou 29,99 €/an, résiliable quand tu veux. Aucun prélèvement ne part avant que tu aies choisi ton offre.',
   },
   {
     question: 'Mes données sont-elles conservées ?',
@@ -718,6 +718,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               <p className="mb-3 font-semibold text-ink">Outils</p>
               <a href="/" className="mb-2 block hover:text-ink transition-colors">Faire l’estimation</a>
               <a href="/calculer-sa-taille-adulte/" className="mb-2 block hover:text-ink transition-colors">Calculer sa taille adulte</a>
+              <a href="/comparatif-calculateurs-taille/" className="mb-2 block hover:text-ink transition-colors">Comparatif des calculateurs</a>
             </div>
 
             <div>
@@ -731,6 +732,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
 
             <div>
               <p className="mb-3 font-semibold text-ink">Grandimi</p>
+              <a href="/methode/" className="mb-2 block hover:text-ink transition-colors">Notre méthode</a>
               <a href="mailto:grandimi14@gmail.com" className="mb-2 block hover:text-ink transition-colors">Contact</a>
               <a href="/mentions-legales.html" className="mb-2 block hover:text-ink transition-colors">Mentions légales</a>
               <a href="/cgv.html" className="mb-2 block hover:text-ink transition-colors">CGV</a>

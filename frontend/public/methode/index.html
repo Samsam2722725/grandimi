@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0a0a" />
+
+    <!-- ============================================================
+         LA PAGE DE TRANSPARENCE — celle qui répond à « qui êtes-vous
+         pour affirmer ça ».
+
+         Sur un sujet de santé qui s'adresse à des mineurs et qui demande
+         une carte bancaire, un moteur de recherche cherche autre chose
+         que des mots-clés : qui publie, sur quoi il s'appuie, et s'il
+         reconnaît ses limites. Aucune des six autres pages ne répondait
+         à ça.
+
+         Elle ne redit pas ce que fait le produit — /methodes-taille-adulte/
+         compare les méthodes, /calculer-sa-taille-adulte/ donne la
+         formule. Celle-ci publie ce qu'on ne trouve nulle part ailleurs :
+         les paramètres réels du modèle, ce qu'il refuse de demander, ce
+         qu'il ne sait pas faire, et ce qui a été corrigé, avec les dates.
+
+         Le journal des corrections est la section la plus inhabituelle
+         et la plus utile. Un site qui publie ses propres erreurs datées
+         dit quelque chose qu'aucune page « à propos » ne peut imiter.
+         ============================================================ -->
+
+    <title>Notre méthode : ce que le calcul sait, et ce qu’il ignore</title>
+    <meta
+      name="description"
+      content="Les paramètres réels du modèle, la façon dont la marge est calculée, ce que le calcul refuse de demander, et le journal daté de ses corrections."
+    />
+    <link rel="canonical" href="https://grandimi.com/methode/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Grandimi" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:url" content="https://grandimi.com/methode/" />
+    <meta property="og:title" content="Notre méthode : ce que le calcul sait, et ce qu’il ignore" />
+    <meta
+      property="og:description"
+      content="Les paramètres réels du modèle, ce qu’il refuse de demander, et le journal daté de ses corrections."
+    />
+    <meta property="og:image" content="https://grandimi.com/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://grandimi.com/og-image.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "AboutPage",
+        "name": "Notre méthode : ce que le calcul sait, et ce qu’il ignore",
+        "url": "https://grandimi.com/methode/",
+        "inLanguage": "fr-FR",
+        "datePublished": "2026-09-19",
+        "dateModified": "2026-09-19",
+        "description": "Paramètres du modèle d’estimation de la taille adulte, calcul de la marge d’erreur, limites déclarées et journal daté des corrections.",
+        "publisher": { "@id": "https://grandimi.com/#organisation" },
+        "about": { "@id": "https://grandimi.com/#organisation" },
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://grandimi.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Notre méthode" }
+          ]
+        }
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/guide.css" />
+  </head>
+
+  <body>
+    <header class="site">
+      <div class="enveloppe">
+        <a class="logo" href="/"><span class="pastille"></span>Grandimi</a>
+        <a class="lien-action" href="/?src=guide-methode">Faire l’estimation →</a>
+      </div>
+    </header>
+
+    <main class="enveloppe">
+      <nav class="fil" aria-label="Fil d’Ariane">
+        <a href="/">Accueil</a> › Notre méthode
+      </nav>
+
+      <h1>Notre méthode</h1>
+
+      <p class="signature">
+        Édité par Grandimi · Mis à jour le 19 septembre 2026 ·
+        <a href="mailto:grandimi14@gmail.com">grandimi14@gmail.com</a>
+      </p>
+
+      <div class="reponse">
+        <p>
+          L’estimation croise deux méthodes publiées — <strong>Khamis-Roche</strong> et le
+          suivi de percentile sur les <strong>courbes de l’OMS</strong> — moyennées sans
+          pondération, puis corrigées d’un indice de maturité. Chaque résultat est affiché
+          avec sa marge. Quand le calcul sort de son domaine, il le dit au lieu de rendre
+          un chiffre.
+        </p>
+      </div>
+
+      <p>
+        Cette page publie les paramètres réels du modèle. Pas une présentation : les
+        valeurs qui servent effectivement, ce que le calcul refuse de demander, ce qu’il
+        ne sait pas faire, et ce qui a été corrigé depuis.
+      </p>
+
+      <h2>Ce que le calcul utilise</h2>
+
+      <p>
+        <span class="net">Deux ancres, moyennées à parts égales.</span> Elles restent
+        utiles ensemble parce qu’elles échouent sur des cas différents : Khamis-Roche sort
+        de son domaine d’ajustement au-delà de 17 ans et demi, le suivi de couloir se
+        trompe quand la puberté est en avance ou en retard. Elles se trompent rarement
+        dans le même sens.
+      </p>
+
+      <p>
+        La moyenne n’est <strong>pas pondérée</strong>, et c’est un choix mesuré : sur nos
+        2 450 profils de référence, donner deux tiers du poids à Khamis-Roche ne fait pas
+        mieux. Inventer une pondération serait afficher une précision qu’on n’a pas.
+      </p>
+
+      <p>
+        S’y ajoute une <strong>correction de maturité</strong>, calculée à partir de la
+        vitesse de croissance de l’année écoulée et du changement de pointure. Elle va
+        dans le sens inverse de l’intuition : être en avance pubertaire, c’est avoir son
+        pic derrière soi, donc finir plus tôt — et être surestimé par l’ancre qui suppose
+        le couloir tenu jusqu’à 19 ans. Un seul indice, nourri par les deux signaux :
+        les appliquer séparément reviendrait à compter deux fois le même phénomène.
+      </p>
+
+      <h2>Ce que le calcul refuse de demander</h2>
+
+      <p>
+        <span class="net"
+          >Le stade pubertaire de Tanner serait le meilleur indicateur de croissance
+          restante. Nous ne le demandons pas.</span
+        >
+        L’obtenir suppose de demander à un mineur d’auto-évaluer sa pilosité pubienne ou
+        son développement génital. C’est une donnée de santé sensible au sens du RGPD, et
+        ce n’est pas une question qu’un site commercial doit poser à un adolescent.
+      </p>
+
+      <p>
+        La vitesse de croissance porte la même information utile, et se demande en une
+        phrase : combien tu as pris cette année. C’est un modèle un peu moins informé,
+        pour une question de moins qu’on n’a pas envie de poser.
+      </p>
+
+      <h2>Comment la marge est calculée</h2>
+
+      <p>
+        La marge ne dépend que de ce qui la détermine réellement : la quantité de
+        croissance qu’il reste à parcourir. Le point de départ est <strong>±6,5 cm</strong>,
+        situé entre l’erreur de Khamis-Roche dans son échantillon d’origine — environ
+        5,3 cm chez le garçon, 4,3 cm chez la fille — et les ±8,5 cm de la formule des
+        parents.
+      </p>
+
+      <div class="tableau-large">
+        <table>
+          <caption>
+            Ce qui resserre ou élargit la fourchette
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Situation</th>
+              <th scope="col">Effet sur la marge</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Croissance ≥ 6 cm sur l’année</th>
+              <td>× 1,15 — pic pubertaire en cours, issue moins prévisible</td>
+            </tr>
+            <tr>
+              <th scope="row">Croissance ≤ 2 cm sur l’année</th>
+              <td>× 0,70 — la croissance s’arrête, l’estimation se resserre</td>
+            </tr>
+            <tr>
+              <th scope="row">Aucun signal de maturité donné</th>
+              <td>× 1,10 — on élargit plutôt que de faire semblant d’être précis</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Les deux questions sur la croissance récente et la pointure sont facultatives.
+        En sauter une élargit la fourchette : c’est la contrepartie honnête d’une
+        information manquante, pas une punition.
+      </p>
+
+      <h2>Ce que le modèle ne sait pas faire</h2>
+
+      <p>
+        <span class="net"
+          >Au-delà de trois écarts-types par rapport à la médiane de son âge, le calcul
+          s’arrête de prétendre.</span
+        >
+        On a quitté la variation normale pour un domaine où seul un médecin peut répondre.
+        Borner le chiffre ne le rendrait pas juste — seulement moins spectaculairement
+        faux.
+      </p>
+
+      <p>Dans ce cas, l’écran affiche ceci, et non un résultat ordinaire :</p>
+
+      <div class="formule">
+        <p>
+          « Ta taille sort nettement des courbes de référence pour ton âge. Ce n’est pas
+          forcément un problème, mais ce calcul n’est pas fait pour ce cas : l’estimation
+          ci-dessous est très approximative. Parles-en à un médecin, c’est le seul moyen
+          d’avoir une vraie réponse. »
+        </p>
+      </div>
+
+      <p>
+        Nous connaissons et mesurons le biais qui subsiste sur ces profils extrêmes : la
+        projection de couloir est bornée par le bas, ce qui tire le résultat vers le haut.
+        Sur un cas de test à 17,5 ans mesurant 105 cm, l’écart atteint 23 cm. Ces profils
+        sont tous signalés hors domaine, avec un intervalle élargi et un renvoi vers un
+        médecin — le produit ne prétend pas les estimer, il dit qu’il ne sait pas.
+      </p>
+
+      <h2>Ce qui a été corrigé, et quand</h2>
+
+      <p>
+        Un modèle qui n’a jamais changé d’avis est un modèle que personne n’a vérifié.
+        Voici les corrections qui ont modifié les chiffres affichés.
+      </p>
+
+      <div class="tableau-large">
+        <table>
+          <caption>
+            Journal des corrections
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Correction</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">15 sept. 2026</th>
+              <td>
+                Le modèle apprend à situer l’adolescent par rapport à son âge ; la table
+                de l’OMS devient reproductible.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">17 sept. 2026</th>
+              <td>
+                La méthode mi-parentale est retirée. Elle comptait deux fois le même
+                signal de maturité et renvoyait à un profil sur cinq sa propre taille en
+                guise de prédiction.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">17 sept. 2026</th>
+              <td>
+                La vitesse de croissance entre réellement dans le chiffre ; un seul indice
+                de maturité remplace deux comptages.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">18 sept. 2026</th>
+              <td>
+                Un garde-fou haut est ajouté : le modèle pouvait annoncer jusqu’à 201 cm.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">18 sept. 2026</th>
+              <td>
+                La borne basse est retirée — elle rendait une constante au lieu d’une
+                estimation.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Les témoignages affichés au lancement ont été retirés pour la même raison : ils
+        n’étaient pas réels. Aucune note moyenne n’est publiée tant qu’il n’y a pas d’avis
+        à agréger.
+      </p>
+
+      <h2>Qui édite ce site</h2>
+
+      <p>
+        Grandimi est édité en France. Le site est un outil d’information : il n’est pas un
+        dispositif médical, il ne pose aucun diagnostic et il ne délivre aucun traitement.
+        Les mesures saisies servent à calculer l’estimation et le plan, rien d’autre —
+        elles ne sont ni revendues ni transmises à des annonceurs, et leur suppression
+        peut être demandée à tout moment.
+      </p>
+
+      <p>
+        Une question, une erreur repérée, une correction à proposer :
+        <a href="mailto:grandimi14@gmail.com">grandimi14@gmail.com</a>. Le détail des
+        traitements de données est dans la
+        <a href="/privacy.html">politique de confidentialité</a>.
+      </p>
+
+      <div class="cta">
+        <h2>Voir ce que ça donne sur toi</h2>
+        <p>
+          Une dizaine de questions, deux minutes, aucune radiographie — et la fourchette
+          affichée avec le résultat.
+        </p>
+        <a class="bouton" href="/?src=guide-methode">Commencer</a>
+      </div>
+
+      <div class="avertissement">
+        <strong>Ce n’est pas un avis médical.</strong> Grandimi n’est pas un dispositif
+        médical et ne pose aucun diagnostic. Une estimation statistique ne remplace pas un
+        examen. En cas d’inquiétude réelle sur une croissance, l’interlocuteur est un
+        pédiatre ou un endocrinologue.
+      </div>
+
+      <h2>Sources</h2>
+
+      <ul class="sources">
+        <li>
+          Khamis H. J., Roche A. F., « Predicting adult stature without using skeletal
+          age: the Khamis-Roche method », <em>Pediatrics</em>, 1994 ; 94(4) — méthode et
+          erreurs de référence citées plus haut.
+        </li>
+        <li>
+          Organisation mondiale de la santé, <em>Growth reference data for 5-19 years</em>
+          — courbes taille-pour-âge utilisées pour le suivi de couloir.
+        </li>
+        <li>
+          Tanner J. M., <em>Growth at Adolescence</em>, 2<sup>e</sup> éd. — stades
+          pubertaires et formule mi-parentale.
+        </li>
+        <li>
+          Greulich W. W., Pyle S. I., <em>Radiographic Atlas of Skeletal Development of
+          the Hand and Wrist</em>, 1959 — référence de l’âge osseux, que nous n’utilisons
+          pas et qui reste plus précise.
+        </li>
+      </ul>
+    </main>
+
+    <footer class="site">
+      <div class="enveloppe">
+        <div class="pied-colonnes">
+          <div>
+            <p class="pied-titre">Outils</p>
+            <a href="/">Faire l’estimation</a>
+            <a href="/calculer-sa-taille-adulte/">Calculer sa taille adulte</a>
+            <a href="/comparatif-calculateurs-taille/">Comparatif des calculateurs</a>
+          </div>
+          <div>
+            <p class="pied-titre">Guides</p>
+            <a href="/questions-croissance/">Questions sur la croissance</a>
+            <a href="/methodes-taille-adulte/">Prédire sa taille adulte</a>
+            <a href="/que-faire-pour-grandir/">Que faire pour grandir</a>
+            <a href="/croissance-terminee/">Savoir si on a fini de grandir</a>
+            <a href="/poussee-de-croissance/">La poussée de croissance</a>
+          </div>
+          <div>
+            <p class="pied-titre">Grandimi</p>
+            <a href="/methode/">Notre méthode</a>
+            <a href="mailto:grandimi14@gmail.com">Contact</a>
+            <a href="/mentions-legales.html">Mentions légales</a>
+            <a href="/cgv.html">CGV</a>
+            <a href="/privacy.html">Confidentialité</a>
+          </div>
+        </div>
+        <p class="pied-avertissement">
+          Grandimi n’est pas un dispositif médical et ne pose aucun diagnostic. Les
+          estimations et les repères publiés ici sont statistiques, et ne remplacent pas
+          l’avis d’un pédiatre ou d’un endocrinologue.
+        </p>
+        <p class="pied-legal">© 2026 Grandimi · Fait en France · Science, pas promesses</p>
+      </div>
+    </footer>
+  </body>
+</html>

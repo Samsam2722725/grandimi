@@ -130,11 +130,19 @@ func TestScores_Bornes(t *testing.T) {
 		}
 	}
 
-	// Un pied qui « retrecit » est une erreur de saisie, pas un signal.
-	quiRetrecit, ok := scorePointure(38, 40)
-	stable, _ := scorePointure(40, 40)
-	if !ok || quiRetrecit != stable {
-		t.Errorf("pointure en recul : score %+.2f, attendu le meme qu une variation nulle (%+.2f)", quiRetrecit, stable)
+	/* Un pied qui « retrecit » est une erreur de saisie, pas un signal.
+
+	   Cette assertion exigeait auparavant le MEME score qu une variation
+	   nulle. Mais une variation nulle est le signal le PLUS FORT du
+	   bareme — +1, correction maximale vers le bas : exiger l egalite
+	   revenait a faire valoir une faute de frappe autant qu un pied
+	   reellement fige depuis un an. Le commentaire disait deja l inverse
+	   de ce que la ligne verifiait, des l origine.
+
+	   Le cas complet est couvert par
+	   TestScorePointure_UnePointureQuiReculeEstNonRenseignee. */
+	if _, ok := scorePointure(38, 40); ok {
+		t.Error("pointure en recul : devrait compter comme non renseignee")
 	}
 }
 
@@ -378,4 +386,49 @@ func TestMarge_LaPointureLeveLaPenaliteDIgnorance(t *testing.T) {
 	}
 
 	t.Logf("marge : aucun signal %.1f cm | pointure declaree %.1f cm", rien.MargeCM, resp.MargeCM)
+}
+
+/* UNE POINTURE QUI RECULE NE DOIT PAS VALOIR UN PIED FIGE.
+
+   Le math.Max(0, ...) d origine ramenait une variation negative a zero.
+   Or zero est le signal le PLUS FORT du bareme : indice +1, donc la
+   correction maximale vers le bas. Une faute de frappe retirait autant
+   de centimetres qu un pied reellement immobile depuis un an.
+
+   Mesure avant correction, garcon de 13 ans : 42 -> 42, 41 apres 42 et
+   38 apres 43 rendaient tous les trois un indice de 1,00. */
+func TestScorePointure_UnePointureQuiReculeEstNonRenseignee(t *testing.T) {
+	for _, c := range [][2]float64{{41, 42}, {38, 43}, {30, 31}} {
+		if _, ok := scorePointure(c[0], c[1]); ok {
+			t.Errorf("pointure %.0f apres %.0f : devrait compter comme non renseignee", c[0], c[1])
+		}
+	}
+
+	// Le pied reellement fige, lui, garde son signal maximal.
+	if s, ok := scorePointure(42, 42); !ok || s != 1 {
+		t.Errorf("pied fige : attendu score 1 renseigne, obtenu %.2f (renseigne=%v)", s, ok)
+	}
+}
+
+/* Le defaut doit disparaitre du CHIFFRE RENDU, pas seulement du score :
+   une saisie qui recule ne doit plus rien deplacer du tout. */
+func TestPredictHeightV2_PointureQuiReculeNeDeplaceRien(t *testing.T) {
+	base := HeightPredictionV2Request{
+		Age: 13, Sex: MALE, HeightCM: 160, WeightKG: 48,
+		FatherHeightCM: 178, MotherHeightCM: 165,
+	}
+	sansSignal := PredictHeightV2(base)
+
+	avecFaute := base
+	avecFaute.ShoeSizeEU = 41
+	avecFaute.ShoeSizeEU1Y = 42
+	resp := PredictHeightV2(avecFaute)
+
+	if resp.PredictedHeightCM != sansSignal.PredictedHeightCM {
+		t.Errorf("pointure qui recule : attendu %.1f cm comme sans signal, obtenu %.1f",
+			sansSignal.PredictedHeightCM, resp.PredictedHeightCM)
+	}
+	if resp.ConfidenceRange != sansSignal.ConfidenceRange {
+		t.Errorf("pointure qui recule : l intervalle doit rester celui d un profil sans signal")
+	}
 }

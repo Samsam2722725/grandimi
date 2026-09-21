@@ -182,8 +182,15 @@ go build -o bin/server cmd/server/main.go
 # - DATABASE_URL
 # - AUTH_SECRET (generated, 32+ chars)
 # - ADMIN_TOKEN (generated, random string)
-# - WHOP_PLAN_ID
+# - WHOP_API_KEY
+# - WHOP_PLAN_ID_MONTHLY
+# - WHOP_PLAN_ID_ANNUAL
 # - WHOP_WEBHOOK_SECRET
+# Pour que les e-mails partent (relance J+30, mot de passe) :
+# - RESEND_API_KEY
+# - EMAIL_EXPEDITEUR
+# - SITE_URL
+# - API_URL
 
 # 3. Commit and push
 git add -A
@@ -302,8 +309,11 @@ Set exactly these:
 - DATABASE_URL (from Supabase)
 - AUTH_SECRET (random 32+ chars)
 - ADMIN_TOKEN (random string)
-- WHOP_PLAN_ID (from Whop)
+- WHOP_API_KEY (from Whop)
+- WHOP_PLAN_ID_MONTHLY (from Whop, le plan reellement facture au mois)
+- WHOP_PLAN_ID_ANNUAL (from Whop)
 - WHOP_WEBHOOK_SECRET (from Whop)
+- RESEND_API_KEY, EMAIL_EXPEDITEUR, SITE_URL, API_URL (sinon aucun e-mail ne part)
 
 **Do NOT set:**
 - VITE_* vars (frontend doesn't see them)

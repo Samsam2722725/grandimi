@@ -51,7 +51,7 @@
          accroches. -->
     <meta
       name="description"
-      content="Quelle sera ta taille adulte ? Estimation en 2 minutes par la méthode Khamis-Roche croisée aux courbes OMS, marge d’erreur affichée. Dès 4,99 €/mois."
+      content="Quelle sera ta taille adulte ? Estimation en 2 minutes par la méthode Khamis-Roche croisée aux courbes OMS, marge d’erreur affichée. Dès 29,99 €/an, ou 9,99 €/mois."
     />
     <title>Calculer sa taille adulte : estimation en 2 min — Grandimi</title>
 
@@ -155,13 +155,71 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- LA FEUILLE DE STYLE DES POLICES NE BLOQUE PLUS LE RENDU.
+
+         Mesure PageSpeed du 19/09/2026, Moto G Power en 4G lente : score
+         64, dont 1 260 ms perdus en « requetes de blocage du rendu ».
+         Cette feuille en fait partie — le navigateur ouvre une connexion
+         vers fonts.googleapis.com et attend sa reponse avant de peindre
+         quoi que ce soit.
+
+         media="print" la fait charger sans bloquer ; onload la rebascule
+         sur "all" des qu'elle est la. Le noscript garde le cas sans
+         JavaScript. Les polices portent deja display=swap, donc le texte
+         s'affiche dans la police de repli puis bascule — ce qui se
+         produisait deja, seulement plus tard.
+
+         A SURVEILLER : le CLS vaut 0 aujourd'hui, soit 25 points sur 100.
+         Si la bascule de police se met a decaler la mise en page, ce
+         changement coute plus qu'il ne rapporte et doit etre annule. -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" />
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet" />
+    </noscript>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- ============================================================
+         COQUILLE DU HERO — le haut de la page, ecrit en dur.
+
+         POURQUOI. Ce fichier n'envoyait qu'un <div id="root"> vide. Le
+         telephone devait donc telecharger 660 ko de JavaScript ET les
+         executer avant de peindre le moindre pixel. Rapport PageSpeed du
+         19/09/2026, Moto G Power en 4G lente : First Contentful Paint a
+         3,5 s, Largest Contentful Paint a 6,0 s — soit 6 points sur les
+         35 que valent ces deux mesures. Aucun reglage ne contourne un
+         document vide.
+
+         CE QU'IL Y A ICI, ET PAS PLUS. L'en-tete et la colonne gauche du
+         hero : titre, sous-titre, bouton. C'est l'element le plus grand
+         de l'ecran sur mobile, donc celui qui porte le LCP. Les trois
+         telephones ne sont pas repris — ils pesent 35 ko de balisage et
+         se trouvent sous la ligne de flottaison sur telephone.
+
+         L'EN-TETE EST LA POUR UNE RAISON PRECISE. Sans lui, le titre se
+         peindrait 77 px trop haut, puis redescendrait quand React monte.
+         C'est exactement le decalage de mise en page que ce changement
+         doit eviter : le CLS vaut 25 des 100 points du score, et il est
+         a 0 aujourd'hui. Le perdre couterait plus que le LCP ne rapporte.
+
+         LES BOUTONS SONT DES <span>. Rien n'est cliquable avant que
+         React ne monte ; un <button> qui ne repond pas est pire qu'un
+         texte qui n'en a pas l'air. React remplace tout ce bloc au
+         montage par la vraie version, interactive.
+
+         A REGENERER QUAND LE HERO CHANGE. Ce balisage est une copie
+         figee de ce que rend HomePage.jsx. Si le titre, le sous-titre ou
+         l'en-tete changent la-bas sans etre reportes ici, le visiteur
+         verra l'ancienne version pendant deux secondes puis la nouvelle
+         — et le decalage reviendra. C'est le prix de cette technique
+         sans outil de pre-rendu.
+         ============================================================ -->
+    <div id="root"><div class="app"><div class="theme-night"><main><header class="sticky top-0 z-50 border-b border-[color:var(--color-frost-gray)] bg-[color:var(--surface-page-canvas)]"><div class="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8"><a href="#" class="flex min-w-0 items-center gap-2.5 text-ink"><span class="flex size-8 items-center justify-center rounded-[9px] bg-brand"></span><span class="truncate font-display text-xl font-semibold tracking-[-0.02em]">Grandimi</span></a><nav class="hidden items-center gap-7 md:flex"><a href="#fonctionnalites" class="text-[13px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase">Fonctionnalités</a><a href="#faq" class="text-[13px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase">FAQ</a><a href="/questions-croissance/" class="text-[13px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase">Guides</a></nav><div class="flex shrink-0 items-center gap-2 sm:gap-3"><span class="inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-sm font-semibold whitespace-nowrap text-ink sm:border sm:border-ink sm:px-5">Se connecter</span><span class="hidden min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] sm:inline-flex sm:px-5">Commencer</span></div></div></header><section class="relative px-5 pt-12 pb-16 sm:px-8 lg:pt-20"><div class="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-12 lg:gap-10"><div class="lg:col-span-7"><h1 class="night-title-gradient font-display text-[clamp(40px,6.2vw,72px)] leading-[1.02] font-medium tracking-[-0.035em] text-balance">Prédis et <span style="-webkit-text-fill-color:currentColor">maximise</span> ta taille.</h1><p class="mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]">Tu ne contrôles pas tes gènes, mais tu peux optimiser ta croissance. Grandimi te dit où tu en es, et quoi faire chaque jour.</p><div class="mt-9"><span class="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)]">Commencer mon analyse</span></div></div></div></section></main></div></div></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

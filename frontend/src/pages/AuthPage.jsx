@@ -29,6 +29,17 @@ function AuthPage({ onAuthComplete }) {
         const predictions = await apiClient.getMyPredictions();
         if (predictions && predictions.length > 0) {
           const latestPrediction = predictions[0];
+          /* L AVERTISSEMENT MEDICAL NE SURVIT PAS A CETTE RECONSTRUCTION.
+
+             predictions.predicted_height et confidence_* existent en base,
+             mais ni out_of_domain ni warning : le modele les calcule a
+             chaque appel et ils ne sont pas persistes. Un utilisateur hors
+             des courbes qui se reconnecte retrouve donc son chiffre sans le
+             renvoi vers un medecin qui l accompagnait.
+
+             Le combler demande deux colonnes et une migration, pas une
+             retouche ici — on ne recalcule pas le modele cote navigateur.
+             Note dans TODO-ESTIMATEUR.md. */
           localStorage.setItem('predictionData', JSON.stringify({
             predicted_height_cm: latestPrediction.predicted_height,
             confidence_range: {
