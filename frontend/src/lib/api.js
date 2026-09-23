@@ -359,6 +359,28 @@ class APIClient {
     return this.request(`/api/v1/apercus${qs}`);
   }
 
+  // ---------- Communauté (lecture seule) ----------
+
+  /** Le fil, avec l'état lu / non lu de ce lecteur.
+   *
+   *  Il n'existe AUCUNE méthode d'écriture ici, et aucune route côté
+   *  serveur non plus : le fil est écrit par l'équipe. */
+  async getCommunaute() {
+    return this.request('/api/v1/communaute');
+  }
+
+  /** Le seul compteur, pour la pastille de la barre d'onglets. */
+  async getNonLus() {
+    return this.request('/api/v1/communaute/non-lus');
+  }
+
+  async marquerLues(ids) {
+    return this.request('/api/v1/communaute/lues', {
+      method: 'POST',
+      body: JSON.stringify({ ids }),
+    });
+  }
+
   /** Enregistre une séance de mesure.
    *
    *  On envoie les TROIS relevés, pas leur médiane : c'est le serveur qui

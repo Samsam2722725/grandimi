@@ -1,4 +1,5 @@
-import { lazy, Suspense, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import apiClient from '../lib/api';
 import Spinner from '../components/Spinner';
 import CarteAbonnement from '../components/CarteAbonnement';
 import CoachMark from '../components/CoachMark';
@@ -89,6 +90,24 @@ function AppShell({
   const { ouvert: tourOuvert, terminer: finirTour } = useTourPriseEnMain(
     abonne && onglet === 'accueil',
   );
+
+  /* La pastille de non-lus.
+
+     Sa propre route, qui ne renvoie qu'un entier : elle est demandée
+     depuis n'importe quel onglet, et charger le corps de huit articles
+     pour afficher un chiffre serait absurde. Une panne la laisse à zéro
+     plutôt que de faire échouer la barre entière. */
+  const [nonLus, setNonLus] = useState(0);
+
+  const relireNonLus = useCallback(() => {
+    if (!abonne) return;
+    apiClient
+      .getNonLus()
+      .then((r) => setNonLus(r.non_lus || 0))
+      .catch(() => setNonLus(0));
+  }, [abonne]);
+
+  useEffect(relireNonLus, [relireNonLus]);
 
   const changerOnglet = (id) => {
     setOnglet(id);
@@ -189,7 +208,12 @@ function AppShell({
               <CarteAbonnement zone="apercus" onAbonner={onAbonner} idEnfant={idEnfant} />
             ))}
 
-          {onglet === 'communaute' && <CommunautePage />}
+          {onglet === 'communaute' &&
+            (abonne ? (
+              <CommunautePage onLu={relireNonLus} />
+            ) : (
+              <CarteAbonnement zone="apercus" onAbonner={onAbonner} idEnfant={idEnfant} />
+            ))}
         </Suspense>
       </main>
 
@@ -197,6 +221,7 @@ function AppShell({
 
       <BarreOnglets
         actif={onglet}
+        nonLus={nonLus}
         onChange={changerOnglet}
         /* L'assistance ouvre encore le compte : l'écran de conversation est
            l'étape 8. Un bouton qui n'ouvre rien du tout serait pire qu'un

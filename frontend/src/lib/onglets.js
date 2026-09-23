@@ -1,18 +1,16 @@
 import { House, Sparkles, TrendingUp, Users } from 'lucide-react';
 
-/* L'onglet Communauté est DÉCLARÉ mais éteint.
+/* L'onglet Communauté est allumé depuis l'étape 8.
 
-   Le mockup de la vitrine porte déjà la règle, en toutes lettres :
-   « Quatre entrées comme chez eux, mais les nôtres : pas de "forum" tant
-   qu'il n'y a pas de forum. » Un onglet qui n'ouvre que « bientôt » coûte
-   une place dans la barre, un clic déçu par visiteur, et il apprend à
-   l'utilisateur que certains onglets ne servent à rien — ce qu'il
-   n'oubliera pas le jour où celui-là marchera.
+   La règle que portait le mockup de la vitrine — « pas de forum tant
+   qu'il n'y a pas de forum » — est tenue : il y a maintenant un fil, en
+   LECTURE SEULE, écrit par l'équipe. L'onglet n'ouvre plus sur
+   « bientôt », il ouvre sur huit réponses.
 
-   La bascule tient en un mot le jour où le fil existe (étape 8), parce
-   que la barre est construite à partir de cette liste et non écrite à la
-   main dans le JSX. */
-const COMMUNAUTE_ACTIVE = false;
+   Ce qui n'est toujours pas là : l'écriture par les utilisateurs. Elle
+   demande un bouton de signalement, une file de modération, une règle de
+   rétention écrite et quelqu'un dont c'est le travail. Avant, pas
+   après — et il n'existe aucune route d'écriture côté serveur. */
 
 /* Dans un fichier à part, et pas à côté du composant : une constante
    exportée depuis un module qui exporte aussi un composant désactive le
@@ -23,14 +21,11 @@ export const ONGLETS = [
   { id: 'accueil', label: 'Accueil', Icone: House },
   { id: 'grandir', label: 'Grandir', Icone: TrendingUp },
   { id: 'apercus', label: 'Aperçus', Icone: Sparkles },
-  ...(COMMUNAUTE_ACTIVE
-    ? [{ id: 'communaute', label: 'Communauté', Icone: Users }]
-    : []),
+  { id: 'communaute', label: 'Communauté', Icone: Users },
 ];
 
-/* Un onglet demandé qui n'existe pas (ou qui est éteint, comme
-   « communaute » aujourd'hui) afficherait un écran vide sans rien dire.
-   On retombe sur l'accueil. */
+/* Un onglet demandé qui n'existe pas afficherait un écran vide sans rien
+   dire. On retombe sur l'accueil. */
 export function ongletValide(id) {
   return ONGLETS.some((onglet) => onglet.id === id);
 }

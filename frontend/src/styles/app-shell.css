@@ -2382,3 +2382,85 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+/* ============================================
+   COMMUNAUTÉ — FIL EN LECTURE SEULE
+   ============================================ */
+
+.fil { display: flex; flex-direction: column; gap: 12px; }
+
+.fil__intro {
+  margin: 4px 0 0;
+  color: var(--funnel-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.fil__liste { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+
+.post {
+  border: 1px solid var(--funnel-line);
+  border-radius: 18px;
+  background: var(--funnel-surface);
+  overflow: hidden;
+}
+
+/* Non lu : un filet d'accent sur le bord gauche. Pas une pastille de
+   plus — la barre d'onglets en porte déjà une, et deux compteurs pour
+   la même information se contredisent au premier décalage. */
+.post--neuf { border-left: 3px solid var(--funnel-accent); }
+
+.post__tete {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  background: none;
+  color: var(--funnel-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.post__etiquettes { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+
+.post__epingle,
+.post__cat,
+.post__preuve {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.post__epingle { background: var(--funnel-accent); color: var(--funnel-on-accent); }
+.post__cat { background: var(--funnel-surface-high); color: var(--funnel-muted); }
+
+/* Le niveau de preuve n'est JAMAIS porté par la seule couleur : le mot
+   est écrit en toutes lettres, et une icône d'alerte double
+   l'avertissement quand ce n'est pas établi. */
+.post__preuve { background: var(--funnel-surface-high); color: var(--funnel-muted); }
+.post__preuve--etabli { color: var(--funnel-text); }
+.post__preuve--probable,
+.post__preuve--incertain { color: var(--funnel-accent); }
+
+.post__titre { font-size: 16px; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
+
+.post__corps { padding: 0 14px 16px; }
+
+.post__corps p {
+  margin: 0 0 10px;
+  color: var(--funnel-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  /* Les listes du corps sont écrites avec des tirets cadratins en début
+     de ligne : les sauts simples doivent être préservés. */
+  white-space: pre-line;
+}
+
+.post__corps p:last-child { margin-bottom: 0; }

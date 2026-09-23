@@ -96,6 +96,16 @@ func main() {
 		   diverger. */
 		paye.GET("/apercus", api.GetApercus)
 
+		/* Communauté, EN LECTURE SEULE. Le fil est écrit par l'équipe ;
+		   personne d'autre n'y publie. Un fil ouvert entre mineurs
+		   imposerait une modération, un signalement et une politique de
+		   rétention que rien d'autre dans ce produit n'impose — et le DSA
+		   ajoute ses propres obligations dès qu'un service est accessible
+		   aux mineurs. Il n'existe donc aucune route d'écriture ici. */
+		paye.GET("/communaute", api.GetCommunaute)
+		paye.GET("/communaute/non-lus", api.GetNonLus)
+		paye.POST("/communaute/lues", api.PostLues)
+
 		// Todo-liste quotidienne : cocher/décocher une tâche du jour, lire
 		// l'état du jour, et l'historique pour le calendrier de série.
 		paye.POST("/tasks/toggle", api.ToggleTaskCompletion)
