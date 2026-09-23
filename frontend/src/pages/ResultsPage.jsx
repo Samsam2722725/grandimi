@@ -3,6 +3,7 @@ import { ArrowLeft, Lock } from 'lucide-react'
 
 import { AnalyseChart } from '@/components/ui/analyse-chart'
 import { BalloonsPopBackground } from '@/components/ui/balloons-pop-background'
+import { CompteurAnime } from '@/components/ui/compteur-anime'
 import { Confetti } from '@/components/ui/confetti'
 
 import Spinner from '../components/Spinner'
@@ -305,7 +306,12 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
         {coutAffichable && (
           <div className="analyse-ligne analyse-ligne--perte">
             <span className="analyse-perte-label">Tes habitudes te coûtent</span>
-            <strong className="analyse-perte-valeur">−{fr(ecartHabitudes)} cm</strong>
+            {/* Le seul chiffre anime de l'ecran. Il monte de zero jusqu'a
+                sa valeur : on voit la perte se constituer au lieu de la
+                lire deja faite. Le texte est inchange. */}
+            <strong className="analyse-perte-valeur">
+              <CompteurAnime valeur={ecartHabitudes} prefixe="−" suffixe=" cm" />
+            </strong>
           </div>
         )}
 
