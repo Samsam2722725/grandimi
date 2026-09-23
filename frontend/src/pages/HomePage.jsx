@@ -97,7 +97,7 @@ const FAQ = [
   {
     question: 'Faut-il payer pour voir mon estimation ?',
     answer:
-      'Oui. Le questionnaire est libre d’accès, mais ton résultat — ta taille adulte estimée, ce que tes habitudes te coûtent et ton plan quotidien — est réservé aux abonnés : 4,99 €/mois ou 29,99 €/an, résiliable quand tu veux. Aucun prélèvement ne part avant que tu aies choisi ton offre.',
+      'Oui. Le questionnaire est libre d’accès, mais ton résultat — ta taille adulte estimée, ce que tes habitudes te coûtent et ton plan quotidien — est réservé aux abonnés : 9,99 €/mois ou 29,99 €/an, résiliable quand tu veux. Aucun prélèvement ne part avant que tu aies choisi ton offre.',
   },
   {
     question: 'Mes données sont-elles conservées ?',

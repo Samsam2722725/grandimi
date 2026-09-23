@@ -150,7 +150,7 @@ const TOUTES_ETAPES = [
   'pilosite-visage',
   'pilosite-aisselles',
   'epaules',
-  'regles',
+  'menarche',
   'odeur',
   'acne',
   'potentiel',
@@ -168,20 +168,35 @@ const TOUTES_ETAPES = [
 ]
 
 const ETAPES_GARCON = new Set(['voix', 'pilosite-visage', 'epaules'])
-const ETAPES_FILLE = new Set(['regles'])
 
-/* La liste parcourue dépend du sexe déclaré. Tous les écrans conditionnés
-   se trouvent APRÈS l'écran « sexe » : le préfixe de la liste est donc
-   identique dans les trois cas (garçon, fille, pas encore répondu), et
-   l'index courant ne se décale jamais sous les pieds de l'utilisateur
-   quand il revient changer sa réponse. */
-function etapesPour(sexe) {
-  return TOUTES_ETAPES.filter((etape) => {
-    if (etape === 'origine' && !COLLECTE_ORIGINE) return false
-    if (ETAPES_GARCON.has(etape)) return sexe === 'M'
-    if (ETAPES_FILLE.has(etape)) return sexe === 'F'
-    return true
-  })
+/* Toutes les etapes ne concernent pas tout le monde, et pour deux raisons
+   differentes qu'il vaut mieux ne pas melanger.
+
+   LE SEXE. Mue, pilosite du visage et elargissement des epaules ne se
+   posent qu'aux garcons. Rien de juridique la-dedans : une question sans
+   objet est juste un ecran de plus a passer.
+
+   L'AGE, ET LA C'EST AUTRE CHOSE. La date des premieres regles est une
+   donnee de sante. En France le consentement d'une mineure ne suffit pas
+   avant quinze ans : il faut celui du titulaire de l'autorite parentale.
+   On ne pose donc la question qu'a partir de quinze ans, ce qui evite
+   d'avoir a construire un recueil de consentement parental au milieu du
+   tunnel. C'est un filtre d'ECRAN, pas de modele :
+   internal/estimator/menarche.go accepte n'importe quel age valide.
+
+   Tous les ecrans conditionnes se trouvent APRES « sexe » et « age » : le
+   prefixe de la liste est donc identique pour tous les profils, et
+   l'index courant ne se decale jamais sous les pieds de quelqu'un qui
+   revient changer une de ces deux reponses. */
+function etapeApplicable(nom, reponses) {
+  if (nom === 'origine') return COLLECTE_ORIGINE
+  if (ETAPES_GARCON.has(nom)) return reponses.sex === 'M'
+  if (nom === 'menarche') return reponses.sex === 'F' && Number(reponses.age) >= 15
+  return true
+}
+
+function etapesPour(reponses) {
+  return TOUTES_ETAPES.filter((etape) => etapeApplicable(etape, reponses))
 }
 
 const REPONSES_INITIALES = {
@@ -199,6 +214,11 @@ const REPONSES_INITIALES = {
      pointures enverrait au serveur un signal que personne n'a donné. */
   shoe_size_eu: null,
   shoe_size_eu_1y: null,
+
+  /* Filles de 15 ans et plus uniquement — voir etapeApplicable.
+     null vaut « non repondu » et reste strictement neutre. */
+  menarche_survenue: null,
+  age_menarche_annees: null,
   sleep_hours_per_night: null,
   nutrition_level: '',
   exercise_min_per_day: null,
@@ -217,7 +237,6 @@ const REPONSES_INITIALES = {
   pilosite_visage: '',
   pilosite_aisselles: '',
   epaules: '',
-  regles: '',
   odeur: '',
   acne: '',
   taille_reve: 180,
@@ -378,7 +397,17 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     ...(reprise?.reponses || {}),
   }))
 
-  const etapes = useMemo(() => etapesPour(reponses.sex), [reponses.sex])
+  /* Les dependances sont le SEXE ET L AGE, parce que `etapeApplicable`
+     lit les deux. Passer `reponses` entier recalculerait la liste a
+     chaque frappe ; ne dependre que du sexe, comme avant la fusion,
+     laissait l ecran menarche hors du tunnel pour une fille de seize ans
+     — il restait pourtant liste au recapitulatif, qui appelle
+     `etapeApplicable` directement. Deux endroits qui repondaient
+     differemment a la meme question. */
+  const etapes = useMemo(
+    () => etapesPour({ sex: reponses.sex, age: reponses.age }),
+    [reponses.sex, reponses.age],
+  )
 
   const [index, setIndex] = useState(() => {
     const repris = Number(reprise?.index)
@@ -386,11 +415,18 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
        y arriverait avec des réponses partiellement effacées si le format a
        changé entre deux visites, et l'analyse relancerait un appel réseau
        avant même que l'utilisateur ait vu l'application. */
-    const dernierRepricable = etapesPour(reprise?.reponses?.sex || '').length - 2
+    const dernierRepricable =
+      etapesPour({
+        sex: reprise?.reponses?.sex || '',
+        age: reprise?.reponses?.age,
+      }).length - 2
     return Number.isInteger(repris) && repris > 0 && repris < dernierRepricable ? repris : 0
   })
 
   const [unite, setUnite] = useState(() => reprise?.unite || 'metric')
+  const [menarcheInconnue, setMenarcheInconnue] = useState(
+    () => (reprise?.reponses?.menarche_survenue ?? null) !== true,
+  )
   const [vitesseInconnue, setVitesseInconnue] = useState(
     () => reprise?.reponses?.height_velocity_cm === null,
   )
@@ -449,6 +485,21 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       }
     })
 
+  /* `suivantApplicable`, venu de main, n'est PAS repris — et son absence
+     est le seul point de cette fusion qui merite d'etre explique.
+
+     Main gardait une liste d'etapes fixe et sautait, a la navigation,
+     celles qui ne concernaient pas le profil. Cette branche filtre la
+     liste elle-meme (`etapesPour`). Les deux mecanismes resolvent le meme
+     probleme ; les empiler ferait sauter DEUX ecrans la ou il n'y en a
+     qu'un a passer.
+
+     Le filtrage en amont a un second effet, qui a pese dans le choix : la
+     barre de progression compte les ecrans reellement parcourus. Avec une
+     liste fixe et un saut, une fille de treize ans verrait la barre
+     avancer de deux crans d'un coup, et un total qui ne correspond a rien
+     de ce qu'elle a vu. */
+
   const avancer = () => {
     /* L'adresse est le seul champ qu'on demande sans rien donner en
        échange à cet instant : savoir combien la franchissent dit si
@@ -506,8 +557,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         return Boolean(reponses.pilosite_aisselles)
       case 'epaules':
         return Boolean(reponses.epaules)
-      case 'regles':
-        return Boolean(reponses.regles)
       case 'odeur':
         return Boolean(reponses.odeur)
       case 'acne':
@@ -556,6 +605,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
              comme une pénalité (internal/estimator/maturite.go). */
           shoe_size_eu: reponses.shoe_size_eu ?? 0,
           shoe_size_eu_1y: reponses.shoe_size_eu_1y ?? 0,
+          /* false et 0 valent « non renseigne » : le serveur n applique
+             alors aucune ancre menarche (internal/estimator/menarche.go). */
+          menarche_survenue: reponses.menarche_survenue === true,
+          age_menarche_annees: reponses.age_menarche_annees ?? 0,
           nutrition_level: reponses.nutrition_level,
           sleep_hours_per_night: reponses.sleep_hours_per_night,
           exercise_min_per_day: reponses.exercise_min_per_day,
@@ -569,23 +622,26 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           ethnic_background:
             reponses.origine && reponses.origine !== 'prefer_not' ? reponses.origine : '',
 
-          /* Les deux seuls signaux de puberté que l'API accepte déjà
-             (handlers.go l. 50-56). Les autres — voix, visage, épaules,
-             odeur, acné — n'ont pas de champ et restent en local ; les
-             inventer ici les ferait silencieusement jeter par le
-             décodeur JSON.
+          /* Le SEUL signal de puberté que l'API accepte encore par ce
+             champ. Les autres — voix, visage, épaules, odeur, acné — n'ont
+             pas de slot et restent en local ; les inventer ici les ferait
+             silencieusement jeter par le décodeur JSON.
 
-             AUCUN DES DEUX NE DÉPLACE L'ESTIMATION AUJOURD'HUI :
-             getPubertyAdjustment n'est appelé que par le chemin v1, et
-             son multiplicateur y est jeté (khamis_roche.go l. 90).
-             C'est écrit ici pour que personne ne croie, en lisant cette
-             charge utile, que ces questions pèsent sur le chiffre. */
+             La ménarche N'Y EST PLUS. Elle voyage désormais par
+             `menarche_survenue` / `age_menarche_annees`, parce qu'elle
+             n'est plus un signal de maturité parmi d'autres mais une
+             TROISIÈME ANCRE, au même rang que Khamis-Roche et le suivi de
+             percentile (internal/estimator/menarche.go). L'envoyer aux
+             deux endroits la compterait deux fois.
+
+             La pilosité, elle, ne déplace toujours rien :
+             getPubertyAdjustment n'est appelé que par le chemin v1, et son
+             multiplicateur y est jeté (khamis_roche.go l. 90). */
           puberty_signs: {
             axillary_hair:
               reponses.pilosite_aisselles === 'prefer_not'
                 ? ''
                 : reponses.pilosite_aisselles,
-            menarche: reponses.regles === 'yes',
           },
         }
 
@@ -1182,31 +1238,66 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           </div>
         )
 
-      /* LES PREMIÈRES RÈGLES. La seule question de ce bloc dont la
-         littérature donne un repère net : la croissance résiduelle après
-         la ménarche tourne autour de 6 à 8 cm. Elle part vers
-         `puberty_signs.menarche`, qu'aucun calcul ne lit aujourd'hui —
-         c'est la première que le moteur devrait exploiter le jour où il
-         en exploitera une. */
-      case 'regles':
+      /* LES PREMIÈRES RÈGLES — écran repris de `main`, pas le mien.
+
+         J'avais posé un oui/non à toutes les filles. Trois raisons de lui
+         préférer celui-ci, et la première suffirait :
+
+         1. L'ÂGE, PAS LE FAIT. Depuis `main`, la ménarche n'est plus un
+            signal de maturité parmi d'autres : c'est une TROISIÈME ANCRE
+            du calcul, au même rang que Khamis-Roche et le suivi de
+            percentile (internal/estimator/menarche.go). Or l'ancre a
+            besoin de la DATE — elle s'éteint 2,5 ans après. Un oui/non ne
+            l'alimente pas.
+
+         2. QUINZE ANS ET PLUS. La date des premières règles est une donnée
+            de santé, et en France le consentement d'une mineure ne suffit
+            pas avant quinze ans. Mon écran la demandait à toutes, y
+            compris à une fille de onze ans. Le filtre est dans
+            `etapeApplicable`.
+
+         3. UN SEUL REFUS. « Pas encore » et « je préfère ne pas répondre »
+            produisent le même calcul — aucune ancre. Deux cartes pour un
+            seul effet donneraient l'illusion d'un choix. */
+      case 'menarche':
         return (
-          <div className="funnel-choices" role="radiogroup" aria-label="Premières règles">
+          <>
+            <div style={{ opacity: menarcheInconnue ? 0.35 : 1 }}>
+              <WheelPicker
+                label="Âge aux premières règles"
+                min={9}
+                max={18}
+                step={0.5}
+                value={Number(reponses.age_menarche_annees ?? 12.5)}
+                onChange={(v) => {
+                  setMenarcheInconnue(false)
+                  definir('menarche_survenue', true)
+                  definir('age_menarche_annees', v)
+                }}
+                format={(v) => `${fr(v)} ans`}
+              />
+            </div>
+            {/* Un seul refus, volontairement : « pas encore » et « je préfère
+                ne pas répondre » produisent exactement le même calcul — aucune
+                ancre ménarche. Deux cartes pour un seul effet donneraient
+                l'illusion d'un choix qui n'en est pas un.
+
+                « Pas encore » à quinze ans EST une information — c'est une
+                maturation tardive — mais le modèle ne l'exploite pas encore.
+                Le jour où il le fera, il faudra séparer les deux cartes. */}
             <ChoiceCard
-              title="Pas encore"
-              selected={reponses.regles === 'no'}
-              onSelect={() => repondreEtAvancer('regles', 'no')}
+              role="checkbox"
+              title="Pas encore, ou je préfère ne pas répondre"
+              hint="Cette question est facultative"
+              selected={menarcheInconnue}
+              onSelect={() => {
+                const inconnu = !menarcheInconnue
+                setMenarcheInconnue(inconnu)
+                definir('menarche_survenue', inconnu ? null : true)
+                definir('age_menarche_annees', inconnu ? null : 12.5)
+              }}
             />
-            <ChoiceCard
-              title="Oui"
-              selected={reponses.regles === 'yes'}
-              onSelect={() => repondreEtAvancer('regles', 'yes')}
-            />
-            <ChoiceCard
-              title="Je préfère ne pas répondre"
-              selected={reponses.regles === 'prefer_not'}
-              onSelect={() => repondreEtAvancer('regles', 'prefer_not')}
-            />
-          </div>
+          </>
         )
 
       case 'odeur':
@@ -1515,6 +1606,21 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 : `${fr(reponses.shoe_size_eu)} (${fr(reponses.shoe_size_eu_1y)} il y a un an)`,
             vers: vers('pointure'),
           },
+          /* Ligne conditionnelle : l'écran ménarche n'existe pas pour tout
+             le monde, et `vers()` rendrait -1 pour un profil qui ne l'a pas
+             vu — « Modifier » renverrait alors en fin de liste. */
+          ...(etapeApplicable('menarche', reponses)
+            ? [
+                {
+                  label: 'Premières règles',
+                  valeur:
+                    reponses.menarche_survenue === true
+                      ? `${fr(reponses.age_menarche_annees)} ans`
+                      : 'Non renseigné',
+                  vers: vers('menarche'),
+                },
+              ]
+            : []),
           {
             label: 'Taille rêvée',
             valeur: `${fr(reponses.taille_reve)} cm`,
@@ -1533,7 +1639,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
           reponses.pilosite_visage,
           reponses.pilosite_aisselles,
           reponses.epaules,
-          reponses.regles,
+          /* La menarche ne compte PLUS parmi les signaux de maturite :
+             elle a sa propre ligne au recapitulatif, et surtout elle est
+             devenue une ancre du calcul. La compter ici la ferait
+             apparaitre deux fois sur le meme ecran. */
           reponses.odeur,
           reponses.acne,
         ].filter((valeur) => valeur && valeur !== 'prefer_not' && valeur !== 'unknown').length
@@ -1695,9 +1804,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       titre: 'Tes épaules se sont-elles élargies ?',
       sous: 'L’élargissement des épaules accompagne la dernière phase de croissance.',
     },
-    regles: {
-      titre: 'As-tu déjà eu tes premières règles ?',
-      sous: 'C’est le repère le plus net chez la fille. Tu peux ne pas répondre.',
+    menarche: {
+      titre: 'À quel âge as-tu eu tes premières règles ?',
+      accent: 'premières règles',
+      sous: 'Elles datent la fin de la croissance mieux que tout le reste. Facultatif.',
     },
     odeur: {
       titre: 'As-tu remarqué une odeur corporelle nouvelle ?',
@@ -1790,7 +1900,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     'pilosite-visage',
     'pilosite-aisselles',
     'epaules',
-    'regles',
+    'menarche',
     'odeur',
     'acne',
     'taille-reve',

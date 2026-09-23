@@ -31,7 +31,7 @@ mettre sur la paywall.**
 17  pilosite-visage     (garçon)                                         NOUVEAU
 18  pilosite-aisselles                                                   NOUVEAU
 19  epaules             (garçon)                                         NOUVEAU
-20  regles              (fille)                                          NOUVEAU
+20  menarche            (fille de 15 ans et plus)                        de `main`
 21  odeur                                                                NOUVEAU
 22  acne                                                                 NOUVEAU
 23  potentiel           Optimise tout ton potentiel de taille  PREUVE 3  NOUVEAU
@@ -66,15 +66,14 @@ tous les deux.
 
 La contrepartie est une règle stricte : **chaque question ajoutée doit nourrir
 le calcul, le plan, ou la conviction — et on doit pouvoir dire laquelle.**
-Les sept questions de maturité nourrissent la conviction ; deux d'entre elles
-remplissent en plus le champ `puberty_signs` déjà prévu par l'API. Toutes ont
-une sortie (« je ne sais pas », « je préfère ne pas répondre ») : la longueur
-ne doit jamais devenir un mur.
+Six des sept questions de maturité nourrissent la conviction ; la septième —
+la ménarche — est devenue une **ancre du calcul** (voir §6). Toutes ont une
+sortie (« je ne sais pas », « je préfère ne pas répondre ») : la longueur ne
+doit jamais devenir un mur.
 
-**Aucun texte de ces écrans ne laisse entendre que la réponse affine le
-chiffre**, parce qu'aucune ne le fait aujourd'hui (voir §6). Les sous-titres
-parlent de « situer où tu en es ». C'est la limite entre un tunnel long et un
-tunnel menteur.
+**Aucun texte des six autres ne laisse entendre que la réponse affine le
+chiffre**, parce qu'aucune ne le fait. Les sous-titres parlent de « situer où
+tu en es ». C'est la limite entre un tunnel long et un tunnel menteur.
 
 ---
 
@@ -257,13 +256,28 @@ Allonger le tunnel ne rouvre pas cette porte.
 | `proches_plus_grands` | non | non | rouvrir le plafond posé par l'écran parents |
 | `origine` | `ethnic_background` | **non** (§5) | à implémenter ou à retirer |
 | `pilosite_aisselles` | `puberty_signs.axillary_hair` | **non** | conviction |
-| `regles` | `puberty_signs.menarche` | **non** | conviction |
+| `menarche_survenue`, `age_menarche_annees` | oui | **OUI — 3ᵉ ancre** | +1,0 à +1,5 cm sur les filles réglées depuis moins de 2,5 ans |
 | `voix`, `pilosite_visage`, `epaules`, `odeur`, `acne` | non (pas de champ) | non | conviction, futur plan |
 | `taille_reve` | non | non | **titre de la paywall (§8)** |
 
 `getPubertyAdjustment` n'est appelé que par le chemin v1, et son
-multiplicateur y est jeté (`khamis_roche.go`, l. 90). Les deux signaux de
-puberté voyagent donc, mais ne pèsent sur rien.
+multiplicateur y est jeté (`khamis_roche.go`, l. 90) : la pilosité voyage donc
+sans peser sur rien.
+
+**La ménarche, elle, a changé de statut pendant cette révision.** Un commit
+arrivé sur `main` le 19/09 en a fait une **troisième ancre**, au même rang que
+Khamis-Roche et le suivi de percentile — parce qu'elle ne dit pas « en avance
+ou en retard », elle **date** la fin de la croissance (95 % de la taille
+adulte atteinte, croissance terminée ~2,5 ans plus tard). Elle corrige une
+sous-estimation des filles réglées tard : à 16 ans au P50, le modèle annonçait
+1 cm restant là où il en reste 4.
+
+Conséquence pour ce tunnel : mon écran « As-tu déjà eu tes premières
+règles ? » (oui/non, toutes les filles) a été **remplacé par celui de `main`**,
+qui demande **l'âge** — l'ancre s'éteint après 2,5 ans, un oui/non ne
+l'alimente pas — et **seulement à partir de 15 ans**, la date des premières
+règles étant une donnée de santé pour laquelle le consentement d'une mineure
+ne suffit pas en France avant cet âge.
 
 ---
 
@@ -365,10 +379,8 @@ Par ordre de valeur :
    du domaine de calibration de Khamis–Roche, neutre sinon et quand le champ
    est vide (même convention que la pointure). C'est ce qui rend l'écran 12
    légal. Sans ça, `COLLECTE_ORIGINE = false`.
-2. **`puberty_signs.menarche`.** Le seul signal de maturité avec un repère
-   chiffré publié : la croissance résiduelle après la ménarche tourne autour
-   de 6 à 8 cm. C'est la première question du bloc que le moteur devrait
-   exploiter, et elle arrive déjà dans la charge utile.
+2. ~~**`puberty_signs.menarche`**~~ — **fait** sur `main` le 19/09, et mieux
+   que prévu : ancre à part entière plutôt que signal de maturité. Voir §6.
 3. **Les cinq champs sans slot API** (voix, visage, épaules, odeur, acné).
    Ils ne valent d'être transmis que le jour où le plan les personnalise ;
    d'ici là, les laisser en local est la bonne décision.

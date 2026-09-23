@@ -33,7 +33,7 @@ import {
    et n'a pas de second produit Whop configuré. À traiter comme une
    décision produit séparée, pas un détail d'implémentation. */
 const PLANS_PAR_DEFAUT = {
-  monthly: { key: 'monthly', label: 'Mensuel', price_eur: 4.99, interval: 'month' },
+  monthly: { key: 'monthly', label: 'Mensuel', price_eur: 9.99, interval: 'month' },
   annual: { key: 'annual', label: 'Annuel', price_eur: 29.99, interval: 'year' },
 }
 
@@ -61,10 +61,37 @@ const VISUELS_OFFRE = [
 ]
 
 
-// 12 mensualités à 4,99 € : le seul repère auquel comparer l'annuel.
-// Jamais présenté comme un ancien prix, seulement comme le calcul qui
-// justifie "économisez".
-const COUT_DOUZE_MENSUALITES = 12 * PLANS_PAR_DEFAUT.monthly.price_eur
+/* Douze mensualités : le seul repère auquel comparer l'annuel. Jamais
+   présenté comme un ancien prix, seulement comme le calcul qui justifie
+   « économisez ».
+
+   CALCULÉ SUR LE PRIX REÇU DU SERVEUR, PAS SUR LA VALEUR DE REPLI.
+   C'était une constante bâtie sur PLANS_PAR_DEFAUT, donc figée à 4,99 €.
+   Le jour où le tarif mensuel change côté serveur, la carte annonçait le
+   nouveau montant pendant que la pastille gardait l'ancienne remise :
+   à 9,99 €/mois elle aurait affiché « − 50 % » là où la vraie remise est
+   de 75 %. Une réduction fausse sur une page de paiement n'est pas une
+   coquille, c'est une allégation commerciale inexacte. */
+function coutDouzeMensualites(plans) {
+  return 12 * plans.monthly.price_eur
+}
+
+/* Le prix ramené à la semaine.
+
+   52,18 semaines par an et non 52 : l'année fait 365,25 jours. L'écart
+   est d'un centime sur l'offre annuelle, mais un prix affiché se
+   vérifie à la calculatrice, et un centime faux sur une page dont
+   l'argument est l'honnêteté coûte plus que le centime.
+
+   Le mois vaut donc 52,18 / 12 = 4,348 semaines, pas 4. Diviser par 4
+   annoncerait 2,50 € au lieu de 2,30 € : une surestimation, mais une
+   erreur quand même — et elle irait contre nous. */
+const SEMAINES_PAR_AN = 365.25 / 7
+
+function coutHebdomadaire(plan) {
+  const semaines = plan.interval === 'year' ? SEMAINES_PAR_AN : SEMAINES_PAR_AN / 12
+  return (plan.price_eur / semaines).toFixed(2).replace('.', ',')
+}
 
 /* Au-delà de ce délai, on nomme l'attente au lieu de la laisser tourner.
    Même valeur que ParentPage : les deux écrans mènent au même Whop. */
@@ -217,8 +244,9 @@ function PaywallPage({ onBackHome }) {
   }, [])
 
   const offre = plans[planChoisi]
-  const economieAnnuelle = COUT_DOUZE_MENSUALITES - plans.annual.price_eur
-  const pourcentageEconomie = Math.round((economieAnnuelle / COUT_DOUZE_MENSUALITES) * 100)
+  const douzeMensualites = coutDouzeMensualites(plans)
+  const economieAnnuelle = douzeMensualites - plans.annual.price_eur
+  const pourcentageEconomie = Math.round((economieAnnuelle / douzeMensualites) * 100)
 
   /* Lien à transmettre au parent. Il porte l'id du compte enfant pour que le
      webhook Whop crédite ce compte-là et non celui du payeur. L'id est écrit
@@ -413,14 +441,30 @@ function PaywallPage({ onBackHome }) {
 
                 <span className="paywall-offer-label">{plan.label}</span>
 
+                {/* LE COÛT PAR SEMAINE EN GRAND, LE MONTANT PRÉLEVÉ JUSTE EN
+                    DESSOUS — et jamais l'un sans l'autre.
+
+                    Un adolescent compare « 2,30 € » à un paquet de chips,
+                    pas « 9,99 € » à son argent de poche du mois. C'est le
+                    même prix, dit dans l'unité où il pèse le moins.
+
+                    Mais le montant réellement débité reste écrit, en clair,
+                    juste en dessous. Afficher un prix hebdomadaire en
+                    prélevant au mois sans le dire est une pratique
+                    commerciale trompeuse au sens de l'article L121-1 du
+                    code de la consommation — et sur un produit vendu à des
+                    mineurs, c'est le dernier endroit où jouer sur les mots.
+                    Le bouton d'abonnement, lui, n'affiche que le montant
+                    prélevé. */}
                 <span className="paywall-offer-prix">
-                  {plan.price_eur.toFixed(2).replace('.', ',')} €
+                  {coutHebdomadaire(plan)} €
+                  <span className="paywall-offer-unite"> / semaine</span>
                 </span>
 
                 <span className="paywall-offer-sous">
                   {annuel
-                    ? `soit ${(plan.price_eur / 12).toFixed(2).replace('.', ',')} € par mois`
-                    : 'sans engagement'}
+                    ? `facturé ${plan.price_eur.toFixed(2).replace('.', ',')} € une fois par an`
+                    : `facturé ${plan.price_eur.toFixed(2).replace('.', ',')} € par mois, sans engagement`}
                 </span>
 
                 {/* « − 50 % sur l'année » passait à la ligne dans une

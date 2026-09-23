@@ -21,6 +21,15 @@
 --  Donc meme si un vrai client portait une adresse ressemblant a un
 --  test, il ne serait pas supprime : son abonnement le protege.
 --
+--  CE QUI PART AVEC LE COMPTE
+--  Les deux DELETE de l etape 2 ne nomment que predictions et
+--  task_completions. Les autres tables suivent seules, par leur cle
+--  etrangere ON DELETE CASCADE : email_envois, preferences_plan et
+--  mesures. Une seule fait exception, paiements_whop, qui est en
+--  ON DELETE SET NULL : la ligne de paiement reste, son user_id passe
+--  a NULL. C est voulu -- un paiement encaisse ne doit pas disparaitre
+--  de la comptabilite parce qu on a efface un compte.
+--
 --  COMMENT PROCEDER
 --  Lancer l'ETAPE 1 seule, lire la liste, et ne lancer l'ETAPE 2 que si
 --  cette liste ne contient que des comptes de test.
@@ -36,7 +45,8 @@ WITH comptes_de_test AS (
             OR u.email LIKE 'verif-%'
             OR u.email LIKE 'migration-check-%'
             OR u.email LIKE 'audit-%'
-            OR u.email LIKE '%@grandimi.test')
+            OR u.email LIKE '%@grandimi.test'
+            OR u.email LIKE 'devtest-%@grandimi.com')
       AND  COALESCE(u.is_premium, false) = false
       AND  NOT EXISTS (SELECT 1 FROM subscriptions s WHERE s.user_id = u.id)
 )
@@ -69,7 +79,8 @@ WHERE  (   u.email LIKE 'granny-test-%'
         OR u.email LIKE 'verif-%'
         OR u.email LIKE 'migration-check-%'
         OR u.email LIKE 'audit-%'
-        OR u.email LIKE '%@grandimi.test')
+        OR u.email LIKE '%@grandimi.test'
+        OR u.email LIKE 'devtest-%@grandimi.com')
   AND  COALESCE(u.is_premium, false) = false
   AND  NOT EXISTS (SELECT 1 FROM subscriptions s WHERE s.user_id = u.id);
 
@@ -84,7 +95,8 @@ WHERE  (   u.email LIKE 'granny-test-%'
         OR u.email LIKE 'verif-%'
         OR u.email LIKE 'migration-check-%'
         OR u.email LIKE 'audit-%'
-        OR u.email LIKE '%@grandimi.test')
+        OR u.email LIKE '%@grandimi.test'
+        OR u.email LIKE 'devtest-%@grandimi.com')
   AND  COALESCE(u.is_premium, false) = false
   AND  NOT EXISTS (SELECT 1 FROM subscriptions s WHERE s.user_id = u.id);
 
@@ -106,6 +118,7 @@ WHERE  email LIKE 'granny-test-%'
     OR email LIKE 'verif-%'
     OR email LIKE 'migration-check-%'
     OR email LIKE '%@grandimi.test'
+    OR email LIKE 'devtest-%@grandimi.com'
 
 UNION ALL
 
