@@ -310,7 +310,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           <SonarGrid
             spacing={30}
             dotRadius={1.3}
-            baseOpacity={0.16}
+            baseOpacity={0.07}
             pingEvery={3.6}
             ringWidth={110}
             amplitude={2}
@@ -332,10 +332,18 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 à 17px et en gris, un point orange tombé sur une lettre est du
                 bruit. Le voile éteint le champ au centre et le laisse entier
                 sur les bords. C'est la parade que la démo du composant
-                applique elle-même. */}
+                applique elle-même.
+
+                Sur grand écran, une ellipse à 46% de large ne couvrait que la
+                colonne de texte : au-delà, la grille de points restait à son
+                opacité pleine et tranchait net contre le fond nu, un bloc de
+                points d'un côté, du noir vide de l'autre — mesuré sur 1440px.
+                L'ellipse est élargie pour couvrir la section quasi entière,
+                et un palier avant le fondu adoucit la transition au lieu de
+                la couper à bord franc. */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_46%_38%_at_50%_52%,var(--surface-page-canvas)_0%,transparent_100%)]"
+              className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_140%_110%_at_50%_38%,var(--surface-page-canvas)_0%,var(--surface-page-canvas)_20%,transparent_100%)]"
             />
 
             {/* Composition centrée, sans visuel latéral.
@@ -493,7 +501,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 Vois Grandimi en action
               </h2>
               <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-                Decouvre l'experience Grandimi avec ces fonctionnalites essentielles pensees pour optimiser ta croissance.
+                Découvre l'expérience Grandimi avec ces fonctionnalités essentielles pensées pour optimiser ta croissance.
               </p>
             </div>
 
@@ -508,12 +516,14 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     PNG reste là pour ceux qui ne lisent pas le WebP. */}
                 <div className="flex justify-center mb-6">
                   <picture>
+                    <source media="(max-width: 768px)" srcSet="/apercus/accueil.webp" type="image/webp" />
                     <source srcSet="/apercus/accueil.webp" type="image/webp" />
                     <img
                       src="/apercus/accueil.png"
                       alt="L'écran d'accueil de Grandimi : la taille adulte estimée, sa fourchette, et la courbe de croissance."
                       className="max-h-[450px] w-auto rounded-2xl shadow-2xl"
                       loading="lazy"
+                      decoding="async"
                     />
                   </picture>
                 </div>
@@ -528,12 +538,14 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               <div className="flex flex-col items-center">
                 <div className="flex justify-center mb-6">
                   <picture>
+                    <source media="(max-width: 768px)" srcSet="/apercus/seance.webp" type="image/webp" />
                     <source srcSet="/apercus/seance.webp" type="image/webp" />
                     <img
                       src="/apercus/seance.png"
                       alt="L'écran de séance : les actions du jour, cochées une à une."
                       className="max-h-[450px] w-auto rounded-2xl shadow-2xl"
                       loading="lazy"
+                      decoding="async"
                     />
                   </picture>
                 </div>
