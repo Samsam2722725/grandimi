@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import { ArrowLeft, Lock } from 'lucide-react'
 
 import { AnalyseChart } from '@/components/ui/analyse-chart'
-import { BalloonsPopBackground } from '@/components/ui/balloons-pop-background'
+const BalloonsPopBackground = lazy(() => import('@/components/ui/balloons-pop-background').then(m => ({ default: m.BalloonsPopBackground })))
 import { CompteurAnime } from '@/components/ui/compteur-anime'
 import { Confetti } from '@/components/ui/confetti'
 
@@ -238,7 +238,9 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           Il ne remplace pas les confettis, qui font autre chose : une
           salve unique au montage, puis plus rien. Les ballons, eux,
           restent — c'est un décor de fond, pas une célébration. */}
-      <BalloonsPopBackground className="results-ballons" />
+      <Suspense fallback={null}>
+        <BalloonsPopBackground className="results-ballons" />
+      </Suspense>
 
       <Confetti />
 
