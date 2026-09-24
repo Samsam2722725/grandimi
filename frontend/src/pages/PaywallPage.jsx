@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, lazy, Suspense } from 'react'
 import { ArrowLeft, Lock } from 'lucide-react'
 
-import { CardCarousel } from '@/components/ui/card-carousel'
+const CardCarousel = lazy(() => import('@/components/ui/card-carousel').then(m => ({ default: m.CardCarousel })))
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
@@ -33,7 +33,7 @@ import {
    et n'a pas de second produit Whop configuré. À traiter comme une
    décision produit séparée, pas un détail d'implémentation. */
 const PLANS_PAR_DEFAUT = {
-  monthly: { key: 'monthly', label: 'Mensuel', price_eur: 4.99, interval: 'month' },
+  monthly: { key: 'monthly', label: 'Mensuel', price_eur: 9.99, interval: 'month' },
   annual: { key: 'annual', label: 'Annuel', price_eur: 29.99, interval: 'year' },
 }
 
@@ -61,10 +61,37 @@ const VISUELS_OFFRE = [
 ]
 
 
-// 12 mensualités à 4,99 € : le seul repère auquel comparer l'annuel.
-// Jamais présenté comme un ancien prix, seulement comme le calcul qui
-// justifie "économisez".
-const COUT_DOUZE_MENSUALITES = 12 * PLANS_PAR_DEFAUT.monthly.price_eur
+/* Douze mensualités : le seul repère auquel comparer l'annuel. Jamais
+   présenté comme un ancien prix, seulement comme le calcul qui justifie
+   « économisez ».
+
+   CALCULÉ SUR LE PRIX REÇU DU SERVEUR, PAS SUR LA VALEUR DE REPLI.
+   C'était une constante bâtie sur PLANS_PAR_DEFAUT, donc figée à 4,99 €.
+   Le jour où le tarif mensuel change côté serveur, la carte annonçait le
+   nouveau montant pendant que la pastille gardait l'ancienne remise :
+   à 9,99 €/mois elle aurait affiché « − 50 % » là où la vraie remise est
+   de 75 %. Une réduction fausse sur une page de paiement n'est pas une
+   coquille, c'est une allégation commerciale inexacte. */
+function coutDouzeMensualites(plans) {
+  return 12 * plans.monthly.price_eur
+}
+
+/* Le prix ramené à la semaine.
+
+   52,18 semaines par an et non 52 : l'année fait 365,25 jours. L'écart
+   est d'un centime sur l'offre annuelle, mais un prix affiché se
+   vérifie à la calculatrice, et un centime faux sur une page dont
+   l'argument est l'honnêteté coûte plus que le centime.
+
+   Le mois vaut donc 52,18 / 12 = 4,348 semaines, pas 4. Diviser par 4
+   annoncerait 2,50 € au lieu de 2,30 € : une surestimation, mais une
+   erreur quand même — et elle irait contre nous. */
+const SEMAINES_PAR_AN = 365.25 / 7
+
+function coutHebdomadaire(plan) {
+  const semaines = plan.interval === 'year' ? SEMAINES_PAR_AN : SEMAINES_PAR_AN / 12
+  return (plan.price_eur / semaines).toFixed(2).replace('.', ',')
+}
 
 /* Au-delà de ce délai, on nomme l'attente au lieu de la laisser tourner.
    Même valeur que ParentPage : les deux écrans mènent au même Whop. */
@@ -72,8 +99,38 @@ const DELAI_AVANT_MESSAGE_MS = 4000
 
 
 
+/* Ce que le questionnaire a mis de côté pour cet écran.
+
+   Deux champs seulement, et ils viennent tous les deux d'une question
+   que le visiteur a répondue lui-même :
+
+     `taille_reve` — le seul chiffre de tout le tunnel qu'il a CHOISI.
+       L'écart entre ce nombre et l'estimation qu'il vient de lire est
+       exactement ce que cette page a à travailler. Un titre générique
+       (« Débloquer ton plan complet ») ne dit rien à personne ; le même
+       titre avec ses centimètres à lui nomme la raison pour laquelle il
+       est encore sur cette page.
+
+     `profil` — qui remplit le formulaire. Un parent n'a pas besoin qu'on
+       lui propose de « faire payer par un parent », et cette proposition
+       faite à un adulte muni d'une carte bancaire n'est pas neutre :
+       elle suggère qu'il y a un obstacle là où il n'y en a pas.
+
+   Lecture défensive de bout en bout : cette page s'affiche aussi pour
+   quelqu'un arrivé d'une session antérieure, dont le stockage local ne
+   contient pas encore ces champs. */
+function lireLaPrediction() {
+  try {
+    const brut = JSON.parse(localStorage.getItem('predictionData') || '{}')
+    return brut && typeof brut === 'object' ? brut : {}
+  } catch {
+    return {}
+  }
+}
+
 function PaywallPage({ onBackHome }) {
   const [email] = useState(() => localStorage.getItem('userEmail') || '')
+  const prediction = useState(lireLaPrediction)[0]
   const [loading, setLoading] = useState(false)
   /* Passe à vrai quand la redirection dépasse DELAI_AVANT_MESSAGE_MS, pour
      nommer l'attente sous le bouton au lieu de la laisser tourner. */
@@ -187,8 +244,9 @@ function PaywallPage({ onBackHome }) {
   }, [])
 
   const offre = plans[planChoisi]
-  const economieAnnuelle = COUT_DOUZE_MENSUALITES - plans.annual.price_eur
-  const pourcentageEconomie = Math.round((economieAnnuelle / COUT_DOUZE_MENSUALITES) * 100)
+  const douzeMensualites = coutDouzeMensualites(plans)
+  const economieAnnuelle = douzeMensualites - plans.annual.price_eur
+  const pourcentageEconomie = Math.round((economieAnnuelle / douzeMensualites) * 100)
 
   /* Lien à transmettre au parent. Il porte l'id du compte enfant pour que le
      webhook Whop crédite ce compte-là et non celui du payeur. L'id est écrit
@@ -289,6 +347,37 @@ function PaywallPage({ onBackHome }) {
     }
   }
 
+  /* Le titre nomme l'écart quand on le connaît, et retombe sur la
+     formulation générique sinon.
+
+     L'écart n'est affiché QUE s'il est positif et plausible. Deux cas à
+     écarter, et ils sont l'un et l'autre fréquents :
+
+       — l'estimation dépasse déjà la taille rêvée. Lui annoncer qu'il
+         lui « manque -3 cm » serait absurde ; et lui dire qu'il a déjà
+         gagné n'est pas le travail de cette page.
+       — un écart énorme (un garçon d'1,60 m qui a mis 2,10 m sur la
+         molette). Le nommer donnerait à la page l'air de promettre un
+         demi-mètre, ce que le plan ne fait évidemment pas. Au-delà de
+         15 cm on revient au titre générique. */
+  const ecartReve = (() => {
+    const reve = Number(prediction.taille_reve)
+    const estimee = Number(prediction.predicted_height_cm)
+    if (!Number.isFinite(reve) || !Number.isFinite(estimee)) return null
+    const ecart = Math.round(reve - estimee)
+    return ecart > 0 && ecart <= 15 ? ecart : null
+  })()
+
+  const titre = ecartReve
+    ? `Il te manque ${ecartReve} cm pour ta taille rêvée`
+    : 'Débloquer ton plan complet'
+
+  /* Un parent est le payeur : lui proposer de faire payer un parent n'a
+     pas de sens. Le lien reste offert à tous les autres, y compris quand
+     le profil n'a pas été renseigné (session antérieure au tunnel actuel)
+     — c'est le défaut le moins coûteux des deux. */
+  const proposerLeParent = prediction.profil !== 'parent'
+
   return (
     <div className="night paywall">
       <header className="paywall-top">
@@ -303,7 +392,7 @@ function PaywallPage({ onBackHome }) {
       </header>
 
       <main className="paywall-scroll">
-        <h1 className="paywall-title">Débloquer ton plan complet</h1>
+        <h1 className="paywall-title">{titre}</h1>
         <p className="paywall-subtitle">
           Ta taille adulte, ce que tes habitudes te coûtent, et tes 11 actions par jour.
         </p>
@@ -352,14 +441,30 @@ function PaywallPage({ onBackHome }) {
 
                 <span className="paywall-offer-label">{plan.label}</span>
 
+                {/* LE COÛT PAR SEMAINE EN GRAND, LE MONTANT PRÉLEVÉ JUSTE EN
+                    DESSOUS — et jamais l'un sans l'autre.
+
+                    Un adolescent compare « 2,30 € » à un paquet de chips,
+                    pas « 9,99 € » à son argent de poche du mois. C'est le
+                    même prix, dit dans l'unité où il pèse le moins.
+
+                    Mais le montant réellement débité reste écrit, en clair,
+                    juste en dessous. Afficher un prix hebdomadaire en
+                    prélevant au mois sans le dire est une pratique
+                    commerciale trompeuse au sens de l'article L121-1 du
+                    code de la consommation — et sur un produit vendu à des
+                    mineurs, c'est le dernier endroit où jouer sur les mots.
+                    Le bouton d'abonnement, lui, n'affiche que le montant
+                    prélevé. */}
                 <span className="paywall-offer-prix">
-                  {plan.price_eur.toFixed(2).replace('.', ',')} €
+                  {coutHebdomadaire(plan)} €
+                  <span className="paywall-offer-unite"> / semaine</span>
                 </span>
 
                 <span className="paywall-offer-sous">
                   {annuel
-                    ? `soit ${(plan.price_eur / 12).toFixed(2).replace('.', ',')} € par mois`
-                    : 'sans engagement'}
+                    ? `facturé ${plan.price_eur.toFixed(2).replace('.', ',')} € une fois par an`
+                    : `facturé ${plan.price_eur.toFixed(2).replace('.', ',')} € par mois, sans engagement`}
                 </span>
 
                 {/* « − 50 % sur l'année » passait à la ligne dans une
@@ -394,7 +499,9 @@ function PaywallPage({ onBackHome }) {
             ce qui est la différence entre une page de paiement utilisable en
             4G et une page qui ne s'affiche jamais. */}
         <section aria-label="Ce que contient le plan">
-          <CardCarousel images={VISUELS_OFFRE} />
+          <Suspense fallback={<div className="h-80 bg-gradient-to-b from-gray-900 to-gray-950 rounded-lg animate-pulse" />}>
+            <CardCarousel images={VISUELS_OFFRE} />
+          </Suspense>
         </section>
 
         {email && (
@@ -414,7 +521,7 @@ function PaywallPage({ onBackHome }) {
         {/* Un seul contrôle pour ce bloc : le bouton du pied de page. Deux
             boutons ouvrant la même chose, l'un en bas l'autre au milieu,
             c'était une commande de trop. */}
-        {lienParent && (
+        {lienParent && proposerLeParent && (
           <section className="paywall-parent" ref={blocParentRef}>
             {lienParentVisible && (
               <div className="paywall-parent-body">
@@ -509,7 +616,7 @@ function PaywallPage({ onBackHome }) {
             page. L'utilisateur type a 14 ans et pas de carte bancaire : lui
             faire chercher ce chemin, c'est le perdre. Contour et non aplat —
             la hiérarchie reste lisible. */}
-        {lienParent && (
+        {lienParent && proposerLeParent && (
           <button
             type="button"
             className="paywall-parent-cta"

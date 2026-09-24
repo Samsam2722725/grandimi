@@ -139,6 +139,12 @@ func main() {
 		prive.GET("/api/v1/check-premium", api.CheckPremium)
 		prive.GET("/api/user/predictions", api.GetPredictionsByEmail)
 
+		/* Suivi de taille : derriere authentification, pas derriere
+		   abonnement. La relance J+30 promet une mise a jour gratuite,
+		   et c est la collecte elle-meme qui a de la valeur. */
+		prive.POST("/api/user/mesures", api.EnregistrerMesure)
+		prive.GET("/api/user/mesures", api.ListerMesures)
+
 		// "Mon compte -> Abonnement" : offre en cours, prochaine date de
 		// paiement, bouton de résiliation.
 		prive.GET("/api/v1/subscription", api.GetSubscription)

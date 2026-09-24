@@ -792,3 +792,16 @@
   padding: 0 24px;
   overflow: hidden;
 }
+
+/* L'unité « / semaine » à côté du chiffre.
+
+   Plus petite et moins contrastée que le montant : c'est le nombre qui
+   doit se lire d'un coup d'œil, pas l'unité. Mais elle reste sur la
+   même ligne de base — la reléguer en dessous ferait lire « 2,30 € »
+   comme un prix total, ce qui serait faux. */
+.paywall-offer-unite {
+  font-size: 0.42em;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  opacity: 0.6;
+}

@@ -35,7 +35,7 @@ var plans = map[PlanKey]Plan{
 	Monthly: {
 		Key:           Monthly,
 		Label:         "Mensuel",
-		PriceEUR:      4.99,
+		PriceEUR:      9.99,
 		Interval:      "month",
 		WhopPlanIDEnv: "WHOP_PLAN_ID_MONTHLY",
 	},

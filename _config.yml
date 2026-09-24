@@ -1,0 +1,25 @@
+# Jekyll configuration for GitHub Pages
+# Configure cache headers for static assets
+
+# GitHub Pages defaults
+markdown: kramdown
+theme: null
+exclude:
+  - node_modules
+  - frontend
+  - internal
+  - cmd
+  - .github
+  - outils
+  - '*.md'
+  - Dockerfile
+  - go.mod
+  - go.sum
+
+# Asset pipeline settings
+keep_files:
+  - assets
+  - fonts
+
+# GitHub Pages Jekyll settings
+github: [metadata]

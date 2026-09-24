@@ -44,6 +44,23 @@ type HeightPredictionV2Request struct {
 	   renseigne », jamais une penalite. Voir maturite.go. */
 	ShoeSizeEU         float64
 	ShoeSizeEU1Y       float64
+
+	// Filles, 15 ans et plus uniquement : les premieres regles datent la
+	// fin de la croissance. Voir menarche.go — pourquoi c est une ancre et
+	// non un signal de maturite de plus, et pourquoi le questionnaire ne
+	// pose la question qu a partir de quinze ans.
+	MenarcheSurvenue   bool
+	AgeMenarcheAnnees  float64
+	// Distingue « pas encore reglee » (declaree, survenue=false) de « pas
+	// repondu ». Sans ce booleen les deux sont indiscernables, et le
+	// retard pubertaire le plus net chez la fille reste invisible.
+	MenarcheDeclaree   bool
+
+	// Signes de puberte, 15 ans et plus. Voir puberte.go : a cet age,
+	// seule leur ABSENCE informe.
+	VoixMuee           string // no | starting | yes | unknown
+	PilositeVisage     string // none | light | developed
+	PilositeAisselles  string // none | light | developed
 	EthnicBackground   EthnicBackground   // Population-specific coefficients
 	NutritionLevel     NutritionLevel     // Health factor
 	SleepHoursPerNight float64            // Growth happens during sleep
@@ -94,6 +111,10 @@ type HeightPredictionV2Response struct {
 	   et Avertissement renvoie vers un medecin, parce qu afficher un
 	   chiffre au dixieme sur ces profils serait une fausse precision. */
 	HorsDomaine bool
+
+	// Signes de puberte nettement en retard pour l age : le modele
+	// sous-estime alors, et le dit. Voir puberte.go.
+	RetardPubertaire bool
 	/* Message a montrer a l utilisateur quand le modele sort de son
 	   domaine. Vide le reste du temps. */
 	Avertissement string
@@ -168,7 +189,38 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	   doublerait son effet le jour ou on rebalancerait les deux ancres.
 	   Nulle si aucun signal n est renseigne. */
 	correction, indice := correctionMaturite(req)
-	base := (khamisRoche+trajectoire)/2 + correction
+	/* TROISIEME ANCRE, quand elle existe : la menarche.
+
+	   Elle rejoint la moyenne au meme rang que les deux autres, et non
+	   comme une correction posee par-dessus — elle mesure directement la
+	   croissance restante, pas une avance ou un retard. Absente ou
+	   eteinte (plus de 2,5 ans), la moyenne porte sur deux ancres et le
+	   resultat est exactement celui d avant. Voir menarche.go. */
+	ancres := []float64{khamisRoche, trajectoire}
+	parMenarche, menarcheUtile := tailleAdulteParMenarche(req)
+	if menarcheUtile {
+		ancres = append(ancres, parMenarche)
+	}
+
+	sommeAncres := 0.0
+	for _, a := range ancres {
+		sommeAncres += a
+	}
+	base := sommeAncres/float64(len(ancres)) + correction
+
+	/* RETARD PUBERTAIRE — la plus grosse erreur qui restait.
+
+	   Un garcon de dix-sept ans a 165 cm qui n a pas commence sa puberte
+	   recevait « +1,7 cm » ; la realite, pour un Tanner 1-2 a cet age,
+	   est de quinze a vingt-cinq. La correction est volontairement
+	   modeste et non calibree : c est l avertissement qui porte le reste,
+	   pas le nombre.
+
+	   Son poids est le COMPLEMENT de celui de l indice de maturite, si
+	   bien que les deux ne peuvent jamais s appliquer a pleine force en
+	   meme temps. Voir puberte.go. */
+	correctionRetard, retardNet := correctionRetardPubertaire(req)
+	base += correctionRetard
 
 	/* CE QUE CE CALCUL SURESTIME ENCORE, ET DE COMBIEN.
 
@@ -341,6 +393,15 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	   trancher sans age osseux. */
 	resp.Factors["khamis_roche"] = khamisRoche
 	resp.Factors["percentile_projection"] = trajectoire
+	if correctionRetard > 0 {
+		resp.Factors["correction_retard_pubertaire"] = correctionRetard
+	}
+	resp.RetardPubertaire = retardNet
+	if menarcheUtile {
+		// Exposee seulement quand elle a servi : une cle a zero laisserait
+		// croire que l ancre a tire le resultat vers le bas.
+		resp.Factors["menarche_projection"] = parMenarche
+	}
 	resp.Factors["indice_maturite"] = indice
 	resp.Factors["correction_maturite"] = correction
 	resp.Factors["vitesse_attendue"] = vitesseAttendue(req.Age, req.Sex)

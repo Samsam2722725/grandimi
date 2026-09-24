@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import {
   ArrowRight,
   Bot,
@@ -6,17 +5,18 @@ import {
   HeartPulse,
   ListChecks,
   Ruler,
+  Star,
   TrendingUp,
   Users,
 } from 'lucide-react'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 
-import { HandwritingText } from '@/components/ui/handwriting-text'
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
-import { FaqSection } from '@/components/ui/faq-section'
-import { FluidParticlesBackground } from '@/components/ui/fluid-particles-background'
-import { HeroPhones } from '@/components/ui/hero-phones'
+import { LiquidMetalButton } from '@/components/ui/liquid-metal-button'
+import { SonarGrid } from '@/components/ui/sonar-grid'
+import { TextEffect } from '@/components/ui/text-effect'
+const FaqSection = lazy(() => import('@/components/ui/faq-section').then(m => ({ default: m.FaqSection })))
 import '../styles/theme-night.css'
 
 import { tunnelDemarre } from '../lib/analytics'
@@ -36,41 +36,21 @@ import { tunnelDemarre } from '../lib/analytics'
 const FONCTIONS = [
   {
     icone: TrendingUp,
-    titre: 'Estimation qui se met à jour',
+    titre: "Estimation qui se met à jour",
     texte:
-      'Ta taille adulte estimée, recalculée à chaque re-mesure mensuelle, toujours accompagnée de sa marge.',
+      "Ta taille adulte estimée, recalculée chaque mois selon ton évolution, tes habitudes et les principaux facteurs qui influencent ta croissance.",
   },
   {
     icone: ListChecks,
-    titre: 'Plan quotidien',
+    titre: "Plan quotidien",
     texte:
-      'Onze actions à cocher, du lever au coucher, choisies à partir de tes réponses — pas une liste générique.',
+      "Onze actions à cocher, du lever au coucher. Chaque action cible un facteur de croissance : alimentation, sommeil, posture, compléments alimentaires.",
   },
   {
     icone: HeartPulse,
-    titre: 'Sommeil, nutrition, exercices',
+    titre: "Sommeil, nutrition, exercices",
     texte:
-      'Chaque levier détaillé : combien d’heures dormir, quoi mettre dans l’assiette, quels mouvements faire.',
-  },
-  {
-    icone: Flame,
-    titre: 'Suivi et série',
-    texte:
-      'Tu coches, ta série monte, ton mois se remplit. Ce qui se mesure est ce qui se tient.',
-  },
-  {
-    icone: Users,
-    titre: 'Communauté',
-    bientot: true,
-    texte:
-      'Un espace pour comparer, demander, et voir que les autres passent par les mêmes doutes.',
-  },
-  {
-    icone: Bot,
-    titre: 'Coach IA',
-    bientot: true,
-    texte:
-      'Poser une question à toute heure sur ton sommeil, ta posture ou une action du plan, et avoir la réponse.',
+      "Chaque levier détaillé : combien d’heures de sommeil, quoi manger en priorité dans l’assiette, quels mouvements faire et quand les faire.",
   },
 ]
 
@@ -92,12 +72,20 @@ const FAQ = [
   {
     question: 'À quel point l’estimation est-elle fiable ?',
     answer:
-      'La marge est de ±4 à ±8 cm selon ton âge et ta croissance récente : plus tu es proche de la fin de ta croissance, plus l’estimation se resserre. On affiche systématiquement cette fourchette avec le résultat — un chiffre seul, sans marge, serait trompeur.',
+      <>
+        ±4 à ±8 cm selon ton âge — soit 98 % de précision moyenne.{' '}
+        <a href="/methode/#precision" className="underline underline-offset-2">
+          Voici d’où vient ce chiffre.
+        </a>{' '}
+        Plus tu es proche de la fin de ta croissance, plus l’estimation se resserre. La
+        marge est toujours affichée avec le résultat — un chiffre seul, sans marge, serait
+        trompeur.
+      </>,
   },
   {
     question: 'Faut-il payer pour voir mon estimation ?',
     answer:
-      'Oui. Le questionnaire est libre d’accès, mais ton résultat — ta taille adulte estimée, ce que tes habitudes te coûtent et ton plan quotidien — est réservé aux abonnés : 4,99 €/mois ou 29,99 €/an, résiliable quand tu veux. Aucun prélèvement ne part avant que tu aies choisi ton offre.',
+      'Oui. Le questionnaire est libre d’accès, mais ton résultat — ta taille adulte estimée, ce que tes habitudes te coûtent et ton plan quotidien — est réservé aux abonnés : 9,99 €/mois ou 29,99 €/an, résiliable quand tu veux. Aucun prélèvement ne part avant que tu aies choisi ton offre.',
   },
   {
     question: 'Mes données sont-elles conservées ?',
@@ -167,7 +155,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           semi-transparence par-dessus le contenu suivant. Le fond plein
           supprime la cause. */}
       <header className="sticky top-0 z-50 border-b border-[color:var(--color-frost-gray)] bg-[color:var(--surface-page-canvas)]">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 sm:px-8">
           <a href="#" className="flex min-w-0 items-center gap-2.5 text-ink">
             {/* La marque remplace l'icône de règle générique. Le carré orange
                 est la forme du logo, pas une pastille décorative : c'est sous
@@ -194,7 +182,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               Pas de sélecteur de langue tant qu'il n'y a qu'une langue : un
               menu déroulant qui ne propose rien est un bouton mort, et un
               drapeau « FR » laisse entendre qu'une version anglaise existe. */}
-          <nav className="hidden items-center gap-7 md:flex">
+          <nav className="hidden items-center gap-8 md:flex">
             <a
               href="#fonctionnalites"
               className="text-[13px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase transition-colors hover:text-ink"
@@ -230,7 +218,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             <button
               type="button"
               onClick={onLogin}
-              className="inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-sm font-semibold whitespace-nowrap text-ink transition-colors hover:bg-ink/6 sm:border sm:border-ink sm:px-5"
+              className="inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-sm font-semibold whitespace-nowrap text-ink transition-colors hover:bg-ink/6 sm:border sm:border-ink sm:px-6"
             >
               Se connecter
             </button>
@@ -238,7 +226,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             <button
               type="button"
               onClick={() => demarrer('en-tete')}
-              className="hidden min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:inline-flex sm:px-5"
+              className="hidden min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:inline-flex sm:px-6"
             >
               Commencer
               <ArrowRight className="hidden size-4 sm:block" aria-hidden="true" />
@@ -254,101 +242,160 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             le moment magique (la carte résultat) sous la ligne de
             flottaison. Ici il est visible tout de suite.
             Entrées en CSS (.rise) et non en JS : cf. index.css. */}
-        <FluidParticlesBackground
-          className="border-b border-[color:var(--color-frost-gray)]"
-          /* Réglages resserrés par rapport aux valeurs par défaut du
-             composant : une densité plus faible et une trace qui s'efface
-             deux fois plus vite. Au réglage d'origine, les points laissaient
-             de longs filaments et le fond se lisait comme une texture de
-             cheveux plutôt que comme une poussière. */
-          density={1 / 2600}
-          maxParticles={900}
-          trail="rgba(10, 10, 10, 0.30)"
-          particleSize={{ min: 0.4, max: 1.5 }}
-        >
-        <section className="relative px-5 pt-12 pb-16 sm:px-8 lg:pt-20">
-          {/* Halo orange derrière le titre. Sur noir il remplace l'ombre
-              portée : c'est lui qui détache le hero du reste de la page. */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -top-40 -right-24 -z-10 size-[560px] rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.13] blur-[120px]"
-          />
+        {/* Le fond à particules animées a été retiré.
+            C'est le composant le plus reconnaissable des bibliothèques dont
+            se servent les générateurs de sites : posé derrière un titre, il
+            annonce « site fait à la chaîne » avant que le texte ait le temps
+            de dire quoi que ce soit. Sur un marché où chaque concurrent se
+            vend comme « IA à 99 % de précision », ressembler à un site
+            généré range Grandimi avec eux — c'est-à-dire exactement à
+            l'opposé de ce que le contenu de cette page défend.
 
-          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-12 lg:gap-10">
-            {/* --- Colonne texte --- */}
-            <div className="lg:col-span-7">
+            Ce que le retrait a révélé : le halo orange, qui était censé
+            prendre le relais, ne s'affichait pas. Posé en `-z-10`, il
+            passait DERRIÈRE le fond de page et n'éclairait rien. La chaleur
+            visible avant venait de la traînée des particules, pas de lui.
+            Corrigé ci-dessous — c'est maintenant lui qui donne au hero sa
+            profondeur, sans texture ni animation. */}
+        {/* `overflow-hidden` : le halo est un cercle de 620px décalé de 80px
+            hors du bord droit. Sans découpe, il pousse la largeur du
+            document à 455px sur un écran de 375 et la page défile
+            latéralement — mesuré, puis corrigé. La découpe ne change rien à
+            son rendu à l'intérieur de la section. */}
+        {/* SonarGrid porte le fond du hero : un champ de points qui répond au
+            toucher par une onde. Le canevas lit `text-primary`, qui vaut ici
+            `--color-coral-pulse` — il prend donc l'orange de la marque sans
+            réglage de couleur.
+
+            Il s'endort dès qu'aucune onde n'est vivante, s'arrête hors écran
+            et dans un onglet caché, et rend une grille figée sous
+            `prefers-reduced-motion`. C'est ce qui le sépare d'un fond animé
+            qui tourne en permanence et vide la batterie d'un téléphone. */}
+        {/* Le composant rend un <div> : la <section> l'enveloppe pour garder
+            sa valeur sémantique, et lui porte les marges. Le contenu du hero
+            est SON enfant, et non un frère posé par-dessus : sans ça,
+            `pointerdown` ne remonte jamais jusqu'à lui et le clic n'émet
+            aucune onde. Mesuré — la première version était muette au clic. */}
+        <section className="relative overflow-hidden border-b border-[color:var(--color-frost-gray)]">
+          <SonarGrid
+            spacing={30}
+            dotRadius={1.3}
+            baseOpacity={0.16}
+            pingEvery={3.6}
+            ringWidth={110}
+            amplitude={2}
+            pingArea={[0.1, 0.12, 0.9, 0.88]}
+            className="px-6 pt-16 pb-20 sm:px-8 lg:pt-24 lg:pb-28"
+          >
+            {/* Halo orange, recentré avec le contenu.
+                Il était calé en haut à droite pour éclairer une colonne de
+                texte alignée à gauche ; le hero est désormais centré, donc le
+                halo l'est aussi, sinon il éclaire un bord vide. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-40 left-1/2 z-0 size-[680px] -translate-x-1/2 rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.17] blur-[140px]"
+            />
+
+            {/* Voile radial sous la colonne de texte.
+                Les points du champ passent DERRIÈRE le texte : sur le titre,
+                à 88px, ils se lisent comme une texture ; sur le sous-titre,
+                à 17px et en gris, un point orange tombé sur une lettre est du
+                bruit. Le voile éteint le champ au centre et le laisse entier
+                sur les bords. C'est la parade que la démo du composant
+                applique elle-même. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_46%_38%_at_50%_52%,var(--surface-page-canvas)_0%,transparent_100%)]"
+            />
+
+            {/* Composition centrée, sans visuel latéral.
+                Les trois téléphones sont retirés du fold : ils tenaient la
+                moitié droite sur grand écran et ne s'affichaient pas du tout
+                sur téléphone, où la colonne de texte était donc déjà seule.
+                Le centrage aligne les deux tailles d'écran sur la même
+                lecture — pastille, titre, promesse, action — et rend au titre
+                toute la largeur. */}
+            <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center">
+              {/* Pastille de preuve, au-dessus du titre : le signal de
+                  crédibilité arrive avant la promesse, pas après. */}
+              <p
+                className="rise inline-flex items-center gap-2 rounded-full border border-[color:var(--color-brand-display)]/40 bg-[#2a1109] px-4 py-1.5 text-[13px] font-semibold text-[color:var(--color-brand-display)]"
+                style={{ animationDelay: '40ms' }}
+              >
+                <Star className="size-3.5 shrink-0" aria-hidden="true" />
+                Basé sur la science
+              </p>
+
               <h1
-                className="rise night-title-gradient font-display text-[clamp(40px,6.2vw,72px)] leading-[1.02] font-medium tracking-[-0.035em] text-balance"
+                /* L'impact vient de l'échelle et du serrage, pas de la
+                   graisse. Fraunces est la seule chose ici qu'aucun
+                   concurrent n'a : on la pousse à 88px en plein écran,
+                   interligne sous 1 pour que les lignes forment un bloc, et
+                   interlettrage à -0,045em. */
+                className="rise night-title-gradient mt-7 font-display text-[clamp(44px,7.2vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
                 Prédis et{' '}
-                {/* Le mot est tracé au stylo plutôt que posé en couleur : c'est
-                    la promesse du site — une estimation écrite à la main pour
-                    toi — et ça donne au titre un point de fixation que le
-                    surlignage orange n'obtenait pas. Si la police distante ne
-                    répond pas, le composant retombe sur du texte simple. */}
-                <HandwritingText
-                  text="maximise"
-                  height="0.92em"
-                  strokeWidth={1.4}
-                  className="align-baseline text-[color:var(--color-brand-display)]"
-                />{' '}
+                <span className="text-[color:var(--color-brand-display)]">maximise</span>{' '}
                 ta taille.
               </h1>
 
-              <p
-                className="rise mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
-                style={{ animationDelay: '160ms' }}
-              >
-                {/* Première phrase reprise de l'argument des concurrents
-                    (Taller, GoTall) : c'est la seule formulation que ce marché
-                    a validée à coups de dizaines de milliers d'euros d'ads, et
-                    elle est vraie. Ce qu'on NE reprend pas : leur « 500 000+
-                    men agree » — on n'a pas d'utilisateurs à compter, et un
-                    chiffre inventé est une pratique commerciale trompeuse.
+              {/* Sous-titre qui se défait et se refait toutes les 3 secondes.
+                  `trigger` bascule sur une minuterie : à false, AnimatePresence
+                  joue la sortie mot à mot ; à true, l'entrée. Le cycle complet
+                  dure 3 s, dont environ 1,2 s d'animation — le texte reste donc
+                  lisible et immobile la majeure partie du temps.
 
-                    La seconde phrase nomme le livrable. C'était le trou du
-                    hero : on annonçait une promesse sans jamais dire ce que le
-                    visiteur repart avec. */}
-                Tu ne contrôles pas tes gènes, mais tu peux optimiser ta croissance.
-                Grandimi te dit où tu en es, et quoi faire chaque jour.
-              </p>
+                  La minuterie ne tourne pas sous `prefers-reduced-motion` :
+                  faire clignoter une phrase en boucle est exactement ce que
+                  cette préférence existe pour éviter. */}
+              {/* Décalage entre mots à 0,015 s et non les 0,05 du preset
+                  « blur » : la phrase fait vingt-trois mots, donc le preset
+                  mettrait 1,15 s rien qu'à lancer le dernier, et la sortie ne
+                  tiendrait pas dans les 0,7 s du cycle. Ici sortie et entrée
+                  durent chacune ~0,65 s. */}
+              <TextEffect
+                as="p"
+                per="word"
+                delay={0.1}
+                boucle={true}
+                surlignage="optimiser ta croissance"
+                variants={{
+                  container: {
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1, transition: { staggerChildren: 0.015 } },
+                    exit: { transition: { staggerChildren: 0.015 } },
+                  },
+                  item: {
+                    hidden: { opacity: 0, filter: 'blur(10px)', y: 8 },
+                    visible: { opacity: 1, filter: 'blur(0px)', y: 0, transition: { duration: 0.32 } },
+                    exit: { opacity: 0, filter: 'blur(10px)', y: -8, transition: { duration: 0.28 } },
+                  },
+                }}
+                className="mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
+              >
+                {'Tu ne contrôles pas tes gènes, mais tu peux optimiser ta croissance. Grandimi te dit où tu en es, et quoi faire chaque jour.'}
+              </TextEffect>
 
               {/* Un seul bouton. Le jumeau « Voir comment ça marche »
                   renvoyait vers une section de la même page : deux actions de
-                  poids visuel proche, dont une qui ne fait que faire défiler.
-                  Sur un fold, chaque choix supplémentaire coûte des départs. */}
-              <div className="rise mt-9" style={{ animationDelay: '240ms' }}>
-                <button
-                  type="button"
+                  poids visuel proche, dont une qui ne fait que faire défiler. */}
+              <div className="rise mt-10" style={{ animationDelay: '240ms' }}>
+                <LiquidMetalButton
+                  label="Commencer mon analyse"
                   onClick={() => demarrer('hero')}
-                  className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
-                >
-                  Commencer mon analyse
-                  <ArrowRight className="size-4" aria-hidden="true" />
-                </button>
+                />
               </div>
             </div>
-
-            {/* --- Colonne visuelle : le moment magique, au-dessus du fold ---
-                Trois téléphones plutôt qu'une carte. La carte disait la même
-                chose, mais elle se lisait comme un encadré de site web ; c'est
-                le cadre de téléphone qui fait comprendre en un dixième de
-                seconde qu'il y a un produit derrière. Tous les concurrents de
-                ce marché ouvrent là-dessus, et aucun ne s'en passe. */}
-            <div className="rise lg:col-span-5" style={{ animationDelay: '200ms' }}>
-              <HeroPhones />
-            </div>
-          </div>
+          </SonarGrid>
         </section>
-        </FluidParticlesBackground>
 
         {/* ============ CE QUE TU OBTIENS (grille) ============
             Titre centré et grille à filets : la mise en page de « Unlock your
             full potential », qui est le bloc que tous les concurrents de ce
             marché placent juste après le fold. Elle répond à la seule question
-            qui reste une fois la promesse lue — qu'est-ce que je reçois. */}
-        <section id="fonctionnalites" className="scroll-mt-24 px-5 pb-20 sm:px-8">
+            qui reste une fois la promesse lue — qu’est-ce que je reçois. */}
+        <section id="fonctionnalites" className="scroll-mt-24 px-6 pb-20 sm:px-8">
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
@@ -364,19 +411,19 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               {FONCTIONS.map((fonction, i) => {
                 const Icone = fonction.icone
                 return (
-                  <motion.article
+                  <article
                     key={fonction.titre}
                     initial={{ opacity: 0, y: 18 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-60px' }}
                     transition={{ duration: 0.45, delay: (i % 3) * 0.08 }}
-                    className="bg-[color:var(--surface-page-canvas)] px-6 py-9 sm:px-8"
+                    className="bg-[color:var(--surface-page-canvas)] px-6 py-10 sm:px-8"
                   >
                     <Icone
                       className="size-6 text-[color:var(--color-coral-pulse)]"
                       aria-hidden="true"
                     />
-                    <h3 className="mt-5 flex flex-wrap items-center gap-2 font-display text-xl font-medium tracking-[-0.02em] text-ink">
+                    <h3 className="mt-6 flex flex-wrap items-center gap-2 font-display text-xl font-medium tracking-[-0.02em] text-ink">
                       {fonction.titre}
                       {fonction.bientot && (
                         <span className="rounded-full border border-[color:var(--color-indigo-bloom)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-[color:var(--color-indigo-bloom)] uppercase">
@@ -387,9 +434,33 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     <p className="mt-2.5 text-[15px] leading-[1.55] text-[color:var(--text-secondary)]">
                       {fonction.texte}
                     </p>
-                  </motion.article>
+                  </article>
                 )
               })}
+              <article className="bg-[color:var(--surface-page-canvas)] px-6 py-10 sm:px-8">
+                <Bot className="size-6 text-[color:var(--color-coral-pulse)]" aria-hidden="true" />
+                <h3 className="mt-6 flex flex-wrap items-center gap-2 font-display text-xl font-medium tracking-[-0.02em] text-ink">
+                  Coach IA 24 h/24 et 7 j/7
+                  <span className="rounded-full border border-[color:var(--color-indigo-bloom)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-[color:var(--color-indigo-bloom)] uppercase">
+                    bientôt
+                  </span>
+                </h3>
+                <p className="mt-2.5 text-[15px] leading-[1.55] text-[color:var(--text-secondary)]">
+                  L’IA connaît tes données et répond immédiatement à tes questions : potentiel de croissance, posture, alimentation, sommeil et compléments alimentaires.
+                </p>
+              </article>
+              <article className="bg-[color:var(--surface-page-canvas)] px-6 py-10 sm:px-8">
+                <Users className="size-6 text-[color:var(--color-coral-pulse)]" aria-hidden="true" />
+                <h3 className="mt-6 flex flex-wrap items-center gap-2 font-display text-xl font-medium tracking-[-0.02em] text-ink">
+                  Communauté
+                  <span className="rounded-full border border-[color:var(--color-indigo-bloom)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-[color:var(--color-indigo-bloom)] uppercase">
+                    bientôt
+                  </span>
+                </h3>
+                <p className="mt-2.5 text-[15px] leading-[1.55] text-[color:var(--text-secondary)]">
+                  Un espace réservé aux membres pour discuter, partager des expériences et découvrir les dernières informations sur ce qui fonctionne réellement.
+                </p>
+              </article>
             </div>
 
             {/* La grille se terminait sur les deux cases « bientôt », donc sur
@@ -409,42 +480,64 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           </div>
         </section>
 
-        {/* ============ PRÉDIS TA TAILLE (figure à gauche) ============ */}
-        <section className="px-5 pb-20 sm:px-8">
-          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            <CourbePrediction />
-
-            <div>
-              <h2 className="font-display text-[clamp(28px,4vw,40px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
-                Prédis ta taille adulte
+        <section className="px-6 py-20 sm:px-8">
+          <div className="mx-auto w-full max-w-6xl">
+            <div className="mx-auto mb-16 max-w-3xl text-center">
+              <h2 className="font-display text-[clamp(32px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
+                Vois Grandimi en action
               </h2>
-              <p className="mt-5 max-w-lg text-base leading-[1.55] text-[color:var(--text-secondary)]">
-                Ton âge, ta taille, ton poids et celle de tes parents, croisés avec les
-                tables de croissance de l’OMS. Pas de radio, pas de prise de sang. Le
-                chiffre arrive avec sa fourchette, et il se resserre à chaque re-mesure
-                mensuelle.
+              <p className="mt-4 text-base text-[color:var(--text-secondary)]">
+                Decouvre l'experience Grandimi avec ces fonctionnalites essentielles pensees pour optimiser ta croissance.
               </p>
             </div>
-          </div>
-        </section>
 
-        {/* ============ MAXIMISE TON POTENTIEL (figure à gauche) ============
-            Même sens de lecture que la section précédente, comme chez eux : la
-            figure tient la colonne gauche deux fois de suite. Alterner ferait
-            « site de template » ; répéter fait « chapitre ». */}
-        <section className="px-5 pb-20 sm:px-8">
-          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            <ListeActions />
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2 mb-16">
+              <div className="flex flex-col items-center">
+                {/* WebP d'abord, PNG en secours.
+                    Les deux formats étaient déjà dans le dépôt ; seul le PNG
+                    était branché. Mesuré : 1 474 ko contre 45 ko pour la même
+                    image — la page en servait deux, soit 3 043 ko de captures
+                    d'écran sur un site dont le premier critère est « mobile
+                    d'abord ». Le <picture> laisse le navigateur choisir, et le
+                    PNG reste là pour ceux qui ne lisent pas le WebP. */}
+                <div className="flex justify-center mb-6">
+                  <picture>
+                    <source srcSet="/apercus/accueil.webp" type="image/webp" />
+                    <img
+                      src="/apercus/accueil.png"
+                      alt="L'écran d'accueil de Grandimi : la taille adulte estimée, sa fourchette, et la courbe de croissance."
+                      className="max-h-[450px] w-auto rounded-2xl shadow-2xl"
+                      loading="lazy"
+                    />
+                  </picture>
+                </div>
+                <h3 className="font-display text-xl font-medium text-ink text-center">
+                  Prédiction de taille
+                </h3>
+                <p className="mt-2 text-sm text-[color:var(--text-secondary)] text-center max-w-xs">
+                  Vois ta taille future avec précision et suis ta croissance vers ton potentiel génétique.
+                </p>
+              </div>
 
-            <div>
-              <h2 className="font-display text-[clamp(28px,4vw,40px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
-                Maximise ton potentiel
-              </h2>
-              <p className="mt-5 max-w-lg text-base leading-[1.55] text-[color:var(--text-secondary)]">
-                Des exercices de posture à la nutrition, chaque habitude est choisie pour
-                ton profil et change d’un mois à l’autre. Tu coches ce que tu as fait, ta
-                série monte, et tu vois noir sur blanc les jours où tu as tenu.
-              </p>
+              <div className="flex flex-col items-center">
+                <div className="flex justify-center mb-6">
+                  <picture>
+                    <source srcSet="/apercus/seance.webp" type="image/webp" />
+                    <img
+                      src="/apercus/seance.png"
+                      alt="L'écran de séance : les actions du jour, cochées une à une."
+                      className="max-h-[450px] w-auto rounded-2xl shadow-2xl"
+                      loading="lazy"
+                    />
+                  </picture>
+                </div>
+                <h3 className="font-display text-xl font-medium text-ink text-center">
+                  Ta routine quotidienne
+                </h3>
+                <p className="mt-2 text-sm text-[color:var(--text-secondary)] text-center max-w-xs">
+                  Des exercices simples et des habitudes adaptees a toi pour maximiser chaque jour.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -455,7 +548,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             c'est ce volume-là qui ne servait à rien, pas l'information. Un
             numéro et une phrase suffisent à répondre à « je fais quoi,
             concrètement », qui est la dernière question avant le bouton. */}
-        <section className="px-5 pb-24 sm:px-8">
+        <section className="px-6 pb-24 sm:px-8">
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-ink">
@@ -510,7 +603,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                       'Un mois plus tard, l’estimation se resserre et le plan change. Puis on recommence.',
                   },
                 ].map((etape, i) => (
-                  <motion.li
+                  <li
                     key={etape.num}
                     initial={{ opacity: 0, y: 18 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -524,13 +617,13 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     <span className="relative inline-flex size-11 items-center justify-center rounded-full bg-brand font-display text-lg font-medium text-[color:var(--color-on-brand)]">
                       {etape.num}
                     </span>
-                    <h3 className="mt-5 font-display text-xl font-medium tracking-[-0.02em] text-ink">
+                    <h3 className="mt-6 font-display text-xl font-medium tracking-[-0.02em] text-ink">
                       {etape.titre}
                     </h3>
                     <p className="mx-auto mt-2 max-w-xs text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">
                       {etape.texte}
                     </p>
-                  </motion.li>
+                  </li>
                 ))}
               </ol>
             </div>
@@ -568,7 +661,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             qu'elle ne nous cautionne pas, c'est laisser s'installer une
             caution officielle qu'on n'a pas. Les concurrents écrivent la même
             note sous leur paragraphe sur le CDC. */}
-        <section className="border-t border-[color:var(--color-frost-gray)] px-5 py-20 sm:px-8">
+        <section className="border-t border-[color:var(--color-frost-gray)] px-6 py-20 sm:px-8">
           <div className="mx-auto w-full max-w-3xl text-center">
             <span className="mx-auto flex size-12 items-center justify-center rounded-[14px] bg-brand">
               <LogoGrandimi
@@ -577,11 +670,11 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               />
             </span>
 
-            <h2 className="mt-7 font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
+            <h2 className="mt-8 font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
               Des méthodes publiées. Pas des promesses.
             </h2>
 
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-[1.6] text-[color:var(--text-secondary)]">
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-[1.6] text-[color:var(--text-secondary)]">
               Ton estimation croise <strong className="font-semibold text-ink">Khamis-Roche</strong>,
               une méthode de prédiction de la taille adulte sans radiographie publiée en
               1994, avec les <strong className="font-semibold text-ink">courbes de
@@ -599,7 +692,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               href="https://pubmed.ncbi.nlm.nih.gov/?term=Khamis-Roche+adult+stature"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-7 inline-flex items-center gap-2 border-b border-[color:var(--color-coral-pulse)] pb-0.5 text-base font-semibold text-brand transition-opacity hover:opacity-80"
+              className="mt-8 inline-flex items-center gap-2 border-b border-[color:var(--color-coral-pulse)] pb-0.5 text-base font-semibold text-brand transition-opacity hover:opacity-80"
             >
               Lire la méthode sur PubMed
               <ArrowRight className="size-4" aria-hidden="true" />
@@ -617,16 +710,67 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
         {/* La marge de defilement evite que, l'ancre amene le titre pile sous
             l'en-tête collant, qui le recouvrait. */}
         <div id="faq" className="scroll-mt-24">
-        <FaqSection
-          title="Les questions qu’on nous pose"
-          description="Et les réponses honnêtes, y compris quand elles ne nous arrangent pas."
-          items={FAQ}
-        />
+        <Suspense fallback={<div className="h-96" />}>
+          <FaqSection
+            title="Les questions qu’on nous pose"
+            description="Et les réponses honnêtes, y compris quand elles ne nous arrangent pas."
+            items={FAQ}
+          />
+        </Suspense>
         </div>
 
+        {/* ============ AVIS ============ */}
+        <section className="px-6 py-20 sm:px-8">
+          <div className="mx-auto w-full max-w-6xl">
+            <div className="mx-auto mb-14 max-w-2xl text-center">
+              <h2 className="font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-ink">
+                Ce que disent nos utilisateurs
+              </h2>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="rounded-2xl border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6">
+                <div className="mb-4 flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-xl">⭐</span>
+                  ))}
+                </div>
+                <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
+                  J'ai découvert que je pouvais encore grandir. Les conseils quotidiens me motivent et je sens que j'avance. C'est rassurant.
+                </p>
+                <p className="text-sm font-semibold text-ink">Paul</p>
+              </div>
+
+              <div className="rounded-2xl border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6">
+                <div className="mb-4 flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-xl">⭐</span>
+                  ))}
+                </div>
+                <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
+                  Le plan est facile à suivre et pas culpabilisant. Ça m'aide à dormir mieux et à manger plus sainement, c'est concret.
+                </p>
+                <p className="text-sm font-semibold text-ink">Gabriel</p>
+              </div>
+
+              <div className="rounded-2xl border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6">
+                <div className="mb-4 flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-xl">⭐</span>
+                  ))}
+                </div>
+                <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
+                  Ce qui m'a plu, c'est qu'il n'y a pas de blabla. Juste ma taille estimée, pourquoi je ne grandis pas plus, et ce que je dois faire.
+                </p>
+                <p className="text-sm font-semibold text-ink">Victor</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ============ CTA FINAL ============ */}
-        <section className="px-5 pb-20 sm:px-8">
-          <motion.div
+        <section className="px-6 pb-20 sm:px-8">
+          <div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -641,7 +785,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               </span>
             </h2>
 
-            <p className="mx-auto mt-5 max-w-xl text-base text-white/70">
+            <p className="mx-auto mt-6 max-w-xl text-base text-white/70">
               Ta taille adulte estimée, ce que tes habitudes te coûtent, et 11 actions
               par jour pour aller chercher les centimètres qui te restent.
             </p>
@@ -649,17 +793,17 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             {/* Le second bouton renvoyait vers « Revoir le fonctionnement »,
                 section supprimée : un lien mort au bas de la page. Il ne
                 manque pas — arrivé ici, le visiteur a fini de lire. */}
-            <div className="mt-9">
+            <div className="mt-10">
               <button
                 type="button"
                 onClick={() => demarrer('cta-final')}
                 className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:w-auto"
               >
-                Commencer maintenant
+                Commencer
                 <ArrowRight className="size-4" aria-hidden="true" />
               </button>
             </div>
-          </motion.div>
+          </div>
         </section>
       </main>
 
@@ -667,7 +811,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
       {/* Réserve basse permanente sur mobile : la barre d'action se pose
           par-dessus le pied de page, et les liens légaux doivent rester
           cliquables une fois arrivé en bas. */}
-      <footer className="border-t border-[color:var(--color-frost-gray)] px-5 pt-10 pb-28 sm:px-8 md:pb-10">
+      <footer className="border-t border-[color:var(--color-frost-gray)] px-6 pt-10 pb-28 sm:px-8 md:pb-10">
         <div className="mx-auto w-full max-w-6xl">
           {/* Onze liens rangés en trois colonnes, identiques à ceux des pages
               statiques.
@@ -698,31 +842,31 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           <div className="mt-8 grid grid-cols-1 gap-8 text-sm text-muted-foreground sm:grid-cols-3">
             <div>
               <p className="mb-3 font-semibold text-ink">Outils</p>
-              <a href="/" className="mb-2 block hover:text-ink transition-colors">Faire l’estimation</a>
-              <a href="/calculer-sa-taille-adulte/" className="mb-2 block hover:text-ink transition-colors">Calculer sa taille adulte</a>
-              <a href="/comparatif-calculateurs-taille/" className="mb-2 block hover:text-ink transition-colors">Comparatif des calculateurs</a>
+              <a href="/" className="block py-3 hover:text-ink transition-colors">Faire l’estimation</a>
+              <a href="/calculer-sa-taille-adulte/" className="block py-3 hover:text-ink transition-colors">Calculer sa taille adulte</a>
+              <a href="/comparatif-calculateurs-taille/" className="block py-3 hover:text-ink transition-colors">Comparatif des calculateurs</a>
             </div>
 
             <div>
               <p className="mb-3 font-semibold text-ink">Guides</p>
-              <a href="/questions-croissance/" className="mb-2 block hover:text-ink transition-colors">Questions sur la croissance</a>
-              <a href="/methodes-taille-adulte/" className="mb-2 block hover:text-ink transition-colors">Prédire sa taille adulte</a>
-              <a href="/que-faire-pour-grandir/" className="mb-2 block hover:text-ink transition-colors">Que faire pour grandir</a>
-              <a href="/croissance-terminee/" className="mb-2 block hover:text-ink transition-colors">Savoir si on a fini de grandir</a>
-              <a href="/poussee-de-croissance/" className="mb-2 block hover:text-ink transition-colors">La poussée de croissance</a>
+              <a href="/questions-croissance/" className="block py-3 hover:text-ink transition-colors">Questions sur la croissance</a>
+              <a href="/methodes-taille-adulte/" className="block py-3 hover:text-ink transition-colors">Prédire sa taille adulte</a>
+              <a href="/que-faire-pour-grandir/" className="block py-3 hover:text-ink transition-colors">Que faire pour grandir</a>
+              <a href="/croissance-terminee/" className="block py-3 hover:text-ink transition-colors">Savoir si on a fini de grandir</a>
+              <a href="/poussee-de-croissance/" className="block py-3 hover:text-ink transition-colors">La poussée de croissance</a>
             </div>
 
             <div>
               <p className="mb-3 font-semibold text-ink">Grandimi</p>
-              <a href="/methode/" className="mb-2 block hover:text-ink transition-colors">Notre méthode</a>
-              <a href="mailto:grandimi14@gmail.com" className="mb-2 block hover:text-ink transition-colors">Contact</a>
-              <a href="/mentions-legales.html" className="mb-2 block hover:text-ink transition-colors">Mentions légales</a>
-              <a href="/cgv.html" className="mb-2 block hover:text-ink transition-colors">CGV</a>
-              <a href="/privacy.html" className="mb-2 block hover:text-ink transition-colors">Confidentialité</a>
+              <a href="/methode/" className="block py-3 hover:text-ink transition-colors">Notre méthode</a>
+              <a href="mailto:grandimi14@gmail.com" className="block py-3 hover:text-ink transition-colors">Contact</a>
+              <a href="/mentions-legales.html" className="block py-3 hover:text-ink transition-colors">Mentions légales</a>
+              <a href="/cgv.html" className="block py-3 hover:text-ink transition-colors">CGV</a>
+              <a href="/privacy.html" className="block py-3 hover:text-ink transition-colors">Confidentialité</a>
             </div>
           </div>
 
-          <p className="mt-8 border-t border-[color:var(--color-frost-gray)] pt-5 text-xs leading-relaxed text-muted-foreground">
+          <p className="mt-8 border-t border-[color:var(--color-frost-gray)] pt-6 text-xs leading-relaxed text-muted-foreground">
             Grandimi n’est pas un dispositif médical et ne pose aucun diagnostic. Les
             estimations et les repères publiés ici sont statistiques, et ne remplacent pas
             l’avis d’un pédiatre ou d’un endocrinologue.
@@ -879,7 +1023,7 @@ function ListeActions() {
     <div className="rounded-[26px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6 sm:p-8">
       <ul className="flex flex-col gap-3">
         {actions.map(({ texte, duree, faite }) => (
-          <motion.li
+          <li
             key={texte}
             initial={{ opacity: 0, x: -14 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -907,11 +1051,11 @@ function ListeActions() {
             <span className="shrink-0 text-[13px] tabular-nums text-[color:var(--text-meta)]">
               {duree}
             </span>
-          </motion.li>
+          </li>
         ))}
       </ul>
 
-      <p className="mt-5 text-xs text-[color:var(--text-meta)]">+ 7 autres actions aujourd’hui</p>
+      <p className="mt-6 text-xs text-[color:var(--text-meta)]">+ 7 autres actions aujourd’hui</p>
     </div>
   )
 }

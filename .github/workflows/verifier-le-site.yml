@@ -37,6 +37,10 @@ jobs:
           npm ci
           npm run build
 
+      # 1.5 Copier les fichiers construits vers docs/ pour GitHub Pages
+      - name: Copier vers docs pour GitHub Pages
+        run: rm -rf docs/* && cp -r frontend/dist/* docs/
+
       # 2. Le site publié est-il cohérent ? Si docs/index.html réclame un
       #    fichier absent de docs/assets/, grandimi.com affiche une page
       #    blanche : le navigateur n'a plus rien à exécuter. C'est le seul

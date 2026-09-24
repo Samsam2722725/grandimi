@@ -29,6 +29,9 @@ type HeightPredictionResponse struct {
 	// chiffre rendu ne vaut pas les autres et doit le dire.
 	Avertissement string
 	HorsDomaine   bool
+	// Meme raison : les deux routes tournent sur le meme moteur et
+	// doivent signaler la meme chose. Voir puberte.go.
+	RetardPubertaire bool
 }
 
 const (
@@ -95,6 +98,7 @@ func PredictHeight(req HeightPredictionRequest) HeightPredictionResponse {
 	resp.PubertyStage = pubertyStage
 	resp.Avertissement = resultat.Avertissement
 	resp.HorsDomaine = resultat.HorsDomaine
+	resp.RetardPubertaire = resultat.RetardPubertaire
 	resp.Message = "Height prediction successful"
 
 	return resp

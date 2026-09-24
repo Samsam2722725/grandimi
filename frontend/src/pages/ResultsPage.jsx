@@ -1,8 +1,17 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { ArrowLeft, ChevronRight, Lock } from 'lucide-react'
 
 import { AnalyseChart } from '@/components/ui/analyse-chart'
 import { Confetti } from '@/components/ui/confetti'
+
+/* Chargé à la demande : 414 lignes de canvas qui n'ont aucune raison de
+   peser sur le paquet d'entrée, puisque cet écran arrive après quatorze
+   autres. */
+const BallonsVolee = lazy(() =>
+  import('@/components/ui/balloons-pop-background').then((m) => ({
+    default: m.BalloonsPopBackground,
+  })),
+)
 
 import Spinner from '../components/Spinner'
 import { resultatVu } from '../lib/analytics'
@@ -114,6 +123,23 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
   return (
     <div className="night results analyse">
+      {/* LES BALLONS PASSENT DEVANT, PAS DERRIÈRE.
+
+          Ils étaient posés en fond (z-index 0) sous un voile à 62 % : le
+          voile existait parce qu'un ballon vert traversant une carte
+          translucide rendait le chiffre illisible. Soigner un décor de
+          fond par un calque qui l'éteint revient à payer une boucle de
+          rendu pour quelque chose qu'on assombrit ensuite.
+
+          Devant et sans voile, la volée dit ce qu'elle a à dire — quelque
+          chose vient d'aboutir — en une seconde et demie, puis le canvas
+          est vide et le résultat est lisible en entier. C'est le même
+          raisonnement que pour les confettis juste en dessous : ça passe,
+          ça ne s'installe pas. */}
+      <Suspense fallback={null}>
+        <BallonsVolee className="results-ballons" />
+      </Suspense>
+
       <Confetti />
 
       {/* En-tête de GoTall : la flèche de retour et la barre de progression,

@@ -140,6 +140,12 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  /* Le retour à la ligne est le repli, pas le défaut : avec DM Sans le titre
+     et la pastille tiennent côte à côte, mais si la police de secours sert
+     (réseau lent, CDN injoignable) elle est plus large, et deux éléments en
+     `nowrap` dans un conteneur qui ne peut pas les contenir se CHEVAUCHENT.
+     Mieux vaut une ligne de plus qu'un texte illisible. */
+  flex-wrap: wrap;
 }
 
 /* Titre et pastille sur la MÊME ligne, comme sur la capture GoTall : la

@@ -74,3 +74,30 @@
   flex-direction: column;
   gap: 16px;
 }
+
+/* ---------- La volée de ballons ----------
+
+   `absolute` dans `.results` (qui est `fixed inset-0`) et pas `fixed` :
+   une couche fixe supplémentaire se positionnerait par rapport au
+   viewport et non par rapport à cet écran, ce qui la ferait déborder dès
+   qu'une autre page se monte par-dessus pendant une transition.
+
+   DEVANT ET NON DERRIÈRE. Le canvas était en `z-index: 0`, sous un voile
+   `.results::after` à 62 % : le voile était là parce qu'un ballon
+   traversant une carte translucide rendait le chiffre illisible. Un
+   décor de fond qu'il faut éteindre pour lire la page n'est plus un
+   décor, c'est une gêne qu'on paie en boucle de rendu. Passé devant, il
+   n'y a plus rien à éteindre : la volée traverse, le canvas se vide, et
+   l'écran est rendu intact.
+
+   `pointer-events: none` : le doigt traverse le canvas, la page défile
+   normalement, et le bouton reste cliquable pendant la volée. */
+.results-ballons {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
