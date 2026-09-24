@@ -160,18 +160,23 @@
          Réduit aussi les variantes : Fraunces seulement 400/500/600 au
          lieu de 9..144 optical size qui gonflait le fichier. Le contenu
          utilise essentiellement ces poids, donc pas de perte visuelle.
+         DM Sans monte jusqu'à 800 : le titre du hero en font-bold (700)
+         restait visiblement plus fin que la référence visée ; sans ce
+         poids chargé, font-extrabold aurait fait du gras synthétique
+         (contours épaissis par le navigateur, pas dessinés par la
+         police) au lieu du vrai dessin plus dense de la fonte.
 
          media="print" + onload = charge sans bloquer le rendu. Le texte
          s'affiche d'abord dans la police de repli (Arial/system), puis
          bascule vers Fraunces et DM Sans une fois chargées (display=swap). -->
     <link
-      href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700|fraunces:400,500,600&display=swap"
+      href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700,800|fraunces:400,500,600&display=swap"
       rel="stylesheet"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
-      <link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700|fraunces:400,500,600&display=swap" rel="stylesheet" />
+      <link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700,800|fraunces:400,500,600&display=swap" rel="stylesheet" />
     </noscript>
   </head>
   <body>

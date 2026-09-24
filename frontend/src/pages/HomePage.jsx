@@ -322,17 +322,31 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                    « Prédis ta taille adulte. » passait de 1 ligne à 2, et
                    le titre entier de 3 lignes à 5 — mesuré. La taille
                    redescend à 54px pour retrouver le même rythme de
-                   lecture (3 lignes sur desktop), le poids monte à 700
-                   pour que l'impact vienne de la graisse plutôt que de
-                   l'échelle, et le serrage se desserre : un grotesque très
-                   condensé ferme les contre-formes que Fraunces, en serif,
-                   n'avait pas. */
-                className="rise night-title-gradient mt-7 font-display text-[clamp(34px,4.6vw,54px)] leading-[1.1] font-bold tracking-[-0.02em] text-balance"
+                   lecture (3 lignes sur desktop), le poids monte à 800
+                   (font-extrabold, chargé — voir index.html) pour que
+                   l'impact vienne de la graisse plutôt que de l'échelle,
+                   et le serrage se desserre : un grotesque très condensé
+                   ferme les contre-formes que Fraunces, en serif, n'avait
+                   pas.
+
+                   `night-title-gradient` retiré : un dégradé blanc→gris
+                   positionné sur la hauteur du bloc donnait un partage
+                   différent selon le nombre de lignes, lui-même différent
+                   à chaque largeur d'écran — la 2e clause n'était pas
+                   toujours grise. Remplacé par deux tons fixes par clause,
+                   sur une référence donnée : la promesse concrète en blanc
+                   plein, la suite en `--text-secondary` — le même gris que
+                   le sous-titre juste en dessous, pas une nouvelle teinte.
+                   « Grandimi » n'est plus orange ici : l'orange reste sur
+                   le badge et le bouton, mais le titre lui-même est
+                   monochrome, comme la référence. */
+                className="rise mt-7 font-display text-[clamp(34px,4.6vw,54px)] leading-[1.1] font-extrabold tracking-[-0.02em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
-                Prédis ta taille adulte.<br />
-                Atteins ton plein potentiel avec{' '}
-                <span className="text-[color:var(--color-brand-display)]">Grandimi</span>.
+                <span className="text-white">Prédis ta taille adulte.</span><br />
+                <span className="text-[color:var(--text-secondary)]">
+                  Atteins ton plein potentiel avec Grandimi.
+                </span>
               </h1>
 
               {/* Le sous-titre se défaisait et se refaisait par mots flous
