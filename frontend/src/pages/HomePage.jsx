@@ -493,7 +493,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 Vois Grandimi en action
               </h2>
               <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-                Decouvre l'experience Grandimi avec ces fonctionnalites essentielles pensees pour optimiser ta croissance.
+                Découvre l'expérience Grandimi avec ces fonctionnalités essentielles pensées pour optimiser ta croissance.
               </p>
             </div>
 
