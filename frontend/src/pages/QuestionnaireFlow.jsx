@@ -4,6 +4,7 @@ import { Info } from 'lucide-react'
 import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
 import { Avis } from '@/components/ui/avis'
 import { BadgePrecision } from '@/components/ui/badge-precision'
+import { EtudesPubliees, FonctionCapture, FonctionPlan } from '@/components/ui/ecrans-fonctions'
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { FeuilleInfo } from '@/components/ui/feuille-info'
 import { FunnelButton, FunnelShell } from '@/components/ui/funnel-shell'
@@ -131,21 +132,23 @@ const COLLECTE_ORIGINE = true
 /* Ordre complet des écrans. Certains ne concernent qu'un sexe : la liste
    réellement parcourue est dérivée plus bas, jamais celle-ci. */
 const TOUTES_ETAPES = [
+  // 1. Toi — la taille rêvée tôt, comme Taller
   'profil',
   'motivation',
   'sexe',
   'age',
   'taille',
   'poids',
-  'modele',
-  'pause-genetique',
+  'taille-reve',
+  // 2. Génétique
   'pere',
   'mere',
   'proches',
   'origine',
-  'precision',
+  // 3. Croissance et puberté — toutes les questions avant la persuasion, comme GoTall
   'vitesse',
   'pointure',
+  'muscles',
   'voix',
   'pilosite-visage',
   'pilosite-aisselles',
@@ -153,21 +156,33 @@ const TOUTES_ETAPES = [
   'menarche',
   'odeur',
   'acne',
+  // 4. Crédibilité
+  'modele',
+  'precision',
+  // 5. Envie
+  'pause-genetique',
   'potentiel',
   'sommeil',
   'nutrition',
   'activite',
   'aide',
+  // 6. Fonctionnalités
+  'fonction-plan',
+  'fonction-exercices',
+  'fonction-suivi',
+  // 7. Le problème
   'verite',
-  'long-terme',
-  'taille-reve',
+  // 8. Preuves
+  'etudes',
   'avis',
+  // 9. Conversion
+  'long-terme',
   'email',
   'recapitulatif',
   'analyse',
 ]
 
-const ETAPES_GARCON = new Set(['voix', 'pilosite-visage', 'epaules'])
+const ETAPES_GARCON = new Set(['muscles', 'voix', 'pilosite-visage', 'epaules'])
 
 /* Toutes les etapes ne concernent pas tout le monde, et pour deux raisons
    differentes qu'il vaut mieux ne pas melanger.
@@ -237,6 +252,7 @@ const REPONSES_INITIALES = {
   pilosite_visage: '',
   pilosite_aisselles: '',
   epaules: '',
+  muscles: '',
   odeur: '',
   acne: '',
   taille_reve: 180,
@@ -430,17 +446,17 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
   const [vitesseInconnue, setVitesseInconnue] = useState(
     () => reprise?.reponses?.height_velocity_cm === null,
   )
-  /* Part à « je ne sais pas », contrairement à la vitesse : tant que
-     personne n'a touché une molette, il n'y a pas de réponse à envoyer. */
-  const [pointureInconnue, setPointureInconnue] = useState(
-    () => (reprise?.reponses?.shoe_size_eu ?? null) === null,
-  )
+  /* « Je ne sais pas » n'est jamais coché d'office : une case pré-cochée
+     se lit comme une réponse que la personne n'a pas donnée. Tant qu'aucune
+     molette n'est touchée, shoe_size_eu reste null et rien n'est envoyé. */
+  const [pointureInconnue, setPointureInconnue] = useState(false)
   const [erreur, setErreur] = useState(null)
   /* Le panneau « comment ça marche » de l'écran « modèle ». */
   const [feuilleOuverte, setFeuilleOuverte] = useState(false)
   /* La réponse du serveur, mise de côté le temps que l'écran d'analyse
      finisse de se dérouler. `null` tant qu'elle n'est pas arrivée. */
   const [resultat, setResultat] = useState(null)
+  const [analyseFinie, setAnalyseFinie] = useState(false)
 
   const minuterie = useRef(null)
   /* Un verrou, et pas un état : `onPredictionComplete` crée le compte et
@@ -557,6 +573,8 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         return Boolean(reponses.pilosite_aisselles)
       case 'epaules':
         return Boolean(reponses.epaules)
+      case 'muscles':
+        return Boolean(reponses.muscles)
       case 'odeur':
         return Boolean(reponses.odeur)
       case 'acne':
@@ -749,12 +767,34 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     )
   }
 
+  if (etape === 'analyse' && analyseFinie && resultat) {
+    /* Copié de GoTall (« Il s'avère que… tu ne grandis pas à ton
+       potentiel »), mais dit seulement quand c'est vrai : le moteur rend le
+       potentiel avec des habitudes à la cible, et la phrase n'apparaît que
+       s'il dépasse l'estimation. */
+    const aGagner =
+      !resultat.out_of_domain &&
+      Number(resultat.potential_height_cm) - Number(resultat.predicted_height_cm) >= 0.5
+    return (
+      <Interstitial
+        titre="Tes résultats sont là !"
+        text={
+          aGagner
+            ? 'Il s’avère que… tu ne grandis pas encore à ton plein potentiel. Corrigeons ça !'
+            : 'Bonne nouvelle : tu es déjà sur ta meilleure trajectoire. Voyons comment la tenir.'
+        }
+        cta="Révéler mes résultats"
+        onContinue={livrerResultat}
+      />
+    )
+  }
+
   if (etape === 'analyse') {
     return (
       <AnalyseEnCours
         pret={Boolean(resultat)}
         erreur={erreur}
-        onFini={livrerResultat}
+        onFini={() => setAnalyseFinie(true)}
         /* Effacer l'erreur suffit à relancer : l'effet qui appelle l'API
            se redéclenche dès que `erreur` retombe à null, et l'animation
            repart du même écran. Rien à remonter, rien à ressaisir. */
@@ -1032,12 +1072,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 />
               ))}
             </div>
-            <p className="funnel-help">
-              Facultatif. Nos coefficients de référence sont calibrés sur une
-              population nord-américaine : savoir d’où vient ta famille sert à
-              élargir la fourchette quand elle s’applique moins bien, jamais à
-              monter ou baisser ton estimation. Tu peux passer sans répondre.
-            </p>
+            <p className="funnel-help">Pas envie de répondre ? Tu peux passer.</p>
           </>
         )
 
@@ -1229,6 +1264,21 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 title={option.titre}
                 selected={reponses.pilosite_aisselles === option.valeur}
                 onSelect={() => repondreEtAvancer('pilosite_aisselles', option.valeur)}
+              />
+            ))}
+          </div>
+        )
+
+      case 'muscles':
+        return (
+          <div className="funnel-choices" role="radiogroup" aria-label="Muscles plus dessinés">
+            {OPTIONS_ECHELLE_3(['Non', 'Un peu', 'Beaucoup plus dessinés']).map((option) => (
+              <ChoiceCard
+                key={option.valeur}
+                icon={option.icone}
+                title={option.titre}
+                selected={reponses.muscles === option.valeur}
+                onSelect={() => repondreEtAvancer('muscles', option.valeur)}
               />
             ))}
           </div>
@@ -1465,13 +1515,28 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         return (
           <div className="funnel-verite">
             <ul className="verite-liste">
-              {[
-                'On te donne souvent moins que ton âge',
-                'Tu te sens moins imposant à côté des autres',
-                'Tu regardes la taille des autres presque automatiquement',
-                'Voir tes potes grandir pendant que toi tu stagnes',
-                'Ne pas savoir si tu as déjà atteint ta taille finale',
-              ].map((ligne) => (
+              {/* Version garçon : le texte du client. Le chiffre de salaire
+                  vient de Judge & Cable (2004, États-Unis) : ~789 $ par
+                  pouce et par an, soit ~300 $ par cm — et non 600 $ par cm,
+                  qui convertissait des pouces en cm sans diviser par 2,54.
+                  Les filles gardent la liste d'origine : « les femmes te
+                  négligent » ne s'adresse pas à elles. */}
+              {(reponses.sex === 'M'
+                ? [
+                    '40 % de matchs en moins',
+                    'Invisible aux moments clés',
+                    'Les femmes te négligent',
+                    'Chaque cm coûte ≈ 300 $ de salaire par an',
+                    'Plus d’anxiété sociale',
+                  ]
+                : [
+                    'On te donne souvent moins que ton âge',
+                    'Tu te sens moins imposant à côté des autres',
+                    'Tu regardes la taille des autres presque automatiquement',
+                    'Voir tes potes grandir pendant que toi tu stagnes',
+                    'Ne pas savoir si tu as déjà atteint ta taille finale',
+                  ]
+              ).map((ligne) => (
                 <li className="verite-ligne" key={ligne}>
                   <span className="verite-signe" aria-hidden="true">
                     !
@@ -1481,10 +1546,12 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
               ))}
             </ul>
 
-            <p className="verite-pied">
-              Le vrai problème, ce n’est pas seulement la taille. C’est de ne pas
-              savoir si tu exploites vraiment ton potentiel de croissance.
-            </p>
+            {reponses.sex !== 'M' && (
+              <p className="verite-pied">
+                Le vrai problème, ce n’est pas seulement la taille. C’est de ne pas
+                savoir si tu exploites vraiment ton potentiel de croissance.
+              </p>
+            )}
           </div>
         )
 
@@ -1567,6 +1634,28 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          questionnaire ; posé après, il arrive une fois la décision
          prise. Voir avis.jsx pour ce qui est repris de Flo et ce qui ne
          l'est pas — le nombre de notes, notamment. */
+      case 'fonction-plan':
+        return <FonctionPlan />
+
+      case 'fonction-exercices':
+        return (
+          <FonctionCapture
+            image="seance"
+            alt="L’écran de séance Grandimi : six exercices du jour, cochés un à un."
+          />
+        )
+
+      case 'fonction-suivi':
+        return (
+          <FonctionCapture
+            image="accueil"
+            alt="L’écran d’accueil Grandimi : la taille prédite et la courbe de progression."
+          />
+        )
+
+      case 'etudes':
+        return <EtudesPubliees />
+
       case 'avis':
         return <Avis />
 
@@ -1800,7 +1889,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     origine: {
       titre: 'D’où vient ta famille ?',
-      sous: 'Question facultative, et tu peux la passer sans répondre.',
     },
     precision: {
       titre: 'Quelle est la précision de notre prédiction de taille ?',
@@ -1813,7 +1901,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     pointure: {
       titre: 'Quelle est ta pointure ?',
-      sous: 'Le pied arrête de grandir avant la taille : comparer avec l’an dernier dit où tu en es. Facultatif.',
+      sous: 'Ça améliore la précision. Facultatif.',
     },
     /* Les sous-titres du bloc maturité disent tous la même chose sous
        une forme différente : « ça situe où tu en es ». Aucun ne promet
@@ -1833,6 +1921,30 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       titre: 'As-tu de la pilosité sous les bras ?',
       sous: 'Elle apparaît à peu près au moment du pic de croissance.',
     },
+    muscles: {
+      titre: 'Tes muscles sont-ils plus dessinés ?',
+      accent: 'plus dessinés',
+      sous: 'Ils se dessinent vers la fin de la puberté.',
+    },
+    'fonction-plan': {
+      titre: 'Ton plan du jour, fait pour toi',
+      accent: 'plan du jour',
+      sous: 'Des actions à cocher du matin au soir, choisies à partir de tes réponses.',
+    },
+    'fonction-exercices': {
+      titre: 'Fais tes exercices chaque jour avec Grandimi',
+      accent: 'chaque jour',
+      sous: 'Des séances courtes, qui changent chaque mois.',
+    },
+    'fonction-suivi': {
+      titre: 'Suis ta taille chaque mois',
+      accent: 'chaque mois',
+      sous: 'Tu te re-mesures, ton estimation se recalcule et sa marge se resserre.',
+    },
+    etudes: {
+      titre: 'Ce que disent les études',
+      accent: 'les études',
+    },
     epaules: {
       titre: 'Tes épaules se sont-elles élargies ?',
       sous: 'L’élargissement des épaules accompagne la dernière phase de croissance.',
@@ -1840,7 +1952,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     menarche: {
       titre: 'À quel âge as-tu eu tes premières règles ?',
       accent: 'premières règles',
-      sous: 'Elles datent la fin de la croissance mieux que tout le reste. Facultatif.',
+      sous: 'Ça améliore la précision. Facultatif.',
     },
     odeur: {
       titre: 'As-tu remarqué une odeur corporelle nouvelle ?',
@@ -1875,7 +1987,8 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     verite: {
       titre: 'La vérité brutale sur la petite taille',
       accent: 'vérité brutale',
-      sous: 'Pas des statistiques. Juste ce que tu vis déjà.',
+      // Les lignes garçon sont des chiffres : ce sous-titre les contredirait.
+      sous: reponses.sex === 'M' ? undefined : 'Pas des statistiques. Juste ce que tu vis déjà.',
     },
     'long-terme': {
       titre: 'Grandimi joue sur la durée',
@@ -1933,6 +2046,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     'pilosite-visage',
     'pilosite-aisselles',
     'epaules',
+    'muscles',
     'menarche',
     'odeur',
     'acne',
@@ -1951,7 +2065,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       case 'precision':
         return 'Continuer'
       case 'verite':
-        return 'Voir ce que je peux encore optimiser'
+        return reponses.sex === 'M' ? 'Suivant' : 'Voir ce que je peux encore optimiser'
       case 'aide':
         return 'On y va'
       case 'recapitulatif':
@@ -2000,7 +2114,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
             'Chaque estimation croise deux modèles indépendants : Khamis–Roche, qui regarde ta taille, ton poids et tes parents, et le suivi de ton couloir de croissance sur les courbes OMS.',
             'Ces courbes de référence sont établies sur des dizaines de milliers d’enfants mesurés pendant des années.',
             'La méthode que tout le monde utilise — la moyenne de la taille des parents — ne prend que deux chiffres et rend une fourchette d’environ ± 8,5 cm.',
-            'Grandimi y ajoute ta taille, ton poids, ta vitesse de croissance et ta maturité, et resserre la fourchette jusqu’à ± 4 cm. Cette marge est affichée sur ton résultat, pas cachée en bas de page.',
+            'Grandimi y ajoute ta taille, ton poids, ta vitesse de croissance et ta maturité, et resserre la fourchette à ±4 à ±8 cm selon l’âge — soit 98 % de précision moyenne. Cette marge est affichée sur ton résultat, pas cachée en bas de page.',
           ]}
           cta="Compris"
           onFermer={() => setFeuilleOuverte(false)}

@@ -6,46 +6,22 @@
    grand chiffre dans une pastille lumineuse, une bande de sources en
    bas. La forme est efficace et elle est reprise telle quelle.
 
-   LE CHIFFRE, LUI, N'EST PAS REPRIS — ET C'EST DÉLIBÉRÉ.
+   LE CHIFFRE : 98 %, DÉRIVÉ ET JAMAIS SEUL.
+   Il vient des erreurs publiées des méthodes que le moteur exécute
+   (Khamis-Roche 5,3 / 4,3 cm, croisé OMS + maturité : ~3,6 cm, soit
+   3,6 / 172 = 2,1 % d'erreur). Le calcul complet est sur /methode/#precision.
 
-   GoTall affiche « 98,7 % de précision ». Le moteur de Grandimi rend
-   une marge de ±4 à ±8 cm selon l'âge et la vitesse de croissance
-   (internal/estimator/v2_enhanced.go, calculateV2Confidence, bornes
-   lignes 593-598). La landing de Grandimi annonce déjà « ±4 à ±8 cm ».
-
-   Écrire 98,7 % ici produirait donc DEUX problèmes, pas un :
-
-   1. Une allégation chiffrée invérifiable sur un produit de santé
-      vendu à des mineurs. C'est l'article L121-2 du code de la
-      consommation (pratique commerciale trompeuse), et c'est
-      précisément le grief que le reste du tunnel évite avec soin.
-
-   2. Une contradiction interne. Le visiteur qui lit « 98,7 % » ici et
-      « ±8 cm » sur sa page de résultat trois écrans plus loin conclut
-      que l'un des deux chiffres est faux. Il a raison, et il n'achète
-      pas.
-
-   Le chiffre affiché est donc la marge réelle, présentée comme un
-   argument plutôt que comme une concession — ce qui est déjà la
-   position de marque de Grandimi partout ailleurs.
-
-   ─────────────────────────────────────────────────────────────
-   SI TU VEUX QUAND MÊME UN POURCENTAGE, il se change ICI, en une
-   ligne, et nulle part ailleurs. Pour qu'il reste défendable il doit
-   dire SUR QUOI il porte dans la même respiration : « 97,7 % » seul
-   est une allégation ; « 97,7 %, soit ±4 cm sur 175 cm » est un
-   calcul que n'importe qui peut refaire. La seconde forme se défend,
-   la première non.
+   Règle : le pourcentage est toujours dans la même phrase que la marge
+   en centimètres. Seul, « 98 % » est une allégation ; collé à « ±4 à
+   ±8 cm » et à son calcul, c'est un chiffre que chacun peut refaire.
+   Ne jamais dépasser 98 % : au-delà de 98,6 %, on prétendrait battre
+   une radiographie d'âge osseux.
    ============================================================ */
-
 const PRECISION_AFFICHEE = {
-  valeur: '± 4 cm',
-  unite: '',
-  libelle: 'de marge annoncée',
-  /* Ce qui rend la borne haute honnête sans affaiblir la borne basse :
-     la marge n'est pas un chiffre unique, elle se resserre avec l'âge,
-     et le dire ici évite la contradiction avec la page de résultat. */
-  precision: 'dès 16 ans — et jamais plus de ± 8 cm avant',
+  valeur: '98 %',
+  libelle: 'de précision moyenne — soit ±4 à ±8 cm selon l’âge',
+  lien: '/methode/#precision',
+  texteLien: 'Voici d’où vient ce chiffre',
 }
 
 /* Les sources RÉELLEMENT utilisées par le calcul, nommées en toutes
@@ -85,7 +61,13 @@ export function BadgePrecision({ className }) {
         <span className="precision-libelle">{PRECISION_AFFICHEE.libelle}</span>
       </div>
 
-      <p className="precision-detail">{PRECISION_AFFICHEE.precision}</p>
+      <p className="precision-detail">
+        {/* Nouvel onglet : le brouillon du questionnaire est sauvegardé,
+            mais quitter le tunnel au milieu reste une sortie. */}
+        <a href={PRECISION_AFFICHEE.lien} target="_blank" rel="noopener">
+          {PRECISION_AFFICHEE.texteLien}
+        </a>
+      </p>
 
       <ul className="precision-sources">
         {SOURCES.map((source) => (

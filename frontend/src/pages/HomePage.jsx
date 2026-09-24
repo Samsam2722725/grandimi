@@ -72,7 +72,15 @@ const FAQ = [
   {
     question: 'À quel point l’estimation est-elle fiable ?',
     answer:
-      'La marge est de ±4 à ±8 cm selon ton âge et ta croissance récente : plus tu es proche de la fin de ta croissance, plus l’estimation se resserre. On affiche systématiquement cette fourchette avec le résultat — un chiffre seul, sans marge, serait trompeur.',
+      <>
+        ±4 à ±8 cm selon ton âge — soit 98 % de précision moyenne.{' '}
+        <a href="/methode/#precision" className="underline underline-offset-2">
+          Voici d’où vient ce chiffre.
+        </a>{' '}
+        Plus tu es proche de la fin de ta croissance, plus l’estimation se resserre. La
+        marge est toujours affichée avec le résultat — un chiffre seul, sans marge, serait
+        trompeur.
+      </>,
   },
   {
     question: 'Faut-il payer pour voir mon estimation ?',
@@ -106,6 +114,12 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
     onStartQuestionnaire()
   }
 
+  /* Barre d'action collante sur mobile.
+     Passé le hero, il n'existait plus aucun moyen de lancer le questionnaire
+     sans remonter : le bouton de l'en-tête est réduit sur petit écran et le
+     reste de la page est long. Une barre basse remet l'action sous le pouce
+     pendant toute la lecture — c'est le motif qui fait la différence sur les
+     tunnels mobiles. */
   const [barreVisible, setBarreVisible] = useState(false)
 
   /* La barre apparaît passé un seuil de défilement.
@@ -401,7 +415,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     key={fonction.titre}
                     initial={{ opacity: 0, y: 18 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-60px' }}
+                    viewport={{ once: true, margin: ‘-60px’ }}
                     transition={{ duration: 0.45, delay: (i % 3) * 0.08 }}
                     className="bg-[color:var(--surface-page-canvas)] px-6 py-10 sm:px-8"
                   >
@@ -428,23 +442,23 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 <h3 className="mt-6 flex flex-wrap items-center gap-2 font-display text-xl font-medium tracking-[-0.02em] text-ink">
                   Coach IA 24 h/24 et 7 j/7
                   <span className="rounded-full border border-[color:var(--color-indigo-bloom)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-[color:var(--color-indigo-bloom)] uppercase">
-                    bientot
+                    bientôt
                   </span>
                 </h3>
                 <p className="mt-2.5 text-[15px] leading-[1.55] text-[color:var(--text-secondary)]">
-                  L'IA connait tes donnees et repond immediatement a tes questions : potentiel de croissance, posture, alimentation, sommeil et complements alimentaires.
+                  L’IA connaît tes données et répond immédiatement à tes questions : potentiel de croissance, posture, alimentation, sommeil et compléments alimentaires.
                 </p>
               </article>
               <article className="bg-[color:var(--surface-page-canvas)] px-6 py-10 sm:px-8">
                 <Users className="size-6 text-[color:var(--color-coral-pulse)]" aria-hidden="true" />
                 <h3 className="mt-6 flex flex-wrap items-center gap-2 font-display text-xl font-medium tracking-[-0.02em] text-ink">
-                  Communaute
+                  Communauté
                   <span className="rounded-full border border-[color:var(--color-indigo-bloom)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-[color:var(--color-indigo-bloom)] uppercase">
-                    bientot
+                    bientôt
                   </span>
                 </h3>
                 <p className="mt-2.5 text-[15px] leading-[1.55] text-[color:var(--text-secondary)]">
-                  Un espace reserve aux membres pour discuter, partager des experiences et decouvrir les dernieres informations sur ce qui fonctionne vraiment.
+                  Un espace réservé aux membres pour discuter, partager des expériences et découvrir les dernières informations sur ce qui fonctionne réellement.
                 </p>
               </article>
             </div>
@@ -456,7 +470,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             <div className="mt-14 text-center">
               <button
                 type="button"
-                onClick={() => demarrer('fonctionnalites')}
+                onClick={() => demarrer(‘fonctionnalites’)}
                 className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
               >
                 Commencer mon analyse
@@ -722,7 +736,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   ))}
                 </div>
                 <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
-                  J'ai decouvert que je pouvais encore grandir. Les conseils quotidiens me motivent et je sens que j'avance. C'est rassurant.
+                  J'ai découvert que je pouvais encore grandir. Les conseils quotidiens me motivent et je sens que j'avance. C'est rassurant.
                 </p>
                 <p className="text-sm font-semibold text-ink">Paul</p>
               </div>
@@ -734,7 +748,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   ))}
                 </div>
                 <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
-                  Le plan est facile a suivre et pas culpabilisant. Ca m'aide a dormir mieux et a manger plus sainement, c'est concret.
+                  Le plan est facile à suivre et pas culpabilisant. Ça m'aide à dormir mieux et à manger plus sainement, c'est concret.
                 </p>
                 <p className="text-sm font-semibold text-ink">Gabriel</p>
               </div>
@@ -746,7 +760,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   ))}
                 </div>
                 <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
-                  Ce qui m'a plu, c'est qu'il n'y a pas de blabla. Juste ma taille estimee, pourquoi je ne grandis pas plus, et ce que je dois faire.
+                  Ce qui m'a plu, c'est qu'il n'y a pas de blabla. Juste ma taille estimée, pourquoi je ne grandis pas plus, et ce que je dois faire.
                 </p>
                 <p className="text-sm font-semibold text-ink">Victor</p>
               </div>
