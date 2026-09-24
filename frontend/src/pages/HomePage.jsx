@@ -38,6 +38,18 @@ const FONCTIONS = [
       "Predis ta taille future et celle que tu pourrais atteindre avec precision, en temps reel. La prediction est mise a jour chaque mois selon ton evolution, tes habitudes et les principaux facteurs qui influencent ta croissance.",
   },
   {
+    icone: HeartPulse,
+    titre: "Programme de sport et d alimentation",
+    texte:
+      "Un programme personnalise de sport et d alimentation concu pour soutenir ta croissance naturelle en ameliorant tes principales habitudes et routines.",
+  },
+  {
+    icone: ListChecks,
+    titre: "Une routine quotidienne optimisee",
+    texte:
+      "Exercices de posture, alimentation, sommeil et complements alimentaires : chaque habitude est personnalisee et s adapte au fil du temps selon ton profil.",
+  },
+  {
     icone: Users,
     titre: "Communaute",
     bientot: true,
@@ -45,23 +57,11 @@ const FONCTIONS = [
       "Notre communaute reservee aux membres te permet de participer a de vraies discussions, de partager des experiences et de decouvrir les dernieres informations sur ce qui fonctionne reellement.",
   },
   {
-    icone: HeartPulse,
-    titre: "Programme de sport et d alimentation",
-    texte:
-      "Un programme personnalise de sport et d alimentation concu pour soutenir ta croissance naturelle en ameliorant tes principales habitudes et routines.",
-  },
-  {
     icone: Bot,
     titre: "Coach IA disponible 24 h 24 et 7 j 7",
     bientot: true,
     texte:
       "Potentiel de croissance, posture, alimentation, sommeil et complements alimentaires : l IA connait tes donnees et repond immediatement a tes questions.",
-  },
-  {
-    icone: ListChecks,
-    titre: "Une routine quotidienne optimisee",
-    texte:
-      "Exercices de posture, alimentation, sommeil et complements alimentaires : chaque habitude est personnalisee et s adapte au fil du temps selon ton profil.",
   },
 ]
 
