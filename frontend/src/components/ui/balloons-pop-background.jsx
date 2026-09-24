@@ -112,7 +112,7 @@ export function BalloonsPopBackground({ className }) {
     let particules = []
     let image = 0
     let tempsDebut = Date.now()
-    const DUREE_ANIMATION_MS = 4000
+    const DUREE_ANIMATION_MS = 2000
     /* Hors écran tant que rien n'a bougé : sans ça, un pointeur implicite
        en (0,0) ferait éclater les ballons du coin haut-gauche tout seuls. */
     const pointeur = { x: -2000, y: -2000 }
