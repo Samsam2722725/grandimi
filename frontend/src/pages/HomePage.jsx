@@ -2,6 +2,7 @@ import {
   ArrowRight,
   Bot,
   Flame,
+  FlaskConical,
   HeartPulse,
   ListChecks,
   Ruler,
@@ -12,6 +13,7 @@ import {
 import { useEffect, useState, lazy, Suspense } from 'react'
 
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
+import { TextEffect } from '@/components/ui/text-effect'
 const FaqSection = lazy(() => import('@/components/ui/faq-section').then(m => ({ default: m.FaqSection })))
 const HeroPhones = lazy(() => import('@/components/ui/hero-phones'))
 import '../styles/theme-night.css'
@@ -265,6 +267,27 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-12 lg:gap-10">
             {/* --- Colonne texte --- */}
             <div className="lg:col-span-6">
+              {/* Pastille de preuve, au-dessus du titre.
+                  Reprise de la mise en forme de GoTall (« Backed by Science »),
+                  qui place ce signal avant même la promesse. L'ordre compte :
+                  un visiteur de quinze ans arrive sur un marché saturé de
+                  « IA 99 % de précision » ; la crédibilité doit arriver avant
+                  l'argument, pas après.
+
+                  Le texte n'est PAS « Validé par la science ». Une formule
+                  vague de ce genre est invérifiable, et l'article L121-2 du
+                  code de la consommation traite l'allégation invérifiable
+                  comme une pratique commerciale trompeuse. On nomme donc les
+                  deux méthodes réellement employées : elles sont publiées, et
+                  la page « méthode » les détaille déjà. */}
+              <p
+                className="rise mb-6 inline-flex items-center gap-2 rounded-full border border-[color:var(--color-brand-display)]/35 bg-[color:var(--color-brand-display)]/10 px-4 py-1.5 text-[13px] font-semibold text-[color:var(--color-brand-display)]"
+                style={{ animationDelay: '40ms' }}
+              >
+                <FlaskConical className="size-3.5 shrink-0" aria-hidden="true" />
+                Méthode Khamis-Roche × tables OMS
+              </p>
+
               <h1
                 /* L'impact vient de l'échelle et du serrage, pas de la
                    graisse. Une condensée massive aurait rangé la page avec
@@ -277,18 +300,33 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 className="rise night-title-gradient font-display text-[clamp(44px,7.2vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
-                Predis et
+                Prédis et
                 <br />
                 <span className="text-[color:var(--color-brand-display)]">maximise</span>{' '}
                 ta taille.
               </h1>
 
-              <p
-                className="rise mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
-                style={{ animationDelay: '160ms' }}
+              {/* Sous-titre révélé mot à mot, avec la promesse en couleur —
+                  la mise en forme de GoTall, où la phrase qui vend est la
+                  seule chose colorée du paragraphe.
+
+                  Les accents étaient tombés ici et dans le titre. « ou » sans
+                  accent ne se lit pas comme une faute de frappe : il change le
+                  sens de la phrase (« te dit OU tu en es » au lieu de « te dit
+                  OÙ tu en es »). Le bundle servi en production portait la
+                  version fautive tandis que la coquille pré-rendue portait la
+                  bonne — l'accent disparaissait donc sous les yeux du visiteur
+                  au montage de React. */}
+              <TextEffect
+                as="p"
+                per="word"
+                preset="blur"
+                delay={0.16}
+                surlignage="optimiser ta croissance"
+                className="mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
               >
-                Tu ne controles pas tes genes, mais tu peux optimiser ta croissance. Grandimi te dit ou tu en es, et quoi faire chaque jour.
-              </p>
+                {'Tu ne contrôles pas tes gènes, mais tu peux optimiser ta croissance. Grandimi te dit où tu en es, et quoi faire chaque jour.'}
+              </TextEffect>
 
               {/* Un seul bouton. Le jumeau « Voir comment ça marche »
                   renvoyait vers une section de la même page : deux actions de
@@ -396,20 +434,43 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
 
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2 mb-16">
               <div className="flex flex-col items-center">
+                {/* WebP d'abord, PNG en secours.
+                    Les deux formats étaient déjà dans le dépôt ; seul le PNG
+                    était branché. Mesuré : 1 474 ko contre 45 ko pour la même
+                    image — la page en servait deux, soit 3 043 ko de captures
+                    d'écran sur un site dont le premier critère est « mobile
+                    d'abord ». Le <picture> laisse le navigateur choisir, et le
+                    PNG reste là pour ceux qui ne lisent pas le WebP. */}
                 <div className="flex justify-center mb-6">
-                  <img src="/apercus/accueil.png" alt="Prediction" className="max-h-[450px] w-auto rounded-2xl shadow-2xl" loading="lazy" />
+                  <picture>
+                    <source srcSet="/apercus/accueil.webp" type="image/webp" />
+                    <img
+                      src="/apercus/accueil.png"
+                      alt="L'écran d'accueil de Grandimi : la taille adulte estimée, sa fourchette, et la courbe de croissance."
+                      className="max-h-[450px] w-auto rounded-2xl shadow-2xl"
+                      loading="lazy"
+                    />
+                  </picture>
                 </div>
                 <h3 className="font-display text-xl font-medium text-ink text-center">
-                  Prediction de taille
+                  Prédiction de taille
                 </h3>
                 <p className="mt-2 text-sm text-[color:var(--text-secondary)] text-center max-w-xs">
-                  Vois ta taille future avec precision et suis ta croissance vers ton potentiel genetique.
+                  Vois ta taille future avec précision et suis ta croissance vers ton potentiel génétique.
                 </p>
               </div>
 
               <div className="flex flex-col items-center">
                 <div className="flex justify-center mb-6">
-                  <img src="/apercus/seance.png" alt="Routine" className="max-h-[450px] w-auto rounded-2xl shadow-2xl" loading="lazy" />
+                  <picture>
+                    <source srcSet="/apercus/seance.webp" type="image/webp" />
+                    <img
+                      src="/apercus/seance.png"
+                      alt="L'écran de séance : les actions du jour, cochées une à une."
+                      className="max-h-[450px] w-auto rounded-2xl shadow-2xl"
+                      loading="lazy"
+                    />
+                  </picture>
                 </div>
                 <h3 className="font-display text-xl font-medium text-ink text-center">
                   Ta routine quotidienne
