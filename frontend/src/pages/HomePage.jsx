@@ -4,18 +4,19 @@ import {
   Flame,
   HeartPulse,
   ListChecks,
+  LogIn,
   Ruler,
   Star,
   TrendingUp,
   Users,
 } from 'lucide-react'
 
-import { useEffect, useState, lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
 import { LiquidMetalButton } from '@/components/ui/liquid-metal-button'
 import { SonarGrid } from '@/components/ui/sonar-grid'
-import { TextEffect } from '@/components/ui/text-effect'
+import { Typewriter } from '@/components/ui/typewriter'
 const FaqSection = lazy(() => import('@/components/ui/faq-section').then(m => ({ default: m.FaqSection })))
 import '../styles/theme-night.css'
 
@@ -114,67 +115,6 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
     onStartQuestionnaire()
   }
 
-  /* Barre d'action collante sur mobile.
-     Passé le hero, il n'existait plus aucun moyen de lancer le questionnaire
-     sans remonter : le bouton de l'en-tête est réduit sur petit écran et le
-     reste de la page est long. Une barre basse remet l'action sous le pouce
-     pendant toute la lecture — c'est le motif qui fait la différence sur les
-     tunnels mobiles. */
-  const [barreVisible, setBarreVisible] = useState(false)
-
-  /* Le sous-titre du hero se défait puis se refait toutes les 3 secondes.
-     `trigger` bascule, AnimatePresence joue la sortie mot à mot, puis
-     l'entrée.
-
-     LE CYCLE EST VOLONTAIREMENT ASYMÉTRIQUE, ET LE TEMPS MORT TRÈS COURT.
-     C'est le seul texte du fold qui dit ce que fait le produit : il ne peut
-     pas s'absenter longtemps. Une première version le masquait 0,7 s, ce qui
-     mesuré donnait 47 % de temps pleinement lisible et une phase de 1,2 s où
-     presque aucun mot ne se lisait — deux captures sur deux sont tombées
-     dessus. À 0,2 s, la vague de sortie et celle du retour se chevauchent :
-     le mouvement traverse la phrase au lieu de l'effacer.
-
-     La boucle ne démarre pas sous `prefers-reduced-motion` : une phrase qui
-     clignote sans fin est exactement ce que cette préférence existe pour
-     éviter. */
-  const [sousTitreVisible, setSousTitreVisible] = useState(true)
-
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
-    let reprise
-    const cycle = setInterval(() => {
-      setSousTitreVisible(false)
-      reprise = setTimeout(() => setSousTitreVisible(true), 200)
-    }, 3000)
-    return () => {
-      clearInterval(cycle)
-      clearTimeout(reprise)
-    }
-  }, [])
-
-  /* La barre apparaît passé un seuil de défilement.
-
-     Elle dépendait d'un IntersectionObserver sur une sentinelle d'un
-     pixel placée sous le bouton du hero. Mesuré en production sur un
-     écran 375 × 667 : à 2000 px de défilement, la sentinelle était à
-     -1275 px et la barre restait « translate-y-full » — elle ne s'est
-     donc jamais affichée sur téléphone, alors que c'est précisément
-     l'appareil pour lequel elle existe.
-
-     Un seuil de défilement n'a pas de cas limite : on compare deux
-     nombres. Le seuil vaut une hauteur d'écran, donc la barre arrive
-     exactement quand le bouton du hero vient de sortir par le haut. */
-  useEffect(() => {
-    if (typeof window === 'undefined') return undefined
-
-    const auDefilement = () => {
-      setBarreVisible(window.scrollY > window.innerHeight * 0.9)
-    }
-    auDefilement()
-    window.addEventListener('scroll', auDefilement, { passive: true })
-    return () => window.removeEventListener('scroll', auDefilement)
-  }, [])
-
   return (
     <div className="theme-night min-h-screen bg-[color:var(--surface-page-canvas)] font-sans">
       {/* ============ EN-TÊTE ============ */}
@@ -240,23 +180,34 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             </a>
           </nav>
 
-          {/* Sous 640px, les deux boutons pleins ne tenaient pas : la barre
-              débordait de 10px et « Se connecter » passait par-dessus le
-              logotype. On dégraisse au lieu de rétrécir la cible tactile —
-              les 44px de hauteur sont conservés partout. */}
+          {/* Sous 640px, les deux boutons pleins ne tenaient pas tels quels :
+              la barre débordait de 10px et « Se connecter » passait par-dessus
+              le logotype. La réponse d'alors avait été de masquer « Commencer »
+              sous `sm` — ce qui laissait mobile sans bouton d'action persistant
+              dans l'en-tête, remplacé par une barre fixe en bas d'écran plus
+              loin dans la page. Repositionnée ici, mais garder le texte des
+              deux boutons à 390px poussait « Grandimi » en « Gra… » par le
+              `truncate` du logo — mesuré, pas juste un débordement de page.
+              « Se connecter » passe donc en icône seule sous `sm` (cible
+              44×44, `aria-label` remplace le texte disparu) ; « Commencer »
+              garde son texte, c'est la seule action qui compte ici. Mesuré de
+              320 à 414px : logo entier, plus de débordement, la barre du bas
+              est devenue inutile et retirée. */}
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <button
               type="button"
               onClick={onLogin}
-              className="inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-sm font-semibold whitespace-nowrap text-ink transition-colors hover:bg-ink/6 sm:border sm:border-ink sm:px-6"
+              aria-label="Se connecter"
+              className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full px-0 text-sm font-semibold whitespace-nowrap text-ink transition-colors hover:bg-ink/6 sm:min-w-0 sm:border sm:border-ink sm:px-6"
             >
-              Se connecter
+              <LogIn className="size-5 sm:hidden" aria-hidden="true" />
+              <span className="hidden sm:inline">Se connecter</span>
             </button>
 
             <button
               type="button"
               onClick={() => demarrer('en-tete')}
-              className="hidden min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:inline-flex sm:px-6"
+              className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-3 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:px-6"
             >
               Commencer
               <ArrowRight className="hidden size-4 sm:block" aria-hidden="true" />
@@ -384,42 +335,24 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 <span className="text-[color:var(--color-brand-display)]">Grandimi</span>.
               </h1>
 
-              {/* Sous-titre qui se défait et se refait toutes les 3 secondes.
-                  `trigger` bascule sur une minuterie : à false, AnimatePresence
-                  joue la sortie mot à mot ; à true, l'entrée. Le cycle complet
-                  dure 3 s, dont environ 1,2 s d'animation — le texte reste donc
-                  lisible et immobile la majeure partie du temps.
-
-                  La minuterie ne tourne pas sous `prefers-reduced-motion` :
-                  faire clignoter une phrase en boucle est exactement ce que
-                  cette préférence existe pour éviter. */}
-              {/* Décalage entre mots à 0,015 s et non les 0,05 du preset
-                  « blur » : la phrase fait vingt-trois mots, donc le preset
-                  mettrait 1,15 s rien qu'à lancer le dernier, et la sortie ne
-                  tiendrait pas dans les 0,7 s du cycle. Ici sortie et entrée
-                  durent chacune ~0,65 s. */}
-              <TextEffect
+              {/* Le sous-titre se défaisait et se refaisait par mots flous
+                  toutes les 3 secondes — jugé trop moche. Remplacé par une
+                  machine à écrire qui tape la phrase une seule fois au
+                  chargement (voir components/ui/typewriter.jsx : `loop`
+                  vaut false par défaut, une boucle infinie sur 127
+                  caractères aurait pris ~19 s par cycle, la moitié passée à
+                  effacer le seul texte du fold qui dit ce que fait le
+                  produit). `highlight` reprend la mise en couleur qu'avait
+                  `surlignage` sur TextEffect, pour ne pas la perdre. */}
+              <Typewriter
                 as="p"
-                per="word"
-                delay={0.1}
-                boucle={sousTitreVisible}
-                surlignage="optimiser ta croissance"
-                variants={{
-                  container: {
-                    hidden: { opacity: 0 },
-                    visible: { opacity: 1, transition: { staggerChildren: 0.015 } },
-                    exit: { transition: { staggerChildren: 0.015 } },
-                  },
-                  item: {
-                    hidden: { opacity: 0, filter: 'blur(10px)', y: 8 },
-                    visible: { opacity: 1, filter: 'blur(0px)', y: 0, transition: { duration: 0.32 } },
-                    exit: { opacity: 0, filter: 'blur(10px)', y: -8, transition: { duration: 0.28 } },
-                  },
-                }}
+                words={[
+                  'Tu ne contrôles pas tes gènes, mais tu peux optimiser ta croissance. Grandimi te dit où tu en es, et quoi faire chaque jour.',
+                ]}
+                speed={20}
+                highlight="optimiser ta croissance"
                 className="mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
-              >
-                {'Tu ne contrôles pas tes gènes, mais tu peux optimiser ta croissance. Grandimi te dit où tu en es, et quoi faire chaque jour.'}
-              </TextEffect>
+              />
 
               {/* Un seul bouton. Le jumeau « Voir comment ça marche »
                   renvoyait vers une section de la même page : deux actions de
@@ -439,7 +372,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             full potential », qui est le bloc que tous les concurrents de ce
             marché placent juste après le fold. Elle répond à la seule question
             qui reste une fois la promesse lue — qu’est-ce que je reçois. */}
-        <section id="fonctionnalites" className="scroll-mt-24 px-6 pb-20 sm:px-8">
+        <section id="fonctionnalites" className="scroll-mt-24 px-6 pb-14 sm:px-8">
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
@@ -487,7 +420,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 ce que le produit ne fait pas encore, et laissait un écran vide
                 avant la figure suivante. Le bouton referme la section sur ce
                 qui existe. */}
-            <div className="mt-14 text-center">
+            <div className="mt-10 text-center">
               <button
                 type="button"
                 onClick={() => demarrer('fonctionnalites')}
@@ -500,7 +433,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           </div>
         </section>
 
-        <section className="px-6 py-20 sm:px-8">
+        <section className="px-6 py-14 sm:px-8">
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-16 max-w-3xl text-center">
               <h2 className="font-display text-[clamp(32px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
@@ -572,7 +505,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             c'est ce volume-là qui ne servait à rien, pas l'information. Un
             numéro et une phrase suffisent à répondre à « je fais quoi,
             concrètement », qui est la dernière question avant le bouton. */}
-        <section className="px-6 pb-24 sm:px-8">
+        <section className="px-6 pb-16 sm:px-8">
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-ink">
@@ -656,7 +589,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 il ne restait plus une seule action entre le hero et le pied de
                 page : sur ordinateur, où la barre collante ne s'affiche pas,
                 le visiteur devait remonter tout en haut. */}
-            <div className="mt-14 text-center">
+            <div className="mt-10 text-center">
               <button
                 type="button"
                 onClick={() => demarrer('comment-ca-marche')}
@@ -685,7 +618,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             qu'elle ne nous cautionne pas, c'est laisser s'installer une
             caution officielle qu'on n'a pas. Les concurrents écrivent la même
             note sous leur paragraphe sur le CDC. */}
-        <section className="border-t border-[color:var(--color-frost-gray)] px-6 py-20 sm:px-8">
+        <section className="border-t border-[color:var(--color-frost-gray)] px-6 py-14 sm:px-8">
           <div className="mx-auto w-full max-w-3xl text-center">
             <span className="mx-auto flex size-12 items-center justify-center rounded-[14px] bg-brand">
               <LogoGrandimi
@@ -744,7 +677,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
         </div>
 
         {/* ============ AVIS ============ */}
-        <section className="px-6 py-20 sm:px-8">
+        <section className="px-6 py-14 sm:px-8">
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-ink">
@@ -793,7 +726,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
         </section>
 
         {/* ============ CTA FINAL ============ */}
-        <section className="px-6 pb-20 sm:px-8">
+        <section className="px-6 pb-14 sm:px-8">
           <div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -835,7 +768,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
       {/* Réserve basse permanente sur mobile : la barre d'action se pose
           par-dessus le pied de page, et les liens légaux doivent rester
           cliquables une fois arrivé en bas. */}
-      <footer className="border-t border-[color:var(--color-frost-gray)] px-6 pt-10 pb-28 sm:px-8 md:pb-10">
+      <footer className="border-t border-[color:var(--color-frost-gray)] px-6 pt-10 pb-12 sm:px-8">
         <div className="mx-auto w-full max-w-6xl">
           {/* Onze liens rangés en trois colonnes, identiques à ceux des pages
               statiques.
@@ -901,31 +834,6 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           </p>
         </div>
       </footer>
-
-      {/* ============ BARRE D'ACTION MOBILE ============
-          Masquée dès `md` : au-delà, le bouton de l'en-tête reste visible et
-          une seconde action permanente ne ferait que manger l'écran.
-          `translate-y` plutôt que `display` : la barre glisse au lieu
-          d'apparaître d'un coup, et l'élément reste dans l'arbre pour ne pas
-          téléporter le focus. */}
-      <div
-        className={`fixed inset-x-0 bottom-0 z-50 border-t border-[color:var(--color-frost-gray)] bg-[color:var(--surface-page-canvas)] px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom,0px))] transition-transform duration-300 ease-out md:hidden ${
-          barreVisible ? 'translate-y-0' : 'translate-y-full'
-        }`}
-        // Hors écran, la barre ne doit pas être atteignable au clavier ni
-        // annoncée : sinon Tab part sur un bouton que personne ne voit.
-        aria-hidden={!barreVisible}
-        {...(barreVisible ? {} : { inert: '' })}
-      >
-        <button
-          type="button"
-          onClick={() => demarrer('barre-mobile')}
-          className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-6 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
-        >
-          Commencer
-          <ArrowRight className="size-4" aria-hidden="true" />
-        </button>
-      </div>
     </div>
   )
 }
