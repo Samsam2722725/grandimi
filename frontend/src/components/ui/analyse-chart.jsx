@@ -31,10 +31,19 @@ import { decelere, lisser } from '@/components/ui/growth-chart'
  */
 
 const W = 320
-const H = 168
+/* La hauteur du viewBox EST la hauteur rendue, au rapport près : le SVG fait
+   la largeur de sa carte et le navigateur en déduit le reste. C'est donc ici
+   que se règle le poste le plus cher de l'écran, qui doit tenir sans
+   défilement — 168 laissait le bas de la page sous le pli sur un téléphone
+   de 667 px de haut. 94 garde la courbe lisible — c'est la hauteur sous
+   laquelle l'axe vertical, la courbe et la pastille d'âge cessent de tenir
+   sans se toucher — et rend soixante-dix pixels à la page. */
+const H = 94
 /* Marge gauche large : elle loge « 100 % » et le cadenas de l'axe vertical.
-   Marge basse : la pastille d'âge passe SOUS les graduations floutées. */
-const M = { top: 16, right: 12, bottom: 44, left: 44 }
+   Marge basse : la pastille d'âge passe SOUS les graduations floutées.
+   Marge haute réduite à 8 : le sommet de la courbe n'a besoin que de la
+   place de son trait. */
+const M = { top: 6, right: 12, bottom: 28, left: 42 }
 
 /* Position du repère sur la courbe, en fraction de l'axe. Volontairement au
    tiers : assez avancé pour qu'on lise une progression déjà faite, assez tôt
@@ -207,16 +216,16 @@ export function AnalyseChart({ className, age = null }) {
       {age !== null && (
         <g>
           <rect
-            x={X_REPERE - 16}
-            y={H - M.bottom + 8}
-            width="32"
-            height="20"
+            x={X_REPERE - 15}
+            y={H - M.bottom + 7}
+            width="30"
+            height="19"
             rx="7"
             fill="var(--funnel-accent, #ff5a1f)"
           />
           <text
             x={X_REPERE}
-            y={H - M.bottom + 22}
+            y={H - M.bottom + 20}
             textAnchor="middle"
             fontSize="11.5"
             fontWeight="700"

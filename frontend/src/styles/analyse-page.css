@@ -14,12 +14,22 @@
    doit pouvoir servir ailleurs.
    ============================================ */
 
+/* ------------------------------------------------------------------
+   TOUT L ECRAN TIENT SANS DEFILEMENT.
+
+   Les hauteurs, les marges et les interlignes sont exprimes en clamp()
+   avec un terme en `vh` : la meme page se comprime sur un petit telephone
+   et respire sur un grand, sans point de rupture a maintenir. Les bornes
+   basses sont les valeurs en dessous desquelles un bloc cesse d etre
+   lisible ou cliquable ; les bornes hautes sont le dessin d origine.
+   ------------------------------------------------------------------ */
+
 .analyse .analyse-titre {
-  font-size: clamp(30px, 9vw, 40px);
-  line-height: 1.1;
+  font-size: clamp(18px, 2.7vh, 26px);
+  line-height: 1.05;
   font-weight: 800;
   letter-spacing: -0.03em;
-  margin: 4px 0 4px;
+  margin: 0;
   color: var(--funnel-text);
 }
 
@@ -34,16 +44,16 @@
 .analyse .analyse-case {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  min-height: 96px;
-  padding: 15px 16px;
-  border-radius: 20px;
+  gap: clamp(3px, 0.6vh, 8px);
+  min-height: clamp(54px, 8.2vh, 92px);
+  padding: clamp(9px, 1.35vh, 15px) 13px;
+  border-radius: 18px;
   background: var(--funnel-surface);
   border: 1px solid var(--funnel-line);
 }
 
 .analyse .analyse-case-label {
-  font-size: 13.5px;
+  font-size: clamp(11.5px, 1.5vh, 13px);
   line-height: 1.25;
   font-weight: 600;
   color: var(--funnel-muted);
@@ -53,7 +63,7 @@
   display: flex;
   align-items: center;
   margin-top: auto;
-  font-size: clamp(22px, 6.4vw, 28px);
+  font-size: clamp(17px, 2.7vh, 24px);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -84,8 +94,8 @@
    pas encore affichée. */
 .analyse .analyse-case-jauge {
   display: block;
-  height: 8px;
-  margin-top: 10px;
+  height: clamp(5px, 0.8vh, 8px);
+  margin-top: clamp(5px, 1vh, 10px);
   border-radius: 999px;
   background: var(--funnel-surface-high);
 }
@@ -96,12 +106,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  padding: 16px;
-  border-radius: 18px;
+  gap: 8px;
+  padding: clamp(8px, 1.15vh, 14px) 13px;
+  border-radius: 16px;
   background: var(--funnel-surface);
   border: 1px solid var(--funnel-line);
-  font-size: clamp(15px, 4.4vw, 17px);
+  font-size: clamp(13.5px, 4.1vw, 17px);
   font-weight: 600;
   color: var(--funnel-text);
   text-align: center;
@@ -127,13 +137,14 @@
    -------------------------------------- */
 
 .analyse .analyse-freins {
-  padding: 16px;
-  border-radius: 20px;
+  position: relative;
+  padding: clamp(9px, 1.2vh, 14px) 13px;
+  border-radius: 18px;
   background: var(--funnel-surface);
   border: 1px solid var(--funnel-line);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: clamp(6px, 1.1vh, 11px);
 }
 
 .analyse .analyse-freins-tete {
@@ -148,17 +159,24 @@
   flex-wrap: wrap;
 }
 
-/* Titre et pastille sur la MÊME ligne, comme sur la capture GoTall : la
-   pastille renvoyée à la ligne suivante se lisait comme un second bloc. */
+/* Le titre garde sa ligne pour lui : la pastille est sortie du flux (voir
+   plus bas), donc elle ne peut plus ni le pousser ni le chevaucher, avec
+   n'importe quelle police. La réserve à droite est ce qui garantit qu'ils
+   ne se rencontrent pas. */
 .analyse .analyse-freins-titre {
   min-width: 0;
   margin: 0;
   /* Un cran sous les lignes verrouillées : à 17 px, « Ce qui te freine : »
      et la pastille ne tiennent pas côte à côte sur un écran de 390 px, et
      le titre se coupait en deux. */
-  font-size: clamp(14px, 3.9vw, 15.5px);
+  padding-right: 8px;
+  font-size: clamp(13px, 3.7vw, 15px);
   font-weight: 700;
-  white-space: nowrap;
+  /* PAS de `white-space: nowrap`. Deux elements insecables dans un conteneur
+     trop etroit ne se replient pas : ils se CHEVAUCHENT, et c est ce qui se
+     voyait — « Ce qui te freine » imprime par-dessus « problemes trouves ».
+     Le titre peut donc passer a la ligne ; la pastille, elle, reste d un
+     bloc et garde sa taille. Le chevauchement devient impossible. */
   color: var(--funnel-text);
 }
 
@@ -166,12 +184,12 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: clamp(5px, 0.9vh, 9px);
 }
 
 .analyse .analyse-frein-barre {
   display: block;
-  height: 22px;
+  height: clamp(11px, 1.5vh, 17px);
   border-radius: 999px;
   background: var(--funnel-surface-high);
   filter: blur(1.5px);
@@ -195,13 +213,14 @@
 /* ---------- Carte du graphique ---------- */
 
 .analyse .analyse-carte-graphe {
-  padding: 16px 14px 10px;
-  border-radius: 20px;
+  position: relative;
+  padding: clamp(10px, 1.5vh, 15px) 12px clamp(3px, 0.6vh, 8px);
+  border-radius: 18px;
   background: var(--funnel-surface);
   border: 1px solid var(--funnel-line);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: clamp(6px, 1.1vh, 12px);
 }
 
 .analyse .analyse-graphe-tete {
@@ -252,21 +271,29 @@
   border-top-color: var(--funnel-accent);
 }
 
-/* Bulle « Chance du rêve : 🔒 % », de la capture GoTall. Alignée à droite
-   et pointant vers la courbe : elle commente la figure, elle ne la titre
-   pas. */
+/* Bulle « Chance du rêve : 🔒 % », de la capture GoTall, où elle est posée
+   SUR la figure et recouvre la fin du titre.
+
+   `absolute` et non un bloc dans le flux : en flux elle coûtait une ligne
+   entière — une quarantaine de pixels sur un écran qui doit tenir d'un seul
+   tenant — pour dire ce qu'une infobulle dit sans place à elle. Elle se pose
+   donc dans le coin haut droit de la carte, à la hauteur du titre, qui est
+   court et lui laisse la place. */
 .analyse .analyse-graphe-bulle {
-  position: relative;
-  align-self: flex-end;
+  position: absolute;
+  top: clamp(8px, 1.2vh, 13px);
+  right: 12px;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  margin-bottom: 4px;
-  padding: 9px 14px;
-  border-radius: 14px;
+  gap: 6px;
+  padding: clamp(5px, 0.85vh, 8px) 10px;
+  border-radius: 12px;
   background: var(--funnel-surface-high);
   border: 1px solid var(--funnel-line);
-  font-size: 13.5px;
+  /* Un cran sous le titre de la carte : la bulle doit laisser voir « Taille
+     / Âge » et son cadenas, qu'elle recouvrait à la virgule près. */
+  font-size: clamp(11px, 1.4vh, 12.5px);
   font-weight: 600;
   color: var(--funnel-text);
 }
@@ -280,8 +307,8 @@
   content: '';
   position: absolute;
   top: 100%;
-  right: 18px;
-  border: 6px solid transparent;
+  right: 16px;
+  border: 5px solid transparent;
   border-top-color: var(--funnel-surface-high);
 }
 
@@ -289,14 +316,35 @@
 
 /* Rouge et non orange de marque : c'est une alerte, pas une action. Le fond
    sourd garde le texte lisible sans allumer un second accent. */
+/* JAMAIS PAR-DESSUS LE TITRE.
+
+   Trois tentatives, et seule la dernière tient :
+
+     `nowrap` des deux côtés .... les deux textes se chevauchent dès que la
+                                  police rendue est plus large que DM Sans,
+                                  et c'est ce qui se voyait à l'écran ;
+     pastille en absolu ......... même chevauchement, la pastille recouvre
+                                  la fin du titre au lieu de le pousser ;
+     dans le flux, repliable .... elle passe à la ligne quand il n'y a plus
+                                  la place, et se tronque si elle-même est
+                                  trop large. Illisible : impossible.
+
+   Le coût est une ligne de plus dans le cas dégradé — police de secours ou
+   gros caractères système. Avec DM Sans les deux tiennent côte à côte. */
+.analyse .analyse-freins .analyse-pastille {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .analyse .analyse-pastille {
   margin-left: auto;
   flex-shrink: 0;
-  padding: 5px 11px;
+  padding: 4px 9px;
   border-radius: 999px;
   background: rgba(214, 69, 47, 0.16);
   color: #ff8a70;
-  font-size: 12.5px;
+  font-size: clamp(11px, 1.45vh, 12.5px);
   font-weight: 700;
   white-space: nowrap;
 }
@@ -349,4 +397,51 @@
   flex: none;
   font-size: 18px;
   line-height: 1.35;
+}
+
+/* ---------- Écrans courts ----------
+
+   En dessous de 800 px de haut — iPhone SE, Android d'entrée de gamme — les
+   bornes basses des clamp() sont déjà atteintes et la page recommence à
+   déborder. Ce palier les abaisse d'un cran de plus : c'est le dernier
+   réglage avant de retirer du contenu, et il n'est pas gratuit — les blocs
+   y sont visiblement plus serrés. Sur ces appareils, la page reste
+   défilable si la police rendue est plus large que DM Sans ; elle ne casse
+   jamais, elle se resserre puis elle défile. */
+@media (max-height: 800px) {
+  .analyse .analyse-titre {
+    font-size: clamp(18px, 3vh, 28px);
+  }
+
+  .analyse .analyse-case {
+    min-height: clamp(46px, 8.2vh, 92px);
+    padding: clamp(7px, 1.35vh, 15px) 12px;
+  }
+
+  .analyse .analyse-ligne {
+    padding: clamp(6px, 1.3vh, 14px) 12px;
+  }
+
+  .analyse .analyse-freins {
+    padding: clamp(7px, 1.35vh, 14px) 12px;
+    gap: clamp(4px, 1.1vh, 11px);
+  }
+
+  .analyse .analyse-frein-barre {
+    height: clamp(10px, 1.7vh, 18px);
+  }
+
+  .analyse .analyse-freins-liste {
+    gap: clamp(4px, 0.9vh, 9px);
+  }
+
+  .analyse .analyse-carte-graphe {
+    padding: clamp(7px, 1.5vh, 15px) 11px clamp(2px, 0.6vh, 8px);
+    gap: clamp(4px, 1.1vh, 12px);
+  }
+
+  .analyse .analyse-case-jauge {
+    height: clamp(4px, 0.8vh, 8px);
+    margin-top: clamp(4px, 1vh, 10px);
+  }
 }
