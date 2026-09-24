@@ -298,7 +298,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 className="rise night-title-gradient font-display text-[clamp(44px,7.2vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
-                Prédis et{' '}
+                La vérité{' '}
                 {/* Le mot était tracé au stylo par une animation d'écriture.
                     Texte manuscrit animé, machine à écrire et fond à
                     particules forment la signature du même catalogue de
@@ -309,27 +309,20 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     porte la couleur de marque, qui tient 6,3:1 sur ce fond
                     et reste lisible là où un tracé au stylo dépendait du
                     chargement d'une police distante. */}
-                <span className="text-[color:var(--color-brand-display)]">maximise</span>{' '}
-                ta taille.
+                <span className="text-[color:var(--color-brand-display)]">brutale</span>{' '}
+                sur la petite taille.
               </h1>
 
-              <p
-                className="rise mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
+              <ul
+                className="rise mt-6 max-w-xl space-y-3 text-[clamp(15px,2.2vw,18px)] leading-[1.6] text-[color:var(--text-secondary)]"
                 style={{ animationDelay: '160ms' }}
               >
-                {/* Première phrase reprise de l'argument des concurrents
-                    (Taller, GoTall) : c'est la seule formulation que ce marché
-                    a validée à coups de dizaines de milliers d'euros d'ads, et
-                    elle est vraie. Ce qu'on NE reprend pas : leur « 500 000+
-                    men agree » — on n'a pas d'utilisateurs à compter, et un
-                    chiffre inventé est une pratique commerciale trompeuse.
-
-                    La seconde phrase nomme le livrable. C'était le trou du
-                    hero : on annonçait une promesse sans jamais dire ce que le
-                    visiteur repart avec. */}
-                Tu ne contrôles pas tes gènes, mais tu peux optimiser ta croissance.
-                Grandimi te dit où tu en es, et quoi faire chaque jour.
-              </p>
+                <li>• 40 % de matchs en moins</li>
+                <li>• Invisible aux moments clés</li>
+                <li>• Les femmes te négligent</li>
+                <li>• Chaque cm coûte 600 $ par an</li>
+                <li>• Plus d'anxiété sociale</li>
+              </ul>
 
               {/* Un seul bouton. Le jumeau « Voir comment ça marche »
                   renvoyait vers une section de la même page : deux actions de
