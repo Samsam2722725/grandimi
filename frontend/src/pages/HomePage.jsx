@@ -33,40 +33,40 @@ import { tunnelDemarre } from '../lib/analytics'
 const FONCTIONS = [
   {
     icone: TrendingUp,
-    titre: "Prediction de taille",
+    titre: "Une prediction de taille qui evolue",
     texte:
-      "Decouvre ta taille future. Elle change chaque mois selon tes habitudes.",
+      "Predis ta taille future et celle que tu pourrais atteindre avec precision, en temps reel. La prediction est mise a jour chaque mois selon ton evolution, tes habitudes et les principaux facteurs qui influencent ta croissance.",
   },
   {
     icone: Users,
-    titre: "Groupe pour discuter",
+    titre: "Communaute",
     texte:
-      "Parle avec les autres. Partage tes experiences et decouvre les meilleurs conseils.",
+      "Notre communaute reservee aux membres te permet de participer a de vraies discussions, de partager des experiences et de decouvrir les dernieres informations sur ce qui fonctionne reellement.",
   },
   {
     icone: HeartPulse,
-    titre: "Programme de sport",
+    titre: "Programme de sport et d alimentation",
     texte:
-      "Un plan fait pour toi. Des exercices et repas pour ta croissance.",
+      "Un programme personnalise de sport et d alimentation concu pour soutenir ta croissance naturelle en ameliorant tes principales habitudes et routines.",
   },
   {
     icone: Bot,
-    titre: "Coach IA jour et nuit",
+    titre: "Coach IA disponible 24 h 24 et 7 j 7",
     texte:
-      "Pose tes questions. L IA te repond tout de suite avec tes infos.",
+      "Potentiel de croissance, posture, alimentation, sommeil et complements alimentaires : l IA connait tes donnees et repond immediatement a tes questions.",
   },
   {
     icone: ListChecks,
-    titre: "Tes bonnes habitudes",
+    titre: "Une routine quotidienne optimisee",
     texte:
-      "Exercices, sommeil, manger : ta routine change pour toi.",
+      "Exercices de posture, alimentation, sommeil et complements alimentaires : chaque habitude est personnalisee et s adapte au fil du temps selon ton profil.",
   },
   {
     icone: Flame,
-    titre: "Produits conseilles pour toi",
+    titre: "Recommandations de produits",
     bientot: true,
     texte:
-      "Des complements pour t aider pendant ta croissance.",
+      "Des recommandations de complements alimentaires et de produits adaptees a tes donnees pour soutenir ta croissance naturelle.",
   },
 ]
 
