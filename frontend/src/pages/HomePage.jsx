@@ -365,9 +365,9 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 className="rise night-title-gradient mt-7 font-display text-[clamp(44px,7.2vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
-                Prédis et{' '}
-                <span className="text-[color:var(--color-brand-display)]">maximise</span>{' '}
-                ta taille.
+                Prédis ta taille adulte.<br />
+                Atteins ton plein potentiel avec{' '}
+                <span className="text-[color:var(--color-brand-display)]">Grandimi</span>.
               </h1>
 
               {/* Sous-titre qui se défait et se refait toutes les 3 secondes.
