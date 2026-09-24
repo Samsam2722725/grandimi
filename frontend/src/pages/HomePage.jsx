@@ -118,11 +118,13 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
      `trigger` bascule, AnimatePresence joue la sortie mot à mot, puis
      l'entrée.
 
-     LE CYCLE EST VOLONTAIREMENT ASYMÉTRIQUE. Un simple setInterval qui
-     bascule laisserait la phrase absente la moitié du temps : c'est le seul
-     texte du fold qui dit ce que fait le produit, et il serait invisible une
-     seconde sur deux. Ici elle disparaît 0,7 s toutes les 3 s — assez pour
-     que le mouvement se voie, trop court pour qu'on arrive sur un vide.
+     LE CYCLE EST VOLONTAIREMENT ASYMÉTRIQUE, ET LE TEMPS MORT TRÈS COURT.
+     C'est le seul texte du fold qui dit ce que fait le produit : il ne peut
+     pas s'absenter longtemps. Une première version le masquait 0,7 s, ce qui
+     mesuré donnait 47 % de temps pleinement lisible et une phase de 1,2 s où
+     presque aucun mot ne se lisait — deux captures sur deux sont tombées
+     dessus. À 0,2 s, la vague de sortie et celle du retour se chevauchent :
+     le mouvement traverse la phrase au lieu de l'effacer.
 
      La boucle ne démarre pas sous `prefers-reduced-motion` : une phrase qui
      clignote sans fin est exactement ce que cette préférence existe pour
@@ -134,7 +136,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
     let reprise
     const cycle = setInterval(() => {
       setSousTitreVisible(false)
-      reprise = setTimeout(() => setSousTitreVisible(true), 700)
+      reprise = setTimeout(() => setSousTitreVisible(true), 200)
     }, 3000)
     return () => {
       clearInterval(cycle)
@@ -316,6 +318,18 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               className="pointer-events-none absolute -top-40 left-1/2 z-0 size-[680px] -translate-x-1/2 rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.17] blur-[140px]"
             />
 
+            {/* Voile radial sous la colonne de texte.
+                Les points du champ passent DERRIÈRE le texte : sur le titre,
+                à 88px, ils se lisent comme une texture ; sur le sous-titre,
+                à 17px et en gris, un point orange tombé sur une lettre est du
+                bruit. Le voile éteint le champ au centre et le laisse entier
+                sur les bords. C'est la parade que la démo du composant
+                applique elle-même. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_46%_38%_at_50%_52%,var(--surface-page-canvas)_0%,transparent_100%)]"
+            />
+
             {/* Composition centrée, sans visuel latéral.
                 Les trois téléphones sont retirés du fold : ils tenaient la
                 moitié droite sur grand écran et ne s'affichaient pas du tout
@@ -327,7 +341,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               {/* Pastille de preuve, au-dessus du titre : le signal de
                   crédibilité arrive avant la promesse, pas après. */}
               <p
-                className="rise inline-flex items-center gap-2 rounded-full border border-[color:var(--color-brand-display)]/35 bg-[color:var(--color-brand-display)]/10 px-4 py-1.5 text-[13px] font-semibold text-[color:var(--color-brand-display)]"
+                className="rise inline-flex items-center gap-2 rounded-full border border-[color:var(--color-brand-display)]/40 bg-[#2a1109] px-4 py-1.5 text-[13px] font-semibold text-[color:var(--color-brand-display)]"
                 style={{ animationDelay: '40ms' }}
               >
                 <Star className="size-3.5 shrink-0" aria-hidden="true" />
