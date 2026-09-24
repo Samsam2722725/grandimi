@@ -1031,9 +1031,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 />
               ))}
             </div>
-            <p className="funnel-help">
-              Facultatif. Ça améliore la précision. Tu peux passer.
-            </p>
+            <p className="funnel-help">Pas envie de répondre ? Tu peux passer.</p>
           </>
         )
 
@@ -1461,13 +1459,28 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         return (
           <div className="funnel-verite">
             <ul className="verite-liste">
-              {[
-                'On te donne souvent moins que ton âge',
-                'Tu te sens moins imposant à côté des autres',
-                'Tu regardes la taille des autres presque automatiquement',
-                'Voir tes potes grandir pendant que toi tu stagnes',
-                'Ne pas savoir si tu as déjà atteint ta taille finale',
-              ].map((ligne) => (
+              {/* Version garçon : le texte du client. Le chiffre de salaire
+                  vient de Judge & Cable (2004, États-Unis) : ~789 $ par
+                  pouce et par an, soit ~300 $ par cm — et non 600 $ par cm,
+                  qui convertissait des pouces en cm sans diviser par 2,54.
+                  Les filles gardent la liste d'origine : « les femmes te
+                  négligent » ne s'adresse pas à elles. */}
+              {(reponses.sex === 'M'
+                ? [
+                    '40 % de matchs en moins',
+                    'Invisible aux moments clés',
+                    'Les femmes te négligent',
+                    'Chaque cm coûte ≈ 300 $ de salaire par an',
+                    'Plus d’anxiété sociale',
+                  ]
+                : [
+                    'On te donne souvent moins que ton âge',
+                    'Tu te sens moins imposant à côté des autres',
+                    'Tu regardes la taille des autres presque automatiquement',
+                    'Voir tes potes grandir pendant que toi tu stagnes',
+                    'Ne pas savoir si tu as déjà atteint ta taille finale',
+                  ]
+              ).map((ligne) => (
                 <li className="verite-ligne" key={ligne}>
                   <span className="verite-signe" aria-hidden="true">
                     !
@@ -1477,10 +1490,12 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
               ))}
             </ul>
 
-            <p className="verite-pied">
-              Le vrai problème, ce n’est pas seulement la taille. C’est de ne pas
-              savoir si tu exploites vraiment ton potentiel de croissance.
-            </p>
+            {reponses.sex !== 'M' && (
+              <p className="verite-pied">
+                Le vrai problème, ce n’est pas seulement la taille. C’est de ne pas
+                savoir si tu exploites vraiment ton potentiel de croissance.
+              </p>
+            )}
           </div>
         )
 
@@ -1796,7 +1811,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     },
     origine: {
       titre: 'D’où vient ta famille ?',
-      sous: 'Question facultative, et tu peux la passer sans répondre.',
     },
     precision: {
       titre: 'Quelle est la précision de notre prédiction de taille ?',
@@ -1871,7 +1885,8 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     verite: {
       titre: 'La vérité brutale sur la petite taille',
       accent: 'vérité brutale',
-      sous: 'Pas des statistiques. Juste ce que tu vis déjà.',
+      // Les lignes garçon sont des chiffres : ce sous-titre les contredirait.
+      sous: reponses.sex === 'M' ? undefined : 'Pas des statistiques. Juste ce que tu vis déjà.',
     },
     'long-terme': {
       titre: 'Grandimi joue sur la durée',
@@ -1947,7 +1962,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       case 'precision':
         return 'Continuer'
       case 'verite':
-        return 'Voir ce que je peux encore optimiser'
+        return reponses.sex === 'M' ? 'Suivant' : 'Voir ce que je peux encore optimiser'
       case 'aide':
         return 'On y va'
       case 'recapitulatif':
