@@ -1554,10 +1554,12 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                   ]
                 : [
                     'On te donne souvent moins que ton âge',
-                    'Tu te sens moins imposant à côté des autres',
+                    'Tu te sens moins imposante à côté des autres',
                     'Tu regardes la taille des autres presque automatiquement',
                     'Voir tes potes grandir pendant que toi tu stagnes',
                     'Ne pas savoir si tu as déjà atteint ta taille finale',
+                    'On te prend moins au sérieux',
+                    'Plus d\'anxiété dans les groupes ou les nouvelles situations',
                   ]
               ).map((ligne) => (
                 <li className="verite-ligne" key={ligne}>
