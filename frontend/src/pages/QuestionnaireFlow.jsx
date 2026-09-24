@@ -1489,14 +1489,35 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
          de conséquences, une par ligne, chacune précédée d'un signe d'alerte.
          Le dispositif marche, il reste.
 
-         LE CONTENU EST ENTIÈREMENT DIFFÉRENT DU LEUR, et c'est le sujet.
-         Taller écrit « 40 % de matchs en moins », « les femmes te négligent »,
-         « chaque cm coûte 600 $ par an », « plus d'anxiété sociale » — à des
-         garçons de treize ans. Aucun de ces quatre chiffres n'est vérifiable,
-         et trois d'entre eux visent l'estime de soi plutôt qu'un fait. En
-         France, exploiter la vulnérabilité d'un mineur pour vendre est une
-         pratique commerciale déloyale (art. L121-1 du code de la
-         consommation).
+         SEPT LIGNES POUR LES GARÇONS, DEUX DE PLUS QUE LA VERSION TALLER
+         REPRISE JUSQU'ICI. Les deux ajouts viennent de GoTall, retenus
+         parce qu'ils sont sourçables, à la différence de ce que GoTall met
+         autour :
+
+         - « Moins pris au sérieux » reste une formule sans chiffre, comme
+           les quatre premières lignes : on nomme un vécu, on ne prétend
+           pas le mesurer.
+         - Le chiffre sur les dirigeants est réécrit depuis GoTall plutôt
+           que copié : GoTall écrit « 59 % moins de chances d'être CEO en
+           dessous de 5'9 » », une probabilité qu'aucune étude ne
+           publie sous cette forme. Le chiffre qui existe vraiment est une
+           COMPARAISON DE COMPOSITION — parmi les patrons des plus grandes
+           entreprises américaines, 58 % dépassent 1,83 m, contre 14,5 %
+           des hommes en général (source rapportée dans la presse
+           économique US, elle-même dérivée des données Fortune 500 sur la
+           taille des dirigeants). Ce n'est pas la même affirmation, et
+           c'est celle qu'on peut tenir.
+
+         Le reste du raisonnement ne change pas : Taller écrivait « 40 % de
+         matchs en moins », « les femmes te négligent », « chaque cm coûte
+         600 $ par an », « plus d'anxiété sociale » — à des garçons de
+         treize ans, sans qu'aucun de ces quatre chiffres soit vérifiable
+         pour trois d'entre eux. En France, exploiter la vulnérabilité d'un
+         mineur pour vendre est une pratique commerciale déloyale (art.
+         L121-1 du code de la consommation) : chaque ligne gardée ici décrit
+         un vécu à la deuxième personne plutôt qu'une statistique invérifiée,
+         et les deux chiffres qui restent (300 $/cm, 58 %/14,5 %) sont
+         sourcés, pas des inventions maison.
 
          DOULEUR, PUIS BASCULE, PUIS CE QU'ON VEND.
 
@@ -1525,8 +1546,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 ? [
                     '40 % de matchs en moins',
                     'Invisible aux moments clés',
+                    'Moins pris au sérieux',
                     'Les femmes te négligent',
                     'Chaque cm coûte ≈ 300 $ de salaire par an',
+                    '58 % des grands patrons américains dépassent 1,83 m — contre 14,5 % des hommes',
                     'Plus d’anxiété sociale',
                   ]
                 : [
