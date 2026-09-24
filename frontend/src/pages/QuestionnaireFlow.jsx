@@ -1018,10 +1018,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
               ))}
             </div>
             <p className="funnel-help">
-              Facultatif. Nos coefficients de référence sont calibrés sur une
-              population nord-américaine : savoir d’où vient ta famille sert à
-              élargir la fourchette quand elle s’applique moins bien, jamais à
-              monter ou baisser ton estimation. Tu peux passer sans répondre.
+              Facultatif. Ça améliore la précision. Tu peux passer.
             </p>
           </>
         )
@@ -1102,8 +1099,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                   value={Number(reponses.shoe_size_eu ?? 39)}
                   onChange={(v) => {
                     setPointureInconnue(false)
-                    definir('shoe_size_eu', v)
-                    if (reponses.shoe_size_eu_1y === null) definir('shoe_size_eu_1y', v - 1)
+                    definir(‘shoe_size_eu’, v)
                   }}
                   format={(v) => String(v)}
                 />
@@ -1779,8 +1775,8 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       sous: 'Compare avec une vieille photo, une toise, ou demande à tes parents.',
     },
     pointure: {
-      titre: 'Quelle est ta pointure ?',
-      sous: 'Le pied arrête de grandir avant la taille : comparer avec l’an dernier dit où tu en es. Facultatif.',
+      titre: ‘Quelle est ta pointure ?’,
+      sous: ‘Ça améliore la précision. Facultatif.’,
     },
     /* Les sous-titres du bloc maturité disent tous la même chose sous
        une forme différente : « ça situe où tu en es ». Aucun ne promet
@@ -1807,7 +1803,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
     menarche: {
       titre: 'À quel âge as-tu eu tes premières règles ?',
       accent: 'premières règles',
-      sous: 'Elles datent la fin de la croissance mieux que tout le reste. Facultatif.',
+      sous: 'Ça améliore la précision. Facultatif.',
     },
     odeur: {
       titre: 'As-tu remarqué une odeur corporelle nouvelle ?',
