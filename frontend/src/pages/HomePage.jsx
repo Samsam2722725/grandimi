@@ -33,35 +33,21 @@ import { tunnelDemarre } from '../lib/analytics'
 const FONCTIONS = [
   {
     icone: TrendingUp,
-    titre: "Une prediction de taille qui evolue",
+    titre: "Estimation qui se met a jour",
     texte:
-      "Predis ta taille future et celle que tu pourrais atteindre avec precision, en temps reel. La prediction est mise a jour chaque mois selon ton evolution, tes habitudes et les principaux facteurs qui influencent ta croissance.",
-  },
-  {
-    icone: HeartPulse,
-    titre: "Programme de sport et d alimentation",
-    texte:
-      "Un programme personnalise de sport et d alimentation concu pour soutenir ta croissance naturelle en ameliorant tes principales habitudes et routines.",
+      "Ta taille adulte estimee, recalculee chaque mois selon ton evolution, tes habitudes et les principaux facteurs qui influencent ta croissance.",
   },
   {
     icone: ListChecks,
-    titre: "Une routine quotidienne optimisee",
+    titre: "Plan quotidien",
     texte:
-      "Exercices de posture, alimentation, sommeil et complements alimentaires : chaque habitude est personnalisee et s adapte au fil du temps selon ton profil.",
+      "Onze actions a cocher, du lever au coucher. Chaque action cible un facteur de croissance : alimentation, sommeil, posture, complements alimentaires.",
   },
   {
-    icone: Users,
-    titre: "Communaute",
-    bientot: true,
+    icone: HeartPulse,
+    titre: "Sommeil, nutrition, exercices",
     texte:
-      "Notre communaute reservee aux membres te permet de participer a de vraies discussions, de partager des experiences et de decouvrir les dernieres informations sur ce qui fonctionne reellement.",
-  },
-  {
-    icone: Bot,
-    titre: "Coach IA disponible 24 h 24 et 7 j 7",
-    bientot: true,
-    texte:
-      "Potentiel de croissance, posture, alimentation, sommeil et complements alimentaires : l IA connait tes donnees et repond immediatement a tes questions.",
+      "Chaque levier detaille : combien d heures de sommeil, quoi manger en priorite dans l assiette, quels mouvements faire et quand les faire.",
   },
 ]
 
@@ -278,7 +264,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
 
           <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-12 lg:gap-10">
             {/* --- Colonne texte --- */}
-            <div className="lg:col-span-7">
+            <div className="lg:col-span-6">
               <h1
                 /* L'impact vient de l'échelle et du serrage, pas de la
                    graisse. Une condensée massive aurait rangé la page avec
@@ -291,17 +277,17 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 className="rise night-title-gradient font-display text-[clamp(44px,7.2vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
-                Predis ta taille adulte.
+                Predis et
                 <br />
-                <span className="text-[color:var(--color-brand-display)]">atteint ton plein potentiel</span>{' '}
-                avec Grandimi.
+                <span className="text-[color:var(--color-brand-display)]">maximise</span>{' '}
+                ta taille.
               </h1>
 
               <p
                 className="rise mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
                 style={{ animationDelay: '160ms' }}
               >
-                Predis et Suis l'evolution de ta taille et decouvre un plan adapte a toi pour donner a ton corps de meilleures conditions pour grandir.
+                Tu ne controles pas tes genes, mais tu peux optimiser ta croissance. Grandimi te dit ou tu en es, et quoi faire chaque jour.
               </p>
 
               {/* Un seul bouton. Le jumeau « Voir comment ça marche »
@@ -322,6 +308,12 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               </div>
             </div>
 
+            {/* --- Colonne téléphones --- */}
+            <div className="hidden lg:col-span-6 lg:flex lg:justify-center">
+              <Suspense fallback={<div className="h-96" />}>
+                <HeroPhones />
+              </Suspense>
+            </div>
           </div>
         </section>
 
@@ -329,15 +321,15 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             Titre centré et grille à filets : la mise en page de « Unlock your
             full potential », qui est le bloc que tous les concurrents de ce
             marché placent juste après le fold. Elle répond à la seule question
-            qui reste une fois la promesse lue — qu'est-ce que je reçois. */}
+            qui reste une fois la promesse lue — qu’est-ce que je reçois. */}
         <section id="fonctionnalites" className="scroll-mt-24 px-6 pb-20 sm:px-8">
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-                Grandis autant que possible.
+                Debloque ton potentiel.
               </h2>
               <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-                On calcule ce qu’il te reste à prendre, et on te donne le plan qui va
+                On calcule ce qu’il te reste a prendre, et on te donne le plan qui va
                 le chercher.
               </p>
             </div>
