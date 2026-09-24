@@ -431,6 +431,19 @@
     height: clamp(9px, 1.5vh, 18px);
   }
 
+  /* Le titre du bloc et sa pastille d'un cran : c'est ce qui les fait tenir
+     sur UNE ligne quelle que soit la police rendue, et une ligne de bandeau
+     en moins rend plus de place que n'importe quelle autre coupe de ce
+     palier. */
+  .analyse .analyse-freins-titre {
+    font-size: 13px;
+  }
+
+  .analyse .analyse-pastille {
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+
   .analyse .analyse-freins-liste {
     gap: clamp(4px, 0.9vh, 9px);
   }
@@ -443,5 +456,67 @@
   .analyse .analyse-case-jauge {
     height: clamp(4px, 0.8vh, 8px);
     margin-top: clamp(4px, 1vh, 10px);
+  }
+}
+
+/* ---------- Très petits écrans ----------
+
+   iPhone SE, vieux Android : 443 px utiles entre l'en-tête et le bouton.
+   Sept blocs n'y tiennent pas au gabarit précédent, et le poste le plus
+   cher n'est pas celui qu'on croit — c'est la pastille « N problèmes
+   trouvés », qui passe à la ligne et coûte à elle seule une trentaine de
+   pixels dès que la police rendue est plus large que DM Sans. La réduire
+   d'un cran la fait tenir à côté du titre dans tous les cas, ce qui rend
+   plus de place que n'importe quelle autre coupe de ce palier.
+
+   Le bouton et la flèche de retour ne bougent plus : 44 px et 40 px sont
+   les cibles tactiles minimales, et on ne les échange contre rien. */
+@media (max-height: 700px) {
+  .analyse .analyse-titre {
+    font-size: clamp(16px, 2.9vh, 28px);
+  }
+
+  .analyse .analyse-freins-titre {
+    font-size: 12.5px;
+  }
+
+  .analyse .analyse-pastille {
+    padding: 3px 7px;
+    font-size: 10.5px;
+  }
+
+  .analyse .analyse-case {
+    padding: clamp(5px, 1.2vh, 15px) 11px;
+  }
+
+  .analyse .analyse-ligne {
+    padding: clamp(3px, 1.1vh, 14px) 11px;
+  }
+
+  .analyse .analyse-freins {
+    padding: clamp(6px, 1.2vh, 14px) 11px;
+    gap: clamp(3px, 1.1vh, 11px);
+  }
+
+  .analyse .analyse-frein-barre {
+    height: clamp(8px, 1.5vh, 18px);
+  }
+
+  .analyse .analyse-carte-graphe {
+    padding: clamp(6px, 1.5vh, 15px) 10px clamp(1px, 0.6vh, 8px);
+    gap: clamp(3px, 1.1vh, 12px);
+  }
+
+  .analyse .analyse-graphe-bulle {
+    padding: 4px 8px;
+    font-size: 10.5px;
+  }
+
+  /* La jauge morte des deux cartes basses disparaît : c'est le seul élément
+     de l'écran qui ne porte aucune information — ni texte, ni cadenas, ni
+     mesure. Sur 443 px utiles, huit pixels de décor sont huit pixels qu'on
+     prend au contenu. */
+  .analyse .analyse-case-jauge {
+    display: none;
   }
 }

@@ -34,26 +34,33 @@ import { decelere, lisser } from '@/components/ui/growth-chart'
 
 const W = 320
 
-/* DEUX GABARITS, ET C EST LA HAUTEUR DE L ECRAN QUI TRANCHE.
+/* TROIS GABARITS, ET C EST LA HAUTEUR DE L ECRAN QUI TRANCHE.
 
    La hauteur du viewBox EST la hauteur rendue, au rapport près : le SVG fait
    la largeur de sa carte et le navigateur en déduit le reste. C'est donc le
    poste le plus cher d'un écran qui doit tenir d'un seul tenant.
 
-   94 sur un téléphone ordinaire ; 76 en dessous de 800 px de haut, où
-   chaque bloc est déjà à sa borne basse et où ces dix-huit pixels sont ce
-   qui reste à prendre sans rendre un texte illisible. Sous 76, l'axe
-   vertical, la courbe et la pastille d'âge commencent à se toucher. */
+   94 sur un téléphone ordinaire ; 76 en dessous de 800 px de haut ; 64 sous
+   700 px — iPhone SE, vieux Android — où chaque bloc est déjà à sa borne
+   basse et où ces douze pixels sont ce qui reste à prendre sans rendre un
+   texte illisible.
+
+   64 EST LE PLANCHER, et il se démontre : la pastille d'âge occupe 26 px
+   sous l'axe (7 de décalage, 19 de haut), le trait de courbe 6 au-dessus,
+   et il faut à l'aire un creux d'au moins trente pixels pour qu'on y lise
+   encore une courbe plutôt qu'une diagonale. */
 const H_NORMALE = 94
 const H_COURTE = 76
-const ECRAN_COURT = '(max-height: 800px)'
+const H_TRES_COURTE = 64
 
 /* Marge gauche large : elle loge « 100 % » et le cadenas de l'axe vertical.
    Marge basse : la pastille d'âge passe SOUS les graduations floutées. */
+/* La marge basse ne descend jamais sous 26 : c'est la place exacte de la
+   pastille d'âge, et l'y comprimer la ferait dépasser du cadre. */
 const marges = (H) => ({
-  top: 6,
+  top: H <= H_TRES_COURTE ? 5 : 6,
   right: 12,
-  bottom: H >= H_NORMALE ? 28 : 25,
+  bottom: H >= H_NORMALE ? 28 : 26,
   left: 42,
 })
 
@@ -98,7 +105,13 @@ function geometrie(H) {
 }
 
 const GEO_NORMALE = geometrie(H_NORMALE)
-const GEO_COURTE = geometrie(H_COURTE)
+
+/* Du plus étroit au plus large : la première requête satisfaite gagne, comme
+   le ferait une cascade de media queries. */
+const GABARITS = [
+  { requete: '(max-height: 700px)', geo: geometrie(H_TRES_COURTE) },
+  { requete: '(max-height: 800px)', geo: geometrie(H_COURTE) },
+]
 
 /* Le gabarit suit la rotation de l'écran et la barre d'URL qui se rétracte :
    sans l'écouteur, un téléphone tourné en paysage garderait le grand
@@ -106,18 +119,22 @@ const GEO_COURTE = geometrie(H_COURTE)
 function useGeometrie() {
   /* `useSyncExternalStore` et pas un état plus un effet : la requête média
      EST une source extérieure à React, et la lire ainsi évite le rendu
-     supplémentaire que provoque un `setState` posé dans un effet. */
-  const court = useSyncExternalStore(
+     supplémentaire que provoque un `setState` posé dans un effet.
+
+     L'instantané est un INDICE et non l'objet géométrie : React compare les
+     instantanés par identité, et rendre un objet fabriqué à chaque appel
+     ferait boucler le rendu. */
+  const indice = useSyncExternalStore(
     (changement) => {
-      const requete = window.matchMedia(ECRAN_COURT)
-      requete.addEventListener('change', changement)
-      return () => requete.removeEventListener('change', changement)
+      const requetes = GABARITS.map(({ requete }) => window.matchMedia(requete))
+      requetes.forEach((r) => r.addEventListener('change', changement))
+      return () => requetes.forEach((r) => r.removeEventListener('change', changement))
     },
-    () => window.matchMedia(ECRAN_COURT).matches,
-    () => false,
+    () => GABARITS.findIndex(({ requete }) => window.matchMedia(requete).matches),
+    () => -1,
   )
 
-  return court ? GEO_COURTE : GEO_NORMALE
+  return indice === -1 ? GEO_NORMALE : GABARITS[indice].geo
 }
 
 export function AnalyseChart({ className, age = null }) {
