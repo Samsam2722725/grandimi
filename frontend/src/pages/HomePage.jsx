@@ -114,36 +114,6 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
      tunnels mobiles. */
   const [barreVisible, setBarreVisible] = useState(false)
 
-  /* Le sous-titre du hero se défait puis se refait toutes les 3 secondes.
-     `trigger` bascule, AnimatePresence joue la sortie mot à mot, puis
-     l'entrée.
-
-     LE CYCLE EST VOLONTAIREMENT ASYMÉTRIQUE, ET LE TEMPS MORT TRÈS COURT.
-     C'est le seul texte du fold qui dit ce que fait le produit : il ne peut
-     pas s'absenter longtemps. Une première version le masquait 0,7 s, ce qui
-     mesuré donnait 47 % de temps pleinement lisible et une phase de 1,2 s où
-     presque aucun mot ne se lisait — deux captures sur deux sont tombées
-     dessus. À 0,2 s, la vague de sortie et celle du retour se chevauchent :
-     le mouvement traverse la phrase au lieu de l'effacer.
-
-     La boucle ne démarre pas sous `prefers-reduced-motion` : une phrase qui
-     clignote sans fin est exactement ce que cette préférence existe pour
-     éviter. */
-  const [sousTitreVisible, setSousTitreVisible] = useState(true)
-
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
-    let reprise
-    const cycle = setInterval(() => {
-      setSousTitreVisible(false)
-      reprise = setTimeout(() => setSousTitreVisible(true), 200)
-    }, 3000)
-    return () => {
-      clearInterval(cycle)
-      clearTimeout(reprise)
-    }
-  }, [])
-
   /* La barre apparaît passé un seuil de défilement.
 
      Elle dépendait d'un IntersectionObserver sur une sentinelle d'un
@@ -380,7 +350,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 as="p"
                 per="word"
                 delay={0.1}
-                boucle={sousTitreVisible}
+                boucle={true}
                 surlignage="optimiser ta croissance"
                 variants={{
                   container: {
@@ -437,7 +407,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     key={fonction.titre}
                     initial={{ opacity: 0, y: 18 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-60px' }}
+                    viewport={{ once: true, margin: ‘-60px’ }}
                     transition={{ duration: 0.45, delay: (i % 3) * 0.08 }}
                     className="bg-[color:var(--surface-page-canvas)] px-6 py-10 sm:px-8"
                   >
@@ -459,6 +429,30 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   </article>
                 )
               })}
+              <article className="bg-[color:var(--surface-page-canvas)] px-6 py-10 sm:px-8">
+                <Bot className="size-6 text-[color:var(--color-coral-pulse)]" aria-hidden="true" />
+                <h3 className="mt-6 flex flex-wrap items-center gap-2 font-display text-xl font-medium tracking-[-0.02em] text-ink">
+                  Coach IA 24 h/24 et 7 j/7
+                  <span className="rounded-full border border-[color:var(--color-indigo-bloom)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-[color:var(--color-indigo-bloom)] uppercase">
+                    bientôt
+                  </span>
+                </h3>
+                <p className="mt-2.5 text-[15px] leading-[1.55] text-[color:var(--text-secondary)]">
+                  L’IA connaît tes données et répond immédiatement à tes questions : potentiel de croissance, posture, alimentation, sommeil et compléments alimentaires.
+                </p>
+              </article>
+              <article className="bg-[color:var(--surface-page-canvas)] px-6 py-10 sm:px-8">
+                <Users className="size-6 text-[color:var(--color-coral-pulse)]" aria-hidden="true" />
+                <h3 className="mt-6 flex flex-wrap items-center gap-2 font-display text-xl font-medium tracking-[-0.02em] text-ink">
+                  Communauté
+                  <span className="rounded-full border border-[color:var(--color-indigo-bloom)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-[color:var(--color-indigo-bloom)] uppercase">
+                    bientôt
+                  </span>
+                </h3>
+                <p className="mt-2.5 text-[15px] leading-[1.55] text-[color:var(--text-secondary)]">
+                  Un espace réservé aux membres pour discuter, partager des expériences et découvrir les dernières informations sur ce qui fonctionne réellement.
+                </p>
+              </article>
             </div>
 
             {/* La grille se terminait sur les deux cases « bientôt », donc sur
@@ -468,7 +462,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             <div className="mt-14 text-center">
               <button
                 type="button"
-                onClick={() => demarrer('fonctionnalites')}
+                onClick={() => demarrer(‘fonctionnalites’)}
                 className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
               >
                 Commencer mon analyse
@@ -734,9 +728,9 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   ))}
                 </div>
                 <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
-                  Grandimi m'a vraiment aide a comprendre ma croissance. L'appli est simple a utiliser et les conseils sont vraiment utiles.
+                  J'ai découvert que je pouvais encore grandir. Les conseils quotidiens me motivent et je sens que j'avance. C'est rassurant.
                 </p>
-                <p className="text-sm font-semibold text-ink">Utilisateur 1</p>
+                <p className="text-sm font-semibold text-ink">Paul</p>
               </div>
 
               <div className="rounded-2xl border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6">
@@ -746,9 +740,9 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   ))}
                 </div>
                 <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
-                  J'aime bien avoir un plan quotidien. Ca m'aide a vraiment faire les efforts pour grandir.
+                  Le plan est facile à suivre et pas culpabilisant. Ça m'aide à dormir mieux et à manger plus sainement, c'est concret.
                 </p>
-                <p className="text-sm font-semibold text-ink">Utilisateur 2</p>
+                <p className="text-sm font-semibold text-ink">Gabriel</p>
               </div>
 
               <div className="rounded-2xl border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6">
@@ -758,9 +752,9 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   ))}
                 </div>
                 <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
-                  La prédiction de taille est precise et ca m'a motiva a vraiment suivre le programme.
+                  Ce qui m'a plu, c'est qu'il n'y a pas de blabla. Juste ma taille estimée, pourquoi je ne grandis pas plus, et ce que je dois faire.
                 </p>
-                <p className="text-sm font-semibold text-ink">Utilisateur 3</p>
+                <p className="text-sm font-semibold text-ink">Victor</p>
               </div>
             </div>
           </div>
