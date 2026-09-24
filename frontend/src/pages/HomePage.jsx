@@ -508,12 +508,14 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     PNG reste là pour ceux qui ne lisent pas le WebP. */}
                 <div className="flex justify-center mb-6">
                   <picture>
+                    <source media="(max-width: 768px)" srcSet="/apercus/accueil.webp" type="image/webp" />
                     <source srcSet="/apercus/accueil.webp" type="image/webp" />
                     <img
                       src="/apercus/accueil.png"
                       alt="L'écran d'accueil de Grandimi : la taille adulte estimée, sa fourchette, et la courbe de croissance."
                       className="max-h-[450px] w-auto rounded-2xl shadow-2xl"
                       loading="lazy"
+                      decoding="async"
                     />
                   </picture>
                 </div>
@@ -528,12 +530,14 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               <div className="flex flex-col items-center">
                 <div className="flex justify-center mb-6">
                   <picture>
+                    <source media="(max-width: 768px)" srcSet="/apercus/seance.webp" type="image/webp" />
                     <source srcSet="/apercus/seance.webp" type="image/webp" />
                     <img
                       src="/apercus/seance.png"
                       alt="L'écran de séance : les actions du jour, cochées une à une."
                       className="max-h-[450px] w-auto rounded-2xl shadow-2xl"
                       loading="lazy"
+                      decoding="async"
                     />
                   </picture>
                 </div>
