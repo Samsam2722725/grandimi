@@ -22,7 +22,7 @@ import { capturePageview } from './lib/analytics';
    justement d accelerer. */
 import HomePage from './pages/HomePage';
 
-const QuestionnaireFlow = lazy(() => import('./pages/QuestionnaireFlow'));
+const OnboardingFlow = lazy(() => import('./pages/OnboardingFlow'));
 const ResultsPage = lazy(() => import('./pages/ResultsPage'));
 const PaywallPage = lazy(() => import('./pages/PaywallPage'));
 const GrowthPlanPage = lazy(() => import('./pages/GrowthPlanPage'));
@@ -157,13 +157,16 @@ function App() {
       );
     }
 
-    /* Le resultat s'affiche SANS compte.
-       La landing promettait "Estimation gratuite - sans compte" et "aucun
-       resultat floute" ; envoyer l'utilisateur sur un mur de connexion
-       juste apres les 5 etapes contredisait la promesse au moment precis
-       ou il attend sa reponse. Le compte n'est demande que plus loin,
-       pour acceder au plan payant. */
-    setCurrentPage('results');
+    /* Onboarding v2 : le dernier écran (« Révéler mes résultats ») mène
+       directement à la paywall, sans étape ResultsPage intermédiaire —
+       c'est la démonstration explicitement demandée pour ce script.
+       ATTENTION, ce que ça change : la landing (HomePage) promet encore
+       "Estimation gratuite - sans compte" / "aucun résultat flouté", ce
+       que ce chemin ne tient plus puisque le résultat chiffré est
+       désormais derrière l'abonnement dès la sortie du tunnel. Cette
+       copie n'a pas été mise à jour ici — décision produit à trancher
+       séparément, pas un oubli d'implémentation. */
+    setCurrentPage('paywall');
   };
 
   /* Le plan ne s’ouvre qu’une fois ses horaires connus.
@@ -466,7 +469,7 @@ function App() {
       )}
 
       {currentPage === 'questionnaire' && (
-        <QuestionnaireFlow
+        <OnboardingFlow
           onPredictionComplete={handlePredictionComplete}
           onCancel={handleBackHome}
         />
