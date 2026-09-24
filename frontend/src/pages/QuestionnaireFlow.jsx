@@ -159,12 +159,9 @@ const TOUTES_ETAPES = [
   // 4. Crédibilité
   'modele',
   'precision',
-  // 5. Envie
+  // 5. Envie (potentiel + aide : affichage visuel, pas de questions)
   'pause-genetique',
   'potentiel',
-  'sommeil',
-  'nutrition',
-  'activite',
   'aide',
   // 6. Fonctionnalités
   'fonction-plan',
@@ -579,12 +576,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         return Boolean(reponses.odeur)
       case 'acne':
         return Boolean(reponses.acne)
-      case 'sommeil':
-        return reponses.sleep_hours_per_night !== null
-      case 'nutrition':
-        return Boolean(reponses.nutrition_level)
-      case 'activite':
-        return reponses.exercise_min_per_day !== null
       case 'email':
         return emailValide
       default:
@@ -1435,54 +1426,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       case 'aide':
         return <RuchePotentiel variante="convergence" className="funnel-ruche" />
 
-      case 'sommeil':
-        return (
-          <div className="funnel-choices" role="radiogroup" aria-label="Heures de sommeil">
-            {OPTIONS_SOMMEIL.map((option) => (
-              <ChoiceCard
-                key={option.valeur}
-                icon={option.icone}
-                title={option.titre}
-                hint={option.indice}
-                selected={reponses.sleep_hours_per_night === option.valeur}
-                onSelect={() => repondreEtAvancer('sleep_hours_per_night', option.valeur)}
-              />
-            ))}
-          </div>
-        )
-
-      case 'nutrition':
-        return (
-          <div className="funnel-choices" role="radiogroup" aria-label="Alimentation">
-            {OPTIONS_NUTRITION.map((option) => (
-              <ChoiceCard
-                key={option.valeur}
-                icon={option.icone}
-                title={option.titre}
-                hint={option.indice}
-                selected={reponses.nutrition_level === option.valeur}
-                onSelect={() => repondreEtAvancer('nutrition_level', option.valeur)}
-              />
-            ))}
-          </div>
-        )
-
-      case 'activite':
-        return (
-          <div className="funnel-choices" role="radiogroup" aria-label="Activité physique">
-            {OPTIONS_ACTIVITE.map((option) => (
-              <ChoiceCard
-                key={option.valeur}
-                icon={option.icone}
-                title={option.titre}
-                hint={option.indice}
-                selected={reponses.exercise_min_per_day === option.valeur}
-                onSelect={() => repondreEtAvancer('exercise_min_per_day', option.valeur)}
-              />
-            ))}
-          </div>
-        )
-
       /* ---------- Ce que la taille change au quotidien ----------
 
          Forme reprise de l'écran « La vérité brutale » de Taller : une liste
@@ -1554,10 +1497,12 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                   ]
                 : [
                     'On te donne souvent moins que ton âge',
-                    'Tu te sens moins imposant à côté des autres',
+                    'Tu te sens moins imposante à côté des autres',
                     'Tu regardes la taille des autres presque automatiquement',
                     'Voir tes potes grandir pendant que toi tu stagnes',
                     'Ne pas savoir si tu as déjà atteint ta taille finale',
+                    'On te prend moins au sérieux',
+                    'Plus d\'anxiété dans les groupes ou les nouvelles situations',
                   ]
               ).map((ligne) => (
                 <li className="verite-ligne" key={ligne}>
@@ -1989,18 +1934,6 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       titre: 'Optimise tout ton potentiel de taille',
       accent: 'potentiel de taille',
       sous: 'Pour grandir au maximum, dors bien, mange bien et reste actif.',
-    },
-    sommeil: {
-      titre: 'Tu dors combien, en général ?',
-      sous: 'L’hormone de croissance se libère surtout pendant le sommeil profond.',
-    },
-    nutrition: {
-      titre: 'Comment tu manges ?',
-      sous: 'Sans protéines ni calcium suffisants, le potentiel n’est pas atteint.',
-    },
-    activite: {
-      titre: 'Tu bouges combien par jour ?',
-      sous: 'L’activité stimule l’os pendant qu’il peut encore s’allonger.',
     },
     aide: {
       titre: 'Grandimi t’aide pour ça',

@@ -249,7 +249,7 @@
   font-size: 17px;
   line-height: 1.45;
   color: var(--funnel-muted);
-  margin: 12px 0 0;
+  margin: 16px 0 0;
   max-width: 42ch;
 }
 
@@ -261,7 +261,7 @@
      que la zone déborde des DEUX côtés et le haut devient inatteignable au
      défilement — le récapitulatif perdait ses deux premières lignes. */
   justify-content: safe center;
-  gap: 20px;
+  gap: 24px;
   /* La réserve du bas laisse la dernière ligne sortir du dégradé du pied. */
   padding: 28px 0 44px;
 }
@@ -276,7 +276,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   /* Dégradé vers le fond : le contenu qui défile s'efface sous le bouton au
      lieu de le toucher franchement. */
   background: linear-gradient(to top, var(--funnel-bg) 62%, transparent);
@@ -296,7 +296,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   /* L ombre decolle le bouton du pied de page. Elle est tiree de
      l accent lui-meme et reste discrete : sur papier, une lueur de
      32 px se lit comme une bavure d impression. */
@@ -462,7 +462,7 @@
   align-items: center;
   gap: 16px;
   width: 100%;
-  padding: 20px;
+  padding: 24px;
   border-radius: 20px;
   border: 1.5px solid var(--funnel-line);
   background: var(--funnel-surface);
@@ -585,7 +585,7 @@
      longueur des valeurs. */
   grid-template-columns: 1fr auto auto;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   padding: 15px 0;
   border-bottom: 1px solid var(--funnel-line);
 }
@@ -729,7 +729,7 @@
 .funnel-choices {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 /* ---------- Écran-chiffre ---------- */
@@ -804,7 +804,7 @@
   font-size: 13px;
   line-height: 1.45;
   color: var(--funnel-muted);
-  margin: 12px 0 0;
+  margin: 16px 0 0;
 }
 
 /* ---------- Réglage du plan : les jours de sport ----------
@@ -871,7 +871,7 @@
 
 .funnel-longterme .lt-legende {
   list-style: none;
-  margin: 18px 0 0;
+  margin: 16px 0 0;
   padding: 0;
   display: flex;
   justify-content: center;
@@ -901,7 +901,7 @@
 .funnel-longterme .lt-note {
   margin: 16px auto 0;
   max-width: 34ch;
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.5;
   text-align: center;
   color: var(--funnel-muted);
@@ -920,7 +920,7 @@
 .funnel-verite {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
 .verite-liste {
@@ -935,7 +935,7 @@
 .verite-ligne {
   display: grid;
   grid-template-columns: 28px 1fr;
-  gap: 12px;
+  gap: 16px;
   align-items: center;
   /* Resserre a 10px : la liste est passee de cinq a six lignes, dont deux
      tiennent sur deux lignes de texte. A 13px de rembourrage, le texte de
@@ -991,7 +991,7 @@
    téléphone étroit. */
 .funnel-pointure {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   align-items: flex-start;
 }
 
@@ -1028,7 +1028,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
 }
 
 .funnel-reseau {
@@ -1175,7 +1175,7 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  margin-top: 14px;
+  margin-top: 16px;
   /* Le défilement s'arrête à la feuille et ne se propage pas au tunnel
      resté monté derrière. Sans ça, arriver en bas de la liste fait
      défiler la page du dessous sur iOS. */
@@ -1184,7 +1184,7 @@
 
 .feuille-intro {
   margin: 0 0 18px;
-  font-size: 15.5px;
+  font-size: 15px;
   line-height: 1.6;
   color: var(--funnel-muted);
 }
@@ -1200,7 +1200,7 @@
 
 .feuille-points li {
   position: relative;
-  padding-left: 20px;
+  padding-left: 24px;
   font-size: 15px;
   line-height: 1.55;
   text-wrap: pretty;
@@ -1250,7 +1250,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
   padding: 8px 0;
 }
 
@@ -1362,7 +1362,7 @@
 }
 
 .precision-sources strong {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--funnel-text);
 }
@@ -1390,7 +1390,7 @@
 .ruche-tuiles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 8px;
   width: 100%;
 }
 
@@ -1407,7 +1407,7 @@
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background: var(--funnel-surface);
   color: var(--funnel-muted);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -1442,7 +1442,7 @@
 .ruche-marque {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-top: -10px;
   padding: 12px 22px;
   border-radius: 18px;
@@ -1480,7 +1480,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 26px;
+  gap: 24px;
   height: 100svh;
   padding: 32px 26px calc(32px + env(safe-area-inset-bottom));
   background: var(--funnel-bg);
@@ -1546,13 +1546,13 @@
   max-width: 340px;
   display: flex;
   flex-direction: column;
-  gap: 11px;
+  gap: 8px;
 }
 
 .analyse-etapes li {
   display: grid;
   grid-template-columns: 22px 1fr;
-  gap: 12px;
+  gap: 16px;
   align-items: center;
   font-size: 15px;
   font-weight: 600;
@@ -1614,7 +1614,7 @@
 .analyse-attente {
   margin: 0;
   max-width: 32ch;
-  font-size: 13.5px;
+  font-size: 14px;
   line-height: 1.5;
   text-align: center;
   color: var(--funnel-muted);
@@ -1683,7 +1683,7 @@
 .avis {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   width: 100%;
 }
 
@@ -1779,7 +1779,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 /* Empilees et non cote a cote, contrairement a Flo : ses citations font
@@ -1796,7 +1796,7 @@
 .avis-entete {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .avis-pastille {
@@ -1820,7 +1820,7 @@
 }
 
 .avis-identite strong {
-  font-size: 15.5px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--funnel-text);
 }
@@ -1834,7 +1834,7 @@
 }
 
 .avis-texte {
-  margin: 12px 0 0;
+  margin: 16px 0 0;
   font-size: 15px;
   line-height: 1.5;
   color: var(--funnel-text);
@@ -1846,7 +1846,7 @@
    contraste lisible et ne descend pas sous 12 px. */
 .avis-mention {
   margin: 0;
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.45;
   color: var(--funnel-muted);
   text-wrap: pretty;
@@ -1888,7 +1888,7 @@
 }
 
 .fonction-plan {
-  padding: 18px;
+  padding: 16px;
   border-radius: 24px;
   background: var(--funnel-surface);
 }
@@ -1896,7 +1896,7 @@
 .fonction-plan ul {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1905,8 +1905,8 @@
 .fonction-plan li {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px;
+  gap: 16px;
+  padding: 16px;
   border-radius: 16px;
   background: var(--funnel-bg);
   font-size: 15px;
@@ -1950,7 +1950,7 @@
 }
 
 .fonction-plan-plus {
-  margin: 14px 0 0;
+  margin: 16px 0 0;
   font-size: 13px;
   color: var(--funnel-muted);
   text-align: center;
@@ -1961,14 +1961,14 @@
 .etudes ul {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .etudes li {
-  padding: 18px;
+  padding: 16px;
   border-left: 3px solid var(--funnel-accent);
   border-radius: 6px 18px 18px 6px;
   background: var(--funnel-surface);
@@ -1990,7 +1990,7 @@
 
 .etudes-note {
   margin: 16px 0 0;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--funnel-muted);
   text-align: center;
 }
