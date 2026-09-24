@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Dumbbell, Moon, Ruler, Utensils } from 'lucide-react'
 
 import { ChoiceCard } from '@/components/ui/choice-card'
@@ -162,6 +163,8 @@ export const TEXTES_ETAPE = {
   'puberty-pause': {
     titre: 'Ta puberté compte',
     sousTitre: 'On va poser quelques questions pour voir si tu es passé par la puberté',
+    message:
+      'Environ 75 % de ta croissance totale se fait pendant la puberté, et seulement 25 % après',
   },
   'pilosite-aisselles': {
     titre: 'As-tu des poils aux aisselles ?',
@@ -427,7 +430,9 @@ export function MoletteTailleCm({ valeurCm, onChange, unite, onChangeUnite, min 
           min={min}
           max={max}
           step={0.1}
-          format={(v) => `${v.toFixed(1).replace('.', ',')} cm`}
+          // Format "X,XX cm" du script, deux décimales même quand le pas de
+          // 0,1 ne produit qu'un seul chiffre significatif (ex. "172,30").
+          format={(v) => `${v.toFixed(2).replace('.', ',')} cm`}
         />
       ) : (
         <WheelPicker
@@ -728,6 +733,10 @@ export function EcranExercicesQuotidiens() {
   return <FonctionCapture image="seance" alt="Séance d’exercices quotidiens dans l’application Grandimi" />
 }
 
+// Les quatre colonnes (sommeil, taille, exercice, vitamine) reprennent
+// exactement le mock du script — pas seulement la taille : c'est bien un
+// tracker à quatre cases cochées par semaine, une seule d'entre elles
+// portant un chiffre.
 const SEMAINES_HAUTEUR = [
   { semaine: 1, taille: '172,3 cm', delta: '' },
   { semaine: 2, taille: '172,4 cm', delta: '+0,1' },
@@ -742,16 +751,22 @@ export function EcranHeightTracker() {
         <thead>
           <tr>
             <th scope="col">Semaine</th>
+            <th scope="col">Sommeil</th>
             <th scope="col">Taille</th>
+            <th scope="col">Exercice</th>
+            <th scope="col">Vitamine</th>
           </tr>
         </thead>
         <tbody>
           {SEMAINES_HAUTEUR.map(({ semaine, taille, delta }) => (
             <tr key={semaine}>
               <td>Semaine {semaine}</td>
+              <td aria-label="Sommeil coché">✓</td>
               <td>
                 {taille} {delta && <span className="onb-tracker-delta">{delta}</span>}
               </td>
+              <td aria-label="Exercice coché">✓</td>
+              <td aria-label="Vitamine cochée">✓</td>
             </tr>
           ))}
         </tbody>
@@ -837,7 +852,41 @@ export function EcranAvisUtilisateurs() {
   return <Avis />
 }
 
+/**
+ * Écran 14. Le script porte trois blocs de texte distincts (titre,
+ * sous-titre, message) alors que le composant `Interstitial` partagé
+ * n'en accepte que deux : on ne peut pas le réutiliser tel quel sans
+ * perdre le message sur les 75 %/25 % de croissance pubertaire, qui est
+ * le seul chiffre de tout cet écran. D'où ce petit rendu dédié, mêmes
+ * classes visuelles que `Interstitial`.
+ */
+export function EcranPuberteIntro({ titre, sousTitre, message, onContinue }) {
+  return (
+    <div className="interstitial">
+      <h1 className="interstitial-titre">{titre}</h1>
+      <p className="interstitial-text">{sousTitre}</p>
+      <p className="funnel-help">{message}</p>
+      <div className="interstitial-action is-ready">
+        <button type="button" className="funnel-cta" onClick={onContinue}>
+          Continuer
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export function EcranPlusQueGenes({ onContinue }) {
+  // Démarre à 0 et se remplit après le montage : le script demande une
+  // « Animation "génétique vs environnement" », pas une figure figée. La
+  // transition CSS est sur `width` (cf. .onb-genes-remplissage) ; ce
+  // composant ne fait que retarder le passage de 0 % à la valeur finale
+  // d'une frame, pour que le navigateur ait quelque chose à animer.
+  const [rempli, setRempli] = useState(false)
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setRempli(true))
+    return () => cancelAnimationFrame(id)
+  }, [])
+
   return (
     <div className="interstitial">
       <h1 className="interstitial-titre">Tu es plus que tes gènes</h1>
@@ -847,11 +896,14 @@ export function EcranPlusQueGenes({ onContinue }) {
       </p>
       <div className="onb-genes-barres" role="img" aria-label="Génétique 70 %, environnement 30 %">
         <div className="onb-genes-barre">
-          <div className="onb-genes-remplissage" style={{ width: '70%' }} />
+          <div className="onb-genes-remplissage" style={{ width: rempli ? '70%' : '0%' }} />
           <span>Génétique 70 %</span>
         </div>
         <div className="onb-genes-barre">
-          <div className="onb-genes-remplissage onb-genes-remplissage--accent" style={{ width: '30%' }} />
+          <div
+            className="onb-genes-remplissage onb-genes-remplissage--accent"
+            style={{ width: rempli ? '30%' : '0%' }}
+          />
           <span>Environnement 30 %</span>
         </div>
       </div>

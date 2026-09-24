@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { User, Users } from 'lucide-react'
 
 import { FunnelShell, FunnelButton } from '@/components/ui/funnel-shell'
-import { Interstitial } from '@/components/ui/interstitial'
 import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
 import '../styles/funnel.css'
 
@@ -56,6 +55,7 @@ import {
   EcranEtudesPubliees,
   EcranAvisUtilisateurs,
   EcranPlusQueGenes,
+  EcranPuberteIntro,
 } from '../onboarding/content.jsx'
 import {
   ageDepuisNaissance,
@@ -548,7 +548,14 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   // ---------- Rendu global ----------
 
   if (etape === 'puberty-pause') {
-    return <Interstitial titre={texte.titre} text={texte.sousTitre} cta="Continuer" onContinue={avancer} />
+    return (
+      <EcranPuberteIntro
+        titre={texte.titre}
+        sousTitre={texte.sousTitre}
+        message={texte.message}
+        onContinue={avancer}
+      />
+    )
   }
 
   if (etape === 'plus-que-genes') {
