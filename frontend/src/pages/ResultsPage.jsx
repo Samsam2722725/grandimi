@@ -21,12 +21,17 @@ import '../styles/analyse-page.css'
      Taille actuelle | Taille potentielle 🔒 ............ les deux
      « Optimise jusqu'à 🔒 cm 📈 » ...................... les deux
      « Ce qui te freine : » + N problème(s) trouvé(s) ... GoTall
-     carte graphe « Taille / Âge » + N points à corriger  Taller
+     carte graphe « Taille / Âge » ...................... Taller
      bulle « Chance du rêve : 🔒 % » .................... GoTall
      « Plus grand que 🔒 de ton âge 🌍 » ................ les deux
      Taille souhaitée 🔒 | Croissance finie 🔒 .......... Taller
      un seul bouton : « Voir mes résultats » de Taller,
      le chevron de GoTall ............................... les deux
+
+   La pastille « N points à corriger » de la capture Taller a été retirée
+   à la demande du client : le même compte est déjà porté par « N problèmes
+   trouvés » juste au-dessus, et le répéter à deux blocs d'écart faisait
+   lire deux mesures là où il n'y en a qu'une.
 
    Ce qui n'est sur aucune des deux captures n'est plus sur l'écran :
    la mention « pas un dispositif médical », le dépliant limites et
@@ -95,8 +100,8 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
      Le détail levier par levier n'est pas affiché — les barres de
      « Ce qui te freine » sont floutées, c'est précisément ce que le plan
-     ouvre. Il ne reste de ce calcul que le NOMBRE, qui alimente les deux
-     pastilles rouges des deux captures. */
+     ouvre. Il ne reste de ce calcul que le NOMBRE, qui alimente la pastille
+     rouge du bloc. */
   const heuresSommeil = Number(predictionData.sleep_hours_per_night)
   const minutesSport = Number(predictionData.exercise_min_per_day)
 
@@ -221,11 +226,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             <span className="analyse-graphe-verrou" aria-hidden="true">
               <Lock size={14} />
             </span>
-            {pointsACorriger > 0 && (
-              <span className="analyse-pastille">
-                {pointsACorriger} point{pointsACorriger > 1 ? 's' : ''} à corriger
-              </span>
-            )}
           </div>
 
           {/* La bulle de GoTall, posée au-dessus de la courbe comme une
