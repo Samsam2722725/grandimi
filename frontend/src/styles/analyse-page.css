@@ -297,16 +297,19 @@
 
 /* ---------- Confettis ---------- */
 
-/* Posés par-dessus tout l'écran, sans jamais intercepter un geste. `fixed`
-   parce que la salve doit couvrir la fenêtre, pas la zone défilante : sinon
-   elle disparaît dès le premier scroll. */
+/* Posés par-dessus TOUT l'écran, bouton compris, sans jamais intercepter un
+   geste. `fixed` parce que la salve doit couvrir la fenêtre, pas la zone
+   défilante : sinon elle disparaît dès le premier scroll.
+
+   z-index au-dessus de tout ce que porte l'écran : la salve passe devant, une
+   seconde, puis le canvas est vide et ne masque plus rien. */
 .analyse .confetti {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 40;
+  z-index: 60;
 }
 
 /* ---------- Avertissement « hors des courbes de référence » ----------

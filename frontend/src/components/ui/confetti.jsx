@@ -7,10 +7,17 @@ import { useEffect, useRef } from 'react'
  * rafraîchissement sur un téléphone d'entrée de gamme, au moment précis où
  * l'écran doit paraître soigné. Un canvas les dessine tous en une passe.
  *
- * Elle S'ARRÊTE. Les particules tombent hors champ et la boucle se coupe
- * d'elle-même — pas d'animation qui tourne en fond pendant que l'utilisateur
- * lit son résultat, et pas de compteur qui continue à consommer la batterie
- * sur un onglet laissé ouvert.
+ * Elle S'ARRÊTE, et VITE. Les particules tombent hors champ et la boucle se
+ * coupe d'elle-même — pas d'animation qui tourne en fond pendant que
+ * l'utilisateur lit son résultat, et pas de compteur qui continue à consommer
+ * la batterie sur un onglet laissé ouvert.
+ *
+ * LA DURÉE EST LE RÉGLAGE QUI COMPTE. À la première version, la salve mettait
+ * près de trois secondes à sortir du champ : pendant tout ce temps, des
+ * carrés de couleur passaient devant le chiffre et le graphe, c'est-à-dire
+ * devant ce que l'écran existe pour montrer. Une salve rapide dit la même
+ * chose — quelque chose vient d'aboutir — et rend l'écran au bout de la
+ * seconde. Elle passe devant, elle ne s'installe pas.
  *
  * `pointer-events: none` et `aria-hidden` : c'est une décoration posée
  * par-dessus l'écran, elle ne doit intercepter ni un doigt ni un lecteur
@@ -19,7 +26,9 @@ import { useEffect, useRef } from 'react'
 
 const COULEURS = ['#ff5a1f', '#e4692f', '#6f7ec9', '#ffffff', '#4ed473']
 const NOMBRE = 90
-const GRAVITE = 0.14
+/* Gravité triplée et vitesse initiale relevée : la salve traverse l'écran en
+   une seconde environ, contre près de trois auparavant. */
+const GRAVITE = 0.42
 
 export function Confetti({ actif = true }) {
   const canvasRef = useRef(null)
@@ -54,13 +63,16 @@ export function Confetti({ actif = true }) {
        qui n'est pas le registre — ici c'est une pluie brève. */
     const particules = Array.from({ length: NOMBRE }, () => ({
       x: Math.random() * largeur,
-      y: -20 - Math.random() * hauteur * 0.5,
-      vx: (Math.random() - 0.5) * 1.6,
-      vy: 1 + Math.random() * 2.4,
+      /* Traînée de départ resserrée : les dernières particules ne partent
+         plus d'un demi-écran au-dessus du cadre, sinon la salve a beau être
+         rapide, sa queue traîne. */
+      y: -20 - Math.random() * hauteur * 0.22,
+      vx: (Math.random() - 0.5) * 2.4,
+      vy: 4 + Math.random() * 3.5,
       taille: 4 + Math.random() * 5,
       allonge: 0.35 + Math.random() * 0.9,
       rotation: Math.random() * Math.PI,
-      vitesseRotation: (Math.random() - 0.5) * 0.18,
+      vitesseRotation: (Math.random() - 0.5) * 0.3,
       couleur: COULEURS[Math.floor(Math.random() * COULEURS.length)],
     }))
 
