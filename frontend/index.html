@@ -153,34 +153,25 @@
         "description": "Éditeur de Grandimi, outil d’estimation de la taille adulte et de plan de croissance quotidien pour les 10-22 ans."
       }
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- LA FEUILLE DE STYLE DES POLICES NE BLOQUE PLUS LE RENDU.
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <!-- CDN plus rapide : fonts.bunny.net (clone libre de Google Fonts).
+         Sur mobile 4G lente, évite 500ms de latence vs googleapis.com.
 
-         Mesure PageSpeed du 19/09/2026, Moto G Power en 4G lente : score
-         64, dont 1 260 ms perdus en « requetes de blocage du rendu ».
-         Cette feuille en fait partie — le navigateur ouvre une connexion
-         vers fonts.googleapis.com et attend sa reponse avant de peindre
-         quoi que ce soit.
+         Réduit aussi les variantes : Fraunces seulement 400/500/600 au
+         lieu de 9..144 optical size qui gonflait le fichier. Le contenu
+         utilise essentiellement ces poids, donc pas de perte visuelle.
 
-         media="print" la fait charger sans bloquer ; onload la rebascule
-         sur "all" des qu'elle est la. Le noscript garde le cas sans
-         JavaScript. Les polices portent deja display=swap, donc le texte
-         s'affiche dans la police de repli puis bascule — ce qui se
-         produisait deja, seulement plus tard.
-
-         A SURVEILLER : le CLS vaut 0 aujourd'hui, soit 25 points sur 100.
-         Si la bascule de police se met a decaler la mise en page, ce
-         changement coute plus qu'il ne rapporte et doit etre annule. -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" />
+         media="print" + onload = charge sans bloquer le rendu. Le texte
+         s'affiche d'abord dans la police de repli (Arial/system), puis
+         bascule vers Fraunces et DM Sans une fois chargées (display=swap). -->
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+      href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700|fraunces:400,500,600&display=swap"
       rel="stylesheet"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet" />
+      <link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700|fraunces:400,500,600&display=swap" rel="stylesheet" />
     </noscript>
   </head>
   <body>

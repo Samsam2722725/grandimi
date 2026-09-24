@@ -1,0 +1,30 @@
+# Cache headers pour GitHub Pages
+# Les assets versionnés (avec hash) peuvent être cachés longtemps
+# car le hash change à chaque build
+
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML non-versionnée - courte durée de cache
+*.html
+  Cache-Control: public, max-age=3600
+
+# Index/racine - très courte durée
+/index.html
+  Cache-Control: public, max-age=300
+  
+# Fichiers générés par Vite (bundle)
+/
+  Cache-Control: public, max-age=300
