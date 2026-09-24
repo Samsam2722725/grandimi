@@ -60,15 +60,99 @@ func RapportTunnelJSON(c *gin.Context) {
 		return
 	}
 
+	points, err := db.LirePointsEntreeTunnel(jours)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"erreur": "lecture impossible"})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"jours":      jours,
-		"ecrans":     ecrans,
-		"evenements": totaux,
+		"jours":         jours,
+		"ecrans":        ecrans,
+		"evenements":    totaux,
+		"points_entree": points,
 	})
 }
 
 func PageRapportTunnel(c *gin.Context) {
 	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(pageRapportTunnel))
+}
+
+/* AnalytiqueTunnelPublique expose des statistiques agrégées, sans données
+   sensibles. Lisible par n'importe qui, sans token.
+   Utile pour les dashboards, les docs, ou un monitoring public. */
+func AnalytiqueTunnelPublique(c *gin.Context) {
+	jours, err := strconv.Atoi(c.DefaultQuery("jours", "30"))
+	if err != nil || jours < 1 {
+		jours = 30
+	}
+	if jours > 365 {
+		jours = 365
+	}
+
+	ecrans, err := db.LireRapportTunnel(jours)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"erreur": "lecture impossible"})
+		return
+	}
+
+	totaux, err := db.LireTotauxTunnel(jours)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"erreur": "lecture impossible"})
+		return
+	}
+
+	/* Extraire quelques chiffres cles pour une vue resumee :
+	   - entrees : tunnel_demarra
+	   - sorties paywall : ceux qui ont vu la paywall mais n ont pas clique
+	   - paiements : paywall_checkout_ouvert
+	   - abandons explicites : tunnel_abandonne */
+	parEvenement := make(map[string]int)
+	for _, t := range totaux {
+		parEvenement[t.Evenement] = t.Visiteurs
+	}
+
+	/* Compter les ecrans du questionnaire pour la courbe de decrochage */
+	var ecransQuestionnaire int
+	var visiteursDuPremierEcran int
+	for _, e := range ecrans {
+		if e.Evenement == "tunnel_etape_vue" {
+			if visiteursDuPremierEcran == 0 {
+				visiteursDuPremierEcran = e.Visiteurs
+			}
+			ecransQuestionnaire++
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"jours": jours,
+		"resume": gin.H{
+			"visiteurs_site":        parEvenement["page_vue"],
+			"questionnaire_demarre": parEvenement["tunnel_demarre"],
+			"paywall_vue":           parEvenement["paywall_vue"],
+			"paiement_ouvert":       parEvenement["paywall_checkout_ouvert"],
+			"abandons_explicites":   parEvenement["tunnel_abandonne"],
+		},
+		"conversion": gin.H{
+			"site_vers_questionnaire":     calcPct(parEvenement["tunnel_demarre"], parEvenement["page_vue"]),
+			"questionnaire_vers_paywall":  calcPct(parEvenement["paywall_vue"], parEvenement["tunnel_demarre"]),
+			"paywall_vers_paiement":       calcPct(parEvenement["paywall_checkout_ouvert"], parEvenement["paywall_vue"]),
+			"site_vers_paiement":          calcPct(parEvenement["paywall_checkout_ouvert"], parEvenement["page_vue"]),
+			"decrochage_questionnaire_pct": calcPct(visiteursDuPremierEcran - parEvenement["paywall_vue"], visiteursDuPremierEcran),
+		},
+		"questionnaire": gin.H{
+			"nombre_ecrans":         ecransQuestionnaire,
+			"visiteurs_premier_ecran": visiteursDuPremierEcran,
+			"taux_completion":       calcPct(parEvenement["paywall_vue"], visiteursDuPremierEcran),
+		},
+	})
+}
+
+func calcPct(a, b int) int {
+	if b == 0 {
+		return 0
+	}
+	return (a * 100) / b
 }
 
 /* La page tient dans un seul fichier, sans dependance et sans etape
@@ -237,6 +321,16 @@ const pageRapportTunnel = `<!doctype html>
       html += '<table><tbody>';
       connus.forEach(function (paire) {
         html += '<tr><td>' + paire[1] + '</td><td class="n">' + parNom[paire[0]] + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    }
+
+    var points = (donnees.points_entree || []);
+    if (points.length > 1) {
+      html += '<h2>Points d entree (boutons de la landing)</h2>';
+      html += '<table><tbody>';
+      points.forEach(function (p) {
+        html += '<tr><td>' + echapper(p.bouton || '(sans nom)') + '</td><td class="n">' + p.visiteurs + '</td></tr>';
       });
       html += '</tbody></table>';
     }

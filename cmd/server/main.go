@@ -130,6 +130,10 @@ func main() {
 	   Voir internal/api/tunnel_rapport.go. */
 	router.GET("/api/v1/tunnel/rapport", api.PageRapportTunnel)
 
+	/* Analytique tunnel publique : vue d ensemble des conversions et
+	   decrochages, sans donnees sensibles. Lisible par n importe qui. */
+	router.GET("/api/v1/tunnel/analytics", api.AnalytiqueTunnelPublique)
+
 	/* Routes portant des données personnelles : session obligatoire.
 	   Elles répondaient auparavant à un ?user_id= ou ?email= arbitraire,
 	   sans authentification. */

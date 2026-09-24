@@ -120,3 +120,40 @@ func LireTotauxTunnel(jours int) ([]TotalTunnel, error) {
 
 	return totaux, lignes.Err()
 }
+
+/* PointEntreeTunnel : par quel bouton de la landing les visiteurs arrivent. */
+type PointEntreeTunnel struct {
+	Bouton    string `json:"bouton"`
+	Visiteurs int    `json:"visiteurs"`
+}
+
+/* LirePointsEntreeTunnel compte combien de visiteurs par point d entree.
+   Sert a identifier les boutons qui ne marchent pas. */
+func LirePointsEntreeTunnel(jours int) ([]PointEntreeTunnel, error) {
+	if DB == nil {
+		return []PointEntreeTunnel{}, nil
+	}
+
+	lignes, err := DB.QueryContext(context.Background(),
+		`SELECT etape, count(DISTINCT session) AS visiteurs
+		   FROM evenements_tunnel
+		  WHERE evenement = 'tunnel_demarre'
+		    AND created_at >= now() - make_interval(days => $1)
+		  GROUP BY etape
+		  ORDER BY visiteurs DESC`, jours)
+	if err != nil {
+		return nil, err
+	}
+	defer lignes.Close()
+
+	points := []PointEntreeTunnel{}
+	for lignes.Next() {
+		var p PointEntreeTunnel
+		if err := lignes.Scan(&p.Bouton, &p.Visiteurs); err != nil {
+			return nil, err
+		}
+		points = append(points, p)
+	}
+
+	return points, lignes.Err()
+}
