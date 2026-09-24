@@ -10,11 +10,11 @@ import {
   Users,
 } from 'lucide-react'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
 import { FaqSection } from '@/components/ui/faq-section'
-import { HeroPhones } from '@/components/ui/hero-phones'
+const HeroPhones = lazy(() => import('@/components/ui/hero-phones'))
 import '../styles/theme-night.css'
 
 import { tunnelDemarre } from '../lib/analytics'
@@ -356,7 +356,9 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 seconde qu'il y a un produit derrière. Tous les concurrents de
                 ce marché ouvrent là-dessus, et aucun ne s'en passe. */}
             <div className="rise lg:col-span-5" style={{ animationDelay: '200ms' }}>
-              <HeroPhones />
+              <Suspense fallback={<div className="h-96 bg-gradient-to-b from-[color:var(--surface-page-canvas)] to-transparent" />}>
+                <HeroPhones />
+              </Suspense>
             </div>
           </div>
         </section>
