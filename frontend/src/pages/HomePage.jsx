@@ -33,41 +33,40 @@ import { tunnelDemarre } from '../lib/analytics'
 const FONCTIONS = [
   {
     icone: TrendingUp,
-    titre: 'Estimation qui se met à jour',
+    titre: "Prediction de taille",
     texte:
-      'Ta taille adulte estimée, recalculée à chaque re-mesure mensuelle, toujours accompagnée de sa marge.',
-  },
-  {
-    icone: ListChecks,
-    titre: 'Plan quotidien',
-    texte:
-      'Onze actions à cocher, du lever au coucher, choisies à partir de tes réponses — pas une liste générique.',
-  },
-  {
-    icone: HeartPulse,
-    titre: 'Sommeil, nutrition, exercices',
-    texte:
-      'Chaque levier détaillé : combien d’heures dormir, quoi mettre dans l’assiette, quels mouvements faire.',
-  },
-  {
-    icone: Flame,
-    titre: 'Suivi et série',
-    texte:
-      'Tu coches, ta série monte, ton mois se remplit. Ce qui se mesure est ce qui se tient.',
+      "Decouvre ta taille future. Elle change chaque mois selon tes habitudes.",
   },
   {
     icone: Users,
-    titre: 'Communauté',
-    bientot: true,
+    titre: "Groupe pour discuter",
     texte:
-      'Un espace pour comparer, demander, et voir que les autres passent par les mêmes doutes.',
+      "Parle avec les autres. Partage tes experiences et decouvre les meilleurs conseils.",
+  },
+  {
+    icone: HeartPulse,
+    titre: "Programme de sport",
+    texte:
+      "Un plan fait pour toi. Des exercices et repas pour ta croissance.",
   },
   {
     icone: Bot,
-    titre: 'Coach IA',
+    titre: "Coach IA jour et nuit",
+    texte:
+      "Pose tes questions. L IA te repond tout de suite avec tes infos.",
+  },
+  {
+    icone: ListChecks,
+    titre: "Tes bonnes habitudes",
+    texte:
+      "Exercices, sommeil, manger : ta routine change pour toi.",
+  },
+  {
+    icone: Flame,
+    titre: "Produits conseilles pour toi",
     bientot: true,
     texte:
-      'Poser une question à toute heure sur ton sommeil, ta posture ou une action du plan, et avoir la réponse.',
+      "Des complements pour t aider pendant ta croissance.",
   },
 ]
 
@@ -348,17 +347,6 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               </div>
             </div>
 
-            {/* --- Colonne visuelle : le moment magique, au-dessus du fold ---
-                Trois téléphones plutôt qu'une carte. La carte disait la même
-                chose, mais elle se lisait comme un encadré de site web ; c'est
-                le cadre de téléphone qui fait comprendre en un dixième de
-                seconde qu'il y a un produit derrière. Tous les concurrents de
-                ce marché ouvrent là-dessus, et aucun ne s'en passe. */}
-            <div className="rise lg:col-span-5" style={{ animationDelay: '200ms' }}>
-              <Suspense fallback={<div className="h-96 bg-gradient-to-b from-[color:var(--surface-page-canvas)] to-transparent" />}>
-                <HeroPhones />
-              </Suspense>
-            </div>
           </div>
         </section>
 
@@ -371,7 +359,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-                Débloque ton potentiel.
+                Grandis autant que possible.
               </h2>
               <p className="mt-4 text-base text-[color:var(--text-secondary)]">
                 On calcule ce qu’il te reste à prendre, et on te donne le plan qui va
@@ -428,42 +416,41 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           </div>
         </section>
 
-        {/* ============ PRÉDIS TA TAILLE (figure à gauche) ============ */}
-        <section className="px-6 pb-20 sm:px-8">
-          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            <CourbePrediction />
-
-            <div>
-              <h2 className="font-display text-[clamp(28px,4vw,40px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
-                Prédis ta taille adulte
+        <section className="px-6 py-20 sm:px-8">
+          <div className="mx-auto w-full max-w-6xl">
+            <div className="mx-auto mb-16 max-w-3xl text-center">
+              <h2 className="font-display text-[clamp(32px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
+                Vois Grandimi en action
               </h2>
-              <p className="mt-6 max-w-lg text-base leading-[1.55] text-[color:var(--text-secondary)]">
-                Ton âge, ta taille, ton poids et celle de tes parents, croisés avec les
-                tables de croissance de l’OMS. Pas de radio, pas de prise de sang. Le
-                chiffre arrive avec sa fourchette, et il se resserre à chaque re-mesure
-                mensuelle.
+              <p className="mt-4 text-base text-[color:var(--text-secondary)]">
+                Decouvre l'experience Grandimi avec ces fonctionnalites essentielles pensees pour optimiser ta croissance.
               </p>
             </div>
-          </div>
-        </section>
 
-        {/* ============ MAXIMISE TON POTENTIEL (figure à gauche) ============
-            Même sens de lecture que la section précédente, comme chez eux : la
-            figure tient la colonne gauche deux fois de suite. Alterner ferait
-            « site de template » ; répéter fait « chapitre ». */}
-        <section className="px-6 pb-20 sm:px-8">
-          <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            <ListeActions />
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2 mb-16">
+              <div className="flex flex-col items-center">
+                <div className="flex justify-center mb-6">
+                  <img src="/apercus/accueil.png" alt="Prediction" className="max-h-[450px] w-auto rounded-2xl shadow-2xl" loading="lazy" />
+                </div>
+                <h3 className="font-display text-xl font-medium text-ink text-center">
+                  Prediction de taille
+                </h3>
+                <p className="mt-2 text-sm text-[color:var(--text-secondary)] text-center max-w-xs">
+                  Vois ta taille future avec precision et suis ta croissance vers ton potentiel genetique.
+                </p>
+              </div>
 
-            <div>
-              <h2 className="font-display text-[clamp(28px,4vw,40px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
-                Maximise ton potentiel
-              </h2>
-              <p className="mt-6 max-w-lg text-base leading-[1.55] text-[color:var(--text-secondary)]">
-                Des exercices de posture à la nutrition, chaque habitude est choisie pour
-                ton profil et change d’un mois à l’autre. Tu coches ce que tu as fait, ta
-                série monte, et tu vois noir sur blanc les jours où tu as tenu.
-              </p>
+              <div className="flex flex-col items-center">
+                <div className="flex justify-center mb-6">
+                  <img src="/apercus/seance.png" alt="Routine" className="max-h-[450px] w-auto rounded-2xl shadow-2xl" loading="lazy" />
+                </div>
+                <h3 className="font-display text-xl font-medium text-ink text-center">
+                  Ta routine quotidienne
+                </h3>
+                <p className="mt-2 text-sm text-[color:var(--text-secondary)] text-center max-w-xs">
+                  Des exercices simples et des habitudes adaptees a toi pour maximiser chaque jour.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -645,6 +632,55 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
         </Suspense>
         </div>
 
+        {/* ============ AVIS ============ */}
+        <section className="px-6 py-20 sm:px-8">
+          <div className="mx-auto w-full max-w-6xl">
+            <div className="mx-auto mb-14 max-w-2xl text-center">
+              <h2 className="font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-ink">
+                Ce que disent nos utilisateurs
+              </h2>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="rounded-2xl border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6">
+                <div className="mb-4 flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-xl">⭐</span>
+                  ))}
+                </div>
+                <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
+                  Grandimi m'a vraiment aide a comprendre ma croissance. L'appli est simple a utiliser et les conseils sont vraiment utiles.
+                </p>
+                <p className="text-sm font-semibold text-ink">Utilisateur 1</p>
+              </div>
+
+              <div className="rounded-2xl border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6">
+                <div className="mb-4 flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-xl">⭐</span>
+                  ))}
+                </div>
+                <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
+                  J'aime bien avoir un plan quotidien. Ca m'aide a vraiment faire les efforts pour grandir.
+                </p>
+                <p className="text-sm font-semibold text-ink">Utilisateur 2</p>
+              </div>
+
+              <div className="rounded-2xl border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6">
+                <div className="mb-4 flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-xl">⭐</span>
+                  ))}
+                </div>
+                <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
+                  La prédiction de taille est precise et ca m'a motiva a vraiment suivre le programme.
+                </p>
+                <p className="text-sm font-semibold text-ink">Utilisateur 3</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ============ CTA FINAL ============ */}
         <section className="px-6 pb-20 sm:px-8">
           <div
@@ -676,7 +712,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 onClick={() => demarrer('cta-final')}
                 className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:w-auto"
               >
-                Commencer maintenant
+                Commencer
                 <ArrowRight className="size-4" aria-hidden="true" />
               </button>
             </div>
