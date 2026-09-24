@@ -1994,3 +1994,212 @@
   color: var(--funnel-muted);
   text-align: center;
 }
+
+/* ============================================================
+   ONBOARDING V2 — écrans propres au nouveau script (38 écrans)
+   ============================================================
+   Préfixe `onb-` pour rester repérable comme un ajout localisé, sans
+   toucher aux classes `funnel-*` / `wheel-*` déjà en usage ailleurs.
+   ============================================================ */
+
+.onb-mesure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.onb-lien-inconnu {
+  margin: 0 auto;
+}
+
+/* Trois molettes de front pour la date de naissance : même raisonnement
+   que .funnel-pointure — les comparer demande de les voir d'un coup. */
+.onb-wheel-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.onb-wheel-row > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.onb-preuve {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Jauge circulaire du potentiel restant. Volontairement PAS la ruche à
+   hexagones de l'écran équivalent : demande explicite de ne pas reprendre
+   cette figure pour ce script. */
+.onb-gauge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.onb-gauge-anneau {
+  width: 160px;
+  height: 160px;
+}
+
+.onb-gauge-piste,
+.onb-gauge-arc {
+  fill: none;
+  stroke-width: 10;
+}
+
+.onb-gauge-piste {
+  stroke: var(--funnel-line);
+}
+
+.onb-gauge-arc {
+  stroke: var(--funnel-accent);
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 60px 60px;
+}
+
+.onb-gauge-texte {
+  fill: var(--funnel-text);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.onb-icones {
+  display: grid;
+  gap: 14px;
+}
+
+.onb-icones-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.onb-icones-4 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.onb-icone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  padding: 16px 10px;
+  border-radius: 16px;
+  background: var(--funnel-surface);
+  border: 1px solid var(--funnel-line);
+  color: var(--funnel-text);
+}
+
+.onb-icone strong {
+  font-size: 14px;
+}
+
+.onb-icone span {
+  font-size: 12.5px;
+  color: var(--funnel-muted);
+}
+
+.onb-exemple-carte {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--funnel-surface);
+  border: 1px solid var(--funnel-line);
+}
+
+.onb-exemple-titre {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--funnel-text);
+}
+
+.onb-exemple-lignes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: 14px;
+  color: var(--funnel-muted);
+}
+
+.onb-exemple-score {
+  margin: 4px 0 0;
+  font-weight: 600;
+  color: var(--funnel-accent-text);
+}
+
+.onb-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.onb-tracker-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.onb-tracker-table th,
+.onb-tracker-table td {
+  text-align: left;
+  padding: 10px 6px;
+  border-bottom: 1px solid var(--funnel-line);
+  color: var(--funnel-text);
+}
+
+.onb-tracker-delta {
+  color: var(--funnel-accent-text);
+  font-weight: 600;
+}
+
+.onb-genes-barres {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.onb-genes-barre {
+  position: relative;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--funnel-surface);
+  border: 1px solid var(--funnel-line);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.onb-genes-remplissage {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--funnel-surface-high);
+  border-radius: 999px;
+}
+
+.onb-genes-remplissage--accent {
+  background: var(--funnel-accent);
+}
+
+.onb-genes-barre span {
+  position: relative;
+  z-index: 1;
+  margin-left: 16px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--funnel-text);
+}
