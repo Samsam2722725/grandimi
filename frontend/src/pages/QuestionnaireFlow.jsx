@@ -430,11 +430,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
   const [vitesseInconnue, setVitesseInconnue] = useState(
     () => reprise?.reponses?.height_velocity_cm === null,
   )
-  /* Part à « je ne sais pas », contrairement à la vitesse : tant que
-     personne n'a touché une molette, il n'y a pas de réponse à envoyer. */
-  const [pointureInconnue, setPointureInconnue] = useState(
-    () => (reprise?.reponses?.shoe_size_eu ?? null) === null,
-  )
+  /* « Je ne sais pas » n'est jamais coché d'office : une case pré-cochée
+     se lit comme une réponse que la personne n'a pas donnée. Tant qu'aucune
+     molette n'est touchée, shoe_size_eu reste null et rien n'est envoyé. */
+  const [pointureInconnue, setPointureInconnue] = useState(false)
   const [erreur, setErreur] = useState(null)
   /* Le panneau « comment ça marche » de l'écran « modèle ». */
   const [feuilleOuverte, setFeuilleOuverte] = useState(false)
@@ -609,6 +608,21 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
              alors aucune ancre menarche (internal/estimator/menarche.go). */
           menarche_survenue: reponses.menarche_survenue === true,
           age_menarche_annees: reponses.age_menarche_annees ?? 0,
+          /* Distingue « pas encore » d'une question sautée. Sans ce
+             booléen les deux sont indiscernables côté serveur, et le
+             signe de retard le plus net chez la fille reste invisible. */
+          menarche_declaree: reponses.menarche_survenue !== null,
+          /* Signes de puberté, exploités à partir de 15 ans et seulement
+             par leur ABSENCE (internal/estimator/puberte.go).
+
+             Odeur, acné et épaules ne sont volontairement pas envoyés :
+             la première relève de l'adrénarche et ne distingue plus
+             personne à quinze ans, la deuxième corrèle mal avec le stade
+             pubertaire, la troisième est une auto-évaluation sans
+             référence. Elles restent collectées pour le plan. */
+          voix_muee: reponses.voix,
+          pilosite_visage: reponses.pilosite_visage,
+          pilosite_aisselles: reponses.pilosite_aisselles,
           nutrition_level: reponses.nutrition_level,
           sleep_hours_per_night: reponses.sleep_hours_per_night,
           exercise_min_per_day: reponses.exercise_min_per_day,
@@ -1099,7 +1113,8 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                   value={Number(reponses.shoe_size_eu ?? 39)}
                   onChange={(v) => {
                     setPointureInconnue(false)
-                    definir(‘shoe_size_eu’, v)
+                    definir('shoe_size_eu', v)
+                    if (reponses.shoe_size_eu_1y === null) definir('shoe_size_eu_1y', v - 1)
                   }}
                   format={(v) => String(v)}
                 />
@@ -1258,7 +1273,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       case 'menarche':
         return (
           <>
-            <div style={{ opacity: menarcheInconnue ? 0.35 : 1 }}>
+            <div style={{ opacity: reponses.menarche_survenue === true ? 1 : 0.35 }}>
               <WheelPicker
                 label="Âge aux premières règles"
                 min={9}
@@ -1266,7 +1281,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 step={0.5}
                 value={Number(reponses.age_menarche_annees ?? 12.5)}
                 onChange={(v) => {
-                  setMenarcheInconnue(false)
+                  // Toucher la molette EST la réponse « oui, à cet âge-là ».
                   definir('menarche_survenue', true)
                   definir('age_menarche_annees', v)
                 }}
@@ -1281,16 +1296,34 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
                 « Pas encore » à quinze ans EST une information — c'est une
                 maturation tardive — mais le modèle ne l'exploite pas encore.
                 Le jour où il le fera, il faudra séparer les deux cartes. */}
+            {/* DEUX CARTES, ET PLUS UNE SEULE.
+
+                Elles produisaient le même calcul tant que le modèle ignorait
+                l'absence de règles. Ce n'est plus le cas : à quinze ans
+                passés, « pas encore » est le signe de retard pubertaire le
+                plus net qui soit, et le modèle sous-estime précisément ces
+                profils (internal/estimator/puberte.go).
+
+                Les garder fondues reviendrait désormais à jeter
+                l'information la plus utile de l'écran. */}
             <ChoiceCard
-              role="checkbox"
-              title="Pas encore, ou je préfère ne pas répondre"
-              hint="Cette question est facultative"
-              selected={menarcheInconnue}
+              role="radio"
+              title="Pas encore"
+              hint="C’est une réponse utile, pas une absence de réponse"
+              selected={reponses.menarche_survenue === false}
               onSelect={() => {
-                const inconnu = !menarcheInconnue
-                setMenarcheInconnue(inconnu)
-                definir('menarche_survenue', inconnu ? null : true)
-                definir('age_menarche_annees', inconnu ? null : 12.5)
+                definir('menarche_survenue', false)
+                definir('age_menarche_annees', null)
+              }}
+            />
+            <ChoiceCard
+              role="radio"
+              title="Je préfère ne pas répondre"
+              hint="Cette question est facultative"
+              selected={reponses.menarche_survenue === null}
+              onSelect={() => {
+                definir('menarche_survenue', null)
+                definir('age_menarche_annees', null)
               }}
             />
           </>
@@ -1775,8 +1808,8 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       sous: 'Compare avec une vieille photo, une toise, ou demande à tes parents.',
     },
     pointure: {
-      titre: ‘Quelle est ta pointure ?’,
-      sous: ‘Ça améliore la précision. Facultatif.’,
+      titre: 'Quelle est ta pointure ?',
+      sous: 'Ça améliore la précision. Facultatif.',
     },
     /* Les sous-titres du bloc maturité disent tous la même chose sous
        une forme différente : « ça situe où tu en es ». Aucun ne promet

@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import { ArrowLeft, Lock } from 'lucide-react'
 
 import { AnalyseChart } from '@/components/ui/analyse-chart'
-import { BalloonsPopBackground } from '@/components/ui/balloons-pop-background'
+const BalloonsPopBackground = lazy(() => import('@/components/ui/balloons-pop-background').then(m => ({ default: m.BalloonsPopBackground })))
 import { CompteurAnime } from '@/components/ui/compteur-anime'
 import { Confetti } from '@/components/ui/confetti'
 
@@ -92,31 +92,31 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
   const leviers = [
     {
-      cle: ‘sommeil’,
-      nom: ‘Sommeil’,
+      cle: 'sommeil',
+      nom: 'Sommeil',
       renseigne: Number.isFinite(heuresSommeil) && heuresSommeil > 0,
       sousCible: Number.isFinite(heuresSommeil) && heuresSommeil > 0 && heuresSommeil < 8,
-      valeur: Number.isFinite(heuresSommeil) ? `${fr(heuresSommeil)} h par nuit` : ‘’,
-      cible: ‘8 à 10 h à ton âge’,
-      enjeu: ‘C’est la nuit que tu grandis.’,
+      valeur: Number.isFinite(heuresSommeil) ? `${fr(heuresSommeil)} h par nuit` : '',
+      cible: '8 à 10 h à ton âge',
+      enjeu: 'L’hormone de croissance se libère surtout en sommeil profond.',
     },
     {
-      cle: ‘nutrition’,
-      nom: ‘Alimentation’,
+      cle: 'nutrition',
+      nom: 'Alimentation',
       renseigne: Boolean(NUTRITION_LABEL[predictionData.nutrition_level]),
-      sousCible: [‘poor’, ‘fair’].includes(predictionData.nutrition_level),
-      valeur: NUTRITION_LABEL[predictionData.nutrition_level] || ‘’,
-      cible: ‘protéines et calcium à chaque repas’,
-      enjeu: ‘Pas de calcium = pas de croissance.’,
+      sousCible: ['poor', 'fair'].includes(predictionData.nutrition_level),
+      valeur: NUTRITION_LABEL[predictionData.nutrition_level] || '',
+      cible: 'protéines et calcium à chaque repas',
+      enjeu: 'L’os ne s’allonge pas avec ce qu’il n’a pas reçu.',
     },
     {
-      cle: ‘activite’,
-      nom: ‘Activité’,
+      cle: 'activite',
+      nom: 'Activité',
       renseigne: Number.isFinite(minutesSport) && minutesSport > 0,
       sousCible: Number.isFinite(minutesSport) && minutesSport > 0 && minutesSport < 30,
-      valeur: Number.isFinite(minutesSport) ? `${minutesSport} min par jour` : ‘’,
-      cible: ‘30 min minimum’,
-      enjeu: ‘Le sport allonge les os.’,
+      valeur: Number.isFinite(minutesSport) ? `${minutesSport} min par jour` : '',
+      cible: '30 min minimum',
+      enjeu: 'La mise en charge stimule le cartilage tant qu’il est ouvert.',
     },
   ].filter((levier) => levier.renseigne)
 
@@ -238,7 +238,9 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           Il ne remplace pas les confettis, qui font autre chose : une
           salve unique au montage, puis plus rien. Les ballons, eux,
           restent — c'est un décor de fond, pas une célébration. */}
-      <BalloonsPopBackground className="results-ballons" />
+      <Suspense fallback={null}>
+        <BalloonsPopBackground className="results-ballons" />
+      </Suspense>
 
       <Confetti />
 
@@ -416,7 +418,8 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             mais elle est due : le produit s'adresse à des mineurs et touche à
             la santé. Elle est petite et après la décision, pas avant. */}
         <p className="results-mention">
-          C’est une estimation, pas une garantie. Si tu as des doutes, parle à ton docteur.
+          C’est une estimation, pas une garantie. Grandimi n’est pas un outil
+          médical : si tu as un doute, parle à ton médecin.
         </p>
 
         <section className="results-limits">

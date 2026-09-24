@@ -44,6 +44,10 @@ type PredictHeightV2Request struct {
 	// Filles de 15 ans et plus uniquement (filtre cote questionnaire).
 	MenarcheSurvenue   bool    `json:"menarche_survenue"`
 	AgeMenarcheAnnees  float64 `json:"age_menarche_annees"`
+	MenarcheDeclaree   bool    `json:"menarche_declaree"`
+	VoixMuee           string  `json:"voix_muee"`
+	PilositeVisage     string  `json:"pilosite_visage"`
+	PilositeAisselles  string  `json:"pilosite_aisselles"`
 	EthnicBackground   string  `json:"ethnic_background"`        // caucasian, asian, african, hispanic, mixed
 	NutritionLevel     string  `json:"nutrition_level"`          // excellent, good, fair, poor
 	SleepHoursPerNight float64 `json:"sleep_hours_per_night"`    // 4-14 hours
@@ -102,6 +106,7 @@ func PredictHeight(c *gin.Context) {
 		   les autres, et les deux routes doivent le dire pareil. */
 		"warning":       result.Avertissement,
 		"out_of_domain": result.HorsDomaine,
+		"retard_pubertaire": result.RetardPubertaire,
 		// Le meme libelle que la v2 : les deux routes tournent sur le meme
 		// moteur, et annoncer deux methodes differentes pour un chiffre
 		// identique serait un mensonge de plus a corriger un jour.
@@ -145,6 +150,10 @@ func PredictHeightV2(c *gin.Context) {
 		ShoeSizeEU1Y:     req.ShoeSizeEU1Y,
 		MenarcheSurvenue:  req.MenarcheSurvenue,
 		AgeMenarcheAnnees: req.AgeMenarcheAnnees,
+		MenarcheDeclaree:  req.MenarcheDeclaree,
+		VoixMuee:          req.VoixMuee,
+		PilositeVisage:    req.PilositeVisage,
+		PilositeAisselles: req.PilositeAisselles,
 		EthnicBackground: ethnic,
 		NutritionLevel:   nutrition,
 		SleepHoursPerNight: req.SleepHoursPerNight,
@@ -215,6 +224,7 @@ func PredictHeightV2(c *gin.Context) {
 		   accompagnee de ce qu elle vaut reellement. */
 		"warning":          result.Avertissement,
 		"out_of_domain":    result.HorsDomaine,
+		"retard_pubertaire": result.RetardPubertaire,
 		"puberty_stage":    result.PubertyStage,
 		"model_used":       result.ModelUsed,
 		"message":          result.Message,

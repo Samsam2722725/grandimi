@@ -90,6 +90,14 @@ const DENSITE = 22
 const NOMBRE_MIN = 10
 const NOMBRE_MAX = 30
 
+/* Une seule volée, pas un décor permanent : chaque ballon traverse l'écran
+   du bas vers le haut en ~1,3 à 2 s, sans réapparaître, puis le canvas se
+   vide et la boucle s'arrête. Couper la boucle à heure fixe laissait la
+   dernière image peinte : des ballons figés en l'air derrière le résultat. */
+const TRAVERSEE_MIN_S = 1.3
+const TRAVERSEE_MAX_S = 2
+const ARRET_FORCE_MS = 4000
+
 export function BalloonsPopBackground({ className }) {
   const canvasRef = useRef(null)
 
@@ -111,15 +119,11 @@ export function BalloonsPopBackground({ className }) {
     let ballons = []
     let particules = []
     let image = 0
-    let tempsDebut = Date.now()
-    const DUREE_ANIMATION_MS = 2000
+    let debut = 0
+    let precedent = 0
     /* Hors écran tant que rien n'a bougé : sans ça, un pointeur implicite
        en (0,0) ferait éclater les ballons du coin haut-gauche tout seuls. */
     const pointeur = { x: -2000, y: -2000 }
-    /* Les minuteries de réapparition, pour les annuler au démontage. Sans
-       ce registre, un ballon éclaté une seconde avant de quitter l'écran
-       réinitialise un objet dont plus personne ne se sert. */
-    const minuteries = new Set()
 
     /* Dimensions en pixels CSS, et pas `canvas.width`.
 
@@ -143,11 +147,11 @@ export function BalloonsPopBackground({ className }) {
         this.opacite = 1
       }
 
-      avancer() {
-        this.x += this.vitesseX
-        this.y += this.vitesseY
-        this.vitesseY += this.gravite
-        this.opacite -= 0.025
+      avancer(f) {
+        this.x += this.vitesseX * f
+        this.y += this.vitesseY * f
+        this.vitesseY += this.gravite * f
+        this.opacite -= 0.025 * f
       }
 
       dessiner() {
@@ -162,19 +166,18 @@ export function BalloonsPopBackground({ className }) {
     }
 
     class Ballon {
-      constructor(premierChargement) {
-        this.initialiser(premierChargement)
-      }
-
-      initialiser(premierChargement) {
+      constructor() {
         this.r = Math.random() * 15 + 30
         this.x = Math.random() * largeur
-        this.y = premierChargement
-          ? Math.random() * hauteur
-          : hauteur + this.r + 200
+        // Départ étalé sous le bord bas : la volée arrive en vague, pas en bloc.
+        this.y = hauteur + this.r + Math.random() * hauteur * 0.35
 
         this.couleurs = COULEURS[Math.floor(Math.random() * COULEURS.length)]
-        this.vitesse = Math.random() * 1 + 0.4
+        // Pixels par image à 60 Hz ; la ficelle (~r + 140) doit sortir aussi.
+        const distance = this.y + this.r + 140
+        const duree = TRAVERSEE_MIN_S + Math.random() * (TRAVERSEE_MAX_S - TRAVERSEE_MIN_S)
+        this.vitesse = distance / (duree * 60)
+        this.parti = false
         this.oscillation = Math.random() * 0.02 + 0.01
         this.angle = Math.random() * Math.PI * 2
         this.eclate = false
@@ -186,8 +189,8 @@ export function BalloonsPopBackground({ className }) {
         this.filVitesseBout = 0
 
         /* Le dégradé est construit ICI et pas à chaque image : il ne
-           dépend que du rayon et des trois couleurs, tous deux figés
-           jusqu'au prochain `initialiser`. Il est défini dans le repère
+           dépend que du rayon et des trois couleurs, figés pour toute la
+           vie du ballon. Il est défini dans le repère
            local du ballon, celui qu'installe le `translate` de
            `dessiner`, donc il suit le ballon sans être recalculé. */
         this.degrade = ctx.createRadialGradient(
@@ -258,28 +261,27 @@ export function BalloonsPopBackground({ className }) {
           particules.push(new Particule(this.x, this.y, this.couleurs.base))
         }
 
-        const minuterie = setTimeout(
-          () => {
-            minuteries.delete(minuterie)
-            this.initialiser(false)
-          },
-          1000 + Math.random() * 1000,
-        )
-        minuteries.add(minuterie)
+        this.parti = true
       }
 
-      avancer() {
-        if (this.eclate) return
+      avancer(f) {
+        if (this.parti) return
 
-        this.y -= this.vitesse
-        this.angle += this.oscillation
-        this.x += Math.sin(this.angle * 0.6) * 0.8
+        this.y -= this.vitesse * f
+        this.angle += this.oscillation * f
+        this.x += Math.sin(this.angle * 0.6) * 0.8 * f
 
         const dx = this.x - pointeur.x
         const dy = this.y - this.r * 0.2 - pointeur.y
-        if (Math.sqrt(dx * dx + dy * dy) < this.r + 10) this.eclater()
+        if (Math.sqrt(dx * dx + dy * dy) < this.r + 10) {
+          this.eclater()
+          return
+        }
 
-        if (this.y < -this.r - 200) this.initialiser(false)
+        if (this.y < -this.r - 140) {
+          this.parti = true
+          return
+        }
 
         this.dessiner()
       }
@@ -317,13 +319,13 @@ export function BalloonsPopBackground({ className }) {
       canvas.height = Math.round(hauteur * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-      /* On ne recrée QUE ce qui manque. L'original vidait le tableau à
-         chaque redimensionnement : sur iOS, la barre d'URL qui se
-         rétracte en déclenche un pendant le défilement, et toute la
-         scène repartait de zéro au milieu du geste. */
-      const voulu = nombreDeBallons()
-      while (ballons.length < voulu) ballons.push(new Ballon(true))
-      if (ballons.length > voulu) ballons.length = voulu
+      /* La volée est créée une seule fois. Sur iOS, la barre d'URL qui se
+         rétracte déclenche `resize` en plein défilement : recréer ici
+         relancerait une seconde volée au milieu du geste. */
+      if (ballons.length === 0) {
+        const voulu = nombreDeBallons()
+        for (let i = 0; i < voulu; i += 1) ballons.push(new Ballon())
+      }
 
       // Un ballon laissé hors du nouveau cadre ne reviendrait jamais.
       for (const ballon of ballons) {
@@ -331,22 +333,34 @@ export function BalloonsPopBackground({ className }) {
       }
     }
 
-    const animer = () => {
-      const tempsEcoule = Date.now() - tempsDebut
+    const animer = (maintenant) => {
+      if (!debut) {
+        debut = maintenant
+        precedent = maintenant
+      }
+      // Déplacements exprimés « par image à 60 Hz » : on les met à l'échelle
+      // du temps réellement écoulé, sinon un écran 120 Hz irait deux fois plus vite.
+      const f = Math.min((maintenant - precedent) / (1000 / 60), 3)
+      precedent = maintenant
 
       ctx.clearRect(0, 0, largeur, hauteur)
 
       particules = particules.filter((p) => p.opacite > 0)
       for (const particule of particules) {
-        particule.avancer()
+        particule.avancer(f)
         particule.dessiner()
       }
 
-      for (const ballon of ballons) ballon.avancer()
+      for (const ballon of ballons) ballon.avancer(f)
 
-      if (tempsEcoule < DUREE_ANIMATION_MS) {
-        image = requestAnimationFrame(animer)
+      const termine =
+        (ballons.every((b) => b.parti) && particules.length === 0) ||
+        maintenant - debut > ARRET_FORCE_MS
+      if (termine) {
+        ctx.clearRect(0, 0, largeur, hauteur)
+        return
       }
+      image = requestAnimationFrame(animer)
     }
 
     /* `pointermove` et non `mousemove` : un seul écouteur pour la souris,
@@ -374,12 +388,10 @@ export function BalloonsPopBackground({ className }) {
     window.addEventListener('pointercancel', auDepart)
 
     redimensionner()
-    animer()
+    image = requestAnimationFrame(animer)
 
     return () => {
       cancelAnimationFrame(image)
-      for (const minuterie of minuteries) clearTimeout(minuterie)
-      minuteries.clear()
       window.removeEventListener('resize', redimensionner)
       window.removeEventListener('pointermove', auPointeur)
       window.removeEventListener('pointerleave', auDepart)

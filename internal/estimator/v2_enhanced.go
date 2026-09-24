@@ -51,6 +51,16 @@ type HeightPredictionV2Request struct {
 	// pose la question qu a partir de quinze ans.
 	MenarcheSurvenue   bool
 	AgeMenarcheAnnees  float64
+	// Distingue « pas encore reglee » (declaree, survenue=false) de « pas
+	// repondu ». Sans ce booleen les deux sont indiscernables, et le
+	// retard pubertaire le plus net chez la fille reste invisible.
+	MenarcheDeclaree   bool
+
+	// Signes de puberte, 15 ans et plus. Voir puberte.go : a cet age,
+	// seule leur ABSENCE informe.
+	VoixMuee           string // no | starting | yes | unknown
+	PilositeVisage     string // none | light | developed
+	PilositeAisselles  string // none | light | developed
 	EthnicBackground   EthnicBackground   // Population-specific coefficients
 	NutritionLevel     NutritionLevel     // Health factor
 	SleepHoursPerNight float64            // Growth happens during sleep
@@ -101,6 +111,10 @@ type HeightPredictionV2Response struct {
 	   et Avertissement renvoie vers un medecin, parce qu afficher un
 	   chiffre au dixieme sur ces profils serait une fausse precision. */
 	HorsDomaine bool
+
+	// Signes de puberte nettement en retard pour l age : le modele
+	// sous-estime alors, et le dit. Voir puberte.go.
+	RetardPubertaire bool
 	/* Message a montrer a l utilisateur quand le modele sort de son
 	   domaine. Vide le reste du temps. */
 	Avertissement string
@@ -193,6 +207,20 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 		sommeAncres += a
 	}
 	base := sommeAncres/float64(len(ancres)) + correction
+
+	/* RETARD PUBERTAIRE — la plus grosse erreur qui restait.
+
+	   Un garcon de dix-sept ans a 165 cm qui n a pas commence sa puberte
+	   recevait « +1,7 cm » ; la realite, pour un Tanner 1-2 a cet age,
+	   est de quinze a vingt-cinq. La correction est volontairement
+	   modeste et non calibree : c est l avertissement qui porte le reste,
+	   pas le nombre.
+
+	   Son poids est le COMPLEMENT de celui de l indice de maturite, si
+	   bien que les deux ne peuvent jamais s appliquer a pleine force en
+	   meme temps. Voir puberte.go. */
+	correctionRetard, retardNet := correctionRetardPubertaire(req)
+	base += correctionRetard
 
 	/* CE QUE CE CALCUL SURESTIME ENCORE, ET DE COMBIEN.
 
@@ -365,6 +393,10 @@ func PredictHeightV2(req HeightPredictionV2Request) HeightPredictionV2Response {
 	   trancher sans age osseux. */
 	resp.Factors["khamis_roche"] = khamisRoche
 	resp.Factors["percentile_projection"] = trajectoire
+	if correctionRetard > 0 {
+		resp.Factors["correction_retard_pubertaire"] = correctionRetard
+	}
+	resp.RetardPubertaire = retardNet
 	if menarcheUtile {
 		// Exposee seulement quand elle a servi : une cle a zero laisserait
 		// croire que l ancre a tire le resultat vers le bas.

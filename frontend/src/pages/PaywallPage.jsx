@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, lazy, Suspense } from 'react'
 import { ArrowLeft, Lock } from 'lucide-react'
 
-import { CardCarousel } from '@/components/ui/card-carousel'
+const CardCarousel = lazy(() => import('@/components/ui/card-carousel').then(m => ({ default: m.CardCarousel })))
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
@@ -499,7 +499,9 @@ function PaywallPage({ onBackHome }) {
             ce qui est la différence entre une page de paiement utilisable en
             4G et une page qui ne s'affiche jamais. */}
         <section aria-label="Ce que contient le plan">
-          <CardCarousel images={VISUELS_OFFRE} />
+          <Suspense fallback={<div className="h-80 bg-gradient-to-b from-gray-900 to-gray-950 rounded-lg animate-pulse" />}>
+            <CardCarousel images={VISUELS_OFFRE} />
+          </Suspense>
         </section>
 
         {email && (
