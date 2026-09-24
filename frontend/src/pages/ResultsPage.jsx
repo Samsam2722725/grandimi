@@ -92,31 +92,31 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
   const leviers = [
     {
-      cle: 'sommeil',
-      nom: 'Sommeil',
+      cle: ‘sommeil’,
+      nom: ‘Sommeil’,
       renseigne: Number.isFinite(heuresSommeil) && heuresSommeil > 0,
       sousCible: Number.isFinite(heuresSommeil) && heuresSommeil > 0 && heuresSommeil < 8,
-      valeur: Number.isFinite(heuresSommeil) ? `${fr(heuresSommeil)} h par nuit` : '',
-      cible: '8 à 10 h à ton âge',
-      enjeu: 'L’hormone de croissance se libère surtout en sommeil profond.',
+      valeur: Number.isFinite(heuresSommeil) ? `${fr(heuresSommeil)} h par nuit` : ‘’,
+      cible: ‘8 à 10 h à ton âge’,
+      enjeu: ‘C’est la nuit que tu grandis.’,
     },
     {
-      cle: 'nutrition',
-      nom: 'Alimentation',
+      cle: ‘nutrition’,
+      nom: ‘Alimentation’,
       renseigne: Boolean(NUTRITION_LABEL[predictionData.nutrition_level]),
-      sousCible: ['poor', 'fair'].includes(predictionData.nutrition_level),
-      valeur: NUTRITION_LABEL[predictionData.nutrition_level] || '',
-      cible: 'protéines et calcium à chaque repas',
-      enjeu: 'L’os ne s’allonge pas avec ce qu’il n’a pas reçu.',
+      sousCible: [‘poor’, ‘fair’].includes(predictionData.nutrition_level),
+      valeur: NUTRITION_LABEL[predictionData.nutrition_level] || ‘’,
+      cible: ‘protéines et calcium à chaque repas’,
+      enjeu: ‘Pas de calcium = pas de croissance.’,
     },
     {
-      cle: 'activite',
-      nom: 'Activité',
+      cle: ‘activite’,
+      nom: ‘Activité’,
       renseigne: Number.isFinite(minutesSport) && minutesSport > 0,
       sousCible: Number.isFinite(minutesSport) && minutesSport > 0 && minutesSport < 30,
-      valeur: Number.isFinite(minutesSport) ? `${minutesSport} min par jour` : '',
-      cible: '30 min minimum',
-      enjeu: 'La mise en charge stimule le cartilage tant qu’il est ouvert.',
+      valeur: Number.isFinite(minutesSport) ? `${minutesSport} min par jour` : ‘’,
+      cible: ‘30 min minimum’,
+      enjeu: ‘Le sport allonge les os.’,
     },
   ].filter((levier) => levier.renseigne)
 
@@ -322,8 +322,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
               <strong className="analyse-perte-valeur">0 cm</strong>
             </div>
             <p className="analyse-acquis-note">
-              Tu es déjà sur ta meilleure trajectoire. Le risque n’est plus de mal
-              faire — c’est de lâcher avant la fin. Le plan sert à tenir jusque-là.
+              Tu es sur la bonne voie. Continue et tu auras tout ce qu’il faut.
             </p>
           </div>
         )}
@@ -383,17 +382,8 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </div>
         )}
 
-        {/* Cette ligne portait « Ton frein principal » parce que le percentile
-            de Taller (« Plus grand que X % de ton âge ») demandait des tables
-            de référence que le produit n'avait pas — et qu'un cadenas ne doit
-            jamais promettre un chiffre qu'on ne saura pas livrer.
-
-            Ces tables existent depuis l'import OMS (who_hfa_table.go) : le
-            percentile est desormais calculable et donc livrable. La ligne
-            pourra basculer dessus quand l'API le renverra ; en attendant elle
-            garde le frein principal, qui est livre par le plan. */}
         <div className="analyse-ligne analyse-ligne--verrou">
-          <span>Ton frein principal</span>
+          <span>Ce qui te bloque vraiment</span>
           <Lock size={17} aria-hidden="true" />
           <span aria-hidden="true">🎯</span>
         </div>
@@ -426,9 +416,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             mais elle est due : le produit s'adresse à des mineurs et touche à
             la santé. Elle est petite et après la décision, pas avant. */}
         <p className="results-mention">
-          Une estimation n’est pas une garantie : elle repose sur des modèles
-          statistiques et sur les données que tu as saisies. Grandimi n’est pas un
-          dispositif médical et ne remplace pas l’avis d’un professionnel de santé.
+          C’est une estimation, pas une garantie. Si tu as des doutes, parle à ton docteur.
         </p>
 
         <section className="results-limits">
@@ -443,44 +431,23 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
           {limitesVisibles && (
             <div className="results-limits-body">
-              <h3>Limites de cette estimation</h3>
+              <h3>Pourquoi ±4 à ±8 cm?</h3>
               <ul>
-                <li>
-                  <strong>Imprécision à l’adolescence :</strong> en plein pic de
-                  croissance, l’estimation peut varier de ±8 cm. Passé 16 ans, quand
-                  la croissance ralentit, elle se resserre autour de ±4 cm.
-                </li>
-                <li>
-                  <strong>Facteurs non mesurés :</strong> hormones, maladies, traitements —
-                  tous affectent la croissance sans être prévisibles ici.
-                </li>
-                <li>
-                  <strong>Données parentales :</strong> la taille des parents est
-                  déclarative. Si elle est imprécise, l’estimation l’est aussi.
-                </li>
-                <li>
-                  <strong>Population de référence :</strong> la méthode a été ajustée sur
-                  des enfants américains en bonne santé. Pour une autre population, c’est
-                  une extrapolation — et le modèle ne fait aucun ajustement ethnique.
-                </li>
+                <li>En pleine croissance, tout peut changer rapidement.</li>
+                <li>La taille de tes parents est ce que tu as déclaré — si elle est fausse, le calcul aussi.</li>
+                <li>Certains trucs (hormones, maladies) on ne les voit pas venir.</li>
               </ul>
 
-              <h3>Sources &amp; méthodologie</h3>
+              <h3>Comment ça marche</h3>
               <p>
-                <strong>Méthode :</strong> Khamis-Roche (1994) — ta taille, ton poids et la
-                moyenne des tailles de tes parents, avec des coefficients qui changent tous
-                les six mois d’âge — moyennée avec ton couloir de croissance OMS, puis
-                ajustée par tes réponses sur le sommeil, l’alimentation et l’activité.
-                Jamais inférieure à la taille que tu fais déjà.
-                <br />
-                <strong>Précision moyenne :</strong> ±4 à ±8 cm selon l’âge et la croissance récente
+                Khamis-Roche (1994) : ta taille + poids + taille de tes parents + tes habitudes (sommeil, nourriture, sport).
               </p>
               <a
                 href="https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+adult+height+prediction"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Lire les publications scientifiques
+                Voir les études
               </a>
             </div>
           )}

@@ -111,6 +111,8 @@ export function BalloonsPopBackground({ className }) {
     let ballons = []
     let particules = []
     let image = 0
+    let tempsDebut = Date.now()
+    const DUREE_ANIMATION_MS = 4000
     /* Hors écran tant que rien n'a bougé : sans ça, un pointeur implicite
        en (0,0) ferait éclater les ballons du coin haut-gauche tout seuls. */
     const pointeur = { x: -2000, y: -2000 }
@@ -330,6 +332,8 @@ export function BalloonsPopBackground({ className }) {
     }
 
     const animer = () => {
+      const tempsEcoule = Date.now() - tempsDebut
+
       ctx.clearRect(0, 0, largeur, hauteur)
 
       particules = particules.filter((p) => p.opacite > 0)
@@ -340,7 +344,9 @@ export function BalloonsPopBackground({ className }) {
 
       for (const ballon of ballons) ballon.avancer()
 
-      image = requestAnimationFrame(animer)
+      if (tempsEcoule < DUREE_ANIMATION_MS) {
+        image = requestAnimationFrame(animer)
+      }
     }
 
     /* `pointermove` et non `mousemove` : un seul écouteur pour la souris,
