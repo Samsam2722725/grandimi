@@ -100,9 +100,9 @@
   /* ---------- Typographie ---------- */
   /* DM Sans : tout le texte courant, l'UI, les boutons. */
   --font-dm-sans: 'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  /* Fraunces : uniquement les grands titres. C'est ce qui donne
-     le ton éditorial — ne pas l'utiliser sous 24px. */
-  --font-display: 'Fraunces', 'Times New Roman', Georgia, serif;
+  /* DM Sans en gras sur les grands titres, et non plus Fraunces :
+     jugé pas assez stylé pour porter le hero — voir HomePage.jsx. */
+  --font-display: 'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   --text-caption: 12px;      --leading-caption: 1.2;
   --text-body-sm: 14px;      --leading-body-sm: 1.38;

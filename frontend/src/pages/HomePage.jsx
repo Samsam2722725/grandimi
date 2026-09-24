@@ -365,12 +365,18 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               </p>
 
               <h1
-                /* L'impact vient de l'échelle et du serrage, pas de la
-                   graisse. Fraunces est la seule chose ici qu'aucun
-                   concurrent n'a : on la pousse à 88px en plein écran,
-                   interligne sous 1 pour que les lignes forment un bloc, et
-                   interlettrage à -0,045em. */
-                className="rise night-title-gradient mt-7 font-display text-[clamp(44px,7.2vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-balance"
+                /* DM Sans a remplacé Fraunces ici (jugé pas assez stylé
+                   pour le hero). Un grotesque est nettement plus large
+                   qu'un serif à taille égale : au clamp d'origine (88px),
+                   « Prédis ta taille adulte. » passait de 1 ligne à 2, et
+                   le titre entier de 3 lignes à 5 — mesuré. La taille
+                   redescend à 54px pour retrouver le même rythme de
+                   lecture (3 lignes sur desktop), le poids monte à 700
+                   pour que l'impact vienne de la graisse plutôt que de
+                   l'échelle, et le serrage se desserre : un grotesque très
+                   condensé ferme les contre-formes que Fraunces, en serif,
+                   n'avait pas. */
+                className="rise night-title-gradient mt-7 font-display text-[clamp(34px,4.6vw,54px)] leading-[1.1] font-bold tracking-[-0.02em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
                 Prédis ta taille adulte.<br />
