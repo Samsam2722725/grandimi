@@ -20,7 +20,7 @@ import { capturePageview } from './lib/analytics';
    elle s affiche. L accueil reste en import direct : la differer
    ajouterait un aller-retour reseau devant le contenu qu on vient
    justement d accelerer. */
-const HomePage = lazy(() => import('./pages/HomePage'));
+import HomePage from './pages/HomePage';
 
 const QuestionnaireFlow = lazy(() => import('./pages/QuestionnaireFlow'));
 const ResultsPage = lazy(() => import('./pages/ResultsPage'));
