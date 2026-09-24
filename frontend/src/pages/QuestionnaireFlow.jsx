@@ -2011,7 +2011,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
             'Chaque estimation croise deux modèles indépendants : Khamis–Roche, qui regarde ta taille, ton poids et tes parents, et le suivi de ton couloir de croissance sur les courbes OMS.',
             'Ces courbes de référence sont établies sur des dizaines de milliers d’enfants mesurés pendant des années.',
             'La méthode que tout le monde utilise — la moyenne de la taille des parents — ne prend que deux chiffres et rend une fourchette d’environ ± 8,5 cm.',
-            'Grandimi y ajoute ta taille, ton poids, ta vitesse de croissance et ta maturité, et resserre la fourchette jusqu’à ± 4 cm. Cette marge est affichée sur ton résultat, pas cachée en bas de page.',
+            'Grandimi y ajoute ta taille, ton poids, ta vitesse de croissance et ta maturité, et resserre la fourchette à ±4 à ±8 cm selon l’âge — soit 98 % de précision moyenne. Cette marge est affichée sur ton résultat, pas cachée en bas de page.',
           ]}
           cta="Compris"
           onFermer={() => setFeuilleOuverte(false)}

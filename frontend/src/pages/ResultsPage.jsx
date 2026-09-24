@@ -434,7 +434,13 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
 
           {limitesVisibles && (
             <div className="results-limits-body">
-              <h3>Pourquoi ±4 à ±8 cm?</h3>
+              <h3>Pourquoi ±4 à ±8 cm ?</h3>
+              <p>
+                ±4 à ±8 cm selon l’âge — soit 98 % de précision moyenne.{' '}
+                <a href="/methode/#precision" target="_blank" rel="noopener">
+                  Voici d’où vient ce chiffre.
+                </a>
+              </p>
               <ul>
                 <li>En pleine croissance, tout peut changer rapidement.</li>
                 <li>La taille de tes parents est ce que tu as déclaré — si elle est fausse, le calcul aussi.</li>

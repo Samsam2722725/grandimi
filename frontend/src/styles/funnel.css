@@ -1324,6 +1324,18 @@
   text-wrap: pretty;
 }
 
+.precision-detail a {
+  color: var(--funnel-accent-text);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+.precision-libelle {
+  max-width: 24ch;
+  text-align: center;
+  text-wrap: balance;
+}
+
 /* La bande de sources remplace la rangée d'écussons de l'original.
    Trois cartes de texte : le nom en blanc, ce qu'on en tire en gris.
    Voir badge-precision.jsx pour la raison — les logos CDC, Harvard et

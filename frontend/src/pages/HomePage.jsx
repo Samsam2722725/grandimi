@@ -72,7 +72,15 @@ const FAQ = [
   {
     question: 'À quel point l’estimation est-elle fiable ?',
     answer:
-      'La marge est de ±4 à ±8 cm selon ton âge et ta croissance récente : plus tu es proche de la fin de ta croissance, plus l’estimation se resserre. On affiche systématiquement cette fourchette avec le résultat — un chiffre seul, sans marge, serait trompeur.',
+      <>
+        ±4 à ±8 cm selon ton âge — soit 98 % de précision moyenne.{' '}
+        <a href="/methode/#precision" className="underline underline-offset-2">
+          Voici d’où vient ce chiffre.
+        </a>{' '}
+        Plus tu es proche de la fin de ta croissance, plus l’estimation se resserre. La
+        marge est toujours affichée avec le résultat — un chiffre seul, sans marge, serait
+        trompeur.
+      </>,
   },
   {
     question: 'Faut-il payer pour voir mon estimation ?',
