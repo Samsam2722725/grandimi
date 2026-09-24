@@ -40,6 +40,7 @@ const FONCTIONS = [
   {
     icone: Users,
     titre: "Communaute",
+    bientot: true,
     texte:
       "Notre communaute reservee aux membres te permet de participer a de vraies discussions, de partager des experiences et de decouvrir les dernieres informations sur ce qui fonctionne reellement.",
   },
@@ -52,6 +53,7 @@ const FONCTIONS = [
   {
     icone: Bot,
     titre: "Coach IA disponible 24 h 24 et 7 j 7",
+    bientot: true,
     texte:
       "Potentiel de croissance, posture, alimentation, sommeil et complements alimentaires : l IA connait tes donnees et repond immediatement a tes questions.",
   },
