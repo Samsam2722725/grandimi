@@ -17,10 +17,12 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
    1. Chaque instance monte son propre contexte WebGL, et un navigateur en
       plafonne autour de seize par page. Au-delà, les plus anciens sont
       détruits en silence et les boutons deviennent noirs.
-   2. Le texte est en #666666 sur la pilule noire, soit 2,84:1 en haut et
-      3,66:1 en bas. WCAG AA demande 4,5:1 pour du texte de cette taille.
-      C'est la valeur de l'original, conservée telle quelle ; passer la
-      couleur à #b8b8b8 la ferait tenir sans rien changer d'autre. */
+   2. SECOND ÉCART : le libellé est en #b8b8b8, pas le #666666 de
+      l'original. Mesuré sur les pixels peints, ce #666666 donnait 2,84:1
+      en haut de la pilule et 3,66:1 en bas, quand WCAG AA exige 4,5:1 pour
+      cette taille — sur le bouton qui porte toute la page. #b8b8b8 monte à
+      8,21:1 et 10,59:1, et c'est déjà la couleur de texte secondaire du
+      site : le bouton cesse d'introduire un gris de plus. */
 
 export function LiquidMetalButton({
   label = 'Get Started',
@@ -198,7 +200,7 @@ export function LiquidMetalButton({
               <Sparkles
                 size={16}
                 style={{
-                  color: '#666666',
+                  color: '#b8b8b8',
                   filter: 'drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.5))',
                   transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
                 }}
@@ -209,7 +211,7 @@ export function LiquidMetalButton({
                 ref={labelRef}
                 style={{
                   fontSize: '14px',
-                  color: '#666666',
+                  color: '#b8b8b8',
                   fontWeight: 400,
                   textShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)',
                   transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',

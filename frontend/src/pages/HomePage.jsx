@@ -37,21 +37,21 @@ import { tunnelDemarre } from '../lib/analytics'
 const FONCTIONS = [
   {
     icone: TrendingUp,
-    titre: "Estimation qui se met a jour",
+    titre: "Estimation qui se met à jour",
     texte:
-      "Ta taille adulte estimee, recalculee chaque mois selon ton evolution, tes habitudes et les principaux facteurs qui influencent ta croissance.",
+      "Ta taille adulte estimée, recalculée chaque mois selon ton évolution, tes habitudes et les principaux facteurs qui influencent ta croissance.",
   },
   {
     icone: ListChecks,
     titre: "Plan quotidien",
     texte:
-      "Onze actions a cocher, du lever au coucher. Chaque action cible un facteur de croissance : alimentation, sommeil, posture, complements alimentaires.",
+      "Onze actions à cocher, du lever au coucher. Chaque action cible un facteur de croissance : alimentation, sommeil, posture, compléments alimentaires.",
   },
   {
     icone: HeartPulse,
     titre: "Sommeil, nutrition, exercices",
     texte:
-      "Chaque levier detaille : combien d heures de sommeil, quoi manger en priorite dans l assiette, quels mouvements faire et quand les faire.",
+      "Chaque levier détaillé : combien d’heures de sommeil, quoi manger en priorité dans l’assiette, quels mouvements faire et quand les faire.",
   },
 ]
 
@@ -392,10 +392,10 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-                Debloque ton potentiel.
+                Débloque ton potentiel.
               </h2>
               <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-                On calcule ce qu’il te reste a prendre, et on te donne le plan qui va
+                On calcule ce qu’il te reste à prendre, et on te donne le plan qui va
                 le chercher.
               </p>
             </div>
@@ -811,27 +811,27 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
           <div className="mt-8 grid grid-cols-1 gap-8 text-sm text-muted-foreground sm:grid-cols-3">
             <div>
               <p className="mb-3 font-semibold text-ink">Outils</p>
-              <a href="/" className="mb-2 block hover:text-ink transition-colors">Faire l’estimation</a>
-              <a href="/calculer-sa-taille-adulte/" className="mb-2 block hover:text-ink transition-colors">Calculer sa taille adulte</a>
-              <a href="/comparatif-calculateurs-taille/" className="mb-2 block hover:text-ink transition-colors">Comparatif des calculateurs</a>
+              <a href="/" className="block py-3 hover:text-ink transition-colors">Faire l’estimation</a>
+              <a href="/calculer-sa-taille-adulte/" className="block py-3 hover:text-ink transition-colors">Calculer sa taille adulte</a>
+              <a href="/comparatif-calculateurs-taille/" className="block py-3 hover:text-ink transition-colors">Comparatif des calculateurs</a>
             </div>
 
             <div>
               <p className="mb-3 font-semibold text-ink">Guides</p>
-              <a href="/questions-croissance/" className="mb-2 block hover:text-ink transition-colors">Questions sur la croissance</a>
-              <a href="/methodes-taille-adulte/" className="mb-2 block hover:text-ink transition-colors">Prédire sa taille adulte</a>
-              <a href="/que-faire-pour-grandir/" className="mb-2 block hover:text-ink transition-colors">Que faire pour grandir</a>
-              <a href="/croissance-terminee/" className="mb-2 block hover:text-ink transition-colors">Savoir si on a fini de grandir</a>
-              <a href="/poussee-de-croissance/" className="mb-2 block hover:text-ink transition-colors">La poussée de croissance</a>
+              <a href="/questions-croissance/" className="block py-3 hover:text-ink transition-colors">Questions sur la croissance</a>
+              <a href="/methodes-taille-adulte/" className="block py-3 hover:text-ink transition-colors">Prédire sa taille adulte</a>
+              <a href="/que-faire-pour-grandir/" className="block py-3 hover:text-ink transition-colors">Que faire pour grandir</a>
+              <a href="/croissance-terminee/" className="block py-3 hover:text-ink transition-colors">Savoir si on a fini de grandir</a>
+              <a href="/poussee-de-croissance/" className="block py-3 hover:text-ink transition-colors">La poussée de croissance</a>
             </div>
 
             <div>
               <p className="mb-3 font-semibold text-ink">Grandimi</p>
-              <a href="/methode/" className="mb-2 block hover:text-ink transition-colors">Notre méthode</a>
-              <a href="mailto:grandimi14@gmail.com" className="mb-2 block hover:text-ink transition-colors">Contact</a>
-              <a href="/mentions-legales.html" className="mb-2 block hover:text-ink transition-colors">Mentions légales</a>
-              <a href="/cgv.html" className="mb-2 block hover:text-ink transition-colors">CGV</a>
-              <a href="/privacy.html" className="mb-2 block hover:text-ink transition-colors">Confidentialité</a>
+              <a href="/methode/" className="block py-3 hover:text-ink transition-colors">Notre méthode</a>
+              <a href="mailto:grandimi14@gmail.com" className="block py-3 hover:text-ink transition-colors">Contact</a>
+              <a href="/mentions-legales.html" className="block py-3 hover:text-ink transition-colors">Mentions légales</a>
+              <a href="/cgv.html" className="block py-3 hover:text-ink transition-colors">CGV</a>
+              <a href="/privacy.html" className="block py-3 hover:text-ink transition-colors">Confidentialité</a>
             </div>
           </div>
 
