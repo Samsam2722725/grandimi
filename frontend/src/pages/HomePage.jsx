@@ -13,6 +13,8 @@ import {
 import { useEffect, useState, lazy, Suspense } from 'react'
 
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
+import { LiquidMetalButton } from '@/components/ui/liquid-metal-button'
+import { SonarGrid } from '@/components/ui/sonar-grid'
 import { TextEffect } from '@/components/ui/text-effect'
 const FaqSection = lazy(() => import('@/components/ui/faq-section').then(m => ({ default: m.FaqSection })))
 const HeroPhones = lazy(() => import('@/components/ui/hero-phones'))
@@ -253,7 +255,32 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             document à 455px sur un écran de 375 et la page défile
             latéralement — mesuré, puis corrigé. La découpe ne change rien à
             son rendu à l'intérieur de la section. */}
-        <section className="relative overflow-hidden border-b border-[color:var(--color-frost-gray)] px-6 pt-12 pb-16 sm:px-8 lg:pt-20">
+        {/* SonarGrid porte le fond du hero : un champ de points qui répond au
+            toucher par une onde. Le canevas lit `text-primary`, qui vaut ici
+            `--color-coral-pulse` — il prend donc l'orange de la marque sans
+            réglage de couleur.
+
+            Il s'endort dès qu'aucune onde n'est vivante, s'arrête hors écran
+            et dans un onglet caché, et rend une grille figée sous
+            `prefers-reduced-motion`. C'est ce qui le sépare d'un fond animé
+            qui tourne en permanence et vide la batterie d'un téléphone. */}
+        {/* Le composant rend un <div> : la <section> l'enveloppe pour garder
+            sa valeur sémantique, et lui porte les marges. Le contenu du hero
+            est SON enfant, et non un frère posé par-dessus : sans ça,
+            `pointerdown` ne remonte jamais jusqu'à lui et le clic n'émet
+            aucune onde. Mesuré — la première version était muette au clic. */}
+        <section className="relative overflow-hidden border-b border-[color:var(--color-frost-gray)]">
+          <SonarGrid
+            spacing={30}
+            dotRadius={1.3}
+            baseOpacity={0.16}
+            pingEvery={3.6}
+            ringWidth={110}
+            amplitude={2}
+            pingArea={[0.1, 0.15, 0.9, 0.85]}
+            className="px-6 pt-12 pb-16 sm:px-8 lg:pt-20"
+          >
+
           {/* Halo orange derrière le titre. Sur noir il remplace l'ombre
               portée : c'est lui qui détache le hero du reste de la page.
               `z-0` et non `-z-10` : le conteneur racine peint un fond, donc
@@ -334,15 +361,15 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   Sur un fold, chaque choix supplémentaire coûte des départs. */}
               {/* 40px et non 36 : tous les espacements du hero tombent
                   désormais sur des multiples de 8. */}
+              {/* Le CTA du hero passe en métal liquide. Une seule instance sur
+                  la page : chaque bouton monte son propre contexte WebGL, et
+                  les deux autres « Commencer mon analyse » plus bas restent en
+                  orange plein. */}
               <div className="rise mt-10" style={{ animationDelay: '240ms' }}>
-                <button
-                  type="button"
+                <LiquidMetalButton
+                  label="Commencer mon analyse"
                   onClick={() => demarrer('hero')}
-                  className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
-                >
-                  Commencer mon analyse
-                  <ArrowRight className="size-4" aria-hidden="true" />
-                </button>
+                />
               </div>
             </div>
 
@@ -353,6 +380,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               </Suspense>
             </div>
           </div>
+          </SonarGrid>
         </section>
 
         {/* ============ CE QUE TU OBTIENS (grille) ============
