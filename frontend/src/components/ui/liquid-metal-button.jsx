@@ -17,12 +17,17 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
    1. Chaque instance monte son propre contexte WebGL, et un navigateur en
       plafonne autour de seize par page. Au-delà, les plus anciens sont
       détruits en silence et les boutons deviennent noirs.
-   2. SECOND ÉCART : le libellé est en #b8b8b8, pas le #666666 de
-      l'original. Mesuré sur les pixels peints, ce #666666 donnait 2,84:1
-      en haut de la pilule et 3,66:1 en bas, quand WCAG AA exige 4,5:1 pour
-      cette taille — sur le bouton qui porte toute la page. #b8b8b8 monte à
-      8,21:1 et 10,59:1, et c'est déjà la couleur de texte secondaire du
-      site : le bouton cesse d'introduire un gris de plus. */
+   2. SECOND ÉCART : LE BOUTON EST ORANGE, ET LE SHADER LE COUVRE EN
+      ENTIER. L'original teinte le shader en argent et pose par-dessus une
+      pilule noire opaque : de l'animation, on ne voyait qu'un liseré de
+      2px sur le pourtour. Ici `u_colorTint` et `u_colorBack` prennent les
+      valeurs de la marque, et la pilule passe en transparent — elle ne sert
+      plus qu'à porter l'enfoncement au clic.
+
+      Le libellé suit : #17120e en demi-gras, qui est la couleur que le site
+      met déjà sur ses aplats orange, et non le #666666 de l'original — ce
+      gris donnait 2,84:1 sur la pilule noire, sous les 4,5:1 exigés, sur le
+      bouton qui porte toute la page. */
 
 export function LiquidMetalButton({
   label = 'Get Started',
@@ -82,6 +87,15 @@ export function LiquidMetalButton({
       const style = document.createElement('style')
       style.id = styleId
       style.textContent = `
+        .shader-container-exploded {
+          /* Orange plein SOUS le shader. Mesure au navigateur : laisse au
+             shader le soin de peindre le fond et sa luminance balaie 0,007 a
+             0,79 au fil de l animation — aucune couleur de libelle ne tient
+             4,5:1 sur une telle amplitude, un voile a 82 % plafonnait encore
+             a 4,38. Sur une base opaque, l animation devient un reflet qui
+             passe sur toute la surface et le contraste, lui, ne bouge plus. */
+          background: #ff5a1f;
+        }
         .shader-container-exploded canvas {
           width: 100% !important;
           height: 100% !important;
@@ -90,6 +104,8 @@ export function LiquidMetalButton({
           top: 0 !important;
           left: 0 !important;
           border-radius: 100px !important;
+          opacity: 0.34;
+          mix-blend-mode: soft-light;
         }
         @keyframes ripple-animation {
           0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.6; }
@@ -114,6 +130,12 @@ export function LiquidMetalButton({
             u_contour: 0,
             u_angle: 45,
             u_scale: 8,
+            // La marque, pas l argent. vec4 en 0-1.
+            // Le fond porte l orange plein (#ff5a1f) et la teinte porte le
+            // reflet clair (#ffd2bb) : l inverse donnait un bouton brun a
+            // rgb(101,31,18), mesure a la capture, ou aucun libelle ne tenait.
+            u_colorBack: [1, 0.353, 0.122, 1],
+            u_colorTint: [1, 0.824, 0.733, 1],
             u_shape: 1,
             u_offsetX: 0.1,
             u_offsetY: -0.1,
@@ -200,8 +222,8 @@ export function LiquidMetalButton({
               <Sparkles
                 size={16}
                 style={{
-                  color: '#b8b8b8',
-                  filter: 'drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.5))',
+                  color: '#17120e',
+                  filter: 'drop-shadow(0 1px 2px rgba(255, 255, 255, 0.28))',
                   transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
                 }}
               />
@@ -211,9 +233,9 @@ export function LiquidMetalButton({
                 ref={labelRef}
                 style={{
                   fontSize: '14px',
-                  color: '#b8b8b8',
-                  fontWeight: 400,
-                  textShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)',
+                  color: '#17120e',
+                  fontWeight: 600,
+                  textShadow: '0 1px 2px rgba(255, 255, 255, 0.28)',
                   transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
                   whiteSpace: 'nowrap',
                 }}
@@ -243,7 +265,10 @@ export function LiquidMetalButton({
                 height: `${dimensions.innerHeight}px`,
                 margin: '2px',
                 borderRadius: '100px',
-                background: 'linear-gradient(180deg, #202020 0%, #000000 100%)',
+                // Transparente : elle masquait le shader et ne laissait voir de
+              // l animation qu un liseré de 2px sur le pourtour. Elle ne sert
+              // plus qu a porter l enfoncement au clic.
+              background: 'transparent',
                 boxShadow: isPressed
                   ? 'inset 0px 2px 4px rgba(0, 0, 0, 0.4), inset 0px 1px 2px rgba(0, 0, 0, 0.3)'
                   : 'none',

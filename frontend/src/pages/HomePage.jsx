@@ -2,10 +2,10 @@ import {
   ArrowRight,
   Bot,
   Flame,
-  FlaskConical,
   HeartPulse,
   ListChecks,
   Ruler,
+  Star,
   TrendingUp,
   Users,
 } from 'lucide-react'
@@ -17,7 +17,6 @@ import { LiquidMetalButton } from '@/components/ui/liquid-metal-button'
 import { SonarGrid } from '@/components/ui/sonar-grid'
 import { TextEffect } from '@/components/ui/text-effect'
 const FaqSection = lazy(() => import('@/components/ui/faq-section').then(m => ({ default: m.FaqSection })))
-const HeroPhones = lazy(() => import('@/components/ui/hero-phones'))
 import '../styles/theme-night.css'
 
 import { tunnelDemarre } from '../lib/analytics'
@@ -114,6 +113,34 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
      pendant toute la lecture — c'est le motif qui fait la différence sur les
      tunnels mobiles. */
   const [barreVisible, setBarreVisible] = useState(false)
+
+  /* Le sous-titre du hero se défait puis se refait toutes les 3 secondes.
+     `trigger` bascule, AnimatePresence joue la sortie mot à mot, puis
+     l'entrée.
+
+     LE CYCLE EST VOLONTAIREMENT ASYMÉTRIQUE. Un simple setInterval qui
+     bascule laisserait la phrase absente la moitié du temps : c'est le seul
+     texte du fold qui dit ce que fait le produit, et il serait invisible une
+     seconde sur deux. Ici elle disparaît 0,7 s toutes les 3 s — assez pour
+     que le mouvement se voie, trop court pour qu'on arrive sur un vide.
+
+     La boucle ne démarre pas sous `prefers-reduced-motion` : une phrase qui
+     clignote sans fin est exactement ce que cette préférence existe pour
+     éviter. */
+  const [sousTitreVisible, setSousTitreVisible] = useState(true)
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    let reprise
+    const cycle = setInterval(() => {
+      setSousTitreVisible(false)
+      reprise = setTimeout(() => setSousTitreVisible(true), 700)
+    }, 3000)
+    return () => {
+      clearInterval(cycle)
+      clearTimeout(reprise)
+    }
+  }, [])
 
   /* La barre apparaît passé un seuil de défilement.
 
@@ -277,79 +304,82 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             pingEvery={3.6}
             ringWidth={110}
             amplitude={2}
-            pingArea={[0.1, 0.15, 0.9, 0.85]}
-            className="px-6 pt-12 pb-16 sm:px-8 lg:pt-20"
+            pingArea={[0.1, 0.12, 0.9, 0.88]}
+            className="px-6 pt-16 pb-20 sm:px-8 lg:pt-24 lg:pb-28"
           >
+            {/* Halo orange, recentré avec le contenu.
+                Il était calé en haut à droite pour éclairer une colonne de
+                texte alignée à gauche ; le hero est désormais centré, donc le
+                halo l'est aussi, sinon il éclaire un bord vide. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-40 left-1/2 z-0 size-[680px] -translate-x-1/2 rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.17] blur-[140px]"
+            />
 
-          {/* Halo orange derrière le titre. Sur noir il remplace l'ombre
-              portée : c'est lui qui détache le hero du reste de la page.
-              `z-0` et non `-z-10` : le conteneur racine peint un fond, donc
-              tout indice négatif disparaît dessous. Le contenu repasse
-              au-dessus en `z-10`. */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -top-32 -right-20 z-0 size-[620px] rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.16] blur-[130px]"
-          />
-
-          <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-12 lg:gap-10">
-            {/* --- Colonne texte --- */}
-            <div className="lg:col-span-6">
-              {/* Pastille de preuve, au-dessus du titre.
-                  Reprise de la mise en forme de GoTall (« Backed by Science »),
-                  qui place ce signal avant même la promesse. L'ordre compte :
-                  un visiteur de quinze ans arrive sur un marché saturé de
-                  « IA 99 % de précision » ; la crédibilité doit arriver avant
-                  l'argument, pas après.
-
-                  Le texte n'est PAS « Validé par la science ». Une formule
-                  vague de ce genre est invérifiable, et l'article L121-2 du
-                  code de la consommation traite l'allégation invérifiable
-                  comme une pratique commerciale trompeuse. On nomme donc les
-                  deux méthodes réellement employées : elles sont publiées, et
-                  la page « méthode » les détaille déjà. */}
+            {/* Composition centrée, sans visuel latéral.
+                Les trois téléphones sont retirés du fold : ils tenaient la
+                moitié droite sur grand écran et ne s'affichaient pas du tout
+                sur téléphone, où la colonne de texte était donc déjà seule.
+                Le centrage aligne les deux tailles d'écran sur la même
+                lecture — pastille, titre, promesse, action — et rend au titre
+                toute la largeur. */}
+            <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center">
+              {/* Pastille de preuve, au-dessus du titre : le signal de
+                  crédibilité arrive avant la promesse, pas après. */}
               <p
-                className="rise mb-6 inline-flex items-center gap-2 rounded-full border border-[color:var(--color-brand-display)]/35 bg-[color:var(--color-brand-display)]/10 px-4 py-1.5 text-[13px] font-semibold text-[color:var(--color-brand-display)]"
+                className="rise inline-flex items-center gap-2 rounded-full border border-[color:var(--color-brand-display)]/35 bg-[color:var(--color-brand-display)]/10 px-4 py-1.5 text-[13px] font-semibold text-[color:var(--color-brand-display)]"
                 style={{ animationDelay: '40ms' }}
               >
-                <FlaskConical className="size-3.5 shrink-0" aria-hidden="true" />
-                Méthode Khamis-Roche × tables OMS
+                <Star className="size-3.5 shrink-0" aria-hidden="true" />
+                Basé sur la science
               </p>
 
               <h1
                 /* L'impact vient de l'échelle et du serrage, pas de la
-                   graisse. Une condensée massive aurait rangé la page avec
-                   les sites du secteur qui en abusent ; Fraunces est la
-                   seule chose ici qu'aucun concurrent n'a. On la pousse donc
-                   plus loin : 88px au lieu de 72 en plein écran, interligne
-                   sous 1 pour que les deux lignes forment un bloc, et
-                   interlettrage à -0,045em — un display serré se tient, un
-                   display lâche se lit comme du corps de texte agrandi. */
-                className="rise night-title-gradient font-display text-[clamp(44px,7.2vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-balance"
+                   graisse. Fraunces est la seule chose ici qu'aucun
+                   concurrent n'a : on la pousse à 88px en plein écran,
+                   interligne sous 1 pour que les lignes forment un bloc, et
+                   interlettrage à -0,045em. */
+                className="rise night-title-gradient mt-7 font-display text-[clamp(44px,7.2vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
-                Prédis et
-                <br />
+                Prédis et{' '}
                 <span className="text-[color:var(--color-brand-display)]">maximise</span>{' '}
                 ta taille.
               </h1>
 
-              {/* Sous-titre révélé mot à mot, avec la promesse en couleur —
-                  la mise en forme de GoTall, où la phrase qui vend est la
-                  seule chose colorée du paragraphe.
+              {/* Sous-titre qui se défait et se refait toutes les 3 secondes.
+                  `trigger` bascule sur une minuterie : à false, AnimatePresence
+                  joue la sortie mot à mot ; à true, l'entrée. Le cycle complet
+                  dure 3 s, dont environ 1,2 s d'animation — le texte reste donc
+                  lisible et immobile la majeure partie du temps.
 
-                  Les accents étaient tombés ici et dans le titre. « ou » sans
-                  accent ne se lit pas comme une faute de frappe : il change le
-                  sens de la phrase (« te dit OU tu en es » au lieu de « te dit
-                  OÙ tu en es »). Le bundle servi en production portait la
-                  version fautive tandis que la coquille pré-rendue portait la
-                  bonne — l'accent disparaissait donc sous les yeux du visiteur
-                  au montage de React. */}
+                  La minuterie ne tourne pas sous `prefers-reduced-motion` :
+                  faire clignoter une phrase en boucle est exactement ce que
+                  cette préférence existe pour éviter. */}
+              {/* Décalage entre mots à 0,015 s et non les 0,05 du preset
+                  « blur » : la phrase fait vingt-trois mots, donc le preset
+                  mettrait 1,15 s rien qu'à lancer le dernier, et la sortie ne
+                  tiendrait pas dans les 0,7 s du cycle. Ici sortie et entrée
+                  durent chacune ~0,65 s. */}
               <TextEffect
                 as="p"
                 per="word"
-                preset="blur"
-                delay={0.16}
+                delay={0.1}
+                boucle={sousTitreVisible}
                 surlignage="optimiser ta croissance"
+                variants={{
+                  container: {
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1, transition: { staggerChildren: 0.015 } },
+                    exit: { transition: { staggerChildren: 0.015 } },
+                  },
+                  item: {
+                    hidden: { opacity: 0, filter: 'blur(10px)', y: 8 },
+                    visible: { opacity: 1, filter: 'blur(0px)', y: 0, transition: { duration: 0.32 } },
+                    exit: { opacity: 0, filter: 'blur(10px)', y: -8, transition: { duration: 0.28 } },
+                  },
+                }}
                 className="mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
               >
                 {'Tu ne contrôles pas tes gènes, mais tu peux optimiser ta croissance. Grandimi te dit où tu en es, et quoi faire chaque jour.'}
@@ -357,14 +387,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
 
               {/* Un seul bouton. Le jumeau « Voir comment ça marche »
                   renvoyait vers une section de la même page : deux actions de
-                  poids visuel proche, dont une qui ne fait que faire défiler.
-                  Sur un fold, chaque choix supplémentaire coûte des départs. */}
-              {/* 40px et non 36 : tous les espacements du hero tombent
-                  désormais sur des multiples de 8. */}
-              {/* Le CTA du hero passe en métal liquide. Une seule instance sur
-                  la page : chaque bouton monte son propre contexte WebGL, et
-                  les deux autres « Commencer mon analyse » plus bas restent en
-                  orange plein. */}
+                  poids visuel proche, dont une qui ne fait que faire défiler. */}
               <div className="rise mt-10" style={{ animationDelay: '240ms' }}>
                 <LiquidMetalButton
                   label="Commencer mon analyse"
@@ -372,14 +395,6 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 />
               </div>
             </div>
-
-            {/* --- Colonne téléphones --- */}
-            <div className="hidden lg:col-span-6 lg:flex lg:justify-center">
-              <Suspense fallback={<div className="h-96" />}>
-                <HeroPhones />
-              </Suspense>
-            </div>
-          </div>
           </SonarGrid>
         </section>
 

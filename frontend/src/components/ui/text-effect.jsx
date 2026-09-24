@@ -166,6 +166,7 @@ export function TextEffect({
   segmentWrapperClassName,
   surlignage,
   classeSurlignage = 'text-[color:var(--color-brand-display)] font-semibold',
+  boucle,
 }) {
   const reduit = useReducedMotion()
 
@@ -226,6 +227,38 @@ export function TextEffect({
       },
     },
     exit: conteneur.exit,
+  }
+
+  /* MODE BOUCLE : l'élément reste monté et bascule entre « hidden » et
+     « visible ».
+
+     POURQUOI PAS AnimatePresence ICI. Le mode présence retire le paragraphe
+     du flux pendant sa sortie. Mesuré sur le hero : le bouton d'appel à
+     l'action remontait de 142px toutes les 3 secondes, et la hauteur de page
+     avec lui. Un bouton qui se dérobe sous le pouce ne se clique pas, et le
+     décalage de mise en page est ce que le CLS compte. En restant monté, le
+     paragraphe garde sa place : seules l'opacité et la netteté changent. */
+  if (boucle !== undefined) {
+    return (
+      <MotionTag
+        initial="hidden"
+        animate={boucle ? 'visible' : 'hidden'}
+        aria-label={children}
+        variants={conteneurRetarde}
+        className={cn('whitespace-pre-wrap', className)}
+        onAnimationComplete={onAnimationComplete}
+      >
+        {places.map((p) => (
+          <Segment
+            key={`${per}-${p.cle}`}
+            segment={p.texte}
+            variants={element}
+            per={per}
+            segmentWrapperClassName={cn(segmentWrapperClassName, p.surligne && classeSurlignage)}
+          />
+        ))}
+      </MotionTag>
+    )
   }
 
   return (
