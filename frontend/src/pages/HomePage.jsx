@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import {
   ArrowRight,
   Bot,
@@ -13,7 +12,7 @@ import {
 import { useEffect, useState, lazy, Suspense } from 'react'
 
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
-import { FaqSection } from '@/components/ui/faq-section'
+const FaqSection = lazy(() => import('@/components/ui/faq-section').then(m => ({ default: m.FaqSection })))
 const HeroPhones = lazy(() => import('@/components/ui/hero-phones'))
 import '../styles/theme-night.css'
 
@@ -384,7 +383,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               {FONCTIONS.map((fonction, i) => {
                 const Icone = fonction.icone
                 return (
-                  <motion.article
+                  <article
                     key={fonction.titre}
                     initial={{ opacity: 0, y: 18 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -407,7 +406,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     <p className="mt-2.5 text-[15px] leading-[1.55] text-[color:var(--text-secondary)]">
                       {fonction.texte}
                     </p>
-                  </motion.article>
+                  </article>
                 )
               })}
             </div>
@@ -530,7 +529,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                       'Un mois plus tard, l’estimation se resserre et le plan change. Puis on recommence.',
                   },
                 ].map((etape, i) => (
-                  <motion.li
+                  <li
                     key={etape.num}
                     initial={{ opacity: 0, y: 18 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -550,7 +549,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                     <p className="mx-auto mt-2 max-w-xs text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">
                       {etape.texte}
                     </p>
-                  </motion.li>
+                  </li>
                 ))}
               </ol>
             </div>
@@ -637,16 +636,18 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
         {/* La marge de defilement evite que, l'ancre amene le titre pile sous
             l'en-tête collant, qui le recouvrait. */}
         <div id="faq" className="scroll-mt-24">
-        <FaqSection
-          title="Les questions qu’on nous pose"
-          description="Et les réponses honnêtes, y compris quand elles ne nous arrangent pas."
-          items={FAQ}
-        />
+        <Suspense fallback={<div className="h-96" />}>
+          <FaqSection
+            title="Les questions qu’on nous pose"
+            description="Et les réponses honnêtes, y compris quand elles ne nous arrangent pas."
+            items={FAQ}
+          />
+        </Suspense>
         </div>
 
         {/* ============ CTA FINAL ============ */}
         <section className="px-6 pb-20 sm:px-8">
-          <motion.div
+          <div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -679,7 +680,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 <ArrowRight className="size-4" aria-hidden="true" />
               </button>
             </div>
-          </motion.div>
+          </div>
         </section>
       </main>
 
@@ -899,7 +900,7 @@ function ListeActions() {
     <div className="rounded-[26px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6 sm:p-8">
       <ul className="flex flex-col gap-3">
         {actions.map(({ texte, duree, faite }) => (
-          <motion.li
+          <li
             key={texte}
             initial={{ opacity: 0, x: -14 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -927,7 +928,7 @@ function ListeActions() {
             <span className="shrink-0 text-[13px] tabular-nums text-[color:var(--text-meta)]">
               {duree}
             </span>
-          </motion.li>
+          </li>
         ))}
       </ul>
 
