@@ -61,13 +61,6 @@ const FONCTIONS = [
     texte:
       "Exercices de posture, alimentation, sommeil et complements alimentaires : chaque habitude est personnalisee et s adapte au fil du temps selon ton profil.",
   },
-  {
-    icone: Flame,
-    titre: "Recommandations de produits",
-    bientot: true,
-    texte:
-      "Des recommandations de complements alimentaires et de produits adaptees a tes donnees pour soutenir ta croissance naturelle.",
-  },
 ]
 
 /* La FAQ porte désormais seule ce que six sections expliquaient avant elle :
