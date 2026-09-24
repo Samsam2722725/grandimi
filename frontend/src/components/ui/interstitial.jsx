@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react'
  * L'écran n'avance jamais tout seul : une auto-avance vole la lecture à qui lit
  * lentement, et rend l'écran inutilisable au lecteur d'écran.
  */
-export function Interstitial({ text, cta = 'Continuer', onContinue }) {
+export function Interstitial({ titre, text, cta = 'Continuer', onContinue }) {
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
@@ -22,6 +22,7 @@ export function Interstitial({ text, cta = 'Continuer', onContinue }) {
 
   return (
     <div className="interstitial">
+      {titre && <h1 className="interstitial-titre">{titre}</h1>}
       <p className="interstitial-text">{text}</p>
       <div className={`interstitial-action ${ready ? 'is-ready' : ''}`}>
         <button type="button" className="funnel-cta" onClick={onContinue}>
