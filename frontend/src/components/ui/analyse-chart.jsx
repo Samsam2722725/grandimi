@@ -1,3 +1,5 @@
+import { useSyncExternalStore } from 'react'
+
 import { decelere, lisser } from '@/components/ui/growth-chart'
 
 /**
@@ -31,49 +33,96 @@ import { decelere, lisser } from '@/components/ui/growth-chart'
  */
 
 const W = 320
-/* La hauteur du viewBox EST la hauteur rendue, au rapport près : le SVG fait
-   la largeur de sa carte et le navigateur en déduit le reste. C'est donc ici
-   que se règle le poste le plus cher de l'écran, qui doit tenir sans
-   défilement — 168 laissait le bas de la page sous le pli sur un téléphone
-   de 667 px de haut. 94 garde la courbe lisible — c'est la hauteur sous
-   laquelle l'axe vertical, la courbe et la pastille d'âge cessent de tenir
-   sans se toucher — et rend soixante-dix pixels à la page. */
-const H = 94
+
+/* DEUX GABARITS, ET C EST LA HAUTEUR DE L ECRAN QUI TRANCHE.
+
+   La hauteur du viewBox EST la hauteur rendue, au rapport près : le SVG fait
+   la largeur de sa carte et le navigateur en déduit le reste. C'est donc le
+   poste le plus cher d'un écran qui doit tenir d'un seul tenant.
+
+   94 sur un téléphone ordinaire ; 76 en dessous de 800 px de haut, où
+   chaque bloc est déjà à sa borne basse et où ces dix-huit pixels sont ce
+   qui reste à prendre sans rendre un texte illisible. Sous 76, l'axe
+   vertical, la courbe et la pastille d'âge commencent à se toucher. */
+const H_NORMALE = 94
+const H_COURTE = 76
+const ECRAN_COURT = '(max-height: 800px)'
+
 /* Marge gauche large : elle loge « 100 % » et le cadenas de l'axe vertical.
-   Marge basse : la pastille d'âge passe SOUS les graduations floutées.
-   Marge haute réduite à 8 : le sommet de la courbe n'a besoin que de la
-   place de son trait. */
-const M = { top: 6, right: 12, bottom: 28, left: 42 }
+   Marge basse : la pastille d'âge passe SOUS les graduations floutées. */
+const marges = (H) => ({
+  top: 6,
+  right: 12,
+  bottom: H >= H_NORMALE ? 28 : 25,
+  left: 42,
+})
 
 /* Position du repère sur la courbe, en fraction de l'axe. Volontairement au
    tiers : assez avancé pour qu'on lise une progression déjà faite, assez tôt
    pour qu'il reste visiblement du chemin — ce que l'écran vend. */
 const REPERE = 0.34
 
-const x = (t) => M.left + t * (W - M.left - M.right)
-const y = (v) => H - M.bottom - v * (H - M.top - M.bottom)
-
 const PAS = 24
-const points = []
-for (let i = 0; i <= PAS; i += 1) {
-  const t = i / PAS
-  // Décélération douce : la silhouette d'une courbe de croissance, rien de plus.
-  points.push([x(t), y(0.08 + decelere(t) * 0.84)])
+
+/* Toute la géométrie dérive de la hauteur, et elle est calculée UNE FOIS par
+   gabarit, au chargement du module : deux objets figés, pas un recalcul à
+   chaque rendu. */
+function geometrie(H) {
+  const M = marges(H)
+  const x = (t) => M.left + t * (W - M.left - M.right)
+  const y = (v) => H - M.bottom - v * (H - M.top - M.bottom)
+
+  const points = []
+  for (let i = 0; i <= PAS; i += 1) {
+    const t = i / PAS
+    // Décélération douce : la silhouette d'une courbe de croissance, rien de plus.
+    points.push([x(t), y(0.08 + decelere(t) * 0.84)])
+  }
+
+  const TRACE = lisser(points)
+
+  return {
+    H,
+    M,
+    TRACE,
+    AIRE: `${TRACE} L ${x(1).toFixed(2)} ${H - M.bottom} L ${x(0).toFixed(2)} ${H - M.bottom} Z`,
+    X_REPERE: x(REPERE),
+    Y_REPERE: y(0.08 + decelere(REPERE) * 0.84),
+    /* Graduations d'âge. Celles qui tomberaient sous la pastille sont
+       retirées : deux formes superposées se lisent comme un défaut
+       d'affichage, pas comme un masquage volontaire. */
+    GRADUATIONS: [0.06, 0.24, 0.42, 0.6, 0.78, 0.94].filter(
+      (p) => Math.abs(p - REPERE) > 0.12,
+    ),
+  }
 }
 
-const TRACE = lisser(points)
-const AIRE = `${TRACE} L ${x(1).toFixed(2)} ${H - M.bottom} L ${x(0).toFixed(2)} ${H - M.bottom} Z`
-const X_REPERE = x(REPERE)
-const Y_REPERE = y(0.08 + decelere(REPERE) * 0.84)
+const GEO_NORMALE = geometrie(H_NORMALE)
+const GEO_COURTE = geometrie(H_COURTE)
 
-/* Graduations d'âge. Celles qui tomberaient sous la pastille sont retirées :
-   deux formes superposées se lisent comme un défaut d'affichage, pas comme un
-   masquage volontaire. */
-const GRADUATIONS = [0.06, 0.24, 0.42, 0.6, 0.78, 0.94].filter(
-  (p) => Math.abs(p - REPERE) > 0.12,
-)
+/* Le gabarit suit la rotation de l'écran et la barre d'URL qui se rétracte :
+   sans l'écouteur, un téléphone tourné en paysage garderait le grand
+   gabarit et reléguerait le bouton sous le pli. */
+function useGeometrie() {
+  /* `useSyncExternalStore` et pas un état plus un effet : la requête média
+     EST une source extérieure à React, et la lire ainsi évite le rendu
+     supplémentaire que provoque un `setState` posé dans un effet. */
+  const court = useSyncExternalStore(
+    (changement) => {
+      const requete = window.matchMedia(ECRAN_COURT)
+      requete.addEventListener('change', changement)
+      return () => requete.removeEventListener('change', changement)
+    },
+    () => window.matchMedia(ECRAN_COURT).matches,
+    () => false,
+  )
+
+  return court ? GEO_COURTE : GEO_NORMALE
+}
 
 export function AnalyseChart({ className, age = null }) {
+  const { H, M, TRACE, AIRE, X_REPERE, Y_REPERE, GRADUATIONS } = useGeometrie()
+
   return (
     <svg
       viewBox={`0 0 ${W} ${H}`}

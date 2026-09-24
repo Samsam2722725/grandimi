@@ -410,16 +410,16 @@
    jamais, elle se resserre puis elle défile. */
 @media (max-height: 800px) {
   .analyse .analyse-titre {
-    font-size: clamp(18px, 3vh, 28px);
+    font-size: clamp(17px, 2.9vh, 28px);
   }
 
   .analyse .analyse-case {
-    min-height: clamp(46px, 8.2vh, 92px);
-    padding: clamp(7px, 1.35vh, 15px) 12px;
+    min-height: clamp(42px, 7.6vh, 92px);
+    padding: clamp(6px, 1.2vh, 15px) 12px;
   }
 
   .analyse .analyse-ligne {
-    padding: clamp(6px, 1.3vh, 14px) 12px;
+    padding: clamp(5px, 1.1vh, 14px) 12px;
   }
 
   .analyse .analyse-freins {
@@ -428,7 +428,7 @@
   }
 
   .analyse .analyse-frein-barre {
-    height: clamp(10px, 1.7vh, 18px);
+    height: clamp(9px, 1.5vh, 18px);
   }
 
   .analyse .analyse-freins-liste {
