@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 /* ============================================================
    ÉCRAN DE PREUVE — ce que vaut l'estimation
    ============================================================
@@ -24,6 +26,49 @@ const PRECISION_AFFICHEE = {
   texteLien: 'Voici d’où vient ce chiffre',
 }
 
+/* Le nombre compte jusqu'à sa valeur au lieu de s'afficher figé, sans
+   jamais toucher à PRECISION_AFFICHEE : la partie numérique est extraite
+   de la même constante documentée plus haut, jamais dupliquée en dur. Si
+   ce chiffre change un jour, l'animation suit sans rien à modifier ici. */
+const PARTIE_NUMERIQUE = PRECISION_AFFICHEE.valeur.match(/^(\d+)(.*)$/)
+const CIBLE = PARTIE_NUMERIQUE ? Number(PARTIE_NUMERIQUE[1]) : null
+const SUFFIXE = PARTIE_NUMERIQUE ? PARTIE_NUMERIQUE[2] : ''
+const DUREE_COMPTEUR_MS = 900
+
+function useCompteur(cible) {
+  const [valeur, setValeur] = useState(cible === null ? 0 : cible)
+
+  useEffect(() => {
+    if (cible === null) return undefined
+
+    const reduit =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    if (reduit) {
+      setValeur(cible)
+      return undefined
+    }
+
+    setValeur(0)
+    let depart
+    let frame
+
+    const etape = (t) => {
+      if (depart === undefined) depart = t
+      const p = Math.min(1, (t - depart) / DUREE_COMPTEUR_MS)
+      // Décélère en fin de course : un compteur qui freine avant d'arriver
+      // se lit comme un calcul qui se stabilise, pas comme un chiffre qui claque.
+      const progression = 1 - (1 - p) ** 3
+      setValeur(Math.round(cible * progression))
+      if (p < 1) frame = requestAnimationFrame(etape)
+    }
+    frame = requestAnimationFrame(etape)
+    return () => cancelAnimationFrame(frame)
+  }, [cible])
+
+  return valeur
+}
+
 /* Les sources RÉELLEMENT utilisées par le calcul, nommées en toutes
    lettres plutôt qu'en écussons.
 
@@ -46,6 +91,9 @@ const SOURCES = [
 ]
 
 export function BadgePrecision({ className }) {
+  const compte = useCompteur(CIBLE)
+  const valeurAffichee = CIBLE === null ? PRECISION_AFFICHEE.valeur : `${compte}${SUFFIXE}`
+
   return (
     <div className={`precision ${className || ''}`}>
       {/* Toise en filigrane, comme sur l'original : elle donne au
@@ -57,7 +105,13 @@ export function BadgePrecision({ className }) {
       </div>
 
       <div className="precision-pastille">
-        <span className="precision-valeur">{PRECISION_AFFICHEE.valeur}</span>
+        {/* `aria-hidden` + texte final en `sr-only` : un lecteur d'écran ne
+            doit pas égrainer 0, 4, 9, 15…98, seulement annoncer le chiffre
+            final une fois. */}
+        <span className="precision-valeur" aria-hidden="true">
+          {valeurAffichee}
+        </span>
+        <span className="sr-only">{PRECISION_AFFICHEE.valeur}</span>
         <span className="precision-libelle">{PRECISION_AFFICHEE.libelle}</span>
       </div>
 
