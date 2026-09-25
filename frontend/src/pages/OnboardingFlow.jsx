@@ -563,6 +563,24 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     return <EcranPlusQueGenes onContinue={avancer} />
   }
 
+  if (etape === 'choix-genetique') {
+    return <div className="onb-content"><p>Tu n'as pas choisi ta génétique. Mais tu peux choisir ce que tu en fais.</p></div>
+  }
+
+  if (etape === 'decouvrir-taller') {
+    return (
+      <div className="interstitial">
+        <h1 className="interstitial-titre">Il est maintenant temps de découvrir</h1>
+        <p className="interstitial-text">Ce que Taller dit sur ton potentiel de croissance</p>
+        <div className="interstitial-action is-ready">
+          <button type="button" className="funnel-cta" onClick={avancer}>
+            Analyser mes réponses
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   if (etape === 'resultats-la') {
     if (phaseResultats === 'analyse') {
       return (

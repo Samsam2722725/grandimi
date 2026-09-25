@@ -62,6 +62,8 @@ export const ORDRE_ETAPES = [
   'avis-utilisateurs',
   'taille-ideale',
   'plus-que-genes',
+  'choix-genetique',
+  'decouvrir-taller',
   'resultats-la',
 ]
 
@@ -105,6 +107,8 @@ export const TYPE_ETAPE = {
   'avis-utilisateurs': 'affichage',
   'taille-ideale': 'question',
   'plus-que-genes': 'interstitielle',
+  'choix-genetique': 'affichage',
+  'decouvrir-taller': 'affichage',
   'resultats-la': 'interstitielle',
 }
 
@@ -270,6 +274,14 @@ export const TEXTES_ETAPE = {
   'plus-que-genes': {
     titre: 'Tu perds peut-être déjà des centimètres',
     sousTitre: 'Génétique 80% • Mode de vie 20% : ton potentiel dépend de tes habitudes maintenant',
+  },
+  'choix-genetique': {
+    titre: "Tu n'as pas choisi ta génétique",
+    sousTitre: 'Mais tu peux choisir ce que tu en fais.',
+  },
+  'decouvrir-taller': {
+    titre: 'Il est maintenant temps de découvrir',
+    sousTitre: 'Ce que Taller dit sur ton potentiel de croissance',
   },
   'resultats-la': {
     titre: 'Tes résultats sont là !',
