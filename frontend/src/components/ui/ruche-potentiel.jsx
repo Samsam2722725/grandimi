@@ -50,9 +50,12 @@ export function RuchePotentiel({ variante = 'ruche', className }) {
               et non en bordures CSS : il faut des courbes qui se
               rejoignent, ce qu'un `border-left` ne sait pas faire. */}
           <svg className="ruche-liens" viewBox="0 0 300 90" aria-hidden="true">
-            <path d="M40 0 V42 Q40 66 90 66 H150" />
-            <path d="M150 0 V66" />
-            <path d="M260 0 V42 Q260 66 210 66 H150" />
+            {/* `pathLength="1"` uniformise la longueur pour l'animation de
+                tracé en CSS (ruche-lien-trace) : chaque branche se dessine
+                à la même vitesse indépendamment de sa longueur réelle. */}
+            <path className="ruche-lien" pathLength="1" d="M40 0 V42 Q40 66 90 66 H150" />
+            <path className="ruche-lien" pathLength="1" d="M150 0 V66" />
+            <path className="ruche-lien" pathLength="1" d="M260 0 V42 Q260 66 210 66 H150" />
           </svg>
           <div className="ruche-marque">
             <span>Grandimi</span>
