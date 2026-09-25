@@ -3,7 +3,9 @@ import { User, Users } from 'lucide-react'
 
 import { FunnelShell, FunnelButton } from '@/components/ui/funnel-shell'
 import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
+import { PaywallFunnel } from '@/components/PaywallFunnel'
 import '../styles/funnel.css'
+import '../styles/paywall-funnel.css'
 
 import apiClient from '../lib/api'
 import { mockPredictHeight } from '../lib/mock-api'
@@ -565,6 +567,15 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
 
   if (etape === 'choix-genetique') {
     return <div className="onb-content"><p>Tu n'as pas choisi ta génétique. Mais tu peux choisir ce que tu en fais.</p></div>
+  }
+
+  if (etape === 'paywall-funnel') {
+    return (
+      <PaywallFunnel onComplete={() => {
+        // Navigate to Paywall after funnel
+        window.location.href = '/paywall'
+      }} />
+    )
   }
 
   if (etape === 'decouvrir-taller') {

@@ -65,6 +65,7 @@ export const ORDRE_ETAPES = [
   'choix-genetique',
   'decouvrir-taller',
   'resultats-la',
+  'paywall-funnel',
 ]
 
 export const TYPE_ETAPE = {
@@ -110,6 +111,7 @@ export const TYPE_ETAPE = {
   'choix-genetique': 'affichage',
   'decouvrir-taller': 'affichage',
   'resultats-la': 'interstitielle',
+  'paywall-funnel': 'interstitielle',
 }
 
 /* ============================================================
