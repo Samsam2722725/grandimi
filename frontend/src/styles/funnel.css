@@ -2199,6 +2199,23 @@
   color: var(--funnel-muted);
 }
 
+.onb-graph-habitudes {
+  width: 100%;
+  max-width: 280px;
+  height: 160px;
+  margin: 16px 0;
+}
+
+.onb-graph-line {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.onb-graph-label {
+  font-size: 13px;
+  fill: var(--funnel-muted);
+}
+
 .onb-genes-barres {
   display: flex;
   flex-direction: column;

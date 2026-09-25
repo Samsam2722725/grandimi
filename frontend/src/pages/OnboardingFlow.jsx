@@ -275,21 +275,21 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       case 'sommeil':
         return reponses.sommeil >= 5
       case 'pilosite-aisselles':
-        return reponses.pilositeAisselles != null
+        return true
       case 'pilosite-visage':
-        return reponses.pilositeVisage != null
+        return true
       case 'epaules':
-        return reponses.epaules != null
+        return true
       case 'odeur':
-        return reponses.odeur != null
+        return true
       case 'acne':
-        return reponses.acne != null
+        return true
       case 'muscles':
-        return reponses.muscles != null
+        return true
       case 'voix':
-        return reponses.voix != null
+        return true
       case 'croissance-lente':
-        return reponses.croissanceLente != null
+        return true
       case 'taille-ideale':
         return reponses.tailleIdeale > 0
       default:
