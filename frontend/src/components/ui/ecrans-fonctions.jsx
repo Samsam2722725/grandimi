@@ -1,18 +1,187 @@
 /* Écrans « fonctionnalités » et « études » du questionnaire, sur le modèle
    de GoTall : un titre, un visuel, rien d'autre.
 
-   Seules des fonctions qui existent sont montrées : les captures viennent de
-   l'application, et le plan du jour reprend des actions réelles du planner.
-   Pas de logos d'institutions sur l'écran « études » : un logo laisse croire
-   à une caution ; un résultat cité avec sa source, non. */
+   CE QUI A CHANGÉ : ces écrans montraient de vraies captures de l'app
+   (`/apercus/*.png`), en thème sombre — alors que le reste du tunnel est
+   passé au papier clair (voir funnel.css). Deux univers visuels dans le
+   même parcours cassaient la cohérence que le reste du tunnel construit
+   écran après écran. Remplacées par des illustrations dessinées, dans le
+   même langage que `reseau-neurones.jsx` / `ruche-potentiel.jsx` /
+   `long-terme-chart.jsx` : du vecteur, pas des captures — ça s'anime et ça
+   reste dans la peau du tunnel, comme le fait la concurrence sur ces
+   écrans-là. Le plan du jour reprend des actions réelles du planner ; les
+   deux nouvelles illustrations ci-dessous décrivent des mécanismes réels
+   de l'app (cocher une séance, suivre sa taille), sans en simuler l'écran
+   exact. Pas de logos d'institutions sur l'écran « études » : un logo
+   laisse croire à une caution ; un résultat cité avec sa source, non. */
 
-export function FonctionCapture({ image, alt }) {
+import { useEffect, useState } from 'react'
+import { Check } from 'lucide-react'
+
+import { decelere, lisser } from '@/components/ui/growth-chart'
+
+const EXERCICES_SEANCE = [
+  { texte: 'Suspension à la barre', duree: '5 × 15 s' },
+  { texte: 'Étirement du dos', duree: '3 × 30 s' },
+  { texte: 'Squats profonds', duree: '4 × 12' },
+  { texte: 'Gainage', duree: '3 × 40 s' },
+]
+
+/* Les cases se cochent seules, l'une après l'autre : ça montre le
+   mécanisme (cocher une séance) plutôt que de le décrire, sur le même
+   principe que l'anneau de l'écran d'analyse (analyse-en-cours.jsx). */
+export function FonctionExercices() {
+  const total = EXERCICES_SEANCE.length
+  const [fait, setFait] = useState(0)
+
+  useEffect(() => {
+    const reduit =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    if (reduit) {
+      setFait(total)
+      return undefined
+    }
+
+    let compte = 0
+    const id = setInterval(() => {
+      compte += 1
+      setFait(Math.min(total, compte))
+      if (compte >= total) clearInterval(id)
+    }, 340)
+    return () => clearInterval(id)
+  }, [total])
+
+  const avancement = fait / total
+  const rayon = 42
+  const circonference = 2 * Math.PI * rayon
+
   return (
-    <div className="fonction-capture">
-      <picture>
-        <source srcSet={`/apercus/${image}.webp`} type="image/webp" />
-        <img src={`/apercus/${image}.png`} alt={alt} />
-      </picture>
+    <div className="fonction-seance">
+      <div className="fonction-seance-anneau" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <circle className="fs-anneau-piste" cx="50" cy="50" r={rayon} />
+          <circle
+            className="fs-anneau-arc"
+            cx="50"
+            cy="50"
+            r={rayon}
+            style={{
+              strokeDasharray: circonference,
+              strokeDashoffset: circonference * (1 - avancement),
+            }}
+          />
+        </svg>
+        <span className="fonction-seance-compte">
+          {fait}/{total}
+        </span>
+      </div>
+
+      <div className="fonction-plan">
+        <ul>
+          {EXERCICES_SEANCE.map(({ texte, duree }, index) => (
+            <li key={texte} className={index < fait ? 'est-faite' : ''}>
+              <span className="fonction-plan-case" aria-hidden="true">
+                {index < fait ? <Check size={13} strokeWidth={3} /> : null}
+              </span>
+              <span className="fonction-plan-texte">{texte}</span>
+              <span className="fonction-plan-duree">{duree}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+/* Illustration, pas une donnée de l'utilisateur — même principe que
+   long-terme-chart.jsx : à cet endroit du tunnel, aucune mesure de suivi
+   n'existe encore. La courbe et le « +14 cm » décrivent ce que l'écran de
+   suivi affichera plus tard dans l'app, pas un résultat déjà calculé. */
+export function FonctionSuivi() {
+  const W = 320
+  const H = 170
+  const M = { top: 18, right: 20, bottom: 18, left: 20 }
+
+  const PAS = 20
+  const courbe = []
+  for (let i = 0; i <= PAS; i += 1) {
+    const t = i / PAS
+    const px = M.left + t * (W - M.left - M.right)
+    const py = H - M.bottom - decelere(t) * (H - M.top - M.bottom)
+    courbe.push([px, py])
+  }
+  const depart = courbe[0]
+  const fin = courbe[courbe.length - 1]
+  const aire = `${lisser(courbe)} L ${W - M.right} ${H - M.bottom} L ${M.left} ${H - M.bottom} Z`
+
+  return (
+    <div className="fonction-suivi">
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        width="100%"
+        role="img"
+        aria-label="Illustration : courbe de suivi de taille au fil des mois, avec un point final mis en avant."
+        style={{ display: 'block', height: 'auto', overflow: 'visible' }}
+      >
+        <defs>
+          <linearGradient id="fs-aire" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--funnel-accent)" stopOpacity="0.28" />
+            <stop offset="100%" stopColor="var(--funnel-accent)" stopOpacity="0.02" />
+          </linearGradient>
+        </defs>
+
+        {[0.3, 0.68].map((g) => (
+          <line
+            key={g}
+            x1={M.left}
+            x2={W - M.right}
+            y1={M.top + g * (H - M.top - M.bottom)}
+            y2={M.top + g * (H - M.top - M.bottom)}
+            stroke="var(--funnel-line)"
+            strokeWidth="1"
+          />
+        ))}
+
+        <path className="lt-aire" d={aire} fill="url(#fs-aire)" stroke="none" />
+        <path
+          className="lt-ligne"
+          pathLength="1"
+          d={lisser(courbe)}
+          fill="none"
+          stroke="var(--funnel-accent-display)"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+        <circle
+          className="lt-point"
+          cx={depart[0]}
+          cy={depart[1]}
+          r="4.5"
+          fill="var(--funnel-text)"
+          stroke="var(--funnel-accent-display)"
+          strokeWidth="2"
+        />
+        <circle
+          className="lt-point"
+          cx={fin[0]}
+          cy={fin[1]}
+          r="5.5"
+          fill="var(--funnel-accent-display)"
+          stroke="var(--funnel-bg)"
+          strokeWidth="2.5"
+        />
+      </svg>
+
+      <div className="fonction-suivi-figure">
+        <span className="fonction-suivi-chiffre">+14</span>
+        <span className="fonction-suivi-legende">cm suivis</span>
+      </div>
+
+      <p className="fonction-suivi-note">
+        Illustration : ta courbe personnelle apparaît une fois ton suivi commencé
+        dans l’application.
+      </p>
     </div>
   )
 }

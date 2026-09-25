@@ -2091,20 +2091,96 @@
   }
 }
 
-/* ---------- Écrans fonctionnalités (captures de l'appli) ---------- */
+/* ---------- Écran « séance » : anneau + liste qui se coche seule ---------- */
 
-.fonction-capture {
+.fonction-seance {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  width: 100%;
 }
 
-.fonction-capture img {
-  display: block;
-  width: auto;
-  max-width: 100%;
-  max-height: min(52svh, 460px);
-  border-radius: 22px;
-  box-shadow: 0 18px 40px rgba(23, 18, 14, 0.18);
+.fonction-seance .fonction-plan {
+  width: 100%;
+}
+
+.fonction-seance-anneau {
+  position: relative;
+  width: 96px;
+  height: 96px;
+}
+
+.fonction-seance-anneau svg {
+  width: 100%;
+  height: 100%;
+  /* Même convention que l'anneau de l'écran d'analyse : démarre en haut,
+     pas à 3 heures. */
+  transform: rotate(-90deg);
+}
+
+.fs-anneau-piste {
+  fill: none;
+  stroke: var(--funnel-surface-high);
+  stroke-width: 8;
+}
+
+.fs-anneau-arc {
+  fill: none;
+  stroke: var(--funnel-accent);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.3s ease-out;
+}
+
+.fonction-seance-compte {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--funnel-text);
+}
+
+/* ---------- Écran « suivi » : courbe illustrative + chiffre ---------- */
+
+.fonction-suivi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.fonction-suivi-figure {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.fonction-suivi-chiffre {
+  font-size: clamp(40px, 12vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--funnel-accent-display);
+}
+
+.fonction-suivi-legende {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--funnel-muted);
+}
+
+.fonction-suivi-note {
+  margin: 0 auto;
+  max-width: 30ch;
+  font-size: 12.5px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--funnel-muted);
+  text-wrap: pretty;
 }
 
 .fonction-plan {

@@ -4,7 +4,7 @@ import { Info } from 'lucide-react'
 import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
 import { Avis } from '@/components/ui/avis'
 import { BadgePrecision } from '@/components/ui/badge-precision'
-import { EtudesPubliees, FonctionCapture, FonctionPlan } from '@/components/ui/ecrans-fonctions'
+import { EtudesPubliees, FonctionExercices, FonctionPlan, FonctionSuivi } from '@/components/ui/ecrans-fonctions'
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { FeuilleInfo } from '@/components/ui/feuille-info'
 import { FunnelButton, FunnelShell } from '@/components/ui/funnel-shell'
@@ -1616,20 +1616,10 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
         return <FonctionPlan />
 
       case 'fonction-exercices':
-        return (
-          <FonctionCapture
-            image="seance"
-            alt="L’écran de séance Grandimi : six exercices du jour, cochés un à un."
-          />
-        )
+        return <FonctionExercices />
 
       case 'fonction-suivi':
-        return (
-          <FonctionCapture
-            image="accueil"
-            alt="L’écran d’accueil Grandimi : la taille prédite et la courbe de progression."
-          />
-        )
+        return <FonctionSuivi />
 
       case 'etudes':
         return <EtudesPubliees />
