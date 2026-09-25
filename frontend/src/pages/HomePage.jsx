@@ -347,7 +347,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 style={{ animationDelay: '80ms' }}
               >
                 <span className="text-white">Prédis ta taille adulte.</span><br />
-                <span className="text-[color:var(--text-secondary)]">
+                <span className="text-white">
                   Atteins ton plein potentiel avec Grandimi.
                 </span>
               </h1>
