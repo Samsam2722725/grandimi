@@ -106,7 +106,7 @@ export const TEXTES_ETAPE = {
   },
   sexe: {
     titre: 'Garçon ou une fille ?',
-    sousTitre: 'Le sexe influence ta taille à l'âge adulte',
+    sousTitre: "Le sexe influence ta taille à l'âge adulte",
   },
   age: {
     titre: 'Quand es-tu né ?',
@@ -133,7 +133,7 @@ export const TEXTES_ETAPE = {
     sousTitre: "L'exercice influence l'hormone de croissance et la récupération",
   },
   sommeil: {
-    titre: 'Combien d'heures dors-tu par nuit ?',
+    titre: "Combien d'heures dors-tu par nuit ?",
     sousTitre: 'Bien dormir aide à grandir et à récupérer',
   },
   pere: {
@@ -152,7 +152,7 @@ export const TEXTES_ETAPE = {
     titre: 'Ta puberté compte',
     sousTitre: 'On va poser quelques questions pour voir si tu es passé par la puberté',
     message:
-      'Environ 75 % de ta croissance totale se fait pendant la puberté, et seulement 25 % après',
+      "Environ 75 % de ta croissance totale se fait pendant la puberté, et seulement 25 % après",
   },
   'pilosite-aisselles': {
     titre: 'As-tu des poils aux aisselles ?',
@@ -163,19 +163,19 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Les poils du visage nous aident à estimer ton stade de croissance',
   },
   'vitesse-croissance': {
-    titre: 'Combien as-tu grandi l'année dernière ?',
-    sousTitre: 'Ta croissance l'année dernière montre le rythme de la puberté',
+    titre: "Combien as-tu grandi l'année dernière ?",
+    sousTitre: "Ta croissance l'année dernière montre le rythme de la puberté",
   },
   epaules: {
     titre: 'Tes épaules se sont-elles élargies ?',
-    sousTitre: 'L'élargissement des épaules peut indiquer la phase milieu de puberté',
+    sousTitre: "L'élargissement des épaules peut indiquer la phase milieu de puberté",
   },
   odeur: {
-    titre: 'As-tu remarqué plus d'odeur corporelle ?',
-    sousTitre: 'Les changements d'odeur corporelle commencent souvent autour de la puberté',
+    titre: "As-tu remarqué plus d'odeur corporelle ?",
+    sousTitre: "Les changements d'odeur corporelle commencent souvent autour de la puberté",
   },
   acne: {
-    titre: 'As-tu de l'acné ?',
+    titre: "As-tu de l'acné ?",
     sousTitre: 'Les boutons peuvent augmenter quand les hormones de la puberté arrivent',
   },
   muscles: {
@@ -187,7 +187,7 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Le changement de voix est un signe tardif que la puberté avance',
   },
   'croissance-lente': {
-    titre: 'Tu grandis encore, mais plus lentement que l'an dernier ?',
+    titre: "Tu grandis encore, mais plus lentement que l'an dernier ?",
     sousTitre: 'Une croissance plus lente peut signifier que ta puberté se termine',
   },
   'modele-prediction': {
@@ -198,22 +198,22 @@ export const TEXTES_ETAPE = {
   precision: {
     titre: 'Quelle est la précision de notre prédiction de taille ?',
     sousTitre:
-      'On combine des mesures clés et des facteurs environnementaux pour estimer ton potentiel',
+      "On combine des mesures clés et des facteurs environnementaux pour estimer ton potentiel",
   },
   'etudes-publiees': {
     titre: 'Disent les études',
     sousTitre: 'Sources scientifiques',
   },
   'vision-long-terme': {
-    titre: 'Comment on peut t'aider',
+    titre: "Comment on peut t'aider",
     sousTitre: 'Tu verras tes progrès chaque mois',
   },
   'verite-brutale': {
-    titre: 'Le coût d'être petit',
+    titre: "Le coût d'être petit",
     sousTitre: 'Pas des statistiques. Juste ce que tu vis déjà',
   },
   'grandimi-aide': {
-    titre: 'Grandimi t'aide avec trois choses',
+    titre: "Grandimi t'aide avec trois choses",
     sousTitre: 'Plan quotidien, conseils sur le sommeil, nutrition et exercices, suivi de ta croissance',
   },
   'taille-ideale': {
@@ -223,7 +223,7 @@ export const TEXTES_ETAPE = {
   'plus-que-genes': {
     titre: 'Tu es plus que tes gènes',
     sousTitre:
-      'Tes gènes posent la base, mais ton mode de vie décide du résultat. On prépare un programme juste pour toi',
+      "Tes gènes posent la base, mais ton mode de vie décide du résultat. On prépare un programme juste pour toi",
   },
   'resultats-la': {
     titre: 'Tes résultats sont là !',
@@ -235,93 +235,93 @@ export const TEXTES_ETAPE = {
    OPTIONS DES ÉCRANS À CHOIX
    ============================================================ */
 export const OPTIONS_MOTIVATION = [
-  { valeur: 'taille-finale', label: 'Prédire ma taille finale' },
-  { valeur: 'nutrition', label: 'Nutrition scanner' },
-  { valeur: 'posture', label: 'Fix ma posture' },
-  { valeur: 'stretches', label: 'Stretches pour grandir' },
+  { valeur: "taille-finale", label: 'Prédire ma taille finale' },
+  { valeur: "nutrition", label: 'Nutrition scanner' },
+  { valeur: "posture", label: 'Fix ma posture' },
+  { valeur: "stretches", label: 'Stretches pour grandir' },
 ]
 
 export const OPTIONS_SPORTS = [
-  { valeur: 'basket', label: 'Basket' },
-  { valeur: 'muscu', label: 'Musculation' },
-  { valeur: 'course', label: 'Course/Athlétisme' },
-  { valeur: 'natation', label: 'Natation' },
-  { valeur: 'foot', label: 'Football/Soccer' },
-  { valeur: 'autre', label: 'Autre' },
+  { valeur: "basket", label: 'Basket' },
+  { valeur: "muscu", label: 'Musculation' },
+  { valeur: "course", label: 'Course/Athlétisme' },
+  { valeur: "natation", label: 'Natation' },
+  { valeur: "foot", label: 'Football/Soccer' },
+  { valeur: "autre", label: 'Autre' },
 ]
 
 export const OPTIONS_EXERCICE_FREQ = [
-  { valeur: '0-2', label: '0-2 heures' },
-  { valeur: '3-5', label: '3-5 heures' },
-  { valeur: '6+', label: '6+ heures' },
+  { valeur: "0-2", label: '0-2 heures' },
+  { valeur: "3-5", label: '3-5 heures' },
+  { valeur: "6+", label: '6+ heures' },
 ]
 
 export const OPTIONS_PROCHES = [
-  { valeur: 'frere', label: 'Frère' },
-  { valeur: 'cousin', label: 'Cousin' },
-  { valeur: 'grand-pere', label: 'Grand-père' },
-  { valeur: 'grand-mere', label: 'Grand-mère' },
-  { valeur: 'autre', label: 'Autre' },
-  { valeur: 'non', label: 'Non' },
+  { valeur: "frere", label: 'Frère' },
+  { valeur: "cousin", label: 'Cousin' },
+  { valeur: "grand-pere", label: 'Grand-père' },
+  { valeur: "grand-mere", label: 'Grand-mère' },
+  { valeur: "autre", label: 'Autre' },
+  { valeur: "non", label: 'Non' },
 ]
 
 export const OPTIONS_PILOSITE_AISSELLES = [
-  { valeur: 'non', label: 'Non' },
-  { valeur: 'un-peu', label: 'Un peu' },
-  { valeur: 'oui', label: 'Oui' },
-  { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
+  { valeur: "non", label: 'Non' },
+  { valeur: "un-peu", label: 'Un peu' },
+  { valeur: "oui", label: 'Oui' },
+  { valeur: "ne-sais-pas", label: 'Je ne sais pas' },
 ]
 
 export const OPTIONS_PILOSITE_VISAGE = [
-  { valeur: 'aucun', label: 'Aucun' },
-  { valeur: 'leger', label: 'Très léger' },
-  { valeur: 'rase-parfois', label: 'Je me rase parfois' },
-  { valeur: 'rase-souvent', label: 'Je me rase régulièrement' },
+  { valeur: "aucun", label: 'Aucun' },
+  { valeur: "leger", label: 'Très léger' },
+  { valeur: "rase-parfois", label: 'Je me rase parfois' },
+  { valeur: "rase-souvent", label: 'Je me rase régulièrement' },
 ]
 
 export const OPTIONS_EPAULES = [
-  { valeur: 'non', label: 'Non' },
-  { valeur: 'un-peu', label: 'Oui un peu' },
-  { valeur: 'clairement', label: 'Oui clairement' },
-  { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
+  { valeur: "non", label: 'Non' },
+  { valeur: "un-peu", label: 'Oui un peu' },
+  { valeur: "clairement", label: 'Oui clairement' },
+  { valeur: "ne-sais-pas", label: 'Je ne sais pas' },
 ]
 
 export const OPTIONS_ODEUR = [
-  { valeur: 'non', label: 'Non' },
-  { valeur: 'un-peu', label: 'Un peu' },
-  { valeur: 'beaucoup', label: 'Beaucoup' },
-  { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
+  { valeur: "non", label: 'Non' },
+  { valeur: "un-peu", label: 'Un peu' },
+  { valeur: "beaucoup", label: 'Beaucoup' },
+  { valeur: "ne-sais-pas", label: 'Je ne sais pas' },
 ]
 
 export const OPTIONS_ACNE = [
-  { valeur: 'aucune', label: 'Aucune' },
-  { valeur: 'rarement', label: 'Rarement' },
-  { valeur: 'reguliere', label: 'Régulière' },
-  { valeur: 'severe', label: 'Fréquente/Sévère' },
-  { valeur: 'disparu', label: 'Presque disparu' },
-  { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
+  { valeur: "aucune", label: 'Aucune' },
+  { valeur: "rarement", label: 'Rarement' },
+  { valeur: "reguliere", label: 'Régulière' },
+  { valeur: "severe", label: 'Fréquente/Sévère' },
+  { valeur: "disparu", label: 'Presque disparu' },
+  { valeur: "ne-sais-pas", label: 'Je ne sais pas' },
 ]
 
 export const OPTIONS_MUSCLES = [
-  { valeur: 'non', label: 'Non' },
-  { valeur: 'un-peu', label: 'Un peu' },
-  { valeur: 'beaucoup', label: 'Beaucoup' },
-  { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
+  { valeur: "non", label: 'Non' },
+  { valeur: "un-peu", label: 'Un peu' },
+  { valeur: "beaucoup", label: 'Beaucoup' },
+  { valeur: "ne-sais-pas", label: 'Je ne sais pas' },
 ]
 
 export const OPTIONS_VOIX = [
-  { valeur: 'non', label: 'Pas de changement' },
-  { valeur: 'un-peu', label: 'Un peu plus grave' },
-  { valeur: 'complet', label: 'Complètement plus grave' },
-  { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
+  { valeur: "non", label: 'Pas de changement' },
+  { valeur: "un-peu", label: 'Un peu plus grave' },
+  { valeur: "complet", label: 'Complètement plus grave' },
+  { valeur: "ne-sais-pas", label: 'Je ne sais pas' },
 ]
 
 export const OPTIONS_CROISSANCE_LENTE = [
-  { valeur: 'pas-grandi', label: 'N'ai pas grandi' },
-  { valeur: 'plus-lentement', label: 'Plus lentement' },
-  { valeur: 'meme-rythme', label: 'Même rythme' },
-  { valeur: 'plus-vite', label: 'Plus vite' },
-  { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
+  { valeur: "pas-grandi", label: "N'ai pas grandi" },
+  { valeur: "plus-lentement", label: 'Plus lentement' },
+  { valeur: "meme-rythme", label: 'Même rythme' },
+  { valeur: "plus-vite", label: 'Plus vite' },
+  { valeur: "ne-sais-pas", label: 'Je ne sais pas' },
 ]
 
 /* ============================================================
@@ -382,8 +382,8 @@ export function MoletteTailleCm({ valeurCm, onChange, unite, onChangeUnite, min 
         value={unite}
         onChange={onChangeUnite}
         options={[
-          { value: 'cm', label: 'cm' },
-          { value: 'ft', label: 'ft/in' },
+          { value: "cm", label: 'cm' },
+          { value: "ft", label: 'ft/in' },
         ]}
       />
       {unite === 'cm' ? (
@@ -440,8 +440,8 @@ export function MolettePoidsKg({ valeurKg, onChange, unite, onChangeUnite }) {
         value={unite}
         onChange={onChangeUnite}
         options={[
-          { value: 'kg', label: 'kg' },
-          { value: 'lbs', label: 'lbs' },
+          { value: "kg", label: 'kg' },
+          { value: "lbs", label: 'lbs' },
         ]}
       />
       {unite === 'kg' ? (
@@ -478,8 +478,8 @@ export function MolettePointure({ valeurEu, onChange, unite, onChangeUnite }) {
         value={unite}
         onChange={onChangeUnite}
         options={[
-          { value: 'eu', label: 'EU' },
-          { value: 'us', label: 'US' },
+          { value: "eu", label: 'EU' },
+          { value: "us", label: 'US' },
         ]}
       />
       {unite === 'eu' ? (
@@ -604,9 +604,9 @@ export function EcranPrecision() {
 }
 
 const AIDES_GRANDIMI = [
-  { icone: Ruler, titre: 'Estimation de taille', detail: 'Mise à jour chaque mois' },
-  { icone: Dumbbell, titre: 'Plan quotidien', detail: '11 actions pour grandir' },
-  { icone: Moon, titre: 'Conseils détaillés', detail: 'Sommeil, nutrition, exercice' },
+  { icone: Ruler, titre: "Estimation de taille", detail: 'Mise à jour chaque mois' },
+  { icone: Dumbbell, titre: "Plan quotidien", detail: '11 actions pour grandir' },
+  { icone: Moon, titre: "Conseils détaillés", detail: 'Sommeil, nutrition, exercice' },
 ]
 
 export function EcranGrandimiAide() {
@@ -689,9 +689,9 @@ export function EcranEtudesPubliees() {
 }
 
 const VISION_LEVIERS = [
-  { icone: Moon, titre: 'Mieux suivre', detail: 'Tes progrès, chaque mois' },
-  { icone: Utensils, titre: 'Mieux comprendre', detail: 'Ce qui influence ta taille' },
-  { icone: Dumbbell, titre: 'Mieux accompagner', detail: 'Chaque jour, tes prochains pas' },
+  { icone: Moon, titre: "Mieux suivre", detail: 'Tes progrès, chaque mois' },
+  { icone: Utensils, titre: "Mieux comprendre", detail: 'Ce qui influence ta taille' },
+  { icone: Dumbbell, titre: "Mieux accompagner", detail: 'Chaque jour, tes prochains pas' },
 ]
 
 export function EcranVisionLongTerme() {
