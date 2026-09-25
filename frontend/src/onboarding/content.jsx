@@ -48,18 +48,12 @@ export const ORDRE_ETAPES = [
   'croissance-lente',
   'modele-prediction',
   'precision',
-  'potentiel-gain',
-  'optimiser-potentiel',
-  'grandimi-aide',
-  'nutrition-scanner',
-  'sleep-tracker',
-  'exercices-quotidiens',
-  'height-tracker',
-  'verite-brutale',
   'etudes-publiees',
-  'avis-utilisateurs',
-  'taille-ideale',
+  'vision-long-terme',
+  'verite-brutale',
   'plus-que-genes',
+  'grandimi-aide',
+  'taille-ideale',
   'resultats-la',
 ]
 
@@ -89,18 +83,12 @@ export const TYPE_ETAPE = {
   'croissance-lente': 'question',
   'modele-prediction': 'affichage',
   precision: 'affichage',
-  'potentiel-gain': 'affichage',
-  'optimiser-potentiel': 'affichage',
-  'grandimi-aide': 'affichage',
-  'nutrition-scanner': 'affichage',
-  'sleep-tracker': 'affichage',
-  'exercices-quotidiens': 'affichage',
-  'height-tracker': 'affichage',
-  'verite-brutale': 'affichage',
   'etudes-publiees': 'affichage',
-  'avis-utilisateurs': 'affichage',
-  'taille-ideale': 'question',
+  'vision-long-terme': 'affichage',
+  'verite-brutale': 'affichage',
   'plus-que-genes': 'interstitielle',
+  'grandimi-aide': 'affichage',
+  'taille-ideale': 'question',
   'resultats-la': 'interstitielle',
 }
 
@@ -118,7 +106,7 @@ export const TEXTES_ETAPE = {
   },
   sexe: {
     titre: 'Garçon ou une fille ?',
-    sousTitre: 'Le sexe influence ta taille à l’âge adulte',
+    sousTitre: 'Le sexe influence ta taille à l'âge adulte',
   },
   age: {
     titre: 'Quand es-tu né ?',
@@ -145,7 +133,7 @@ export const TEXTES_ETAPE = {
     sousTitre: "L'exercice influence l'hormone de croissance et la récupération",
   },
   sommeil: {
-    titre: 'Combien d’heures dors-tu par nuit ?',
+    titre: 'Combien d'heures dors-tu par nuit ?',
     sousTitre: 'Bien dormir aide à grandir et à récupérer',
   },
   pere: {
@@ -175,19 +163,19 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Les poils du visage nous aident à estimer ton stade de croissance',
   },
   'vitesse-croissance': {
-    titre: 'Combien as-tu grandi l’année dernière ?',
-    sousTitre: 'Ta croissance l’année dernière montre le rythme de la puberté',
+    titre: 'Combien as-tu grandi l'année dernière ?',
+    sousTitre: 'Ta croissance l'année dernière montre le rythme de la puberté',
   },
   epaules: {
     titre: 'Tes épaules se sont-elles élargies ?',
-    sousTitre: 'L’élargissement des épaules peut indiquer la phase milieu de puberté',
+    sousTitre: 'L'élargissement des épaules peut indiquer la phase milieu de puberté',
   },
   odeur: {
-    titre: 'As-tu remarqué plus d’odeur corporelle ?',
-    sousTitre: 'Les changements d’odeur corporelle commencent souvent autour de la puberté',
+    titre: 'As-tu remarqué plus d'odeur corporelle ?',
+    sousTitre: 'Les changements d'odeur corporelle commencent souvent autour de la puberté',
   },
   acne: {
-    titre: 'As-tu de l’acné ?',
+    titre: 'As-tu de l'acné ?',
     sousTitre: 'Les boutons peuvent augmenter quand les hormones de la puberté arrivent',
   },
   muscles: {
@@ -199,58 +187,34 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Le changement de voix est un signe tardif que la puberté avance',
   },
   'croissance-lente': {
-    titre: 'Tu grandis encore, mais plus lentement que l’an dernier ?',
+    titre: 'Tu grandis encore, mais plus lentement que l'an dernier ?',
     sousTitre: 'Une croissance plus lente peut signifier que ta puberté se termine',
   },
   'modele-prediction': {
-    titre: "The World's Best Height Prediction Model",
+    titre: 'Basé sur Khamis-Roche, reconnu mondialement',
     sousTitre:
-      "A team of Grandimi engineers have spent months building the world's best height prediction engine",
+      'L'équipe Grandimi combine la méthode scientifique Khamis-Roche avec le suivi OMS pour prédire ta taille définitive',
   },
   precision: {
     titre: 'Quelle est la précision de notre prédiction de taille ?',
     sousTitre:
       'On combine des mesures clés et des facteurs environnementaux pour estimer ton potentiel',
   },
-  'potentiel-gain': {
-    titre: 'Tu peux grandir',
-    sousTitre: 'Environ 20 % de ta taille est encore entre tes mains',
-  },
-  'optimiser-potentiel': {
-    titre: 'Optimise tout ton potentiel de taille',
-    sousTitre: 'Pour grandir au maximum, dors bien, mange bien et reste actif',
-  },
-  'grandimi-aide': {
-    titre: 'Grandimi t’aide pour ça',
-    sousTitre: 'On te guide vers ton plein potentiel avec des étapes simples et efficaces',
-  },
-  'nutrition-scanner': {
-    titre: 'Vérifie si ton alimentation aide ta croissance',
-    sousTitre: 'Apprends comment ce que tu manges influence la croissance',
-  },
-  'sleep-tracker': {
-    titre: 'Suis ton sommeil et reçois des conseils',
-    sousTitre: 'Observe ton sommeil et reçois des conseils pour mieux te reposer',
-  },
-  'exercices-quotidiens': {
-    titre: 'Fais des exercices quotidiens avec Grandimi',
-    sousTitre: 'Suis des routines simples pour soutenir ta croissance et ta santé',
-  },
-  'height-tracker': {
-    titre: 'Suis ta taille chaque semaine',
-    sousTitre: 'Saisis ta taille chaque semaine. Plus on a de données, plus la prédiction est précise',
-  },
-  'verite-brutale': {
-    titre: 'Le coût d’être petit',
-    sousTitre: 'Pas des statistiques. Juste ce que tu vis déjà',
-  },
   'etudes-publiees': {
     titre: 'Disent les études',
     sousTitre: 'Sources scientifiques',
   },
-  'avis-utilisateurs': {
-    titre: 'Résultats réels',
-    sousTitre: '100 000+ utilisateurs',
+  'vision-long-terme': {
+    titre: 'Comment on peut t'aider',
+    sousTitre: 'Tu verras tes progrès chaque mois',
+  },
+  'verite-brutale': {
+    titre: 'Le coût d'être petit',
+    sousTitre: 'Pas des statistiques. Juste ce que tu vis déjà',
+  },
+  'grandimi-aide': {
+    titre: 'Grandimi t'aide avec trois choses',
+    sousTitre: 'Plan quotidien, conseils sur le sommeil, nutrition et exercices, suivi de ta croissance',
   },
   'taille-ideale': {
     titre: 'Quelle est ta taille idéale ?',
@@ -263,7 +227,7 @@ export const TEXTES_ETAPE = {
   },
   'resultats-la': {
     titre: 'Tes résultats sont là !',
-    sousTitre: 'Il s’avère que… Tu ne grandis pas à ton potentiel. Corrigeons ça !',
+    sousTitre: 'Rentre ton email pour voir tes résultats complets et débloquer ton plan',
   },
 }
 
@@ -353,7 +317,7 @@ export const OPTIONS_VOIX = [
 ]
 
 export const OPTIONS_CROISSANCE_LENTE = [
-  { valeur: 'pas-grandi', label: 'N’ai pas grandi' },
+  { valeur: 'pas-grandi', label: 'N'ai pas grandi' },
   { valeur: 'plus-lentement', label: 'Plus lentement' },
   { valeur: 'meme-rythme', label: 'Même rythme' },
   { valeur: 'plus-vite', label: 'Plus vite' },
@@ -565,13 +529,13 @@ export function MoletteVitesseCroissance({ valeur, onChange }) {
   return (
     <div className="onb-mesure">
       <WheelPicker
-        label="Croissance l’année dernière"
+        label="Croissance l'année dernière"
         value={inconnu ? 5 : valeur}
         onChange={onChange}
         min={0}
         max={25}
         step={0.5}
-        format={(v) => `${v % 1 === 0 ? v : v.toFixed(1).replace('.', ',')} cm l’année dernière`}
+        format={(v) => `${v % 1 === 0 ? v : v.toFixed(1).replace('.', ',')} cm l'année dernière`}
       />
       <button type="button" className="funnel-link onb-lien-inconnu" onClick={() => onChange(null)}>
         Je ne sais pas
@@ -639,139 +603,22 @@ export function EcranPrecision() {
   return <BadgePrecision />
 }
 
-export function EcranPotentielGain() {
-  return (
-    <div className="onb-gauge" role="img" aria-label="20 % de ta taille adulte dépend de toi">
-      <svg viewBox="0 0 120 120" className="onb-gauge-anneau" aria-hidden="true">
-        <circle className="onb-gauge-piste" cx="60" cy="60" r="52" />
-        <circle
-          className="onb-gauge-arc"
-          cx="60"
-          cy="60"
-          r="52"
-          style={{
-            strokeDasharray: 2 * Math.PI * 52,
-            strokeDashoffset: 2 * Math.PI * 52 * (1 - 0.2),
-          }}
-        />
-        <text x="60" y="66" textAnchor="middle" className="onb-gauge-texte">
-          20 %
-        </text>
-      </svg>
-      <p className="funnel-help">20 % de ta taille adulte dépend de tes habitudes.</p>
-    </div>
-  )
-}
-
-const LEVIERS_OPTIMISATION = [
-  { icone: Moon, titre: 'Sommeil', detail: '7-9 heures par nuit' },
-  { icone: Utensils, titre: 'Nutrition', detail: 'Protéines, calcium, vitamine D' },
-  { icone: Dumbbell, titre: 'Activité', detail: '30 min par jour minimum' },
+const AIDES_GRANDIMI = [
+  { icone: Ruler, titre: 'Estimation de taille', detail: 'Mise à jour chaque mois' },
+  { icone: Dumbbell, titre: 'Plan quotidien', detail: '11 actions pour grandir' },
+  { icone: Moon, titre: 'Conseils détaillés', detail: 'Sommeil, nutrition, exercice' },
 ]
 
-export function EcranOptimiserPotentiel() {
+export function EcranGrandimiAide() {
   return (
     <div className="onb-icones onb-icones-3">
-      {LEVIERS_OPTIMISATION.map(({ icone: Icone, titre, detail }) => (
+      {AIDES_GRANDIMI.map(({ icone: Icone, titre, detail }) => (
         <div className="onb-icone" key={titre}>
           <Icone size={26} aria-hidden="true" />
           <strong>{titre}</strong>
           <span>{detail}</span>
         </div>
       ))}
-    </div>
-  )
-}
-
-const AIDES_GRANDIMI = [
-  { icone: Moon, titre: 'Sommeil', detail: 'Suivi et conseils chaque soir' },
-  { icone: Utensils, titre: 'Nutrition', detail: 'Scanner de repas' },
-  { icone: Dumbbell, titre: 'Exercice', detail: 'Routines quotidiennes' },
-  { icone: Ruler, titre: 'Suivi Grandimi', detail: 'Ta taille, semaine après semaine' },
-]
-
-export function EcranGrandimiAide() {
-  return (
-    <div className="onb-icones onb-icones-4">
-      {AIDES_GRANDIMI.map(({ icone: Icone, titre, detail }) => (
-        <div className="onb-icone" key={titre}>
-          <Icone size={24} aria-hidden="true" />
-          <strong>{titre}</strong>
-          <span>{detail}</span>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-export function EcranNutritionScanner() {
-  return (
-    <div className="onb-exemple-carte">
-      <p className="onb-exemple-titre">Salmon toast</p>
-      <ul className="onb-exemple-lignes">
-        <li>450 kcal</li>
-        <li>40 g protéines</li>
-        <li>90 g glucides</li>
-        <li>25 g lipides</li>
-      </ul>
-      <p className="onb-exemple-score">Height Score : 85/100</p>
-    </div>
-  )
-}
-
-export function EcranSleepTracker() {
-  return (
-    <div className="onb-exemple-carte">
-      <p className="onb-exemple-titre">5 h 51</p>
-      <p>Moins que les 8h nécessaires pour une croissance optimale</p>
-      <p className="onb-exemple-score">Recommandation : dors avant 22h30</p>
-    </div>
-  )
-}
-
-export function EcranExercicesQuotidiens() {
-  return <FonctionCapture image="seance" alt="Séance d’exercices quotidiens dans l’application Grandimi" />
-}
-
-// Les quatre colonnes (sommeil, taille, exercice, vitamine) reprennent
-// exactement le mock du script — pas seulement la taille : c'est bien un
-// tracker à quatre cases cochées par semaine, une seule d'entre elles
-// portant un chiffre.
-const SEMAINES_HAUTEUR = [
-  { semaine: 1, taille: '172,3 cm', delta: '' },
-  { semaine: 2, taille: '172,4 cm', delta: '+0,1' },
-  { semaine: 3, taille: '172,5 cm', delta: '+0,2' },
-  { semaine: 4, taille: '172,7 cm', delta: '+0,2' },
-]
-
-export function EcranHeightTracker() {
-  return (
-    <div className="onb-tracker">
-      <table className="onb-tracker-table">
-        <thead>
-          <tr>
-            <th scope="col">Semaine</th>
-            <th scope="col">Sommeil</th>
-            <th scope="col">Taille</th>
-            <th scope="col">Exercice</th>
-            <th scope="col">Vitamine</th>
-          </tr>
-        </thead>
-        <tbody>
-          {SEMAINES_HAUTEUR.map(({ semaine, taille, delta }) => (
-            <tr key={semaine}>
-              <td>Semaine {semaine}</td>
-              <td aria-label="Sommeil coché">✓</td>
-              <td>
-                {taille} {delta && <span className="onb-tracker-delta">{delta}</span>}
-              </td>
-              <td aria-label="Exercice coché">✓</td>
-              <td aria-label="Vitamine cochée">✓</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <p className="onb-exemple-score">Précision : 83 % → 85 % (+2 %)</p>
     </div>
   )
 }
@@ -794,7 +641,7 @@ const VERITE_GARCON = [
   'On te traite encore comme le plus jeune du groupe',
   'Ça pèse sur la confiance, pas seulement sur le miroir',
   'Le premier regard te met déjà à part',
-  'Plus d’anxiété sociale',
+  'Plus d'anxiété sociale',
 ]
 
 const VERITE_FILLE = [
@@ -804,7 +651,7 @@ const VERITE_FILLE = [
   'Voir tes potes grandir',
   'Ne pas savoir si tu as fini',
   'On te prend moins au sérieux',
-  'Plus d’anxiété dans les groupes',
+  'Plus d'anxiété dans les groupes',
 ]
 
 export function EcranVeriteBrutale({ sexe }) {
@@ -841,15 +688,24 @@ export function EcranEtudesPubliees() {
   return <EtudesPubliees />
 }
 
-/**
- * Écran 35. Mêmes trois prénoms (Adam, Lucas, Nolan) que dans le script,
- * mais avec les centimètres réellement fournis par le client et déjà
- * publiés dans `avis.jsx` — le script en proposait d'autres (+2.3 cm,
- * +2.1 cm, +1.9 cm) qu'aucun client n'a mesurés. Un témoignage avec un
- * chiffre inventé n'est plus un témoignage.
- */
-export function EcranAvisUtilisateurs() {
-  return <Avis />
+const VISION_LEVIERS = [
+  { icone: Moon, titre: 'Mieux suivre', detail: 'Tes progrès, chaque mois' },
+  { icone: Utensils, titre: 'Mieux comprendre', detail: 'Ce qui influence ta taille' },
+  { icone: Dumbbell, titre: 'Mieux accompagner', detail: 'Chaque jour, tes prochains pas' },
+]
+
+export function EcranVisionLongTerme() {
+  return (
+    <div className="onb-icones onb-icones-3">
+      {VISION_LEVIERS.map(({ icone: Icone, titre, detail }) => (
+        <div className="onb-icone" key={titre}>
+          <Icone size={26} aria-hidden="true" />
+          <strong>{titre}</strong>
+          <span>{detail}</span>
+        </div>
+      ))}
+    </div>
+  )
 }
 
 /**

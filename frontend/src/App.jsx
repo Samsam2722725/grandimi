@@ -157,16 +157,7 @@ function App() {
       );
     }
 
-    /* Onboarding v2 : le dernier écran (« Révéler mes résultats ») mène
-       directement à la paywall, sans étape ResultsPage intermédiaire —
-       c'est la démonstration explicitement demandée pour ce script.
-       ATTENTION, ce que ça change : la landing (HomePage) promet encore
-       "Estimation gratuite - sans compte" / "aucun résultat flouté", ce
-       que ce chemin ne tient plus puisque le résultat chiffré est
-       désormais derrière l'abonnement dès la sortie du tunnel. Cette
-       copie n'a pas été mise à jour ici — décision produit à trancher
-       séparément, pas un oubli d'implémentation. */
-    setCurrentPage('paywall');
+    setCurrentPage('results');
   };
 
   /* Le plan ne s’ouvre qu’une fois ses horaires connus.

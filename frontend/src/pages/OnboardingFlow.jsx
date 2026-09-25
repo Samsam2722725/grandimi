@@ -44,16 +44,10 @@ import {
   MoletteVitesseCroissance,
   EcranModelePrediction,
   EcranPrecision,
-  EcranPotentielGain,
-  EcranOptimiserPotentiel,
   EcranGrandimiAide,
-  EcranNutritionScanner,
-  EcranSleepTracker,
-  EcranExercicesQuotidiens,
-  EcranHeightTracker,
   EcranVeriteBrutale,
   EcranEtudesPubliees,
-  EcranAvisUtilisateurs,
+  EcranVisionLongTerme,
   EcranPlusQueGenes,
   EcranPuberteIntro,
 } from '../onboarding/content.jsx'
@@ -509,26 +503,14 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
         return <EcranModelePrediction />
       case 'precision':
         return <EcranPrecision />
-      case 'potentiel-gain':
-        return <EcranPotentielGain />
-      case 'optimiser-potentiel':
-        return <EcranOptimiserPotentiel />
-      case 'grandimi-aide':
-        return <EcranGrandimiAide />
-      case 'nutrition-scanner':
-        return <EcranNutritionScanner />
-      case 'sleep-tracker':
-        return <EcranSleepTracker />
-      case 'exercices-quotidiens':
-        return <EcranExercicesQuotidiens />
-      case 'height-tracker':
-        return <EcranHeightTracker />
-      case 'verite-brutale':
-        return <EcranVeriteBrutale sexe={reponses.sexe} />
       case 'etudes-publiees':
         return <EcranEtudesPubliees />
-      case 'avis-utilisateurs':
-        return <EcranAvisUtilisateurs />
+      case 'vision-long-terme':
+        return <EcranVisionLongTerme />
+      case 'verite-brutale':
+        return <EcranVeriteBrutale sexe={reponses.sexe} />
+      case 'grandimi-aide':
+        return <EcranGrandimiAide />
       case 'taille-ideale':
         return (
           <MoletteTailleCm
