@@ -525,6 +525,18 @@
     box-shadow 0.15s ease;
 }
 
+.funnel-choice-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.funnel-choice-description {
+  font-size: 12px;
+  color: var(--funnel-muted);
+  margin-left: 12px;
+}
+
 .choice-card.is-selected .choice-card-radio {
   border-color: var(--funnel-accent);
   /* Le point central est peint par une ombre interne : pas de pseudo-élément
