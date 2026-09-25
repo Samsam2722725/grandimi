@@ -23,6 +23,7 @@ import { capturePageview } from './lib/analytics';
 import HomePage from './pages/HomePage';
 
 const OnboardingFlow = lazy(() => import('./pages/OnboardingFlow'));
+const PaywallFunnel = lazy(() => import('./pages/PaywallFunnel'));
 const Paywall = lazy(() => import('./pages/Paywall'));
 const ResultsPage = lazy(() => import('./pages/ResultsPage'));
 const PaywallPage = lazy(() => import('./pages/PaywallPage'));
@@ -159,7 +160,7 @@ function App() {
     }
 
     /* Onboarding v2 : le dernier écran (« Révéler mes résultats ») mène
-       directement à la paywall, sans étape ResultsPage intermédiaire —
+       au funnel éducatif puis à la paywall, sans étape ResultsPage intermédiaire —
        c'est la démonstration explicitement demandée pour ce script.
        ATTENTION, ce que ça change : la landing (HomePage) promet encore
        "Estimation gratuite - sans compte" / "aucun résultat flouté", ce
@@ -167,7 +168,7 @@ function App() {
        désormais derrière l'abonnement dès la sortie du tunnel. Cette
        copie n'a pas été mise à jour ici — décision produit à trancher
        séparément, pas un oubli d'implémentation. */
-    setCurrentPage('paywall');
+    setCurrentPage('paywall-funnel');
   };
 
   /* Le plan ne s’ouvre qu’une fois ses horaires connus.
@@ -506,6 +507,13 @@ function App() {
           predictionData={predictionData}
           onViewPlan={handleViewPlan}
           onBackHome={handleBackHome}
+        />
+      )}
+
+      {/* Paywall Funnel (education pages before payment) */}
+      {currentPage === 'paywall-funnel' && predictionData && (
+        <PaywallFunnel
+          onComplete={() => setCurrentPage('paywall')}
         />
       )}
 
