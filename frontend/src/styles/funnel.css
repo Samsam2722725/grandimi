@@ -556,6 +556,18 @@
     box-shadow 0.15s ease;
 }
 
+.funnel-choice-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.funnel-choice-description {
+  font-size: 12px;
+  color: var(--funnel-muted);
+  margin-left: 12px;
+}
+
 .choice-card.is-selected .choice-card-radio {
   border-color: var(--funnel-accent);
   /* Le point central est peint par une ombre interne : pas de pseudo-élément
@@ -2436,29 +2448,68 @@
   color: var(--funnel-accent-text);
 }
 
-.onb-tracker {
-  display: flex;
+.onb-exemple-lignes--colonne {
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
-.onb-tracker-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-.onb-tracker-table th,
-.onb-tracker-table td {
-  text-align: left;
-  padding: 10px 6px;
-  border-bottom: 1px solid var(--funnel-line);
+.onb-exemple-lignes--colonne strong {
   color: var(--funnel-text);
 }
 
-.onb-tracker-delta {
-  color: var(--funnel-accent-text);
-  font-weight: 600;
+.onb-frise {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-left: 2px solid var(--funnel-line);
+}
+
+.onb-frise-etape {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.onb-frise-etape::before {
+  content: '';
+  position: absolute;
+  left: -25px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--funnel-accent-text);
+}
+
+.onb-frise-etape strong {
+  font-size: 15px;
+  color: var(--funnel-text);
+}
+
+.onb-frise-etape span {
+  font-size: 14px;
+  color: var(--funnel-muted);
+}
+
+.onb-graph-habitudes {
+  width: 100%;
+  max-width: 280px;
+  height: 160px;
+  margin: 16px 0;
+}
+
+.onb-graph-line {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.onb-graph-label {
+  font-size: 13px;
+  fill: var(--funnel-muted);
 }
 
 .onb-genes-barres {
@@ -2505,4 +2556,155 @@
   font-size: 13.5px;
   font-weight: 700;
   color: var(--funnel-text);
+}
+
+/* Resultats email screen - purple/magenta theme */
+.resultats-email {
+  background: linear-gradient(135deg, #0f0015 0%, #1a001f 100%);
+  color: #fff;
+}
+
+.resultats-email .resultats-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.resultats-email .interstitial-titre {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.resultats-email .interstitial-text {
+  color: #ccc;
+  font-size: 1.1rem;
+}
+
+.resultats-email .funnel-field input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1.5px solid #7a3ac2;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+}
+
+.resultats-email .funnel-field input::placeholder {
+  color: #999;
+}
+
+.resultats-email .funnel-help {
+  color: #999;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.resultats-email .resultats-btn {
+  background: linear-gradient(135deg, #b633d4 0%, #7a3ac2 100%);
+  border: none;
+  color: #fff;
+  padding: 1.2rem;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.resultats-email .resultats-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(182, 51, 212, 0.4);
+}
+
+.resultats-email .resultats-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Plan creation screen */
+.plan-creation {
+  background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.plan-progress {
+  margin: 2rem 0;
+}
+
+.progress-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: conic-gradient(#ff5a1f 0deg, #ff5a1f 216deg, #333 216deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.progress-value {
+  width: 130px;
+  height: 130px;
+  background: #0a0a0a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.plan-steps {
+  width: 100%;
+  max-width: 500px;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.plan-step {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #666;
+}
+
+.plan-step.done {
+  border-left-color: #ff5a1f;
+  background: rgba(255, 90, 31, 0.1);
+}
+
+.step-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.plan-step.done .step-check {
+  background: #ff5a1f;
+  border-color: #ff5a1f;
+  color: #fff;
+}
+
+.step-label {
+  color: #ccc;
+  font-size: 0.95rem;
+}
+
+.plan-step.done .step-label {
+  color: #fff;
 }

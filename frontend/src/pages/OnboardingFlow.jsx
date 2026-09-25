@@ -42,12 +42,15 @@ import {
   MoletteDateNaissance,
   MoletteSommeil,
   MoletteVitesseCroissance,
+  EcranHabitudes,
   EcranModelePrediction,
   EcranPrecision,
+  EcranPotentielGain,
+  EcranOptimiserPotentiel,
   EcranGrandimiAide,
   EcranVeriteBrutale,
   EcranEtudesPubliees,
-  EcranVisionLongTerme,
+  EcranAvisUtilisateurs,
   EcranPlusQueGenes,
   EcranPuberteIntro,
 } from '../onboarding/content.jsx'
@@ -268,21 +271,21 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       case 'sommeil':
         return reponses.sommeil >= 5
       case 'pilosite-aisselles':
-        return reponses.pilositeAisselles != null
+        return true
       case 'pilosite-visage':
-        return reponses.pilositeVisage != null
+        return true
       case 'epaules':
-        return reponses.epaules != null
+        return true
       case 'odeur':
-        return reponses.odeur != null
+        return true
       case 'acne':
-        return reponses.acne != null
+        return true
       case 'muscles':
-        return reponses.muscles != null
+        return true
       case 'voix':
-        return reponses.voix != null
+        return true
       case 'croissance-lente':
-        return reponses.croissanceLente != null
+        return true
       case 'taille-ideale':
         return reponses.tailleIdeale > 0
       default:
@@ -499,18 +502,34 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
             options={OPTIONS_CROISSANCE_LENTE}
           />
         )
+      case 'habitudes':
+        return <EcranHabitudes />
       case 'modele-prediction':
         return <EcranModelePrediction />
       case 'precision':
         return <EcranPrecision />
-      case 'etudes-publiees':
-        return <EcranEtudesPubliees />
-      case 'vision-long-terme':
-        return <EcranVisionLongTerme />
-      case 'verite-brutale':
-        return <EcranVeriteBrutale sexe={reponses.sexe} />
+      case 'potentiel-gain':
+        return <EcranPotentielGain />
+      case 'optimiser-potentiel':
+        return <EcranOptimiserPotentiel />
       case 'grandimi-aide':
         return <EcranGrandimiAide />
+      case 'exercices-quotidiens':
+        return <div className="onb-content"><p>Fais des exercices quotidiens pour soutenir ta croissance</p></div>
+      case 'optimise-routine':
+        return <div className="onb-content"><p>Optimise ta routine avec des petits changements</p></div>
+      case 'programme-optimal':
+        return <div className="onb-content"><p>Ton programme optimal t'attend</p></div>
+      case 'guide-grandir':
+        return <div className="onb-content"><p>Guide pour grandir : les fondamentaux expliqués</p></div>
+      case 'height-tracker':
+        return <div className="onb-content"><p>Suis ta taille chaque semaine pour une meilleure prédiction</p></div>
+      case 'verite-brutale':
+        return <EcranVeriteBrutale sexe={reponses.sexe} />
+      case 'etudes-publiees':
+        return <EcranEtudesPubliees />
+      case 'avis-utilisateurs':
+        return <EcranAvisUtilisateurs />
       case 'taille-ideale':
         return (
           <MoletteTailleCm
@@ -544,40 +563,59 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     return <EcranPlusQueGenes onContinue={avancer} />
   }
 
-  if (etape === 'resultats-la') {
-    if (phaseResultats === 'analyse') {
-      return (
-        <AnalyseEnCours
-          pret={Boolean(resultatApi)}
-          erreur={erreurApi}
-          onFini={terminerAnalyse}
-          onReessayer={() => setTentative((n) => n + 1)}
-        />
-      )
-    }
-    const emailValide = EMAIL_VALIDE.test(email)
+  if (etape === 'choix-genetique') {
+    return <div className="onb-content"><p>Tu n'as pas choisi ta génétique. Mais tu peux choisir ce que tu en fais.</p></div>
+  }
+
+  if (etape === 'decouvrir-taller') {
     return (
       <div className="interstitial">
+        <h1 className="interstitial-titre">Il est maintenant temps de découvrir</h1>
+        <p className="interstitial-text">Ce que Taller dit sur ton potentiel de croissance</p>
+        <div className="interstitial-action is-ready">
+          <button type="button" className="funnel-cta" onClick={avancer}>
+            Analyser mes réponses
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (etape === 'resultats-la') {
+    // Plan creation screen with progression
+    const steps = [
+      { label: 'Lecture de tes mesures', done: true },
+      { label: 'Projection Khamis-Roche', done: true },
+      { label: 'Croissement avec les courbes OMS', done: false },
+      { label: 'Correction selon ta maturité', done: false },
+      { label: 'Pondération de tes habitudes', done: false },
+    ]
+
+    const progressPercent = (steps.filter(s => s.done).length / steps.length) * 100
+
+    return (
+      <div className="interstitial plan-creation">
         <h1 className="interstitial-titre">{texte.titre}</h1>
         <p className="interstitial-text">{texte.sousTitre}</p>
-        <div className="funnel-field">
-          <label htmlFor="onb-email" className="sr-only">
-            Adresse e-mail
-          </label>
-          <input
-            id="onb-email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            placeholder="ton@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+
+        <div className="plan-progress">
+          <div className="progress-circle">
+            <div className="progress-value">{Math.round(progressPercent)}%</div>
+          </div>
         </div>
-        <p className="funnel-help">On t’envoie ton résultat à cette adresse.</p>
+
+        <div className="plan-steps">
+          {steps.map((step, idx) => (
+            <div key={idx} className={`plan-step ${step.done ? 'done' : ''}`}>
+              <div className="step-check">{step.done ? '✓' : ''}</div>
+              <span className="step-label">{step.label}</span>
+            </div>
+          ))}
+        </div>
+
         <div className="interstitial-action is-ready">
-          <button type="button" className="funnel-cta" disabled={!emailValide} onClick={lancerAnalyse}>
-            Révéler mes résultats
+          <button type="button" className="funnel-cta" onClick={avancer} disabled>
+            En cours...
           </button>
         </div>
       </div>
