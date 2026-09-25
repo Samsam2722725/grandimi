@@ -268,13 +268,13 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
             pingArea={[0.1, 0.12, 0.9, 0.88]}
             className="px-6 pt-16 pb-20 sm:px-8 lg:pt-24 lg:pb-28"
           >
-            {/* Halo orange, recentré avec le contenu.
-                Il était calé en haut à droite pour éclairer une colonne de
-                texte alignée à gauche ; le hero est désormais centré, donc le
-                halo l'est aussi, sinon il éclaire un bord vide. */}
+            {/* Halo orange, ramené sous le texte redevenu aligné à gauche
+                (référence fournie : positionnement à gauche, pas centré).
+                Recalé à gauche plutôt que centré, sinon il éclaire un bord
+                vide pendant que le texte est ailleurs. */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute -top-40 left-1/2 z-0 size-[680px] -translate-x-1/2 rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.17] blur-[140px]"
+              className="pointer-events-none absolute -top-32 -left-20 z-0 size-[680px] rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.17] blur-[140px]"
             />
 
             {/* Voile radial sous la colonne de texte.
@@ -291,20 +291,23 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                 points d'un côté, du noir vide de l'autre — mesuré sur 1440px.
                 L'ellipse est élargie pour couvrir la section quasi entière,
                 et un palier avant le fondu adoucit la transition au lieu de
-                la couper à bord franc. */}
+                la couper à bord franc. Centre décalé de 50% à 38% : le texte
+                est repassé à gauche, sa colonne (max-w-3xl) n'occupe plus le
+                centre de la section sur grand écran. */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_140%_110%_at_50%_38%,var(--surface-page-canvas)_0%,var(--surface-page-canvas)_20%,transparent_100%)]"
+              className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_140%_110%_at_38%_38%,var(--surface-page-canvas)_0%,var(--surface-page-canvas)_20%,transparent_100%)]"
             />
 
-            {/* Composition centrée, sans visuel latéral.
-                Les trois téléphones sont retirés du fold : ils tenaient la
+            {/* Aligné à gauche, sans visuel latéral — référence fournie par
+                l'utilisateur : le texte démarre au bord, pas au centre. Les
+                trois téléphones restent retirés du fold : ils tenaient la
                 moitié droite sur grand écran et ne s'affichaient pas du tout
                 sur téléphone, où la colonne de texte était donc déjà seule.
-                Le centrage aligne les deux tailles d'écran sur la même
-                lecture — pastille, titre, promesse, action — et rend au titre
-                toute la largeur. */}
-            <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center">
+                `mx-auto` retiré : il centrait tout le bloc dans la section,
+                ce qui aurait remis le texte au milieu sur grand écran malgré
+                `items-start`. */}
+            <div className="relative z-10 flex w-full max-w-3xl flex-col items-start text-left">
               {/* Pastille de preuve, au-dessus du titre : le signal de
                   crédibilité arrive avant la promesse, pas après. */}
               <p
