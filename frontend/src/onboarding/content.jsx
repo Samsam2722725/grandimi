@@ -46,20 +46,24 @@ export const ORDRE_ETAPES = [
   'muscles',
   'voix',
   'croissance-lente',
+  'habitudes',
   'modele-prediction',
   'precision',
   'potentiel-gain',
   'optimiser-potentiel',
   'grandimi-aide',
-  'conseils-nutrition',
-  'conseils-sommeil',
-  'plan-quotidien',
-  'estimation-mensuelle',
+  'exercices-quotidiens',
+  'optimise-routine',
+  'programme-optimal',
+  'guide-grandir',
+  'height-tracker',
   'verite-brutale',
   'etudes-publiees',
   'avis-utilisateurs',
   'taille-ideale',
   'plus-que-genes',
+  'choix-genetique',
+  'decouvrir-taller',
   'resultats-la',
 ]
 
@@ -87,20 +91,24 @@ export const TYPE_ETAPE = {
   muscles: 'question',
   voix: 'question',
   'croissance-lente': 'question',
+  'habitudes': 'affichage',
   'modele-prediction': 'affichage',
   precision: 'affichage',
   'potentiel-gain': 'affichage',
   'optimiser-potentiel': 'affichage',
   'grandimi-aide': 'affichage',
-  'conseils-nutrition': 'affichage',
-  'conseils-sommeil': 'affichage',
-  'plan-quotidien': 'affichage',
-  'estimation-mensuelle': 'affichage',
+  'exercices-quotidiens': 'affichage',
+  'optimise-routine': 'affichage',
+  'programme-optimal': 'affichage',
+  'guide-grandir': 'affichage',
+  'height-tracker': 'affichage',
   'verite-brutale': 'affichage',
   'etudes-publiees': 'affichage',
   'avis-utilisateurs': 'affichage',
   'taille-ideale': 'question',
   'plus-que-genes': 'interstitielle',
+  'choix-genetique': 'affichage',
+  'decouvrir-taller': 'affichage',
   'resultats-la': 'interstitielle',
 }
 
@@ -118,7 +126,7 @@ export const TEXTES_ETAPE = {
   },
   sexe: {
     titre: 'Garçon ou une fille ?',
-    sousTitre: 'Le sexe influence ta taille à l’âge adulte',
+    sousTitre: "Le sexe influence ta taille à l’âge adulte",
   },
   age: {
     titre: 'Quand es-tu né ?',
@@ -202,64 +210,78 @@ export const TEXTES_ETAPE = {
     titre: 'Tu grandis encore, mais plus lentement que l’an dernier ?',
     sousTitre: 'Une croissance plus lente peut signifier que ta puberté se termine',
   },
+  'habitudes': {
+    titre: 'Grandimi crée des habitudes',
+    sousTitre: 'Jusqu\'à 20 % de ta taille finale dépend de tes habitudes quotidiennes',
+  },
   'modele-prediction': {
-    titre: "The World's Best Height Prediction Model",
+    titre: 'Le meilleur modèle de prédiction de taille au monde',
     sousTitre:
-      "A team of Grandimi engineers have spent months building the world's best height prediction engine",
+      'Une équipe d\'ingénieurs Grandimi a passé des mois à construire le meilleur moteur de prédiction de taille',
   },
   precision: {
-    titre: 'Quelle est la précision de notre prédiction de taille ?',
-    sousTitre:
-      'On combine des mesures clés et des facteurs environnementaux pour estimer ton potentiel',
+    titre: 'Précision',
+    sousTitre: '98 %',
   },
   'potentiel-gain': {
     titre: 'Tu peux grandir',
-    sousTitre: 'Environ 20 % de ta taille est encore entre tes mains',
+    sousTitre: 'Environ 20 % de ta taille est encore entre tes mains. Les bonnes habitudes font la différence.',
   },
   'optimiser-potentiel': {
     titre: 'Optimise tout ton potentiel de taille',
     sousTitre: 'Pour grandir au maximum, dors bien, mange bien et reste actif',
   },
   'grandimi-aide': {
-    titre: 'Grandimi t’aide pour ça',
-    sousTitre: 'On te guide vers ton plein potentiel avec des étapes simples et efficaces',
+    titre: "Grandimi t'aide pour ça",
+    sousTitre: 'Trois leviers clés',
   },
-  'conseils-nutrition': {
-    titre: 'Sache quoi manger pour grandir',
-    sousTitre: 'Grandimi te dit quoi mettre en priorité dans ton assiette',
+  'exercices-quotidiens': {
+    titre: 'Fais des exercices quotidiens',
+    sousTitre: 'Suis des routines simples pour soutenir ta croissance et ta santé',
   },
-  'conseils-sommeil': {
-    titre: 'Dors assez pour grandir',
-    sousTitre: 'Combien d’heures dormir à ton âge, et comment y arriver',
+  'optimise-routine': {
+    titre: 'Optimise ta routine',
+    sousTitre: 'Petits changements, grands résultats',
   },
-  'plan-quotidien': {
-    titre: 'Ton plan du jour avec Grandimi',
-    sousTitre: 'Onze actions à cocher, du lever au coucher : sommeil, assiette, exercices, posture',
+  'programme-optimal': {
+    titre: 'Ton programme optimal',
+    sousTitre: 'Chaque routine te rapproche de ton potentiel',
   },
-  'estimation-mensuelle': {
-    titre: 'Ton estimation se met à jour chaque mois',
-    sousTitre: 'Grandir prend du temps. Les résultats se construisent sur le long terme',
+  'guide-grandir': {
+    titre: 'Guide pour grandir',
+    sousTitre: 'Les fondamentaux expliqués',
+  },
+  'height-tracker': {
+    titre: 'Suis ta taille chaque semaine',
+    sousTitre: 'Saisis ta taille chaque semaine. Plus on a de données, plus la prédiction est précise',
   },
   'verite-brutale': {
     titre: 'Le coût d’être petit',
     sousTitre: 'Pas des statistiques. Juste ce que tu vis déjà',
   },
   'etudes-publiees': {
-    titre: 'Disent les études',
+    titre: 'Avis expert',
     sousTitre: 'Sources scientifiques',
   },
   'avis-utilisateurs': {
     titre: 'Résultats réels',
-    sousTitre: '100 000+ utilisateurs',
+    sousTitre: 'Ce que les utilisateurs obtiennent',
   },
   'taille-ideale': {
     titre: 'Quelle est ta taille idéale ?',
     sousTitre: 'Choisis la taille que tu veux atteindre',
   },
   'plus-que-genes': {
-    titre: 'Tu es plus que tes gènes',
-    sousTitre:
-      'Tes gènes posent la base, mais ton mode de vie décide du résultat. On prépare un programme juste pour toi',
+    titre: 'Tu perds peut-être déjà des centimètres',
+    sousTitre: 'Génétique 80% • Mode de vie 20% : ton potentiel dépend de tes habitudes maintenant',
+  },
+  'choix-genetique': {
+    titre: "Tu n'as pas choisi ta génétique",
+    sousTitre: 'Mais tu peux choisir ce que tu en fais.',
+  },
+  'decouvrir-taller': {
+    titre: 'Il est maintenant temps de découvrir',
+    sousTitre: 'Ce que Taller dit sur ton potentiel de croissance',
   },
   'resultats-la': {
     titre: 'Tes résultats sont là !',
@@ -623,6 +645,30 @@ export function MoletteDateNaissance({ jour, mois, annee, onChange }) {
 /* ============================================================
    ÉCRANS D'AFFICHAGE (24-35)
    ============================================================ */
+
+export function EcranHabitudes() {
+  return (
+    <div className="onb-preuve">
+      <svg viewBox="0 0 300 200" className="onb-graph-habitudes" aria-hidden="true">
+        <defs>
+          <linearGradient id="grad-effective" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#4ade80" />
+            <stop offset="100%" stopColor="#22c55e" />
+          </linearGradient>
+        </defs>
+        <text x="40" y="30" className="onb-graph-label">Height / Age</text>
+        <text x="200" y="30" className="onb-graph-label">with Grandimi</text>
+        <polyline points="20,160 60,130 100,90 140,60 180,40 220,30 260,25"
+                  className="onb-graph-line" stroke="url(#grad-effective)" strokeWidth="3" fill="none" />
+        <polyline points="20,160 60,135 100,115 140,100 180,90 220,85 260,82"
+                  className="onb-graph-line" stroke="#666" strokeWidth="2" fill="none" />
+        <circle cx="260" cy="25" r="4" fill="#22c55e" />
+        <text x="10" y="175" className="onb-graph-label" fontSize="12">Effective Planning</text>
+        <text x="120" y="175" className="onb-graph-label" fontSize="12">Bad Habits</text>
+      </svg>
+    </div>
+  )
+}
 
 export function EcranModelePrediction() {
   return (
