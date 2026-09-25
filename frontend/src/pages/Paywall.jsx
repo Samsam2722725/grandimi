@@ -1,9 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import '../styles/paywall.css'
+import apiClient from '../lib/api'
 
 export default function Paywall({ onContinue, onParentPay }) {
   const [showFaq, setShowFaq] = useState(false)
   const [showParentOption, setShowParentOption] = useState(false)
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [parentEmail, setParentEmail] = useState('')
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('userEmail') || ''
+    setEmail(savedEmail)
+  }, [])
 
   const faqs = [
     {
@@ -24,6 +33,28 @@ export default function Paywall({ onContinue, onParentPay }) {
     },
   ]
 
+  const handlePlan = async (plan) => {
+    setLoading(true)
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}')
+      const res = await apiClient.createCheckout({
+        email,
+        userId: user.id,
+        plan
+      })
+      if (res.checkout_url) {
+        window.location.href = res.checkout_url
+      }
+    } catch (err) {
+      console.error("Erreur checkout:", err)
+      setLoading(false)
+    }
+  }
+
+  const handleSkip = () => {
+    if (onContinue) onContinue()
+  }
+
   return (
     <div className="paywall">
       <div className="paywall-header">
@@ -41,8 +72,8 @@ export default function Paywall({ onContinue, onParentPay }) {
           <h2>Plan Annuel</h2>
           <div className="price-amount">39,99€<span className="price-period">/an</span></div>
           <div className="price-save">Économise 25%</div>
-          <button className="paywall-btn primary" onClick={onContinue}>
-            Commencer maintenant
+          <button className="paywall-btn primary" onClick={() => handlePlan('annual')} disabled={loading || !email}>
+            {loading ? 'Redirection...' : 'Commencer maintenant'}
           </button>
           <p className="price-billing">Facturé 39,99€ par an</p>
         </div>
@@ -50,8 +81,8 @@ export default function Paywall({ onContinue, onParentPay }) {
         <div className="price-card">
           <h2>Plan Mensuel</h2>
           <div className="price-amount">4,99€<span className="price-period">/mois</span></div>
-          <button className="paywall-btn secondary" onClick={onContinue}>
-            Choisir le plan mensuel
+          <button className="paywall-btn secondary" onClick={() => handlePlan('monthly')} disabled={loading || !email}>
+            {loading ? 'Redirection...' : 'Choisir le plan mensuel'}
           </button>
         </div>
       </div>
@@ -70,10 +101,18 @@ export default function Paywall({ onContinue, onParentPay }) {
               type="email"
               placeholder="Email du parent"
               className="parent-email-input"
+              value={parentEmail}
+              onChange={(e) => setParentEmail(e.target.value)}
             />
             <button
               className="paywall-btn primary"
-              onClick={() => onParentPay && onParentPay()}
+              onClick={() => {
+                if (parentEmail && onParentPay) {
+                  const user = JSON.parse(localStorage.getItem('user') || '{}')
+                  localStorage.setItem('grandimi:paiement_pour', user.id)
+                  onParentPay(parentEmail)
+                }
+              }}
             >
               Envoyer le lien parent
             </button>
@@ -101,7 +140,7 @@ export default function Paywall({ onContinue, onParentPay }) {
       </div>
 
       <div className="paywall-footer">
-        <button className="paywall-skip" onClick={onContinue}>
+        <button className="paywall-skip" onClick={handleSkip}>
           Continuer sans payer
         </button>
         <p className="paywall-guarantee">✓ Garantie 30 jours satisfait ou remboursé</p>
