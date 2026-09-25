@@ -268,9 +268,8 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Choisis la taille que tu veux atteindre',
   },
   'plus-que-genes': {
-    titre: 'Tu es plus que tes gènes',
-    sousTitre:
-      'Tes gènes posent la base, mais ton mode de vie décide du résultat. On prépare un programme juste pour toi',
+    titre: 'Tu perds peut-être déjà des centimètres',
+    sousTitre: 'Génétique 80% • Mode de vie 20% : ton potentiel dépend de tes habitudes maintenant',
   },
   'resultats-la': {
     titre: 'Tes résultats sont là !',
