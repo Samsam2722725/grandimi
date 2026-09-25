@@ -111,7 +111,7 @@ export function initializeProgramRun(program: SevenDayProgram, now?: Now): Progr
         originalActionId: action.id, currentActionId: action.id, category: action.category,
         status: "pending", completedAt: null, skippedAt: null, replacementHistory: [],
       })),
-    })) as ProgramRun["days"],
+    })) as unknown as ProgramRun["days"],
   };
 }
 function clone(run: ProgramRun): ProgramRun { return structuredClone(run); }
