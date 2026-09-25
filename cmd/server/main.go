@@ -90,6 +90,10 @@ func main() {
 	   quelqu'un d'autre a payé pour lui depuis un autre appareil. */
 	router.GET("/api/v1/checkout-status", api.GetCheckoutStatus)
 
+	/* Envoie un lien de paiement parent par email. Publique : un tiers peut
+	   envoyer ce lien à un parent depuis la page de partage. */
+	router.POST("/api/v1/parent-payment-link", api.SendParentPaymentLink)
+
 	/* Rattache un paiement au compte qui l a fait, par l identifiant
 	   que Whop met dans l URL de retour. Publique et sans session : a
 	   cet instant le client vient de payer et n a pas encore de mot de

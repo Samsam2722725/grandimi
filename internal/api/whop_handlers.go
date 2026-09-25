@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"grandimi/internal/billing"
 	"grandimi/internal/db"
+	"grandimi/internal/email"
 	"io"
 	"net/http"
 	"net/url"
@@ -577,4 +578,130 @@ func moisAbonnement(creeLe string) int {
 		return 1
 	}
 	return mois
+}
+
+// SendParentPaymentLink génère un lien de paiement pour un parent et envoie par email
+type ParentPaymentRequest struct {
+	ParentEmail string `json:"parent_email"`
+	ChildUserID string `json:"child_user_id"`
+	Plan        string `json:"plan"`
+}
+
+type ParentPaymentResponse struct {
+	Sent  bool   `json:"sent"`
+	Error string `json:"error,omitempty"`
+}
+
+func SendParentPaymentLink(c *gin.Context) {
+	var req ParentPaymentRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
+		return
+	}
+
+	if req.ParentEmail == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "parent_email required"})
+		return
+	}
+
+	if req.ChildUserID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "child_user_id required"})
+		return
+	}
+
+	enfant, err := db.GetUserByID(req.ChildUserID)
+	if err != nil || enfant == nil {
+		fmt.Printf("[parent-payment] compte enfant introuvable (%q): %v\n", req.ChildUserID, err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "unknown child account"})
+		return
+	}
+
+	cleOffre := req.Plan
+	if cleOffre == "" {
+		cleOffre = string(billing.Monthly)
+	}
+	offre, ok := billing.Get(cleOffre)
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "unknown plan"})
+		return
+	}
+
+	planID := os.Getenv(offre.WhopPlanIDEnv)
+	if planID == "" {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": fmt.Sprintf("%s is not configured", offre.WhopPlanIDEnv),
+		})
+		return
+	}
+
+	parentUser, err := db.GetOrCreateUser(req.ParentEmail)
+	if err != nil {
+		fmt.Printf("[parent-payment] GetOrCreateUser(%q): %v\n", req.ParentEmail, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get parent user"})
+		return
+	}
+
+	checkoutURL := fmt.Sprintf(
+		"https://whop.com/checkout/%s?customer_email=%s&metadata[grandimi_user_id]=%s&metadata[child_user_id]=%s",
+		planID,
+		url.QueryEscape(req.ParentEmail),
+		url.QueryEscape(parentUser.ID),
+		url.QueryEscape(req.ChildUserID),
+	)
+
+	var priceText string
+	if offre.Key == billing.Annual {
+		priceText = fmt.Sprintf("%.2f EUR/an", offre.PriceEUR)
+	} else {
+		priceText = fmt.Sprintf("%.2f EUR/mois", offre.PriceEUR)
+	}
+
+	nomEnfant := enfant.Prenom
+	if nomEnfant == "" {
+		nomEnfant = "votre enfant"
+	}
+
+	texteEmail := fmt.Sprintf(`Bonjour,
+
+Vous avez demandé un accès premium pour %s sur Grandimi.
+
+Cliquez sur le lien ci-dessous pour procéder au paiement :
+%s
+
+Prix : %s
+
+Une fois le paiement effectué, l'accès premium sera immédiatement actif sur le compte de %s.
+
+Cordialement,
+L'équipe Grandimi`, nomEnfant, checkoutURL, priceText, nomEnfant)
+
+	htmlEmail := fmt.Sprintf(`<html><body>
+<p>Bonjour,</p>
+
+<p>Vous avez demandé un accès premium pour <strong>%s</strong> sur Grandimi.</p>
+
+<p><a href="%s" style="background-color: #ff5a1f; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Procéder au paiement</a></p>
+
+<p><strong>Prix :</strong> %s</p>
+
+<p>Une fois le paiement effectué, l'accès premium sera immédiatement actif sur le compte de <strong>%s</strong>.</p>
+
+<p>Cordialement,<br>L'équipe Grandimi</p>
+</body></html>`, nomEnfant, checkoutURL, priceText, nomEnfant)
+
+	msg := email.Message{
+		A:     req.ParentEmail,
+		Sujet: fmt.Sprintf("Accès premium Grandimi pour %s", nomEnfant),
+		Texte: texteEmail,
+		HTML:  htmlEmail,
+	}
+
+	err = email.Envoyer(msg)
+	if err != nil {
+		fmt.Printf("[parent-payment] failed to send email to %s: %v\n", req.ParentEmail, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to send email"})
+		return
+	}
+
+	c.JSON(http.StatusOK, ParentPaymentResponse{Sent: true})
 }
