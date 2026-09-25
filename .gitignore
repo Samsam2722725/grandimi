@@ -35,3 +35,6 @@ Thumbs.db
 bin/
 dist/
 *.tsbuildinfo
+
+# Dependencies (each package installs its own; never versioned)
+node_modules/
