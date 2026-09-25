@@ -4,7 +4,6 @@ import { Dumbbell, Moon, Ruler, Utensils } from 'lucide-react'
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { SegmentedControl } from '@/components/ui/segmented-control'
 import { WheelPicker } from '@/components/ui/wheel-picker'
-import { FonctionCapture } from '@/components/ui/ecrans-fonctions'
 import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ReseauNeurones } from '@/components/ui/reseau-neurones'
 import { EtudesPubliees } from '@/components/ui/ecrans-fonctions'
@@ -193,7 +192,7 @@ export const TEXTES_ETAPE = {
   'modele-prediction': {
     titre: 'Basé sur Khamis-Roche, reconnu mondialement',
     sousTitre:
-      'L'équipe Grandimi combine la méthode scientifique Khamis-Roche avec le suivi OMS pour prédire ta taille définitive',
+      "L'équipe Grandimi combine la méthode scientifique Khamis-Roche avec le suivi OMS pour prédire ta taille définitive",
   },
   precision: {
     titre: 'Quelle est la précision de notre prédiction de taille ?',
@@ -635,23 +634,23 @@ export function EcranGrandimiAide() {
  * à corriger.
  */
 const VERITE_GARCON = [
-  'Moins de temps de jeu, plus souvent sur le banc',
-  'Invisible aux moments clés',
-  'Moins pris au sérieux',
-  'On te traite encore comme le plus jeune du groupe',
-  'Ça pèse sur la confiance, pas seulement sur le miroir',
-  'Le premier regard te met déjà à part',
-  'Plus d'anxiété sociale',
+  "Moins de temps de jeu, plus souvent sur le banc",
+  "Invisible aux moments clés",
+  "Moins pris au sérieux",
+  "On te traite encore comme le plus jeune du groupe",
+  "Ça pèse sur la confiance, pas seulement sur le miroir",
+  "Le premier regard te met déjà à part",
+  "Plus d'anxiété sociale",
 ]
 
 const VERITE_FILLE = [
-  'On te donne moins que ton âge',
-  'Tu te sens moins imposante',
-  'Tu regardes la taille des autres',
-  'Voir tes potes grandir',
-  'Ne pas savoir si tu as fini',
-  'On te prend moins au sérieux',
-  'Plus d'anxiété dans les groupes',
+  "On te donne moins que ton âge",
+  "Tu te sens moins imposante",
+  "Tu regardes la taille des autres",
+  "Voir tes potes grandir",
+  "Ne pas savoir si tu as fini",
+  "On te prend moins au sérieux",
+  "Plus d'anxiété dans les groupes",
 ]
 
 export function EcranVeriteBrutale({ sexe }) {

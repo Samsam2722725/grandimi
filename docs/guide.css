@@ -1,0 +1,372 @@
+/* ============================================================
+   CHARTE DES PAGES STATIQUES
+
+   Les pages servies en dur — /calculer-sa-taille-adulte/,
+   /questions-croissance/ — ne chargent pas la feuille de
+   l'application : leur intérêt est justement d'exister sans le
+   bundle React. Elles partageaient donc le même bloc <style>,
+   copié. À deux pages c'était supportable ; à cinq, une couleur
+   corrigée à un seul endroit aurait fait diverger le site de
+   lui-même.
+
+   Valeurs reprises de src/styles/theme-night.css, en littéral. Les
+   ratios en commentaire sont ceux mesurés dans le fichier
+   d'origine, sur le fond #0a0a0a.
+   ============================================================ */
+
+:root {
+  --canvas: #0a0a0a;
+  --card: #141414;
+  --ink: #ffffff; /* 19.3:1 */
+  --texte: #b8b8b8; /* 11.2:1 */
+  --meta: #9a9a9a; /* 7.3:1  */
+  --filet: #262626;
+  --corail: #ff5a1f; /* fond de bouton uniquement */
+  --sur-corail: #17120e; /* 5.96:1 sur le corail */
+  --orange-texte: #ff7a45; /* 7.6:1 — orange lisible en texte */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--texte);
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.enveloppe {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ---------- En-tête et pied ---------- */
+
+header.site {
+  border-bottom: 1px solid var(--filet);
+}
+header.site .enveloppe {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+}
+.pastille {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--corail);
+  display: inline-block;
+}
+.lien-action {
+  color: var(--orange-texte);
+  text-decoration: none;
+  font-size: 16px;
+}
+
+/* ---------- Pied de page ----------
+
+   Trois colonnes, et le MÊME bloc sur toutes les pages. C'est ce qui en
+   fait autre chose qu'une rangée de liens légaux : présent partout, il
+   pousse en permanence vers les pages qui doivent se positionner, et il
+   porte les signaux qu'un site de santé doit afficher — qui édite,
+   comment le joindre, et le fait que ce n'est pas un avis médical.
+
+   Onze liens, pas trente. Un pied de page qui liste tout ne transmet
+   plus rien : chaque lien supplémentaire dilue les autres. */
+
+footer.site {
+  border-top: 1px solid var(--filet);
+  margin-top: 56px;
+  padding: 34px 0 40px;
+  font-size: 14px;
+  color: var(--meta);
+}
+
+.pied-colonnes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+@media (max-width: 620px) {
+  .pied-colonnes {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.pied-titre {
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+.pied-colonnes a {
+  color: var(--meta);
+  display: block;
+  margin-bottom: 7px;
+  text-decoration: none;
+  line-height: 1.45;
+}
+.pied-colonnes a:hover {
+  color: var(--ink);
+}
+
+.pied-avertissement {
+  margin: 30px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--filet);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.pied-legal {
+  margin: 12px 0 0;
+  font-size: 13px;
+}
+
+nav.fil {
+  font-size: 14px;
+  color: var(--meta);
+  padding-top: 22px;
+}
+nav.fil a {
+  color: var(--meta);
+}
+
+/* ---------- Texte ---------- */
+
+h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(32px, 6vw, 46px);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin: 14px 0 0;
+}
+
+h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(24px, 4vw, 30px);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 52px 0 14px;
+}
+
+h3 {
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 38px 0 8px;
+  line-height: 1.3;
+}
+
+p {
+  margin: 0 0 16px;
+}
+
+a {
+  color: var(--orange-texte);
+}
+
+strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+ul {
+  padding-left: 20px;
+  margin: 0 0 16px;
+}
+li {
+  margin-bottom: 8px;
+}
+
+/* ---------- Blocs ---------- */
+
+/* La réponse directe, en tête de page. Une quarantaine de mots avant
+   tout détail : c'est ce bloc qu'un moteur découpe pour une réponse en
+   tête de résultats, et ce que lit un visiteur pressé. */
+.reponse {
+  background: var(--card);
+  border: 1px solid var(--filet);
+  border-left: 3px solid var(--corail);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin: 26px 0 8px;
+  color: var(--ink);
+  font-size: 18px;
+}
+.reponse p:last-child {
+  margin-bottom: 0;
+}
+
+/* Première phrase d'une réponse de FAQ : la réponse nette, avant la
+   nuance. Même rôle que .reponse, à l'échelle d'une question. */
+.net {
+  color: var(--ink);
+}
+
+.formule {
+  background: var(--card);
+  border: 1px solid var(--filet);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin: 22px 0;
+}
+.formule p {
+  margin: 0 0 10px;
+}
+.formule p:last-child {
+  margin-bottom: 0;
+}
+.formule code {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 15px;
+  color: var(--ink);
+  background: #000;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 6px 0 14px;
+  overflow-x: auto;
+}
+
+/* Un tableau large fait défiler SON cadre, jamais la page.
+
+   Mesuré sur la page des méthodes à 375 px : le tableau à quatre
+   colonnes réclamait 406 px et faisait déborder le document entier —
+   toute la page glissait latéralement, pas seulement le tableau. Le
+   `min-width` garantit en plus que les colonnes ne soient pas écrasées
+   au point d'être illisibles : mieux vaut un tableau qu'on fait glisser
+   qu'un tableau dont chaque cellule tient sur six lignes.
+
+   Tout tableau de comparaison va dans ce cadre, y compris ceux qui
+   tiennent aujourd'hui : une colonne ajoutée plus tard ne doit pas
+   pouvoir casser la mise en page en silence. */
+.tableau-large {
+  overflow-x: auto;
+  margin: 22px 0;
+}
+.tableau-large table {
+  margin: 0;
+  min-width: 460px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 22px 0;
+  font-size: 15px;
+}
+caption {
+  text-align: left;
+  color: var(--meta);
+  font-size: 14px;
+  padding-bottom: 10px;
+}
+th,
+td {
+  text-align: left;
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--filet);
+  vertical-align: top;
+}
+th {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.cta {
+  background: var(--card);
+  border: 1px solid var(--filet);
+  border-radius: 22px;
+  padding: 30px 24px;
+  margin: 54px 0 0;
+  text-align: center;
+}
+.cta h2 {
+  margin-top: 0;
+  font-size: clamp(22px, 4vw, 28px);
+}
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 28px;
+  border-radius: 999px;
+  background: var(--corail);
+  color: var(--sur-corail);
+  font-weight: 600;
+  font-size: 17px;
+  text-decoration: none;
+  margin-top: 8px;
+}
+
+.avertissement {
+  border: 1px solid var(--filet);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin: 40px 0 0;
+  font-size: 15px;
+  color: var(--meta);
+}
+.avertissement strong {
+  color: var(--ink);
+}
+
+.sources {
+  font-size: 15px;
+  color: var(--meta);
+}
+
+/* Ligne d'attribution sous le titre : qui édite, quand c'est à jour,
+   où écrire. Sur un sujet de santé, ces trois informations pèsent plus
+   que n'importe quel mot-clé — et elles n'étaient nulle part. */
+.signature {
+  margin: 14px 0 0;
+  font-size: 14px;
+  color: var(--meta);
+}
+
+/* Sommaire d'une page de questions : les ancres tiennent lieu de plan,
+   et donnent des liens profonds partageables vers une réponse. */
+.sommaire {
+  background: var(--card);
+  border: 1px solid var(--filet);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin: 26px 0 0;
+}
+.sommaire ol {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 16px;
+}
+.sommaire li {
+  margin-bottom: 6px;
+}
