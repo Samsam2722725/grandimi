@@ -582,41 +582,40 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   }
 
   if (etape === 'resultats-la') {
-    if (phaseResultats === 'analyse') {
-      return (
-        <AnalyseEnCours
-          pret={Boolean(resultatApi)}
-          erreur={erreurApi}
-          onFini={terminerAnalyse}
-          onReessayer={() => setTentative((n) => n + 1)}
-        />
-      )
-    }
-    const emailValide = EMAIL_VALIDE.test(email)
+    // Plan creation screen with progression
+    const steps = [
+      { label: 'Lecture de tes mesures', done: true },
+      { label: 'Projection Khamis-Roche', done: true },
+      { label: 'Croissement avec les courbes OMS', done: false },
+      { label: 'Correction selon ta maturité', done: false },
+      { label: 'Pondération de tes habitudes', done: false },
+    ]
+
+    const progressPercent = (steps.filter(s => s.done).length / steps.length) * 100
+
     return (
-      <div className="interstitial resultats-email">
-        <div className="resultats-header">
-          <h1 className="interstitial-titre">{texte.titre}</h1>
-          <p className="interstitial-text">{texte.sousTitre}</p>
+      <div className="interstitial plan-creation">
+        <h1 className="interstitial-titre">{texte.titre}</h1>
+        <p className="interstitial-text">{texte.sousTitre}</p>
+
+        <div className="plan-progress">
+          <div className="progress-circle">
+            <div className="progress-value">{Math.round(progressPercent)}%</div>
+          </div>
         </div>
-        <div className="funnel-field">
-          <label htmlFor="onb-email" className="sr-only">
-            Adresse e-mail
-          </label>
-          <input
-            id="onb-email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            placeholder="ton@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+
+        <div className="plan-steps">
+          {steps.map((step, idx) => (
+            <div key={idx} className={`plan-step ${step.done ? 'done' : ''}`}>
+              <div className="step-check">{step.done ? '✓' : ''}</div>
+              <span className="step-label">{step.label}</span>
+            </div>
+          ))}
         </div>
-        <p className="funnel-help">On t’envoie ton résultat à cette adresse.</p>
+
         <div className="interstitial-action is-ready">
-          <button type="button" className="funnel-cta resultats-btn" disabled={!emailValide} onClick={lancerAnalyse}>
-            Révéler mes résultats
+          <button type="button" className="funnel-cta" onClick={avancer} disabled>
+            En cours...
           </button>
         </div>
       </div>
