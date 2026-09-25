@@ -2140,29 +2140,51 @@
   color: var(--funnel-accent-text);
 }
 
-.onb-tracker {
-  display: flex;
+.onb-exemple-lignes--colonne {
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
-.onb-tracker-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-.onb-tracker-table th,
-.onb-tracker-table td {
-  text-align: left;
-  padding: 10px 6px;
-  border-bottom: 1px solid var(--funnel-line);
+.onb-exemple-lignes--colonne strong {
   color: var(--funnel-text);
 }
 
-.onb-tracker-delta {
-  color: var(--funnel-accent-text);
-  font-weight: 600;
+.onb-frise {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-left: 2px solid var(--funnel-line);
+}
+
+.onb-frise-etape {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.onb-frise-etape::before {
+  content: '';
+  position: absolute;
+  left: -25px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--funnel-accent-text);
+}
+
+.onb-frise-etape strong {
+  font-size: 15px;
+  color: var(--funnel-text);
+}
+
+.onb-frise-etape span {
+  font-size: 14px;
+  color: var(--funnel-muted);
 }
 
 .onb-genes-barres {

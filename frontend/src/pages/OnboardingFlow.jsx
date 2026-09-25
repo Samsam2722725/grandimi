@@ -47,10 +47,10 @@ import {
   EcranPotentielGain,
   EcranOptimiserPotentiel,
   EcranGrandimiAide,
-  EcranNutritionScanner,
-  EcranSleepTracker,
-  EcranExercicesQuotidiens,
-  EcranHeightTracker,
+  EcranConseilsNutrition,
+  EcranConseilsSommeil,
+  EcranPlanQuotidien,
+  EcranEstimationMensuelle,
   EcranVeriteBrutale,
   EcranEtudesPubliees,
   EcranAvisUtilisateurs,
@@ -515,14 +515,14 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
         return <EcranOptimiserPotentiel />
       case 'grandimi-aide':
         return <EcranGrandimiAide />
-      case 'nutrition-scanner':
-        return <EcranNutritionScanner />
-      case 'sleep-tracker':
-        return <EcranSleepTracker />
-      case 'exercices-quotidiens':
-        return <EcranExercicesQuotidiens />
-      case 'height-tracker':
-        return <EcranHeightTracker />
+      case 'conseils-nutrition':
+        return <EcranConseilsNutrition />
+      case 'conseils-sommeil':
+        return <EcranConseilsSommeil />
+      case 'plan-quotidien':
+        return <EcranPlanQuotidien />
+      case 'estimation-mensuelle':
+        return <EcranEstimationMensuelle />
       case 'verite-brutale':
         return <EcranVeriteBrutale sexe={reponses.sexe} />
       case 'etudes-publiees':

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Dumbbell, Moon, Ruler, Utensils } from 'lucide-react'
+import { Dumbbell, HeartPulse, ListChecks, Moon, TrendingUp, Utensils } from 'lucide-react'
 
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { SegmentedControl } from '@/components/ui/segmented-control'
 import { WheelPicker } from '@/components/ui/wheel-picker'
-import { FonctionCapture } from '@/components/ui/ecrans-fonctions'
+import { FonctionPlan } from '@/components/ui/ecrans-fonctions'
 import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ReseauNeurones } from '@/components/ui/reseau-neurones'
 import { EtudesPubliees } from '@/components/ui/ecrans-fonctions'
@@ -51,10 +51,10 @@ export const ORDRE_ETAPES = [
   'potentiel-gain',
   'optimiser-potentiel',
   'grandimi-aide',
-  'nutrition-scanner',
-  'sleep-tracker',
-  'exercices-quotidiens',
-  'height-tracker',
+  'conseils-nutrition',
+  'conseils-sommeil',
+  'plan-quotidien',
+  'estimation-mensuelle',
   'verite-brutale',
   'etudes-publiees',
   'avis-utilisateurs',
@@ -92,10 +92,10 @@ export const TYPE_ETAPE = {
   'potentiel-gain': 'affichage',
   'optimiser-potentiel': 'affichage',
   'grandimi-aide': 'affichage',
-  'nutrition-scanner': 'affichage',
-  'sleep-tracker': 'affichage',
-  'exercices-quotidiens': 'affichage',
-  'height-tracker': 'affichage',
+  'conseils-nutrition': 'affichage',
+  'conseils-sommeil': 'affichage',
+  'plan-quotidien': 'affichage',
+  'estimation-mensuelle': 'affichage',
   'verite-brutale': 'affichage',
   'etudes-publiees': 'affichage',
   'avis-utilisateurs': 'affichage',
@@ -224,21 +224,21 @@ export const TEXTES_ETAPE = {
     titre: 'Grandimi t’aide pour ça',
     sousTitre: 'On te guide vers ton plein potentiel avec des étapes simples et efficaces',
   },
-  'nutrition-scanner': {
-    titre: 'Vérifie si ton alimentation aide ta croissance',
-    sousTitre: 'Apprends comment ce que tu manges influence la croissance',
+  'conseils-nutrition': {
+    titre: 'Sache quoi manger pour grandir',
+    sousTitre: 'Grandimi te dit quoi mettre en priorité dans ton assiette',
   },
-  'sleep-tracker': {
-    titre: 'Suis ton sommeil et reçois des conseils',
-    sousTitre: 'Observe ton sommeil et reçois des conseils pour mieux te reposer',
+  'conseils-sommeil': {
+    titre: 'Dors assez pour grandir',
+    sousTitre: 'Combien d’heures dormir à ton âge, et comment y arriver',
   },
-  'exercices-quotidiens': {
-    titre: 'Fais des exercices quotidiens avec Grandimi',
-    sousTitre: 'Suis des routines simples pour soutenir ta croissance et ta santé',
+  'plan-quotidien': {
+    titre: 'Ton plan du jour avec Grandimi',
+    sousTitre: 'Onze actions à cocher, du lever au coucher : sommeil, assiette, exercices, posture',
   },
-  'height-tracker': {
-    titre: 'Suis ta taille chaque semaine',
-    sousTitre: 'Saisis ta taille chaque semaine. Plus on a de données, plus la prédiction est précise',
+  'estimation-mensuelle': {
+    titre: 'Ton estimation se met à jour chaque mois',
+    sousTitre: 'Grandir prend du temps. Les résultats se construisent sur le long terme',
   },
   'verite-brutale': {
     titre: 'Le coût d’être petit',
@@ -272,9 +272,9 @@ export const TEXTES_ETAPE = {
    ============================================================ */
 export const OPTIONS_MOTIVATION = [
   { valeur: 'taille-finale', label: 'Prédire ma taille finale' },
-  { valeur: 'nutrition', label: 'Nutrition scanner' },
-  { valeur: 'posture', label: 'Fix ma posture' },
-  { valeur: 'stretches', label: 'Stretches pour grandir' },
+  { valeur: 'nutrition', label: 'Savoir quoi manger pour grandir' },
+  { valeur: 'posture', label: 'Corriger ma posture' },
+  { valeur: 'exercices', label: 'Exercices pour grandir' },
 ]
 
 export const OPTIONS_SPORTS = [
@@ -664,7 +664,7 @@ export function EcranPotentielGain() {
 }
 
 const LEVIERS_OPTIMISATION = [
-  { icone: Moon, titre: 'Sommeil', detail: '7-9 heures par nuit' },
+  { icone: Moon, titre: 'Sommeil', detail: '8-10 heures par nuit' },
   { icone: Utensils, titre: 'Nutrition', detail: 'Protéines, calcium, vitamine D' },
   { icone: Dumbbell, titre: 'Activité', detail: '30 min par jour minimum' },
 ]
@@ -683,16 +683,16 @@ export function EcranOptimiserPotentiel() {
   )
 }
 
+// Les trois fonctions de la landing (FONCTIONS dans HomePage.jsx), rien d'autre.
 const AIDES_GRANDIMI = [
-  { icone: Moon, titre: 'Sommeil', detail: 'Suivi et conseils chaque soir' },
-  { icone: Utensils, titre: 'Nutrition', detail: 'Scanner de repas' },
-  { icone: Dumbbell, titre: 'Exercice', detail: 'Routines quotidiennes' },
-  { icone: Ruler, titre: 'Suivi Grandimi', detail: 'Ta taille, semaine après semaine' },
+  { icone: TrendingUp, titre: 'Estimation', detail: 'Recalculée chaque mois' },
+  { icone: ListChecks, titre: 'Plan quotidien', detail: '11 actions à cocher' },
+  { icone: HeartPulse, titre: 'Sommeil, nutrition, exercices', detail: 'Chaque levier détaillé' },
 ]
 
 export function EcranGrandimiAide() {
   return (
-    <div className="onb-icones onb-icones-4">
+    <div className="onb-icones onb-icones-3">
       {AIDES_GRANDIMI.map(({ icone: Icone, titre, detail }) => (
         <div className="onb-icone" key={titre}>
           <Icone size={24} aria-hidden="true" />
@@ -704,75 +704,66 @@ export function EcranGrandimiAide() {
   )
 }
 
-export function EcranNutritionScanner() {
-  return (
-    <div className="onb-exemple-carte">
-      <p className="onb-exemple-titre">Salmon toast</p>
-      <ul className="onb-exemple-lignes">
-        <li>450 kcal</li>
-        <li>40 g protéines</li>
-        <li>90 g glucides</li>
-        <li>25 g lipides</li>
-      </ul>
-      <p className="onb-exemple-score">Height Score : 85/100</p>
-    </div>
-  )
-}
+/* Écrans 29-32. Le script GoTall montrait ici un scanner de repas, un
+   tracker de sommeil et un suivi hebdomadaire de taille : trois fonctions
+   que Grandimi n'a pas. Les quatre emplacements sont gardés et montrent
+   les trois fonctions réelles de la landing, sans score ni chiffre
+   d'utilisateur inventé. */
 
-export function EcranSleepTracker() {
-  return (
-    <div className="onb-exemple-carte">
-      <p className="onb-exemple-titre">5 h 51</p>
-      <p>Moins que les 8h nécessaires pour une croissance optimale</p>
-      <p className="onb-exemple-score">Recommandation : dors avant 22h30</p>
-    </div>
-  )
-}
-
-export function EcranExercicesQuotidiens() {
-  return <FonctionCapture image="seance" alt="Séance d’exercices quotidiens dans l’application Grandimi" />
-}
-
-// Les quatre colonnes (sommeil, taille, exercice, vitamine) reprennent
-// exactement le mock du script — pas seulement la taille : c'est bien un
-// tracker à quatre cases cochées par semaine, une seule d'entre elles
-// portant un chiffre.
-const SEMAINES_HAUTEUR = [
-  { semaine: 1, taille: '172,3 cm', delta: '' },
-  { semaine: 2, taille: '172,4 cm', delta: '+0,1' },
-  { semaine: 3, taille: '172,5 cm', delta: '+0,2' },
-  { semaine: 4, taille: '172,7 cm', delta: '+0,2' },
+const PRIORITES_ASSIETTE = [
+  { nutriment: 'Protéines', sources: 'à chaque repas : œufs, poisson, viande, légumineuses' },
+  { nutriment: 'Calcium', sources: 'laitages, amandes, légumes verts' },
+  { nutriment: 'Vitamine D', sources: 'poissons gras, lumière du jour' },
+  { nutriment: 'Zinc', sources: 'viande, graines, céréales complètes' },
 ]
 
-export function EcranHeightTracker() {
+export function EcranConseilsNutrition() {
   return (
-    <div className="onb-tracker">
-      <table className="onb-tracker-table">
-        <thead>
-          <tr>
-            <th scope="col">Semaine</th>
-            <th scope="col">Sommeil</th>
-            <th scope="col">Taille</th>
-            <th scope="col">Exercice</th>
-            <th scope="col">Vitamine</th>
-          </tr>
-        </thead>
-        <tbody>
-          {SEMAINES_HAUTEUR.map(({ semaine, taille, delta }) => (
-            <tr key={semaine}>
-              <td>Semaine {semaine}</td>
-              <td aria-label="Sommeil coché">✓</td>
-              <td>
-                {taille} {delta && <span className="onb-tracker-delta">{delta}</span>}
-              </td>
-              <td aria-label="Exercice coché">✓</td>
-              <td aria-label="Vitamine cochée">✓</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <p className="onb-exemple-score">Précision : 83 % → 85 % (+2 %)</p>
+    <div className="onb-exemple-carte">
+      <p className="onb-exemple-titre">Dans ton assiette</p>
+      <ul className="onb-exemple-lignes onb-exemple-lignes--colonne">
+        {PRIORITES_ASSIETTE.map(({ nutriment, sources }) => (
+          <li key={nutriment}>
+            <strong>{nutriment}</strong> — {sources}
+          </li>
+        ))}
+      </ul>
     </div>
+  )
+}
+
+// 8 à 10 h : recommandation de l'American Academy of Sleep Medicine pour les 13-18 ans.
+export function EcranConseilsSommeil() {
+  return (
+    <div className="onb-exemple-carte">
+      <p className="onb-exemple-titre">8 à 10 h par nuit</p>
+      <p>Ce qui est recommandé entre 13 et 18 ans.</p>
+      <p className="onb-exemple-score">Conseil : écrans coupés 45 min avant de dormir</p>
+    </div>
+  )
+}
+
+export function EcranPlanQuotidien() {
+  return <FonctionPlan />
+}
+
+const ETAPES_LONG_TERME = [
+  { quand: 'Aujourd’hui', quoi: 'Ta première estimation et ton plan' },
+  { quand: 'Chaque jour', quoi: 'Tu coches tes actions : sommeil, assiette, exercices' },
+  { quand: 'Chaque mois', quoi: 'Ton estimation est recalculée avec tes nouvelles mesures' },
+  { quand: 'Sur plusieurs mois', quoi: 'C’est la régularité qui compte, pas un seul bon jour' },
+]
+
+export function EcranEstimationMensuelle() {
+  return (
+    <ol className="onb-frise">
+      {ETAPES_LONG_TERME.map(({ quand, quoi }) => (
+        <li key={quand} className="onb-frise-etape">
+          <strong>{quand}</strong>
+          <span>{quoi}</span>
+        </li>
+      ))}
+    </ol>
   )
 }
 
