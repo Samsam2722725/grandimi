@@ -624,8 +624,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
         </div>
 
         <div className="interstitial-action is-ready">
-          <button type="button" className="funnel-cta" onClick={avancer} disabled>
-            En cours...
+          <button type="button" className="funnel-cta" onClick={() => onPredictionComplete(donnees)}>
+            Voir mon analyse
           </button>
         </div>
       </div>
