@@ -256,12 +256,12 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Pas des statistiques. Juste ce que tu vis déjà',
   },
   'etudes-publiees': {
-    titre: 'Disent les études',
+    titre: 'Avis expert',
     sousTitre: 'Sources scientifiques',
   },
   'avis-utilisateurs': {
     titre: 'Résultats réels',
-    sousTitre: '100 000+ utilisateurs',
+    sousTitre: 'Ce que les utilisateurs obtiennent',
   },
   'taille-ideale': {
     titre: 'Quelle est ta taille idéale ?',
