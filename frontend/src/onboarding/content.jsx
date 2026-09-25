@@ -52,10 +52,11 @@ export const ORDRE_ETAPES = [
   'potentiel-gain',
   'optimiser-potentiel',
   'grandimi-aide',
-  'conseils-nutrition',
-  'conseils-sommeil',
-  'plan-quotidien',
-  'estimation-mensuelle',
+  'exercices-quotidiens',
+  'optimise-routine',
+  'programme-optimal',
+  'guide-grandir',
+  'height-tracker',
   'verite-brutale',
   'etudes-publiees',
   'avis-utilisateurs',
@@ -94,10 +95,11 @@ export const TYPE_ETAPE = {
   'potentiel-gain': 'affichage',
   'optimiser-potentiel': 'affichage',
   'grandimi-aide': 'affichage',
-  'conseils-nutrition': 'affichage',
-  'conseils-sommeil': 'affichage',
-  'plan-quotidien': 'affichage',
-  'estimation-mensuelle': 'affichage',
+  'exercices-quotidiens': 'affichage',
+  'optimise-routine': 'affichage',
+  'programme-optimal': 'affichage',
+  'guide-grandir': 'affichage',
+  'height-tracker': 'affichage',
   'verite-brutale': 'affichage',
   'etudes-publiees': 'affichage',
   'avis-utilisateurs': 'affichage',
@@ -120,7 +122,7 @@ export const TEXTES_ETAPE = {
   },
   sexe: {
     titre: 'Garçon ou une fille ?',
-    sousTitre: 'Le sexe influence ta taille à l’âge adulte',
+    sousTitre: "Le sexe influence ta taille à l’âge adulte",
   },
   age: {
     titre: 'Quand es-tu né ?',
@@ -226,24 +228,28 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Pour grandir au maximum, dors bien, mange bien et reste actif',
   },
   'grandimi-aide': {
-    titre: 'Grandimi t’aide pour ça',
-    sousTitre: 'On te guide vers ton plein potentiel avec des étapes simples et efficaces',
+    titre: "Grandimi t'aide pour ça",
+    sousTitre: 'Trois leviers clés',
   },
-  'conseils-nutrition': {
-    titre: 'Sache quoi manger pour grandir',
-    sousTitre: 'Grandimi te dit quoi mettre en priorité dans ton assiette',
+  'exercices-quotidiens': {
+    titre: 'Fais des exercices quotidiens',
+    sousTitre: 'Suis des routines simples pour soutenir ta croissance et ta santé',
   },
-  'conseils-sommeil': {
-    titre: 'Dors assez pour grandir',
-    sousTitre: 'Combien d’heures dormir à ton âge, et comment y arriver',
+  'optimise-routine': {
+    titre: 'Optimise ta routine',
+    sousTitre: 'Petits changements, grands résultats',
   },
-  'plan-quotidien': {
-    titre: 'Ton plan du jour avec Grandimi',
-    sousTitre: 'Onze actions à cocher, du lever au coucher : sommeil, assiette, exercices, posture',
+  'programme-optimal': {
+    titre: 'Ton programme optimal',
+    sousTitre: 'Chaque routine te rapproche de ton potentiel',
   },
-  'estimation-mensuelle': {
-    titre: 'Ton estimation se met à jour chaque mois',
-    sousTitre: 'Grandir prend du temps. Les résultats se construisent sur le long terme',
+  'guide-grandir': {
+    titre: 'Guide pour grandir',
+    sousTitre: 'Les fondamentaux expliqués',
+  },
+  'height-tracker': {
+    titre: 'Suis ta taille chaque semaine',
+    sousTitre: 'Saisis ta taille chaque semaine. Plus on a de données, plus la prédiction est précise',
   },
   'verite-brutale': {
     titre: 'Le coût d’être petit',

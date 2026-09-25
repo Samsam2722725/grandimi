@@ -48,10 +48,6 @@ import {
   EcranPotentielGain,
   EcranOptimiserPotentiel,
   EcranGrandimiAide,
-  EcranConseilsNutrition,
-  EcranConseilsSommeil,
-  EcranPlanQuotidien,
-  EcranEstimationMensuelle,
   EcranVeriteBrutale,
   EcranEtudesPubliees,
   EcranAvisUtilisateurs,
@@ -518,14 +514,16 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
         return <EcranOptimiserPotentiel />
       case 'grandimi-aide':
         return <EcranGrandimiAide />
-      case 'conseils-nutrition':
-        return <EcranConseilsNutrition />
-      case 'conseils-sommeil':
-        return <EcranConseilsSommeil />
-      case 'plan-quotidien':
-        return <EcranPlanQuotidien />
-      case 'estimation-mensuelle':
-        return <EcranEstimationMensuelle />
+      case 'exercices-quotidiens':
+        return <div className="onb-content"><p>Fais des exercices quotidiens pour soutenir ta croissance</p></div>
+      case 'optimise-routine':
+        return <div className="onb-content"><p>Optimise ta routine avec des petits changements</p></div>
+      case 'programme-optimal':
+        return <div className="onb-content"><p>Ton programme optimal t'attend</p></div>
+      case 'guide-grandir':
+        return <div className="onb-content"><p>Guide pour grandir : les fondamentaux expliqués</p></div>
+      case 'height-tracker':
+        return <div className="onb-content"><p>Suis ta taille chaque semaine pour une meilleure prédiction</p></div>
       case 'verite-brutale':
         return <EcranVeriteBrutale sexe={reponses.sexe} />
       case 'etudes-publiees':
