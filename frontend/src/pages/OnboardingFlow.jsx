@@ -564,7 +564,17 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   }
 
   if (etape === 'choix-genetique') {
-    return <div className="onb-content"><p>Tu n'as pas choisi ta génétique. Mais tu peux choisir ce que tu en fais.</p></div>
+    return (
+      <div className="interstitial">
+        <h1 className="interstitial-titre">{texte.titre}</h1>
+        <p className="interstitial-text">{texte.sousTitre}</p>
+        <div className="interstitial-action is-ready">
+          <button type="button" className="funnel-cta" onClick={avancer}>
+            Continuer
+          </button>
+        </div>
+      </div>
+    )
   }
 
   if (etape === 'decouvrir-taller') {
@@ -616,6 +626,88 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
         <div className="interstitial-action is-ready">
           <button type="button" className="funnel-cta" onClick={avancer} disabled>
             En cours...
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (etape === 'pourquoi-telecharge') {
+    return (
+      <div className="interstitial">
+        <h1 className="interstitial-titre">{texte.titre}</h1>
+        <p className="interstitial-text">{texte.sousTitre}</p>
+        <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {['Prédire ma taille finale', 'Savoir quoi manger pour grandir', 'Corriger ma posture', 'Exercices pour grandir'].map((opt) => (
+            <div key={opt} style={{ padding: '1rem', border: '2px solid #ff5a1f', borderRadius: '8px', cursor: 'pointer' }}>
+              {opt}
+            </div>
+          ))}
+        </div>
+        <div className="interstitial-action is-ready">
+          <button type="button" className="funnel-cta" onClick={avancer}>
+            Continuer
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (etape === 'ta-puberte-edu') {
+    return (
+      <div className="interstitial">
+        <h1 className="interstitial-titre">{texte.titre}</h1>
+        <p className="interstitial-text">{texte.sousTitre}</p>
+        <div className="interstitial-action is-ready">
+          <button type="button" className="funnel-cta" onClick={avancer}>
+            Continuer
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (etape === 'precision-98') {
+    return (
+      <div className="interstitial" style={{ textAlign: 'center' }}>
+        <h1 className="interstitial-titre">{texte.titre}</h1>
+        <p className="interstitial-text">{texte.sousTitre}</p>
+        <div style={{ fontSize: '5rem', fontWeight: '700', color: '#ff5a1f', margin: '2rem 0' }}>
+          98.5%
+        </div>
+        <p style={{ color: '#666', marginBottom: '2rem' }}>Accuracy</p>
+        <div className="interstitial-action is-ready">
+          <button type="button" className="funnel-cta" onClick={avancer}>
+            Continuer
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (etape === 'cout-petit') {
+    const costs = [
+      "40 % de matchs en moins sur les applis de rencontre",
+      "Ignoré dans les moments importants",
+      "Moins pris au sérieux par les autres",
+      "59 % moins de chances d'être CEO en dessous de 5'9\"",
+      "Chaque pouce coûte 600 $/an",
+      "Plus d'anxiété sociale",
+    ]
+    return (
+      <div className="interstitial">
+        <h1 className="interstitial-titre">{texte.titre}</h1>
+        <p className="interstitial-text">{texte.sousTitre}</p>
+        <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {costs.map((cost, idx) => (
+            <div key={idx} style={{ padding: '1rem', background: 'rgba(255, 90, 31, 0.1)', border: '1px solid rgba(255, 90, 31, 0.3)', borderRadius: '6px', borderLeft: '3px solid #ff5a1f' }}>
+              <strong style={{ color: '#ff5a1f' }}>!</strong> {cost}
+            </div>
+          ))}
+        </div>
+        <div className="interstitial-action is-ready">
+          <button type="button" className="funnel-cta" onClick={avancer}>
+            Continuer
           </button>
         </div>
       </div>
