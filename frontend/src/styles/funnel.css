@@ -266,6 +266,32 @@
   padding: 28px 0 44px;
 }
 
+/* Enveloppe titre + sous-titre + contenu, remontée avec `key={stepKey}` à
+   chaque changement de question : c'est ce qui fait rejouer l'entrée sans
+   jamais démonter le header (retour, barre de progression), qui doit
+   rester stable pour que sa largeur continue de glisser au lieu de sauter.
+   `flex` et `min-height: 0` reproduisent exactement le comportement que le
+   titre, le sous-titre et `.funnel-content` avaient en enfants directs de
+   `.funnel-body` avant cette enveloppe. */
+.funnel-step {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  animation: funnel-step-in 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes funnel-step-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ---------- Pied : une seule action, toujours au même endroit ---------- */
 
 .funnel-footer {
@@ -482,6 +508,10 @@
 .choice-card.is-selected {
   border-color: var(--funnel-accent);
   background: rgba(255, 90, 31, 0.09);
+  /* Le tap a un mouvement à regarder pendant les 260 ms que le composant
+     laisse déjà s'écouler avant d'avancer (repondreEtAvancer) : sans ça,
+     ce délai ne montrait qu'un changement de couleur immobile. */
+  animation: choice-card-pop 0.28s ease-out;
 }
 
 .choice-card:focus-visible {
@@ -530,6 +560,28 @@
   /* Le point central est peint par une ombre interne : pas de pseudo-élément
      à positionner, et le cercle reste parfaitement concentrique. */
   box-shadow: inset 0 0 0 5px var(--funnel-accent);
+  animation: choice-radio-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes choice-card-pop {
+  from {
+    transform: scale(0.98);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes choice-radio-pop {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* ---------- Champ texte (e-mail) ---------- */
@@ -719,7 +771,10 @@
     transition: none;
   }
 
-  .interstitial-text {
+  .interstitial-text,
+  .funnel-step,
+  .choice-card.is-selected,
+  .choice-card.is-selected .choice-card-radio {
     animation: none;
   }
 }

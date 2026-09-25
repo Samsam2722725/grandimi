@@ -2036,6 +2036,7 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       <FunnelShell
         onBack={reculer}
         progress={progression}
+        stepKey={etape}
         title={titreAvecAccent(texte.titre, texte.accent)}
         subtitle={texte.sous}
         onSkip={ECRANS_FACULTATIFS.has(etape) ? avancer : undefined}
