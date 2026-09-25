@@ -2261,3 +2261,65 @@
   font-weight: 700;
   color: var(--funnel-text);
 }
+
+/* Resultats email screen - purple/magenta theme */
+.resultats-email {
+  background: linear-gradient(135deg, #0f0015 0%, #1a001f 100%);
+  color: #fff;
+}
+
+.resultats-email .resultats-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.resultats-email .interstitial-titre {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.resultats-email .interstitial-text {
+  color: #ccc;
+  font-size: 1.1rem;
+}
+
+.resultats-email .funnel-field input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1.5px solid #7a3ac2;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+}
+
+.resultats-email .funnel-field input::placeholder {
+  color: #999;
+}
+
+.resultats-email .funnel-help {
+  color: #999;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.resultats-email .resultats-btn {
+  background: linear-gradient(135deg, #b633d4 0%, #7a3ac2 100%);
+  border: none;
+  color: #fff;
+  padding: 1.2rem;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.resultats-email .resultats-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(182, 51, 212, 0.4);
+}
+
+.resultats-email .resultats-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

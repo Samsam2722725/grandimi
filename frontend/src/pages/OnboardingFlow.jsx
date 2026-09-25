@@ -594,9 +594,11 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     }
     const emailValide = EMAIL_VALIDE.test(email)
     return (
-      <div className="interstitial">
-        <h1 className="interstitial-titre">{texte.titre}</h1>
-        <p className="interstitial-text">{texte.sousTitre}</p>
+      <div className="interstitial resultats-email">
+        <div className="resultats-header">
+          <h1 className="interstitial-titre">{texte.titre}</h1>
+          <p className="interstitial-text">{texte.sousTitre}</p>
+        </div>
         <div className="funnel-field">
           <label htmlFor="onb-email" className="sr-only">
             Adresse e-mail
@@ -613,7 +615,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
         </div>
         <p className="funnel-help">On t’envoie ton résultat à cette adresse.</p>
         <div className="interstitial-action is-ready">
-          <button type="button" className="funnel-cta" disabled={!emailValide} onClick={lancerAnalyse}>
+          <button type="button" className="funnel-cta resultats-btn" disabled={!emailValide} onClick={lancerAnalyse}>
             Révéler mes résultats
           </button>
         </div>
