@@ -23,6 +23,7 @@ import { capturePageview } from './lib/analytics';
 import HomePage from './pages/HomePage';
 
 const OnboardingFlow = lazy(() => import('./pages/OnboardingFlow'));
+const Paywall = lazy(() => import('./pages/Paywall'));
 const ResultsPage = lazy(() => import('./pages/ResultsPage'));
 const PaywallPage = lazy(() => import('./pages/PaywallPage'));
 const GrowthPlanPage = lazy(() => import('./pages/GrowthPlanPage'));
@@ -512,7 +513,16 @@ function App() {
       {/* La paywall redirige vers Whop : l'accès n'est plus accordé
           côté client, mais par le webhook après paiement réel. */}
       {currentPage === 'paywall' && predictionData && (
-        <PaywallPage onBackHome={handleBackHome} />
+        <Paywall
+          onContinue={handlePaymentComplete}
+          onParentPay={() => {
+            const email = document.querySelector('.parent-email-input')?.value;
+            if (email) {
+              localStorage.setItem('parentEmail', email);
+              setCurrentPage('parent');
+            }
+          }}
+        />
       )}
 
       {/* Growth Plan (after payment) */}
