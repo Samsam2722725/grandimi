@@ -684,7 +684,17 @@ function QuestionnaireFlow({ onPredictionComplete, onCancel }) {
       } catch (err) {
         if (annule) return
         estimationEchouee(err.message)
-        setErreur(err.message)
+        /* PAS err.message À L'ÉCRAN. Une requête réseau qui échoue avant
+           même d'atteindre le serveur (hors ligne, DNS, CORS) rejette avec
+           un message du NAVIGATEUR, jamais du code — « Failed to fetch »,
+           « NetworkError when attempting to fetch resource », « Load
+           failed » selon le navigateur — et ce message est TOUJOURS en
+           anglais, quelle que soit la langue de l'interface. `err.message`
+           part bien vers l'analytics juste au-dessus, pour le diagnostic ;
+           ce que l'utilisateur lit reste une phrase qu'on a écrite. */
+        setErreur(
+          'La connexion avec le serveur a échoué. Vérifie ta connexion et réessaie.',
+        )
       }
     }
 
