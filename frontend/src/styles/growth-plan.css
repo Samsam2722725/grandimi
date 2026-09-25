@@ -111,6 +111,20 @@
   margin: 0;
 }
 
+/* ---------- Trajectoire de croissance ---------- */
+
+.plan-chart-card {
+  margin-bottom: var(--spacing-48);
+}
+
+.plan-chart-title {
+  font-size: var(--text-caption);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: var(--font-weight-semibold);
+  margin: 0 0 var(--spacing-24);
+}
+
 /* ---------- Statistiques ---------- */
 
 .stats-grid {

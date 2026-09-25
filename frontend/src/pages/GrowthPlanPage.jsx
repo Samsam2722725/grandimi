@@ -5,6 +5,13 @@ import Spinner from '../components/Spinner';
 import '../styles/funnel.css';
 import '../styles/growth-plan.css';
 import apiClient from '../lib/api';
+/* Le graphique à deux trajectoires existait déjà dans le projet — construit
+   pour cet écran précisément (il lit predicted_height_cm ET
+   potential_height_cm, tous deux verrouillés avant paiement) — mais n'était
+   monté nulle part. C'est la courbe que le résultat sous cadenas promettait ;
+   elle apparaît maintenant ici, une fois l'accès payé, avec les seules
+   valeurs que le calcul a réellement produites. */
+import { GrowthProjectionChart } from '../components/ui/growth-projection-chart';
 
 // Date au format YYYY-MM-DD dans le fuseau local (pas toISOString, qui
 // bascule sur UTC et peut donner la veille ou le lendemain selon l'heure).
@@ -296,6 +303,25 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
                 </div>
               );
             })}
+
+            {/* LA COURBE — le climax du résultat, enfin déverrouillé.
+                Deux trajectoires réelles : celle que les habitudes actuelles
+                produisent, celle qu'atteindre les trois leviers (sommeil,
+                nutrition, activité) rendrait possible. Aucune valeur
+                inventée — les deux viennent de predictionData, calculées par
+                le même moteur que la carte cadenassée de l'écran de
+                résultat. */}
+            <div className="card plan-chart-card">
+              <h3 className="plan-chart-title">Ta trajectoire de croissance</h3>
+              <GrowthProjectionChart
+                ageNow={Number(predictionData.age)}
+                heightNow={Number(predictionData.current_height_cm)}
+                predicted={Number(predictionData.predicted_height_cm)}
+                potentiel={Number(predictionData.potential_height_cm)}
+                velocityCM={predictionData.height_velocity_cm}
+                sex={predictionData.sex}
+              />
+            </div>
 
             {/* HORS DES COURBES DE RÉFÉRENCE — l'avertissement suit le CHIFFRE.
 

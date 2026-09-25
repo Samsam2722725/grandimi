@@ -82,10 +82,17 @@ export function LongTermeChart({ className }) {
 
         {/* La haute d'abord : son aire passe SOUS celle de la basse, sinon la
             zone commune prend deux fois la teinte et vire au brun. */}
-        <path d={aire(haute)} fill="url(#lt-haute)" stroke="none" />
-        <path d={aire(basse)} fill="url(#lt-basse)" stroke="none" />
+        <path className="lt-aire" d={aire(haute)} fill="url(#lt-haute)" stroke="none" />
+        <path className="lt-aire" d={aire(basse)} fill="url(#lt-basse)" stroke="none" />
 
+        {/* Les deux traits se dessinent au lieu d'apparaître d'un coup :
+            l'écart qu'ils portent est censé se creuser avec le temps, pas
+            surgir instantanément. `pathLength="1"` fixe la longueur totale à
+            1 quel que soit le tracé réel, donc le dashoffset animé en CSS
+            (0 à 1) marche sans mesurer chaque courbe en JS. */}
         <path
+          className="lt-ligne"
+          pathLength="1"
           d={lisser(haute)}
           fill="none"
           stroke={SERIE_OPTIMISE}
@@ -93,6 +100,8 @@ export function LongTermeChart({ className }) {
           strokeLinecap="round"
         />
         <path
+          className="lt-ligne lt-ligne--subie"
+          pathLength="1"
           d={lisser(basse)}
           fill="none"
           stroke={SERIE_SUBIE}
@@ -101,6 +110,7 @@ export function LongTermeChart({ className }) {
         />
 
         <circle
+          className="lt-point lt-point--subie"
           cx={M.left}
           cy={H - M.bottom}
           r="5.5"
@@ -109,6 +119,7 @@ export function LongTermeChart({ className }) {
           strokeWidth="2.5"
         />
         <circle
+          className="lt-point lt-point--fin"
           cx={finHaute[0]}
           cy={finHaute[1]}
           r="5.5"
@@ -116,7 +127,7 @@ export function LongTermeChart({ className }) {
           stroke={SERIE_OPTIMISE}
           strokeWidth="2.5"
         />
-        <circle cx={finBasse[0]} cy={finBasse[1]} r="4" fill={SERIE_SUBIE} />
+        <circle className="lt-point lt-point--fin" cx={finBasse[0]} cy={finBasse[1]} r="4" fill={SERIE_SUBIE} />
       </svg>
 
       <ul className="lt-legende">

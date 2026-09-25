@@ -21,6 +21,12 @@ export function FunnelShell({
   children,
   footer,
   className,
+  /* Identité de l'écran courant, utilisée uniquement comme `key` pour
+     rejouer l'animation d'entrée à chaque changement de question. Le
+     header (retour, barre de progression) reste hors de ce `key` : lui
+     seul ne doit jamais se démonter, sinon la barre de progression saute
+     au lieu de glisser d'une largeur à l'autre. */
+  stepKey,
   /* Quand il est fourni, « Ignorer » remplace la reserve de droite.
 
      Ce n'est pas un ornement sur un tunnel de trente-deux ecrans : une
@@ -69,9 +75,11 @@ export function FunnelShell({
       </header>
 
       <main className="funnel-body">
-        {title && <h1 className="funnel-title">{title}</h1>}
-        {subtitle && <p className="funnel-subtitle">{subtitle}</p>}
-        <div className="funnel-content">{children}</div>
+        <div className="funnel-step" key={stepKey}>
+          {title && <h1 className="funnel-title">{title}</h1>}
+          {subtitle && <p className="funnel-subtitle">{subtitle}</p>}
+          <div className="funnel-content">{children}</div>
+        </div>
       </main>
 
       {footer && <footer className="funnel-footer">{footer}</footer>}

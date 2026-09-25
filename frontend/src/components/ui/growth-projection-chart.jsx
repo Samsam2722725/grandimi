@@ -153,8 +153,18 @@ export function GrowthProjectionChart({
           </g>
         ))}
 
+        {/* Les classes `lt-*` viennent de long-terme-chart.jsx : même figure,
+            même mise en scène (tracé progressif via `pathLength`, aire qui
+            se fond, points qui arrivent après leur ligne) — réutilisée telle
+            quelle plutôt que redéfinie ici. */}
         {deuxCourbes && (
-          <path d={aireEcart} fill={SERIE_POTENTIEL} fillOpacity="0.16" stroke="none" />
+          <path
+            className="lt-aire"
+            d={aireEcart}
+            fill={SERIE_POTENTIEL}
+            fillOpacity="0.16"
+            stroke="none"
+          />
         )}
 
         {/* Le passé : trait sobre, sans couleur de série. Ce n'est pas une
@@ -172,6 +182,8 @@ export function GrowthProjectionChart({
 
         {deuxCourbes && (
           <path
+            className="lt-ligne"
+            pathLength="1"
             d={lisser(courbeOptimisee)}
             fill="none"
             stroke={SERIE_POTENTIEL}
@@ -182,6 +194,8 @@ export function GrowthProjectionChart({
         )}
 
         <path
+          className={deuxCourbes ? 'lt-ligne lt-ligne--subie' : 'lt-ligne'}
+          pathLength="1"
           d={lisser(courbeActuelle)}
           fill="none"
           stroke={deuxCourbes ? SERIE_SOUS_POTENTIEL : SERIE_POTENTIEL}
@@ -222,6 +236,7 @@ export function GrowthProjectionChart({
         />
 
         <circle
+          className={deuxCourbes ? 'lt-point lt-point--subie' : 'lt-point'}
           cx={x(ageFin)}
           cy={y(predicted)}
           r="4.5"
@@ -233,6 +248,7 @@ export function GrowthProjectionChart({
         {deuxCourbes && (
           <>
             <circle
+              className="lt-point"
               cx={x(ageFin)}
               cy={y(cible)}
               r="4.5"
