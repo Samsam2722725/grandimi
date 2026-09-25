@@ -42,6 +42,7 @@ import {
   MoletteDateNaissance,
   MoletteSommeil,
   MoletteVitesseCroissance,
+  EcranHabitudes,
   EcranModelePrediction,
   EcranPrecision,
   EcranPotentielGain,
@@ -505,6 +506,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
             options={OPTIONS_CROISSANCE_LENTE}
           />
         )
+      case 'habitudes':
+        return <EcranHabitudes />
       case 'modele-prediction':
         return <EcranModelePrediction />
       case 'precision':
