@@ -219,7 +219,7 @@ export const TEXTES_ETAPE = {
   },
   'potentiel-gain': {
     titre: 'Tu peux grandir',
-    sousTitre: 'Environ 20 % de ta taille est encore entre tes mains',
+    sousTitre: 'Environ 20 % de ta taille est encore entre tes mains. Les bonnes habitudes font la différence.',
   },
   'optimiser-potentiel': {
     titre: 'Optimise tout ton potentiel de taille',
