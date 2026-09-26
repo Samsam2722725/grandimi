@@ -503,6 +503,42 @@ function PaywallPage({ onBackHome }) {
           </section>
         )}
 
+        {/* Le style existe depuis toujours dans paywall-night.css
+            (.paywall-faq, en <details>/<summary>) sans jamais avoir été
+            posé ici — demande explicite du client de mettre une FAQ en
+            bas de cette page. Les réponses sont vérifiées contre les CGV
+            et la politique de confidentialité du site, pas recopiées :
+            l'ancienne version (écran retiré) annonçait 30 jours de
+            garantie alors que les CGV en promettent 14. */}
+        <section className="paywall-faq" aria-label="Questions fréquentes">
+          <details>
+            <summary>Comment fonctionne l'estimation de taille ?</summary>
+            <p>
+              Grandimi combine tes mesures et celles de tes parents avec le modèle
+              Khamis-Roche et les courbes de croissance de l'OMS pour estimer ta
+              taille adulte, avec une marge d'erreur affichée à côté du résultat.
+            </p>
+          </details>
+          <details>
+            <summary>Mes données sont-elles sécurisées ?</summary>
+            <p>
+              Oui : tes mesures sont chiffrées en base de données, stockées dans
+              l'Union européenne, et ne sont jamais partagées avec un outil tiers.
+            </p>
+          </details>
+          <details>
+            <summary>Puis-je annuler mon abonnement ?</summary>
+            <p>Oui, à tout moment et en ligne, sans frais ni justification à donner.</p>
+          </details>
+          <details>
+            <summary>Y a-t-il une garantie ?</summary>
+            <p>
+              Oui : droit de rétractation de 14 jours à partir du paiement,
+              satisfait ou remboursé, sans questions.
+            </p>
+          </details>
+        </section>
+
         <p className="paywall-security">
           <Lock size={15} aria-hidden="true" />
           Paiement traité par Whop. Grandimi ne voit ni ne stocke ta carte.
