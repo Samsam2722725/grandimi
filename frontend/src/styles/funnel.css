@@ -2435,11 +2435,42 @@
   font-size: 13px;
 }
 
+/* ---------- Cartes lumineuses ----------
+   Le langage visuel des images du client (graphique « Votre taille
+   finale », jauge 20 %) : carte sombre, liseré et halo orange. Posées sur
+   le fond crème, elles restent des objets — le tunnel garde sa peau claire
+   (cf. en-tête de ce fichier) sans que ces écrans jurent avec les images.
+
+   Les jetons --funnel-* sont redéfinis SUR la carte : tout ce qu'elle
+   contient (titres, texte gris, accent) passe en version sombre sans
+   qu'aucun composant enfant n'ait à le savoir. */
+.onb-icone,
+.onb-exemple-carte,
+.onb-tracker,
+.onb-frise {
+  --funnel-text: #ffffff;
+  --funnel-muted: #b3a79c;
+  --funnel-line: rgba(255, 138, 76, 0.28);
+  --funnel-accent-text: #ff8a4c;
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 90, 31, 0.16), transparent 60%),
+    #17110d;
+  border: 1px solid rgba(255, 120, 60, 0.45);
+  border-radius: 20px;
+  box-shadow:
+    0 0 0 1px rgba(255, 90, 31, 0.08),
+    0 10px 30px -8px rgba(255, 90, 31, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  color: var(--funnel-text);
+}
+
 .onb-tracker {
   display: flex;
   flex-direction: column;
-  max-width: 280px;
+  width: 100%;
+  max-width: 300px;
   margin: 0 auto;
+  padding: 10px 22px;
 }
 
 .onb-tracker-ligne {
@@ -2465,6 +2496,7 @@
   height: 12px;
   border-radius: 999px;
   background: var(--funnel-accent);
+  box-shadow: 0 0 10px 2px rgba(255, 90, 31, 0.7);
 }
 
 .onb-tracker-semaine {
@@ -2494,13 +2526,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   text-align: center;
-  padding: 16px 10px;
-  border-radius: 16px;
-  background: var(--funnel-surface);
-  border: 1px solid var(--funnel-line);
-  color: var(--funnel-text);
+  padding: 20px 10px;
+}
+
+.onb-icone svg {
+  color: #ff8a4c;
+  filter: drop-shadow(0 0 6px rgba(255, 90, 31, 0.6));
 }
 
 .onb-icone strong {
@@ -2516,10 +2549,13 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 20px;
-  border-radius: 16px;
-  background: var(--funnel-surface);
-  border: 1px solid var(--funnel-line);
+  padding: 22px;
+}
+
+.onb-exemples {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .onb-exemple-titre {
@@ -2558,11 +2594,10 @@
 .onb-frise {
   list-style: none;
   margin: 0;
-  padding: 0 0 0 18px;
+  padding: 22px 22px 22px 44px;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  border-left: 2px solid var(--funnel-line);
 }
 
 .onb-frise-etape {

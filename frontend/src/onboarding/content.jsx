@@ -781,28 +781,32 @@ export function EcranConseilsSommeil() {
   )
 }
 
-export function EcranPlanQuotidien() {
-  return <FonctionPlan />
+// 60 min par jour : recommandation de l'OMS pour les 5-17 ans (activité
+// modérée à soutenue). Les sports à impact sont cités pour la mise en charge
+// de l'os, pas comme une promesse de centimètres.
+export function EcranConseilsExercice() {
+  return (
+    <div className="onb-exemple-carte">
+      <p className="onb-exemple-titre">60 min d’activité par jour</p>
+      <p>Ce que recommande l’OMS entre 5 et 17 ans.</p>
+      <p className="onb-exemple-score">Conseil : privilégie les sports avec des sauts — basket, volley, corde à sauter</p>
+    </div>
+  )
 }
 
-const ETAPES_LONG_TERME = [
-  { quand: 'Aujourd’hui', quoi: 'Ta première estimation et ton plan' },
-  { quand: 'Chaque jour', quoi: 'Tu coches tes actions : sommeil, assiette, exercices' },
-  { quand: 'Chaque mois', quoi: 'Ton estimation est recalculée avec tes nouvelles mesures' },
-  { quand: 'Sur plusieurs mois', quoi: 'C’est la régularité qui compte, pas un seul bon jour' },
-]
-
-export function EcranEstimationMensuelle() {
+// « Les fondamentaux » : les deux piliers que l'utilisateur ne voit sur
+// aucun autre écran en détail, sommeil et assiette.
+export function EcranFondamentaux() {
   return (
-    <ol className="onb-frise">
-      {ETAPES_LONG_TERME.map(({ quand, quoi }) => (
-        <li key={quand} className="onb-frise-etape">
-          <strong>{quand}</strong>
-          <span>{quoi}</span>
-        </li>
-      ))}
-    </ol>
+    <div className="onb-exemples">
+      <EcranConseilsSommeil />
+      <EcranConseilsNutrition />
+    </div>
   )
+}
+
+export function EcranPlanQuotidien() {
+  return <FonctionPlan />
 }
 
 /**
