@@ -73,7 +73,6 @@ export const ORDRE_ETAPES = [
   'taille-ideale',
   'plus-que-genes',
   'resultats-la',
-  'paywall-funnel',
 ]
 
 export const TYPE_ETAPE = {
@@ -115,7 +114,6 @@ export const TYPE_ETAPE = {
   'taille-ideale': 'question',
   'plus-que-genes': 'interstitielle',
   'resultats-la': 'interstitielle',
-  'paywall-funnel': 'interstitielle',
 }
 
 /* ============================================================

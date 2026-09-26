@@ -3,9 +3,7 @@ import { User, Users } from 'lucide-react'
 
 import { FunnelShell, FunnelButton } from '@/components/ui/funnel-shell'
 import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
-import { PaywallFunnel } from '@/components/PaywallFunnel'
 import '../styles/funnel.css'
-import '../styles/paywall-funnel.css'
 
 import apiClient from '../lib/api'
 import { mockPredictHeight } from '../lib/mock-api'
@@ -734,14 +732,6 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           </div>
         )}
       </ProgressionAnalyse>
-    )
-  }
-
-  if (etape === 'paywall-funnel') {
-    return (
-      <PaywallFunnel onComplete={() => {
-        window.location.href = '/paywall'
-      }} />
     )
   }
 
