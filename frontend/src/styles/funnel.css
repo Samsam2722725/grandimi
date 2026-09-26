@@ -1207,8 +1207,26 @@
 }
 
 .funnel-reseau {
+  position: relative;
   width: 100%;
-  max-width: 420px;
+  max-width: 460px;
+}
+
+/* Halo d'ambiance derrière le réseau : sans lui, la figure flotte seule
+   dans un grand vide clair et se lit comme inachevée, quel que soit le
+   soin mis dans le tracé lui-même. Porté par un pseudo-élément flou et
+   non par chaque nœud (cf. note plus bas sur le coût des drop-shadow),
+   il donne de la présence à l'écran sans coûter une image de plus. */
+.funnel-reseau::before {
+  content: '';
+  position: absolute;
+  inset: -15% -5%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 90, 31, 0.14),
+    transparent 70%
+  );
+  z-index: -1;
 }
 
 .reseau {
@@ -1223,12 +1241,12 @@
 
 .reseau-arete {
   stroke: var(--funnel-accent);
-  stroke-width: 0.7;
+  stroke-width: 0.9;
   transition: opacity 0.45s ease;
 }
 
 .reseau-arete.est-active {
-  stroke-width: 1.1;
+  stroke-width: 1.4;
 }
 
 .reseau-poids {
@@ -1243,7 +1261,7 @@
 .reseau-noeud {
   fill: var(--funnel-bg);
   stroke: var(--funnel-accent);
-  stroke-width: 1.6;
+  stroke-width: 2;
   transition:
     fill 0.45s ease,
     stroke-width 0.45s ease;
@@ -1251,7 +1269,7 @@
 
 .reseau-noeud.est-active {
   fill: var(--funnel-accent);
-  stroke-width: 2.2;
+  stroke-width: 2.6;
 }
 
 /* Le lien « Comment ça marche ? » : discret par construction. Il ne
@@ -1561,6 +1579,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+}
+
+/* Même principe que le halo du réseau de neurones : une atmosphère
+   derrière le cluster plutôt qu'un cluster posé seul sur du vide. */
+.ruche::before {
+  content: '';
+  position: absolute;
+  inset: -20% -10%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 90, 31, 0.12),
+    transparent 72%
+  );
+  z-index: -1;
 }
 
 .ruche-tuiles {
@@ -1568,11 +1601,16 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   width: 100%;
+  max-width: 340px;
 }
 
 /* Les tuiles sont des hexagones, comme sur l'original. `clip-path`
    plutôt qu'une image : le contour suit la tuile quelle que soit la
-   largeur de l'écran, et il n'y a rien à charger. */
+   largeur de l'écran, et il n'y a rien à charger.
+
+   Bordure et texte relevés : à `--funnel-muted` plein, les tuiles
+   inactives se fondaient presque dans le fond papier — la figure se
+   lisait comme trois cases vides plutôt que comme trois leviers réels. */
 .ruche-tuile {
   display: flex;
   flex-direction: column;
@@ -1582,9 +1620,10 @@
   aspect-ratio: 0.88;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background: var(--funnel-surface);
-  color: var(--funnel-muted);
-  font-size: 13.5px;
-  font-weight: 600;
+  border: 1px solid rgba(255, 90, 31, 0.16);
+  color: color-mix(in srgb, var(--funnel-text) 62%, var(--funnel-muted) 38%);
+  font-size: 14px;
+  font-weight: 700;
 }
 
 /* Au milieu, allumé : le potentiel de croissance, c'est-à-dire ce vers

@@ -38,7 +38,7 @@ export function RuchePotentiel({ variante = 'ruche', className }) {
       <div className="ruche-tuiles">
         {LEVIERS.map(({ clef, Icone, nom }) => (
           <div key={clef} className={`ruche-tuile ruche-tuile--${clef}`}>
-            <Icone size={26} aria-hidden="true" />
+            <Icone size={29} strokeWidth={2} aria-hidden="true" />
             <span>{nom}</span>
           </div>
         ))}

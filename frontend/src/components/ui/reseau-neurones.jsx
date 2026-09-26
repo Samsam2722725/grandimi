@@ -82,7 +82,10 @@ function construireReseau() {
              illisible sous 380 px de large — et la moitié des
              étiquettes s'y superposent déjà. */
           etiquetee: (iDepart * 5 + iArrivee) % 7 === 0,
-          opacite: 0.1 + tirer() * 0.25,
+          /* Relevé de 0,1–0,35 à 0,2–0,5 : au repos, la figure se lisait
+             comme un filigrane plutôt que comme le calcul qu'elle
+             représente. */
+          opacite: 0.2 + tirer() * 0.3,
         })
       })
     })
@@ -159,7 +162,7 @@ export function ReseauNeurones({ className }) {
             key={`n-${index}`}
             cx={noeud.x}
             cy={noeud.y}
-            r="6.5"
+            r="7.5"
             className={`reseau-noeud ${noeud.couche === couchActive ? 'est-active' : ''}`}
           />
         ))}
