@@ -787,7 +787,8 @@
   .segmented-option.is-selected,
   .verite-ligne,
   .fonction-plan li,
-  .etudes li {
+  .etudes li,
+  .fonction-suivi-semaines li {
     animation: none;
     /* Ces figures sont posées `opacity: 0` / `stroke-dashoffset: 1` en
        attendant leur animation d'entrée : sans l'animation pour les
@@ -2144,6 +2145,44 @@
   width: 100%;
 }
 
+/* La silhouette : un pictogramme plat, pas une mascotte. Tronc et
+   membres sont un unique trait épais à bouts ronds — le même langage
+   que la pilule de sélection des molettes (.wheel-selection) et le
+   point d'arrivée des courbes (.lt-point). */
+.fonction-seance-silhouette {
+  position: relative;
+  width: 120px;
+  height: 132px;
+}
+
+.fonction-seance-silhouette::before {
+  content: '';
+  position: absolute;
+  inset: 10% -30%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 90, 31, 0.16),
+    transparent 70%
+  );
+  z-index: -1;
+}
+
+.fs-socle {
+  fill: var(--funnel-surface-high);
+}
+
+.fs-corps circle {
+  fill: var(--funnel-accent-display);
+}
+
+.fs-corps path {
+  fill: none;
+  stroke: var(--funnel-accent-display);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .fonction-seance-anneau {
   position: relative;
   width: 96px;
@@ -2191,6 +2230,58 @@
   align-items: center;
   gap: 10px;
   width: 100%;
+}
+
+/* Trois pastilles empilées, chacune légèrement décalée et tournée : la
+   pile suggère l'accumulation des semaines avant que la courbe ne
+   commence, sans jamais afficher de chiffre — la donnée reste dans le
+   graphique en dessous. */
+.fonction-suivi-semaines {
+  position: relative;
+  list-style: none;
+  margin: 0 0 -6px;
+  padding: 0;
+  height: 68px;
+  width: 100%;
+  max-width: 220px;
+}
+
+.fonction-suivi-semaines li {
+  position: absolute;
+  left: 50%;
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: var(--funnel-surface);
+  border: 1px solid var(--funnel-line);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--funnel-muted);
+  white-space: nowrap;
+  opacity: 0;
+  animation: funnel-step-in 0.4s ease-out both;
+}
+
+.fonction-suivi-semaines li:nth-child(1) {
+  top: 0;
+  transform: translateX(-72%) rotate(-6deg);
+  animation-delay: 0.05s;
+}
+
+.fonction-suivi-semaines li:nth-child(2) {
+  top: 22px;
+  transform: translateX(-32%) rotate(3deg);
+  animation-delay: 0.18s;
+  color: var(--funnel-text);
+}
+
+.fonction-suivi-semaines li:nth-child(3) {
+  top: 44px;
+  transform: translateX(-58%) rotate(-2deg);
+  animation-delay: 0.31s;
+  background: var(--funnel-surface-high);
+  border-color: rgba(255, 90, 31, 0.3);
+  color: var(--funnel-accent-text);
+  font-weight: 800;
 }
 
 .fonction-suivi-figure {

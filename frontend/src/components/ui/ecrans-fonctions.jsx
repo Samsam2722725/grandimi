@@ -58,6 +58,8 @@ export function FonctionExercices() {
 
   return (
     <div className="fonction-seance">
+      <SilhouetteSeance />
+
       <div className="fonction-seance-anneau" aria-hidden="true">
         <svg viewBox="0 0 100 100">
           <circle className="fs-anneau-piste" cx="50" cy="50" r={rayon} />
@@ -94,6 +96,34 @@ export function FonctionExercices() {
   )
 }
 
+/* Silhouette en pictogramme plat — tête, tronc et membres en traits
+   épais à bouts ronds, comme la pilule de sélection des molettes ou le
+   point central des courbes. Volontairement PAS un rendu figuratif
+   (pas de visage, pas de dégradé de peau) : un pictogramme reste dans
+   le langage géométrique déjà établi par reseau-neurones.jsx et
+   ruche-potentiel.jsx, là où une mascotte détaillée jurerait avec le
+   reste du tunnel et risquerait de paraître bon marché. */
+function SilhouetteSeance() {
+  return (
+    <svg
+      className="fonction-seance-silhouette"
+      viewBox="0 0 100 110"
+      role="presentation"
+      aria-hidden="true"
+    >
+      <ellipse className="fs-socle" cx="50" cy="100" rx="30" ry="6" />
+      <g className="fs-corps">
+        <circle cx="50" cy="17" r="9" />
+        <path d="M50 27 V54" />
+        <path d="M44 32 L31 49" />
+        <path d="M56 32 L69 49" />
+        <path d="M46 54 L35 68 L31 85" />
+        <path d="M54 54 L66 68 L70 85" />
+      </g>
+    </svg>
+  )
+}
+
 /* Illustration, pas une donnée de l'utilisateur — même principe que
    long-terme-chart.jsx : à cet endroit du tunnel, aucune mesure de suivi
    n'existe encore. La courbe et le « +14 cm » décrivent ce que l'écran de
@@ -117,6 +147,15 @@ export function FonctionSuivi() {
 
   return (
     <div className="fonction-suivi">
+      {/* Trois pastilles qui s'empilent avant la courbe : chaque semaine
+         suivie nourrit la mesure suivante. Purement décoratif — aucun
+         chiffre ici n'est une donnée, contrairement au reste de l'écran. */}
+      <ul className="fonction-suivi-semaines" aria-hidden="true">
+        <li>Semaine 1</li>
+        <li>Semaine 2</li>
+        <li>Semaine 3</li>
+      </ul>
+
       <svg
         viewBox={`0 0 ${W} ${H}`}
         width="100%"
