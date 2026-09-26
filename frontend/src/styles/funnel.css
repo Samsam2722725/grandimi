@@ -2369,6 +2369,7 @@
 }
 
 .onb-preuve {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2380,6 +2381,246 @@
   max-width: 360px;
   height: auto;
   border-radius: 16px;
+}
+
+/* ---------- Graphique « Votre taille finale » (SVG, sans fond) ---------- */
+
+.tfc {
+  width: 100%;
+  max-width: 360px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tfc-titre {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--funnel-text);
+}
+
+.tfc-titre em {
+  font-style: normal;
+  color: var(--funnel-accent-display);
+}
+
+.tfc-icone {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #17110d;
+  box-shadow: 0 4px 14px -4px rgba(255, 90, 31, 0.6);
+}
+
+.tfc-icone svg {
+  fill: #ffb020;
+}
+
+.tfc-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.tfc-grille {
+  stroke: rgba(23, 18, 14, 0.12);
+  stroke-width: 1;
+  stroke-dasharray: 4 5;
+}
+
+.tfc-courbe {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: tfc-trace 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.tfc-courbe--habitudes {
+  stroke: #b8987a;
+  stroke-width: 3;
+  animation-delay: 0.2s;
+}
+
+.tfc-courbe--routine {
+  stroke-width: 4;
+  animation-delay: 0.45s;
+}
+
+.tfc-zone {
+  opacity: 0;
+  animation: tfc-apparait 0.8s ease-out 1.3s forwards;
+}
+
+.tfc-point {
+  stroke: #fff;
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  animation: tfc-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.tfc-point--depart {
+  fill: #ff5a1f;
+  animation-delay: 0.1s;
+}
+
+.tfc-point--habitudes {
+  fill: #e8c9a8;
+  animation-delay: 1.5s;
+}
+
+.tfc-point--routine {
+  fill: #ff5a1f;
+  animation-delay: 1.8s;
+}
+
+.tfc-legende {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--funnel-text);
+}
+
+.tfc-legende li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tfc-pastille {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+}
+
+.tfc-pastille--habitudes {
+  background: #e8c9a8;
+}
+
+.tfc-pastille--routine {
+  background: #ff5a1f;
+  box-shadow: 0 0 10px rgba(255, 90, 31, 0.8);
+}
+
+@keyframes tfc-trace {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes tfc-apparait {
+  to { opacity: 1; }
+}
+
+@keyframes tfc-pop {
+  to { transform: scale(1); }
+}
+
+/* ---------- Jauge 20 % (SVG, sans fond) ---------- */
+
+.jauge {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.jauge-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.jauge-piste {
+  fill: none;
+  stroke: #d9cfc4;
+  stroke-width: 18;
+  stroke-linecap: round;
+}
+
+.jauge-segment {
+  fill: none;
+  stroke-width: 18;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: tfc-trace 1.4s cubic-bezier(0.65, 0, 0.35, 1) 0.4s forwards;
+}
+
+.jauge-graduation {
+  stroke: #b3a79c;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.jauge-graduation.is-active {
+  stroke: #ff8a2a;
+}
+
+.jauge-disque {
+  fill: #120c09;
+  stroke: #ff5a1f;
+  stroke-width: 2;
+}
+
+.jauge-trame {
+  opacity: 0;
+  animation: tfc-apparait 1s ease-out 0.6s forwards;
+}
+
+.jauge-bouton {
+  fill: #fff;
+  stroke: #ff5a1f;
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  animation: tfc-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 1.6s forwards;
+}
+
+.jauge-valeur {
+  fill: #fff;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.jauge-borne {
+  fill: var(--funnel-muted);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tfc-courbe,
+  .jauge-segment {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .tfc-zone,
+  .jauge-trame {
+    animation: none;
+    opacity: 1;
+  }
+
+  .tfc-point,
+  .jauge-bouton {
+    animation: none;
+    transform: none;
+  }
 }
 
 /* Jauge circulaire du potentiel restant. Volontairement PAS la ruche à

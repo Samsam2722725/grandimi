@@ -21,8 +21,8 @@ import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ReseauNeurones } from '@/components/ui/reseau-neurones'
 import { EtudesPubliees } from '@/components/ui/ecrans-fonctions'
 import { Avis } from '@/components/ui/avis'
-import tailleFinaleChart from '../assets/images/taille-finale-chart.webp'
-import jaugePotentiel from '../assets/images/jauge-potentiel.webp'
+import { TailleFinaleChart } from '@/components/ui/taille-finale-chart'
+import { JaugePotentiel } from '@/components/ui/jauge-potentiel'
 import {
   cmVersPouceTotal,
   euVersUs,
@@ -644,38 +644,18 @@ export function EcranModelePrediction() {
   )
 }
 
-/* Écran « Grandimi crée des résultats à long terme » : n'avait aucun
-   `case` dans OnboardingFlow.jsx et retombait sur un écran vide, titre
-   et sous-titre seuls. Le graphe compare la trajectoire avec et sans
-   routine ; il n'affiche aucun chiffre que le modèle ne produit pas —
-   c'est une illustration de la mécanique, pas une prédiction chiffrée
-   pour CET utilisateur (celle-là reste sous cadenas, après paiement). */
 export function EcranResultatsLongTerme() {
   return (
     <div className="onb-preuve">
-      <img
-        src={tailleFinaleChart}
-        alt="Comparaison de trajectoire : habitudes actuelles contre routine Grandimi"
-        className="onb-image-pleine"
-      />
+      <TailleFinaleChart />
     </div>
   )
 }
 
-/* Remplace l'ancienne jauge en arc dessinée en SVG (0-100 %, portion verte)
-   par l'image envoyée par le client : même information — 20 % de la
-   taille adulte dépend des habitudes — mais dans le rendu qu'il a choisi.
-   L'écran avait été retiré entièrement à une demande antérieure de
-   « enlève le premier car c'est chiant », qui visait la répétition du
-   ratio 20/80 sur 3 écrans, pas cette image précise. */
 export function EcranPotentielGain() {
   return (
     <div className="onb-preuve">
-      <img
-        src={jaugePotentiel}
-        alt="Jauge : 20 % de ta taille adulte dépend de toi"
-        className="onb-image-pleine"
-      />
+      <JaugePotentiel />
     </div>
   )
 }
