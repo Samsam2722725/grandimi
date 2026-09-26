@@ -61,7 +61,6 @@ export const ORDRE_ETAPES = [
   'modele-prediction',
   'precision',
   'resultats-long-terme',
-  'potentiel-gain',
   'optimiser-potentiel',
   'grandimi-aide',
   'height-tracker',
@@ -104,7 +103,6 @@ export const TYPE_ETAPE = {
   'modele-prediction': 'affichage',
   precision: 'affichage',
   'resultats-long-terme': 'affichage',
-  'potentiel-gain': 'affichage',
   'optimiser-potentiel': 'affichage',
   'grandimi-aide': 'affichage',
   'exercices-quotidiens': 'affichage',
@@ -231,10 +229,6 @@ export const TEXTES_ETAPE = {
     titre: 'Grandimi crée des résultats à long terme',
     sousTitre: 'Beaucoup n’atteignent pas leur plein potentiel de taille à cause d’habitudes non optimisées.',
   },
-  'potentiel-gain': {
-    titre: 'Tu peux grandir',
-    sousTitre: 'Environ 20 % de ta taille est encore entre tes mains. Les bonnes habitudes font la différence.',
-  },
   'optimiser-potentiel': {
     titre: 'Optimise tout ton potentiel de taille',
     sousTitre: 'Pour grandir au maximum, dors bien, mange bien et reste actif',
@@ -274,10 +268,6 @@ export const TEXTES_ETAPE = {
   'taille-ideale': {
     titre: 'Quelle est ta taille idéale ?',
     sousTitre: 'Choisis la taille que tu veux atteindre',
-  },
-  'plus-que-genes': {
-    titre: 'Tu perds peut-être déjà des centimètres',
-    sousTitre: 'Génétique 80% • Mode de vie 20% : ton potentiel dépend de tes habitudes maintenant',
   },
   'resultats-la': {
     titre: 'Il est maintenant temps de découvrir',
@@ -684,63 +674,6 @@ export function EcranPrecision() {
   return <BadgePrecision />
 }
 
-// Jauge en arc 0-100 % : la portion verte, à l'extrémité proche de 100 %,
-// représente les 20 % encore modifiables par les habitudes. Volontairement
-// pas de remplissage à points ni de ruche à hexagones (cf. note historique
-// sur .onb-gauge plus bas) : seule la forme d'arc est reprise.
-const GAUGE_CENTRE = { x: 120, y: 140 }
-const GAUGE_RAYON = 95
-const GAUGE_ANGLE_DEBUT = 135
-const GAUGE_ANGLE_FIN = 405
-const GAUGE_TICKS = [135, 168.75, 202.5, 236.25, 270, 303.75, 337.5, 371.25, 405]
-
-function pointSurArc(angleDeg, rayon) {
-  const rad = (angleDeg * Math.PI) / 180
-  return {
-    x: GAUGE_CENTRE.x + rayon * Math.cos(rad),
-    y: GAUGE_CENTRE.y + rayon * Math.sin(rad),
-  }
-}
-
-export function EcranPotentielGain() {
-  const debut = pointSurArc(GAUGE_ANGLE_DEBUT, GAUGE_RAYON)
-  const fin = pointSurArc(GAUGE_ANGLE_FIN, GAUGE_RAYON)
-  const debutVert = pointSurArc(GAUGE_ANGLE_FIN - 0.2 * (GAUGE_ANGLE_FIN - GAUGE_ANGLE_DEBUT), GAUGE_RAYON)
-
-  return (
-    <div className="onb-gauge" role="img" aria-label="20 % de ta taille adulte dépend de toi">
-      <svg viewBox="0 0 240 240" className="onb-gauge-cadran" aria-hidden="true">
-        <path
-          className="onb-gauge-piste"
-          d={`M ${debut.x} ${debut.y} A ${GAUGE_RAYON} ${GAUGE_RAYON} 0 1 1 ${fin.x} ${fin.y}`}
-        />
-        <path
-          className="onb-gauge-arc"
-          d={`M ${debutVert.x} ${debutVert.y} A ${GAUGE_RAYON} ${GAUGE_RAYON} 0 0 1 ${fin.x} ${fin.y}`}
-        />
-        {GAUGE_TICKS.map((angle) => {
-          const interieur = pointSurArc(angle, GAUGE_RAYON + 7)
-          const exterieur = pointSurArc(angle, GAUGE_RAYON + 17)
-          return (
-            <line
-              key={angle}
-              className="onb-gauge-tick"
-              x1={interieur.x}
-              y1={interieur.y}
-              x2={exterieur.x}
-              y2={exterieur.y}
-            />
-          )
-        })}
-        <text x="34" y="232" textAnchor="middle" className="onb-gauge-label">0 %</text>
-        <text x="206" y="232" textAnchor="middle" className="onb-gauge-label">100 %</text>
-        <text x="120" y="150" textAnchor="middle" className="onb-gauge-texte">20 %</text>
-        <text x="120" y="172" textAnchor="middle" className="onb-gauge-legende">de ta taille adulte</text>
-      </svg>
-    </div>
-  )
-}
-
 const LEVIERS_OPTIMISATION = [
   { icone: Moon, titre: 'Sommeil' },
   { icone: Utensils, titre: 'Nutrition' },
@@ -977,8 +910,7 @@ export function EcranPlusQueGenes({ onContinue }) {
     <div className="interstitial">
       <h1 className="interstitial-titre">Tu es plus que tes gènes</h1>
       <p className="interstitial-text">
-        Tes gènes posent la base, mais ton mode de vie décide du résultat. On prépare un
-        programme juste pour toi.
+        Tu n’as pas choisi ta génétique, mais tu peux choisir ce que tu fais.
       </p>
       <div className="onb-genes-barres" role="img" aria-label="Génétique 80 %, environnement 20 %">
         <div className="onb-genes-barre">

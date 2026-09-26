@@ -46,7 +46,6 @@ import {
   MoletteSommeil,
   EcranModelePrediction,
   EcranPrecision,
-  EcranPotentielGain,
   EcranOptimiserPotentiel,
   EcranGrandimiAide,
   EcranConseilsSommeil,
@@ -630,8 +629,6 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
         return <EcranModelePrediction />
       case 'precision':
         return <EcranPrecision />
-      case 'potentiel-gain':
-        return <EcranPotentielGain />
       case 'optimiser-potentiel':
         return <EcranOptimiserPotentiel />
       case 'grandimi-aide':
