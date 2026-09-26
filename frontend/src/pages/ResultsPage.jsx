@@ -8,9 +8,8 @@ import { Confetti } from '@/components/ui/confetti'
 import Spinner from '../components/Spinner'
 import { resultatVu } from '../lib/analytics'
 import heroCelebrate from '../assets/images/hero-celebrate.webp'
-import semainesSuivi from '../assets/images/semaines-suivi.webp'
-import lessonsList from '../assets/images/lessons.webp'
-import routinePhone from '../assets/images/routine-phone.webp'
+import { Lecons, SuiviSemaines, TelephoneRoutine } from '@/components/ui/resultats-visuels'
+import { Compteur } from '@/components/ui/compteur'
 import { ActionsDuJour } from '@/components/ui/actions-du-jour'
 import '../styles/funnel.css'
 import '../styles/results-page.css'
@@ -318,16 +317,12 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           <AnalyseChart />
         </section>
 
-        <img
-          src={semainesSuivi}
-          alt="Suivi des semaines : Semaine 1-4 avec progression de ta prédiction"
-          className="results-image results-image-semaines"
-        />
+        <SuiviSemaines />
 
         {percentileAffichable && (
           <div className="analyse-ligne analyse-ligne--fait">
             <span className="analyse-perte-label">
-              Plus grand que {percentileAge} % des jeunes de ton âge
+              Plus grand que <Compteur valeur={percentileAge} delai={900} /> % des jeunes de ton âge
             </span>
             <span aria-hidden="true">🌍</span>
           </div>
@@ -339,7 +334,15 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
               {/* « moins de 5 % » plutot que « 5 % » : arrondir 1,4 % a 5 %
                   serait surestimer ce qui reste, sur l'ecran meme qui sert
                   a decider d'un achat. */}
-              Il te reste {resteCroissance > 0 ? `${resteCroissance} %` : 'moins de 5 %'} de
+              Il te reste{' '}
+              {resteCroissance > 0 ? (
+                <>
+                  <Compteur valeur={resteCroissance} delai={1100} /> %
+                </>
+              ) : (
+                'moins de 5 %'
+              )}{' '}
+              de
               ta croissance à faire
             </span>
             <span aria-hidden="true">📈</span>
@@ -352,17 +355,9 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           <span aria-hidden="true">🎯</span>
         </div>
 
-        <img
-          src={lessonsList}
-          alt="3 leçons : Mythes, Nutrition, Sommeil"
-          className="results-image results-image-lessons"
-        />
+        <Lecons />
 
-        <img
-          src={routinePhone}
-          alt="Routine quotidienne : 30 jours Level 1"
-          className="results-image results-image-routine"
-        />
+        <TelephoneRoutine />
 
         <ActionsDuJour />
 

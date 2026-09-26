@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCompteur } from './compteur'
 
 /* Jauge « 20 % de ta taille adulte dépend de toi », reconstruite en SVG
    d'après le visuel du client. Le segment orange couvre exactement 20 %
@@ -27,25 +27,6 @@ function arc(a1, a2, rayon = R) {
 
 const DEBUT_SEGMENT = FIN - ((FIN - DEBUT) * VALEUR) / 100
 const GRADUATIONS = Array.from({ length: 11 }, (_, i) => DEBUT + ((FIN - DEBUT) * i) / 10)
-
-function useCompteur(cible, duree = 1400, delai = 400) {
-  const [valeur, setValeur] = useState(() =>
-    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? cible : 0,
-  )
-  useEffect(() => {
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined
-    let raf
-    const t0 = performance.now() + delai
-    const tick = (t) => {
-      const p = Math.min(1, Math.max(0, (t - t0) / duree))
-      setValeur(Math.round(cible * (1 - (1 - p) ** 3)))
-      if (p < 1) raf = requestAnimationFrame(tick)
-    }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [cible, duree, delai])
-  return valeur
-}
 
 export function JaugePotentiel() {
   const valeur = useCompteur(VALEUR)
