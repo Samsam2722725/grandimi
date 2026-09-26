@@ -2935,50 +2935,158 @@
   fill: var(--funnel-muted);
 }
 
-.onb-genes-barres {
+/* ---------- Colonne génétique / habitudes ----------
+   Une colonne de 100 % : 80 % de génétique en bloc sombre, 20 %
+   d'habitudes en orange lumineux au sommet. Les blocs montent depuis le
+   bas quand `.is-rempli` est posé (une frame après le montage). */
+.genes {
+  display: grid;
+  grid-template-columns: 44px 120px auto;
+  justify-content: center;
+  gap: 14px;
+  height: 250px;
+  margin: 12px 0 4px;
+}
+
+.genes-axe {
+  position: relative;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--funnel-muted);
+}
+
+.genes-axe span {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+
+.genes-axe-100 { top: 0; }
+.genes-axe-0 { top: 100%; }
+
+.genes-axe-80 {
+  top: 20%;
+  color: var(--funnel-accent-display);
+  font-weight: 800;
+}
+
+/* Le pointillé qui marque la frontière 80 %, de l'axe à la colonne. */
+.genes-axe-80::after {
+  content: '';
+  position: absolute;
+  left: calc(100% + 4px);
+  top: 50%;
+  width: 134px;
+  border-top: 2px dashed rgba(238, 74, 14, 0.55);
+}
+
+.genes-colonne {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  width: 100%;
-  margin: 8px 0;
+  gap: 6px;
 }
 
-.onb-genes-barre {
-  position: relative;
-  height: 40px;
-  border-radius: 999px;
-  background: var(--funnel-surface);
-  border: 1px solid var(--funnel-line);
+.genes-bloc {
   display: flex;
   align-items: center;
-  overflow: hidden;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 16px;
+  transform-origin: bottom;
+  transform: scaleY(0);
+  transition: transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.onb-genes-remplissage {
+.genes-bloc--genetique {
+  flex: 80;
+  background: #17110d;
+  border: 1px solid #3a2a20;
+  color: #6b5f55;
+}
+
+.genes-bloc--habitudes {
+  flex: 20;
+  background: linear-gradient(180deg, #ffb020, #ff5a1f);
+  color: rgba(23, 18, 14, 0.75);
+  box-shadow: 0 0 34px -2px rgba(255, 90, 31, 0.75);
+  transition-delay: 0.8s;
+}
+
+.genes.is-rempli .genes-bloc {
+  transform: scaleY(1);
+}
+
+.genes.is-rempli .genes-bloc--habitudes svg {
+  animation: genes-monte 1.6s ease-in-out 1.6s infinite;
+}
+
+.genes-bloc--habitudes svg:nth-child(2) {
+  animation-delay: 1.8s !important;
+}
+
+.genes-bloc--habitudes svg:nth-child(3) {
+  animation-delay: 2s !important;
+}
+
+@keyframes genes-monte {
+  0%, 100% { transform: translateY(2px); }
+  50% { transform: translateY(-4px); }
+}
+
+.genes-legendes {
+  position: relative;
+  min-width: 110px;
+}
+
+.genes-legende {
   position: absolute;
-  inset: 0 auto 0 0;
-  background: var(--funnel-surface-high);
-  border-radius: 999px;
-  transition: width 0.9s ease-out;
+  left: 0;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--funnel-muted);
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.genes-legende strong {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--funnel-text);
+}
+
+.genes-legende--habitudes {
+  top: 10%;
+  color: var(--funnel-accent-display);
+  transition-delay: 1.4s;
+}
+
+.genes-legende--habitudes strong {
+  color: var(--funnel-accent-display);
+}
+
+.genes-legende--genetique {
+  top: 60%;
+  transition-delay: 0.7s;
+}
+
+.genes.is-rempli .genes-legende {
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .onb-genes-remplissage {
+  .genes-bloc,
+  .genes-legende {
     transition: none;
   }
-}
 
-.onb-genes-remplissage--accent {
-  background: var(--funnel-accent);
-}
-
-.onb-genes-barre span {
-  position: relative;
-  z-index: 1;
-  margin-left: 16px;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--funnel-text);
+  .genes.is-rempli .genes-bloc--habitudes svg {
+    animation: none;
+  }
 }
 
 /* Resultats email screen - purple/magenta theme */

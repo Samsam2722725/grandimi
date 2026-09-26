@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import {
+  ArrowUp,
   BookOpen,
+  Dna,
   CheckCircle2,
   Circle,
   Dumbbell,
@@ -23,7 +25,6 @@ import { TailleFinaleChart } from '@/components/ui/taille-finale-chart'
 import { JaugePotentiel } from '@/components/ui/jauge-potentiel'
 import { Lecons, SuiviSemaines, TelephoneRoutine } from '@/components/ui/resultats-visuels'
 import { ActionsDuJour } from '@/components/ui/actions-du-jour'
-import garconSaute from '../assets/images/hero-celebrate.webp'
 import {
   cmVersPouceTotal,
   euVersUs,
@@ -674,7 +675,6 @@ const LEVIERS_OPTIMISATION = [
 export function EcranOptimiserPotentiel() {
   return (
     <div className="onb-preuve">
-      <img src={garconSaute} alt="" className="onb-heros" />
       <div className="onb-icones onb-icones-3">
         {LEVIERS_OPTIMISATION.map(({ icone: Icone, titre }) => (
           <div className="onb-icone" key={titre}>
@@ -689,7 +689,7 @@ export function EcranOptimiserPotentiel() {
 
 // Les trois fonctions de la landing (FONCTIONS dans HomePage.jsx), rien d'autre.
 const AIDES_GRANDIMI = [
-  { icone: TrendingUp, titre: 'Estimation' },
+  { icone: TrendingUp, titre: 'Prédiction' },
   { icone: ListChecks, titre: 'Plan quotidien' },
   { icone: HeartPulse, titre: 'Conseils' },
 ]
@@ -820,17 +820,37 @@ export function EcranPlusQueGenes({ onContinue }) {
       <p className="interstitial-text">
         Tu n’as pas choisi ta génétique, mais tu peux choisir ce que tu fais.
       </p>
-      <div className="onb-genes-barres" role="img" aria-label="Génétique 80 %, environnement 20 %">
-        <div className="onb-genes-barre">
-          <div className="onb-genes-remplissage" style={{ width: rempli ? '80%' : '0%' }} />
-          <span>Génétique 80 %</span>
+      {/* Une seule colonne de 100 % : les gènes en fond sombre, les
+          habitudes en haut, en orange — la part sur laquelle on agit.
+          Inspiré de la colonne « poussée de croissance » que le client a
+          montrée, remise aux couleurs de Grandimi. */}
+      <div
+        className={`genes ${rempli ? 'is-rempli' : ''}`}
+        role="img"
+        aria-label="Environ 80 % de ta taille vient de ta génétique, 20 % de tes habitudes"
+      >
+        <div className="genes-axe" aria-hidden="true">
+          <span className="genes-axe-100">100 %</span>
+          <span className="genes-axe-80">80 %</span>
+          <span className="genes-axe-0">0 %</span>
         </div>
-        <div className="onb-genes-barre">
-          <div
-            className="onb-genes-remplissage onb-genes-remplissage--accent"
-            style={{ width: rempli ? '20%' : '0%' }}
-          />
-          <span>Environnement 20 %</span>
+        <div className="genes-colonne" aria-hidden="true">
+          <div className="genes-bloc genes-bloc--habitudes">
+            <ArrowUp size={18} />
+            <ArrowUp size={22} />
+            <ArrowUp size={18} />
+          </div>
+          <div className="genes-bloc genes-bloc--genetique">
+            <Dna size={30} />
+          </div>
+        </div>
+        <div className="genes-legendes" aria-hidden="true">
+          <span className="genes-legende genes-legende--habitudes">
+            <strong>20 %</strong> Tes habitudes
+          </span>
+          <span className="genes-legende genes-legende--genetique">
+            <strong>80 %</strong> Ta génétique
+          </span>
         </div>
       </div>
       <div className="interstitial-action is-ready">

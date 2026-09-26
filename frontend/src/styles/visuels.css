@@ -7,21 +7,6 @@
    n'importe quel écran sans dépendre de la feuille d'une page.
    ============================================ */
 
-.onb-heros {
-  display: block;
-  width: 100%;
-  max-width: 170px;
-  height: auto;
-  margin: 0 auto;
-  animation: rv-flotte 4.5s ease-in-out 0.8s infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .onb-heros {
-    animation: none;
-  }
-}
-
 /* ---------- Visuels reconstruits : semaines, leçons, téléphone ---------- */
 
 @keyframes rv-entree {
