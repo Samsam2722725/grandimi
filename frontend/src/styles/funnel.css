@@ -349,6 +349,51 @@
   outline-offset: 3px;
 }
 
+/* ---------- Bouton brillant (écrans sombres : résultat, paywall) ----------
+   Inspiré du ShinyButton : un reflet balaie le bouton toutes les quelques
+   secondes et le halo respire. Réservé au bouton principal des écrans
+   sombres, là où se prend la décision — sur le papier du tunnel, une
+   lueur animée à chaque écran deviendrait du bruit. */
+.night .funnel-footer .funnel-cta:not(:disabled) {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(135deg, #ff7a2a, #ff5a1f 45%, #ff3d0e);
+  animation: cta-halo 2.8s ease-in-out infinite;
+}
+
+.night .funnel-footer .funnel-cta:not(:disabled)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%);
+  animation: cta-reflet 3.2s ease-in-out 1.2s infinite;
+}
+
+@keyframes cta-halo {
+  0%, 100% { box-shadow: 0 6px 22px rgba(255, 90, 31, 0.35); }
+  50% { box-shadow: 0 8px 34px rgba(255, 90, 31, 0.7), 0 0 0 4px rgba(255, 90, 31, 0.12); }
+}
+
+@keyframes cta-reflet {
+  0% { transform: translateX(-120%); }
+  45%, 100% { transform: translateX(120%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .night .funnel-footer .funnel-cta:not(:disabled),
+  .night .funnel-footer .funnel-cta:not(:disabled)::after {
+    animation: none;
+  }
+}
+
 /* Action secondaire : texte seul, jamais un second bouton plein. Deux boutons
    pleins côte à côte obligent à lire pour choisir. */
 .funnel-link {
