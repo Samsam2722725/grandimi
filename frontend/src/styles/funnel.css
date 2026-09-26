@@ -2375,6 +2375,13 @@
   gap: 20px;
 }
 
+.onb-image-pleine {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  border-radius: 16px;
+}
+
 /* Jauge circulaire du potentiel restant. Volontairement PAS la ruche à
    hexagones de l'écran équivalent : demande explicite de ne pas reprendre
    cette figure pour ce script. */

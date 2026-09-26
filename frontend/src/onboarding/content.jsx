@@ -21,6 +21,7 @@ import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ReseauNeurones } from '@/components/ui/reseau-neurones'
 import { EtudesPubliees } from '@/components/ui/ecrans-fonctions'
 import { Avis } from '@/components/ui/avis'
+import tailleFinaleChart from '../assets/images/taille-finale-chart.webp'
 import {
   cmVersPouceTotal,
   euVersUs,
@@ -640,6 +641,24 @@ export function EcranModelePrediction() {
       <a className="funnel-lien-info" href="/methode/" target="_blank" rel="noopener">
         Comment ça marche ?
       </a>
+    </div>
+  )
+}
+
+/* Écran « Grandimi crée des résultats à long terme » : n'avait aucun
+   `case` dans OnboardingFlow.jsx et retombait sur un écran vide, titre
+   et sous-titre seuls. Le graphe compare la trajectoire avec et sans
+   routine ; il n'affiche aucun chiffre que le modèle ne produit pas —
+   c'est une illustration de la mécanique, pas une prédiction chiffrée
+   pour CET utilisateur (celle-là reste sous cadenas, après paiement). */
+export function EcranResultatsLongTerme() {
+  return (
+    <div className="onb-preuve">
+      <img
+        src={tailleFinaleChart}
+        alt="Comparaison de trajectoire : habitudes actuelles contre routine Grandimi"
+        className="onb-image-pleine"
+      />
     </div>
   )
 }

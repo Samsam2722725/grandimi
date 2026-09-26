@@ -44,6 +44,7 @@ import {
   MoletteSommeil,
   EcranModelePrediction,
   EcranPrecision,
+  EcranResultatsLongTerme,
   EcranOptimiserPotentiel,
   EcranGrandimiAide,
   EcranConseilsSommeil,
@@ -627,6 +628,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
         return <EcranModelePrediction />
       case 'precision':
         return <EcranPrecision />
+      case 'resultats-long-terme':
+        return <EcranResultatsLongTerme />
       case 'optimiser-potentiel':
         return <EcranOptimiserPotentiel />
       case 'grandimi-aide':
