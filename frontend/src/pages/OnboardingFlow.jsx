@@ -45,6 +45,7 @@ import {
   EcranModelePrediction,
   EcranPrecision,
   EcranResultatsLongTerme,
+  EcranPotentielGain,
   EcranOptimiserPotentiel,
   EcranGrandimiAide,
   EcranConseilsSommeil,
@@ -644,6 +645,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
         return <EcranPrecision />
       case 'resultats-long-terme':
         return <EcranResultatsLongTerme />
+      case 'potentiel-gain':
+        return <EcranPotentielGain />
       case 'optimiser-potentiel':
         return <EcranOptimiserPotentiel />
       case 'grandimi-aide':

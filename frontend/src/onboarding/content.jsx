@@ -22,6 +22,7 @@ import { ReseauNeurones } from '@/components/ui/reseau-neurones'
 import { EtudesPubliees } from '@/components/ui/ecrans-fonctions'
 import { Avis } from '@/components/ui/avis'
 import tailleFinaleChart from '../assets/images/taille-finale-chart.webp'
+import jaugePotentiel from '../assets/images/jauge-potentiel.webp'
 import {
   cmVersPouceTotal,
   euVersUs,
@@ -62,6 +63,7 @@ export const ORDRE_ETAPES = [
   'modele-prediction',
   'precision',
   'resultats-long-terme',
+  'potentiel-gain',
   'optimiser-potentiel',
   'grandimi-aide',
   'height-tracker',
@@ -103,6 +105,7 @@ export const TYPE_ETAPE = {
   'modele-prediction': 'affichage',
   precision: 'affichage',
   'resultats-long-terme': 'affichage',
+  'potentiel-gain': 'affichage',
   'optimiser-potentiel': 'affichage',
   'grandimi-aide': 'affichage',
   'exercices-quotidiens': 'affichage',
@@ -227,6 +230,10 @@ export const TEXTES_ETAPE = {
   'resultats-long-terme': {
     titre: 'Grandimi crée des résultats à long terme',
     sousTitre: 'Beaucoup n’atteignent pas leur plein potentiel de taille à cause d’habitudes non optimisées.',
+  },
+  'potentiel-gain': {
+    titre: 'Tu peux grandir',
+    sousTitre: 'Environ 20 % de ta taille est encore entre tes mains. Les bonnes habitudes font la différence.',
   },
   'optimiser-potentiel': {
     titre: 'Optimise tout ton potentiel de taille',
@@ -657,6 +664,24 @@ export function EcranResultatsLongTerme() {
       <img
         src={tailleFinaleChart}
         alt="Comparaison de trajectoire : habitudes actuelles contre routine Grandimi"
+        className="onb-image-pleine"
+      />
+    </div>
+  )
+}
+
+/* Remplace l'ancienne jauge en arc dessinée en SVG (0-100 %, portion verte)
+   par l'image envoyée par le client : même information — 20 % de la
+   taille adulte dépend des habitudes — mais dans le rendu qu'il a choisi.
+   L'écran avait été retiré entièrement à une demande antérieure de
+   « enlève le premier car c'est chiant », qui visait la répétition du
+   ratio 20/80 sur 3 écrans, pas cette image précise. */
+export function EcranPotentielGain() {
+  return (
+    <div className="onb-preuve">
+      <img
+        src={jaugePotentiel}
+        alt="Jauge : 20 % de ta taille adulte dépend de toi"
         className="onb-image-pleine"
       />
     </div>
