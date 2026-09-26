@@ -13,6 +13,8 @@ import {
   Utensils,
 } from 'lucide-react'
 
+import '../../styles/visuels.css'
+
 /* Les trois derniers visuels de la page résultats, reconstruits en code
    d'après les images du client : sans fond, animés, nets à toute taille.
 

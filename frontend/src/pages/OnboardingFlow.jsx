@@ -48,9 +48,9 @@ import {
   EcranPotentielGain,
   EcranOptimiserPotentiel,
   EcranGrandimiAide,
-  EcranConseilsExercice,
+  EcranActionsDuJour,
   EcranPlanQuotidien,
-  EcranFondamentaux,
+  EcranLecons,
   EcranHeightTracker,
   EcranVeriteBrutale,
   EcranEtudesPubliees,
@@ -649,11 +649,11 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       case 'grandimi-aide':
         return <EcranGrandimiAide />
       case 'exercices-quotidiens':
-        return <EcranConseilsExercice />
+        return <EcranActionsDuJour />
       case 'programme-optimal':
         return <EcranPlanQuotidien />
       case 'guide-grandir':
-        return <EcranFondamentaux />
+        return <EcranLecons />
       case 'height-tracker':
         return <EcranHeightTracker />
       case 'verite-brutale':

@@ -8,7 +8,6 @@ import {
   ListChecks,
   Lock,
   Moon,
-  Ruler,
   TrendingUp,
   Utensils,
 } from 'lucide-react'
@@ -16,13 +15,15 @@ import {
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { SegmentedControl } from '@/components/ui/segmented-control'
 import { WheelPicker } from '@/components/ui/wheel-picker'
-import { FonctionPlan } from '@/components/ui/ecrans-fonctions'
 import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ReseauNeurones } from '@/components/ui/reseau-neurones'
 import { EtudesPubliees } from '@/components/ui/ecrans-fonctions'
 import { Avis } from '@/components/ui/avis'
 import { TailleFinaleChart } from '@/components/ui/taille-finale-chart'
 import { JaugePotentiel } from '@/components/ui/jauge-potentiel'
+import { Lecons, SuiviSemaines, TelephoneRoutine } from '@/components/ui/resultats-visuels'
+import { ActionsDuJour } from '@/components/ui/actions-du-jour'
+import garconSaute from '../assets/images/hero-celebrate.webp'
 import {
   cmVersPouceTotal,
   euVersUs,
@@ -672,13 +673,16 @@ const LEVIERS_OPTIMISATION = [
 
 export function EcranOptimiserPotentiel() {
   return (
-    <div className="onb-icones onb-icones-3">
-      {LEVIERS_OPTIMISATION.map(({ icone: Icone, titre }) => (
-        <div className="onb-icone" key={titre}>
-          <Icone size={26} aria-hidden="true" />
-          <strong>{titre}</strong>
-        </div>
-      ))}
+    <div className="onb-preuve">
+      <img src={garconSaute} alt="" className="onb-heros" />
+      <div className="onb-icones onb-icones-3">
+        {LEVIERS_OPTIMISATION.map(({ icone: Icone, titre }) => (
+          <div className="onb-icone" key={titre}>
+            <Icone size={26} aria-hidden="true" />
+            <strong>{titre}</strong>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -703,90 +707,23 @@ export function EcranGrandimiAide() {
   )
 }
 
-// Frise simple des saisies hebdomadaires. Pas de collage de cartes qui
-// s'envolent ni de fausse statistique « accuracy » : juste l'idée que
-// chaque semaine ajoute une mesure.
-const SEMAINES_SUIVI = [1, 2, 3, 4]
-
+/* Écrans d'affichage illustrés par les visuels du client, reconstruits
+   en code (components/ui/resultats-visuels.jsx, actions-du-jour.jsx) :
+   chaque visuel est posé sur l'écran dont le titre porte son sujet. */
 export function EcranHeightTracker() {
-  return (
-    <div className="onb-tracker">
-      {SEMAINES_SUIVI.map((semaine) => (
-        <div className="onb-tracker-ligne" key={semaine}>
-          <span className="onb-tracker-point" aria-hidden="true" />
-          <span className="onb-tracker-semaine">Semaine {semaine}</span>
-          <Ruler size={18} className="onb-tracker-icone" aria-hidden="true" />
-        </div>
-      ))}
-    </div>
-  )
+  return <SuiviSemaines />
 }
 
-/* Écrans 29-32. Le script GoTall montrait ici un scanner de repas, un
-   tracker de sommeil et un suivi hebdomadaire de taille : trois fonctions
-   que Grandimi n'a pas. Les quatre emplacements sont gardés et montrent
-   les trois fonctions réelles de la landing, sans score ni chiffre
-   d'utilisateur inventé. */
-
-const PRIORITES_ASSIETTE = [
-  { nutriment: 'Protéines', sources: 'à chaque repas : œufs, poisson, viande, légumineuses' },
-  { nutriment: 'Calcium', sources: 'laitages, amandes, légumes verts' },
-  { nutriment: 'Vitamine D', sources: 'poissons gras, lumière du jour' },
-  { nutriment: 'Zinc', sources: 'viande, graines, céréales complètes' },
-]
-
-export function EcranConseilsNutrition() {
-  return (
-    <div className="onb-exemple-carte">
-      <p className="onb-exemple-titre">Dans ton assiette</p>
-      <ul className="onb-exemple-lignes onb-exemple-lignes--colonne">
-        {PRIORITES_ASSIETTE.map(({ nutriment, sources }) => (
-          <li key={nutriment}>
-            <strong>{nutriment}</strong> — {sources}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+export function EcranActionsDuJour() {
+  return <ActionsDuJour />
 }
 
-// 8 à 10 h : recommandation de l'American Academy of Sleep Medicine pour les 13-18 ans.
-export function EcranConseilsSommeil() {
-  return (
-    <div className="onb-exemple-carte">
-      <p className="onb-exemple-titre">8 à 10 h par nuit</p>
-      <p>Ce qui est recommandé entre 13 et 18 ans.</p>
-      <p className="onb-exemple-score">Conseil : écrans coupés 45 min avant de dormir</p>
-    </div>
-  )
-}
-
-// 60 min par jour : recommandation de l'OMS pour les 5-17 ans (activité
-// modérée à soutenue). Les sports à impact sont cités pour la mise en charge
-// de l'os, pas comme une promesse de centimètres.
-export function EcranConseilsExercice() {
-  return (
-    <div className="onb-exemple-carte">
-      <p className="onb-exemple-titre">60 min d’activité par jour</p>
-      <p>Ce que recommande l’OMS entre 5 et 17 ans.</p>
-      <p className="onb-exemple-score">Conseil : privilégie les sports avec des sauts — basket, volley, corde à sauter</p>
-    </div>
-  )
-}
-
-// « Les fondamentaux » : les deux piliers que l'utilisateur ne voit sur
-// aucun autre écran en détail, sommeil et assiette.
-export function EcranFondamentaux() {
-  return (
-    <div className="onb-exemples">
-      <EcranConseilsSommeil />
-      <EcranConseilsNutrition />
-    </div>
-  )
+export function EcranLecons() {
+  return <Lecons />
 }
 
 export function EcranPlanQuotidien() {
-  return <FonctionPlan />
+  return <TelephoneRoutine />
 }
 
 /**

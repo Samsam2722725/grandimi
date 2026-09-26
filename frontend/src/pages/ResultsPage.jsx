@@ -7,10 +7,7 @@ import { Confetti } from '@/components/ui/confetti'
 
 import Spinner from '../components/Spinner'
 import { resultatVu } from '../lib/analytics'
-import heroCelebrate from '../assets/images/hero-celebrate.webp'
-import { Lecons, SuiviSemaines, TelephoneRoutine } from '@/components/ui/resultats-visuels'
 import { Compteur } from '@/components/ui/compteur'
-import { ActionsDuJour } from '@/components/ui/actions-du-jour'
 import '../styles/funnel.css'
 import '../styles/results-page.css'
 import '../styles/analyse-page.css'
@@ -235,12 +232,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           Analyse prête <span aria-hidden="true">👀</span>
         </h1>
 
-        <img
-          src={heroCelebrate}
-          alt="Enfant célébrant sa croissance"
-          className="results-image results-image-hero"
-        />
-
         {/* HORS DES COURBES DE RÉFÉRENCE.
 
             Le serveur signale les profils dont la taille s'écarte de plus de
@@ -317,8 +308,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           <AnalyseChart />
         </section>
 
-        <SuiviSemaines />
-
         {percentileAffichable && (
           <div className="analyse-ligne analyse-ligne--fait">
             <span className="analyse-perte-label">
@@ -354,12 +343,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           <Lock size={17} aria-hidden="true" />
           <span aria-hidden="true">🎯</span>
         </div>
-
-        <Lecons />
-
-        <TelephoneRoutine />
-
-        <ActionsDuJour />
 
         {/* Le partage a disparu de cet écran. Il produisait une image portant
             la taille adulte estimée — c'est-à-dire exactement ce que la carte

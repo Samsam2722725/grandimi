@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { BedDouble, Check, ChevronRight, Milk, PersonStanding, Sun } from 'lucide-react'
 
+import '../../styles/visuels.css'
+
 /* Les 4 actions du jour, reconstruites d'après le visuel du client (qui
    portait un fond noir incrusté). Les cases se cochent au toucher : un
    avant-goût du plan, sans rien enregistrer — la vraie liste est derrière

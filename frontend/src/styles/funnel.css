@@ -2800,6 +2800,10 @@
   gap: 14px;
 }
 
+.onb-preuve > .onb-icones {
+  width: 100%;
+}
+
 .onb-icones-3 {
   grid-template-columns: repeat(3, 1fr);
 }
