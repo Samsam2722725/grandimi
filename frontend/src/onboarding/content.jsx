@@ -215,9 +215,9 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Une croissance plus lente peut signifier que ta puberté se termine',
   },
   'modele-prediction': {
-    titre: 'Le meilleur modèle de prédiction de taille au monde',
+    titre: 'Un modèle basé sur la science',
     sousTitre:
-      'Une équipe d\'ingénieurs Grandimi a passé des mois à construire le meilleur moteur de prédiction de taille au monde',
+      'Construit à partir des tables de croissance OMS et du modèle Khamis-Roche, pas d\'une formule maison.',
   },
   precision: {
     titre: 'Quelle est la précision de notre prédiction ?',
@@ -632,30 +632,6 @@ export function MoletteDateNaissance({ jour, mois, annee, onChange }) {
 /* ============================================================
    ÉCRANS D'AFFICHAGE (24-35)
    ============================================================ */
-
-export function EcranHabitudes() {
-  return (
-    <div className="onb-preuve">
-      <svg viewBox="0 0 300 200" className="onb-graph-habitudes" aria-hidden="true">
-        <defs>
-          <linearGradient id="grad-effective" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#4ade80" />
-            <stop offset="100%" stopColor="#22c55e" />
-          </linearGradient>
-        </defs>
-        <text x="40" y="30" className="onb-graph-label">Taille / Âge</text>
-        <text x="175" y="18" className="onb-graph-label">avec Grandimi</text>
-        <polyline points="20,160 60,130 100,90 140,60 180,40 220,30 260,25"
-                  className="onb-graph-line" stroke="url(#grad-effective)" strokeWidth="3" fill="none" />
-        <polyline points="20,160 60,135 100,115 140,100 180,90 220,85 260,82"
-                  className="onb-graph-line" stroke="#666" strokeWidth="2" fill="none" />
-        <circle cx="260" cy="25" r="4" fill="#22c55e" />
-        <text x="10" y="175" className="onb-graph-label" fontSize="11">Bonnes habitudes</text>
-        <text x="130" y="175" className="onb-graph-label" fontSize="11">Mauvaises habitudes</text>
-      </svg>
-    </div>
-  )
-}
 
 export function EcranModelePrediction() {
   return (

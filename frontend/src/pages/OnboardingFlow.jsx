@@ -685,7 +685,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     // l'anneau continue seul jusqu'à ce que le vrai appel API réponde —
     // pas pour « envoyer le résultat par mail » : c'est ce qui permet de
     // retrouver le compte ensuite (même adresse que le checkout Whop, cf.
-    // Paywall.jsx qui relit `localStorage.userEmail`).
+    // PaywallPage.jsx qui relit `localStorage.userEmail`).
     const emailPlausible = EMAIL_VALIDE.test(email.trim())
     return (
       <ProgressionAnalyse titre="On analyse tes réponses" pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
