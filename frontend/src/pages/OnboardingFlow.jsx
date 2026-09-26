@@ -237,10 +237,24 @@ function ProgressionAnalyse({ titre, pourcentage, steps, children }) {
   )
 }
 
+/* `?step=resultats-long-terme` saute direct à cet écran de l'onboarding,
+   sans repasser par les questions précédentes. DEV UNIQUEMENT (comme le
+   `?preview=` de App.jsx) : sert à vérifier un écran précis en un lien,
+   pas à exposer un mode démo en production. */
+function indexEtapePreview() {
+  if (!import.meta.env.DEV) return null
+  const etape = new URLSearchParams(window.location.search).get('step')
+  if (!etape) return null
+  const i = ORDRE_ETAPES.indexOf(etape)
+  return i >= 0 ? i : null
+}
+
 function OnboardingFlow({ onPredictionComplete, onCancel }) {
   const etatSauvegarde = useMemo(() => chargerEtat(), [])
 
-  const [index, setIndex] = useState(etatSauvegarde?.index ?? 0)
+  const [index, setIndex] = useState(
+    () => indexEtapePreview() ?? etatSauvegarde?.index ?? 0,
+  )
   const [reponses, setReponses] = useState(etatSauvegarde?.reponses ?? reponsesInitiales())
   const [unites, setUnites] = useState(etatSauvegarde?.unites ?? unitesInitiales())
 

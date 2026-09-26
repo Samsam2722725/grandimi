@@ -106,6 +106,9 @@ function App() {
     const params = new URLSearchParams(window.location.search);
     const preview = pagePreviewDemandee(params);
     if (preview) return preview;
+    // `?step=xxx` (dev only, lu par OnboardingFlow) saute direct à un écran
+    // de l'onboarding : encore faut-il que l'app affiche l'onboarding.
+    if (import.meta.env.DEV && params.has('step')) return 'questionnaire';
     return retourDePaiementReussi(params) ? 'paiement' : 'home';
   });
   const [predictionData, setPredictionData] = useState(() => {
