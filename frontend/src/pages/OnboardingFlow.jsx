@@ -52,7 +52,6 @@ import {
   EcranEtudesPubliees,
   EcranAvisUtilisateurs,
   EcranPlusQueGenes,
-  EcranPuberteIntro,
 } from '../onboarding/content.jsx'
 import {
   ageDepuisNaissance,
@@ -421,8 +420,6 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
             exclusif="non"
           />
         )
-      case 'puberty-pause':
-        return null // interstitielle, rendue à part
       case 'pilosite-aisselles':
         return (
           <ListeChoixUnique
@@ -547,17 +544,6 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   }
 
   // ---------- Rendu global ----------
-
-  if (etape === 'puberty-pause') {
-    return (
-      <EcranPuberteIntro
-        titre={texte.titre}
-        sousTitre={texte.sousTitre}
-        message={texte.message}
-        onContinue={avancer}
-      />
-    )
-  }
 
   if (etape === 'plus-que-genes') {
     return <EcranPlusQueGenes onContinue={avancer} />

@@ -36,7 +36,6 @@ export const ORDRE_ETAPES = [
   'pere',
   'mere',
   'proches',
-  'puberty-pause',
   'pilosite-aisselles',
   'pilosite-visage',
   'vitesse-croissance',
@@ -81,7 +80,6 @@ export const TYPE_ETAPE = {
   pere: 'question',
   mere: 'question',
   proches: 'question',
-  'puberty-pause': 'interstitielle',
   'pilosite-aisselles': 'question',
   'pilosite-visage': 'question',
   'vitesse-croissance': 'question',
@@ -167,12 +165,6 @@ export const TEXTES_ETAPE = {
   proches: {
     titre: 'As-tu des proches plus grands que ton père ?',
     sousTitre: 'La taille de ta famille nous renseigne sur tes gènes',
-  },
-  'puberty-pause': {
-    titre: 'Ta puberté compte',
-    sousTitre: 'On va poser quelques questions pour voir si tu es passé par la puberté',
-    message:
-      'Environ 75 % de ta croissance totale se fait pendant la puberté, et seulement 25 % après',
   },
   'pilosite-aisselles': {
     titre: 'As-tu des poils aux aisselles ?',
@@ -887,29 +879,6 @@ export function EcranEtudesPubliees() {
  */
 export function EcranAvisUtilisateurs() {
   return <Avis />
-}
-
-/**
- * Écran 14. Le script porte trois blocs de texte distincts (titre,
- * sous-titre, message) alors que le composant `Interstitial` partagé
- * n'en accepte que deux : on ne peut pas le réutiliser tel quel sans
- * perdre le message sur les 75 %/25 % de croissance pubertaire, qui est
- * le seul chiffre de tout cet écran. D'où ce petit rendu dédié, mêmes
- * classes visuelles que `Interstitial`.
- */
-export function EcranPuberteIntro({ titre, sousTitre, message, onContinue }) {
-  return (
-    <div className="interstitial">
-      <h1 className="interstitial-titre">{titre}</h1>
-      <p className="interstitial-text">{sousTitre}</p>
-      <p className="funnel-help">{message}</p>
-      <div className="interstitial-action is-ready">
-        <button type="button" className="funnel-cta" onClick={onContinue}>
-          Continuer
-        </button>
-      </div>
-    </div>
-  )
 }
 
 export function EcranPlusQueGenes({ onContinue }) {
