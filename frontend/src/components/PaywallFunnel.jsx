@@ -51,7 +51,7 @@ export function PaywallFunnel({ onComplete }) {
 function Page1() {
   return (
     <div className="funnel-page">
-      <h1>Pourquoi tu as téléchargé Grandimi?</h1>
+      <h1>Pourquoi tu es sur Grandimi?</h1>
       <div className="features-grid">
         <div className="feature">
           <h3>📊 Estimation précise</h3>

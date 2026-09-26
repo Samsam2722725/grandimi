@@ -1,13 +1,17 @@
-import { useEffect, useState, lazy, Suspense } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { ArrowLeft, Lock } from 'lucide-react'
 
 import { AnalyseChart } from '@/components/ui/analyse-chart'
 const BalloonsPopBackground = lazy(() => import('@/components/ui/balloons-pop-background').then(m => ({ default: m.BalloonsPopBackground })))
-import { CompteurAnime } from '@/components/ui/compteur-anime'
 import { Confetti } from '@/components/ui/confetti'
 
 import Spinner from '../components/Spinner'
 import { resultatVu } from '../lib/analytics'
+import heroCelebrate from '../assets/images/hero-celebrate.webp'
+import semainesSuivi from '../assets/images/semaines-suivi.webp'
+import lessonsList from '../assets/images/lessons.webp'
+import routinePhone from '../assets/images/routine-phone.webp'
+import dailyActions from '../assets/images/daily-actions.webp'
 import '../styles/funnel.css'
 import '../styles/results-page.css'
 import '../styles/analyse-page.css'
@@ -41,8 +45,6 @@ const fr = (valeur) => String(valeur).replace('.', ',')
 const cm = (valeur) => Math.round(Number(valeur))
 
 function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
-  const [limitesVisibles, setLimitesVisibles] = useState(false)
-
   /* Le résultat est le pivot du tunnel : c'est ici que se décide la
      suite (payer, partager, partir). Il doit être compté séparément
      de l'estimation obtenue — l'appel peut réussir sans que l'écran
@@ -125,31 +127,8 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      dont un inventé. */
   const pointsACorriger = leviers.filter((levier) => levier.sousCible).length
 
-  /* CE QUE SES HABITUDES LUI COUTENT, EN CLAIR.
-
-     C'est le seul argument de cet écran qui soit à la fois SON chiffre,
-     une perte en cours, et réparable par ce qu'on vend. Il était caché
-     derrière « Optimise jusqu'à 🔒 cm » : on cachait l'enjeu ET le
-     remède, donc il ne restait aucune raison d'ouvrir.
-
-     Le modèle produit deux scénarios — l'estimation avec les habitudes
-     déclarées, et le potentiel si elles étaient à la cible. Mesuré en
-     production le 17/09/2026, garçon de 14 ans, 165 cm, parents 176/164 :
-
-       habitudes dégradées ... 173,8  potentiel 179,2  ->  5,4 cm
-       habitudes moyennes .... 177,0  potentiel 179,2  ->  2,2 cm
-       habitudes à la cible .. 179,2  potentiel 179,2  ->  0 cm
-
-     L'écart vaut zéro quand il n'y a rien à gagner, et on le dit alors
-     — c'est ce qui sépare ce chiffre d'une urgence fabriquée. Sans
-     aucune réponse de mode de vie, il ne veut rien dire : le bloc
-     retombe sur le cadenas. */
   const estimeeCm = Number(predictionData.predicted_height_cm)
   const potentielCm = Number(predictionData.potential_height_cm)
-  const ecartHabitudes =
-    Number.isFinite(estimeeCm) && Number.isFinite(potentielCm) && potentielCm > estimeeCm
-      ? Math.round((potentielCm - estimeeCm) * 10) / 10
-      : 0
 
   /* Rang parmi les jeunes du meme age, calcule par le serveur sur les
      tables OMS. Il ne se derive d'aucune valeur verrouillee : on peut
@@ -213,9 +192,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
     centimetresRestants >= 1
       ? Math.round((centimetresRestants / cibleCroissance) * 20) * 5
       : 0
-  const auMoinsUnLevier = leviers.some((levier) => levier.renseigne)
-  const coutAffichable = auMoinsUnLevier && ecartHabitudes > 0
-  const dejaAuMaximum = auMoinsUnLevier && ecartHabitudes === 0
   /* Le potentiel optimisé (potential_height_cm) n’est plus affiché en clair
      sur cet écran : il est passé derrière le cadenas « Optimise jusqu’à 🔒 cm »,
      qui est précisément ce que l’abonnement ouvre. Le chiffre existe côté
@@ -259,6 +235,12 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
         <h1 className="analyse-titre">
           Analyse prête <span aria-hidden="true">👀</span>
         </h1>
+
+        <img
+          src={heroCelebrate}
+          alt="Enfant célébrant sa croissance"
+          className="results-image results-image-hero"
+        />
 
         {/* HORS DES COURBES DE RÉFÉRENCE.
 
@@ -305,38 +287,12 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           </div>
         </div>
 
-        {coutAffichable && (
-          <div className="analyse-ligne analyse-ligne--perte">
-            <span className="analyse-perte-label">Tes habitudes te coûtent</span>
-            {/* Le seul chiffre anime de l'ecran. Il monte de zero jusqu'a
-                sa valeur : on voit la perte se constituer au lieu de la
-                lire deja faite. Le texte est inchange. */}
-            <strong className="analyse-perte-valeur">
-              <CompteurAnime valeur={ecartHabitudes} prefixe="−" suffixe=" cm" />
-            </strong>
-          </div>
-        )}
-
-        {dejaAuMaximum && (
-          <div className="analyse-ligne analyse-ligne--acquis analyse-ligne--acquis-bloc">
-            <div className="analyse-acquis-tete">
-              <span className="analyse-perte-label">Tes habitudes ne te coûtent rien</span>
-              <strong className="analyse-perte-valeur">0 cm</strong>
-            </div>
-            <p className="analyse-acquis-note">
-              Tu es sur la bonne voie. Continue et tu auras tout ce qu’il faut.
-            </p>
-          </div>
-        )}
-
-        {!coutAffichable && !dejaAuMaximum && (
-          <div className="analyse-ligne analyse-ligne--verrou">
-            <span>Optimise jusqu’à</span>
-            <Lock size={17} aria-hidden="true" />
-            <span>cm</span>
-            <span aria-hidden="true">📈</span>
-          </div>
-        )}
+        <div className="analyse-ligne analyse-ligne--verrou">
+          <span>Optimise jusqu’à</span>
+          <Lock size={17} aria-hidden="true" />
+          <span>cm</span>
+          <span aria-hidden="true">📈</span>
+        </div>
 
         <section className="analyse-carte-graphe">
           <div className="analyse-graphe-tete">
@@ -361,6 +317,12 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
               position du point et l'écart restant sans avoir payé. */}
           <AnalyseChart />
         </section>
+
+        <img
+          src={semainesSuivi}
+          alt="Suivi des semaines : Semaine 1-4 avec progression de ta prédiction"
+          className="results-image results-image-semaines"
+        />
 
         {percentileAffichable && (
           <div className="analyse-ligne analyse-ligne--fait">
@@ -390,20 +352,23 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           <span aria-hidden="true">🎯</span>
         </div>
 
-        <div className="analyse-duo">
-          <div className="analyse-case analyse-case--verrou">
-            <span className="analyse-case-label">Tes 11 actions du jour</span>
-            <span className="analyse-case-valeur">
-              <Lock size={20} aria-hidden="true" />
-            </span>
-          </div>
-          <div className="analyse-case analyse-case--verrou">
-            <span className="analyse-case-label">Fin de ta croissance</span>
-            <span className="analyse-case-valeur">
-              <Lock size={20} aria-hidden="true" />
-            </span>
-          </div>
-        </div>
+        <img
+          src={lessonsList}
+          alt="3 leçons : Mythes, Nutrition, Sommeil"
+          className="results-image results-image-lessons"
+        />
+
+        <img
+          src={routinePhone}
+          alt="Routine quotidienne : 30 jours Level 1"
+          className="results-image results-image-routine"
+        />
+
+        <img
+          src={dailyActions}
+          alt="Actions quotidiennes : lait, sommeil, lumière, cobra stretch"
+          className="results-image results-image-actions"
+        />
 
         {/* Le partage a disparu de cet écran. Il produisait une image portant
             la taille adulte estimée — c'est-à-dire exactement ce que la carte
@@ -414,53 +379,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             désormais APRÈS le paiement, sur le plan, où l'utilisateur a le
             droit de partager le chiffre qu'il a acheté. */}
 
-        {/* La mention reste. Elle n'est sur aucune des captures de référence,
-            mais elle est due : le produit s'adresse à des mineurs et touche à
-            la santé. Elle est petite et après la décision, pas avant. */}
-        <p className="results-mention">
-          C’est une estimation, pas une garantie. Grandimi n’est pas un outil
-          médical : si tu as un doute, parle à ton médecin.
-        </p>
-
-        <section className="results-limits">
-          <button
-            type="button"
-            className="results-limits-toggle"
-            onClick={() => setLimitesVisibles((visible) => !visible)}
-            aria-expanded={limitesVisibles}
-          >
-            {limitesVisibles ? 'Masquer les limites' : 'Voir les limites de ce calcul'}
-          </button>
-
-          {limitesVisibles && (
-            <div className="results-limits-body">
-              <h3>Pourquoi ±4 à ±8 cm ?</h3>
-              <p>
-                ±4 à ±8 cm selon l’âge — soit 98 % de précision moyenne.{' '}
-                <a href="/methode/#precision" target="_blank" rel="noopener">
-                  Voici d’où vient ce chiffre.
-                </a>
-              </p>
-              <ul>
-                <li>En pleine croissance, tout peut changer rapidement.</li>
-                <li>La taille de tes parents est ce que tu as déclaré — si elle est fausse, le calcul aussi.</li>
-                <li>Certains trucs (hormones, maladies) on ne les voit pas venir.</li>
-              </ul>
-
-              <h3>Comment ça marche</h3>
-              <p>
-                Khamis-Roche (1994) : ta taille + poids + taille de tes parents + tes habitudes (sommeil, nourriture, sport).
-              </p>
-              <a
-                href="https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+adult+height+prediction"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Voir les études
-              </a>
-            </div>
-          )}
-        </section>
       </main>
 
       <footer className="funnel-footer">

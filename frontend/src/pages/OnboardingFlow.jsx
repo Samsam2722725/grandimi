@@ -35,6 +35,7 @@ import {
   OPTIONS_MUSCLES,
   OPTIONS_VOIX,
   OPTIONS_CROISSANCE_LENTE,
+  OPTIONS_VITESSE_CROISSANCE,
   ListeChoixUnique,
   ListeChoixMultiple,
   MoletteTailleCm,
@@ -43,13 +44,15 @@ import {
   MolettePointure,
   MoletteDateNaissance,
   MoletteSommeil,
-  MoletteVitesseCroissance,
-  EcranHabitudes,
   EcranModelePrediction,
   EcranPrecision,
   EcranPotentielGain,
   EcranOptimiserPotentiel,
   EcranGrandimiAide,
+  EcranConseilsSommeil,
+  EcranPlanQuotidien,
+  EcranEstimationMensuelle,
+  EcranHeightTracker,
   EcranVeriteBrutale,
   EcranEtudesPubliees,
   EcranAvisUtilisateurs,
@@ -67,7 +70,7 @@ import {
 const STOCKAGE = 'grandimi:onboarding-v2'
 
 function anneeParDefaut() {
-  return new Date().getFullYear() - 14
+  return new Date().getFullYear() - 18
 }
 
 function reponsesInitiales() {
@@ -82,7 +85,7 @@ function reponsesInitiales() {
     // valeur par défaut doit déjà être un âge valide, sinon l'écran reste
     // bloqué sur un continuer désactivé sans qu'aucune action ne l'explique.
     age: ageDepuisNaissance(naissance.annee, naissance.mois, naissance.jour),
-    taille: 160,
+    taille: 170,
     poids: 55,
     pointure: null,
     sports: [],
@@ -136,6 +139,106 @@ function basculerDansListe(liste, valeur, exclusif) {
 
 const EMAIL_VALIDE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+const ETAPES_ANALYSE = [
+  { label: 'Analyse des facteurs', seuil: 20 },
+  { label: 'Projection génétique', seuil: 40 },
+  { label: 'Fenêtre de croissance', seuil: 60 },
+  { label: 'Construction du plan', seuil: 80 },
+  { label: 'Création de routine', seuil: 100 },
+]
+
+const DUREE_MONTEE_MS = 11000
+const PLAFOND_ATTENTE = 96
+const DUREE_FINALE_MS = 550
+
+/* L'anneau monte tout seul dès que l'écran s'affiche — pas besoin d'avoir
+   soumis l'e-mail pour ça — et plafonne à 96 % tant que le serveur n'a pas
+   répondu. `pretALivrer` (resultatApi non nul) relance une seconde montée,
+   courte, de la valeur courante jusqu'à 100 % : l'anneau termine toujours
+   sa course au lieu d'être coupé net par le changement d'écran. */
+function useProgressionAnimee(actif, pretALivrer) {
+  const [pourcentage, setPourcentage] = useState(0)
+  const [complet, setComplet] = useState(false)
+  const pourcentageRef = useRef(0)
+
+  useEffect(() => {
+    if (!actif) return undefined
+
+    const reduit =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const cible = pretALivrer ? 100 : PLAFOND_ATTENTE
+
+    if (reduit) {
+      pourcentageRef.current = cible
+      setPourcentage(cible)
+      if (pretALivrer) setComplet(true)
+      return undefined
+    }
+
+    const duree = pretALivrer ? DUREE_FINALE_MS : DUREE_MONTEE_MS
+    const depart = pourcentageRef.current
+    let debut
+    let frame
+
+    const etape = (t) => {
+      if (debut === undefined) debut = t
+      const p = Math.min(1, (t - debut) / duree)
+      const progression = 1 - (1 - p) ** 2
+      const valeur = depart + (cible - depart) * progression
+      pourcentageRef.current = valeur
+      setPourcentage(valeur)
+      if (p < 1) {
+        frame = requestAnimationFrame(etape)
+      } else if (pretALivrer) {
+        setComplet(true)
+      }
+    }
+    frame = requestAnimationFrame(etape)
+    return () => cancelAnimationFrame(frame)
+  }, [actif, pretALivrer])
+
+  return [pourcentage, complet]
+}
+
+// L'anneau et les étapes tournent en continu derrière l'écran ; `children`
+// (le formulaire e-mail, puis le bouton d'erreur/retry) s'affiche par-dessus.
+function ProgressionAnalyse({ titre, pourcentage, steps, children }) {
+  const indexCourant = steps.findIndex((s) => pourcentage < s.seuil)
+
+  return (
+    <div className="interstitial plan-creation">
+      <h1 className="interstitial-titre">{titre}</h1>
+
+      <div className="plan-progress">
+        <div
+          className="progress-circle"
+          style={{ '--progression': `${pourcentage * 3.6}deg` }}
+        >
+          <div className="progress-value">{Math.round(pourcentage)}%</div>
+        </div>
+      </div>
+
+      <div className="plan-steps">
+        {steps.map((step, idx) => {
+          const fait = pourcentage >= step.seuil
+          return (
+            <div
+              key={step.label}
+              className={`plan-step ${fait ? 'done' : ''} ${idx === indexCourant ? 'current' : ''}`}
+            >
+              <div className="step-check">{fait ? '✓' : ''}</div>
+              <span className="step-label">{step.label}</span>
+            </div>
+          )
+        })}
+      </div>
+
+      {children}
+    </div>
+  )
+}
+
 function OnboardingFlow({ onPredictionComplete, onCancel }) {
   const etatSauvegarde = useMemo(() => chargerEtat(), [])
 
@@ -143,12 +246,15 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   const [reponses, setReponses] = useState(etatSauvegarde?.reponses ?? reponsesInitiales())
   const [unites, setUnites] = useState(etatSauvegarde?.unites ?? unitesInitiales())
 
-  // Écran final : phase séparée du reste, jamais persistée (cf. chargerEtat).
-  const [phaseResultats, setPhaseResultats] = useState('gate') // 'gate' | 'analyse'
+  // Écran final : état séparé du reste, jamais persisté (cf. chargerEtat).
+  // L'anneau de progression tourne dès l'affichage de l'écran, avec le
+  // formulaire e-mail par-dessus ; `emailEnvoye` bascule une fois soumis,
+  // ce qui déclenche le vrai appel API pendant que l'anneau continue.
+  const [emailEnvoye, setEmailEnvoye] = useState(false)
   const [email, setEmail] = useState('')
   const [resultatApi, setResultatApi] = useState(null)
   const [erreurApi, setErreurApi] = useState(null)
-  // Incrémenté à chaque « Réessayer » : `phaseResultats` ne change pas de
+  // Incrémenté à chaque « Réessayer » : `emailEnvoye` ne change pas de
   // valeur entre deux tentatives, donc lui seul ne suffit pas à rejouer
   // l'effet qui appelle l'API.
   const [tentative, setTentative] = useState(0)
@@ -156,6 +262,11 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
 
   const etape = ORDRE_ETAPES[index]
   const texte = TEXTES_ETAPE[etape]
+
+  const [pourcentageAnalyse, animationTerminee] = useProgressionAnimee(
+    etape === 'resultats-la',
+    !!resultatApi,
+  )
 
   useEffect(() => {
     localStorage.setItem(STOCKAGE, JSON.stringify({ index, reponses, unites }))
@@ -207,11 +318,11 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   function lancerAnalyse() {
     emailSaisi()
     setErreurApi(null)
-    setPhaseResultats('analyse')
+    setEmailEnvoye(true)
   }
 
   useEffect(() => {
-    if (phaseResultats !== 'analyse') return undefined
+    if (!emailEnvoye) return undefined
     let annule = false
     setResultatApi(null)
     setErreurApi(null)
@@ -239,10 +350,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       annule = true
     }
     // `reponses` et `email` sont figés une fois cette phase atteinte : les
-    // écrans qui les renseignent sont derrière nous. Seuls `phaseResultats`
+    // écrans qui les renseignent sont derrière nous. Seuls `emailEnvoye`
     // et `tentative` doivent rejouer l'appel.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phaseResultats, tentative])
+  }, [emailEnvoye, tentative])
 
   function terminerAnalyse() {
     if (dejaLivre.current || !resultatApi) return
@@ -251,6 +362,15 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     localStorage.removeItem(STOCKAGE)
     onPredictionComplete(donnees)
   }
+
+  // L'anneau termine sa propre montée (0 → 100 %) une fois l'API répondue
+  // avant qu'on quitte l'écran : `animationTerminee` porte ce délai, pas
+  // `resultatApi` directement, pour ne jamais couper l'animation en plein
+  // mouvement.
+  useEffect(() => {
+    if (animationTerminee) terminerAnalyse()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animationTerminee])
 
   // ---------- Validation par écran ----------
 
@@ -445,9 +565,11 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
         )
       case 'vitesse-croissance':
         return (
-          <MoletteVitesseCroissance
+          <ListeChoixUnique
+            label={texte.titre}
             valeur={reponses.vitesseCroissance}
-            onChange={(v) => definir('vitesseCroissance', v)}
+            onChoisir={(v) => definir('vitesseCroissance', v)}
+            options={OPTIONS_VITESSE_CROISSANCE}
           />
         )
       case 'epaules':
@@ -504,8 +626,6 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
             options={OPTIONS_CROISSANCE_LENTE}
           />
         )
-      case 'habitudes':
-        return <EcranHabitudes />
       case 'modele-prediction':
         return <EcranModelePrediction />
       case 'precision':
@@ -517,15 +637,13 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       case 'grandimi-aide':
         return <EcranGrandimiAide />
       case 'exercices-quotidiens':
-        return <div className="onb-content"><p>Fais des exercices quotidiens pour soutenir ta croissance</p></div>
-      case 'optimise-routine':
-        return <div className="onb-content"><p>Optimise ta routine avec des petits changements</p></div>
+        return <EcranConseilsSommeil />
       case 'programme-optimal':
-        return <div className="onb-content"><p>Ton programme optimal t'attend</p></div>
+        return <EcranPlanQuotidien />
       case 'guide-grandir':
-        return <div className="onb-content"><p>Guide pour grandir : les fondamentaux expliqués</p></div>
+        return <EcranEstimationMensuelle />
       case 'height-tracker':
-        return <div className="onb-content"><p>Suis ta taille chaque semaine pour une meilleure prédiction</p></div>
+        return <EcranHeightTracker />
       case 'verite-brutale':
         return <EcranVeriteBrutale sexe={reponses.sexe} />
       case 'etudes-publiees':
@@ -565,71 +683,68 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     return <EcranPlusQueGenes onContinue={avancer} />
   }
 
-  if (etape === 'choix-genetique') {
-    return <div className="onb-content"><p>Tu n'as pas choisi ta génétique. Mais tu peux choisir ce que tu en fais.</p></div>
+  if (etape === 'resultats-la') {
+    // L'anneau tourne dès l'affichage de l'écran (cf. useProgressionAnimee
+    // plus haut) ; le formulaire e-mail s'affiche par-dessus, en overlay,
+    // pas comme un écran séparé. Une fois soumis, l'overlay disparaît et
+    // l'anneau continue seul jusqu'à ce que le vrai appel API réponde —
+    // pas pour « envoyer le résultat par mail » : c'est ce qui permet de
+    // retrouver le compte ensuite (même adresse que le checkout Whop, cf.
+    // Paywall.jsx qui relit `localStorage.userEmail`).
+    const emailPlausible = EMAIL_VALIDE.test(email.trim())
+    return (
+      <ProgressionAnalyse titre="On analyse tes réponses" pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
+        {!emailEnvoye ? (
+          <div className="resultats-overlay">
+            <div className="resultats-overlay-carte">
+              <h2 className="resultats-overlay-titre">{texte.titre}</h2>
+              <p className="resultats-overlay-text">{texte.sousTitre}</p>
+
+              <input
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                className="resultats-gate-input"
+                placeholder="ton@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <p className="funnel-help">C'est ce qui te permet de retrouver ton compte et ton plan.</p>
+
+              <FunnelButton
+                disabled={!emailPlausible}
+                onClick={() => {
+                  localStorage.setItem('userEmail', email.trim())
+                  lancerAnalyse()
+                }}
+              >
+                Révéler mes résultats
+              </FunnelButton>
+            </div>
+          </div>
+        ) : (
+          <div className="interstitial-action is-ready">
+            {erreurApi ? (
+              <>
+                <p className="funnel-help">{erreurApi}</p>
+                <FunnelButton onClick={() => setTentative((t) => t + 1)}>Réessayer</FunnelButton>
+              </>
+            ) : (
+              <button type="button" className="funnel-cta" disabled>
+                En cours...
+              </button>
+            )}
+          </div>
+        )}
+      </ProgressionAnalyse>
+    )
   }
 
   if (etape === 'paywall-funnel') {
     return (
       <PaywallFunnel onComplete={() => {
-        // Navigate to Paywall after funnel
         window.location.href = '/paywall'
       }} />
-    )
-  }
-
-  if (etape === 'decouvrir-taller') {
-    return (
-      <div className="interstitial">
-        <h1 className="interstitial-titre">Il est maintenant temps de découvrir</h1>
-        <p className="interstitial-text">Ce que Taller dit sur ton potentiel de croissance</p>
-        <div className="interstitial-action is-ready">
-          <button type="button" className="funnel-cta" onClick={avancer}>
-            Analyser mes réponses
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  if (etape === 'resultats-la') {
-    // Plan creation screen with progression
-    const steps = [
-      { label: 'Lecture de tes mesures', done: true },
-      { label: 'Projection Khamis-Roche', done: true },
-      { label: 'Croissement avec les courbes OMS', done: false },
-      { label: 'Correction selon ta maturité', done: false },
-      { label: 'Pondération de tes habitudes', done: false },
-    ]
-
-    const progressPercent = (steps.filter(s => s.done).length / steps.length) * 100
-
-    return (
-      <div className="interstitial plan-creation">
-        <h1 className="interstitial-titre">{texte.titre}</h1>
-        <p className="interstitial-text">{texte.sousTitre}</p>
-
-        <div className="plan-progress">
-          <div className="progress-circle">
-            <div className="progress-value">{Math.round(progressPercent)}%</div>
-          </div>
-        </div>
-
-        <div className="plan-steps">
-          {steps.map((step, idx) => (
-            <div key={idx} className={`plan-step ${step.done ? 'done' : ''}`}>
-              <div className="step-check">{step.done ? '✓' : ''}</div>
-              <span className="step-label">{step.label}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="interstitial-action is-ready">
-          <button type="button" className="funnel-cta" onClick={avancer} disabled>
-            En cours...
-          </button>
-        </div>
-      </div>
     )
   }
 

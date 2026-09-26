@@ -1,5 +1,17 @@
 import { useEffect, useState } from 'react'
-import { Dumbbell, HeartPulse, ListChecks, Moon, TrendingUp, Utensils } from 'lucide-react'
+import {
+  BookOpen,
+  CheckCircle2,
+  Circle,
+  Dumbbell,
+  HeartPulse,
+  ListChecks,
+  Lock,
+  Moon,
+  Ruler,
+  TrendingUp,
+  Utensils,
+} from 'lucide-react'
 
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { SegmentedControl } from '@/components/ui/segmented-control'
@@ -24,12 +36,12 @@ import {
    ============================================================ */
 export const ORDRE_ETAPES = [
   'profil',
-  'motivation',
   'sexe',
   'age',
   'taille',
   'poids',
   'pointure',
+  'motivation',
   'sports',
   'exercice-freq',
   'sommeil',
@@ -46,24 +58,21 @@ export const ORDRE_ETAPES = [
   'muscles',
   'voix',
   'croissance-lente',
-  'habitudes',
   'modele-prediction',
   'precision',
+  'resultats-long-terme',
   'potentiel-gain',
   'optimiser-potentiel',
   'grandimi-aide',
+  'height-tracker',
   'exercices-quotidiens',
-  'optimise-routine',
   'programme-optimal',
   'guide-grandir',
-  'height-tracker',
   'verite-brutale',
   'etudes-publiees',
   'avis-utilisateurs',
   'taille-ideale',
   'plus-que-genes',
-  'choix-genetique',
-  'decouvrir-taller',
   'resultats-la',
   'paywall-funnel',
 ]
@@ -92,14 +101,13 @@ export const TYPE_ETAPE = {
   muscles: 'question',
   voix: 'question',
   'croissance-lente': 'question',
-  'habitudes': 'affichage',
   'modele-prediction': 'affichage',
   precision: 'affichage',
+  'resultats-long-terme': 'affichage',
   'potentiel-gain': 'affichage',
   'optimiser-potentiel': 'affichage',
   'grandimi-aide': 'affichage',
   'exercices-quotidiens': 'affichage',
-  'optimise-routine': 'affichage',
   'programme-optimal': 'affichage',
   'guide-grandir': 'affichage',
   'height-tracker': 'affichage',
@@ -108,8 +116,6 @@ export const TYPE_ETAPE = {
   'avis-utilisateurs': 'affichage',
   'taille-ideale': 'question',
   'plus-que-genes': 'interstitielle',
-  'choix-genetique': 'affichage',
-  'decouvrir-taller': 'affichage',
   'resultats-la': 'interstitielle',
   'paywall-funnel': 'interstitielle',
 }
@@ -123,7 +129,7 @@ export const TEXTES_ETAPE = {
     sousTitre: "Cela nous aide à adapter ton parcours d'onboarding",
   },
   motivation: {
-    titre: 'Pourquoi tu as téléchargé Grandimi ?',
+    titre: 'Pourquoi tu es sur Grandimi ?',
     sousTitre: 'Tu peux choisir plusieurs',
   },
   sexe: {
@@ -212,18 +218,18 @@ export const TEXTES_ETAPE = {
     titre: 'Tu grandis encore, mais plus lentement que l’an dernier ?',
     sousTitre: 'Une croissance plus lente peut signifier que ta puberté se termine',
   },
-  'habitudes': {
-    titre: 'Grandimi crée des habitudes',
-    sousTitre: 'Jusqu\'à 20 % de ta taille finale dépend de tes habitudes quotidiennes',
-  },
   'modele-prediction': {
     titre: 'Le meilleur modèle de prédiction de taille au monde',
     sousTitre:
-      'Une équipe d\'ingénieurs Grandimi a passé des mois à construire le meilleur moteur de prédiction de taille',
+      'Une équipe d\'ingénieurs Grandimi a passé des mois à construire le meilleur moteur de prédiction de taille au monde',
   },
   precision: {
-    titre: 'Précision',
-    sousTitre: '98 %',
+    titre: 'Quelle est la précision de notre prédiction ?',
+    sousTitre: 'On combine tes mesures et tes habitudes pour estimer ton potentiel.',
+  },
+  'resultats-long-terme': {
+    titre: 'Grandimi crée des résultats à long terme',
+    sousTitre: 'Beaucoup n’atteignent pas leur plein potentiel de taille à cause d’habitudes non optimisées.',
   },
   'potentiel-gain': {
     titre: 'Tu peux grandir',
@@ -240,10 +246,6 @@ export const TEXTES_ETAPE = {
   'exercices-quotidiens': {
     titre: 'Fais des exercices quotidiens',
     sousTitre: 'Suis des routines simples pour soutenir ta croissance et ta santé',
-  },
-  'optimise-routine': {
-    titre: 'Optimise ta routine',
-    sousTitre: 'Petits changements, grands résultats',
   },
   'programme-optimal': {
     titre: 'Ton programme optimal',
@@ -277,17 +279,9 @@ export const TEXTES_ETAPE = {
     titre: 'Tu perds peut-être déjà des centimètres',
     sousTitre: 'Génétique 80% • Mode de vie 20% : ton potentiel dépend de tes habitudes maintenant',
   },
-  'choix-genetique': {
-    titre: "Tu n'as pas choisi ta génétique",
-    sousTitre: 'Mais tu peux choisir ce que tu en fais.',
-  },
-  'decouvrir-taller': {
-    titre: 'Il est maintenant temps de découvrir',
-    sousTitre: 'Ce que Taller dit sur ton potentiel de croissance',
-  },
   'resultats-la': {
-    titre: 'Tes résultats sont là !',
-    sousTitre: 'Il s’avère que… Tu ne grandis pas à ton potentiel. Corrigeons ça !',
+    titre: 'Il est maintenant temps de découvrir',
+    sousTitre: 'Ce que Grandimi dit sur ton potentiel de croissance',
   },
 }
 
@@ -377,11 +371,19 @@ export const OPTIONS_VOIX = [
 ]
 
 export const OPTIONS_CROISSANCE_LENTE = [
-  { valeur: 'pas-grandi', label: 'N’ai pas grandi' },
-  { valeur: 'plus-lentement', label: 'Plus lentement' },
-  { valeur: 'meme-rythme', label: 'Même rythme' },
-  { valeur: 'plus-vite', label: 'Plus vite' },
-  { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
+  { valeur: "pas-grandi", label: "N'ai pas grandi" },
+  { valeur: "plus-lentement", label: "Plus lentement" },
+  { valeur: "meme-rythme", label: "Même rythme" },
+  { valeur: "plus-vite", label: "Plus vite" },
+  { valeur: "ne-sais-pas", label: "Je ne sais pas" },
+]
+
+export const OPTIONS_VITESSE_CROISSANCE = [
+  { valeur: "moins-2cm", label: "< 2 cm" },
+  { valeur: "2-5cm", label: "2-5 cm" },
+  { valeur: "6-9cm", label: "6-9 cm" },
+  { valeur: "plus-10cm", label: "10+ cm" },
+  { valeur: "ne-sais-pas", label: "Je ne sais pas" },
 ]
 
 /* ============================================================
@@ -485,8 +487,17 @@ export function MoletteTailleAvecInconnu({ valeurCm, onChange, unite, onChangeUn
         min={min}
         max={max}
       />
-      <button type="button" className="funnel-link onb-lien-inconnu" onClick={() => onChange(null)}>
-        Je ne sais pas
+      {/* Sans ce texte, choisir « Je ne sais pas » ne change rien à l'écran :
+          la molette retombe sur une valeur moyenne qui a l'air d'un choix
+          comme un autre, et le clic semble n'avoir rien fait. */}
+      {inconnu && <p className="onb-inconnu-note">Valeur moyenne utilisée — fais glisser pour corriger.</p>}
+      <button
+        type="button"
+        className="funnel-link onb-lien-inconnu"
+        aria-pressed={inconnu}
+        onClick={() => onChange(null)}
+      >
+        {inconnu ? '✓ Je ne sais pas' : 'Je ne sais pas'}
       </button>
     </div>
   )
@@ -563,8 +574,14 @@ export function MolettePointure({ valeurEu, onChange, unite, onChangeUnite }) {
           format={(v) => `Size ${v} (US)`}
         />
       )}
-      <button type="button" className="funnel-link onb-lien-inconnu" onClick={() => onChange(null)}>
-        Je ne sais pas
+      {inconnu && <p className="onb-inconnu-note">Valeur moyenne utilisée — fais glisser pour corriger.</p>}
+      <button
+        type="button"
+        className="funnel-link onb-lien-inconnu"
+        aria-pressed={inconnu}
+        onClick={() => onChange(null)}
+      >
+        {inconnu ? '✓ Je ne sais pas' : 'Je ne sais pas'}
       </button>
     </div>
   )
@@ -581,26 +598,6 @@ export function MoletteSommeil({ valeur, onChange }) {
       step={0.5}
       format={(v) => `${v % 1 === 0 ? v : v.toFixed(1).replace('.', ',')} heures par nuit`}
     />
-  )
-}
-
-export function MoletteVitesseCroissance({ valeur, onChange }) {
-  const inconnu = valeur == null
-  return (
-    <div className="onb-mesure">
-      <WheelPicker
-        label="Croissance l’année dernière"
-        value={inconnu ? 5 : valeur}
-        onChange={onChange}
-        min={0}
-        max={25}
-        step={0.5}
-        format={(v) => `${v % 1 === 0 ? v : v.toFixed(1).replace('.', ',')} cm l’année dernière`}
-      />
-      <button type="button" className="funnel-link onb-lien-inconnu" onClick={() => onChange(null)}>
-        Je ne sais pas
-      </button>
-    </div>
   )
 }
 
@@ -658,15 +655,15 @@ export function EcranHabitudes() {
             <stop offset="100%" stopColor="#22c55e" />
           </linearGradient>
         </defs>
-        <text x="40" y="30" className="onb-graph-label">Height / Age</text>
-        <text x="200" y="30" className="onb-graph-label">with Grandimi</text>
+        <text x="40" y="30" className="onb-graph-label">Taille / Âge</text>
+        <text x="175" y="18" className="onb-graph-label">avec Grandimi</text>
         <polyline points="20,160 60,130 100,90 140,60 180,40 220,30 260,25"
                   className="onb-graph-line" stroke="url(#grad-effective)" strokeWidth="3" fill="none" />
         <polyline points="20,160 60,135 100,115 140,100 180,90 220,85 260,82"
                   className="onb-graph-line" stroke="#666" strokeWidth="2" fill="none" />
         <circle cx="260" cy="25" r="4" fill="#22c55e" />
-        <text x="10" y="175" className="onb-graph-label" fontSize="12">Effective Planning</text>
-        <text x="120" y="175" className="onb-graph-label" fontSize="12">Bad Habits</text>
+        <text x="10" y="175" className="onb-graph-label" fontSize="11">Bonnes habitudes</text>
+        <text x="130" y="175" className="onb-graph-label" fontSize="11">Mauvaises habitudes</text>
       </svg>
     </div>
   )
@@ -687,44 +684,76 @@ export function EcranPrecision() {
   return <BadgePrecision />
 }
 
+// Jauge en arc 0-100 % : la portion verte, à l'extrémité proche de 100 %,
+// représente les 20 % encore modifiables par les habitudes. Volontairement
+// pas de remplissage à points ni de ruche à hexagones (cf. note historique
+// sur .onb-gauge plus bas) : seule la forme d'arc est reprise.
+const GAUGE_CENTRE = { x: 120, y: 140 }
+const GAUGE_RAYON = 95
+const GAUGE_ANGLE_DEBUT = 135
+const GAUGE_ANGLE_FIN = 405
+const GAUGE_TICKS = [135, 168.75, 202.5, 236.25, 270, 303.75, 337.5, 371.25, 405]
+
+function pointSurArc(angleDeg, rayon) {
+  const rad = (angleDeg * Math.PI) / 180
+  return {
+    x: GAUGE_CENTRE.x + rayon * Math.cos(rad),
+    y: GAUGE_CENTRE.y + rayon * Math.sin(rad),
+  }
+}
+
 export function EcranPotentielGain() {
+  const debut = pointSurArc(GAUGE_ANGLE_DEBUT, GAUGE_RAYON)
+  const fin = pointSurArc(GAUGE_ANGLE_FIN, GAUGE_RAYON)
+  const debutVert = pointSurArc(GAUGE_ANGLE_FIN - 0.2 * (GAUGE_ANGLE_FIN - GAUGE_ANGLE_DEBUT), GAUGE_RAYON)
+
   return (
     <div className="onb-gauge" role="img" aria-label="20 % de ta taille adulte dépend de toi">
-      <svg viewBox="0 0 120 120" className="onb-gauge-anneau" aria-hidden="true">
-        <circle className="onb-gauge-piste" cx="60" cy="60" r="52" />
-        <circle
-          className="onb-gauge-arc"
-          cx="60"
-          cy="60"
-          r="52"
-          style={{
-            strokeDasharray: 2 * Math.PI * 52,
-            strokeDashoffset: 2 * Math.PI * 52 * (1 - 0.2),
-          }}
+      <svg viewBox="0 0 240 240" className="onb-gauge-cadran" aria-hidden="true">
+        <path
+          className="onb-gauge-piste"
+          d={`M ${debut.x} ${debut.y} A ${GAUGE_RAYON} ${GAUGE_RAYON} 0 1 1 ${fin.x} ${fin.y}`}
         />
-        <text x="60" y="66" textAnchor="middle" className="onb-gauge-texte">
-          20 %
-        </text>
+        <path
+          className="onb-gauge-arc"
+          d={`M ${debutVert.x} ${debutVert.y} A ${GAUGE_RAYON} ${GAUGE_RAYON} 0 0 1 ${fin.x} ${fin.y}`}
+        />
+        {GAUGE_TICKS.map((angle) => {
+          const interieur = pointSurArc(angle, GAUGE_RAYON + 7)
+          const exterieur = pointSurArc(angle, GAUGE_RAYON + 17)
+          return (
+            <line
+              key={angle}
+              className="onb-gauge-tick"
+              x1={interieur.x}
+              y1={interieur.y}
+              x2={exterieur.x}
+              y2={exterieur.y}
+            />
+          )
+        })}
+        <text x="34" y="232" textAnchor="middle" className="onb-gauge-label">0 %</text>
+        <text x="206" y="232" textAnchor="middle" className="onb-gauge-label">100 %</text>
+        <text x="120" y="150" textAnchor="middle" className="onb-gauge-texte">20 %</text>
+        <text x="120" y="172" textAnchor="middle" className="onb-gauge-legende">de ta taille adulte</text>
       </svg>
-      <p className="funnel-help">20 % de ta taille adulte dépend de tes habitudes.</p>
     </div>
   )
 }
 
 const LEVIERS_OPTIMISATION = [
-  { icone: Moon, titre: 'Sommeil', detail: '8-10 heures par nuit' },
-  { icone: Utensils, titre: 'Nutrition', detail: 'Protéines, calcium, vitamine D' },
-  { icone: Dumbbell, titre: 'Activité', detail: '30 min par jour minimum' },
+  { icone: Moon, titre: 'Sommeil' },
+  { icone: Utensils, titre: 'Nutrition' },
+  { icone: Dumbbell, titre: 'Activité' },
 ]
 
 export function EcranOptimiserPotentiel() {
   return (
     <div className="onb-icones onb-icones-3">
-      {LEVIERS_OPTIMISATION.map(({ icone: Icone, titre, detail }) => (
+      {LEVIERS_OPTIMISATION.map(({ icone: Icone, titre }) => (
         <div className="onb-icone" key={titre}>
           <Icone size={26} aria-hidden="true" />
           <strong>{titre}</strong>
-          <span>{detail}</span>
         </div>
       ))}
     </div>
@@ -733,19 +762,37 @@ export function EcranOptimiserPotentiel() {
 
 // Les trois fonctions de la landing (FONCTIONS dans HomePage.jsx), rien d'autre.
 const AIDES_GRANDIMI = [
-  { icone: TrendingUp, titre: 'Estimation', detail: 'Recalculée chaque mois' },
-  { icone: ListChecks, titre: 'Plan quotidien', detail: '11 actions à cocher' },
-  { icone: HeartPulse, titre: 'Sommeil, nutrition, exercices', detail: 'Chaque levier détaillé' },
+  { icone: TrendingUp, titre: 'Estimation' },
+  { icone: ListChecks, titre: 'Plan quotidien' },
+  { icone: HeartPulse, titre: 'Conseils' },
 ]
 
 export function EcranGrandimiAide() {
   return (
     <div className="onb-icones onb-icones-3">
-      {AIDES_GRANDIMI.map(({ icone: Icone, titre, detail }) => (
+      {AIDES_GRANDIMI.map(({ icone: Icone, titre }) => (
         <div className="onb-icone" key={titre}>
           <Icone size={24} aria-hidden="true" />
           <strong>{titre}</strong>
-          <span>{detail}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// Frise simple des saisies hebdomadaires. Pas de collage de cartes qui
+// s'envolent ni de fausse statistique « accuracy » : juste l'idée que
+// chaque semaine ajoute une mesure.
+const SEMAINES_SUIVI = [1, 2, 3, 4]
+
+export function EcranHeightTracker() {
+  return (
+    <div className="onb-tracker">
+      {SEMAINES_SUIVI.map((semaine) => (
+        <div className="onb-tracker-ligne" key={semaine}>
+          <span className="onb-tracker-point" aria-hidden="true" />
+          <span className="onb-tracker-semaine">Semaine {semaine}</span>
+          <Ruler size={18} className="onb-tracker-icone" aria-hidden="true" />
         </div>
       ))}
     </div>
@@ -816,24 +863,24 @@ export function EcranEstimationMensuelle() {
 }
 
 /**
- * Écran 33. Les sept lignes « garçon » du script demandé comportaient un
- * montant inventé (« ~300$ par an ») et une allusion à la séduction
- * (« les femmes te négligent ») : deux choses que ce même fichier
- * `funnel.css` interdit explicitement à cet écran ailleurs dans le code
- * (« NI pourcentage NI montant NI allusion à la séduction — c'est la
- * différence entre une liste vérifiable et une liste qui vise l'estime
- * de soi d'un mineur »). Les sept idées sont conservées, reformulées sans
- * chiffre fabriqué ni ressort romantique. La liste « fille » n'avait rien
- * à corriger.
+ * Écran 33. Plusieurs versions du script « garçon » comportaient un
+ * montant inventé (« ~300$ par an » puis « 600$ par pouce »), un
+ * pourcentage de carrière fabriqué (« 59 % de chances en moins d'être
+ * CEO ») et une allusion à la séduction (« moins de matchs en rencontre » /
+ * « les femmes te négligent ») : ce que ce même fichier `funnel.css`
+ * interdit explicitement à cet écran ailleurs dans le code (« NI
+ * pourcentage NI montant NI allusion à la séduction — c'est la différence
+ * entre une liste vérifiable et une liste qui vise l'estime de soi d'un
+ * mineur »). Les idées sont conservées quand elles sont vérifiables,
+ * reformulées sans chiffre fabriqué ni ressort romantique. La liste
+ * « fille » n'avait rien à corriger.
  */
 const VERITE_GARCON = [
-  'Moins de temps de jeu, plus souvent sur le banc',
-  'Invisible aux moments clés',
-  'Moins pris au sérieux',
-  'On te traite encore comme le plus jeune du groupe',
-  'Ça pèse sur la confiance, pas seulement sur le miroir',
-  'Le premier regard te met déjà à part',
-  'Plus d’anxiété sociale',
+  'Ignoré dans les moments importants',
+  'Moins pris au sérieux par les autres',
+  'Sous 1m75, on te voit moins comme un leader',
+  'Chaque centimètre peut influencer le salaire et la confiance qu’on te donne',
+  'Ça peut créer plus d’anxiété sociale',
 ]
 
 const VERITE_FILLE = [
@@ -933,17 +980,17 @@ export function EcranPlusQueGenes({ onContinue }) {
         Tes gènes posent la base, mais ton mode de vie décide du résultat. On prépare un
         programme juste pour toi.
       </p>
-      <div className="onb-genes-barres" role="img" aria-label="Génétique 70 %, environnement 30 %">
+      <div className="onb-genes-barres" role="img" aria-label="Génétique 80 %, environnement 20 %">
         <div className="onb-genes-barre">
-          <div className="onb-genes-remplissage" style={{ width: rempli ? '70%' : '0%' }} />
-          <span>Génétique 70 %</span>
+          <div className="onb-genes-remplissage" style={{ width: rempli ? '80%' : '0%' }} />
+          <span>Génétique 80 %</span>
         </div>
         <div className="onb-genes-barre">
           <div
             className="onb-genes-remplissage onb-genes-remplissage--accent"
-            style={{ width: rempli ? '30%' : '0%' }}
+            style={{ width: rempli ? '20%' : '0%' }}
           />
-          <span>Environnement 30 %</span>
+          <span>Environnement 20 %</span>
         </div>
       </div>
       <div className="interstitial-action is-ready">

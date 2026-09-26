@@ -592,3 +592,27 @@
   background: color-mix(in srgb, var(--funnel-bg) 62%, transparent);
   pointer-events: none;
 }
+
+/* ---------- Images intégrées ---------- */
+
+.results-image {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  object-fit: contain;
+}
+
+.results-image-hero {
+  max-width: 280px;
+  margin: 0 auto 8px;
+}
+
+.results-image-semaines {
+  margin-top: 8px;
+}
+
+.results-image-lessons,
+.results-image-routine,
+.results-image-actions {
+  margin-top: 8px;
+}

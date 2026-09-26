@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
+import '../styles/funnel.css'
 import '../styles/paywall.css'
 import apiClient from '../lib/api'
+import { Avis } from '@/components/ui/avis'
 
 export default function Paywall({ onContinue, onParentPay }) {
   const [showFaq, setShowFaq] = useState(false)
@@ -56,14 +58,10 @@ export default function Paywall({ onContinue, onParentPay }) {
   }
 
   return (
-    <div className="paywall">
+    <div className="paywall night">
       <div className="paywall-header">
         <h1>Choisir ton plan</h1>
-        <div className="paywall-rating">⭐⭐⭐⭐⭐</div>
-        <p className="paywall-testimonial">
-          "L'app m'a vraiment aidé à comprendre comment grandir. Les recommandations basées sur mon mode de vie sont exactes!"
-        </p>
-        <p className="paywall-author">- utilisateur Grandimi</p>
+        <Avis className="paywall-avis" />
       </div>
 
       <div className="paywall-pricing">

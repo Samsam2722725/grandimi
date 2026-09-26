@@ -1,10 +1,9 @@
-import { useRef, useState, useEffect, lazy, Suspense } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { ArrowLeft, Lock } from 'lucide-react'
-
-const CardCarousel = lazy(() => import('@/components/ui/card-carousel').then(m => ({ default: m.CardCarousel })))
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
+import { Avis } from '@/components/ui/avis'
 import '../styles/funnel.css'
 /* Feuille dédiée, et non paywall.css : cette dernière habille encore
    ParentPage (page claire, destinée à un adulte arrivé par lien partagé) et
@@ -36,29 +35,6 @@ const PLANS_PAR_DEFAUT = {
   monthly: { key: 'monthly', label: 'Mensuel', price_eur: 9.99, interval: 'month' },
   annual: { key: 'annual', label: 'Annuel', price_eur: 29.99, interval: 'year' },
 }
-
-/* Les trois supports de la marque, servis depuis public/offre en WebP.
-
-   Le nom de fichier porte le sujet plutôt qu'un numéro : il se retrouve tel
-   quel dans l'onglet réseau et dans le cache du navigateur, où
-   « image-3.webp » n'aurait rien dit à personne.
-
-   Les `alt` décrivent ce que montre l'image, pas son titre : un lecteur
-   d'écran ne tire rien de « Programme optimal » seul. */
-const VISUELS_OFFRE = [
-  {
-    src: '/offre/programme-optimal.webp',
-    alt: 'Programme optimal : la routine quotidienne, jour après jour',
-  },
-  {
-    src: '/offre/guide-pour-grandir.webp',
-    alt: 'Guide pour grandir : les leçons sur la croissance, débloquées une à une',
-  },
-  {
-    src: '/offre/optimise-la.webp',
-    alt: 'Optimise-la : les actions du jour, à cocher une par une',
-  },
-]
 
 
 /* Douze mensualités : le seul repère auquel comparer l'annuel. Jamais
@@ -397,7 +373,11 @@ function PaywallPage({ onBackHome }) {
           Ta taille adulte, ce que tes habitudes te coûtent, et tes 11 actions par jour.
         </p>
 
-        {/* Les deux formules CÔTE À CÔTE, avant tout argument.
+        <Avis className="paywall-avis" limit={1} />
+
+        {/* Les deux formules CÔTE À CÔTE, juste après le meilleur argument
+            (le témoignage) — demande explicite du client de suivre l'ordre
+            « argument d'abord, prix ensuite ».
 
             Elles étaient présentées par un sélecteur à bascule (deux
             pastilles dans une glissière) qui n'affichait qu'un prix à la
@@ -478,31 +458,8 @@ function PaywallPage({ onBackHome }) {
         </section>
 
         {/* L apercu du plan du matin (« TON PLAN D AUJOURD HUI », cinq lignes
-            dont trois sous cadenas) est retire a la demande du client.
-
-            Ce que le visiteur voit maintenant entre le prix et le bouton : la
-            phrase d annonce, puis les trois visuels du carrousel. C est la
-            seule demonstration qui reste, et elle porte desormais seule le
-            travail de montrer ce qu on achete. */}
-        <p className="paywall-voici">Voici ce que tu obtiens :</p>
-
-        {/* La liste à coches « ce que tu auras » est retirée à la demande du
-            client. Elle répétait en texte ce que l'aperçu du plan montre
-            juste au-dessus et ce que les trois visuels du carrousel montrent
-            juste en dessous — trois fois la même promesse sur le même écran,
-            dont une seule en montrant quelque chose. */}
-
-        {/* Les visuels dessinés cèdent la place aux vrais supports de la
-            marque, en coverflow : carte centrale de face, voisines en
-            perspective, avance automatique. Ils pesaient 6,2 Mo en PNG —
-            converti en WebP à 760 px de large, l'ensemble tient en 106 Ko,
-            ce qui est la différence entre une page de paiement utilisable en
-            4G et une page qui ne s'affiche jamais. */}
-        <section aria-label="Ce que contient le plan">
-          <Suspense fallback={<div className="h-80 bg-gradient-to-b from-gray-900 to-gray-950 rounded-lg animate-pulse" />}>
-            <CardCarousel images={VISUELS_OFFRE} />
-          </Suspense>
-        </section>
+            dont trois sous cadenas) et le carrousel de visuels marketing sont
+            retires a la demande du client. */}
 
         {email && (
           <p className="paywall-account">
@@ -550,31 +507,6 @@ function PaywallPage({ onBackHome }) {
           <Lock size={15} aria-hidden="true" />
           Paiement traité par Whop. Grandimi ne voit ni ne stocke ta carte.
         </p>
-
-        <section className="paywall-faq">
-          <details>
-            <summary>Puis-je annuler mon abonnement ?</summary>
-            <p>
-              Oui, en ligne et à tout moment, depuis ton espace Whop. L’accès reste
-              actif jusqu’à la fin de la période déjà payée.
-            </p>
-          </details>
-          <details>
-            <summary>Qu’est-ce que je débloque exactement ?</summary>
-            <p>
-              Ta taille adulte estimée avec sa marge d’erreur, ce que tes habitudes
-              actuelles te coûtent en centimètres, ton frein principal nommé, et les
-              11 actions quotidiennes de ton plan — renouvelé chaque mois d’abonnement.
-            </p>
-          </details>
-          <details>
-            <summary>Qui traite le paiement ?</summary>
-            <p>
-              Whop. Tu es redirigé vers sa page sécurisée : tes données bancaires ne
-              passent jamais par Grandimi, et nous ne les stockons pas.
-            </p>
-          </details>
-        </section>
 
         <p className="paywall-legal">
           En continuant, tu acceptes nos <a href="/cgv.html">conditions d’utilisation</a>{' '}

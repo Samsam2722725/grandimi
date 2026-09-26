@@ -112,7 +112,6 @@ export function BadgePrecision({ className }) {
           {valeurAffichee}
         </span>
         <span className="sr-only">{PRECISION_AFFICHEE.valeur}</span>
-        <span className="precision-libelle">{PRECISION_AFFICHEE.libelle}</span>
       </div>
 
       <p className="precision-detail">
