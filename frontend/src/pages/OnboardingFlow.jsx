@@ -52,7 +52,11 @@ import {
   EcranEtudesPubliees,
   EcranAvisUtilisateurs,
   EcranPlusQueGenes,
+  EcranConseilsNutrition,
+  EcranConseilsSommeil,
+  EcranPlanQuotidien,
 } from '../onboarding/content.jsx'
+import { FonctionExercices, FonctionSuivi } from '@/components/ui/ecrans-fonctions'
 import {
   ageDepuisNaissance,
   construirePayloadPrediction,
@@ -512,15 +516,15 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       case 'grandimi-aide':
         return <EcranGrandimiAide />
       case 'exercices-quotidiens':
-        return <div className="onb-content"><p>Fais des exercices quotidiens pour soutenir ta croissance</p></div>
+        return <FonctionExercices />
       case 'optimise-routine':
-        return <div className="onb-content"><p>Optimise ta routine avec des petits changements</p></div>
+        return <EcranConseilsSommeil />
       case 'programme-optimal':
-        return <div className="onb-content"><p>Ton programme optimal t'attend</p></div>
+        return <EcranPlanQuotidien />
       case 'guide-grandir':
-        return <div className="onb-content"><p>Guide pour grandir : les fondamentaux expliqués</p></div>
+        return <EcranConseilsNutrition />
       case 'height-tracker':
-        return <div className="onb-content"><p>Suis ta taille chaque semaine pour une meilleure prédiction</p></div>
+        return <FonctionSuivi />
       case 'verite-brutale':
         return <EcranVeriteBrutale sexe={reponses.sexe} />
       case 'etudes-publiees':

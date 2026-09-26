@@ -7,6 +7,7 @@ import { WheelPicker } from '@/components/ui/wheel-picker'
 import { FonctionPlan } from '@/components/ui/ecrans-fonctions'
 import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ReseauNeurones } from '@/components/ui/reseau-neurones'
+import { LongTermeChart } from '@/components/ui/long-terme-chart'
 import { EtudesPubliees } from '@/components/ui/ecrans-fonctions'
 import { Avis } from '@/components/ui/avis'
 import {
@@ -641,23 +642,7 @@ export function MoletteDateNaissance({ jour, mois, annee, onChange }) {
 export function EcranHabitudes() {
   return (
     <div className="onb-preuve">
-      <svg viewBox="0 0 300 200" className="onb-graph-habitudes" aria-hidden="true">
-        <defs>
-          <linearGradient id="grad-effective" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#4ade80" />
-            <stop offset="100%" stopColor="#22c55e" />
-          </linearGradient>
-        </defs>
-        <text x="40" y="30" className="onb-graph-label">Height / Age</text>
-        <text x="200" y="30" className="onb-graph-label">with Grandimi</text>
-        <polyline points="20,160 60,130 100,90 140,60 180,40 220,30 260,25"
-                  className="onb-graph-line" stroke="url(#grad-effective)" strokeWidth="3" fill="none" />
-        <polyline points="20,160 60,135 100,115 140,100 180,90 220,85 260,82"
-                  className="onb-graph-line" stroke="#666" strokeWidth="2" fill="none" />
-        <circle cx="260" cy="25" r="4" fill="#22c55e" />
-        <text x="10" y="175" className="onb-graph-label" fontSize="12">Effective Planning</text>
-        <text x="120" y="175" className="onb-graph-label" fontSize="12">Bad Habits</text>
-      </svg>
+      <LongTermeChart className="funnel-longterme" />
     </div>
   )
 }
