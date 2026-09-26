@@ -595,24 +595,37 @@
 
 /* ---------- Images intégrées ---------- */
 
+/* Les visuels d'origine sont des exports haute résolution (jusqu'à
+   1536px de haut) : affichés à 100% de la largeur de la carte, l'un
+   d'eux (routine-phone) occupait à lui seul 745px, soit près de deux
+   écrans de téléphone. Chaque image a donc sa propre limite de largeur,
+   calée sur son ratio d'origine, plutôt qu'un seul `100%` partagé. */
 .results-image {
-  width: 100%;
+  display: block;
   height: auto;
+  margin: 8px auto 0;
   border-radius: 16px;
   object-fit: contain;
 }
 
 .results-image-hero {
-  max-width: 280px;
-  margin: 0 auto 8px;
+  max-width: 220px;
+  margin-top: 0;
+  margin-bottom: 4px;
 }
 
 .results-image-semaines {
-  margin-top: 8px;
+  max-width: 260px;
 }
 
-.results-image-lessons,
-.results-image-routine,
+.results-image-lessons {
+  max-width: 340px;
+}
+
+.results-image-routine {
+  max-width: 200px;
+}
+
 .results-image-actions {
-  margin-top: 8px;
+  max-width: 320px;
 }
