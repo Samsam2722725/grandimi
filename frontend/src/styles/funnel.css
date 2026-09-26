@@ -354,7 +354,7 @@
    secondes et le halo respire. Réservé au bouton principal des écrans
    sombres, là où se prend la décision — sur le papier du tunnel, une
    lueur animée à chaque écran deviendrait du bruit. */
-.night .funnel-footer .funnel-cta:not(:disabled) {
+.results .funnel-footer .funnel-cta:not(:disabled) {
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -362,7 +362,7 @@
   animation: cta-halo 2.8s ease-in-out infinite;
 }
 
-.night .funnel-footer .funnel-cta:not(:disabled)::after {
+.results .funnel-footer .funnel-cta:not(:disabled)::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -388,8 +388,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .night .funnel-footer .funnel-cta:not(:disabled),
-  .night .funnel-footer .funnel-cta:not(:disabled)::after {
+  .results .funnel-footer .funnel-cta:not(:disabled),
+  .results .funnel-footer .funnel-cta:not(:disabled)::after {
     animation: none;
   }
 }
