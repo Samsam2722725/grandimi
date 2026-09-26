@@ -11,7 +11,7 @@ import heroCelebrate from '../assets/images/hero-celebrate.webp'
 import semainesSuivi from '../assets/images/semaines-suivi.webp'
 import lessonsList from '../assets/images/lessons.webp'
 import routinePhone from '../assets/images/routine-phone.webp'
-import dailyActions from '../assets/images/daily-actions.webp'
+import { ActionsDuJour } from '@/components/ui/actions-du-jour'
 import '../styles/funnel.css'
 import '../styles/results-page.css'
 import '../styles/analyse-page.css'
@@ -364,11 +364,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           className="results-image results-image-routine"
         />
 
-        <img
-          src={dailyActions}
-          alt="Actions quotidiennes : lait, sommeil, lumière, cobra stretch"
-          className="results-image results-image-actions"
-        />
+        <ActionsDuJour />
 
         {/* Le partage a disparu de cet écran. Il produisait une image portant
             la taille adulte estimée — c'est-à-dire exactement ce que la carte
