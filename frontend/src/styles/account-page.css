@@ -144,3 +144,6 @@
 .account-manage-link a:hover {
   color: var(--color-coral-pulse, #ff5a1f);
 }
+
+.account-contact { margin-top: var(--spacing-16); }
+.account-contact a { color: #ff7a1a; font-weight: 600; }

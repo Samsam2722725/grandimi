@@ -202,6 +202,15 @@ function AccountPage({ onBackHome }) {
         )}
       </section>
 
+      <section className="account-section account-contact">
+        <h2>Nous contacter</h2>
+        <p>
+          Une question sur ton plan, ton paiement ou ton abonnement ? Écris-nous, on répond
+          par e-mail :{' '}
+          <a href="mailto:grandimi14@gmail.com?subject=Mon%20compte%20Grandimi">grandimi14@gmail.com</a>
+        </p>
+      </section>
+
       {confirmationOuverte && (
         <div className="account-modal-overlay" role="dialog" aria-modal="true">
           <div className="account-modal">
