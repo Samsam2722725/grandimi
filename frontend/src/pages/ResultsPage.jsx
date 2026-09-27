@@ -7,7 +7,6 @@ import { Confetti } from '@/components/ui/confetti'
 
 import Spinner from '../components/Spinner'
 import { resultatVu } from '../lib/analytics'
-import { Compteur } from '@/components/ui/compteur'
 import '../styles/funnel.css'
 import '../styles/results-page.css'
 import '../styles/analyse-page.css'
@@ -123,71 +122,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      dont un inventé. */
   const pointsACorriger = leviers.filter((levier) => levier.sousCible).length
 
-  const estimeeCm = Number(predictionData.predicted_height_cm)
-  const potentielCm = Number(predictionData.potential_height_cm)
-
-  /* Rang parmi les jeunes du meme age, calcule par le serveur sur les
-     tables OMS. Il ne se derive d'aucune valeur verrouillee : on peut
-     l'afficher sans ouvrir la porte. */
-  const percentileAge = Number(predictionData.percentile_age)
-  const percentileAffichable = Number.isFinite(percentileAge) && percentileAge > 0
-
-  /* Part de croissance qui reste a faire.
-
-     ARRONDI A 5 % ET PAS AU POINT PRES, VOLONTAIREMENT. La taille du jour
-     est affichee juste au-dessus : un pourcentage exact laisserait
-     reconstituer la taille adulte, qui est justement sous cadenas —
-     165 / 0,89 donne 185,4. Par tranches de cinq, la meme division ouvre
-     une fourchette de dix centimetres, trop large pour remplacer ce que
-     l'abonnement livre.
-
-     LE DENOMINATEUR EST LE POTENTIEL, PAS L ESTIMATION.
-
-     Rapporte a l'estimation — celle que ses habitudes actuelles
-     produisent — le chiffre disait « tu as fait 95 % de ta croissance »
-     juste sous « tes habitudes te coutent 5,4 cm ». Les deux lignes se
-     contredisaient : s'il ne reste que 5 % a faire, il n'y a pas 5 cm a
-     recuperer. Le denominateur qui a du sens est son plafond, celui que
-     le plan vise ; la part parcourue tombe alors a 92 %, et les deux
-     chiffres racontent la meme histoire. */
-  const cibleCroissance =
-    Number.isFinite(potentielCm) && potentielCm > 0 ? potentielCm : estimeeCm
-  /* CE QUI RESTE, PAS CE QUI EST FAIT.
-
-     « Tu as fait 90 % de ta croissance » est exact et demotivant : le
-     lecteur en conclut que c'est joue, et il a raison de le conclure —
-     c'est ce que la phrase dit. Le meme nombre, pris par l'autre bout,
-     designe ce qui est encore en jeu, c'est-a-dire precisement ce que
-     l'abonnement adresse. Aucun des deux n'est plus vrai que l'autre ;
-     l'un ferme la porte, l'autre l'ouvre.
-
-     TROIS ETATS, ET PAS DEUX. Le calcul portait un plancher a 5 % : en
-     dessous, l'arrondi par tranches de cinq affichait « 0 % ». Ce
-     plancher soignait un symptome — le modele rendait une taille adulte
-     EGALE a la taille du jour pour un profil sur cinq (voir
-     internal/estimator/khamis_roche_table.go), et sans lui ces ecrans
-     annoncaient « 0 % » a des adolescents de quinze ans.
-
-     Le modele est repare, mais le plancher ne peut pas simplement
-     disparaitre : les tranches de cinq arrondissent a zero quelqu'un a
-     qui il reste encore quatre centimetres. Il y a donc trois cas, et
-     chacun dit la verite :
-
-       plus rien a prendre ....... la ligne ne s'affiche pas
-       moins de 5 % ............... « moins de 5 % » (voir plus bas)
-       au-dela .................... le pourcentage, par tranches de cinq
-
-     Le seuil est en CENTIMETRES et non en pourcentage : un centimetre
-     restant est un centimetre, quelle que soit la taille sur laquelle on
-     le rapporte. */
-  const centimetresRestants =
-    Number.isFinite(cibleCroissance) && cibleCroissance > 0 && tailleActuelle > 0
-      ? cibleCroissance - tailleActuelle
-      : 0
-  const resteCroissance =
-    centimetresRestants >= 1
-      ? Math.round((centimetresRestants / cibleCroissance) * 20) * 5
-      : 0
   /* Le potentiel optimisé (potential_height_cm) n’est plus affiché en clair
      sur cet écran : il est passé derrière le cadenas « Optimise jusqu’à 🔒 cm »,
      qui est précisément ce que l’abonnement ouvre. Le chiffre existe côté
@@ -270,7 +204,7 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             <span className="analyse-case-valeur">{cm(tailleActuelle)} cm</span>
           </div>
           <div className="analyse-case analyse-case--accent">
-            <span className="analyse-case-label">Ta taille adulte</span>
+            <span className="analyse-case-label">Taille potentielle</span>
             <span className="analyse-case-valeur">
               <Lock size={22} aria-hidden="true" />
             </span>
@@ -308,40 +242,28 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           <AnalyseChart />
         </section>
 
-        {percentileAffichable && (
-          <div className="analyse-ligne analyse-ligne--fait">
-            <span className="analyse-perte-label">
-              Plus grand que <Compteur valeur={percentileAge} delai={900} /> % des jeunes de ton âge
-            </span>
-            <span aria-hidden="true">🌍</span>
-          </div>
-        )}
-
-        {centimetresRestants >= 1 && (
-          <div className="analyse-ligne analyse-ligne--fait">
-            <span className="analyse-perte-label">
-              {/* « moins de 5 % » plutot que « 5 % » : arrondir 1,4 % a 5 %
-                  serait surestimer ce qui reste, sur l'ecran meme qui sert
-                  a decider d'un achat. */}
-              Il te reste{' '}
-              {resteCroissance > 0 ? (
-                <>
-                  <Compteur valeur={resteCroissance} delai={1100} /> %
-                </>
-              ) : (
-                'moins de 5 %'
-              )}{' '}
-              de
-              ta croissance à faire
-            </span>
-            <span aria-hidden="true">📈</span>
-          </div>
-        )}
-
+        {/* Plus rien d'affiché en clair sous le graphique : décision du
+            client, « rien de gratuit ». Le percentile et la part de
+            croissance restante étaient lisibles ici ; ils passent derrière
+            le cadenas comme le reste. */}
         <div className="analyse-ligne analyse-ligne--verrou">
-          <span>Ce qui te bloque vraiment</span>
+          <span>Plus grand que</span>
           <Lock size={17} aria-hidden="true" />
-          <span aria-hidden="true">🎯</span>
+          <span>de ton âge</span>
+          <span aria-hidden="true">🌍</span>
+        </div>
+
+        <div className="analyse-duo">
+          <div className="analyse-case analyse-case--verrou">
+            <span className="analyse-case-label">Taille souhaitée</span>
+            <Lock size={22} aria-hidden="true" />
+            <span className="analyse-barre-floue" aria-hidden="true" />
+          </div>
+          <div className="analyse-case analyse-case--verrou">
+            <span className="analyse-case-label">Croissance finie</span>
+            <Lock size={22} aria-hidden="true" />
+            <span className="analyse-barre-floue" aria-hidden="true" />
+          </div>
         </div>
 
         {/* Le partage a disparu de cet écran. Il produisait une image portant
