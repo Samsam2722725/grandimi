@@ -120,6 +120,28 @@ const PILOSITE_AISSELLES_VERS_API = {
  * (écran 38, cf. OnboardingFlow) car il n'existe aucun écran e-mail dans
  * les 38 du script — et le champ est pourtant obligatoire côté serveur.
  */
+/* Premières règles (fille de 15 ans et plus, cf. etapesPour). Le moteur
+   attend un âge aux premières règles ; la question donne un délai, qu'on
+   convertit en prenant le milieu de chaque tranche. « Plus de 2 ans » vaut
+   3 ans : au-delà de 2,5 ans le moteur éteint de lui-même ce signal
+   (menarche.go), la valeur exacte n'y change donc rien. */
+const DELAI_REGLES_ANS = { 'moins-1-an': 0.5, '1-2-ans': 1.5, 'plus-2-ans': 3 }
+
+function champsRegles(reponses) {
+  const r = reponses.regles
+  if (r === 'non') {
+    return { menarche_declaree: true, menarche_survenue: false, age_menarche_annees: 0 }
+  }
+  if (r in DELAI_REGLES_ANS) {
+    return {
+      menarche_declaree: true,
+      menarche_survenue: true,
+      age_menarche_annees: Math.round((reponses.age - DELAI_REGLES_ANS[r]) * 10) / 10,
+    }
+  }
+  return { menarche_declaree: false, menarche_survenue: false, age_menarche_annees: 0 }
+}
+
 export function construirePayloadPrediction(reponses, email) {
   const tailleReferencePere = reponses.pere ?? TAILLE_PERE_INCONNUE_CM
   const tailleReferenceMere = reponses.mere ?? TAILLE_MERE_INCONNUE_CM
@@ -139,6 +161,7 @@ export function construirePayloadPrediction(reponses, email) {
     voix_muee: VOIX_MUEE_VERS_API[reponses.voix] ?? 'unknown',
     pilosite_visage: PILOSITE_VISAGE_VERS_API[reponses.pilositeVisage] ?? '',
     pilosite_aisselles: PILOSITE_AISSELLES_VERS_API[reponses.pilositeAisselles] ?? '',
+    ...champsRegles(reponses),
   }
 }
 

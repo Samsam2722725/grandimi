@@ -59,22 +59,23 @@
      declare juste en dessous, et gardent leurs jetons sombres : ces deux
      ecrans ont ete dessines pour le noir (paywall-night.css) et les
      basculer serait un autre chantier. */
-  --funnel-bg: #fbf7f2;
-  --funnel-surface: #f4eee6;
-  --funnel-surface-high: #ebdcc6;
-  --funnel-line: #e6ddd2;
-  --funnel-text: #17120e;
-  --funnel-muted: #756a5f;
-
-  /* TROIS oranges, et il faut les trois. L orange vif ne passe pas en
-     texte courant (2.9:1 sur papier) : il ne sert que de FOND de bouton,
-     avec l encre posee dessus. Les deux autres sont les versions
-     lisibles, l une pour le texte courant, l autre pour les gros titres.
-     Melanger les trois est l erreur qui fait echouer un audit AA. */
-  --funnel-accent: #ff5a1f;          /* fond de bouton uniquement      */
-  --funnel-accent-text: #c23c0b;     /* texte courant — 4.99:1         */
-  --funnel-accent-display: #ee4a0e;  /* titres >= 24px — 3.50:1        */
-  --funnel-on-accent: #17120e;       /* encre sur orange — 5.96:1      */
+  /* 27/09/2026 — LE TUNNEL PASSE EN SOMBRE, décision du client : la
+     landing est désormais sombre elle aussi, et le passage crème → noir à
+     l'écran d'analyse cassait le parcours. Les raisons ci-dessus sont
+     gardées pour l'historique ; les jetons sont désormais ceux de `.night`,
+     un seul thème du début à la fin. */
+  --funnel-bg: #0a0a0a;
+  --funnel-surface: #141414;
+  --funnel-surface-high: #1c1c1c;
+  --funnel-line: #2a2a2a;
+  --funnel-text: #ffffff;
+  --funnel-muted: #9a9a9a;
+  --funnel-accent: #ff5a1f;
+  /* Sur noir, l'orange vif passe en texte (6.35:1) : les trois rôles
+     d'accent pointent sur la même valeur. */
+  --funnel-accent-text: #ff5a1f;
+  --funnel-accent-display: #ff5a1f;
+  --funnel-on-accent: #17120e;
 }
 
 /* La surface sombre, conservee telle quelle pour le resultat et la
@@ -2475,7 +2476,7 @@
 }
 
 .tfc-grille {
-  stroke: rgba(23, 18, 14, 0.12);
+  stroke: rgba(255, 255, 255, 0.1);
   stroke-width: 1;
   stroke-dasharray: 4 5;
 }
@@ -2589,7 +2590,7 @@
 
 .jauge-piste {
   fill: none;
-  stroke: #d9cfc4;
+  stroke: #2e2622;
   stroke-width: 18;
   stroke-linecap: round;
 }

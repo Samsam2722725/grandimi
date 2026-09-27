@@ -53,6 +53,7 @@ export const ORDRE_ETAPES = [
   'mere',
   'proches',
   'pilosite-aisselles',
+  'regles',
   'pilosite-visage',
   'vitesse-croissance',
   'epaules',
@@ -94,6 +95,7 @@ export const TYPE_ETAPE = {
   mere: 'question',
   proches: 'question',
   'pilosite-aisselles': 'question',
+  regles: 'question',
   'pilosite-visage': 'question',
   'vitesse-croissance': 'question',
   epaules: 'question',
@@ -126,18 +128,18 @@ export const TYPE_ETAPE = {
 export const TEXTES_ETAPE = {
   profil: {
     titre: 'Qui es-tu ?',
-    sousTitre: "Cela nous aide à adapter ton parcours d'onboarding",
+    sousTitre: 'Pour te poser les bonnes questions',
   },
   motivation: {
     titre: 'Pourquoi tu es sur Grandimi ?',
     sousTitre: 'Tu peux choisir plusieurs',
   },
   sexe: {
-    titre: 'Garçon ou une fille ?',
+    titre: 'Tu es un garçon ou une fille ?',
     sousTitre: "Le sexe influence ta taille à l’âge adulte",
   },
   age: {
-    titre: 'Quand es-tu né ?',
+    titre: 'Quand es-tu né(e) ?',
     sousTitre: 'Ton âge nous aide à prédire quand tu vas grandir',
   },
   taille: {
@@ -175,6 +177,10 @@ export const TEXTES_ETAPE = {
   proches: {
     titre: 'As-tu des proches plus grands que ton père ?',
     sousTitre: 'La taille de ta famille nous renseigne sur tes gènes',
+  },
+  regles: {
+    titre: 'As-tu déjà eu tes premières règles ?',
+    sousTitre: 'C’est le repère le plus fiable pour savoir où tu en es dans ta croissance',
   },
   'pilosite-aisselles': {
     titre: 'As-tu des poils aux aisselles ?',
@@ -275,6 +281,45 @@ export const TEXTES_ETAPE = {
   },
 }
 
+/* Quand c'est un parent qui remplit (« Je suis un parent »), les
+   questions parlent de son enfant et non plus à lui. Seuls les écrans
+   de question sont concernés : les écrans d'affichage restent adressés
+   à l'ado, que le parent lit par-dessus son épaule ou lui montre. */
+const TEXTES_PARENT = {
+  motivation: { titre: 'Pourquoi êtes-vous sur Grandimi ?', sousTitre: 'Vous pouvez en choisir plusieurs' },
+  sexe: { titre: 'Votre enfant est un garçon ou une fille ?', sousTitre: 'Le sexe influence la taille à l’âge adulte' },
+  age: { titre: 'Quand est né(e) votre enfant ?', sousTitre: 'Son âge nous aide à prédire quand il va grandir' },
+  taille: { titre: 'Combien mesure votre enfant ?', sousTitre: 'Faites glisser pour choisir sa taille actuelle' },
+  poids: { titre: 'Quel est son poids ?', sousTitre: 'Faites glisser pour choisir son poids actuel' },
+  pointure: { titre: 'Quelle est sa pointure ?', sousTitre: 'La taille des pieds montre où il en est dans sa croissance' },
+  sports: { titre: 'Quels sports pratique-t-il ?', sousTitre: 'Le sport peut aider le corps à grandir' },
+  'exercice-freq': { titre: 'Combien d’heures d’exercice par semaine ?', sousTitre: 'L’exercice influence l’hormone de croissance et la récupération' },
+  sommeil: { titre: 'Combien d’heures dort-il par nuit ?', sousTitre: 'Bien dormir aide à grandir et à récupérer' },
+  pere: { titre: 'Combien mesure le père ?', sousTitre: 'La taille des parents influence beaucoup la sienne' },
+  mere: { titre: 'Combien mesure la mère ?', sousTitre: 'La taille des parents influence beaucoup la sienne' },
+  proches: { titre: 'A-t-il des proches plus grands que son père ?', sousTitre: 'La taille de la famille nous renseigne sur ses gènes' },
+  regles: { titre: 'A-t-elle déjà eu ses premières règles ?', sousTitre: 'C’est le repère le plus fiable pour savoir où elle en est' },
+  'pilosite-aisselles': { titre: 'A-t-il des poils aux aisselles ?', sousTitre: 'C’est un signe précoce de la puberté' },
+  'pilosite-visage': { titre: 'A-t-il des poils au visage ?', sousTitre: 'Ils nous aident à estimer son stade de croissance' },
+  'vitesse-croissance': { titre: 'Combien a-t-il grandi l’année dernière ?', sousTitre: 'Sa croissance récente montre le rythme de sa puberté' },
+  epaules: { titre: 'Ses épaules se sont-elles élargies ?', sousTitre: 'Cela peut indiquer le milieu de la puberté' },
+  odeur: { titre: 'A-t-il plus d’odeur corporelle ?', sousTitre: 'Ce changement commence souvent autour de la puberté' },
+  acne: { titre: 'A-t-il de l’acné ?', sousTitre: 'Les boutons peuvent augmenter avec les hormones de la puberté' },
+  muscles: { titre: 'Ses muscles sont-ils plus dessinés ?', sousTitre: 'Cela peut indiquer que la puberté commence' },
+  voix: { titre: 'Sa voix a-t-elle complètement mué ?', sousTitre: 'C’est un signe tardif que la puberté avance' },
+  'croissance-lente': { titre: 'Grandit-il plus lentement que l’an dernier ?', sousTitre: 'Cela peut signifier que sa puberté se termine' },
+  'taille-ideale': { titre: 'Quelle taille aimerait-il atteindre ?', sousTitre: 'Choisissez la taille qu’il vise' },
+}
+
+const auFeminin = (texte) => texte.replace(/-il\b/g, '-elle').replace(/\bil\b/g, 'elle')
+
+export function texteEtape(etape, profil, sexe) {
+  const parent = profil === 'parent' && TEXTES_PARENT[etape]
+  if (!parent) return TEXTES_ETAPE[etape]
+  if (sexe !== 'F') return parent
+  return { titre: auFeminin(parent.titre), sousTitre: auFeminin(parent.sousTitre) }
+}
+
 /* ============================================================
    OPTIONS DES ÉCRANS À CHOIX
    ============================================================ */
@@ -308,6 +353,34 @@ export const OPTIONS_PROCHES = [
   { valeur: 'autre', label: 'Autre' },
   { valeur: 'non', label: 'Non' },
 ]
+
+/* Premières règles : seulement à partir de 15 ans (voir etapesPour).
+   La réponse donne le délai écoulé, que le moteur convertit en âge aux
+   premières règles (internal/estimator/menarche.go). */
+export const OPTIONS_REGLES = [
+  { valeur: 'non', label: 'Pas encore' },
+  { valeur: 'moins-1-an', label: 'Oui, il y a moins d’un an' },
+  { valeur: '1-2-ans', label: 'Oui, il y a 1 à 2 ans' },
+  { valeur: 'plus-2-ans', label: 'Oui, il y a plus de 2 ans' },
+  { valeur: 'sans-reponse', label: 'Je préfère ne pas répondre' },
+]
+
+/* Les écrans montrés dépendent du sexe et de l'âge.
+   - Pour une fille : pas de questions sur les poils du visage, la voix,
+     les épaules ou les muscles, qui décrivent une puberté de garçon.
+   - Les premières règles ne sont demandées qu'à une fille de 15 ans et
+     plus : c'est une donnée de santé, et avant 15 ans il faudrait le
+     consentement d'un parent (cf. menarche.go). */
+const ETAPES_GARCON = new Set(['pilosite-visage', 'voix', 'epaules', 'muscles'])
+
+export function etapesPour(reponses) {
+  const fille = reponses?.sexe === 'F'
+  return ORDRE_ETAPES.filter((etape) => {
+    if (fille && ETAPES_GARCON.has(etape)) return false
+    if (etape === 'regles') return fille && reponses.age >= 15
+    return true
+  })
+}
 
 export const OPTIONS_PILOSITE_AISSELLES = [
   { valeur: 'non', label: 'Non' },

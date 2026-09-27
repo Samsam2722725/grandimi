@@ -18,9 +18,10 @@ import {
 } from '../lib/analytics'
 
 import {
-  ORDRE_ETAPES,
+  etapesPour,
+  texteEtape,
+  OPTIONS_REGLES,
   TYPE_ETAPE,
-  TEXTES_ETAPE,
   OPTIONS_MOTIVATION,
   OPTIONS_SPORTS,
   OPTIONS_EXERCICE_FREQ,
@@ -93,6 +94,7 @@ function reponsesInitiales() {
     mere: null,
     proches: [],
     pilositeAisselles: null,
+    regles: null,
     pilositeVisage: null,
     vitesseCroissance: null,
     epaules: null,
@@ -117,7 +119,7 @@ function chargerEtat() {
     // Ne jamais reprendre en plein milieu de l'écran final : la saisie
     // d'e-mail et l'appel serveur repartent proprement du début de cet
     // écran plutôt que de rejouer un état d'analyse à moitié fait.
-    if (ORDRE_ETAPES[donnees.index] === 'resultats-la') return null
+    if (etapesPour(donnees.reponses)[donnees.index] === 'resultats-la') return null
     return donnees
   } catch {
     return null
@@ -241,21 +243,21 @@ function ProgressionAnalyse({ titre, pourcentage, steps, children }) {
    sans repasser par les questions précédentes. DEV UNIQUEMENT (comme le
    `?preview=` de App.jsx) : sert à vérifier un écran précis en un lien,
    pas à exposer un mode démo en production. */
-function indexEtapePreview() {
+function indexEtapePreview(reponses) {
   if (!import.meta.env.DEV) return null
   const etape = new URLSearchParams(window.location.search).get('step')
   if (!etape) return null
-  const i = ORDRE_ETAPES.indexOf(etape)
+  const i = etapesPour(reponses).indexOf(etape)
   return i >= 0 ? i : null
 }
 
 function OnboardingFlow({ onPredictionComplete, onCancel }) {
   const etatSauvegarde = useMemo(() => chargerEtat(), [])
 
-  const [index, setIndex] = useState(
-    () => indexEtapePreview() ?? etatSauvegarde?.index ?? 0,
-  )
   const [reponses, setReponses] = useState(etatSauvegarde?.reponses ?? reponsesInitiales())
+  const [index, setIndex] = useState(
+    () => indexEtapePreview(reponses) ?? etatSauvegarde?.index ?? 0,
+  )
   const [unites, setUnites] = useState(etatSauvegarde?.unites ?? unitesInitiales())
 
   // Écran final : état séparé du reste, jamais persisté (cf. chargerEtat).
@@ -272,8 +274,11 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   const [tentative, setTentative] = useState(0)
   const dejaLivre = useRef(false)
 
-  const etape = ORDRE_ETAPES[index]
-  const texte = TEXTES_ETAPE[etape]
+  // Liste des écrans propre à ce profil (fille / garçon, âge) : l'index
+  // porte sur CETTE liste, pas sur ORDRE_ETAPES.
+  const etapes = useMemo(() => etapesPour(reponses), [reponses])
+  const etape = etapes[Math.min(index, etapes.length - 1)]
+  const texte = texteEtape(etape, reponses.profil, reponses.sexe)
 
   const [pourcentageAnalyse, animationTerminee] = useProgressionAnimee(
     etape === 'resultats-la',
@@ -285,7 +290,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   }, [index, reponses, unites])
 
   useEffect(() => {
-    tunnelEtapeVue(etape, index + 1, ORDRE_ETAPES.length)
+    tunnelEtapeVue(etape, index + 1, etapes.length)
   }, [etape, index])
 
   useEffect(() => {
@@ -305,7 +310,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   }
 
   function avancer() {
-    setIndex((precedent) => Math.min(ORDRE_ETAPES.length - 1, precedent + 1))
+    setIndex((precedent) => Math.min(etapes.length - 1, precedent + 1))
   }
 
   function reculer() {
@@ -419,6 +424,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       case 'voix':
         return true
       case 'croissance-lente':
+        return true
+      case 'regles':
         return true
       case 'taille-ideale':
         return reponses.tailleIdeale > 0
@@ -627,6 +634,15 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
             options={OPTIONS_VOIX}
           />
         )
+      case 'regles':
+        return (
+          <ListeChoixUnique
+            label={texte.titre}
+            valeur={reponses.regles}
+            onChoisir={(v) => definir('regles', v)}
+            options={OPTIONS_REGLES}
+          />
+        )
       case 'croissance-lente':
         return (
           <ListeChoixUnique
@@ -746,7 +762,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   return (
     <FunnelShell
       onBack={reculer}
-      progress={index / ORDRE_ETAPES.length}
+      progress={index / etapes.length}
       title={texte.titre}
       subtitle={texte.sousTitre}
       footer={
