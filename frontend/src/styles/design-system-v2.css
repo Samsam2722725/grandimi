@@ -571,7 +571,7 @@ label {
 
 .spinner-page {
   width: 36px; height: 36px; border-width: 3px;
-  color: var(--color-canopy-green);
+  color: #ff6a1a;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -581,9 +581,13 @@ label {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
+  /* Plein écran et sombre : un chargement crème flashait entre la
+     landing et le tunnel, tous deux sombres. */
+  min-height: 100vh;
   gap: var(--spacing-24);
   padding: var(--spacing-24);
+  background: #0a0a0a;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .loading-container p {
