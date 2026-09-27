@@ -143,6 +143,19 @@ function App() {
     capturePageview(currentPage);
   }, [currentPage]);
 
+  /* Réveil du serveur. Render (offre gratuite) s'endort après 15 min sans
+     visite et met jusqu'à une minute à repartir : c'est ce qui rendait la
+     fin de l'analyse et le bouton du paywall si lents. On l'appelle dès
+     l'ouverture du site, après l'affichage ; le temps de faire le
+     questionnaire, il est réveillé. */
+  useEffect(() => {
+    const reveiller = () => apiClient.healthCheck().catch(() => {});
+    const id = window.requestIdleCallback
+      ? window.requestIdleCallback(reveiller, { timeout: 4000 })
+      : setTimeout(reveiller, 1500);
+    return () => (window.cancelIdleCallback ? window.cancelIdleCallback(id) : clearTimeout(id));
+  }, []);
+
   // Récupère les données de prédiction sauvegardées
   useEffect(() => {
     const savedPredictionData = localStorage.getItem('predictionData');

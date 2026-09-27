@@ -13,9 +13,12 @@ import {
 import { useEffect, useState, lazy, Suspense } from 'react'
 
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
-import { LiquidMetalButton } from '@/components/ui/liquid-metal-button'
 import { SonarGrid } from '@/components/ui/sonar-grid'
-import { TextEffect } from '@/components/ui/text-effect'
+/* Le bouton « métal liquide » tire un moteur WebGL (@paper-design/shaders) :
+   chargé à part, après l'affichage, avec un bouton simple en attendant. */
+const LiquidMetalButton = lazy(() =>
+  import('@/components/ui/liquid-metal-button').then((m) => ({ default: m.LiquidMetalButton })),
+)
 const FaqSection = lazy(() => import('@/components/ui/faq-section').then(m => ({ default: m.FaqSection })))
 import '../styles/theme-night.css'
 
@@ -137,20 +140,6 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
      La boucle ne démarre pas sous `prefers-reduced-motion` : une phrase qui
      clignote sans fin est exactement ce que cette préférence existe pour
      éviter. */
-  const [sousTitreVisible, setSousTitreVisible] = useState(true)
-
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
-    let reprise
-    const cycle = setInterval(() => {
-      setSousTitreVisible(false)
-      reprise = setTimeout(() => setSousTitreVisible(true), 200)
-    }, 3000)
-    return () => {
-      clearInterval(cycle)
-      clearTimeout(reprise)
-    }
-  }, [])
 
   /* La barre apparaît passé un seuil de défilement.
 
@@ -265,7 +254,7 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
         </div>
       </header>
 
-      <main>
+      <main className="accueil-main">
         {/* ============ HERO ============
             Deux colonnes asymétriques, texte aligné à gauche. La pile
             centrée précédente laissait 60 % du fold vide et repoussait
@@ -392,37 +381,32 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   mettrait 1,15 s rien qu'à lancer le dernier, et la sortie ne
                   tiendrait pas dans les 0,7 s du cycle. Ici sortie et entrée
                   durent chacune ~0,65 s. */}
-              <TextEffect
-                as="p"
-                per="word"
-                delay={0.1}
-                boucle={sousTitreVisible}
-                surlignage="optimiser ta croissance"
-                variants={{
-                  container: {
-                    hidden: { opacity: 0 },
-                    visible: { opacity: 1, transition: { staggerChildren: 0.015 } },
-                    exit: { transition: { staggerChildren: 0.015 } },
-                  },
-                  item: {
-                    hidden: { opacity: 0, filter: 'blur(10px)', y: 8 },
-                    visible: { opacity: 1, filter: 'blur(0px)', y: 0, transition: { duration: 0.32 } },
-                    exit: { opacity: 0, filter: 'blur(10px)', y: -8, transition: { duration: 0.28 } },
-                  },
-                }}
-                className="mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
+              {/* Texte visible dès le premier affichage : l'animation mot par
+                  mot (framer-motion) le laissait invisible tant que la
+                  bibliothèque n'était pas chargée, et c'est ce que PageSpeed
+                  mesurait comme contenu principal affiché trop tard. */}
+              <p
+                className="rise mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
+                style={{ animationDelay: '100ms' }}
               >
-                {'Tu ne contrôles pas tes gènes, mais tu peux optimiser ta croissance. Grandimi te dit où tu en es, et quoi faire chaque jour.'}
-              </TextEffect>
+                Tu ne contrôles pas tes gènes, mais tu peux{' '}
+                <span className="text-[color:var(--color-brand-display)] font-semibold">optimiser ta croissance</span>
+                . Grandimi te dit où tu en es, et quoi faire chaque jour.
+              </p>
 
               {/* Un seul bouton. Le jumeau « Voir comment ça marche »
                   renvoyait vers une section de la même page : deux actions de
                   poids visuel proche, dont une qui ne fait que faire défiler. */}
               <div className="rise mt-10" style={{ animationDelay: '240ms' }}>
-                <LiquidMetalButton
-                  label="Commencer mon analyse"
-                  onClick={() => demarrer('hero')}
-                />
+                <Suspense
+                  fallback={
+                    <button type="button" className="bouton-hero-simple" onClick={() => demarrer('hero')}>
+                      Commencer mon analyse
+                    </button>
+                  }
+                >
+                  <LiquidMetalButton label="Commencer mon analyse" onClick={() => demarrer('hero')} />
+                </Suspense>
               </div>
             </div>
           </SonarGrid>
