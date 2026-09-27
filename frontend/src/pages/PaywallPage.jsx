@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect } from 'react'
-import { ArrowLeft, CreditCard, ShieldCheck, Wallet } from 'lucide-react'
+import { Star, X } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
-import { Avis } from '@/components/ui/avis'
+import { AVIS } from '@/components/ui/avis'
 import '../styles/funnel.css'
 /* Feuille dédiée, et non paywall.css : cette dernière habille encore
    ParentPage (page claire, destinée à un adulte arrivé par lien partagé) et
@@ -323,30 +323,7 @@ function PaywallPage({ onBackHome }) {
     }
   }
 
-  /* Le titre nomme l'écart quand on le connaît, et retombe sur la
-     formulation générique sinon.
 
-     L'écart n'est affiché QUE s'il est positif et plausible. Deux cas à
-     écarter, et ils sont l'un et l'autre fréquents :
-
-       — l'estimation dépasse déjà la taille rêvée. Lui annoncer qu'il
-         lui « manque -3 cm » serait absurde ; et lui dire qu'il a déjà
-         gagné n'est pas le travail de cette page.
-       — un écart énorme (un garçon d'1,60 m qui a mis 2,10 m sur la
-         molette). Le nommer donnerait à la page l'air de promettre un
-         demi-mètre, ce que le plan ne fait évidemment pas. Au-delà de
-         15 cm on revient au titre générique. */
-  const ecartReve = (() => {
-    const reve = Number(prediction.taille_reve)
-    const estimee = Number(prediction.predicted_height_cm)
-    if (!Number.isFinite(reve) || !Number.isFinite(estimee)) return null
-    const ecart = Math.round(reve - estimee)
-    return ecart > 0 && ecart <= 15 ? ecart : null
-  })()
-
-  const titre = ecartReve
-    ? `Il te manque ${ecartReve} cm pour ta taille rêvée`
-    : 'Débloquer ton plan complet'
 
   /* Un parent est le payeur : lui proposer de faire payer un parent n'a
      pas de sens. Le lien reste offert à tous les autres, y compris quand
@@ -356,118 +333,60 @@ function PaywallPage({ onBackHome }) {
 
   return (
     <div className="night paywall">
-      <header className="paywall-top">
-        <button
-          type="button"
-          className="funnel-back"
-          onClick={onBackHome}
-          aria-label="Revenir en arrière"
-        >
-          <ArrowLeft size={20} aria-hidden="true" />
+      {/* Mise en page calquée sur le paywall GoTall, à la demande du
+          client : logo, « Choisis ton offre », cinq étoiles, un avis, les
+          deux offres l’une sous l’autre, un bouton. Rien d’autre. Pas de
+          compte à rebours ni de « X personnes aujourd’hui » : ce seraient
+          des chiffres inventés. */}
+      <header className="pw2-top">
+        <button type="button" className="pw2-fermer" onClick={onBackHome} aria-label="Fermer">
+          <X size={24} aria-hidden="true" />
         </button>
+        <span className="pw2-logo">Grandimi</span>
       </header>
 
-      <main className="paywall-scroll">
-        <h1 className="paywall-title">{titre}</h1>
-        <p className="paywall-subtitle">
-          Ta taille adulte, ce que tes habitudes te coûtent, et tes 11 actions par jour.
-        </p>
+      <main className="paywall-scroll pw2">
+        <h1 className="pw2-titre">Choisis ton offre</h1>
 
-        <Avis className="paywall-avis" limit={1} />
+        <div className="pw2-etoiles" aria-label="5 étoiles sur 5">
+          {[0, 1, 2, 3, 4].map((n) => (
+            <Star key={n} size={34} fill="currentColor" strokeWidth={0} aria-hidden="true" />
+          ))}
+        </div>
 
-        {/* Les deux formules CÔTE À CÔTE, juste après le meilleur argument
-            (le témoignage) — demande explicite du client de suivre l'ordre
-            « argument d'abord, prix ensuite ».
+        <blockquote className="pw2-avis">
+          <p>« {AVIS[0].texte} »</p>
+          <cite>— {AVIS[0].prenom}, {AVIS[0].age} ans</cite>
+        </blockquote>
 
-            Elles étaient présentées par un sélecteur à bascule (deux
-            pastilles dans une glissière) qui n'affichait qu'un prix à la
-            fois : pour comparer, il fallait cliquer, retenir, recliquer.
-            Un choix qu'on ne peut pas voir d'un coup d'œil n'est pas un
-            choix, c'est une manipulation à faire.
+        <p className="pw2-offre-speciale">− {pourcentageEconomie} % avec l’offre annuelle</p>
 
-            Deux cartes visibles ensemble changent la question posée au
-            visiteur : non plus « est-ce que je paie ? » mais « laquelle
-            je prends ? ». C'est le motif de tous les tunnels qui
-            convertissent sur ce marché, et la feuille de style le
-            prévoyait déjà (`.paywall-offers.is-multiple`, badge compris)
-            sans que personne ne s'en serve.
-
-            L'ordre des cartes n'est pas neutre : le mensuel à gauche sert
-            d'ancre — c'est en le lisant qu'on comprend ce que l'annuel
-            fait économiser. L'inverse ne marche pas. */}
-        <section
-          className="paywall-offers is-multiple"
-          role="radiogroup"
-          aria-label="Choisir la formule"
-        >
-          {['monthly', 'annual'].map((clef) => {
+        <section className="pw2-offres" role="radiogroup" aria-label="Choisir la formule">
+          {['annual', 'monthly'].map((clef) => {
             const plan = plans[clef]
             const selectionne = planChoisi === clef
             const annuel = clef === 'annual'
-
             return (
               <button
                 key={clef}
                 type="button"
                 role="radio"
                 aria-checked={selectionne}
-                className={`paywall-offer ${selectionne ? 'is-selected' : ''}`}
+                className={`pw2-offre ${selectionne ? 'is-choisie' : ''}`}
                 onClick={() => {
                   setPlanChoisi(clef)
                   mesurerPlanChoisi(clef)
                 }}
               >
-                {annuel && <span className="paywall-offer-badge">Meilleure offre</span>}
-
-                <span className="paywall-offer-label">{plan.label}</span>
-
-                {/* LE COÛT PAR SEMAINE EN GRAND, LE MONTANT PRÉLEVÉ JUSTE EN
-                    DESSOUS — et jamais l'un sans l'autre.
-
-                    Un adolescent compare « 2,30 € » à un paquet de chips,
-                    pas « 9,99 € » à son argent de poche du mois. C'est le
-                    même prix, dit dans l'unité où il pèse le moins.
-
-                    Mais le montant réellement débité reste écrit, en clair,
-                    juste en dessous. Afficher un prix hebdomadaire en
-                    prélevant au mois sans le dire est une pratique
-                    commerciale trompeuse au sens de l'article L121-1 du
-                    code de la consommation — et sur un produit vendu à des
-                    mineurs, c'est le dernier endroit où jouer sur les mots.
-                    Le bouton d'abonnement, lui, n'affiche que le montant
-                    prélevé. */}
-                <span className="paywall-offer-prix">
-                  {coutHebdomadaire(plan)} €
-                  <span className="paywall-offer-unite"> / semaine</span>
+                {annuel && <span className="pw2-offre-bandeau">Meilleure offre</span>}
+                <span className="pw2-offre-ligne">
+                  <span className="pw2-offre-nom">{annuel ? 'Offre annuelle' : 'Offre mensuelle'}</span>
+                  <span className="pw2-offre-prix">{coutHebdomadaire(plan)} €/semaine</span>
                 </span>
-
-                <span className="paywall-offer-sous">
-                  {annuel
-                    ? `facturé ${plan.price_eur.toFixed(2).replace('.', ',')} € une fois par an`
-                    : `facturé ${plan.price_eur.toFixed(2).replace('.', ',')} € par mois, sans engagement`}
-                </span>
-
-                {/* « − 50 % sur l'année » passait à la ligne dans une
-                    demi-colonne et la pastille se lisait comme un pavé de
-                    deux lignes. Le pourcentage seul suffit : la ligne du
-                    dessus vient de dire à quoi il se rapporte. */}
-                {annuel && <span className="paywall-offer-eco">− {pourcentageEconomie} %</span>}
               </button>
             )
           })}
         </section>
-
-        {/* L apercu du plan du matin (« TON PLAN D AUJOURD HUI », cinq lignes
-            dont trois sous cadenas) et le carrousel de visuels marketing sont
-            retires a la demande du client. */}
-
-        {email && (
-          <p className="paywall-account">
-            Compte : <strong>{email}</strong>
-            <br />
-            C’est l’adresse du questionnaire — l’accès s’ouvrira sur ce compte.
-          </p>
-        )}
 
         {erreur && (
           <p className="funnel-error" role="alert">
@@ -475,18 +394,14 @@ function PaywallPage({ onBackHome }) {
           </p>
         )}
 
-        {/* Un seul contrôle pour ce bloc : le bouton du pied de page. Deux
-            boutons ouvrant la même chose, l'un en bas l'autre au milieu,
-            c'était une commande de trop. */}
         {lienParent && proposerLeParent && (
           <section className="paywall-parent" ref={blocParentRef}>
             {lienParentVisible && (
               <div className="paywall-parent-body">
                 <h2 className="paywall-section-title">Faire payer par un parent</h2>
                 <p>
-                  Envoie ce lien à ton parent. Il y trouvera l’explication, le prix et
-                  la mention que Grandimi n’est pas un dispositif médical — et il pourra
-                  régler depuis son e-mail. Ton accès s’ouvrira ici, sur ce compte.
+                  Envoie ce lien à ton parent. Il pourra régler depuis son e-mail, et ton
+                  accès s’ouvrira ici, sur ce compte.
                 </p>
                 <input
                   type="text"
@@ -502,26 +417,6 @@ function PaywallPage({ onBackHome }) {
             )}
           </section>
         )}
-
-        {/* La FAQ est retirée à la demande du client : à la place, la
-            réassurance sur le paiement, juste sous les offres. */}
-        <div className="paywall-paiement">
-          <p className="paywall-paiement-titre">
-            <ShieldCheck size={17} aria-hidden="true" />
-            Paiement sécurisé, encaissé par Whop
-          </p>
-          <ul className="paywall-paiement-moyens">
-            <li><span className="paywall-paiement-whop" aria-hidden="true">W\</span>Whop</li>
-            <li><CreditCard size={16} aria-hidden="true" />Carte bancaire</li>
-            <li><Wallet size={16} aria-hidden="true" />Apple Pay</li>
-          </ul>
-        </div>
-
-        <p className="paywall-legal">
-          En continuant, tu acceptes nos <a href="/cgv.html">conditions d’utilisation</a>{' '}
-          et notre <a href="/privacy.html">politique de confidentialité</a>. Résiliable
-          en ligne à tout moment.
-        </p>
       </main>
 
       <footer className="funnel-footer">
@@ -537,11 +432,17 @@ function PaywallPage({ onBackHome }) {
               Redirection…
             </>
           ) : (
-            `S’abonner — ${offre.price_eur.toFixed(2).replace('.', ',')} €${
-              offre.interval === 'year' ? '/an' : '/mois'
-            }`
+            'Commencer mon parcours'
           )}
         </button>
+
+        <p className="pw2-facture">
+          {offre.interval === 'year'
+            ? `Facturé ${offre.price_eur.toFixed(2).replace('.', ',')} € par an`
+            : `Facturé ${offre.price_eur.toFixed(2).replace('.', ',')} € par mois, sans engagement`}
+          {' · '}
+          <a href="/cgv.html">Conditions</a> · Résiliable à tout moment
+        </p>
 
         {/* `role="status"` et non un paragraphe muet : le message apparaît
             plusieurs secondes après le clic, donc un lecteur d'écran doit

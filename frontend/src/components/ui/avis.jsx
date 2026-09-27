@@ -46,7 +46,7 @@ const NOTE_BOUTIQUES = null
    client, et la mention sous les cartes qui le redit en clair. La
    nuance est ce qui sépare un témoignage d'une promesse de résultat,
    et la seconde serait, elle, une allégation à étayer. */
-const AVIS = [
+export const AVIS = [
   {
     prenom: 'Adam',
     age: 15,
