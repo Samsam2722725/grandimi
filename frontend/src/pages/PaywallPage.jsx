@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
-import { Star, X } from 'lucide-react'
+import { CreditCard, ShieldCheck, Star, Wallet, X } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
@@ -383,10 +383,25 @@ function PaywallPage({ onBackHome }) {
                   <span className="pw2-offre-nom">{annuel ? 'Offre annuelle' : 'Offre mensuelle'}</span>
                   <span className="pw2-offre-prix">{coutHebdomadaire(plan)} €/semaine</span>
                 </span>
+                <span className="pw2-offre-total">
+                  {plan.price_eur.toFixed(2).replace('.', ',')} € {annuel ? 'par an' : 'par mois, sans engagement'}
+                </span>
               </button>
             )
           })}
         </section>
+
+        <div className="paywall-paiement">
+          <p className="paywall-paiement-titre">
+            <ShieldCheck size={17} aria-hidden="true" />
+            Paiement sécurisé, encaissé par Whop
+          </p>
+          <ul className="paywall-paiement-moyens">
+            <li><span className="paywall-paiement-whop" aria-hidden="true">W\</span>Whop</li>
+            <li><CreditCard size={16} aria-hidden="true" />Carte bancaire</li>
+            <li><Wallet size={16} aria-hidden="true" />Apple Pay</li>
+          </ul>
+        </div>
 
         {erreur && (
           <p className="funnel-error" role="alert">
