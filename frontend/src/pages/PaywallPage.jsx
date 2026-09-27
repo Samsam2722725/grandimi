@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
-import { ArrowLeft, Lock } from 'lucide-react'
+import { ArrowLeft, CreditCard, ShieldCheck, Wallet } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
@@ -503,46 +503,19 @@ function PaywallPage({ onBackHome }) {
           </section>
         )}
 
-        {/* Le style existe depuis toujours dans paywall-night.css
-            (.paywall-faq, en <details>/<summary>) sans jamais avoir été
-            posé ici — demande explicite du client de mettre une FAQ en
-            bas de cette page. Les réponses sont vérifiées contre les CGV
-            et la politique de confidentialité du site, pas recopiées :
-            l'ancienne version (écran retiré) annonçait 30 jours de
-            garantie alors que les CGV en promettent 14. */}
-        <section className="paywall-faq" aria-label="Questions fréquentes">
-          <details>
-            <summary>Comment fonctionne l'estimation de taille ?</summary>
-            <p>
-              Grandimi combine tes mesures et celles de tes parents avec le modèle
-              Khamis-Roche et les courbes de croissance de l'OMS pour estimer ta
-              taille adulte, avec une marge d'erreur affichée à côté du résultat.
-            </p>
-          </details>
-          <details>
-            <summary>Mes données sont-elles sécurisées ?</summary>
-            <p>
-              Oui : tes mesures sont chiffrées en base de données, stockées dans
-              l'Union européenne, et ne sont jamais partagées avec un outil tiers.
-            </p>
-          </details>
-          <details>
-            <summary>Puis-je annuler mon abonnement ?</summary>
-            <p>Oui, à tout moment et en ligne, sans frais ni justification à donner.</p>
-          </details>
-          <details>
-            <summary>Y a-t-il une garantie ?</summary>
-            <p>
-              Oui : droit de rétractation de 14 jours à partir du paiement,
-              satisfait ou remboursé, sans questions.
-            </p>
-          </details>
-        </section>
-
-        <p className="paywall-security">
-          <Lock size={15} aria-hidden="true" />
-          Paiement traité par Whop. Grandimi ne voit ni ne stocke ta carte.
-        </p>
+        {/* La FAQ est retirée à la demande du client : à la place, la
+            réassurance sur le paiement, juste sous les offres. */}
+        <div className="paywall-paiement">
+          <p className="paywall-paiement-titre">
+            <ShieldCheck size={17} aria-hidden="true" />
+            Paiement sécurisé, encaissé par Whop
+          </p>
+          <ul className="paywall-paiement-moyens">
+            <li><span className="paywall-paiement-whop" aria-hidden="true">W\</span>Whop</li>
+            <li><CreditCard size={16} aria-hidden="true" />Carte bancaire</li>
+            <li><Wallet size={16} aria-hidden="true" />Apple Pay</li>
+          </ul>
+        </div>
 
         <p className="paywall-legal">
           En continuant, tu acceptes nos <a href="/cgv.html">conditions d’utilisation</a>{' '}
