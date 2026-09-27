@@ -155,10 +155,10 @@ function AppShell({
         aria-label={ONGLETS.find((o) => o.id === onglet)?.label}
       >
         <Suspense fallback={<Spinner size="page" label="Chargement..." />}>
-          {/* L'accueil d'un non-abonné garde son estimation — la page
-              d'accueil du site promet « aucun résultat flouté », et la
-              flouter ici vendrait une chose pour en livrer une autre sur
-              la même marque. C'est le SUIVI quotidien qui est payant. */}
+          {/* Un non-abonné ne voit PAS son estimation ici. Elle est
+              payante : la page de résultats la met sous cadenas, et le
+              bouton « Débloquer mon potentiel » de cette même page mène
+              ici. L'afficher, c'était la donner en un clic. */}
           {onglet === 'accueil' &&
             (abonne ? (
               <AccueilPage
@@ -166,10 +166,7 @@ function AppShell({
                 onAllerAuPlan={() => changerOnglet('grandir')}
               />
             ) : (
-              <>
-                <ApercuLibre predictionData={predictionData} />
-                <CarteAbonnement zone="accueil" onAbonner={onAbonner} idEnfant={idEnfant} />
-              </>
+              <CarteAbonnement zone="accueil" onAbonner={onAbonner} idEnfant={idEnfant} />
             ))}
 
           {/* L'onglet Grandir est maintenant la SÉANCE du jour : six
@@ -233,29 +230,3 @@ function AppShell({
 }
 
 export default AppShell;
-
-/* L'estimation seule, pour un compte non abonné.
-
-   Volontairement minuscule : ce n'est pas l'accueil amputé, c'est le
-   seul chiffre auquel il a droit — et il y a droit entièrement, sans
-   flou ni cadenas, parce que la page d'accueil du site le promet. */
-function ApercuLibre({ predictionData }) {
-  const estimation = predictionData?.predicted_height_cm;
-  const intervalle = predictionData?.confidence_range;
-  if (!estimation) return null;
-
-  return (
-    <div className="libre">
-      <p className="libre__label">Taille projetée</p>
-      <p className="libre__chiffre">
-        {Math.round(estimation)}
-        <span className="libre__unite">cm</span>
-      </p>
-      {intervalle?.min != null && intervalle?.max != null && (
-        <p className="libre__intervalle">
-          entre {Math.round(intervalle.min)} et {Math.round(intervalle.max)} cm
-        </p>
-      )}
-    </div>
-  );
-}

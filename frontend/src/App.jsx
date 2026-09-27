@@ -227,16 +227,57 @@ function App() {
     setCurrentPage('account');
   };
 
-  const handleAuthComplete = () => {
+  /* Relit l'estimation que la connexion vient d'écrire en mémoire.
+
+     Elle n'était lue qu'au montage de l'application. Un abonné qui se
+     connectait depuis un NOUVEL appareil n'avait rien en mémoire à ce
+     moment-là : les écrans qui en dépendent ne rendaient rien, et il
+     tombait sur une page entièrement vide juste après s'être connecté.
+     Renvoie l'estimation, ou null s'il n'y en a aucune. */
+  const relirePrediction = () => {
+    try {
+      const brut = localStorage.getItem('predictionData');
+      if (!brut) return null;
+      const donnees = JSON.parse(brut);
+      setPredictionData(donnees);
+      return donnees;
+    } catch {
+      return null;
+    }
+  };
+
+  const handleAuthComplete = async () => {
     setIsAuthenticated(true);
+    const prediction = relirePrediction() || predictionData;
+
     /* Sans ceci, isPaid restait figé à sa valeur d'avant connexion : un
        enfant qui crée son mot de passe à la main (plutôt que via la
        redirection automatique après paiement) semblait non-premium et
-       retombait sur la paywall, alors que son compte l'était déjà. */
-    apiClient
-      .checkPremium()
-      .then((res) => setIsPaid(Boolean(res.is_premium)))
-      .catch(() => {});
+       retombait sur la paywall, alors que son compte l'était déjà.
+       Un échec réseau vaut « non abonné », comme au montage. */
+    let premium = false;
+    try {
+      premium = Boolean((await apiClient.checkPremium()).is_premium);
+    } catch {
+      premium = false;
+    }
+    setIsPaid(premium);
+
+    /* Aucune estimation pour ce compte : aucun écran de résultat ni de
+       plan ne peut s'afficher. « Mon compte » s'affiche sans elle, et
+       montre l'état réel de l'abonnement plutôt qu'une page vide. */
+    if (!prediction) {
+      setCurrentPage('account');
+      return;
+    }
+
+    /* Un abonné va droit à son application. La page de résultats est
+       l'écran de VENTE : cadenas sur sa taille adulte et « Débloquer mon
+       potentiel », montrés à quelqu'un qui a déjà payé. */
+    if (premium) {
+      await ouvrirPlan();
+      return;
+    }
     setCurrentPage('results');
   };
 
@@ -254,12 +295,19 @@ function App() {
      s'ouvrir ne doit pas se lire comme un refus. */
   const handlePaymentComplete = async () => {
     setIsAuthenticated(true);
+    // Même raison que dans handleAuthComplete : sans estimation en
+    // mémoire, le plan ne rend rien.
+    const prediction = relirePrediction() || predictionData;
 
     for (let essai = 0; essai < 5; essai += 1) {
       try {
         const res = await apiClient.checkPremium();
         if (res.is_premium) {
           setIsPaid(true);
+          if (!prediction) {
+            setCurrentPage('account');
+            return;
+          }
           await ouvrirPlan();
           return;
         }

@@ -6,15 +6,15 @@ import { Check, Lock, Send } from 'lucide-react';
    DEUX CHOSES QUE CETTE CARTE NE FAIT PAS, et ce sont les deux décisions
    de conception.
 
-   1. ELLE NE FLOUTE PAS L'ESTIMATION.
+   1. ELLE NE MONTRE PAS L'ESTIMATION.
 
-   Le concurrent affiche la taille projetée derrière un flou avec un
-   cadenas. C'est efficace, et c'est impossible ici : la page d'accueil
-   du site promet en toutes lettres « Estimation gratuite — sans compte »
-   et « aucun résultat flouté ». Reprendre le flou reviendrait à vendre
-   une chose et à en livrer une autre, sur la même marque, à deux clics
-   d'écart. Ce qui est payant, c'est le PROGRAMME quotidien : exercices,
-   nutrition, sommeil, aperçus. L'estimation reste visible, entière.
+   La taille adulte est payante : c'est la décision du client, et la
+   page d'accueil du site a été réécrite en conséquence (plus aucune
+   promesse de gratuité). La page de résultats la met sous cadenas ; la
+   montrer ici, à un clic de ce cadenas, revenait à la donner. Cette
+   carte a longtemps dit le contraire, en s'appuyant sur une promesse
+   « aucun résultat flouté » que la page d'accueil ne faisait plus.
+   Elle ne floute rien pour autant : elle dit ce qu'il y a derrière.
 
    2. ELLE NE DEMANDE PAS À L'ENFANT DE FAIRE PAYER SES PARENTS.
 

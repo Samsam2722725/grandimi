@@ -144,7 +144,10 @@ function AccueilPage({ predictionData, onAllerAuPlan }) {
             <li key={s.cle} className={`pilier ${s.suivi ? '' : 'pilier--futur'}`}>
               <span className="pilier__nom">{s.libelle}</span>
               <span className="pilier__valeur">
-                {s.suivi ? `${s.pct}%` : 'bientôt'}
+                {/* « bientôt » laissait croire que la fonction n'existait
+                    pas encore. Elle existe : c'est l'abonné qui n'a rien
+                    noté. */}
+                {s.suivi ? `${s.pct}%` : 'rien de noté'}
               </span>
               <span className="pilier__barre" aria-hidden="true">
                 <span

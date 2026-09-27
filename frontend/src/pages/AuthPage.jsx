@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Spinner from '../components/Spinner';
 import apiClient from '../lib/api';
+import { predictionDepuisServeur } from '../lib/prediction';
 import '../styles/auth-page.css';
 
 function AuthPage({ onAuthComplete }) {
@@ -28,17 +29,10 @@ function AuthPage({ onAuthComplete }) {
         // Charger les prédictions depuis le backend
         const predictions = await apiClient.getMyPredictions();
         if (predictions && predictions.length > 0) {
-          const latestPrediction = predictions[0];
-          localStorage.setItem('predictionData', JSON.stringify({
-            predicted_height_cm: latestPrediction.predicted_height,
-            confidence_range: {
-              min: latestPrediction.confidence_min,
-              max: latestPrediction.confidence_max,
-            },
-            confidence_level: latestPrediction.confidence_level,
-            current_height: latestPrediction.height_cm,
-            email: email,
-          }));
+          localStorage.setItem(
+            'predictionData',
+            JSON.stringify(predictionDepuisServeur(predictions[0], email)),
+          );
         }
       } else if (mode === 'signup') {
         if (!email || !password) throw new Error('Email et mot de passe requis');
