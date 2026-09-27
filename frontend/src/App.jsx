@@ -92,7 +92,14 @@ const PREVIEW_DATA = {
 function pagePreviewDemandee(params) {
   if (!import.meta.env.DEV) return null;
   const valeur = params.get('preview');
-  return valeur === 'results' || valeur === 'paywall' ? valeur : null;
+  const pages = {
+    results: 'results',
+    paywall: 'paywall',
+    plan: 'plan',
+    reglage: 'plan-setup',
+    'mot-de-passe': 'set-password',
+  };
+  return pages[valeur] ?? null;
 }
 
 function App() {
@@ -123,7 +130,10 @@ function App() {
     return PREVIEW_DATA;
   });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isPaid, setIsPaid] = useState(false);
+  // L'aperçu du plan (dev) doit passer la garde `isPaid` du rendu.
+  const [isPaid, setIsPaid] = useState(
+    () => pagePreviewDemandee(new URLSearchParams(window.location.search)) === 'plan',
+  );
   // Compte enfant à créditer quand un parent arrive par le lien partagé.
   const [parentChildUserId, setParentChildUserId] = useState(null);
 

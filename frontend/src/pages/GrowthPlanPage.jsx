@@ -5,6 +5,7 @@ import Spinner from '../components/Spinner';
 import '../styles/funnel.css';
 import '../styles/growth-plan.css';
 import apiClient from '../lib/api';
+import { APERCU_PLAN, PLAN_APERCU } from '../lib/plan-apercu';
 /* Le graphique à deux trajectoires existait déjà dans le projet — construit
    pour cet écran précisément (il lit predicted_height_cm ET
    potential_height_cm, tous deux verrouillés avant paiement) — mais n'était
@@ -39,6 +40,12 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
 
   useEffect(() => {
     const fetchPlan = async () => {
+      if (APERCU_PLAN) {
+        setPlan(PLAN_APERCU.plan);
+        setMonthlyPlan(PLAN_APERCU.monthly_plan);
+        setLoading(false);
+        return;
+      }
       try {
         setLoading(true);
 
@@ -72,6 +79,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
     };
 
     fetchPlan();
+    if (APERCU_PLAN) return;
 
     // La todo du jour et l'historique sont indépendants du plan : une
     // panne ici ne doit pas empêcher d'afficher le plan lui-même, donc on
@@ -95,6 +103,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
       return suivant;
     });
 
+    if (APERCU_PLAN) return;
     apiClient.toggleTask(cle).catch(() => {
       // Échec réseau : on annule l'optimisme plutôt que de laisser
       // l'écran mentir sur ce qui est réellement enregistré.
