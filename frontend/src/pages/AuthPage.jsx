@@ -47,7 +47,7 @@ function AuthPage({ onAuthComplete }) {
               max: latestPrediction.confidence_max,
             },
             confidence_level: latestPrediction.confidence_level,
-            current_height: latestPrediction.height_cm,
+            current_height_cm: latestPrediction.height_cm,
             email: email,
           }));
         }

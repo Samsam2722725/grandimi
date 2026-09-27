@@ -254,18 +254,35 @@ function App() {
     setCurrentPage('account');
   };
 
-  const handleAuthComplete = () => {
+  const handleAuthComplete = async () => {
     setIsAuthenticated(true);
-    /* Sans ceci, isPaid restait figé à sa valeur d'avant connexion : un
-       enfant qui crée son mot de passe à la main (plutôt que via la
-       redirection automatique après paiement) semblait non-premium et
-       retombait sur la paywall, alors que son compte l'était déjà. */
-    apiClient
-      .checkPremium()
-      .then((res) => setIsPaid(Boolean(res.is_premium)))
-      .catch(() => {});
-    setCurrentPage('results');
+
+    /* AuthPage vient d'écrire la dernière prédiction dans le localStorage,
+       mais l'état React ne la relisait pas : après « Accueil » (qui le
+       vide), « Se connecter » menait à un écran de résultats sans données,
+       donc à une page blanche. On la relit, et un abonné va droit à son
+       plan plutôt qu'à l'écran qui lui vend ce qu'il a déjà. */
+    let donnees = null;
+    try {
+      donnees = JSON.parse(localStorage.getItem('predictionData') || 'null');
+    } catch {
+      donnees = null;
+    }
+    if (donnees) setPredictionData(donnees);
+
+    try {
+      const res = await apiClient.checkPremium();
+      setIsPaid(Boolean(res.is_premium));
+      if (res.is_premium && donnees) {
+        await ouvrirPlan();
+        return;
+      }
+    } catch {
+      // Réseau : on retombe sur les résultats ou l'accueil ci-dessous.
+    }
+    setCurrentPage(donnees ? 'results' : 'home');
   };
+
 
   /* Après création du mot de passe, on DEMANDE au serveur si le
      compte est premium au lieu de le supposer.
@@ -315,6 +332,20 @@ function App() {
     setCurrentPage('home');
     setPredictionData(null);
   };
+
+  /* Chaque écran ne s'affiche que si ses données sont là (résultats et
+     plan : une prédiction ; compte : une session). Quand l'une manquait,
+     rien ne s'affichait : une page crème vide, sans issue. On renvoie
+     plutôt vers un écran qui peut s'afficher. */
+  useEffect(() => {
+    if (['results', 'plan', 'paywall'].includes(currentPage) && !predictionData) {
+      setCurrentPage(isAuthenticated ? 'account' : 'home');
+    } else if (currentPage === 'plan' && !isPaid) {
+      setCurrentPage('paywall');
+    } else if (currentPage === 'account' && !isAuthenticated) {
+      setCurrentPage('auth');
+    }
+  }, [currentPage, predictionData, isAuthenticated, isPaid]);
 
   const handleBackHome = () => {
     setCurrentPage('home');

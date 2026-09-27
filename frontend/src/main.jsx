@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import FiletErreur from './components/FiletErreur.jsx'
 import { initAnalytics } from './lib/analytics'
 
 /* POSTHOG APRES L AFFICHAGE, PAS PENDANT.
@@ -24,6 +25,8 @@ if (typeof window !== 'undefined' && window.requestIdleCallback) {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <FiletErreur>
+      <App />
+    </FiletErreur>
   </StrictMode>,
 )
