@@ -2430,11 +2430,30 @@
   gap: 16px;
 }
 
-.onb-lien-inconnu {
+/* « Je ne sais pas » : un vrai bouton, pas un lien souligné qu on
+   ne voyait pas comme une réponse possible. */
+.onb-bouton-inconnu {
   margin: 0 auto;
+  min-width: 220px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 1.5px solid var(--funnel-line);
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
 }
 
-.onb-lien-inconnu[aria-pressed="true"] {
+.onb-bouton-inconnu:hover {
+  border-color: var(--funnel-accent);
+}
+
+.onb-bouton-inconnu[aria-pressed="true"] {
+  border-color: var(--funnel-accent);
+  background: color-mix(in srgb, var(--funnel-accent) 16%, transparent);
   color: var(--funnel-accent-text);
   font-weight: 700;
 }

@@ -556,11 +556,12 @@ export function MoletteTailleCm({ valeurCm, onChange, unite, onChangeUnite, min 
 }
 
 export function MoletteTailleAvecInconnu({ valeurCm, onChange, unite, onChangeUnite, min, max, inconnuDefaut }) {
-  const inconnu = valeurCm == null
+  const [aChoisi, setAChoisi] = useState(false)
+  const inconnu = valeurCm == null && aChoisi
   return (
     <div className="onb-mesure">
       <MoletteTailleCm
-        valeurCm={inconnu ? inconnuDefaut : valeurCm}
+        valeurCm={valeurCm ?? inconnuDefaut}
         onChange={onChange}
         unite={unite}
         onChangeUnite={onChangeUnite}
@@ -573,9 +574,12 @@ export function MoletteTailleAvecInconnu({ valeurCm, onChange, unite, onChangeUn
       {inconnu && <p className="onb-inconnu-note">Valeur moyenne utilisée — fais glisser pour corriger.</p>}
       <button
         type="button"
-        className="funnel-link onb-lien-inconnu"
+        className="onb-bouton-inconnu"
         aria-pressed={inconnu}
-        onClick={() => onChange(null)}
+        onClick={() => {
+          setAChoisi(true)
+          onChange(null)
+        }}
       >
         {inconnu ? '✓ Je ne sais pas' : 'Je ne sais pas'}
       </button>
@@ -621,7 +625,8 @@ export function MolettePoidsKg({ valeurKg, onChange, unite, onChangeUnite }) {
 }
 
 export function MolettePointure({ valeurEu, onChange, unite, onChangeUnite }) {
-  const inconnu = valeurEu == null
+  const [aChoisi, setAChoisi] = useState(false)
+  const inconnu = valeurEu == null && aChoisi
   return (
     <div className="onb-mesure">
       <SegmentedControl
@@ -636,7 +641,7 @@ export function MolettePointure({ valeurEu, onChange, unite, onChangeUnite }) {
       {unite === 'eu' ? (
         <WheelPicker
           label="Pointure européenne"
-          value={inconnu ? 40 : valeurEu}
+          value={valeurEu ?? 40}
           onChange={onChange}
           min={30}
           max={50}
@@ -646,7 +651,7 @@ export function MolettePointure({ valeurEu, onChange, unite, onChangeUnite }) {
       ) : (
         <WheelPicker
           label="Pointure américaine"
-          value={inconnu ? euVersUs(40) : euVersUs(valeurEu)}
+          value={euVersUs(valeurEu ?? 40)}
           onChange={(us) => onChange(usVersEu(us))}
           min={0.5}
           max={16}
@@ -657,9 +662,12 @@ export function MolettePointure({ valeurEu, onChange, unite, onChangeUnite }) {
       {inconnu && <p className="onb-inconnu-note">Valeur moyenne utilisée — fais glisser pour corriger.</p>}
       <button
         type="button"
-        className="funnel-link onb-lien-inconnu"
+        className="onb-bouton-inconnu"
         aria-pressed={inconnu}
-        onClick={() => onChange(null)}
+        onClick={() => {
+          setAChoisi(true)
+          onChange(null)
+        }}
       >
         {inconnu ? '✓ Je ne sais pas' : 'Je ne sais pas'}
       </button>
