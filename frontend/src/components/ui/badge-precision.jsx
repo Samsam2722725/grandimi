@@ -21,7 +21,8 @@ import { useEffect, useState } from 'react'
    ============================================================ */
 const PRECISION_AFFICHEE = {
   valeur: '98 %',
-  libelle: 'de précision moyenne — soit ±4 à ±8 cm selon l’âge',
+  libelle: 'de précision',
+  marge: 'soit ±4 à ±8 cm selon l’âge',
   lien: '/methode/#precision',
   texteLien: 'Voici d’où vient ce chiffre',
 }
@@ -96,14 +97,6 @@ export function BadgePrecision({ className }) {
 
   return (
     <div className={`precision ${className || ''}`}>
-      {/* Toise en filigrane, comme sur l'original : elle donne au
-          chiffre un contexte de mesure au lieu de le laisser flotter. */}
-      <div className="precision-toise" aria-hidden="true">
-        {Array.from({ length: 11 }, (_, i) => (
-          <span key={i} className={i % 5 === 0 ? 'est-longue' : ''} />
-        ))}
-      </div>
-
       <div className="precision-pastille">
         {/* `aria-hidden` + texte final en `sr-only` : un lecteur d'écran ne
             doit pas égrainer 0, 4, 9, 15…98, seulement annoncer le chiffre
@@ -112,6 +105,9 @@ export function BadgePrecision({ className }) {
           {valeurAffichee}
         </span>
         <span className="sr-only">{PRECISION_AFFICHEE.valeur}</span>
+        {/* Sans ces deux lignes, « 98 % » ne disait pas de quoi. */}
+        <span className="precision-libelle">{PRECISION_AFFICHEE.libelle}</span>
+        <span className="precision-marge">{PRECISION_AFFICHEE.marge}</span>
       </div>
 
       <p className="precision-detail">

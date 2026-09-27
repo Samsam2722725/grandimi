@@ -3380,3 +3380,14 @@
 .plan-step.current .step-label {
   color: #ff5a1f;
 }
+
+.precision-libelle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--funnel-text);
+}
+
+.precision-marge {
+  font-size: 14px;
+  color: var(--funnel-muted);
+}
