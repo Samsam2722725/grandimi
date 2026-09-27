@@ -19,6 +19,8 @@ import {
 
 import {
   etapesPour,
+  CHAPITRES,
+  chapitreDe,
   texteEtape,
   OPTIONS_REGLES,
   TYPE_ETAPE,
@@ -280,6 +282,14 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   const etape = etapes[Math.min(index, etapes.length - 1)]
   const texte = texteEtape(etape, reponses.profil, reponses.sexe)
 
+  const chapitreActif = chapitreDe(etape)
+  const dansChapitre = etapes.filter((e) => chapitreDe(e) === chapitreActif && e !== 'resultats-la')
+  const chapitres = {
+    noms: CHAPITRES,
+    actif: chapitreActif,
+    avancement: (dansChapitre.indexOf(etape) + 1) / dansChapitre.length,
+  }
+
   const [pourcentageAnalyse, animationTerminee] = useProgressionAnimee(
     etape === 'resultats-la',
     !!resultatApi,
@@ -307,6 +317,18 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       ...precedent,
       [champ]: basculerDansListe(precedent[champ], valeur, exclusif),
     }))
+  }
+
+  /* Choix unique : un toucher suffit. La réponse s'affiche sélectionnée
+     un court instant (le temps de voir la case s'allumer), puis l'écran
+     suivant arrive, sans passer par « Continuer ». */
+  const minuterieAvance = useRef(null)
+  useEffect(() => () => clearTimeout(minuterieAvance.current), [])
+
+  function choisirEtAvancer(champ, valeur) {
+    definir(champ, valeur)
+    clearTimeout(minuterieAvance.current)
+    minuterieAvance.current = setTimeout(avancer, 280)
   }
 
   function avancer() {
@@ -443,7 +465,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.profil}
-            onChoisir={(v) => definir('profil', v)}
+            onChoisir={(v) => choisirEtAvancer('profil', v)}
             options={[
               { valeur: 'ado', label: 'Je suis un ado', icon: <User size={22} aria-hidden="true" /> },
               { valeur: 'parent', label: 'Je suis un parent', icon: <Users size={22} aria-hidden="true" /> },
@@ -464,7 +486,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.sexe}
-            onChoisir={(v) => definir('sexe', v)}
+            onChoisir={(v) => choisirEtAvancer('sexe', v)}
             options={[
               { valeur: 'M', label: 'Garçon' },
               { valeur: 'F', label: 'Fille' },
@@ -521,7 +543,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.exerciceFreq}
-            onChoisir={(v) => definir('exerciceFreq', v)}
+            onChoisir={(v) => choisirEtAvancer('exerciceFreq', v)}
             options={OPTIONS_EXERCICE_FREQ.map((o) => ({ valeur: o.valeur, label: o.label }))}
           />
         )
@@ -567,7 +589,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.pilositeAisselles}
-            onChoisir={(v) => definir('pilositeAisselles', v)}
+            onChoisir={(v) => choisirEtAvancer('pilositeAisselles', v)}
             options={OPTIONS_PILOSITE_AISSELLES}
           />
         )
@@ -576,7 +598,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.pilositeVisage}
-            onChoisir={(v) => definir('pilositeVisage', v)}
+            onChoisir={(v) => choisirEtAvancer('pilositeVisage', v)}
             options={OPTIONS_PILOSITE_VISAGE}
           />
         )
@@ -585,7 +607,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.vitesseCroissance}
-            onChoisir={(v) => definir('vitesseCroissance', v)}
+            onChoisir={(v) => choisirEtAvancer('vitesseCroissance', v)}
             options={OPTIONS_VITESSE_CROISSANCE}
           />
         )
@@ -594,7 +616,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.epaules}
-            onChoisir={(v) => definir('epaules', v)}
+            onChoisir={(v) => choisirEtAvancer('epaules', v)}
             options={OPTIONS_EPAULES}
           />
         )
@@ -603,7 +625,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.odeur}
-            onChoisir={(v) => definir('odeur', v)}
+            onChoisir={(v) => choisirEtAvancer('odeur', v)}
             options={OPTIONS_ODEUR}
           />
         )
@@ -612,7 +634,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.acne}
-            onChoisir={(v) => definir('acne', v)}
+            onChoisir={(v) => choisirEtAvancer('acne', v)}
             options={OPTIONS_ACNE}
           />
         )
@@ -621,7 +643,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.muscles}
-            onChoisir={(v) => definir('muscles', v)}
+            onChoisir={(v) => choisirEtAvancer('muscles', v)}
             options={OPTIONS_MUSCLES}
           />
         )
@@ -630,7 +652,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.voix}
-            onChoisir={(v) => definir('voix', v)}
+            onChoisir={(v) => choisirEtAvancer('voix', v)}
             options={OPTIONS_VOIX}
           />
         )
@@ -639,7 +661,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.regles}
-            onChoisir={(v) => definir('regles', v)}
+            onChoisir={(v) => choisirEtAvancer('regles', v)}
             options={OPTIONS_REGLES}
           />
         )
@@ -648,7 +670,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.croissanceLente}
-            onChoisir={(v) => definir('croissanceLente', v)}
+            onChoisir={(v) => choisirEtAvancer('croissanceLente', v)}
             options={OPTIONS_CROISSANCE_LENTE}
           />
         )
@@ -763,6 +785,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     <FunnelShell
       onBack={reculer}
       progress={index / etapes.length}
+      chapitres={chapitres}
       title={texte.titre}
       subtitle={texte.sousTitre}
       footer={

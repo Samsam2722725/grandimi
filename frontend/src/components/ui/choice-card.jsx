@@ -24,7 +24,12 @@ export function ChoiceCard({
       type="button"
       role={role}
       aria-checked={selected}
-      onClick={onSelect}
+      onClick={() => {
+        // Vibration courte au toucher, sur les téléphones qui la gèrent
+        // (Android) ; ignorée silencieusement ailleurs.
+        navigator.vibrate?.(10)
+        onSelect()
+      }}
       className={cn('choice-card', selected && 'is-selected', className)}
     >
       {icon && (

@@ -373,6 +373,23 @@ export const OPTIONS_REGLES = [
      consentement d'un parent (cf. menarche.go). */
 const ETAPES_GARCON = new Set(['pilosite-visage', 'voix', 'epaules', 'muscles'])
 
+/* Les quatre chapitres du parcours, affichés en tête d'écran (segments +
+   libellé). Tout ce qui n'est ni « toi », ni « famille », ni « puberté »
+   appartient au dernier chapitre, celui qui présente le plan. */
+export const CHAPITRES = ['Toi', 'Ta famille', 'Ta puberté', 'Ton plan']
+const CHAPITRE_DE = {
+  profil: 0, sexe: 0, age: 0, taille: 0, poids: 0, pointure: 0,
+  motivation: 0, sports: 0, 'exercice-freq': 0, sommeil: 0,
+  pere: 1, mere: 1, proches: 1,
+  regles: 2, 'pilosite-aisselles': 2, 'pilosite-visage': 2,
+  'vitesse-croissance': 2, epaules: 2, odeur: 2, acne: 2, muscles: 2,
+  voix: 2, 'croissance-lente': 2,
+}
+
+export function chapitreDe(etape) {
+  return CHAPITRE_DE[etape] ?? 3
+}
+
 export function etapesPour(reponses) {
   const fille = reponses?.sexe === 'F'
   return ORDRE_ETAPES.filter((etape) => {
