@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Globe, TrendingUp, Users } from 'lucide-react'
 
 /* ============================================================
    ÉCRAN DE PREUVE — ce que vaut l'estimation
@@ -85,45 +86,53 @@ function useCompteur(cible) {
    (khamis_roche_table.go) et les courbes de référence CDC citées comme
    repère de comparaison. On peut les nommer parce qu'on les emploie. */
 const SOURCES = [
-  { nom: 'OMS', detail: 'Tables LMS de croissance 5-19 ans' },
-  { nom: 'Khamis–Roche', detail: 'Fels Longitudinal Study' },
-  { nom: 'Percentile', detail: 'Suivi du couloir de croissance' },
+  { nom: 'Les courbes de l’OMS', detail: 'Les courbes de référence de l’Organisation mondiale de la santé', Icone: Globe },
+  { nom: 'La méthode Khamis-Roche', detail: 'Ta taille, ton poids et ceux de tes parents', Icone: Users },
+  { nom: 'Ta courbe de croissance', detail: 'Où tu te situes par rapport aux jeunes de ton âge', Icone: TrendingUp },
 ]
 
 export function BadgePrecision({ className }) {
   const compte = useCompteur(CIBLE)
   const valeurAffichee = CIBLE === null ? PRECISION_AFFICHEE.valeur : `${compte}${SUFFIXE}`
 
+  /* Mise en page voulue par le client : un très grand chiffre, une flèche
+     tracée à la main qui dit « Précision », puis les sources en images.
+     Les gens ne connaissent ni l’OMS ni Khamis-Roche : une icône et une
+     phrase simple par source valent mieux qu’un sigle. */
   return (
-    <div className={`precision ${className || ''}`}>
-      <div className="precision-pastille">
-        {/* `aria-hidden` + texte final en `sr-only` : un lecteur d'écran ne
-            doit pas égrainer 0, 4, 9, 15…98, seulement annoncer le chiffre
-            final une fois. */}
-        <span className="precision-valeur" aria-hidden="true">
-          {valeurAffichee}
-        </span>
-        <span className="sr-only">{PRECISION_AFFICHEE.valeur}</span>
-        {/* Sans ces deux lignes, « 98 % » ne disait pas de quoi. */}
-        <span className="precision-libelle">{PRECISION_AFFICHEE.libelle}</span>
+    <div className={`precision precision--simple ${className || ''}`}>
+      <span className="precision-grand" aria-hidden="true">
+        {valeurAffichee}
+      </span>
+      <span className="sr-only">{PRECISION_AFFICHEE.valeur} de précision</span>
+
+      <div className="precision-fleche" aria-hidden="true">
+        <svg viewBox="0 0 150 80" width="120" height="64" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M140 66 C 90 70, 40 72, 30 20" />
+          <path d="M16 32 L 30 14 L 42 30" />
+        </svg>
+        <span className="precision-manuscrit">Précision</span>
       </div>
 
+      <ul className="precision-sources-images">
+        {SOURCES.map(({ nom, detail, Icone }) => (
+          <li key={nom}>
+            <span className="precision-source-image" aria-hidden="true">
+              <Icone size={22} />
+            </span>
+            <span>
+              <strong>{nom}</strong>
+              <span>{detail}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+
       <p className="precision-detail">
-        {/* Nouvel onglet : le brouillon du questionnaire est sauvegardé,
-            mais quitter le tunnel au milieu reste une sortie. */}
         <a href={PRECISION_AFFICHEE.lien} target="_blank" rel="noopener">
           {PRECISION_AFFICHEE.texteLien}
         </a>
       </p>
-
-      <ul className="precision-sources">
-        {SOURCES.map((source) => (
-          <li key={source.nom}>
-            <strong>{source.nom}</strong>
-            <span>{source.detail}</span>
-          </li>
-        ))}
-      </ul>
     </div>
   )
 }

@@ -3391,3 +3391,85 @@
   font-size: 14px;
   color: var(--funnel-muted);
 }
+
+/* ---------- Écran précision, version simple ---------- */
+@font-face {
+  font-family: 'Caveat';
+  src: url('/fonts/caveat.ttf') format('truetype');
+  font-display: swap;
+}
+
+.precision--simple {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.precision-grand {
+  font-size: clamp(88px, 28vw, 132px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+
+.precision-fleche {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin: 4px 0 20px 40px;
+  color: #fff;
+}
+
+.precision-manuscrit {
+  font-family: 'Caveat', cursive;
+  font-size: 34px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.precision-sources-images {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.precision-sources-images li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--funnel-surface);
+  border: 1px solid var(--funnel-line);
+}
+
+.precision-source-image {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--funnel-accent) 14%, transparent);
+  color: var(--funnel-accent-text);
+}
+
+.precision-sources-images strong {
+  display: block;
+  font-size: 15px;
+  color: var(--funnel-text);
+}
+
+.precision-sources-images li span span {
+  display: block;
+  font-size: 13px;
+  color: var(--funnel-muted);
+}
+
+.precision--simple .precision-detail {
+  align-self: center;
+}
