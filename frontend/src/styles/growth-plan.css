@@ -1089,3 +1089,23 @@
 
 .plan-contact { margin: 32px 0 8px; text-align: center; font-size: 14px; color: rgba(255,255,255,0.55); }
 .plan-contact a { color: #ff7a1a; font-weight: 600; }
+
+/* Cibles tactiles : « Pourquoi ? » faisait 18 px de haut et la case 28 px,
+   trop petits pour un pouce. La zone cliquable grandit, pas le dessin. */
+.growth-plan-page .todo-why-toggle {
+  min-height: 40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: -6px;
+  margin-bottom: -10px;
+}
+
+.growth-plan-page .todo-checkbox {
+  position: relative;
+}
+
+.growth-plan-page .todo-checkbox::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+}
