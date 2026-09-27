@@ -555,7 +555,7 @@ export function MoletteTailleCm({ valeurCm, onChange, unite, onChangeUnite, min 
   )
 }
 
-export function MoletteTailleAvecInconnu({ valeurCm, onChange, unite, onChangeUnite, min, max, inconnuDefaut }) {
+export function MoletteTailleAvecInconnu({ valeurCm, onChange, onInconnu, unite, onChangeUnite, min, max, inconnuDefaut }) {
   const [aChoisi, setAChoisi] = useState(false)
   const inconnu = valeurCm == null && aChoisi
   return (
@@ -578,7 +578,9 @@ export function MoletteTailleAvecInconnu({ valeurCm, onChange, unite, onChangeUn
         aria-pressed={inconnu}
         onClick={() => {
           setAChoisi(true)
-          onChange(null)
+          // Répondre « je ne sais pas » passe à la question suivante.
+          if (onInconnu) onInconnu()
+          else onChange(null)
         }}
       >
         {inconnu ? '✓ Je ne sais pas' : 'Je ne sais pas'}
@@ -624,7 +626,7 @@ export function MolettePoidsKg({ valeurKg, onChange, unite, onChangeUnite }) {
   )
 }
 
-export function MolettePointure({ valeurEu, onChange, unite, onChangeUnite }) {
+export function MolettePointure({ valeurEu, onChange, onInconnu, unite, onChangeUnite }) {
   const [aChoisi, setAChoisi] = useState(false)
   const inconnu = valeurEu == null && aChoisi
   return (
@@ -666,7 +668,9 @@ export function MolettePointure({ valeurEu, onChange, unite, onChangeUnite }) {
         aria-pressed={inconnu}
         onClick={() => {
           setAChoisi(true)
-          onChange(null)
+          // Répondre « je ne sais pas » passe à la question suivante.
+          if (onInconnu) onInconnu()
+          else onChange(null)
         }}
       >
         {inconnu ? '✓ Je ne sais pas' : 'Je ne sais pas'}

@@ -528,6 +528,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <MolettePointure
             valeurEu={reponses.pointure}
             onChange={(v) => definir('pointure', v)}
+            onInconnu={() => choisirEtAvancer('pointure', null)}
             unite={unites.pointure}
             onChangeUnite={(u) => setUnites((p) => ({ ...p, pointure: u }))}
           />
@@ -558,6 +559,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <MoletteTailleAvecInconnu
             valeurCm={reponses.pere}
             onChange={(v) => definir('pere', v)}
+            onInconnu={() => choisirEtAvancer('pere', null)}
             unite={unites.pere}
             onChangeUnite={(u) => setUnites((p) => ({ ...p, pere: u }))}
             min={130}
@@ -570,6 +572,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <MoletteTailleAvecInconnu
             valeurCm={reponses.mere}
             onChange={(v) => definir('mere', v)}
+            onInconnu={() => choisirEtAvancer('mere', null)}
             unite={unites.mere}
             onChangeUnite={(u) => setUnites((p) => ({ ...p, mere: u }))}
             min={120}
