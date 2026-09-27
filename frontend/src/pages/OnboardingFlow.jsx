@@ -368,7 +368,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     estimationDemandee()
 
     const payload = construirePayloadPrediction(reponses, email)
-    const utiliserApiReelle = import.meta.env.VITE_USE_REAL_API === 'true'
+    // Réel par défaut : `=== 'true'` faisait tourner le simulateur en
+    // production, où la variable n'est pas définie. Seul .env.development
+    // l'éteint.
+    const utiliserApiReelle = import.meta.env.VITE_USE_REAL_API !== 'false'
     const appel = utiliserApiReelle ? apiClient.predictHeightV2(payload) : mockPredictHeight(payload)
 
     appel

@@ -22,7 +22,6 @@ import { useEffect, useState } from 'react'
 const PRECISION_AFFICHEE = {
   valeur: '98 %',
   libelle: 'de précision',
-  marge: 'soit ±4 à ±8 cm selon l’âge',
   lien: '/methode/#precision',
   texteLien: 'Voici d’où vient ce chiffre',
 }
@@ -107,7 +106,6 @@ export function BadgePrecision({ className }) {
         <span className="sr-only">{PRECISION_AFFICHEE.valeur}</span>
         {/* Sans ces deux lignes, « 98 % » ne disait pas de quoi. */}
         <span className="precision-libelle">{PRECISION_AFFICHEE.libelle}</span>
-        <span className="precision-marge">{PRECISION_AFFICHEE.marge}</span>
       </div>
 
       <p className="precision-detail">
