@@ -182,5 +182,13 @@ export function fusionnerResultatPrediction(reponses, email, resultatApi) {
     sleep_hours_per_night: reponses.sommeil ?? 0,
     exercise_min_per_day: minutesExerciceParJour(reponses.exerciceFreq),
     taille_reve: reponses.tailleIdeale,
+    // Le plan calcule les protéines sur le poids : sans lui, il
+    // recevait undefined et annonçait 0 g par jour.
+    weight_kg: reponses.poids,
+    /* De quoi recalculer l'estimation plus tard, quand l'abonné saisit une
+       nouvelle taille (onglet « Ma taille » du plan) : la même requête,
+       avec la taille et l'âge du jour. */
+    payload_prediction: construirePayloadPrediction(reponses, email),
+    date_prediction: new Date().toISOString().slice(0, 10),
   }
 }

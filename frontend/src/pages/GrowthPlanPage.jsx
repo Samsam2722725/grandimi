@@ -13,6 +13,8 @@ import { APERCU_PLAN, PLAN_APERCU } from '../lib/plan-apercu';
    elle apparaît maintenant ici, une fois l'accès payé, avec les seules
    valeurs que le calcul a réellement produites. */
 import { GrowthProjectionChart } from '../components/ui/growth-projection-chart';
+import { MaTaille } from '../components/ui/ma-taille';
+import { LeconsPlan } from '../components/ui/lecons-plan';
 
 // Date au format YYYY-MM-DD dans le fuseau local (pas toISOString, qui
 // bascule sur UTC et peut donner la veille ou le lendemain selon l'heure).
@@ -24,7 +26,7 @@ function dateDuJour(decalageJours = 0) {
   return `${d.getFullYear()}-${mois}-${jour}`;
 }
 
-function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
+function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJourPrediction }) {
   const [plan, setPlan] = useState(null);
   const [monthlyPlan, setMonthlyPlan] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -234,6 +236,18 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
           onClick={() => setActiveTab('sleep')}
         >
           Sommeil
+        </button>
+        <button
+          className={`tab ${activeTab === 'taille' ? 'active' : ''}`}
+          onClick={() => setActiveTab('taille')}
+        >
+          Ma taille
+        </button>
+        <button
+          className={`tab ${activeTab === 'lecons' ? 'active' : ''}`}
+          onClick={() => setActiveTab('lecons')}
+        >
+          Leçons
         </button>
       </nav>
 
@@ -534,6 +548,18 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
         )}
 
         {/* Sleep Tab */}
+        {activeTab === 'taille' && (
+          <section className="tab-content">
+            <MaTaille predictionData={predictionData} onMiseAJour={onMiseAJourPrediction} />
+          </section>
+        )}
+
+        {activeTab === 'lecons' && (
+          <section className="tab-content">
+            <LeconsPlan />
+          </section>
+        )}
+
         {activeTab === 'sleep' && (
           <section className="tab-content">
             <div className="section-title">Optimisation du sommeil</div>

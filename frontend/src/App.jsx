@@ -573,6 +573,12 @@ function App() {
           predictionData={predictionData}
           onBackHome={handleBackHome}
           onGoToAccount={handleGoToAccount}
+          onMiseAJourPrediction={(nouvelles) => {
+            // Nouvelle mesure → estimation recalculée : on la garde comme
+            // la prédiction courante, au même endroit que la première.
+            setPredictionData(nouvelles);
+            localStorage.setItem('predictionData', JSON.stringify(nouvelles));
+          }}
         />
       )}
 
