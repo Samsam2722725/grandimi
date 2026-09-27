@@ -45,7 +45,7 @@ export const ORDRE_ETAPES = [
   'taille',
   'poids',
   'pointure',
-  'motivation',
+  // 'motivation' retiré à la demande du client : la réponse ne servait à rien.
   'sports',
   'exercice-freq',
   'sommeil',
