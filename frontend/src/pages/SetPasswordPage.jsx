@@ -132,8 +132,8 @@ function SetPasswordPage({ onAuthComplete }) {
         </div>
 
         <div className="auth-card">
-          <h1>Bienvenue! 🎉</h1>
-          <p className="subtitle">Créez votre mot de passe pour accéder à votre plan</p>
+          <h1>Paiement confirmé</h1>
+          <p className="subtitle">Choisis un mot de passe pour retrouver ton plan à chaque connexion.</p>
 
           <form onSubmit={handleSubmit} className="auth-form">
             {error && (
@@ -177,26 +177,26 @@ function SetPasswordPage({ onAuthComplete }) {
             </div>
 
             <div className="form-group">
-              <label htmlFor="confirmPassword">Confirmer mot de passe</label>
+              <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
               <input
                 id="confirmPassword"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirmez votre mot de passe"
+                placeholder="Retape ton mot de passe"
                 required
               />
             </div>
 
             <button type="submit" className="btn-primary btn-full" disabled={loading}>
-              {loading ? <><Spinner />Création du compte...</> : 'Créer mon compte et accéder au plan'}
+              {loading ? <><Spinner />Création du compte…</> : 'Créer mon compte et accéder au plan'}
             </button>
           </form>
 
           <div className="auth-footer">
             <p style={{ fontSize: '0.9rem', textAlign: 'center', color: '#666' }}>
               ✓ Paiement confirmé<br/>
-              ✓ Prêt à accéder à votre plan personnalisé
+              ✓ Ton plan personnalisé est prêt
             </p>
           </div>
         </div>

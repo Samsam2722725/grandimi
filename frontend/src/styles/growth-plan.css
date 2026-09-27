@@ -815,3 +815,277 @@
 .exercise-detail-line strong {
   color: var(--funnel-text);
 }
+
+/* ---------- Onglet « Ma taille » ---------- */
+
+.ma-taille {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ma-taille-estimation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 22px 18px;
+  border-radius: 20px;
+  text-align: center;
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 90, 31, 0.22), transparent 60%),
+    #17110d;
+  border: 1px solid rgba(255, 120, 60, 0.45);
+  box-shadow: 0 10px 30px -8px rgba(255, 90, 31, 0.5);
+}
+
+.ma-taille-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #b3a79c;
+}
+
+.ma-taille-valeur {
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #ff8a4c;
+  text-shadow: 0 0 22px rgba(255, 90, 31, 0.6);
+}
+
+.ma-taille-marge {
+  font-size: 14px;
+  color: #b3a79c;
+}
+
+.ma-taille-maj {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6ee7a0;
+}
+
+.ma-taille-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 20px;
+  background: var(--funnel-surface, #141414);
+  border: 1px solid var(--funnel-line, #2a2a2a);
+}
+
+.ma-taille-form label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--funnel-text, #fff);
+}
+
+.ma-taille-ligne {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ma-taille-ligne input {
+  flex: 1;
+  min-width: 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--funnel-line, #2a2a2a);
+  background: #0a0a0a;
+  color: #fff;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.ma-taille-ligne input:focus-visible {
+  outline: 2px solid #ff5a1f;
+  outline-offset: 1px;
+}
+
+.ma-taille-unite {
+  font-weight: 700;
+  color: #b3a79c;
+}
+
+.ma-taille-bouton {
+  width: auto;
+  min-height: 52px;
+  padding: 0 20px;
+  font-size: 16px;
+}
+
+.ma-taille-aide {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--funnel-muted, #9a9a9a);
+}
+
+.ma-taille-vitesse {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 90, 31, 0.1);
+  border: 1px solid rgba(255, 90, 31, 0.35);
+  color: #fff;
+  font-size: 15px;
+}
+
+.ma-taille-historique h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: #fff;
+}
+
+.ma-taille-historique ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ma-taille-historique li {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: var(--funnel-surface, #141414);
+  color: #b3a79c;
+  font-size: 14px;
+}
+
+.ma-taille-historique li strong {
+  color: #fff;
+}
+
+.ma-taille-vide {
+  margin: 0;
+  font-size: 14px;
+  color: var(--funnel-muted, #9a9a9a);
+}
+
+/* ---------- Onglet « Leçons » ---------- */
+
+.lecons-plan {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lecon-plan {
+  border-radius: 22px;
+  border: 1px solid rgba(255, 120, 60, 0.4);
+  background:
+    radial-gradient(80% 140% at 90% 0%, rgba(255, 110, 40, 0.18), transparent 60%),
+    #17110d;
+  box-shadow: 0 8px 24px -12px rgba(255, 90, 31, 0.6);
+  overflow: hidden;
+}
+
+.lecon-plan-tete {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lecon-plan-pastille {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  color: #fff;
+}
+
+.lecon-plan-pastille--orange {
+  background: radial-gradient(circle at 30% 30%, #ffb14a, #ff5a1f);
+  box-shadow: 0 0 14px rgba(255, 90, 31, 0.7);
+}
+
+.lecon-plan-pastille--violet {
+  background: radial-gradient(circle at 30% 30%, #d86bff, #9b1fe8);
+  box-shadow: 0 0 14px rgba(155, 31, 232, 0.6);
+}
+
+.lecon-plan-pastille--rose {
+  background: radial-gradient(circle at 30% 30%, #ff7ae0, #d21fb0);
+  box-shadow: 0 0 14px rgba(210, 31, 176, 0.6);
+}
+
+.lecon-plan-titres {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lecon-plan-titres strong {
+  font-size: 16px;
+}
+
+.lecon-plan-titres span {
+  font-size: 13.5px;
+  color: #b3a79c;
+}
+
+.lecon-plan-chevron {
+  color: #8a7e74;
+  transition: transform 0.2s ease;
+}
+
+.lecon-plan.is-ouverte .lecon-plan-chevron {
+  transform: rotate(180deg);
+}
+
+.lecon-plan-points {
+  list-style: none;
+  margin: 0;
+  padding: 0 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lecon-plan-points li {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-left: 12px;
+  border-left: 2px solid rgba(255, 90, 31, 0.6);
+}
+
+.lecon-plan-points strong {
+  font-size: 14.5px;
+  color: #fff;
+}
+
+.lecon-plan-points span {
+  font-size: 14px;
+  line-height: 1.45;
+  color: #b3a79c;
+}
+
+.plan-contact { margin: 32px 0 8px; text-align: center; font-size: 14px; color: rgba(255,255,255,0.55); }
+.plan-contact a { color: #ff7a1a; font-weight: 600; }

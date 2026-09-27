@@ -1,9 +1,8 @@
-import { useEffect, useState, lazy, Suspense } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { ArrowLeft, Lock } from 'lucide-react'
 
 import { AnalyseChart } from '@/components/ui/analyse-chart'
 const BalloonsPopBackground = lazy(() => import('@/components/ui/balloons-pop-background').then(m => ({ default: m.BalloonsPopBackground })))
-import { CompteurAnime } from '@/components/ui/compteur-anime'
 import { Confetti } from '@/components/ui/confetti'
 
 import Spinner from '../components/Spinner'
@@ -41,8 +40,6 @@ const fr = (valeur) => String(valeur).replace('.', ',')
 const cm = (valeur) => Math.round(Number(valeur))
 
 function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
-  const [limitesVisibles, setLimitesVisibles] = useState(false)
-
   /* Le résultat est le pivot du tunnel : c'est ici que se décide la
      suite (payer, partager, partir). Il doit être compté séparément
      de l'estimation obtenue — l'appel peut réussir sans que l'écran
@@ -125,97 +122,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
      dont un inventé. */
   const pointsACorriger = leviers.filter((levier) => levier.sousCible).length
 
-  /* CE QUE SES HABITUDES LUI COUTENT, EN CLAIR.
-
-     C'est le seul argument de cet écran qui soit à la fois SON chiffre,
-     une perte en cours, et réparable par ce qu'on vend. Il était caché
-     derrière « Optimise jusqu'à 🔒 cm » : on cachait l'enjeu ET le
-     remède, donc il ne restait aucune raison d'ouvrir.
-
-     Le modèle produit deux scénarios — l'estimation avec les habitudes
-     déclarées, et le potentiel si elles étaient à la cible. Mesuré en
-     production le 17/09/2026, garçon de 14 ans, 165 cm, parents 176/164 :
-
-       habitudes dégradées ... 173,8  potentiel 179,2  ->  5,4 cm
-       habitudes moyennes .... 177,0  potentiel 179,2  ->  2,2 cm
-       habitudes à la cible .. 179,2  potentiel 179,2  ->  0 cm
-
-     L'écart vaut zéro quand il n'y a rien à gagner, et on le dit alors
-     — c'est ce qui sépare ce chiffre d'une urgence fabriquée. Sans
-     aucune réponse de mode de vie, il ne veut rien dire : le bloc
-     retombe sur le cadenas. */
-  const estimeeCm = Number(predictionData.predicted_height_cm)
-  const potentielCm = Number(predictionData.potential_height_cm)
-  const ecartHabitudes =
-    Number.isFinite(estimeeCm) && Number.isFinite(potentielCm) && potentielCm > estimeeCm
-      ? Math.round((potentielCm - estimeeCm) * 10) / 10
-      : 0
-
-  /* Rang parmi les jeunes du meme age, calcule par le serveur sur les
-     tables OMS. Il ne se derive d'aucune valeur verrouillee : on peut
-     l'afficher sans ouvrir la porte. */
-  const percentileAge = Number(predictionData.percentile_age)
-  const percentileAffichable = Number.isFinite(percentileAge) && percentileAge > 0
-
-  /* Part de croissance qui reste a faire.
-
-     ARRONDI A 5 % ET PAS AU POINT PRES, VOLONTAIREMENT. La taille du jour
-     est affichee juste au-dessus : un pourcentage exact laisserait
-     reconstituer la taille adulte, qui est justement sous cadenas —
-     165 / 0,89 donne 185,4. Par tranches de cinq, la meme division ouvre
-     une fourchette de dix centimetres, trop large pour remplacer ce que
-     l'abonnement livre.
-
-     LE DENOMINATEUR EST LE POTENTIEL, PAS L ESTIMATION.
-
-     Rapporte a l'estimation — celle que ses habitudes actuelles
-     produisent — le chiffre disait « tu as fait 95 % de ta croissance »
-     juste sous « tes habitudes te coutent 5,4 cm ». Les deux lignes se
-     contredisaient : s'il ne reste que 5 % a faire, il n'y a pas 5 cm a
-     recuperer. Le denominateur qui a du sens est son plafond, celui que
-     le plan vise ; la part parcourue tombe alors a 92 %, et les deux
-     chiffres racontent la meme histoire. */
-  const cibleCroissance =
-    Number.isFinite(potentielCm) && potentielCm > 0 ? potentielCm : estimeeCm
-  /* CE QUI RESTE, PAS CE QUI EST FAIT.
-
-     « Tu as fait 90 % de ta croissance » est exact et demotivant : le
-     lecteur en conclut que c'est joue, et il a raison de le conclure —
-     c'est ce que la phrase dit. Le meme nombre, pris par l'autre bout,
-     designe ce qui est encore en jeu, c'est-a-dire precisement ce que
-     l'abonnement adresse. Aucun des deux n'est plus vrai que l'autre ;
-     l'un ferme la porte, l'autre l'ouvre.
-
-     TROIS ETATS, ET PAS DEUX. Le calcul portait un plancher a 5 % : en
-     dessous, l'arrondi par tranches de cinq affichait « 0 % ». Ce
-     plancher soignait un symptome — le modele rendait une taille adulte
-     EGALE a la taille du jour pour un profil sur cinq (voir
-     internal/estimator/khamis_roche_table.go), et sans lui ces ecrans
-     annoncaient « 0 % » a des adolescents de quinze ans.
-
-     Le modele est repare, mais le plancher ne peut pas simplement
-     disparaitre : les tranches de cinq arrondissent a zero quelqu'un a
-     qui il reste encore quatre centimetres. Il y a donc trois cas, et
-     chacun dit la verite :
-
-       plus rien a prendre ....... la ligne ne s'affiche pas
-       moins de 5 % ............... « moins de 5 % » (voir plus bas)
-       au-dela .................... le pourcentage, par tranches de cinq
-
-     Le seuil est en CENTIMETRES et non en pourcentage : un centimetre
-     restant est un centimetre, quelle que soit la taille sur laquelle on
-     le rapporte. */
-  const centimetresRestants =
-    Number.isFinite(cibleCroissance) && cibleCroissance > 0 && tailleActuelle > 0
-      ? cibleCroissance - tailleActuelle
-      : 0
-  const resteCroissance =
-    centimetresRestants >= 1
-      ? Math.round((centimetresRestants / cibleCroissance) * 20) * 5
-      : 0
-  const auMoinsUnLevier = leviers.some((levier) => levier.renseigne)
-  const coutAffichable = auMoinsUnLevier && ecartHabitudes > 0
-  const dejaAuMaximum = auMoinsUnLevier && ecartHabitudes === 0
   /* Le potentiel optimisé (potential_height_cm) n’est plus affiché en clair
      sur cet écran : il est passé derrière le cadenas « Optimise jusqu’à 🔒 cm »,
      qui est précisément ce que l’abonnement ouvre. Le chiffre existe côté
@@ -298,45 +204,19 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             <span className="analyse-case-valeur">{cm(tailleActuelle)} cm</span>
           </div>
           <div className="analyse-case analyse-case--accent">
-            <span className="analyse-case-label">Ta taille adulte</span>
+            <span className="analyse-case-label">Taille potentielle</span>
             <span className="analyse-case-valeur">
               <Lock size={22} aria-hidden="true" />
             </span>
           </div>
         </div>
 
-        {coutAffichable && (
-          <div className="analyse-ligne analyse-ligne--perte">
-            <span className="analyse-perte-label">Tes habitudes te coûtent</span>
-            {/* Le seul chiffre anime de l'ecran. Il monte de zero jusqu'a
-                sa valeur : on voit la perte se constituer au lieu de la
-                lire deja faite. Le texte est inchange. */}
-            <strong className="analyse-perte-valeur">
-              <CompteurAnime valeur={ecartHabitudes} prefixe="−" suffixe=" cm" />
-            </strong>
-          </div>
-        )}
-
-        {dejaAuMaximum && (
-          <div className="analyse-ligne analyse-ligne--acquis analyse-ligne--acquis-bloc">
-            <div className="analyse-acquis-tete">
-              <span className="analyse-perte-label">Tes habitudes ne te coûtent rien</span>
-              <strong className="analyse-perte-valeur">0 cm</strong>
-            </div>
-            <p className="analyse-acquis-note">
-              Tu es sur la bonne voie. Continue et tu auras tout ce qu’il faut.
-            </p>
-          </div>
-        )}
-
-        {!coutAffichable && !dejaAuMaximum && (
-          <div className="analyse-ligne analyse-ligne--verrou">
-            <span>Optimise jusqu’à</span>
-            <Lock size={17} aria-hidden="true" />
-            <span>cm</span>
-            <span aria-hidden="true">📈</span>
-          </div>
-        )}
+        <div className="analyse-ligne analyse-ligne--verrou">
+          <span>Optimise jusqu’à</span>
+          <Lock size={17} aria-hidden="true" />
+          <span>cm</span>
+          <span aria-hidden="true">📈</span>
+        </div>
 
         <section className="analyse-carte-graphe">
           <div className="analyse-graphe-tete">
@@ -362,46 +242,27 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
           <AnalyseChart />
         </section>
 
-        {percentileAffichable && (
-          <div className="analyse-ligne analyse-ligne--fait">
-            <span className="analyse-perte-label">
-              Plus grand que {percentileAge} % des jeunes de ton âge
-            </span>
-            <span aria-hidden="true">🌍</span>
-          </div>
-        )}
-
-        {centimetresRestants >= 1 && (
-          <div className="analyse-ligne analyse-ligne--fait">
-            <span className="analyse-perte-label">
-              {/* « moins de 5 % » plutot que « 5 % » : arrondir 1,4 % a 5 %
-                  serait surestimer ce qui reste, sur l'ecran meme qui sert
-                  a decider d'un achat. */}
-              Il te reste {resteCroissance > 0 ? `${resteCroissance} %` : 'moins de 5 %'} de
-              ta croissance à faire
-            </span>
-            <span aria-hidden="true">📈</span>
-          </div>
-        )}
-
+        {/* Plus rien d'affiché en clair sous le graphique : décision du
+            client, « rien de gratuit ». Le percentile et la part de
+            croissance restante étaient lisibles ici ; ils passent derrière
+            le cadenas comme le reste. */}
         <div className="analyse-ligne analyse-ligne--verrou">
-          <span>Ce qui te bloque vraiment</span>
+          <span>Plus grand que</span>
           <Lock size={17} aria-hidden="true" />
-          <span aria-hidden="true">🎯</span>
+          <span>de ton âge</span>
+          <span aria-hidden="true">🌍</span>
         </div>
 
         <div className="analyse-duo">
           <div className="analyse-case analyse-case--verrou">
-            <span className="analyse-case-label">Tes 11 actions du jour</span>
-            <span className="analyse-case-valeur">
-              <Lock size={20} aria-hidden="true" />
-            </span>
+            <span className="analyse-case-label">Taille souhaitée</span>
+            <Lock size={22} aria-hidden="true" />
+            <span className="analyse-barre-floue" aria-hidden="true" />
           </div>
           <div className="analyse-case analyse-case--verrou">
-            <span className="analyse-case-label">Fin de ta croissance</span>
-            <span className="analyse-case-valeur">
-              <Lock size={20} aria-hidden="true" />
-            </span>
+            <span className="analyse-case-label">Croissance finie</span>
+            <Lock size={22} aria-hidden="true" />
+            <span className="analyse-barre-floue" aria-hidden="true" />
           </div>
         </div>
 
@@ -414,53 +275,6 @@ function ResultsPage({ predictionData, onViewPlan, onBackHome }) {
             désormais APRÈS le paiement, sur le plan, où l'utilisateur a le
             droit de partager le chiffre qu'il a acheté. */}
 
-        {/* La mention reste. Elle n'est sur aucune des captures de référence,
-            mais elle est due : le produit s'adresse à des mineurs et touche à
-            la santé. Elle est petite et après la décision, pas avant. */}
-        <p className="results-mention">
-          C’est une estimation, pas une garantie. Grandimi n’est pas un outil
-          médical : si tu as un doute, parle à ton médecin.
-        </p>
-
-        <section className="results-limits">
-          <button
-            type="button"
-            className="results-limits-toggle"
-            onClick={() => setLimitesVisibles((visible) => !visible)}
-            aria-expanded={limitesVisibles}
-          >
-            {limitesVisibles ? 'Masquer les limites' : 'Voir les limites de ce calcul'}
-          </button>
-
-          {limitesVisibles && (
-            <div className="results-limits-body">
-              <h3>Pourquoi ±4 à ±8 cm ?</h3>
-              <p>
-                ±4 à ±8 cm selon l’âge — soit 98 % de précision moyenne.{' '}
-                <a href="/methode/#precision" target="_blank" rel="noopener">
-                  Voici d’où vient ce chiffre.
-                </a>
-              </p>
-              <ul>
-                <li>En pleine croissance, tout peut changer rapidement.</li>
-                <li>La taille de tes parents est ce que tu as déclaré — si elle est fausse, le calcul aussi.</li>
-                <li>Certains trucs (hormones, maladies) on ne les voit pas venir.</li>
-              </ul>
-
-              <h3>Comment ça marche</h3>
-              <p>
-                Khamis-Roche (1994) : ta taille + poids + taille de tes parents + tes habitudes (sommeil, nourriture, sport).
-              </p>
-              <a
-                href="https://pubmed.ncbi.nlm.nih.gov/?term=khamis+roche+adult+height+prediction"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Voir les études
-              </a>
-            </div>
-          )}
-        </section>
       </main>
 
       <footer className="funnel-footer">

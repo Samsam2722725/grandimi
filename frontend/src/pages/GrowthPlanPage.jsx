@@ -5,6 +5,7 @@ import Spinner from '../components/Spinner';
 import '../styles/funnel.css';
 import '../styles/growth-plan.css';
 import apiClient from '../lib/api';
+import { APERCU_PLAN, PLAN_APERCU } from '../lib/plan-apercu';
 /* Le graphique à deux trajectoires existait déjà dans le projet — construit
    pour cet écran précisément (il lit predicted_height_cm ET
    potential_height_cm, tous deux verrouillés avant paiement) — mais n'était
@@ -12,6 +13,8 @@ import apiClient from '../lib/api';
    elle apparaît maintenant ici, une fois l'accès payé, avec les seules
    valeurs que le calcul a réellement produites. */
 import { GrowthProjectionChart } from '../components/ui/growth-projection-chart';
+import { MaTaille } from '../components/ui/ma-taille';
+import { LeconsPlan } from '../components/ui/lecons-plan';
 
 // Date au format YYYY-MM-DD dans le fuseau local (pas toISOString, qui
 // bascule sur UTC et peut donner la veille ou le lendemain selon l'heure).
@@ -23,7 +26,7 @@ function dateDuJour(decalageJours = 0) {
   return `${d.getFullYear()}-${mois}-${jour}`;
 }
 
-function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
+function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJourPrediction }) {
   const [plan, setPlan] = useState(null);
   const [monthlyPlan, setMonthlyPlan] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -39,6 +42,12 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
 
   useEffect(() => {
     const fetchPlan = async () => {
+      if (APERCU_PLAN) {
+        setPlan(PLAN_APERCU.plan);
+        setMonthlyPlan(PLAN_APERCU.monthly_plan);
+        setLoading(false);
+        return;
+      }
       try {
         setLoading(true);
 
@@ -72,6 +81,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
     };
 
     fetchPlan();
+    if (APERCU_PLAN) return;
 
     // La todo du jour et l'historique sont indépendants du plan : une
     // panne ici ne doit pas empêcher d'afficher le plan lui-même, donc on
@@ -95,6 +105,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
       return suivant;
     });
 
+    if (APERCU_PLAN) return;
     apiClient.toggleTask(cle).catch(() => {
       // Échec réseau : on annule l'optimisme plutôt que de laisser
       // l'écran mentir sur ce qui est réellement enregistré.
@@ -225,6 +236,18 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
           onClick={() => setActiveTab('sleep')}
         >
           Sommeil
+        </button>
+        <button
+          className={`tab ${activeTab === 'taille' ? 'active' : ''}`}
+          onClick={() => setActiveTab('taille')}
+        >
+          Ma taille
+        </button>
+        <button
+          className={`tab ${activeTab === 'lecons' ? 'active' : ''}`}
+          onClick={() => setActiveTab('lecons')}
+        >
+          Leçons
         </button>
       </nav>
 
@@ -525,6 +548,18 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
         )}
 
         {/* Sleep Tab */}
+        {activeTab === 'taille' && (
+          <section className="tab-content">
+            <MaTaille predictionData={predictionData} onMiseAJour={onMiseAJourPrediction} />
+          </section>
+        )}
+
+        {activeTab === 'lecons' && (
+          <section className="tab-content">
+            <LeconsPlan />
+          </section>
+        )}
+
         {activeTab === 'sleep' && (
           <section className="tab-content">
             <div className="section-title">Optimisation du sommeil</div>
@@ -580,6 +615,11 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount }) {
           de payer, en lui promettant l’inverse. Un « Commencer mon
           parcours » qui fait sortir du produit est pire qu’absent — et
           le plan est déjà à l’écran, il n’y a rien à démarrer. */}
+
+      <p className="plan-contact">
+        Une question, un souci, une idée ? Écris-nous :{' '}
+        <a href="mailto:grandimi14@gmail.com?subject=Mon%20plan%20Grandimi">grandimi14@gmail.com</a>
+      </p>
     </div>
   );
 }

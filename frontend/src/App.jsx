@@ -23,7 +23,6 @@ import { capturePageview } from './lib/analytics';
 import HomePage from './pages/HomePage';
 
 const OnboardingFlow = lazy(() => import('./pages/OnboardingFlow'));
-const Paywall = lazy(() => import('./pages/Paywall'));
 const ResultsPage = lazy(() => import('./pages/ResultsPage'));
 const PaywallPage = lazy(() => import('./pages/PaywallPage'));
 const GrowthPlanPage = lazy(() => import('./pages/GrowthPlanPage'));
@@ -59,6 +58,50 @@ function estUnRetourDePaiement(params) {
   return params.has('checkout_status') || params.has('status');
 }
 
+/* ---------- Raccourci de prévisualisation, DEV UNIQUEMENT ----------
+
+   `?preview=results` ou `?preview=paywall` saute directement à l'écran
+   sans repasser par les ~38 questions de l'onboarding. Ajouté après
+   plusieurs allers-retours où « va voir localhost » voulait dire refaire
+   tout le questionnaire pour vérifier un changement de deux pixels.
+
+   `import.meta.env.DEV` exclut ce chemin du build de production : ce
+   n'est pas un mode démo à exposer aux visiteurs, juste un raccourci
+   pour ce dépôt en développement. */
+const PREVIEW_DATA = {
+  age: 14.2,
+  sex: 'M',
+  profil: 'ado',
+  current_height_cm: 165,
+  predicted_height_cm: 178,
+  potential_height_cm: 181.5,
+  confidence_range: { min: 174, max: 182 },
+  confidence_level: 'medium',
+  percentile_age: 62,
+  sleep_hours_per_night: 7,
+  exercise_min_per_day: 20,
+  nutrition_level: 'fair',
+  taille_reve: 183,
+  out_of_domain: false,
+  warning: null,
+  email: 'preview@grandimi.dev',
+  user_id: 'preview-user',
+  model_used: 'Khamis-Roche + percentile OMS — preview',
+};
+
+function pagePreviewDemandee(params) {
+  if (!import.meta.env.DEV) return null;
+  const valeur = params.get('preview');
+  const pages = {
+    results: 'results',
+    paywall: 'paywall',
+    plan: 'plan',
+    reglage: 'plan-setup',
+    'mot-de-passe': 'set-password',
+  };
+  return pages[valeur] ?? null;
+}
+
 function App() {
   /* Un client qui revient de Whop voyait la page d'accueil marchande le
      temps que la vérification d'achat réponde — soit jusqu'à une minute
@@ -66,14 +109,31 @@ function App() {
      lui revendait le produit, sans rien indiquer. Cet écran d'attente
      est choisi dès le premier rendu, avant toute peinture, pour qu'il
      n'y ait pas non plus de clignotement. */
-  const [currentPage, setCurrentPage] = useState(() =>
-    retourDePaiementReussi(new URLSearchParams(window.location.search))
-      ? 'paiement'
-      : 'home',
-  );
-  const [predictionData, setPredictionData] = useState(null);
+  const [currentPage, setCurrentPage] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const preview = pagePreviewDemandee(params);
+    if (preview) return preview;
+    // `?step=xxx` (dev only, lu par OnboardingFlow) saute direct à un écran
+    // de l'onboarding : encore faut-il que l'app affiche l'onboarding.
+    if (import.meta.env.DEV && params.has('step')) return 'questionnaire';
+    return retourDePaiementReussi(params) ? 'paiement' : 'home';
+  });
+  const [predictionData, setPredictionData] = useState(() => {
+    const preview = pagePreviewDemandee(new URLSearchParams(window.location.search));
+    if (!preview) return null;
+    // PaywallPage relit `predictionData` et `userEmail` depuis localStorage
+    // directement (elle ne les reçoit pas en props) : le raccourci doit donc
+    // écrire au même endroit que handlePredictionComplete, pas seulement
+    // poser l'état React.
+    localStorage.setItem('predictionData', JSON.stringify(PREVIEW_DATA));
+    localStorage.setItem('userEmail', PREVIEW_DATA.email);
+    return PREVIEW_DATA;
+  });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isPaid, setIsPaid] = useState(false);
+  // L'aperçu du plan (dev) doit passer la garde `isPaid` du rendu.
+  const [isPaid, setIsPaid] = useState(
+    () => pagePreviewDemandee(new URLSearchParams(window.location.search)) === 'plan',
+  );
   // Compte enfant à créditer quand un parent arrive par le lien partagé.
   const [parentChildUserId, setParentChildUserId] = useState(null);
 
@@ -504,16 +564,7 @@ function App() {
       {/* La paywall redirige vers Whop : l'accès n'est plus accordé
           côté client, mais par le webhook après paiement réel. */}
       {currentPage === 'paywall' && predictionData && (
-        <Paywall
-          onContinue={handlePaymentComplete}
-          onParentPay={() => {
-            const email = document.querySelector('.parent-email-input')?.value;
-            if (email) {
-              localStorage.setItem('parentEmail', email);
-              setCurrentPage('parent');
-            }
-          }}
-        />
+        <PaywallPage onBackHome={handleBackHome} />
       )}
 
       {/* Growth Plan (after payment) */}
@@ -522,6 +573,12 @@ function App() {
           predictionData={predictionData}
           onBackHome={handleBackHome}
           onGoToAccount={handleGoToAccount}
+          onMiseAJourPrediction={(nouvelles) => {
+            // Nouvelle mesure → estimation recalculée : on la garde comme
+            // la prédiction courante, au même endroit que la première.
+            setPredictionData(nouvelles);
+            localStorage.setItem('predictionData', JSON.stringify(nouvelles));
+          }}
         />
       )}
 

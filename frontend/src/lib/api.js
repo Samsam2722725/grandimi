@@ -215,6 +215,21 @@ class APIClient {
     return this.request('/api/user/predictions');
   }
 
+  // ---------- Suivi de la taille ----------
+
+  /** Enregistre une mesure (aujourd'hui) ; rend l'historique à jour. */
+  async enregistrerMesure(tailleCm) {
+    return this.request('/api/user/mesures', {
+      method: 'POST',
+      body: JSON.stringify({ taille_cm: tailleCm }),
+    });
+  }
+
+  /** Historique des mesures, et la vitesse mesurée quand elle a un sens. */
+  async listerMesures() {
+    return this.request('/api/user/mesures');
+  }
+
   // ---------- Todo-liste quotidienne ----------
 
   /** Coche/décoche une tâche. Un même appel sert pour les deux sens. */

@@ -18,9 +18,12 @@ import {
 } from '../lib/analytics'
 
 import {
-  ORDRE_ETAPES,
+  etapesPour,
+  CHAPITRES,
+  chapitreDe,
+  texteEtape,
+  OPTIONS_REGLES,
   TYPE_ETAPE,
-  TEXTES_ETAPE,
   OPTIONS_MOTIVATION,
   OPTIONS_SPORTS,
   OPTIONS_EXERCICE_FREQ,
@@ -33,6 +36,7 @@ import {
   OPTIONS_MUSCLES,
   OPTIONS_VOIX,
   OPTIONS_CROISSANCE_LENTE,
+  OPTIONS_VITESSE_CROISSANCE,
   ListeChoixUnique,
   ListeChoixMultiple,
   MoletteTailleCm,
@@ -41,22 +45,21 @@ import {
   MolettePointure,
   MoletteDateNaissance,
   MoletteSommeil,
-  MoletteVitesseCroissance,
-  EcranHabitudes,
   EcranModelePrediction,
   EcranPrecision,
+  EcranResultatsLongTerme,
   EcranPotentielGain,
   EcranOptimiserPotentiel,
   EcranGrandimiAide,
+  EcranActionsDuJour,
+  EcranPlanQuotidien,
+  EcranLecons,
+  EcranHeightTracker,
   EcranVeriteBrutale,
   EcranEtudesPubliees,
   EcranAvisUtilisateurs,
   EcranPlusQueGenes,
-  EcranConseilsNutrition,
-  EcranConseilsSommeil,
-  EcranPlanQuotidien,
 } from '../onboarding/content.jsx'
-import { FonctionExercices, FonctionSuivi } from '@/components/ui/ecrans-fonctions'
 import {
   ageDepuisNaissance,
   construirePayloadPrediction,
@@ -68,7 +71,7 @@ import {
 const STOCKAGE = 'grandimi:onboarding-v2'
 
 function anneeParDefaut() {
-  return new Date().getFullYear() - 14
+  return new Date().getFullYear() - 18
 }
 
 function reponsesInitiales() {
@@ -83,7 +86,7 @@ function reponsesInitiales() {
     // valeur par défaut doit déjà être un âge valide, sinon l'écran reste
     // bloqué sur un continuer désactivé sans qu'aucune action ne l'explique.
     age: ageDepuisNaissance(naissance.annee, naissance.mois, naissance.jour),
-    taille: 160,
+    taille: 170,
     poids: 55,
     pointure: null,
     sports: [],
@@ -93,6 +96,7 @@ function reponsesInitiales() {
     mere: null,
     proches: [],
     pilositeAisselles: null,
+    regles: null,
     pilositeVisage: null,
     vitesseCroissance: null,
     epaules: null,
@@ -117,7 +121,7 @@ function chargerEtat() {
     // Ne jamais reprendre en plein milieu de l'écran final : la saisie
     // d'e-mail et l'appel serveur repartent proprement du début de cet
     // écran plutôt que de rejouer un état d'analyse à moitié fait.
-    if (ORDRE_ETAPES[donnees.index] === 'resultats-la') return null
+    if (etapesPour(donnees.reponses)[donnees.index] === 'resultats-la') return null
     return donnees
   } catch {
     return null
@@ -137,33 +141,166 @@ function basculerDansListe(liste, valeur, exclusif) {
 
 const EMAIL_VALIDE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+const ETAPES_ANALYSE = [
+  { label: 'Analyse des facteurs', seuil: 20 },
+  { label: 'Projection génétique', seuil: 40 },
+  { label: 'Fenêtre de croissance', seuil: 60 },
+  { label: 'Construction du plan', seuil: 80 },
+  { label: 'Création de routine', seuil: 100 },
+]
+
+const DUREE_MONTEE_MS = 11000
+const PLAFOND_ATTENTE = 96
+const DUREE_FINALE_MS = 550
+
+/* L'anneau monte tout seul dès que l'écran s'affiche — pas besoin d'avoir
+   soumis l'e-mail pour ça — et plafonne à 96 % tant que le serveur n'a pas
+   répondu. `pretALivrer` (resultatApi non nul) relance une seconde montée,
+   courte, de la valeur courante jusqu'à 100 % : l'anneau termine toujours
+   sa course au lieu d'être coupé net par le changement d'écran. */
+function useProgressionAnimee(actif, pretALivrer) {
+  const [pourcentage, setPourcentage] = useState(0)
+  const [complet, setComplet] = useState(false)
+  const pourcentageRef = useRef(0)
+
+  useEffect(() => {
+    if (!actif) return undefined
+
+    const reduit =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const cible = pretALivrer ? 100 : PLAFOND_ATTENTE
+
+    if (reduit) {
+      pourcentageRef.current = cible
+      setPourcentage(cible)
+      if (pretALivrer) setComplet(true)
+      return undefined
+    }
+
+    const duree = pretALivrer ? DUREE_FINALE_MS : DUREE_MONTEE_MS
+    const depart = pourcentageRef.current
+    let debut
+    let frame
+
+    const etape = (t) => {
+      if (debut === undefined) debut = t
+      const p = Math.min(1, (t - debut) / duree)
+      const progression = 1 - (1 - p) ** 2
+      const valeur = depart + (cible - depart) * progression
+      pourcentageRef.current = valeur
+      setPourcentage(valeur)
+      if (p < 1) {
+        frame = requestAnimationFrame(etape)
+      } else if (pretALivrer) {
+        setComplet(true)
+      }
+    }
+    frame = requestAnimationFrame(etape)
+    return () => cancelAnimationFrame(frame)
+  }, [actif, pretALivrer])
+
+  return [pourcentage, complet]
+}
+
+// L'anneau et les étapes tournent en continu derrière l'écran ; `children`
+// (le formulaire e-mail, puis le bouton d'erreur/retry) s'affiche par-dessus.
+function ProgressionAnalyse({ titre, pourcentage, steps, children }) {
+  const indexCourant = steps.findIndex((s) => pourcentage < s.seuil)
+
+  return (
+    <div className="interstitial plan-creation">
+      <h1 className="interstitial-titre">{titre}</h1>
+
+      <div className="plan-progress">
+        <div
+          className="progress-circle"
+          style={{ '--progression': `${pourcentage * 3.6}deg` }}
+        >
+          <div className="progress-value">{Math.round(pourcentage)}%</div>
+        </div>
+      </div>
+
+      <div className="plan-steps">
+        {steps.map((step, idx) => {
+          const fait = pourcentage >= step.seuil
+          return (
+            <div
+              key={step.label}
+              className={`plan-step ${fait ? 'done' : ''} ${idx === indexCourant ? 'current' : ''}`}
+            >
+              <div className="step-check">{fait ? '✓' : ''}</div>
+              <span className="step-label">{step.label}</span>
+            </div>
+          )
+        })}
+      </div>
+
+      {children}
+    </div>
+  )
+}
+
+/* `?step=resultats-long-terme` saute direct à cet écran de l'onboarding,
+   sans repasser par les questions précédentes. DEV UNIQUEMENT (comme le
+   `?preview=` de App.jsx) : sert à vérifier un écran précis en un lien,
+   pas à exposer un mode démo en production. */
+function indexEtapePreview(reponses) {
+  if (!import.meta.env.DEV) return null
+  const etape = new URLSearchParams(window.location.search).get('step')
+  if (!etape) return null
+  const i = etapesPour(reponses).indexOf(etape)
+  return i >= 0 ? i : null
+}
+
 function OnboardingFlow({ onPredictionComplete, onCancel }) {
   const etatSauvegarde = useMemo(() => chargerEtat(), [])
 
-  const [index, setIndex] = useState(etatSauvegarde?.index ?? 0)
   const [reponses, setReponses] = useState(etatSauvegarde?.reponses ?? reponsesInitiales())
+  const [index, setIndex] = useState(
+    () => indexEtapePreview(reponses) ?? etatSauvegarde?.index ?? 0,
+  )
   const [unites, setUnites] = useState(etatSauvegarde?.unites ?? unitesInitiales())
 
-  // Écran final : phase séparée du reste, jamais persistée (cf. chargerEtat).
-  const [phaseResultats, setPhaseResultats] = useState('gate') // 'gate' | 'analyse'
+  // Écran final : état séparé du reste, jamais persisté (cf. chargerEtat).
+  // L'anneau de progression tourne dès l'affichage de l'écran, avec le
+  // formulaire e-mail par-dessus ; `emailEnvoye` bascule une fois soumis,
+  // ce qui déclenche le vrai appel API pendant que l'anneau continue.
+  const [emailEnvoye, setEmailEnvoye] = useState(false)
   const [email, setEmail] = useState('')
   const [resultatApi, setResultatApi] = useState(null)
   const [erreurApi, setErreurApi] = useState(null)
-  // Incrémenté à chaque « Réessayer » : `phaseResultats` ne change pas de
+  // Incrémenté à chaque « Réessayer » : `emailEnvoye` ne change pas de
   // valeur entre deux tentatives, donc lui seul ne suffit pas à rejouer
   // l'effet qui appelle l'API.
   const [tentative, setTentative] = useState(0)
   const dejaLivre = useRef(false)
 
-  const etape = ORDRE_ETAPES[index]
-  const texte = TEXTES_ETAPE[etape]
+  // Liste des écrans propre à ce profil (fille / garçon, âge) : l'index
+  // porte sur CETTE liste, pas sur ORDRE_ETAPES.
+  const etapes = useMemo(() => etapesPour(reponses), [reponses])
+  const etape = etapes[Math.min(index, etapes.length - 1)]
+  const texte = texteEtape(etape, reponses.profil, reponses.sexe)
+
+  const chapitreActif = chapitreDe(etape)
+  const dansChapitre = etapes.filter((e) => chapitreDe(e) === chapitreActif && e !== 'resultats-la')
+  const chapitres = {
+    noms: CHAPITRES,
+    actif: chapitreActif,
+    avancement: (dansChapitre.indexOf(etape) + 1) / dansChapitre.length,
+  }
+
+  const [pourcentageAnalyse, animationTerminee] = useProgressionAnimee(
+    etape === 'resultats-la',
+    !!resultatApi,
+  )
 
   useEffect(() => {
     localStorage.setItem(STOCKAGE, JSON.stringify({ index, reponses, unites }))
   }, [index, reponses, unites])
 
   useEffect(() => {
-    tunnelEtapeVue(etape, index + 1, ORDRE_ETAPES.length)
+    tunnelEtapeVue(etape, index + 1, etapes.length)
   }, [etape, index])
 
   useEffect(() => {
@@ -182,8 +319,20 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     }))
   }
 
+  /* Choix unique : un toucher suffit. La réponse s'affiche sélectionnée
+     un court instant (le temps de voir la case s'allumer), puis l'écran
+     suivant arrive, sans passer par « Continuer ». */
+  const minuterieAvance = useRef(null)
+  useEffect(() => () => clearTimeout(minuterieAvance.current), [])
+
+  function choisirEtAvancer(champ, valeur) {
+    definir(champ, valeur)
+    clearTimeout(minuterieAvance.current)
+    minuterieAvance.current = setTimeout(avancer, 280)
+  }
+
   function avancer() {
-    setIndex((precedent) => Math.min(ORDRE_ETAPES.length - 1, precedent + 1))
+    setIndex((precedent) => Math.min(etapes.length - 1, precedent + 1))
   }
 
   function reculer() {
@@ -208,11 +357,11 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   function lancerAnalyse() {
     emailSaisi()
     setErreurApi(null)
-    setPhaseResultats('analyse')
+    setEmailEnvoye(true)
   }
 
   useEffect(() => {
-    if (phaseResultats !== 'analyse') return undefined
+    if (!emailEnvoye) return undefined
     let annule = false
     setResultatApi(null)
     setErreurApi(null)
@@ -240,10 +389,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       annule = true
     }
     // `reponses` et `email` sont figés une fois cette phase atteinte : les
-    // écrans qui les renseignent sont derrière nous. Seuls `phaseResultats`
+    // écrans qui les renseignent sont derrière nous. Seuls `emailEnvoye`
     // et `tentative` doivent rejouer l'appel.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phaseResultats, tentative])
+  }, [emailEnvoye, tentative])
 
   function terminerAnalyse() {
     if (dejaLivre.current || !resultatApi) return
@@ -252,6 +401,15 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     localStorage.removeItem(STOCKAGE)
     onPredictionComplete(donnees)
   }
+
+  // L'anneau termine sa propre montée (0 → 100 %) une fois l'API répondue
+  // avant qu'on quitte l'écran : `animationTerminee` porte ce délai, pas
+  // `resultatApi` directement, pour ne jamais couper l'animation en plein
+  // mouvement.
+  useEffect(() => {
+    if (animationTerminee) terminerAnalyse()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animationTerminee])
 
   // ---------- Validation par écran ----------
 
@@ -289,6 +447,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
         return true
       case 'croissance-lente':
         return true
+      case 'regles':
+        return true
       case 'taille-ideale':
         return reponses.tailleIdeale > 0
       default:
@@ -305,7 +465,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.profil}
-            onChoisir={(v) => definir('profil', v)}
+            onChoisir={(v) => choisirEtAvancer('profil', v)}
             options={[
               { valeur: 'ado', label: 'Je suis un ado', icon: <User size={22} aria-hidden="true" /> },
               { valeur: 'parent', label: 'Je suis un parent', icon: <Users size={22} aria-hidden="true" /> },
@@ -326,7 +486,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.sexe}
-            onChoisir={(v) => definir('sexe', v)}
+            onChoisir={(v) => choisirEtAvancer('sexe', v)}
             options={[
               { valeur: 'M', label: 'Garçon' },
               { valeur: 'F', label: 'Fille' },
@@ -383,7 +543,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.exerciceFreq}
-            onChoisir={(v) => definir('exerciceFreq', v)}
+            onChoisir={(v) => choisirEtAvancer('exerciceFreq', v)}
             options={OPTIONS_EXERCICE_FREQ.map((o) => ({ valeur: o.valeur, label: o.label }))}
           />
         )
@@ -429,7 +589,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.pilositeAisselles}
-            onChoisir={(v) => definir('pilositeAisselles', v)}
+            onChoisir={(v) => choisirEtAvancer('pilositeAisselles', v)}
             options={OPTIONS_PILOSITE_AISSELLES}
           />
         )
@@ -438,15 +598,17 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.pilositeVisage}
-            onChoisir={(v) => definir('pilositeVisage', v)}
+            onChoisir={(v) => choisirEtAvancer('pilositeVisage', v)}
             options={OPTIONS_PILOSITE_VISAGE}
           />
         )
       case 'vitesse-croissance':
         return (
-          <MoletteVitesseCroissance
+          <ListeChoixUnique
+            label={texte.titre}
             valeur={reponses.vitesseCroissance}
-            onChange={(v) => definir('vitesseCroissance', v)}
+            onChoisir={(v) => choisirEtAvancer('vitesseCroissance', v)}
+            options={OPTIONS_VITESSE_CROISSANCE}
           />
         )
       case 'epaules':
@@ -454,7 +616,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.epaules}
-            onChoisir={(v) => definir('epaules', v)}
+            onChoisir={(v) => choisirEtAvancer('epaules', v)}
             options={OPTIONS_EPAULES}
           />
         )
@@ -463,7 +625,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.odeur}
-            onChoisir={(v) => definir('odeur', v)}
+            onChoisir={(v) => choisirEtAvancer('odeur', v)}
             options={OPTIONS_ODEUR}
           />
         )
@@ -472,7 +634,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.acne}
-            onChoisir={(v) => definir('acne', v)}
+            onChoisir={(v) => choisirEtAvancer('acne', v)}
             options={OPTIONS_ACNE}
           />
         )
@@ -481,7 +643,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.muscles}
-            onChoisir={(v) => definir('muscles', v)}
+            onChoisir={(v) => choisirEtAvancer('muscles', v)}
             options={OPTIONS_MUSCLES}
           />
         )
@@ -490,8 +652,17 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.voix}
-            onChoisir={(v) => definir('voix', v)}
+            onChoisir={(v) => choisirEtAvancer('voix', v)}
             options={OPTIONS_VOIX}
+          />
+        )
+      case 'regles':
+        return (
+          <ListeChoixUnique
+            label={texte.titre}
+            valeur={reponses.regles}
+            onChoisir={(v) => choisirEtAvancer('regles', v)}
+            options={OPTIONS_REGLES}
           />
         )
       case 'croissance-lente':
@@ -499,16 +670,16 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
           <ListeChoixUnique
             label={texte.titre}
             valeur={reponses.croissanceLente}
-            onChoisir={(v) => definir('croissanceLente', v)}
+            onChoisir={(v) => choisirEtAvancer('croissanceLente', v)}
             options={OPTIONS_CROISSANCE_LENTE}
           />
         )
-      case 'habitudes':
-        return <EcranHabitudes />
       case 'modele-prediction':
         return <EcranModelePrediction />
       case 'precision':
         return <EcranPrecision />
+      case 'resultats-long-terme':
+        return <EcranResultatsLongTerme />
       case 'potentiel-gain':
         return <EcranPotentielGain />
       case 'optimiser-potentiel':
@@ -516,15 +687,13 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       case 'grandimi-aide':
         return <EcranGrandimiAide />
       case 'exercices-quotidiens':
-        return <FonctionExercices />
-      case 'optimise-routine':
-        return <EcranConseilsSommeil />
+        return <EcranActionsDuJour />
       case 'programme-optimal':
         return <EcranPlanQuotidien />
       case 'guide-grandir':
-        return <EcranConseilsNutrition />
+        return <EcranLecons />
       case 'height-tracker':
-        return <FonctionSuivi />
+        return <EcranHeightTracker />
       case 'verite-brutale':
         return <EcranVeriteBrutale sexe={reponses.sexe} />
       case 'etudes-publiees':
@@ -553,62 +722,60 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     return <EcranPlusQueGenes onContinue={avancer} />
   }
 
-  if (etape === 'choix-genetique') {
-    return <div className="onb-content"><p>Tu n'as pas choisi ta génétique. Mais tu peux choisir ce que tu en fais.</p></div>
-  }
-
-  if (etape === 'decouvrir-taller') {
-    return (
-      <div className="interstitial">
-        <h1 className="interstitial-titre">Il est maintenant temps de découvrir</h1>
-        <p className="interstitial-text">Ce que Taller dit sur ton potentiel de croissance</p>
-        <div className="interstitial-action is-ready">
-          <button type="button" className="funnel-cta" onClick={avancer}>
-            Analyser mes réponses
-          </button>
-        </div>
-      </div>
-    )
-  }
-
   if (etape === 'resultats-la') {
-    // Plan creation screen with progression
-    const steps = [
-      { label: 'Lecture de tes mesures', done: true },
-      { label: 'Projection Khamis-Roche', done: true },
-      { label: 'Croissement avec les courbes OMS', done: false },
-      { label: 'Correction selon ta maturité', done: false },
-      { label: 'Pondération de tes habitudes', done: false },
-    ]
-
-    const progressPercent = (steps.filter(s => s.done).length / steps.length) * 100
-
+    // L'anneau tourne dès l'affichage de l'écran (cf. useProgressionAnimee
+    // plus haut) ; le formulaire e-mail s'affiche par-dessus, en overlay,
+    // pas comme un écran séparé. Une fois soumis, l'overlay disparaît et
+    // l'anneau continue seul jusqu'à ce que le vrai appel API réponde —
+    // pas pour « envoyer le résultat par mail » : c'est ce qui permet de
+    // retrouver le compte ensuite (même adresse que le checkout Whop, cf.
+    // PaywallPage.jsx qui relit `localStorage.userEmail`).
+    const emailPlausible = EMAIL_VALIDE.test(email.trim())
     return (
-      <div className="interstitial plan-creation">
-        <h1 className="interstitial-titre">{texte.titre}</h1>
-        <p className="interstitial-text">{texte.sousTitre}</p>
+      <ProgressionAnalyse titre="On analyse tes réponses" pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
+        {!emailEnvoye ? (
+          <div className="resultats-overlay">
+            <div className="resultats-overlay-carte">
+              <h2 className="resultats-overlay-titre">{texte.titre}</h2>
+              <p className="resultats-overlay-text">{texte.sousTitre}</p>
 
-        <div className="plan-progress">
-          <div className="progress-circle">
-            <div className="progress-value">{Math.round(progressPercent)}%</div>
-          </div>
-        </div>
+              <input
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                className="resultats-gate-input"
+                placeholder="ton@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <p className="funnel-help">C'est ce qui te permet de retrouver ton compte et ton plan.</p>
 
-        <div className="plan-steps">
-          {steps.map((step, idx) => (
-            <div key={idx} className={`plan-step ${step.done ? 'done' : ''}`}>
-              <div className="step-check">{step.done ? '✓' : ''}</div>
-              <span className="step-label">{step.label}</span>
+              <FunnelButton
+                disabled={!emailPlausible}
+                onClick={() => {
+                  localStorage.setItem('userEmail', email.trim())
+                  lancerAnalyse()
+                }}
+              >
+                Révéler mes résultats
+              </FunnelButton>
             </div>
-          ))}
-        </div>
-
-        <div className="interstitial-action is-ready">
-          <button type="button" className="funnel-cta" onClick={avancer} disabled>
-            En cours...
-          </button>
-        </div>
-      </div>
+          </div>
+        ) : (
+          <div className="interstitial-action is-ready">
+            {erreurApi ? (
+              <>
+                <p className="funnel-help">{erreurApi}</p>
+                <FunnelButton onClick={() => setTentative((t) => t + 1)}>Réessayer</FunnelButton>
+              </>
+            ) : (
+              <button type="button" className="funnel-cta" disabled>
+                En cours...
+              </button>
+            )}
+          </div>
+        )}
+      </ProgressionAnalyse>
     )
   }
 
@@ -617,7 +784,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   return (
     <FunnelShell
       onBack={reculer}
-      progress={index / ORDRE_ETAPES.length}
+      progress={index / etapes.length}
+      chapitres={chapitres}
       title={texte.titre}
       subtitle={texte.sousTitre}
       footer={

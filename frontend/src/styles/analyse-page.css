@@ -72,6 +72,40 @@
   color: var(--funnel-muted);
 }
 
+/* Cartes entièrement verrouillées (taille souhaitée, croissance finie) :
+   libellé, cadenas centré, barre floutée qui dit « il y a une valeur
+   ici » sans en laisser deviner la longueur. */
+.analyse .analyse-case--verrou {
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.analyse .analyse-case--verrou .analyse-case-label {
+  font-size: 15px;
+  color: var(--funnel-text);
+}
+
+.analyse .analyse-case--verrou svg {
+  color: #ffb020;
+  filter: drop-shadow(0 0 8px rgba(255, 150, 40, 0.6));
+}
+
+.analyse .analyse-barre-floue {
+  width: 80%;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2a2522, #3a302a, #2a2522);
+  filter: blur(1.5px);
+}
+
+/* L'aplat orange de la carte « Taille potentielle » gagne le halo des
+   autres éléments lumineux du parcours. */
+.analyse .analyse-case--accent {
+  box-shadow: 0 10px 34px -8px rgba(255, 90, 31, 0.75);
+}
+
 /* ---------- Ligne pleine largeur, verrouillée ---------- */
 
 .analyse .analyse-ligne {
@@ -90,8 +124,87 @@
 }
 
 .analyse .analyse-ligne--verrou svg {
-  color: var(--funnel-accent);
+  color: #ffb020;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(255, 150, 40, 0.6));
+}
+
+/* Plein écran : la zone défile sans barre visible. Sur ordinateur, la
+   barre grise dessinait un cadre autour du contenu et donnait l'air d'une
+   fenêtre posée dans la page. */
+.analyse.results .results-scroll {
+  scrollbar-width: none;
+  gap: 10px;
+  padding-top: 4px;
+  padding-bottom: 12px;
+}
+
+/* Le retour passe en coin, hors du flux : centré au-dessus du titre, il
+   coûtait une bande de 70 px et poussait les deux dernières cartes sous le
+   pli. */
+.analyse.results .results-top {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 0;
+  z-index: 2;
+}
+
+.analyse.results .results-top .funnel-back {
+  width: 38px;
+  height: 38px;
+}
+
+.analyse .analyse-titre {
+  margin-top: 40px;
+}
+
+/* Une ligne verrouillée ne se coupe jamais mot par mot : chaque segment
+   reste entier, le texte rétrécit un peu sur les petits écrans. */
+.analyse .analyse-ligne--verrou {
+  padding: 13px 14px;
+  font-size: clamp(14px, 4.2vw, 17px);
+}
+
+.analyse .analyse-ligne--verrou span {
+  white-space: nowrap;
+}
+
+/* En-tête du graphique sur une seule ligne : la pastille d'alerte se
+   range dans le coin au lieu de pousser la courbe d'une ligne vers le bas. */
+.analyse .analyse-carte-graphe {
+  position: relative;
+  gap: 6px;
+  padding-bottom: 6px;
+}
+
+.analyse .analyse-graphe-tete {
+  flex-wrap: nowrap;
+}
+
+.analyse .analyse-graphe-tete .analyse-alerte {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  margin: 0;
+  padding: 4px 9px;
+  font-size: 11.5px;
+}
+
+.analyse .analyse-carte-graphe > svg {
+  max-height: 100px;
+}
+
+.analyse .analyse-case {
+  min-height: 84px;
+}
+
+.analyse .analyse-titre {
+  margin-bottom: 0;
+}
+
+.analyse.results .results-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 /* ---------- Carte du graphique ---------- */

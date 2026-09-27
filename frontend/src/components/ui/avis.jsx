@@ -111,7 +111,8 @@ function Laurier({ cote }) {
   )
 }
 
-export function Avis({ className }) {
+export function Avis({ className, limit }) {
+  const avisAffiches = limit ? AVIS.slice(0, limit) : AVIS
   return (
     <div className={`avis ${className || ''}`}>
       <div className={`avis-couronne ${NOTE_BOUTIQUES ? 'a-couronne' : ''}`}>
@@ -141,7 +142,7 @@ export function Avis({ className }) {
       </div>
 
       <ul className="avis-cartes">
-        {AVIS.map((avis) => (
+        {avisAffiches.map((avis) => (
           <li className="avis-carte" key={avis.prenom}>
             <div className="avis-entete">
               {/* Une initiale dans une pastille plutôt qu'un portrait

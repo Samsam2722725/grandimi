@@ -36,6 +36,9 @@ export function FunnelShell({
      note sous le bouton, que personne ne lit avant d'avoir deja
      hesite. */
   onSkip,
+  /* { noms, actif, avancement } : remplace la barre unique par un segment
+     par chapitre, et affiche le chapitre courant au-dessus du titre. */
+  chapitres,
 }) {
   return (
     <div className={cn('funnel', className)}>
@@ -49,19 +52,45 @@ export function FunnelShell({
           <ArrowLeft size={20} aria-hidden="true" />
         </button>
 
-        <div
-          className="funnel-progress"
-          role="progressbar"
-          aria-label="Progression du questionnaire"
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={Math.round(progress * 100)}
-        >
+        {chapitres ? (
+          /* Un segment par chapitre : on sait combien de parties il reste,
+             pas seulement qu'une barre avance lentement. */
           <div
-            className="funnel-progress-fill"
-            style={{ width: `${Math.max(4, Math.min(100, progress * 100))}%` }}
-          />
-        </div>
+            className="funnel-chapitres"
+            role="progressbar"
+            aria-label={`Partie ${chapitres.actif + 1} sur ${chapitres.noms.length} : ${chapitres.noms[chapitres.actif]}`}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(progress * 100)}
+          >
+            {chapitres.noms.map((nom, i) => {
+              const remplissage =
+                i < chapitres.actif ? 1 : i > chapitres.actif ? 0 : chapitres.avancement
+              return (
+                <span key={nom} className="funnel-chapitre">
+                  <span
+                    className="funnel-chapitre-fill"
+                    style={{ width: `${Math.max(i === chapitres.actif ? 8 : 0, remplissage * 100)}%` }}
+                  />
+                </span>
+              )
+            })}
+          </div>
+        ) : (
+          <div
+            className="funnel-progress"
+            role="progressbar"
+            aria-label="Progression du questionnaire"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(progress * 100)}
+          >
+            <div
+              className="funnel-progress-fill"
+              style={{ width: `${Math.max(4, Math.min(100, progress * 100))}%` }}
+            />
+          </div>
+        )}
 
         {onSkip ? (
           <button type="button" className="funnel-skip" onClick={onSkip}>
@@ -76,6 +105,11 @@ export function FunnelShell({
 
       <main className="funnel-body">
         <div className="funnel-step" key={stepKey}>
+          {chapitres && (
+            <p className="funnel-chapitre-nom">
+              {chapitres.actif + 1}/{chapitres.noms.length} · {chapitres.noms[chapitres.actif]}
+            </p>
+          )}
           {title && <h1 className="funnel-title">{title}</h1>}
           {subtitle && <p className="funnel-subtitle">{subtitle}</p>}
           <div className="funnel-content">{children}</div>

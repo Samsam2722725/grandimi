@@ -59,22 +59,23 @@
      declare juste en dessous, et gardent leurs jetons sombres : ces deux
      ecrans ont ete dessines pour le noir (paywall-night.css) et les
      basculer serait un autre chantier. */
-  --funnel-bg: #fbf7f2;
-  --funnel-surface: #f4eee6;
-  --funnel-surface-high: #ebdcc6;
-  --funnel-line: #e6ddd2;
-  --funnel-text: #17120e;
-  --funnel-muted: #756a5f;
-
-  /* TROIS oranges, et il faut les trois. L orange vif ne passe pas en
-     texte courant (2.9:1 sur papier) : il ne sert que de FOND de bouton,
-     avec l encre posee dessus. Les deux autres sont les versions
-     lisibles, l une pour le texte courant, l autre pour les gros titres.
-     Melanger les trois est l erreur qui fait echouer un audit AA. */
-  --funnel-accent: #ff5a1f;          /* fond de bouton uniquement      */
-  --funnel-accent-text: #c23c0b;     /* texte courant — 4.99:1         */
-  --funnel-accent-display: #ee4a0e;  /* titres >= 24px — 3.50:1        */
-  --funnel-on-accent: #17120e;       /* encre sur orange — 5.96:1      */
+  /* 27/09/2026 — LE TUNNEL PASSE EN SOMBRE, décision du client : la
+     landing est désormais sombre elle aussi, et le passage crème → noir à
+     l'écran d'analyse cassait le parcours. Les raisons ci-dessus sont
+     gardées pour l'historique ; les jetons sont désormais ceux de `.night`,
+     un seul thème du début à la fin. */
+  --funnel-bg: #0a0a0a;
+  --funnel-surface: #141414;
+  --funnel-surface-high: #1c1c1c;
+  --funnel-line: #2a2a2a;
+  --funnel-text: #ffffff;
+  --funnel-muted: #9a9a9a;
+  --funnel-accent: #ff5a1f;
+  /* Sur noir, l'orange vif passe en texte (6.35:1) : les trois rôles
+     d'accent pointent sur la même valeur. */
+  --funnel-accent-text: #ff5a1f;
+  --funnel-accent-display: #ff5a1f;
+  --funnel-on-accent: #17120e;
 }
 
 /* La surface sombre, conservee telle quelle pour le resultat et la
@@ -200,6 +201,39 @@
   transition: width 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
+/* ---------- Chapitres : quatre segments au lieu d'une barre ---------- */
+.funnel-chapitres {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  align-items: center;
+}
+
+.funnel-chapitre {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--funnel-line);
+  overflow: hidden;
+}
+
+.funnel-chapitre-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff5a1f, #ff8a2a);
+  box-shadow: 0 0 8px rgba(255, 90, 31, 0.7);
+  transition: width 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.funnel-chapitre-nom {
+  margin: 0 0 6px;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--funnel-accent-text);
+}
+
 .funnel-header-spacer {
   display: block;
   width: 48px;
@@ -264,6 +298,14 @@
   gap: 24px;
   /* La réserve du bas laisse la dernière ligne sortir du dégradé du pied. */
   padding: 28px 0 44px;
+}
+
+/* Écrans à choix : les réponses se rangent juste sous la question. Centrées
+   verticalement, elles laissaient un grand vide entre le titre et la
+   première réponse, et l'œil devait traverser la moitié de l'écran. */
+.funnel-content:has(> .funnel-choices) {
+  justify-content: flex-start;
+  padding-top: 20px;
 }
 
 /* Enveloppe titre + sous-titre + contenu, remontée avec `key={stepKey}` à
@@ -347,6 +389,51 @@
 .funnel-cta:focus-visible {
   outline: 2px solid var(--funnel-text);
   outline-offset: 3px;
+}
+
+/* ---------- Bouton brillant (écrans sombres : résultat, paywall) ----------
+   Inspiré du ShinyButton : un reflet balaie le bouton toutes les quelques
+   secondes et le halo respire. Réservé au bouton principal des écrans
+   sombres, là où se prend la décision — sur le papier du tunnel, une
+   lueur animée à chaque écran deviendrait du bruit. */
+.results .funnel-footer .funnel-cta:not(:disabled) {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(135deg, #ff7a2a, #ff5a1f 45%, #ff3d0e);
+  animation: cta-halo 2.8s ease-in-out infinite;
+}
+
+.results .funnel-footer .funnel-cta:not(:disabled)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%);
+  animation: cta-reflet 3.2s ease-in-out 1.2s infinite;
+}
+
+@keyframes cta-halo {
+  0%, 100% { box-shadow: 0 6px 22px rgba(255, 90, 31, 0.35); }
+  50% { box-shadow: 0 8px 34px rgba(255, 90, 31, 0.7), 0 0 0 4px rgba(255, 90, 31, 0.12); }
+}
+
+@keyframes cta-reflet {
+  0% { transform: translateX(-120%); }
+  45%, 100% { transform: translateX(120%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .results .funnel-footer .funnel-cta:not(:disabled),
+  .results .funnel-footer .funnel-cta:not(:disabled)::after {
+    animation: none;
+  }
 }
 
 /* Action secondaire : texte seul, jamais un second bouton plein. Deux boutons
@@ -487,10 +574,10 @@
 .choice-card {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   width: 100%;
-  padding: 24px;
-  border-radius: 20px;
+  padding: 15px 20px;
+  border-radius: 16px;
   border: 1.5px solid var(--funnel-line);
   background: var(--funnel-surface);
   color: var(--funnel-text);
@@ -508,11 +595,12 @@
 
 .choice-card.is-selected {
   border-color: var(--funnel-accent);
-  background: rgba(255, 90, 31, 0.09);
-  /* Le tap a un mouvement à regarder pendant les 260 ms que le composant
-     laisse déjà s'écouler avant d'avancer (repondreEtAvancer) : sans ça,
-     ce délai ne montrait qu'un changement de couleur immobile. */
-  animation: choice-card-pop 0.28s ease-out;
+  background: rgba(255, 90, 31, 0.12);
+  box-shadow: 0 0 22px -4px rgba(255, 90, 31, 0.55);
+  /* Le tap a un mouvement à regarder pendant les 280 ms laissées avant
+     l'avance automatique (choisirEtAvancer) : sans ça, ce délai ne
+     montrait qu'un changement de couleur immobile. */
+  animation: choice-card-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .choice-card:focus-visible {
@@ -535,7 +623,7 @@
 }
 
 .choice-card-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -546,8 +634,8 @@
 }
 
 .choice-card-radio {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 999px;
   border: 2px solid var(--funnel-line);
   flex-shrink: 0;
@@ -577,10 +665,13 @@
 }
 
 @keyframes choice-card-pop {
-  from {
-    transform: scale(0.98);
+  0% {
+    transform: scale(0.96);
   }
-  to {
+  55% {
+    transform: scale(1.025);
+  }
+  100% {
     transform: scale(1);
   }
 }
@@ -764,6 +855,28 @@
   pointer-events: auto;
 }
 
+.resultats-gate-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  border: 1.5px solid var(--funnel-line);
+  background: var(--funnel-surface);
+  color: var(--funnel-text);
+  font-family: inherit;
+  font-size: 16px;
+  text-align: center;
+}
+
+.resultats-gate-input:focus {
+  outline: 2px solid var(--funnel-accent);
+  outline-offset: 2px;
+}
+
+.resultats-gate-input::placeholder {
+  color: var(--funnel-muted);
+}
+
 @keyframes interstitial-in {
   from {
     opacity: 0;
@@ -799,9 +912,7 @@
   .segmented-option.is-selected,
   .verite-ligne,
   .fonction-plan li,
-  .etudes li,
-  .fonction-suivi-semaines li,
-  .onb-icone {
+  .etudes li {
     animation: none;
     /* Ces figures sont posées `opacity: 0` / `stroke-dashoffset: 1` en
        attendant leur animation d'entrée : sans l'animation pour les
@@ -817,7 +928,7 @@
 .funnel-choices {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 9px;
 }
 
 /* ---------- Écran-chiffre ---------- */
@@ -1221,26 +1332,8 @@
 }
 
 .funnel-reseau {
-  position: relative;
   width: 100%;
   max-width: 420px;
-}
-
-/* Halo d'ambiance derrière le réseau : sans lui, la figure flotte seule
-   dans un grand vide clair et se lit comme inachevée, quel que soit le
-   soin mis dans le tracé lui-même. Porté par un pseudo-élément flou et
-   non par chaque nœud (cf. note plus bas sur le coût des drop-shadow),
-   il donne de la présence à l'écran sans coûter une image de plus. */
-.funnel-reseau::before {
-  content: '';
-  position: absolute;
-  inset: -15% -5%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 90, 31, 0.14),
-    transparent 70%
-  );
-  z-index: -1;
 }
 
 .reseau {
@@ -1593,20 +1686,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-/* Même principe que le halo du réseau de neurones : une atmosphère
-   derrière le cluster plutôt qu'un cluster posé seul sur du vide. */
-.ruche::before {
-  content: '';
-  position: absolute;
-  inset: -20% -10%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 90, 31, 0.12),
-    transparent 72%
-  );
-  z-index: -1;
 }
 
 .ruche-tuiles {
@@ -2151,44 +2230,6 @@
   width: 100%;
 }
 
-/* La silhouette : un pictogramme plat, pas une mascotte. Tronc et
-   membres sont un unique trait épais à bouts ronds — le même langage
-   que la pilule de sélection des molettes (.wheel-selection) et le
-   point d'arrivée des courbes (.lt-point). */
-.fonction-seance-silhouette {
-  position: relative;
-  width: 120px;
-  height: 132px;
-}
-
-.fonction-seance-silhouette::before {
-  content: '';
-  position: absolute;
-  inset: 10% -30%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 90, 31, 0.16),
-    transparent 70%
-  );
-  z-index: -1;
-}
-
-.fs-socle {
-  fill: var(--funnel-surface-high);
-}
-
-.fs-corps circle {
-  fill: var(--funnel-accent-display);
-}
-
-.fs-corps path {
-  fill: none;
-  stroke: var(--funnel-accent-display);
-  stroke-width: 9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
 .fonction-seance-anneau {
   position: relative;
   width: 96px;
@@ -2236,58 +2277,6 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-}
-
-/* Trois pastilles empilées, chacune légèrement décalée et tournée : la
-   pile suggère l'accumulation des semaines avant que la courbe ne
-   commence, sans jamais afficher de chiffre — la donnée reste dans le
-   graphique en dessous. */
-.fonction-suivi-semaines {
-  position: relative;
-  list-style: none;
-  margin: 0 0 -6px;
-  padding: 0;
-  height: 68px;
-  width: 100%;
-  max-width: 220px;
-}
-
-.fonction-suivi-semaines li {
-  position: absolute;
-  left: 50%;
-  padding: 7px 16px;
-  border-radius: 999px;
-  background: var(--funnel-surface);
-  border: 1px solid var(--funnel-line);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--funnel-muted);
-  white-space: nowrap;
-  opacity: 0;
-  animation: funnel-step-in 0.4s ease-out both;
-}
-
-.fonction-suivi-semaines li:nth-child(1) {
-  top: 0;
-  transform: translateX(-72%) rotate(-6deg);
-  animation-delay: 0.05s;
-}
-
-.fonction-suivi-semaines li:nth-child(2) {
-  top: 22px;
-  transform: translateX(-32%) rotate(3deg);
-  animation-delay: 0.18s;
-  color: var(--funnel-text);
-}
-
-.fonction-suivi-semaines li:nth-child(3) {
-  top: 44px;
-  transform: translateX(-58%) rotate(-2deg);
-  animation-delay: 0.31s;
-  background: var(--funnel-surface-high);
-  border-color: rgba(255, 90, 31, 0.3);
-  color: var(--funnel-accent-text);
-  font-weight: 800;
 }
 
 .fonction-suivi-figure {
@@ -2445,6 +2434,18 @@
   margin: 0 auto;
 }
 
+.onb-lien-inconnu[aria-pressed="true"] {
+  color: var(--funnel-accent-text);
+  font-weight: 700;
+}
+
+.onb-inconnu-note {
+  margin: 0;
+  font-size: 13px;
+  color: var(--funnel-muted);
+  text-align: center;
+}
+
 /* Trois molettes de front pour la date de naissance : même raisonnement
    que .funnel-pointure — les comparer demande de les voir d'un coup. */
 .onb-wheel-row {
@@ -2459,10 +2460,258 @@
 }
 
 .onb-preuve {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
+}
+
+.onb-image-pleine {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  border-radius: 16px;
+}
+
+/* ---------- Graphique « Votre taille finale » (SVG, sans fond) ---------- */
+
+.tfc {
+  width: 100%;
+  max-width: 360px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tfc-titre {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--funnel-text);
+}
+
+.tfc-titre em {
+  font-style: normal;
+  color: var(--funnel-accent-display);
+}
+
+.tfc-icone {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #17110d;
+  box-shadow: 0 4px 14px -4px rgba(255, 90, 31, 0.6);
+}
+
+.tfc-icone svg {
+  fill: #ffb020;
+}
+
+.tfc-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.tfc-grille {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1;
+  stroke-dasharray: 4 5;
+}
+
+.tfc-courbe {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: tfc-trace 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.tfc-courbe--habitudes {
+  stroke: #b8987a;
+  stroke-width: 3;
+  animation-delay: 0.2s;
+}
+
+.tfc-courbe--routine {
+  stroke-width: 4;
+  animation-delay: 0.45s;
+}
+
+.tfc-zone {
+  opacity: 0;
+  animation: tfc-apparait 0.8s ease-out 1.3s forwards;
+}
+
+.tfc-point {
+  stroke: #fff;
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  animation: tfc-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.tfc-point--depart {
+  fill: #ff5a1f;
+  animation-delay: 0.1s;
+}
+
+.tfc-point--habitudes {
+  fill: #e8c9a8;
+  animation-delay: 1.5s;
+}
+
+.tfc-point--routine {
+  fill: #ff5a1f;
+  animation-delay: 1.8s;
+}
+
+.tfc-legende {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--funnel-text);
+}
+
+.tfc-legende li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tfc-pastille {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+}
+
+.tfc-pastille--habitudes {
+  background: #e8c9a8;
+}
+
+.tfc-pastille--routine {
+  background: #ff5a1f;
+  box-shadow: 0 0 10px rgba(255, 90, 31, 0.8);
+}
+
+@keyframes tfc-trace {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes tfc-apparait {
+  to { opacity: 1; }
+}
+
+@keyframes tfc-pop {
+  to { transform: scale(1); }
+}
+
+/* ---------- Jauge 20 % (SVG, sans fond) ---------- */
+
+.jauge {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.jauge-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.jauge-piste {
+  fill: none;
+  stroke: #2e2622;
+  stroke-width: 18;
+  stroke-linecap: round;
+}
+
+.jauge-segment {
+  fill: none;
+  stroke-width: 18;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: tfc-trace 1.4s cubic-bezier(0.65, 0, 0.35, 1) 0.4s forwards;
+}
+
+.jauge-graduation {
+  stroke: #b3a79c;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.jauge-graduation.is-active {
+  stroke: #ff8a2a;
+}
+
+.jauge-disque {
+  fill: #120c09;
+  stroke: #ff5a1f;
+  stroke-width: 2;
+}
+
+.jauge-trame {
+  opacity: 0;
+  animation: tfc-apparait 1s ease-out 0.6s forwards;
+}
+
+.jauge-bouton {
+  fill: #fff;
+  stroke: #ff5a1f;
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  animation: tfc-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 1.6s forwards;
+}
+
+.jauge-valeur {
+  fill: #fff;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.jauge-borne {
+  fill: var(--funnel-muted);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tfc-courbe,
+  .jauge-segment {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .tfc-zone,
+  .jauge-trame {
+    animation: none;
+    opacity: 1;
+  }
+
+  .tfc-point,
+  .jauge-bouton {
+    animation: none;
+    transform: none;
+  }
 }
 
 /* Jauge circulaire du potentiel restant. Volontairement PAS la ruche à
@@ -2475,15 +2724,17 @@
   gap: 16px;
 }
 
-.onb-gauge-anneau {
-  width: 160px;
-  height: 160px;
+.onb-gauge-cadran {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
 }
 
 .onb-gauge-piste,
 .onb-gauge-arc {
   fill: none;
-  stroke-width: 10;
+  stroke-width: 14;
+  stroke-linecap: round;
 }
 
 .onb-gauge-piste {
@@ -2491,21 +2742,112 @@
 }
 
 .onb-gauge-arc {
-  stroke: var(--funnel-accent);
-  stroke-linecap: round;
-  transform: rotate(-90deg);
-  transform-origin: 60px 60px;
+  stroke: #22c55e;
+}
+
+.onb-gauge-tick {
+  stroke: var(--funnel-line);
+  stroke-width: 2;
+}
+
+.onb-gauge-label {
+  fill: var(--funnel-muted);
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .onb-gauge-texte {
   fill: var(--funnel-text);
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.onb-gauge-legende {
+  fill: var(--funnel-muted);
+  font-size: 13px;
+}
+
+/* ---------- Cartes lumineuses ----------
+   Le langage visuel des images du client (graphique « Votre taille
+   finale », jauge 20 %) : carte sombre, liseré et halo orange. Posées sur
+   le fond crème, elles restent des objets — le tunnel garde sa peau claire
+   (cf. en-tête de ce fichier) sans que ces écrans jurent avec les images.
+
+   Les jetons --funnel-* sont redéfinis SUR la carte : tout ce qu'elle
+   contient (titres, texte gris, accent) passe en version sombre sans
+   qu'aucun composant enfant n'ait à le savoir. */
+.onb-icone,
+.onb-exemple-carte,
+.onb-tracker,
+.onb-frise {
+  --funnel-text: #ffffff;
+  --funnel-muted: #b3a79c;
+  --funnel-line: rgba(255, 138, 76, 0.28);
+  --funnel-accent-text: #ff8a4c;
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 90, 31, 0.16), transparent 60%),
+    #17110d;
+  border: 1px solid rgba(255, 120, 60, 0.45);
+  border-radius: 20px;
+  box-shadow:
+    0 0 0 1px rgba(255, 90, 31, 0.08),
+    0 10px 30px -8px rgba(255, 90, 31, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  color: var(--funnel-text);
+}
+
+.onb-tracker {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 10px 22px;
+}
+
+.onb-tracker-ligne {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 8px;
+  padding: 14px 0 14px 24px;
+  border-left: 2px solid var(--funnel-line);
+}
+
+.onb-tracker-ligne:last-child {
+  border-left-color: transparent;
+}
+
+.onb-tracker-point {
+  position: absolute;
+  left: -7px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--funnel-accent);
+  box-shadow: 0 0 10px 2px rgba(255, 90, 31, 0.7);
+}
+
+.onb-tracker-semaine {
+  flex: 1;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.onb-tracker-icone {
+  color: var(--funnel-muted);
 }
 
 .onb-icones {
   display: grid;
   gap: 14px;
+}
+
+.onb-preuve > .onb-icones {
+  width: 100%;
 }
 
 .onb-icones-3 {
@@ -2522,37 +2864,12 @@
   align-items: center;
   gap: 8px;
   text-align: center;
-  padding: 18px 10px 16px;
-  border-radius: 16px;
-  background: var(--funnel-surface);
-  border: 1px solid var(--funnel-line);
-  color: var(--funnel-text);
-  opacity: 0;
-  animation: funnel-step-in 0.45s ease-out both;
-}
-
-.onb-icones-3 .onb-icone:nth-child(1) {
-  animation-delay: 0.05s;
-}
-
-.onb-icones-3 .onb-icone:nth-child(2) {
-  animation-delay: 0.16s;
-}
-
-.onb-icones-3 .onb-icone:nth-child(3) {
-  animation-delay: 0.27s;
+  padding: 20px 10px;
 }
 
 .onb-icone svg {
-  width: 22px;
-  height: 22px;
-  padding: 11px;
-  border-radius: 999px;
-  /* var(...) tinte l'orange de la marque à 12 % : le même halo que le
-     réseau de neurones et la ruche, réduit à l'échelle d'une icône. */
-  background: color-mix(in srgb, var(--funnel-accent) 12%, transparent);
-  color: var(--funnel-accent-text);
-  box-sizing: content-box;
+  color: #ff8a4c;
+  filter: drop-shadow(0 0 6px rgba(255, 90, 31, 0.6));
 }
 
 .onb-icone strong {
@@ -2568,10 +2885,13 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 20px;
-  border-radius: 16px;
-  background: var(--funnel-surface);
-  border: 1px solid var(--funnel-line);
+  padding: 22px;
+}
+
+.onb-exemples {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .onb-exemple-titre {
@@ -2610,11 +2930,10 @@
 .onb-frise {
   list-style: none;
   margin: 0;
-  padding: 0 0 0 18px;
+  padding: 22px 22px 22px 44px;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  border-left: 2px solid var(--funnel-line);
 }
 
 .onb-frise-etape {
@@ -2645,50 +2964,175 @@
   color: var(--funnel-muted);
 }
 
-.onb-genes-barres {
+.onb-graph-habitudes {
+  width: 100%;
+  max-width: 280px;
+  height: 160px;
+  margin: 16px 0;
+}
+
+.onb-graph-line {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.onb-graph-label {
+  font-size: 13px;
+  fill: var(--funnel-muted);
+}
+
+/* ---------- Colonne génétique / habitudes ----------
+   Une colonne de 100 % : 80 % de génétique en bloc sombre, 20 %
+   d'habitudes en orange lumineux au sommet. Les blocs montent depuis le
+   bas quand `.is-rempli` est posé (une frame après le montage). */
+.genes {
+  display: grid;
+  grid-template-columns: 44px 120px auto;
+  justify-content: center;
+  gap: 14px;
+  height: 250px;
+  margin: 12px 0 4px;
+}
+
+.genes-axe {
+  position: relative;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--funnel-muted);
+}
+
+.genes-axe span {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+
+.genes-axe-100 { top: 0; }
+.genes-axe-0 { top: 100%; }
+
+.genes-axe-80 {
+  top: 20%;
+  color: var(--funnel-accent-display);
+  font-weight: 800;
+}
+
+/* Le pointillé qui marque la frontière 80 %, de l'axe à la colonne. */
+.genes-axe-80::after {
+  content: '';
+  position: absolute;
+  left: calc(100% + 4px);
+  top: 50%;
+  width: 134px;
+  border-top: 2px dashed rgba(238, 74, 14, 0.55);
+}
+
+.genes-colonne {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  width: 100%;
-  margin: 8px 0;
+  gap: 6px;
 }
 
-.onb-genes-barre {
-  position: relative;
-  height: 40px;
-  border-radius: 999px;
-  background: var(--funnel-surface);
-  border: 1px solid var(--funnel-line);
+.genes-bloc {
   display: flex;
   align-items: center;
-  overflow: hidden;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 16px;
+  transform-origin: bottom;
+  transform: scaleY(0);
+  transition: transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.onb-genes-remplissage {
+.genes-bloc--genetique {
+  flex: 80;
+  background: #17110d;
+  border: 1px solid #3a2a20;
+  color: #6b5f55;
+}
+
+.genes-bloc--habitudes {
+  flex: 20;
+  background: linear-gradient(180deg, #ffb020, #ff5a1f);
+  color: rgba(23, 18, 14, 0.75);
+  box-shadow: 0 0 34px -2px rgba(255, 90, 31, 0.75);
+  transition-delay: 0.8s;
+}
+
+.genes.is-rempli .genes-bloc {
+  transform: scaleY(1);
+}
+
+.genes.is-rempli .genes-bloc--habitudes svg {
+  animation: genes-monte 1.6s ease-in-out 1.6s infinite;
+}
+
+.genes-bloc--habitudes svg:nth-child(2) {
+  animation-delay: 1.8s !important;
+}
+
+.genes-bloc--habitudes svg:nth-child(3) {
+  animation-delay: 2s !important;
+}
+
+@keyframes genes-monte {
+  0%, 100% { transform: translateY(2px); }
+  50% { transform: translateY(-4px); }
+}
+
+.genes-legendes {
+  position: relative;
+  min-width: 110px;
+}
+
+.genes-legende {
   position: absolute;
-  inset: 0 auto 0 0;
-  background: var(--funnel-surface-high);
-  border-radius: 999px;
-  transition: width 0.9s ease-out;
+  left: 0;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--funnel-muted);
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.genes-legende strong {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--funnel-text);
+}
+
+.genes-legende--habitudes {
+  top: 10%;
+  color: var(--funnel-accent-display);
+  transition-delay: 1.4s;
+}
+
+.genes-legende--habitudes strong {
+  color: var(--funnel-accent-display);
+}
+
+.genes-legende--genetique {
+  top: 60%;
+  transition-delay: 0.7s;
+}
+
+.genes.is-rempli .genes-legende {
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .onb-genes-remplissage {
+  .genes-bloc,
+  .genes-legende {
     transition: none;
   }
-}
 
-.onb-genes-remplissage--accent {
-  background: var(--funnel-accent);
-}
-
-.onb-genes-barre span {
-  position: relative;
-  z-index: 1;
-  margin-left: 16px;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--funnel-text);
+  .genes.is-rempli .genes-bloc--habitudes svg {
+    animation: none;
+  }
 }
 
 /* Resultats email screen - purple/magenta theme */
@@ -2763,6 +3207,10 @@
   padding: 2rem;
 }
 
+.interstitial.plan-creation {
+  background: #0a0a0a;
+}
+
 .plan-progress {
   margin: 2rem 0;
 }
@@ -2771,24 +3219,46 @@
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: conic-gradient(#ff5a1f 0deg, #ff5a1f 216deg, #333 216deg);
+  /* L'angle vient de `--progression`, posé en style inline avec le vrai
+     pourcentage — un dégradé figé à 216deg (60 %) mentait dès que la
+     valeur affichée au centre était différente. */
+  background: conic-gradient(#ff5a1f 0deg, #ffb020 var(--progression, 0deg), #2a2522 var(--progression, 0deg));
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
+  /* Même langage que la jauge 20 % : anneau orange lumineux, cœur
+     tramé. Le halo respire pendant que l'analyse tourne. */
+  animation: anneau-halo 2.4s ease-in-out infinite;
 }
 
 .progress-value {
-  width: 130px;
-  height: 130px;
-  background: #0a0a0a;
+  width: 122px;
+  height: 122px;
+  background:
+    radial-gradient(circle, rgba(255, 106, 42, 0.55) 1.2px, transparent 1.8px) 0 0 / 7px 7px,
+    #120c09;
   border-radius: 50%;
+  box-shadow: inset 0 0 24px 10px #120c09;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
-  font-weight: bold;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
   color: #fff;
+  text-shadow: 0 0 18px rgba(255, 90, 31, 0.8);
+}
+
+@keyframes anneau-halo {
+  0%, 100% { box-shadow: 0 0 24px rgba(255, 90, 31, 0.35); }
+  50% { box-shadow: 0 0 44px rgba(255, 90, 31, 0.7); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-circle {
+    animation: none;
+  }
 }
 
 .plan-steps {
@@ -2840,4 +3310,54 @@
 
 .plan-step.done .step-label {
   color: #fff;
+}
+
+/* L'anneau tourne derrière ; ce voile assombri + la carte dessus forment
+   l'écran de saisie e-mail. `position: absolute` se cale sur `.interstitial`
+   (deja `position: fixed`), donc il couvre tout l'ecran sans wrapper de plus. */
+.resultats-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: rgba(10, 10, 10, 0.82);
+  backdrop-filter: blur(6px);
+  animation: interstitial-in 0.5s ease-out both;
+}
+
+.resultats-overlay-carte {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px 24px;
+  border-radius: 20px;
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.resultats-overlay-titre {
+  font-size: clamp(20px, 5vw, 26px);
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.resultats-overlay-text {
+  color: #bbb;
+  font-size: 15px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.resultats-overlay .funnel-help {
+  color: #999;
+}
+
+.plan-step.current .step-label {
+  color: #ff5a1f;
 }

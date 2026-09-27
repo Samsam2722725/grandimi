@@ -19,24 +19,9 @@
   font-weight: 700;
 }
 
-.paywall-rating {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-.paywall-testimonial {
-  font-size: 1rem;
-  color: #ccc;
-  font-style: italic;
-  margin-bottom: 0.5rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.paywall-author {
-  color: #999;
-  font-size: 0.9rem;
+.paywall-avis {
+  margin: 0 auto;
+  max-width: 480px;
 }
 
 .paywall-pricing {
