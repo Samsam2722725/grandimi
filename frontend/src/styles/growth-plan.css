@@ -1086,3 +1086,6 @@
   line-height: 1.45;
   color: #b3a79c;
 }
+
+.plan-contact { margin: 32px 0 8px; text-align: center; font-size: 14px; color: rgba(255,255,255,0.55); }
+.plan-contact a { color: #ff7a1a; font-weight: 600; }

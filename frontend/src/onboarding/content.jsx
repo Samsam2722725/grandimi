@@ -535,10 +535,10 @@ export function MoletteTailleCm({ valeurCm, onChange, unite, onChangeUnite, min 
           onChange={onChange}
           min={min}
           max={max}
-          step={0.1}
-          // Format "X,XX cm" du script, deux décimales même quand le pas de
-          // 0,1 ne produit qu'un seul chiffre significatif (ex. "172,30").
-          format={(v) => `${v.toFixed(2).replace('.', ',')} cm`}
+          step={0.5}
+          // Au demi-centimètre : « 172,30 cm » demandait une précision que
+          // personne n'a sous la toise et faisait hésiter.
+          format={(v) => `${v % 1 === 0 ? v : v.toFixed(1).replace('.', ',')} cm`}
         />
       ) : (
         <WheelPicker

@@ -615,6 +615,11 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
           de payer, en lui promettant l’inverse. Un « Commencer mon
           parcours » qui fait sortir du produit est pire qu’absent — et
           le plan est déjà à l’écran, il n’y a rien à démarrer. */}
+
+      <p className="plan-contact">
+        Une question, un souci, une idée ? Écris-nous :{' '}
+        <a href="mailto:grandimi14@gmail.com?subject=Mon%20plan%20Grandimi">grandimi14@gmail.com</a>
+      </p>
     </div>
   );
 }
