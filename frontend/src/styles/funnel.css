@@ -3473,3 +3473,21 @@
 .precision--simple .precision-detail {
   align-self: center;
 }
+
+/* Pendant l'analyse, le bouton et ses messages (« on réveille le
+   serveur », « Réessayer ») tombaient sous le bas de l'écran d'un
+   téléphone : collés en bas, ils restent toujours visibles. */
+.analyse-action {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%) !important;
+  z-index: 5;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--funnel-bg, #0a0a0a) 70%, transparent);
+  text-align: center;
+}
+
+.plan-creation {
+  padding-bottom: 120px;
+}

@@ -274,6 +274,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   // valeur entre deux tentatives, donc lui seul ne suffit pas à rejouer
   // l'effet qui appelle l'API.
   const [tentative, setTentative] = useState(0)
+  const [attenteLongue, setAttenteLongue] = useState(false)
   const dejaLivre = useRef(false)
 
   // Liste des écrans propre à ce profil (fille / garçon, âge) : l'index
@@ -372,9 +373,32 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     // production, où la variable n'est pas définie. Seul .env.development
     // l'éteint.
     const utiliserApiReelle = import.meta.env.VITE_USE_REAL_API !== 'false'
-    const appel = utiliserApiReelle ? apiClient.predictHeightV2(payload) : mockPredictHeight(payload)
+    /* Le serveur gratuit dort parfois et met jusqu'à une minute à
+       répondre ; un réseau mobile peut aussi laisser une requête pendue.
+       Sans limite, l'anneau restait bloqué à 96 % pour toujours. On
+       retente une fois tout seul, puis on affiche « Réessayer ». */
+    const unAppel = () => {
+      const requete = utiliserApiReelle ? apiClient.predictHeightV2(payload) : mockPredictHeight(payload)
+      const delai = new Promise((_, rejeter) =>
+        setTimeout(() => rejeter(new Error('delai')), 40000),
+      )
+      return Promise.race([requete, delai])
+    }
+    const minuterieLente = setTimeout(() => {
+      if (!annule) setAttenteLongue(true)
+    }, 6000)
+    setAttenteLongue(false)
+
+    const appel = unAppel().catch((err) => {
+      if (annule) throw err
+      // Une vraie réponse d'erreur du serveur (données refusées) ne se
+      // corrige pas en retentant : seule une panne réseau ou un délai.
+      if (err && err.status) throw err
+      return unAppel()
+    })
 
     appel
+      .finally(() => clearTimeout(minuterieLente))
       .then((reponseApi) => {
         if (annule) return
         estimationObtenue({ age: reponses.age, sexe: reponses.sexe, confiance: reponseApi.confidence_level })
@@ -384,7 +408,9 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
         if (annule) return
         estimationEchouee(err.message)
         setErreurApi(
-          err.message || "L'estimation a échoué. Vérifie ta connexion et réessaie.",
+          err && err.status
+            ? err.message
+            : "Le serveur ne répond pas. Vérifie ta connexion, puis réessaie : tes réponses sont gardées.",
         )
       })
 
@@ -768,16 +794,21 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
             </div>
           </div>
         ) : (
-          <div className="interstitial-action is-ready">
+          <div className="interstitial-action is-ready analyse-action">
             {erreurApi ? (
               <>
                 <p className="funnel-help">{erreurApi}</p>
                 <FunnelButton onClick={() => setTentative((t) => t + 1)}>Réessayer</FunnelButton>
               </>
             ) : (
-              <button type="button" className="funnel-cta" disabled>
-                En cours...
-              </button>
+              <>
+                {attenteLongue && (
+                  <p className="funnel-help">On réveille le serveur, encore quelques secondes…</p>
+                )}
+                <button type="button" className="funnel-cta" disabled>
+                  En cours...
+                </button>
+              </>
             )}
           </div>
         )}
