@@ -275,7 +275,45 @@ function PaywallPage({ onBackHome }) {
    * L'accès n'est PAS accordé ici : il l'est par le webhook Whop côté serveur,
    * après paiement réel.
    */
+  /* ---------- Paiement Whop DANS la page ----------
+     Rediriger vers whop.com coûtait plusieurs secondes au clic (leur page
+     pèse ~925 ko et se reconstruit dans le navigateur). Le paiement intégré
+     de Whop (loader.js) se prépare en arrière-plan, caché, dès que le
+     paywall s'affiche ; au clic, on ne fait que le montrer. Quand il
+     aboutit, Whop nous donne l'identifiant du paiement (pay_…) et on
+     reprend exactement le retour habituel (?payment_id=…&status=success). */
+  const [feuilleOuverte, setFeuilleOuverte] = useState(false)
+  const planWhop = urlPrechargee ? (urlPrechargee.match(/checkout\/(plan_[A-Za-z0-9]+)/) || [])[1] : null
+
+  useEffect(() => {
+    if (document.getElementById('whop-checkout-loader')) return
+    const script = document.createElement('script')
+    script.id = 'whop-checkout-loader'
+    script.src = 'https://js.whop.com/static/checkout/loader.js'
+    script.async = true
+    document.head.appendChild(script)
+  }, [])
+
+  useEffect(() => {
+    window.grandimiPaiementTermine = (resultat) => {
+      const id = resultat && resultat.receipt_id
+      window.location.href = id
+        ? `/?payment_id=${encodeURIComponent(id)}&status=success`
+        : '/?status=success'
+    }
+    return () => {
+      delete window.grandimiPaiementTermine
+    }
+  }, [])
+
   const lancerPaiement = async () => {
+    if (planWhop) {
+      setErreur(null)
+      checkoutOuvert(planChoisi)
+      setFeuilleOuverte(true)
+      return
+    }
+
     setErreur(null)
     setLoading(true)
 
@@ -443,6 +481,34 @@ function PaywallPage({ onBackHome }) {
           </section>
         )}
       </main>
+
+      {planWhop && (
+        <div
+          className={`pw2-feuille ${feuilleOuverte ? 'is-ouverte' : ''}`}
+          aria-hidden={!feuilleOuverte}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setFeuilleOuverte(false)
+          }}
+        >
+          <div className="pw2-feuille-panneau" role="dialog" aria-label="Paiement">
+            <div className="pw2-feuille-tete">
+              <span>Paiement sécurisé par Whop</span>
+              <button type="button" onClick={() => setFeuilleOuverte(false)} aria-label="Fermer le paiement">
+                <X size={22} aria-hidden="true" />
+              </button>
+            </div>
+            <div
+              key={planWhop}
+              className="pw2-feuille-whop"
+              data-whop-checkout-plan-id={planWhop}
+              data-whop-checkout-prefill-email={email}
+              data-whop-checkout-theme="dark"
+              data-whop-checkout-on-complete="grandimiPaiementTermine"
+              data-whop-checkout-return-url={`${window.location.origin}/`}
+            />
+          </div>
+        </div>
+      )}
 
       <footer className="funnel-footer">
         <button
