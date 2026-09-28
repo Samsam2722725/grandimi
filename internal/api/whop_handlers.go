@@ -656,10 +656,9 @@ func SendParentPaymentLink(c *gin.Context) {
 		priceText = fmt.Sprintf("%.2f EUR/mois", offre.PriceEUR)
 	}
 
-	nomEnfant := enfant.Prenom
-	if nomEnfant == "" {
-		nomEnfant = "votre enfant"
-	}
+	// Le compte ne porte pas de prénom (on ne le demande pas) : db.User
+	// n'a pas de champ Prenom, et y faire référence cassait la compilation.
+	nomEnfant := "votre enfant"
 
 	texteEmail := fmt.Sprintf(`Bonjour,
 
