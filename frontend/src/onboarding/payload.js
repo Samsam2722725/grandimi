@@ -89,6 +89,24 @@ export function minutesExerciceParJour(tranche) {
 export const TAILLE_PERE_INCONNUE_CM = 175
 export const TAILLE_MERE_INCONNUE_CM = 162
 
+/* La question « combien as-tu grandi l'an dernier » stocke une tranche
+   (« 2-5cm »…), le serveur attend des cm/an : on envoie le milieu de la
+   tranche. 0 veut dire « inconnu » côté moteur. Sans cette conversion, le
+   serveur refusait toute réponse autre que « Je ne sais pas » et
+   l'analyse restait bloquée à 96 %. */
+const VITESSE_VERS_CM = {
+  'moins-2cm': 1,
+  '2-5cm': 3.5,
+  '6-9cm': 7.5,
+  'plus-10cm': 11,
+  'ne-sais-pas': 0,
+}
+
+function vitesseEnCm(valeur) {
+  if (typeof valeur === 'number') return valeur
+  return VITESSE_VERS_CM[valeur] ?? 0
+}
+
 const VOIX_MUEE_VERS_API = {
   'non': 'no',
   'un-peu': 'starting',
@@ -154,7 +172,7 @@ export function construirePayloadPrediction(reponses, email) {
     weight_kg: reponses.poids,
     father_height_cm: tailleReferencePere,
     mother_height_cm: tailleReferenceMere,
-    height_velocity_cm: reponses.vitesseCroissance ?? 0,
+    height_velocity_cm: vitesseEnCm(reponses.vitesseCroissance),
     shoe_size_eu: reponses.pointure ?? 0,
     sleep_hours_per_night: reponses.sommeil ?? 0,
     exercise_min_per_day: minutesExerciceParJour(reponses.exerciceFreq),
