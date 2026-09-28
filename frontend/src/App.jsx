@@ -156,6 +156,39 @@ function App() {
     return () => (window.cancelIdleCallback ? window.cancelIdleCallback(id) : clearTimeout(id));
   }, []);
 
+  /* Calcul en attente : l'analyse a échoué (serveur, limite, réseau) mais
+     on a laissé passer vers les résultats et le paywall. On le relance ici
+     toutes les 20 s, discrètement, jusqu'à obtenir la vraie prédiction et
+     l'identifiant du compte — avant que le plan payant en ait besoin. */
+  useEffect(() => {
+    if (!predictionData?.prediction_en_attente || !predictionData.payload_prediction) return undefined;
+    let annule = false;
+    let minuterie;
+    const essayer = async () => {
+      try {
+        const res = await apiClient.predictHeightV2(predictionData.payload_prediction);
+        if (annule) return;
+        const complet = { ...predictionData, ...res, prediction_en_attente: false };
+        setPredictionData(complet);
+        localStorage.setItem('predictionData', JSON.stringify(complet));
+        if (res.user_id) {
+          const utilisateur = JSON.parse(localStorage.getItem('user') || '{}');
+          localStorage.setItem(
+            'user',
+            JSON.stringify({ ...utilisateur, id: utilisateur.id || res.user_id, email: complet.email }),
+          );
+        }
+      } catch {
+        if (!annule) minuterie = setTimeout(essayer, 20000);
+      }
+    };
+    minuterie = setTimeout(essayer, 3000);
+    return () => {
+      annule = true;
+      clearTimeout(minuterie);
+    };
+  }, [predictionData]);
+
   // Récupère les données de prédiction sauvegardées
   useEffect(() => {
     const savedPredictionData = localStorage.getItem('predictionData');

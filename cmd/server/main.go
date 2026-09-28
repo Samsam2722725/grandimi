@@ -42,7 +42,9 @@ func main() {
 	// V2 API (Khamis-Roche + percentile OMS + facteurs de mode de vie)
 	// Chaque appel crée un compte et une prédiction en base : plafonné
 	// pour qu'on ne puisse pas la remplir depuis une boucle.
-	router.POST("/api/v2/predict-height", api.RateLimit(30, time.Hour), api.PredictHeightV2)
+	// 300 et non 30 : un wifi de lycée ou une antenne 4G partagent une même
+	// IP entre des dizaines d'élèves ; 30 bloquait de vrais visiteurs.
+	router.POST("/api/v2/predict-height", api.RateLimit(300, time.Hour), api.PredictHeightV2)
 
 	/* Le plan de croissance et les guides sont ce que paie l'abonnement.
 	   Servis en accès libre, ils s'obtenaient par un POST anonyme : le

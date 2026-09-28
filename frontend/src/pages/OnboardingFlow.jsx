@@ -406,12 +406,13 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       })
       .catch((err) => {
         if (annule) return
-        estimationEchouee(err.message)
-        setErreurApi(
-          err && err.status
-            ? err.message
-            : "Le serveur ne répond pas. Vérifie ta connexion, puis réessaie : tes réponses sont gardées.",
-        )
+        estimationEchouee(err && err.message)
+        /* Personne ne doit rester bloqué ici. Serveur en panne, limite
+           atteinte ou réponse refusée : on passe quand même aux résultats
+           (dont les chiffres sont sous cadenas) et au paywall. App.jsx
+           relance le calcul en arrière-plan jusqu'à ce qu'il réussisse,
+           bien avant que le plan payant en ait besoin. */
+        setResultatApi({ prediction_en_attente: true })
       })
 
     return () => {
