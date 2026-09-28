@@ -209,6 +209,18 @@ function PaywallPage({ onBackHome }) {
     }
   }, [planChoisi, email, emailValide])
 
+  /* Une fois l'URL connue, on demande au navigateur de télécharger la page
+     Whop en tâche de fond : au clic, elle est déjà là au lieu d'arriver. */
+  useEffect(() => {
+    if (!urlPrechargee) return undefined
+    const lien = document.createElement('link')
+    lien.rel = 'prefetch'
+    lien.as = 'document'
+    lien.href = urlPrechargee
+    document.head.appendChild(lien)
+    return () => lien.remove()
+  }, [urlPrechargee])
+
   /* Dénominateur du seul taux que le brief demande de suivre :
      « paywall affichée → checkout Whop ouvert ». Sans cet
      événement, le numérateur seul ne veut rien dire. */
@@ -359,8 +371,6 @@ function PaywallPage({ onBackHome }) {
           <cite>— {AVIS[0].prenom}, {AVIS[0].age} ans</cite>
         </blockquote>
 
-        <p className="pw2-offre-speciale">− {pourcentageEconomie} % avec l’offre annuelle</p>
-
         <section className="pw2-offres" role="radiogroup" aria-label="Choisir la formule">
           {['annual', 'monthly'].map((clef) => {
             const plan = plans[clef]
@@ -378,7 +388,7 @@ function PaywallPage({ onBackHome }) {
                   mesurerPlanChoisi(clef)
                 }}
               >
-                {annuel && <span className="pw2-offre-bandeau">Meilleure offre</span>}
+                {annuel && <span className="pw2-offre-bandeau">Meilleure offre · − {pourcentageEconomie} %</span>}
                 <span className="pw2-offre-ligne">
                   <span className="pw2-offre-nom">{annuel ? 'Offre annuelle' : 'Offre mensuelle'}</span>
                   <span className="pw2-offre-prix">{coutHebdomadaire(plan)} €/semaine</span>

@@ -395,3 +395,16 @@
   font-size: 18px;
   line-height: 1.35;
 }
+
+/* ---------- Tout sur un seul écran de téléphone ----------
+   Demande du client : comme l'écran de référence, on voit toutes les
+   cartes et le bouton sans faire défiler. */
+.analyse.results .results-scroll { gap: 8px; padding-bottom: 4px; }
+.analyse .analyse-titre { font-size: 28px; margin: 0 0 2px; }
+.analyse .analyse-duo { gap: 8px; }
+.analyse .analyse-case { padding: 10px 14px; min-height: 0; }
+.analyse .analyse-case-valeur { font-size: 24px; }
+.analyse .analyse-ligne { padding: 8px 14px; min-height: 0; }
+.analyse .analyse-carte-graphe { padding: 10px 14px; }
+.analyse .analyse-carte-graphe > svg { height: 72px; }
+.analyse.results .funnel-footer { padding-top: 6px; padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
