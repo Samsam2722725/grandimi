@@ -380,7 +380,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     const unAppel = () => {
       const requete = utiliserApiReelle ? apiClient.predictHeightV2(payload) : mockPredictHeight(payload)
       const delai = new Promise((_, rejeter) =>
-        setTimeout(() => rejeter(new Error('delai')), 40000),
+        setTimeout(() => rejeter(new Error('delai')), 12000),
       )
       return Promise.race([requete, delai])
     }
@@ -389,13 +389,9 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     }, 6000)
     setAttenteLongue(false)
 
-    const appel = unAppel().catch((err) => {
-      if (annule) throw err
-      // Une vraie réponse d'erreur du serveur (données refusées) ne se
-      // corrige pas en retentant : seule une panne réseau ou un délai.
-      if (err && err.status) throw err
-      return unAppel()
-    })
+    // Un seul essai à l'écran, 12 s maximum : si ça échoue, on passe
+    // aux résultats et App.jsx relance le calcul en arrière-plan.
+    const appel = unAppel()
 
     appel
       .finally(() => clearTimeout(minuterieLente))
