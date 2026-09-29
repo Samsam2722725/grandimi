@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#0a0a0a" />
+<link rel="preconnect" href="https://fonts.bunny.net" />
+<link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700,800&display=swap" rel="stylesheet" />
+<title>Grandimi</title>
+<link rel="icon" href="/favicon.svg" />
+<!--
+  Page de démo pour les vidéos TikTok (écran filmé au téléphone).
+  Indépendante de l'application : aucun code partagé, aucun appel serveur,
+  rien ne peut bloquer pendant un tournage. Le dernier bouton mène au vrai
+  questionnaire de grandimi.com. Exclue de Google (noindex + robots.txt).
+-->
+<style>
+  :root {
+    --fond: #0a0a0a;
+    --carte: #161616;
+    --trait: #262626;
+    --texte: #ffffff;
+    --doux: #a3a3a3;
+    --pale: #6b6b6b;
+    --orange: #ff5a1f;
+    --ombre: none;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; background: var(--fond); }
+  body {
+    font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--texte);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .app {
+    height: 100dvh;
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 20px);
+  }
+
+  /* En-tête */
+  .marque { display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: -.01em; font-size: 17px; }
+  .marque-logo {
+    width: 28px; height: 28px; border-radius: 9px; background: var(--orange); color: #111;
+    display: grid; place-items: center; font-size: 14px; font-weight: 800;
+  }
+  .marque-logo span { color: var(--orange); }
+  .barre { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+  .retour {
+    width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--trait); background: var(--carte);
+    display: grid; place-items: center; cursor: pointer; color: var(--texte); box-shadow: var(--ombre);
+    transition: transform .15s, opacity .2s;
+  }
+  .retour:active { transform: scale(.92); }
+  .retour[disabled] { opacity: .35; }
+  .fil { font-size: 14px; color: var(--pale); flex: 1; }
+  .fil b { color: var(--doux); font-weight: 600; }
+  .compteur { font-size: 13px; font-weight: 700; color: var(--orange); letter-spacing: .02em; }
+  .compteur i { font-style: normal; color: var(--pale); }
+  .progres { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 14px; }
+  .progres span { height: 3px; border-radius: 3px; background: var(--trait); overflow: hidden; position: relative; }
+  .progres span::after {
+    content: ""; position: absolute; inset: 0; background: var(--orange); transform: scaleX(0); transform-origin: left;
+    transition: transform .45s cubic-bezier(.22,1,.36,1);
+  }
+  .progres span.fait::after { transform: scaleX(1); }
+
+  /* Écrans */
+  .scene { flex: 1; position: relative; }
+  .ecran {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; opacity: 0; transform: translateX(24px); pointer-events: none;
+    transition: opacity .35s ease, transform .45s cubic-bezier(.22,1,.36,1);
+  }
+  .ecran.actif { opacity: 1; transform: none; pointer-events: auto; }
+  .ecran.parti { opacity: 0; transform: translateX(-24px); }
+  .icone {
+    width: 62px; height: 62px; border-radius: 18px; background: var(--carte); border: 1px solid var(--trait);
+    display: grid; place-items: center; color: var(--orange); box-shadow: 0 0 40px -8px rgba(255,90,31,.55);
+  }
+  .etiquette { margin-top: 18px; font-size: 13px; font-weight: 800; letter-spacing: .08em; color: var(--orange); text-transform: uppercase; }
+  h1 {
+    margin: 12px 0 0; font-size: clamp(30px, 8.6vw, 38px); line-height: 1.06; letter-spacing: -.035em; font-weight: 700;
+  }
+  h1 .clair { color: var(--doux); }
+
+  /* Curseur */
+  .valeur {
+    margin-top: 34px; font-size: clamp(56px, 17vw, 76px); font-weight: 700; letter-spacing: -.04em;
+    font-variant-numeric: tabular-nums; line-height: 1;
+  }
+  .valeur small { font-size: .42em; color: var(--doux); font-weight: 600; letter-spacing: -.01em; margin-left: 4px; }
+  .curseur { width: 100%; margin-top: 30px; }
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 36px; background: transparent; margin: 0; }
+  input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: linear-gradient(to right, var(--orange) var(--p), var(--trait) var(--p)); }
+  input[type=range]::-moz-range-track { height: 4px; border-radius: 4px; background: var(--trait); }
+  input[type=range]::-moz-range-progress { height: 4px; border-radius: 4px; background: var(--orange); }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 30px; height: 30px; border-radius: 50%; margin-top: -13px;
+    background: #fff; border: 0; box-shadow: 0 0 0 6px rgba(255,90,31,.25);
+  }
+  input[type=range]::-moz-range-thumb { width: 30px; height: 30px; border-radius: 50%; background: #fff; border: 0; box-shadow: 0 0 0 6px rgba(255,90,31,.25); }
+  .bornes { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--pale); }
+  .bornes div { display: flex; flex-direction: column; gap: 3px; }
+  .bornes div:last-child { text-align: right; }
+
+  /* Cartes */
+  .cartes { width: 100%; margin-top: 30px; display: grid; gap: 12px; }
+  .cartes.deux { grid-template-columns: 1fr 1fr; }
+  .carte {
+    position: relative; text-align: left; background: var(--carte); border: 1px solid var(--trait); border-radius: 18px;
+    padding: 18px 18px 20px; cursor: pointer; font: inherit; color: inherit; box-shadow: var(--ombre);
+    transition: transform .15s ease, border-color .2s, box-shadow .2s, background .2s;
+  }
+  .carte:active { transform: scale(.975); }
+  .carte strong { display: block; font-size: 19px; letter-spacing: -.02em; font-weight: 650; }
+  .carte span { display: block; margin-top: 6px; font-size: 14px; line-height: 1.35; color: var(--doux); }
+  .carte.choisie { border-color: var(--orange); background: rgba(255,90,31,.10); box-shadow: 0 0 0 1px var(--orange); }
+
+  /* Bouton */
+  .bouton {
+    margin-top: 30px; min-width: 190px; height: 54px; border-radius: 16px; border: 0; cursor: pointer;
+    background: var(--orange); color: #111; font: inherit; font-size: 16px; font-weight: 700; padding: 0 28px; border-radius: 999px;
+    box-shadow: 0 12px 30px -10px rgba(255,90,31,.7); transition: transform .15s;
+  }
+  .bouton:active { transform: scale(.96); }
+  .bouton.orange { background: var(--orange); box-shadow: 0 12px 30px -10px rgba(255,90,31,.7); }
+
+  /* Chargement */
+  .rond {
+    margin-top: 44px; width: 52px; height: 52px; border-radius: 50%; border: 3px solid var(--trait); border-top-color: var(--orange);
+    animation: tourne .9s linear infinite;
+  }
+  @keyframes tourne { to { transform: rotate(360deg); } }
+  .etape-calcul { margin-top: 18px; font-size: 15px; color: var(--doux); min-height: 20px; transition: opacity .25s; }
+  .pret { display: none; flex-direction: column; align-items: center; }
+  .pret.visible { display: flex; animation: monte .5s cubic-bezier(.22,1,.36,1); }
+  @keyframes monte { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .flou {
+    margin-top: 26px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  .flou div {
+    background: var(--carte); border: 1px solid var(--trait); border-radius: 16px; padding: 14px; text-align: left; box-shadow: var(--ombre);
+  }
+  .flou small { display: block; font-size: 12px; color: var(--doux); }
+  .flou b { display: block; margin-top: 6px; font-size: 24px; letter-spacing: -.03em; filter: blur(7px); user-select: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ecran, .progres span::after { transition: none; }
+    .rond { animation-duration: 2s; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="marque"><div class="marque-logo">G</div>Grandimi</div>
+
+  <div class="barre">
+    <button class="retour" id="retour" aria-label="Retour" disabled>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="fil"></div>
+    <div class="compteur"><span id="num">1</span>/5</div>
+  </div>
+  <div class="progres" id="progres"><span class="fait"></span><span></span><span></span><span></span><span></span></div>
+
+  <div class="scene">
+    <!-- 1 -->
+    <section class="ecran actif" data-i="0">
+      <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg></div>
+      <div class="etiquette">Ton objectif</div>
+      <h1>Quelle taille<br><span class="clair">veux-tu atteindre ?</span></h1>
+      <div class="valeur"><span id="taille">180</span><small>cm</small></div>
+      <div class="curseur">
+        <input type="range" id="curseur" min="155" max="200" value="180" aria-label="Taille visée">
+        <div class="bornes"><div><span>155 cm</span><span>Je démarre</span></div><div><span>200 cm</span><span>Ambitieux</span></div></div>
+      </div>
+      <button class="bouton" data-suivant>Continuer</button>
+    </section>
+
+    <!-- 2 -->
+    <section class="ecran" data-i="1">
+      <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <div class="etiquette">Ton âge</div>
+      <h1>Tu as quel âge ?<br><span class="clair">C'est ta fenêtre.</span></h1>
+      <div class="cartes">
+        <button class="carte" data-choix><strong>13 - 14 ans</strong><span>la grande poussée arrive ou commence</span></button>
+        <button class="carte" data-choix><strong>15 - 16 ans</strong><span>il reste encore de la marge</span></button>
+        <button class="carte" data-choix><strong>17 ans et +</strong><span>on vérifie ce qu'il te reste</span></button>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="ecran" data-i="2">
+      <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.8-3 3-4.6 5.5-4.6s4.7 1.6 5.5 4.6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.6c2.2 0 3.8 1.2 4.5 3.6"/></svg></div>
+      <div class="etiquette">Tes gènes</div>
+      <h1>Tes parents<br><span class="clair">sont plutôt grands ?</span></h1>
+      <div class="cartes deux">
+        <button class="carte" data-choix><strong>Oui</strong><span>au-dessus de la moyenne</span></button>
+        <button class="carte" data-choix><strong>Non</strong><span>plutôt dans la moyenne</span></button>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="ecran" data-i="3">
+      <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></div>
+      <div class="etiquette">Tes habitudes</div>
+      <h1>Tu dors combien<br><span class="clair">par nuit ?</span></h1>
+      <div class="cartes">
+        <button class="carte" data-choix><strong>Moins de 7 h</strong><span>je me couche tard</span></button>
+        <button class="carte" data-choix><strong>7 à 8 h</strong><span>ça dépend des soirs</span></button>
+        <button class="carte" data-choix><strong>Plus de 8 h</strong><span>je dors bien</span></button>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="ecran" data-i="4">
+      <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
+      <div class="etiquette">Dernière étape</div>
+      <h1>On calcule<br><span class="clair">ton potentiel.</span></h1>
+      <div id="calcul" style="display:flex;flex-direction:column;align-items:center">
+        <div class="rond"></div>
+        <div class="etape-calcul" id="etapeCalcul">On croise tes réponses…</div>
+      </div>
+      <div class="pret" id="pret">
+        <div class="flou">
+          <div><small>Taille adulte</small><b>1 8 2 cm</b></div>
+          <div><small>Il te reste</small><b>+ 9 cm</b></div>
+        </div>
+        <a class="bouton orange" href="/" style="display:inline-grid;place-items:center;text-decoration:none">Voir mon résultat</a>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+(function () {
+  var ecrans = [].slice.call(document.querySelectorAll('.ecran'));
+  var barres = [].slice.call(document.querySelectorAll('#progres span'));
+  var num = document.getElementById('num');
+  var retour = document.getElementById('retour');
+  var courant = 0;
+
+  function vibre() { try { navigator.vibrate && navigator.vibrate(8); } catch (e) {} }
+
+  function aller(i) {
+    if (i < 0 || i >= ecrans.length) return;
+    ecrans[courant].classList.remove('actif');
+    ecrans[courant].classList.toggle('parti', i > courant);
+    courant = i;
+    ecrans[i].classList.remove('parti');
+    ecrans[i].classList.add('actif');
+    num.textContent = String(i + 1);
+    barres.forEach(function (b, k) { b.classList.toggle('fait', k <= i); });
+    retour.disabled = i === 0;
+    if (i === 4) lancerCalcul();
+  }
+
+  // Curseur : le gros chiffre suit le doigt.
+  var curseur = document.getElementById('curseur');
+  var taille = document.getElementById('taille');
+  function majCurseur() {
+    var p = (curseur.value - curseur.min) / (curseur.max - curseur.min) * 100;
+    curseur.style.setProperty('--p', p + '%');
+    if (taille.textContent !== curseur.value) { taille.textContent = curseur.value; }
+  }
+  curseur.addEventListener('input', majCurseur);
+  curseur.addEventListener('change', vibre);
+  majCurseur();
+
+  document.querySelectorAll('[data-suivant]').forEach(function (b) {
+    b.addEventListener('click', function () { vibre(); aller(courant + 1); });
+  });
+
+  // Cartes : on choisit, on voit la sélection, on avance tout seul.
+  document.querySelectorAll('[data-choix]').forEach(function (c) {
+    c.addEventListener('click', function () {
+      vibre();
+      c.parentNode.querySelectorAll('.carte').forEach(function (x) { x.classList.remove('choisie'); });
+      c.classList.add('choisie');
+      setTimeout(function () { aller(courant + 1); }, 320);
+    });
+  });
+
+  retour.addEventListener('click', function () {
+    if (courant === 4) resetCalcul();
+    aller(courant - 1);
+  });
+
+  var minuteries = [];
+  function resetCalcul() {
+    minuteries.forEach(clearTimeout); minuteries = [];
+    document.getElementById('calcul').style.display = 'flex';
+    document.getElementById('pret').classList.remove('visible');
+  }
+  function lancerCalcul() {
+    resetCalcul();
+    var texte = document.getElementById('etapeCalcul');
+    var etapes = ['On croise tes réponses…', 'On regarde ta génétique…', 'On estime ta fenêtre de croissance…'];
+    etapes.forEach(function (t, k) {
+      minuteries.push(setTimeout(function () { texte.textContent = t; }, k * 900));
+    });
+    minuteries.push(setTimeout(function () {
+      document.getElementById('calcul').style.display = 'none';
+      document.getElementById('pret').classList.add('visible');
+      vibre();
+    }, 2900));
+  }
+})();
+</script>
+</body>
+</html>
