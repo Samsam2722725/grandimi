@@ -12,8 +12,9 @@
 <!--
   Page de démo pour les vidéos TikTok (écran filmé au téléphone).
   Indépendante de l'application : aucun code partagé, aucun appel serveur,
-  rien ne peut bloquer pendant un tournage. Le dernier bouton mène au vrai
-  questionnaire de grandimi.com. Exclue de Google (noindex + robots.txt).
+  rien ne peut bloquer pendant un tournage. Style Grandimi (noir, orange).
+  Les textes du plan reprennent mot pour mot ceux du questionnaire.
+  Exclue de Google (noindex + robots.txt).
 -->
 <style>
   :root {
@@ -24,7 +25,7 @@
     --doux: #a3a3a3;
     --pale: #6b6b6b;
     --orange: #ff5a1f;
-    --ombre: none;
+    --orange-clair: #ff8a4c;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; height: 100%; background: var(--fond); }
@@ -40,7 +41,7 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    padding: calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 20px);
+    padding: calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 18px);
   }
 
   /* En-tête */
@@ -49,20 +50,17 @@
     width: 28px; height: 28px; border-radius: 9px; background: var(--orange); color: #111;
     display: grid; place-items: center; font-size: 14px; font-weight: 800;
   }
-  .marque-logo span { color: var(--orange); }
-  .barre { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+  .barre { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
   .retour {
     width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--trait); background: var(--carte);
-    display: grid; place-items: center; cursor: pointer; color: var(--texte); box-shadow: var(--ombre);
+    display: grid; place-items: center; cursor: pointer; color: var(--texte);
     transition: transform .15s, opacity .2s;
   }
   .retour:active { transform: scale(.92); }
   .retour[disabled] { opacity: .35; }
-  .fil { font-size: 14px; color: var(--pale); flex: 1; }
-  .fil b { color: var(--doux); font-weight: 600; }
+  .espace { flex: 1; }
   .compteur { font-size: 13px; font-weight: 700; color: var(--orange); letter-spacing: .02em; }
-  .compteur i { font-style: normal; color: var(--pale); }
-  .progres { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 14px; }
+  .progres { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 14px; }
   .progres span { height: 3px; border-radius: 3px; background: var(--trait); overflow: hidden; position: relative; }
   .progres span::after {
     content: ""; position: absolute; inset: 0; background: var(--orange); transform: scaleX(0); transform-origin: left;
@@ -84,26 +82,19 @@
     display: grid; place-items: center; color: var(--orange); box-shadow: 0 0 40px -8px rgba(255,90,31,.55);
   }
   .etiquette { margin-top: 18px; font-size: 13px; font-weight: 800; letter-spacing: .08em; color: var(--orange); text-transform: uppercase; }
-  h1 {
-    margin: 12px 0 0; font-size: clamp(30px, 8.6vw, 38px); line-height: 1.06; letter-spacing: -.035em; font-weight: 700;
-  }
+  h1 { margin: 12px 0 0; font-size: clamp(30px, 8.6vw, 38px); line-height: 1.06; letter-spacing: -.035em; font-weight: 700; }
   h1 .clair { color: var(--doux); }
+  .sous { margin: 12px 8px 0; font-size: 16px; line-height: 1.45; color: var(--doux); }
 
   /* Curseur */
-  .valeur {
-    margin-top: 34px; font-size: clamp(56px, 17vw, 76px); font-weight: 700; letter-spacing: -.04em;
-    font-variant-numeric: tabular-nums; line-height: 1;
-  }
+  .valeur { margin-top: 34px; font-size: clamp(56px, 17vw, 76px); font-weight: 700; letter-spacing: -.04em; font-variant-numeric: tabular-nums; line-height: 1; }
   .valeur small { font-size: .42em; color: var(--doux); font-weight: 600; letter-spacing: -.01em; margin-left: 4px; }
   .curseur { width: 100%; margin-top: 30px; }
   input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 36px; background: transparent; margin: 0; }
   input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: linear-gradient(to right, var(--orange) var(--p), var(--trait) var(--p)); }
   input[type=range]::-moz-range-track { height: 4px; border-radius: 4px; background: var(--trait); }
   input[type=range]::-moz-range-progress { height: 4px; border-radius: 4px; background: var(--orange); }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 30px; height: 30px; border-radius: 50%; margin-top: -13px;
-    background: #fff; border: 0; box-shadow: 0 0 0 6px rgba(255,90,31,.25);
-  }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; border-radius: 50%; margin-top: -13px; background: #fff; border: 0; box-shadow: 0 0 0 6px rgba(255,90,31,.25); }
   input[type=range]::-moz-range-thumb { width: 30px; height: 30px; border-radius: 50%; background: #fff; border: 0; box-shadow: 0 0 0 6px rgba(255,90,31,.25); }
   .bornes { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--pale); }
   .bornes div { display: flex; flex-direction: column; gap: 3px; }
@@ -113,45 +104,77 @@
   .cartes { width: 100%; margin-top: 30px; display: grid; gap: 12px; }
   .cartes.deux { grid-template-columns: 1fr 1fr; }
   .carte {
-    position: relative; text-align: left; background: var(--carte); border: 1px solid var(--trait); border-radius: 18px;
-    padding: 18px 18px 20px; cursor: pointer; font: inherit; color: inherit; box-shadow: var(--ombre);
+    text-align: left; background: var(--carte); border: 1px solid var(--trait); border-radius: 18px;
+    padding: 18px 18px 20px; cursor: pointer; font: inherit; color: inherit;
     transition: transform .15s ease, border-color .2s, box-shadow .2s, background .2s;
   }
   .carte:active { transform: scale(.975); }
-  .carte strong { display: block; font-size: 19px; letter-spacing: -.02em; font-weight: 650; }
+  .carte strong { display: block; font-size: 19px; letter-spacing: -.02em; font-weight: 700; }
   .carte span { display: block; margin-top: 6px; font-size: 14px; line-height: 1.35; color: var(--doux); }
   .carte.choisie { border-color: var(--orange); background: rgba(255,90,31,.10); box-shadow: 0 0 0 1px var(--orange); }
 
   /* Bouton */
   .bouton {
-    margin-top: 30px; min-width: 190px; height: 54px; border-radius: 16px; border: 0; cursor: pointer;
-    background: var(--orange); color: #111; font: inherit; font-size: 16px; font-weight: 700; padding: 0 28px; border-radius: 999px;
+    margin-top: 28px; min-width: 200px; height: 54px; border: 0; cursor: pointer; border-radius: 999px;
+    background: var(--orange); color: #111; font: inherit; font-size: 16px; font-weight: 700; padding: 0 28px;
     box-shadow: 0 12px 30px -10px rgba(255,90,31,.7); transition: transform .15s;
+    display: inline-grid; place-items: center; text-decoration: none;
   }
   .bouton:active { transform: scale(.96); }
-  .bouton.orange { background: var(--orange); box-shadow: 0 12px 30px -10px rgba(255,90,31,.7); }
 
-  /* Chargement */
-  .rond {
-    margin-top: 44px; width: 52px; height: 52px; border-radius: 50%; border: 3px solid var(--trait); border-top-color: var(--orange);
-    animation: tourne .9s linear infinite;
-  }
+  /* Colonne 80 % / 20 % */
+  .genes { display: grid; grid-template-columns: 44px 120px 104px; justify-content: center; gap: 12px; height: 240px; margin-top: 26px; }
+  .genes-axe { position: relative; font-size: 13px; font-weight: 600; color: var(--pale); }
+  .genes-axe span { position: absolute; right: 0; transform: translateY(-50%); }
+  .genes-axe .a100 { top: 0; } .genes-axe .a80 { top: 20%; color: var(--orange-clair); font-weight: 800; } .genes-axe .a0 { top: 100%; }
+  .genes-col { display: flex; flex-direction: column; gap: 6px; }
+  .bloc { display: grid; place-items: center; border-radius: 16px; transform-origin: bottom; transform: scaleY(0); transition: transform .8s cubic-bezier(.22,.61,.36,1); font-size: 13px; font-weight: 700; }
+  .bloc-h { flex: 20; background: linear-gradient(180deg, #ffb020, #ff5a1f); color: rgba(17,17,17,.8); box-shadow: 0 0 34px -2px rgba(255,90,31,.75); transition-delay: .8s; }
+  .bloc-g { flex: 80; background: #17110d; border: 1px solid #3a2a20; color: #6b5f55; }
+  .genes.rempli .bloc { transform: scaleY(1); }
+  .genes-leg { position: relative; text-align: left; font-size: 13px; }
+  .genes-leg div { position: absolute; left: 0; transform: translateY(-50%); }
+  .genes-leg .l-h { top: 10%; color: var(--orange-clair); font-weight: 800; }
+  .genes-leg .l-g { top: 60%; color: var(--doux); font-weight: 600; }
+  .genes-leg b { display: block; font-size: 18px; }
+
+  /* Calcul */
+  .rond { margin-top: 44px; width: 52px; height: 52px; border-radius: 50%; border: 3px solid var(--trait); border-top-color: var(--orange); animation: tourne .9s linear infinite; }
   @keyframes tourne { to { transform: rotate(360deg); } }
-  .etape-calcul { margin-top: 18px; font-size: 15px; color: var(--doux); min-height: 20px; transition: opacity .25s; }
-  .pret { display: none; flex-direction: column; align-items: center; }
-  .pret.visible { display: flex; animation: monte .5s cubic-bezier(.22,1,.36,1); }
+  .etape-calcul { margin-top: 18px; font-size: 15px; color: var(--doux); min-height: 20px; }
   @keyframes monte { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-  .flou {
-    margin-top: 26px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-  }
-  .flou div {
-    background: var(--carte); border: 1px solid var(--trait); border-radius: 16px; padding: 14px; text-align: left; box-shadow: var(--ombre);
-  }
-  .flou small { display: block; font-size: 12px; color: var(--doux); }
-  .flou b { display: block; margin-top: 6px; font-size: 24px; letter-spacing: -.03em; filter: blur(7px); user-select: none; }
+
+  /* Résultats (tout visible) */
+  .res { width: 100%; margin-top: 20px; display: grid; gap: 10px; animation: monte .5s cubic-bezier(.22,1,.36,1); }
+  .res small { display: block; font-size: 13px; color: var(--doux); }
+  .res b { display: block; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .res-grand { background: var(--carte); border: 1px solid rgba(255,90,31,.45); border-radius: 20px; padding: 16px; box-shadow: 0 0 44px -14px rgba(255,90,31,.6); }
+  .res-grand b { font-size: 60px; line-height: 1.05; margin-top: 2px; }
+  .res-grand em { font-style: normal; font-size: 22px; color: var(--doux); margin-left: 4px; font-weight: 700; }
+  .precision { display: inline-block; margin-top: 6px; padding: 5px 12px; border-radius: 999px; background: rgba(255,90,31,.14); color: var(--orange-clair); font-size: 13px; font-weight: 700; }
+  .res-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .res-duo > div { background: var(--carte); border: 1px solid var(--trait); border-radius: 18px; padding: 14px; text-align: left; }
+  .res-duo b { font-size: 30px; margin-top: 6px; }
+  .res-duo b.o { color: var(--orange); }
+  .res-duo .note { display: block; font-size: 12px; color: var(--doux); margin-top: 2px; }
+
+  /* Création du plan */
+  .titre-plan { font-size: clamp(26px, 7.4vw, 32px); }
+  .anneau { position: relative; margin-top: 34px; width: 190px; height: 190px; }
+  .anneau svg { filter: drop-shadow(0 0 18px rgba(255,90,31,.45)); }
+  .anneau-valeur { position: absolute; inset: 0; display: grid; place-items: center; font-size: 46px; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .coche { width: 52px; height: 52px; border-radius: 50%; background: var(--orange); color: #111; display: grid; place-items: center; font-size: 26px; font-weight: 800; box-shadow: 0 0 36px -6px rgba(255,90,31,.8); }
+  .contenu { width: 100%; margin-top: 18px; display: grid; gap: 8px; text-align: left; }
+  .contenu div { display: flex; gap: 12px; align-items: flex-start; background: var(--carte); border: 1px solid var(--trait); border-radius: 16px; padding: 12px 14px; opacity: 0; animation: monte .45s cubic-bezier(.22,1,.36,1) forwards; }
+  .contenu div:nth-child(2) { animation-delay: .12s; } .contenu div:nth-child(3) { animation-delay: .24s; } .contenu div:nth-child(4) { animation-delay: .36s; }
+  .contenu i { flex: none; width: 22px; height: 22px; border-radius: 50%; background: rgba(255,90,31,.16); color: var(--orange); display: grid; place-items: center; font-style: normal; font-size: 13px; font-weight: 800; margin-top: 1px; }
+  .contenu b { display: block; font-size: 15px; }
+  .contenu span { display: block; font-size: 13px; color: var(--doux); margin-top: 2px; line-height: 1.35; }
+
+  .cache { display: none !important; }
 
   @media (prefers-reduced-motion: reduce) {
-    .ecran, .progres span::after { transition: none; }
+    .ecran, .progres span::after, .bloc { transition: none; }
     .rond { animation-duration: 2s; }
   }
 </style>
@@ -164,14 +187,14 @@
     <button class="retour" id="retour" aria-label="Retour" disabled>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
-    <div class="fil"></div>
-    <div class="compteur"><span id="num">1</span>/5</div>
+    <div class="espace"></div>
+    <div class="compteur"><span id="num">1</span>/7</div>
   </div>
-  <div class="progres" id="progres"><span class="fait"></span><span></span><span></span><span></span><span></span></div>
+  <div class="progres" id="progres"><span class="fait"></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
   <div class="scene">
-    <!-- 1 -->
-    <section class="ecran actif" data-i="0">
+    <!-- 1 · objectif -->
+    <section class="ecran actif">
       <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg></div>
       <div class="etiquette">Ton objectif</div>
       <h1>Quelle taille<br><span class="clair">veux-tu atteindre ?</span></h1>
@@ -183,8 +206,8 @@
       <button class="bouton" data-suivant>Continuer</button>
     </section>
 
-    <!-- 2 -->
-    <section class="ecran" data-i="1">
+    <!-- 2 · âge -->
+    <section class="ecran">
       <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
       <div class="etiquette">Ton âge</div>
       <h1>Tu as quel âge ?<br><span class="clair">C'est ta fenêtre.</span></h1>
@@ -195,8 +218,8 @@
       </div>
     </section>
 
-    <!-- 3 -->
-    <section class="ecran" data-i="2">
+    <!-- 3 · parents -->
+    <section class="ecran">
       <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.8-3 3-4.6 5.5-4.6s4.7 1.6 5.5 4.6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.6c2.2 0 3.8 1.2 4.5 3.6"/></svg></div>
       <div class="etiquette">Tes gènes</div>
       <h1>Tes parents<br><span class="clair">sont plutôt grands ?</span></h1>
@@ -206,8 +229,20 @@
       </div>
     </section>
 
-    <!-- 4 -->
-    <section class="ecran" data-i="3">
+    <!-- 4 · argument 80 / 20 (textes du questionnaire) -->
+    <section class="ecran" id="ecranGenes">
+      <h1>Tu peux grandir</h1>
+      <p class="sous">Environ 20 % de ta taille est encore entre tes mains. Les bonnes habitudes font la différence.</p>
+      <div class="genes" id="genes">
+        <div class="genes-axe"><span class="a100">100 %</span><span class="a80">80 %</span><span class="a0">0 %</span></div>
+        <div class="genes-col"><div class="bloc bloc-h">20 %</div><div class="bloc bloc-g">80 %</div></div>
+        <div class="genes-leg"><div class="l-h"><b>20 %</b>Tes habitudes</div><div class="l-g"><b>80 %</b>Ta génétique</div></div>
+      </div>
+      <button class="bouton" data-suivant>Continuer</button>
+    </section>
+
+    <!-- 5 · sommeil -->
+    <section class="ecran">
       <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></div>
       <div class="etiquette">Tes habitudes</div>
       <h1>Tu dors combien<br><span class="clair">par nuit ?</span></h1>
@@ -218,21 +253,52 @@
       </div>
     </section>
 
-    <!-- 5 -->
-    <section class="ecran" data-i="4">
-      <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
-      <div class="etiquette">Dernière étape</div>
-      <h1>On calcule<br><span class="clair">ton potentiel.</span></h1>
+    <!-- 6 · calcul puis résultats visibles -->
+    <section class="ecran" id="ecranCalcul">
+      <div class="icone" id="iconeCalcul"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
+      <div class="etiquette" id="etiquetteCalcul">Dernière étape</div>
+      <h1 id="titreCalcul">On calcule<br><span class="clair">ton potentiel.</span></h1>
       <div id="calcul" style="display:flex;flex-direction:column;align-items:center">
         <div class="rond"></div>
         <div class="etape-calcul" id="etapeCalcul">On croise tes réponses…</div>
       </div>
-      <div class="pret" id="pret">
-        <div class="flou">
-          <div><small>Taille adulte</small><b>1 8 2 cm</b></div>
-          <div><small>Il te reste</small><b>+ 9 cm</b></div>
+      <div id="resultats" class="cache" style="width:100%;flex-direction:column;align-items:center">
+        <div class="res">
+          <div class="res-grand">
+            <small>Ta taille adulte prédite</small>
+            <b><span data-compte="179">0</span><em>cm</em></b>
+            <span class="precision">Précision 98 %</span>
+          </div>
+          <div class="res-duo">
+            <div><small>Tu peux l'optimiser jusqu'à</small><b class="o"><span data-compte="183">0</span> cm</b></div>
+            <div><small>Plus grand que</small><b><span data-compte="72">0</span> %</b><span class="note">des jeunes de ton âge</span></div>
+          </div>
         </div>
-        <a class="bouton orange" href="/" style="display:inline-grid;place-items:center;text-decoration:none">Voir mon résultat</a>
+        <button class="bouton" id="creer">Créer mon plan →</button>
+      </div>
+    </section>
+
+    <!-- 7 · création du plan -->
+    <section class="ecran" id="ecranPlan">
+      <h1 class="titre-plan" id="titrePlan">Création de ton plan<br>personnalisé<br><span class="clair">pour atteindre ton potentiel</span></h1>
+      <div class="anneau" id="anneau">
+        <svg viewBox="0 0 120 120" width="190" height="190">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="#262626" stroke-width="8"/>
+          <circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="#ff5a1f" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" transform="rotate(-90 60 60)"/>
+        </svg>
+        <div class="anneau-valeur"><div><span id="pct">0</span>%</div></div>
+      </div>
+      <div id="planPret" class="cache" style="width:100%;flex-direction:column;align-items:center">
+        <div class="coche">✓</div>
+        <h1 style="font-size:28px;margin-top:12px">Ton plan est prêt</h1>
+        <!-- Titres et sous-titres repris mot pour mot du questionnaire. -->
+        <div class="contenu">
+          <div><i>✓</i><p style="margin:0"><b>Ton programme optimal</b><span>Chaque routine te rapproche de ton potentiel</span></p></div>
+          <div><i>✓</i><p style="margin:0"><b>Fais des exercices quotidiens</b><span>Des routines simples pour soutenir ta croissance</span></p></div>
+          <div><i>✓</i><p style="margin:0"><b>Suis ta taille chaque semaine</b><span>Plus on a de données, plus la prédiction est précise</span></p></div>
+          <div><i>✓</i><p style="margin:0"><b>Guide pour grandir</b><span>Les fondamentaux expliqués</span></p></div>
+        </div>
+        <a class="bouton" href="/" style="margin-top:18px">Commencer mon plan</a>
       </div>
     </section>
   </div>
@@ -245,11 +311,18 @@
   var num = document.getElementById('num');
   var retour = document.getElementById('retour');
   var courant = 0;
+  var GENES = ecrans.indexOf(document.getElementById('ecranGenes'));
+  var CALCUL = ecrans.indexOf(document.getElementById('ecranCalcul'));
+  var PLAN = ecrans.indexOf(document.getElementById('ecranPlan'));
+  var minuteries = [];
 
   function vibre() { try { navigator.vibrate && navigator.vibrate(8); } catch (e) {} }
+  function plus_tard(fn, ms) { minuteries.push(setTimeout(fn, ms)); }
+  function arreter() { minuteries.forEach(clearTimeout); minuteries = []; }
 
   function aller(i) {
     if (i < 0 || i >= ecrans.length) return;
+    arreter();
     ecrans[courant].classList.remove('actif');
     ecrans[courant].classList.toggle('parti', i > courant);
     courant = i;
@@ -258,7 +331,9 @@
     num.textContent = String(i + 1);
     barres.forEach(function (b, k) { b.classList.toggle('fait', k <= i); });
     retour.disabled = i === 0;
-    if (i === 4) lancerCalcul();
+    if (i === GENES) lancerGenes();
+    if (i === CALCUL) lancerCalcul();
+    if (i === PLAN) lancerPlan();
   }
 
   // Curseur : le gros chiffre suit le doigt.
@@ -267,7 +342,7 @@
   function majCurseur() {
     var p = (curseur.value - curseur.min) / (curseur.max - curseur.min) * 100;
     curseur.style.setProperty('--p', p + '%');
-    if (taille.textContent !== curseur.value) { taille.textContent = curseur.value; }
+    taille.textContent = curseur.value;
   }
   curseur.addEventListener('input', majCurseur);
   curseur.addEventListener('change', vibre);
@@ -287,29 +362,82 @@
     });
   });
 
-  retour.addEventListener('click', function () {
-    if (courant === 4) resetCalcul();
-    aller(courant - 1);
-  });
+  retour.addEventListener('click', function () { aller(courant - 1); });
 
-  var minuteries = [];
-  function resetCalcul() {
-    minuteries.forEach(clearTimeout); minuteries = [];
-    document.getElementById('calcul').style.display = 'flex';
-    document.getElementById('pret').classList.remove('visible');
+  // 80 / 20 : la colonne se remplit à l'arrivée sur l'écran.
+  function lancerGenes() {
+    var g = document.getElementById('genes');
+    g.classList.remove('rempli');
+    plus_tard(function () { g.classList.add('rempli'); }, 250);
   }
-  function lancerCalcul() {
-    resetCalcul();
-    var texte = document.getElementById('etapeCalcul');
-    var etapes = ['On croise tes réponses…', 'On regarde ta génétique…', 'On estime ta fenêtre de croissance…'];
-    etapes.forEach(function (t, k) {
-      minuteries.push(setTimeout(function () { texte.textContent = t; }, k * 900));
+
+  // Les chiffres montent jusqu'à leur valeur.
+  function compter(racine) {
+    racine.querySelectorAll('[data-compte]').forEach(function (el) {
+      var cible = Number(el.dataset.compte), debut = null;
+      function pas(t) {
+        if (debut === null) debut = t;
+        var p = Math.min(1, (t - debut) / 1100);
+        el.textContent = Math.round(cible * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(pas);
+      }
+      requestAnimationFrame(pas);
     });
-    minuteries.push(setTimeout(function () {
-      document.getElementById('calcul').style.display = 'none';
-      document.getElementById('pret').classList.add('visible');
+  }
+
+  function lancerCalcul() {
+    var calcul = document.getElementById('calcul'), res = document.getElementById('resultats');
+    var icone = document.getElementById('iconeCalcul'), etiquette = document.getElementById('etiquetteCalcul');
+    var titre = document.getElementById('titreCalcul'), texte = document.getElementById('etapeCalcul');
+    calcul.style.display = 'flex';
+    res.classList.add('cache');
+    icone.classList.remove('cache');
+    etiquette.textContent = 'Dernière étape';
+    titre.innerHTML = 'On calcule<br><span class="clair">ton potentiel.</span>';
+    texte.textContent = 'On croise tes réponses…';
+    plus_tard(function () { texte.textContent = 'On regarde ta génétique…'; }, 900);
+    plus_tard(function () { texte.textContent = 'On estime ta fenêtre de croissance…'; }, 1800);
+    plus_tard(function () {
+      calcul.style.display = 'none';
+      icone.classList.add('cache');
+      etiquette.textContent = 'Ton résultat';
+      titre.innerHTML = 'Voici<br><span class="clair">ton potentiel.</span>';
+      res.classList.remove('cache');
+      res.style.display = 'flex';
+      compter(res);
       vibre();
-    }, 2900));
+    }, 2900);
+  }
+
+  document.getElementById('creer').addEventListener('click', function () { vibre(); aller(PLAN); });
+
+  function lancerPlan() {
+    var arc = document.getElementById('arc'), pct = document.getElementById('pct');
+    var anneau = document.getElementById('anneau'), pret = document.getElementById('planPret');
+    var titre = document.getElementById('titrePlan');
+    anneau.classList.remove('cache');
+    titre.classList.remove('cache');
+    pret.classList.add('cache');
+    var total = 326.7, duree = 6500, debut = null, idCourse = {};
+    lancerPlan.course = idCourse;
+    function pas(t) {
+      if (lancerPlan.course !== idCourse || courant !== PLAN) return;
+      if (debut === null) debut = t;
+      var p = Math.min(1, (t - debut) / duree);
+      // Avance par à-coups, comme un vrai calcul, sans jamais reculer.
+      var e = Math.max(0, Math.min(1, p < 1 ? p - Math.sin(p * Math.PI * 6) * 0.02 : 1));
+      pct.textContent = Math.round(e * 100);
+      arc.setAttribute('stroke-dashoffset', String(total * (1 - e)));
+      if (p < 1) { requestAnimationFrame(pas); return; }
+      plus_tard(function () {
+        anneau.classList.add('cache');
+        titre.classList.add('cache');
+        pret.classList.remove('cache');
+        pret.style.display = 'flex';
+        vibre();
+      }, 400);
+    }
+    requestAnimationFrame(pas);
   }
 })();
 </script>
