@@ -64,7 +64,7 @@
   .retour[disabled] { opacity: .35; }
   .espace { flex: 1; }
   .compteur { font-size: 13px; font-weight: 700; color: var(--orange); letter-spacing: .02em; }
-  .progres { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 14px; }
+  .progres { display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px; margin-top: 14px; }
   .progres span { height: 3px; border-radius: 3px; background: var(--trait); overflow: hidden; position: relative; }
   .progres span::after {
     content: ""; position: absolute; inset: 0; background: var(--orange); transform: scaleX(0); transform-origin: left;
@@ -181,6 +181,10 @@
     .ecran, .progres span::after, .bloc { transition: none; }
     .rond { animation-duration: 2s; }
   }
+  .molette { width: 100%; }
+  .molette .valeur { margin-top: 26px; }
+  .molette .curseur { margin-top: 22px; }
+  .sous { max-width: 340px; }
 </style>
 </head>
 <body>
@@ -192,48 +196,46 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
     <div class="espace"></div>
-    <div class="compteur"><span id="num">1</span>/7</div>
+    <div class="compteur"><span id="num">1</span>/9</div>
   </div>
-  <div class="progres" id="progres"><span class="fait"></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="progres" id="progres"></div>
 
+  <!-- Questions reprises mot pour mot du vrai questionnaire de Grandimi. -->
   <div class="scene">
-    <!-- 1 · objectif -->
     <section class="ecran actif">
-      <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg></div>
-      <div class="etiquette">Ton objectif</div>
-      <h1>Quelle taille<br><span class="clair">veux-tu atteindre ?</span></h1>
-      <div class="valeur"><span id="taille">180</span><small>cm</small></div>
-      <div class="curseur">
-        <input type="range" id="curseur" min="155" max="200" value="180" aria-label="Taille visée">
-        <div class="bornes"><div><span>155 cm</span><span>Je démarre</span></div><div><span>200 cm</span><span>Ambitieux</span></div></div>
+      <div class="etiquette">Toi</div>
+      <h1>Tu es un garçon<br><span class="clair">ou une fille ?</span></h1>
+      <p class="sous">Le sexe influence la taille à l’âge adulte</p>
+      <div class="cartes deux">
+        <button class="carte" data-choix data-sexe="M"><strong>Garçon</strong></button>
+        <button class="carte" data-choix data-sexe="F"><strong>Fille</strong></button>
       </div>
+    </section>
+
+    <section class="ecran">
+      <div class="etiquette">Toi</div>
+      <h1>Quelle est<br><span class="clair">ta taille ?</span></h1>
+      <p class="sous">Fais glisser pour choisir ta taille actuelle</p>
+      <div class="molette" data-id="taille" data-min="130" data-max="200" data-pas="1" data-val="170" data-unite="cm"></div>
       <button class="bouton" data-suivant>Continuer</button>
     </section>
 
-    <!-- 2 · âge -->
     <section class="ecran">
-      <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
-      <div class="etiquette">Ton âge</div>
-      <h1>Tu as quel âge ?<br><span class="clair">C'est ta fenêtre.</span></h1>
-      <div class="cartes">
-        <button class="carte" data-choix><strong>13 - 14 ans</strong><span>la grande poussée arrive ou commence</span></button>
-        <button class="carte" data-choix><strong>15 - 16 ans</strong><span>il reste encore de la marge</span></button>
-        <button class="carte" data-choix><strong>17 ans et +</strong><span>on vérifie ce qu'il te reste</span></button>
-      </div>
+      <div class="etiquette">Ta famille</div>
+      <h1>Combien mesure<br><span class="clair">ton père ?</span></h1>
+      <p class="sous">La taille de tes parents influence beaucoup la tienne</p>
+      <div class="molette" data-id="pere" data-min="150" data-max="205" data-pas="1" data-val="182" data-unite="cm"></div>
+      <button class="bouton" data-suivant>Continuer</button>
     </section>
 
-    <!-- 3 · parents -->
     <section class="ecran">
-      <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.8-3 3-4.6 5.5-4.6s4.7 1.6 5.5 4.6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.6c2.2 0 3.8 1.2 4.5 3.6"/></svg></div>
-      <div class="etiquette">Tes gènes</div>
-      <h1>Tes parents<br><span class="clair">sont plutôt grands ?</span></h1>
-      <div class="cartes deux">
-        <button class="carte" data-choix><strong>Oui</strong><span>au-dessus de la moyenne</span></button>
-        <button class="carte" data-choix><strong>Non</strong><span>plutôt dans la moyenne</span></button>
-      </div>
+      <div class="etiquette">Ta famille</div>
+      <h1>Combien mesure<br><span class="clair">ta mère ?</span></h1>
+      <p class="sous">La taille de tes parents influence beaucoup la tienne</p>
+      <div class="molette" data-id="mere" data-min="140" data-max="195" data-pas="1" data-val="166" data-unite="cm"></div>
+      <button class="bouton" data-suivant>Continuer</button>
     </section>
 
-    <!-- 4 · argument 80 / 20 (textes du questionnaire) -->
     <section class="ecran" id="ecranGenes">
       <h1>Tu peux grandir</h1>
       <p class="sous">Environ 20 % de ta taille est encore entre tes mains. Les bonnes habitudes font la différence.</p>
@@ -245,19 +247,22 @@
       <button class="bouton" data-suivant>Continuer</button>
     </section>
 
-    <!-- 5 · sommeil -->
     <section class="ecran">
-      <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></div>
       <div class="etiquette">Tes habitudes</div>
-      <h1>Tu dors combien<br><span class="clair">par nuit ?</span></h1>
-      <div class="cartes">
-        <button class="carte" data-choix><strong>Moins de 7 h</strong><span>je me couche tard</span></button>
-        <button class="carte" data-choix><strong>7 à 8 h</strong><span>ça dépend des soirs</span></button>
-        <button class="carte" data-choix><strong>Plus de 8 h</strong><span>je dors bien</span></button>
-      </div>
+      <h1>Combien d’heures<br><span class="clair">dors-tu par nuit ?</span></h1>
+      <p class="sous">Bien dormir aide à grandir et à récupérer</p>
+      <div class="molette" data-id="sommeil" data-min="4" data-max="12" data-pas="0.5" data-val="8" data-unite="h"></div>
+      <button class="bouton" data-suivant>Continuer</button>
     </section>
 
-    <!-- 6 · calcul puis résultats visibles -->
+    <section class="ecran">
+      <div class="etiquette">Ton objectif</div>
+      <h1>Quelle est<br><span class="clair">ta taille idéale ?</span></h1>
+      <p class="sous">Choisis la taille que tu veux atteindre</p>
+      <div class="molette" data-id="ideale" data-min="150" data-max="210" data-pas="1" data-val="185" data-unite="cm"></div>
+      <button class="bouton" data-suivant>Continuer</button>
+    </section>
+
     <section class="ecran" id="ecranCalcul">
       <div class="icone" id="iconeCalcul"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
       <div class="etiquette" id="etiquetteCalcul">Dernière étape</div>
@@ -267,22 +272,22 @@
         <div class="etape-calcul" id="etapeCalcul">On croise tes réponses…</div>
       </div>
       <div id="resultats" class="cache" style="width:100%;flex-direction:column;align-items:center">
+        <!-- Libellés identiques à l'écran de résultats du vrai site. -->
         <div class="res">
           <div class="res-grand">
-            <small>Ta taille adulte prédite</small>
-            <b><span data-compte="179" id="rPredite">0</span><em>cm</em></b>
+            <small>Taille potentielle</small>
+            <b><span data-compte="0" id="rPotentielle">0</span><em>cm</em></b>
             <span class="precision">Précision 98 %</span>
           </div>
           <div class="res-duo">
-            <div><small>Tu peux l'optimiser jusqu'à</small><b class="o"><span data-compte="183" id="rOptimise">0</span> cm</b></div>
-            <div><small>Plus grand que</small><b><span data-compte="72" id="rPourcent">0</span> %</b><span class="note">des jeunes de ton âge</span></div>
+            <div><small>Optimise jusqu’à</small><b class="o"><span data-compte="0" id="rOptimise">0</span> cm</b></div>
+            <div><small>Plus grand que</small><b><span data-compte="0" id="rPourcent">0</span> %</b><span class="note">de ton âge</span></div>
           </div>
         </div>
         <button class="bouton" id="creer">Créer mon plan →</button>
       </div>
     </section>
 
-    <!-- 7 · création du plan -->
     <section class="ecran" id="ecranPlan">
       <h1 class="titre-plan" id="titrePlan">Création de ton plan<br>personnalisé<br><span class="clair">pour atteindre ton potentiel</span></h1>
       <div class="anneau" id="anneau">
@@ -295,7 +300,6 @@
       <div id="planPret" class="cache" style="width:100%;flex-direction:column;align-items:center">
         <div class="coche">✓</div>
         <h1 style="font-size:28px;margin-top:12px">Ton plan est prêt</h1>
-        <!-- Titres et sous-titres repris mot pour mot du questionnaire. -->
         <div class="contenu">
           <div><i>✓</i><p style="margin:0"><b>Ton programme optimal</b><span>Chaque routine te rapproche de ton potentiel</span></p></div>
           <div><i>✓</i><p style="margin:0"><b>Fais des exercices quotidiens</b><span>Des routines simples pour soutenir ta croissance</span></p></div>
@@ -311,18 +315,22 @@
 <script>
 (function () {
   var ecrans = [].slice.call(document.querySelectorAll('.ecran'));
-  var barres = [].slice.call(document.querySelectorAll('#progres span'));
+  var progres = document.getElementById('progres');
+  ecrans.forEach(function (_, k) { var s = document.createElement('span'); if (k === 0) s.className = 'fait'; progres.appendChild(s); });
+  var barres = [].slice.call(progres.children);
   var num = document.getElementById('num');
   var retour = document.getElementById('retour');
   var courant = 0;
   var GENES = ecrans.indexOf(document.getElementById('ecranGenes'));
   var CALCUL = ecrans.indexOf(document.getElementById('ecranCalcul'));
   var PLAN = ecrans.indexOf(document.getElementById('ecranPlan'));
+  var reponses = { sexe: 'M' };
   var minuteries = [];
 
   function vibre() { try { navigator.vibrate && navigator.vibrate(8); } catch (e) {} }
   function plus_tard(fn, ms) { minuteries.push(setTimeout(fn, ms)); }
   function arreter() { minuteries.forEach(clearTimeout); minuteries = []; }
+  function fr(v) { return String(v).replace('.', ','); }
 
   function aller(i) {
     if (i < 0 || i >= ecrans.length) return;
@@ -340,26 +348,32 @@
     if (i === PLAN) lancerPlan();
   }
 
-  // Curseur : le gros chiffre suit le doigt.
-  var curseur = document.getElementById('curseur');
-  var taille = document.getElementById('taille');
-  function majCurseur() {
-    var p = (curseur.value - curseur.min) / (curseur.max - curseur.min) * 100;
-    curseur.style.setProperty('--p', p + '%');
-    taille.textContent = curseur.value;
-  }
-  curseur.addEventListener('input', majCurseur);
-  curseur.addEventListener('change', vibre);
-  majCurseur();
+  // Molettes : un gros chiffre qui suit le curseur, comme sur le vrai site.
+  document.querySelectorAll('.molette').forEach(function (m) {
+    var d = m.dataset;
+    m.innerHTML = '<div class="valeur"><span></span><small>' + d.unite + '</small></div>' +
+      '<div class="curseur"><input type="range" min="' + d.min + '" max="' + d.max + '" step="' + d.pas + '" value="' + d.val + '">' +
+      '<div class="bornes"><div><span>' + fr(d.min) + ' ' + d.unite + '</span></div><div><span>' + fr(d.max) + ' ' + d.unite + '</span></div></div></div>';
+    var input = m.querySelector('input'), affiche = m.querySelector('.valeur span');
+    function maj() {
+      var p = (input.value - input.min) / (input.max - input.min) * 100;
+      input.style.setProperty('--p', p + '%');
+      affiche.textContent = fr(input.value);
+      reponses[d.id] = Number(input.value);
+    }
+    input.addEventListener('input', maj);
+    input.addEventListener('change', vibre);
+    maj();
+  });
 
   document.querySelectorAll('[data-suivant]').forEach(function (b) {
     b.addEventListener('click', function () { vibre(); aller(courant + 1); });
   });
 
-  // Cartes : on choisit, on voit la sélection, on avance tout seul.
   document.querySelectorAll('[data-choix]').forEach(function (c) {
     c.addEventListener('click', function () {
       vibre();
+      if (c.dataset.sexe) reponses.sexe = c.dataset.sexe;
       c.parentNode.querySelectorAll('.carte').forEach(function (x) { x.classList.remove('choisie'); });
       c.classList.add('choisie');
       setTimeout(function () { aller(courant + 1); }, 320);
@@ -368,14 +382,12 @@
 
   retour.addEventListener('click', function () { aller(courant - 1); });
 
-  // 80 / 20 : la colonne se remplit à l'arrivée sur l'écran.
   function lancerGenes() {
     var g = document.getElementById('genes');
     g.classList.remove('rempli');
     plus_tard(function () { g.classList.add('rempli'); }, 250);
   }
 
-  // Les chiffres montent jusqu'à leur valeur.
   function compter(racine) {
     racine.querySelectorAll('[data-compte]').forEach(function (el) {
       var cible = Number(el.dataset.compte), debut = null;
@@ -389,10 +401,35 @@
     });
   }
 
+  // Loi normale : part des jeunes plus petits que cette taille adulte.
+  function sousLaCourbe(z) {
+    var t = 1 / (1 + 0.2316419 * Math.abs(z));
+    var d = 0.3989423 * Math.exp(-z * z / 2);
+    var p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+    return z > 0 ? 1 - p : p;
+  }
+
+  /* Résultat d'exemple, cohérent avec les réponses : taille cible
+     parentale (moyenne des parents ± 6,5 cm selon le sexe), jamais sous la
+     taille actuelle ; « optimise » quelques cm au-dessus. */
+  function resultat() {
+    var garcon = reponses.sexe !== 'F';
+    var cible = (reponses.pere + reponses.mere + (garcon ? 13 : -13)) / 2;
+    var potentielle = Math.round(Math.max(cible, reponses.taille + 1));
+    var optimise = potentielle + 4;
+    var moyenne = garcon ? 176 : 163, ecart = garcon ? 7 : 6.5;
+    var pourcent = Math.round(100 * sousLaCourbe((potentielle - moyenne) / ecart));
+    return { potentielle: potentielle, optimise: optimise, pourcent: Math.max(3, Math.min(98, pourcent)) };
+  }
+
   function lancerCalcul() {
     var calcul = document.getElementById('calcul'), res = document.getElementById('resultats');
     var icone = document.getElementById('iconeCalcul'), etiquette = document.getElementById('etiquetteCalcul');
     var titre = document.getElementById('titreCalcul'), texte = document.getElementById('etapeCalcul');
+    var r = resultat();
+    document.getElementById('rPotentielle').dataset.compte = r.potentielle;
+    document.getElementById('rOptimise').dataset.compte = r.optimise;
+    document.getElementById('rPourcent').dataset.compte = r.pourcent;
     calcul.style.display = 'flex';
     res.classList.add('cache');
     icone.classList.remove('cache');
@@ -401,15 +438,6 @@
     texte.textContent = 'On croise tes réponses…';
     plus_tard(function () { texte.textContent = 'On regarde ta génétique…'; }, 900);
     plus_tard(function () { texte.textContent = 'On estime ta fenêtre de croissance…'; }, 1800);
-    // Résultat cohérent avec l'objectif : prédiction un peu sous la cible,
-    // optimisation un peu au-dessus, pourcentage qui suit la taille.
-    var objectif = Number(curseur.value);
-    var predite = Math.max(160, Math.min(196, objectif - 1));
-    var optimise = Math.min(predite + 4, 200);
-    var pourcent = Math.max(5, Math.min(98, Math.round((predite - 160) * 3 + 15)));
-    document.getElementById('rPredite').dataset.compte = predite;
-    document.getElementById('rOptimise').dataset.compte = optimise;
-    document.getElementById('rPourcent').dataset.compte = pourcent;
     plus_tard(function () {
       calcul.style.display = 'none';
       icone.classList.add('cache');
@@ -437,7 +465,6 @@
       if (lancerPlan.course !== idCourse || courant !== PLAN) return;
       if (debut === null) debut = t;
       var p = Math.min(1, (t - debut) / duree);
-      // Avance par à-coups, comme un vrai calcul, sans jamais reculer.
       var e = Math.max(0, Math.min(1, p < 1 ? p - Math.sin(p * Math.PI * 6) * 0.02 : 1));
       pct.textContent = Math.round(e * 100);
       arc.setAttribute('stroke-dashoffset', String(total * (1 - e)));
