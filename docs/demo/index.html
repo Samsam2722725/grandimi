@@ -6,8 +6,14 @@
 <meta name="robots" content="noindex, nofollow" />
 <meta name="theme-color" content="#0a0a0a" />
 <link rel="preconnect" href="https://fonts.bunny.net" />
-<link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700,800&display=swap" rel="stylesheet" />
+<link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700,800|fraunces:600&display=swap" rel="stylesheet" />
 <title>Grandimi</title>
+<script>
+  /* Démo réservée au tournage : sans le code, on renvoie vers le vrai site.
+     Quelqu'un qui tomberait sur /demo ne verra jamais un résultat d'exemple
+     présenté comme le sien. Dans la vidéo, Safari n'affiche que le domaine. */
+  if (location.search.indexOf("tournage") === -1) location.replace("/");
+</script>
 <link rel="icon" href="/favicon.svg" />
 <!--
   Page de démo pour les vidéos TikTok (écran filmé au téléphone).
@@ -45,11 +51,9 @@
   }
 
   /* En-tête */
-  .marque { display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: -.01em; font-size: 17px; }
-  .marque-logo {
-    width: 28px; height: 28px; border-radius: 9px; background: var(--orange); color: #111;
-    display: grid; place-items: center; font-size: 14px; font-weight: 800;
-  }
+  .marque { display: flex; align-items: center; gap: 9px; font-family: "Fraunces", Georgia, serif; font-weight: 600; letter-spacing: -.01em; font-size: 20px; }
+  .marque-logo { width: 32px; height: 32px; border-radius: 9px; background: var(--orange); color: #111; display: grid; place-items: center; }
+  .marque-logo svg { width: 20px; height: 20px; }
   .barre { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
   .retour {
     width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--trait); background: var(--carte);
@@ -181,7 +185,7 @@
 </head>
 <body>
 <div class="app">
-  <div class="marque"><div class="marque-logo">G</div>Grandimi</div>
+  <div class="marque"><div class="marque-logo"><svg viewBox="0 0 100 100" fill="none" aria-hidden="true"><circle cx="30.5" cy="46" r="11.5" stroke="currentColor" stroke-width="6"/><rect x="19" y="61" width="23" height="34" rx="11.5" stroke="currentColor" stroke-width="6"/><circle cx="69.5" cy="22" r="13.5" fill="currentColor"/><rect x="56" y="40" width="27" height="55" rx="13.5" fill="currentColor"/></svg></div>Grandimi</div>
 
   <div class="barre">
     <button class="retour" id="retour" aria-label="Retour" disabled>
@@ -266,12 +270,12 @@
         <div class="res">
           <div class="res-grand">
             <small>Ta taille adulte prédite</small>
-            <b><span data-compte="179">0</span><em>cm</em></b>
+            <b><span data-compte="179" id="rPredite">0</span><em>cm</em></b>
             <span class="precision">Précision 98 %</span>
           </div>
           <div class="res-duo">
-            <div><small>Tu peux l'optimiser jusqu'à</small><b class="o"><span data-compte="183">0</span> cm</b></div>
-            <div><small>Plus grand que</small><b><span data-compte="72">0</span> %</b><span class="note">des jeunes de ton âge</span></div>
+            <div><small>Tu peux l'optimiser jusqu'à</small><b class="o"><span data-compte="183" id="rOptimise">0</span> cm</b></div>
+            <div><small>Plus grand que</small><b><span data-compte="72" id="rPourcent">0</span> %</b><span class="note">des jeunes de ton âge</span></div>
           </div>
         </div>
         <button class="bouton" id="creer">Créer mon plan →</button>
@@ -397,6 +401,15 @@
     texte.textContent = 'On croise tes réponses…';
     plus_tard(function () { texte.textContent = 'On regarde ta génétique…'; }, 900);
     plus_tard(function () { texte.textContent = 'On estime ta fenêtre de croissance…'; }, 1800);
+    // Résultat cohérent avec l'objectif : prédiction un peu sous la cible,
+    // optimisation un peu au-dessus, pourcentage qui suit la taille.
+    var objectif = Number(curseur.value);
+    var predite = Math.max(160, Math.min(196, objectif - 1));
+    var optimise = Math.min(predite + 4, 200);
+    var pourcent = Math.max(5, Math.min(98, Math.round((predite - 160) * 3 + 15)));
+    document.getElementById('rPredite').dataset.compte = predite;
+    document.getElementById('rOptimise').dataset.compte = optimise;
+    document.getElementById('rPourcent').dataset.compte = pourcent;
     plus_tard(function () {
       calcul.style.display = 'none';
       icone.classList.add('cache');
