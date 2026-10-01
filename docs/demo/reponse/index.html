@@ -216,6 +216,9 @@
   .courbe svg { height: 56px; }
   .courbe { margin-top: 8px; padding-top: 8px; }
   .cta { margin-top: 8px; padding: 10px 14px; }
+  .enjeu { margin: 12px 0 0; font-size: 15px; line-height: 1.4; color: var(--doux); }
+  .enjeu b { color: var(--texte); }
+  .gratuit { margin: 8px 0 0; font-size: 13px; color: var(--doux); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -256,17 +259,18 @@
       <h1 style="font-size:30px">Voici<br><span class="clair">ton potentiel.</span></h1>
       <div class="res" style="margin-top:16px">
         <div class="res-grand">
-          <small>Taille potentielle</small>
+          <small>Ta taille adulte prévue</small>
           <b><span id="rPotentielle">0</span><em>cm</em></b>
           
         </div>
         <div class="res-duo">
-          <div><small>Optimise jusqu’à</small><b class="o"><span id="rOptimise">0</span> cm</b></div>
-          <div><small>Plus grand que</small><b><span id="rPourcent">0</span> %</b><span class="note">de ton âge</span></div>
+          <div id="carteOptimise"><small>Avec les bonnes habitudes</small><b class="o"><span id="rOptimise">0</span> cm</b></div>
+          <div><small>Aujourd’hui, <span id="rGrand">plus grand</span> que</small><b><span id="rPourcent">0</span> %</b><span class="note">des jeunes de ton âge</span></div>
         </div>
       </div>
+      <p class="enjeu">Ta génétique fixe la limite.<br><b>Tes habitudes décident si tu l’atteins.</b></p>
       <div class="courbe">
-        <small>Taille / Âge</small>
+        <small id="courbeTitre">Taille / Âge</small>
         <svg viewBox="0 0 300 96" preserveAspectRatio="none" aria-hidden="true">
           <defs><linearGradient id="remplissage" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5a1f" stop-opacity=".35"/><stop offset="1" stop-color="#ff5a1f" stop-opacity="0"/></linearGradient></defs>
           <path id="aire" fill="url(#remplissage)"/>
@@ -281,14 +285,15 @@
     <!-- Appel à l'action : textes repris de la page d'accueil. -->
     <section class="ecran" id="ecranSuite" style="justify-content:flex-start;padding-top:14px">
       <div class="etiquette">Ta prédiction complète</div>
-      <h1 style="font-size:30px">Pour une précision<br><span class="clair">à 98 %</span></h1>
-      <p class="sous" style="margin-top:8px">Fais l’analyse complète : ta puberté, ta croissance et tes habitudes comptent aussi.</p>
+      <h1 style="font-size:28px">Ne laisse pas tes habitudes<br><span class="clair">te coûter des centimètres</span></h1>
+      <p class="sous" style="margin-top:8px">Pour une prédiction précise à 98 % et ton plan pour l’atteindre :</p>
       <div class="contenu" style="margin-top:14px">
         <div><i>✓</i><p style="margin:0"><b>Estimation qui se met à jour</b><span>Recalculée chaque mois selon ton évolution et tes habitudes</span></p></div>
         <div><i>✓</i><p style="margin:0"><b>Plan quotidien</b><span>Onze actions à cocher, du lever au coucher</span></p></div>
         <div><i>✓</i><p style="margin:0"><b>Sommeil, nutrition, exercices</b><span>Chaque levier détaillé : quoi faire et quand</span></p></div>
       </div>
       <div class="cta-lien" style="margin-top:18px">grandimi.com <span>→</span></div>
+      <p class="gratuit">Analyse gratuite · 2 min</p>
       <button class="nouveau" id="nouveau" type="button">Nouvelle prédiction</button>
     </section>
   </div>
@@ -406,10 +411,16 @@
         var optimise = Number(res.potential_height_cm) || potentielle;
         montrer('resultat');
         compter(document.getElementById('rPotentielle'), potentielle, 1);
-        compter(document.getElementById('rOptimise'), optimise, 1);
+        var gain = optimise - potentielle;
+        var duo = document.querySelector('#ecranResultat .res-duo');
+        document.getElementById('carteOptimise').style.display = gain >= 2 ? '' : 'none';
+        duo.style.gridTemplateColumns = gain >= 2 ? '' : '1fr';
+        if (gain >= 2) compter(document.getElementById('rOptimise'), optimise, 1);
+        document.getElementById('rGrand').textContent = valeurs.sexe === 'F' ? 'plus grande' : 'plus grand';
         compter(document.getElementById('rPourcent'), Math.round(Number(res.percentile_age) || 50), 0);
 
         dessinerCourbe(valeurs.age, valeurs.taille, potentielle);
+        document.getElementById('courbeTitre').textContent = valeurs.taille + ' cm aujourd’hui → ' + fr(potentielle.toFixed(1)) + ' cm adulte';
         vibre();
       }, reste);
     }).catch(function (e) {
