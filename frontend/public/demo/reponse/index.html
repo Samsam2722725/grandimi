@@ -203,6 +203,14 @@
   .courbe small { font-size: 13px; color: var(--doux); font-weight: 600; }
   .courbe svg { display: block; width: 100%; height: 96px; margin-top: 4px; }
   .courbe .axes { display: flex; justify-content: space-between; font-size: 11px; color: var(--pale); padding: 0 2px; }
+  .cta { width: 100%; margin-top: 12px; padding: 14px 16px; border-radius: 18px; text-align: center;
+    background: linear-gradient(180deg, rgba(255,90,31,.16), rgba(255,90,31,.06)); border: 1px solid rgba(255,90,31,.5); }
+  .cta-note { margin: 0; font-size: 12px; color: var(--doux); }
+  .cta-titre { margin: 4px 0 0; font-size: 15px; font-weight: 700; line-height: 1.3; }
+  .cta-lien { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; padding: 10px 20px; border-radius: 999px;
+    background: var(--orange); color: #111; font-weight: 800; font-size: 17px; letter-spacing: -.01em;
+    box-shadow: 0 10px 26px -10px rgba(255,90,31,.8); }
+  .nouveau { margin-top: 10px; background: none; border: 0; color: var(--pale); font: inherit; font-size: 13px; text-decoration: underline; cursor: pointer; padding: 6px; }
 </style>
 </head>
 <body>
@@ -245,7 +253,7 @@
         <div class="res-grand">
           <small>Taille potentielle</small>
           <b><span id="rPotentielle">0</span><em>cm</em></b>
-          <span class="precision">Précision 98 %</span>
+          <span class="precision" id="rMarge">± 0 cm</span>
         </div>
         <div class="res-duo">
           <div><small>Optimise jusqu’à</small><b class="o"><span id="rOptimise">0</span> cm</b></div>
@@ -262,7 +270,12 @@
         </svg>
         <div class="axes" id="axes"></div>
       </div>
-      <button class="bouton" id="nouveau" style="margin-top:16px">Nouvelle prédiction</button>
+      <div class="cta">
+        <p class="cta-note">Estimation à partir de 5 infos.</p>
+        <p class="cta-titre">Ta prédiction complète, avec ta puberté et tes habitudes :</p>
+        <div class="cta-lien">grandimi.com <span>→</span></div>
+      </div>
+      <button class="nouveau" id="nouveau" type="button">Nouvelle prédiction</button>
     </section>
   </div>
 </div>
@@ -381,6 +394,8 @@
         compter(document.getElementById('rPotentielle'), potentielle, 1);
         compter(document.getElementById('rOptimise'), optimise, 1);
         compter(document.getElementById('rPourcent'), Math.round(Number(res.percentile_age) || 50), 0);
+        var marge = Number(res.margin_cm);
+        document.getElementById('rMarge').textContent = isFinite(marge) && marge > 0 ? '± ' + fr(Math.round(marge)) + ' cm' : 'Estimation';
         dessinerCourbe(valeurs.age, valeurs.taille, potentielle);
         vibre();
       }, reste);
