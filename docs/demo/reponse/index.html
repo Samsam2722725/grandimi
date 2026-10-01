@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#0a0a0a" />
+<link rel="preconnect" href="https://fonts.bunny.net" />
+<link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700,800|fraunces:600&display=swap" rel="stylesheet" />
+<title>Grandimi</title>
+<script>
+  /* Démo réservée au tournage : sans le code, on renvoie vers le vrai site.
+     Quelqu'un qui tomberait sur /demo ne verra jamais un résultat d'exemple
+     présenté comme le sien. Dans la vidéo, Safari n'affiche que le domaine. */
+  if (location.search.indexOf("tournage") === -1) location.replace("/");
+</script>
+<link rel="icon" href="/favicon.svg" />
+<!--
+  Page de démo pour les vidéos TikTok (écran filmé au téléphone).
+  Indépendante de l'application : aucun code partagé, aucun appel serveur,
+  rien ne peut bloquer pendant un tournage. Style Grandimi (noir, orange).
+  Les textes du plan reprennent mot pour mot ceux du questionnaire.
+  Exclue de Google (noindex + robots.txt).
+-->
+<style>
+  :root {
+    --fond: #0a0a0a;
+    --carte: #161616;
+    --trait: #262626;
+    --texte: #ffffff;
+    --doux: #a3a3a3;
+    --pale: #6b6b6b;
+    --orange: #ff5a1f;
+    --orange-clair: #ff8a4c;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; background: var(--fond); }
+  body {
+    font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--texte);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .app {
+    height: 100dvh;
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 18px);
+  }
+
+  /* En-tête */
+  .marque { display: flex; align-items: center; gap: 9px; font-family: "Fraunces", Georgia, serif; font-weight: 600; letter-spacing: -.01em; font-size: 20px; }
+  .marque-logo { width: 32px; height: 32px; border-radius: 9px; background: var(--orange); color: #111; display: grid; place-items: center; }
+  .marque-logo svg { width: 20px; height: 20px; }
+  .barre { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
+  .retour {
+    width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--trait); background: var(--carte);
+    display: grid; place-items: center; cursor: pointer; color: var(--texte);
+    transition: transform .15s, opacity .2s;
+  }
+  .retour:active { transform: scale(.92); }
+  .retour[disabled] { opacity: .35; }
+  .espace { flex: 1; }
+  .compteur { font-size: 13px; font-weight: 700; color: var(--orange); letter-spacing: .02em; }
+  .progres { display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px; margin-top: 14px; }
+  .progres span { height: 3px; border-radius: 3px; background: var(--trait); overflow: hidden; position: relative; }
+  .progres span::after {
+    content: ""; position: absolute; inset: 0; background: var(--orange); transform: scaleX(0); transform-origin: left;
+    transition: transform .45s cubic-bezier(.22,1,.36,1);
+  }
+  .progres span.fait::after { transform: scaleX(1); }
+
+  /* Écrans */
+  .scene { flex: 1; position: relative; }
+  .ecran {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; opacity: 0; transform: translateX(24px); pointer-events: none;
+    transition: opacity .35s ease, transform .45s cubic-bezier(.22,1,.36,1);
+  }
+  .ecran.actif { opacity: 1; transform: none; pointer-events: auto; }
+  .ecran.parti { opacity: 0; transform: translateX(-24px); }
+  .icone {
+    width: 62px; height: 62px; border-radius: 18px; background: var(--carte); border: 1px solid var(--trait);
+    display: grid; place-items: center; color: var(--orange); box-shadow: 0 0 40px -8px rgba(255,90,31,.55);
+  }
+  .etiquette { margin-top: 18px; font-size: 13px; font-weight: 800; letter-spacing: .08em; color: var(--orange); text-transform: uppercase; }
+  h1 { margin: 12px 0 0; font-size: clamp(30px, 8.6vw, 38px); line-height: 1.06; letter-spacing: -.035em; font-weight: 700; }
+  h1 .clair { color: var(--doux); }
+  .sous { margin: 12px 8px 0; font-size: 16px; line-height: 1.45; color: var(--doux); }
+
+  /* Curseur */
+  .valeur { margin-top: 34px; font-size: clamp(56px, 17vw, 76px); font-weight: 700; letter-spacing: -.04em; font-variant-numeric: tabular-nums; line-height: 1; }
+  .valeur small { font-size: .42em; color: var(--doux); font-weight: 600; letter-spacing: -.01em; margin-left: 4px; }
+  .curseur { width: 100%; margin-top: 30px; }
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 36px; background: transparent; margin: 0; }
+  input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: linear-gradient(to right, var(--orange) var(--p), var(--trait) var(--p)); }
+  input[type=range]::-moz-range-track { height: 4px; border-radius: 4px; background: var(--trait); }
+  input[type=range]::-moz-range-progress { height: 4px; border-radius: 4px; background: var(--orange); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; border-radius: 50%; margin-top: -13px; background: #fff; border: 0; box-shadow: 0 0 0 6px rgba(255,90,31,.25); }
+  input[type=range]::-moz-range-thumb { width: 30px; height: 30px; border-radius: 50%; background: #fff; border: 0; box-shadow: 0 0 0 6px rgba(255,90,31,.25); }
+  .bornes { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--pale); }
+  .bornes div { display: flex; flex-direction: column; gap: 3px; }
+  .bornes div:last-child { text-align: right; }
+
+  /* Cartes */
+  .cartes { width: 100%; margin-top: 30px; display: grid; gap: 12px; }
+  .cartes.deux { grid-template-columns: 1fr 1fr; }
+  .carte {
+    text-align: left; background: var(--carte); border: 1px solid var(--trait); border-radius: 18px;
+    padding: 18px 18px 20px; cursor: pointer; font: inherit; color: inherit;
+    transition: transform .15s ease, border-color .2s, box-shadow .2s, background .2s;
+  }
+  .carte:active { transform: scale(.975); }
+  .carte strong { display: block; font-size: 19px; letter-spacing: -.02em; font-weight: 700; }
+  .carte span { display: block; margin-top: 6px; font-size: 14px; line-height: 1.35; color: var(--doux); }
+  .carte.choisie { border-color: var(--orange); background: rgba(255,90,31,.10); box-shadow: 0 0 0 1px var(--orange); }
+
+  /* Bouton */
+  .bouton {
+    margin-top: 28px; min-width: 200px; height: 54px; border: 0; cursor: pointer; border-radius: 999px;
+    background: var(--orange); color: #111; font: inherit; font-size: 16px; font-weight: 700; padding: 0 28px;
+    box-shadow: 0 12px 30px -10px rgba(255,90,31,.7); transition: transform .15s;
+    display: inline-grid; place-items: center; text-decoration: none;
+  }
+  .bouton:active { transform: scale(.96); }
+
+  /* Colonne 80 % / 20 % */
+  .genes { display: grid; grid-template-columns: 44px 120px 104px; justify-content: center; gap: 12px; height: 240px; margin-top: 26px; }
+  .genes-axe { position: relative; font-size: 13px; font-weight: 600; color: var(--pale); }
+  .genes-axe span { position: absolute; right: 0; transform: translateY(-50%); }
+  .genes-axe .a100 { top: 0; } .genes-axe .a80 { top: 20%; color: var(--orange-clair); font-weight: 800; } .genes-axe .a0 { top: 100%; }
+  .genes-col { display: flex; flex-direction: column; gap: 6px; }
+  .bloc { display: grid; place-items: center; border-radius: 16px; transform-origin: bottom; transform: scaleY(0); transition: transform .8s cubic-bezier(.22,.61,.36,1); font-size: 13px; font-weight: 700; }
+  .bloc-h { flex: 20; background: linear-gradient(180deg, #ffb020, #ff5a1f); color: rgba(17,17,17,.8); box-shadow: 0 0 34px -2px rgba(255,90,31,.75); transition-delay: .8s; }
+  .bloc-g { flex: 80; background: #17110d; border: 1px solid #3a2a20; color: #6b5f55; }
+  .genes.rempli .bloc { transform: scaleY(1); }
+  .genes-leg { position: relative; text-align: left; font-size: 13px; }
+  .genes-leg div { position: absolute; left: 0; transform: translateY(-50%); }
+  .genes-leg .l-h { top: 10%; color: var(--orange-clair); font-weight: 800; }
+  .genes-leg .l-g { top: 60%; color: var(--doux); font-weight: 600; }
+  .genes-leg b { display: block; font-size: 18px; }
+
+  /* Calcul */
+  .rond { margin-top: 44px; width: 52px; height: 52px; border-radius: 50%; border: 3px solid var(--trait); border-top-color: var(--orange); animation: tourne .9s linear infinite; }
+  @keyframes tourne { to { transform: rotate(360deg); } }
+  .etape-calcul { margin-top: 18px; font-size: 15px; color: var(--doux); min-height: 20px; }
+  @keyframes monte { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  /* Résultats (tout visible) */
+  .res { width: 100%; margin-top: 20px; display: grid; gap: 10px; animation: monte .5s cubic-bezier(.22,1,.36,1); }
+  .res small { display: block; font-size: 13px; color: var(--doux); }
+  .res b { display: block; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .res-grand { background: var(--carte); border: 1px solid rgba(255,90,31,.45); border-radius: 20px; padding: 16px; box-shadow: 0 0 44px -14px rgba(255,90,31,.6); }
+  .res-grand b { font-size: 60px; line-height: 1.05; margin-top: 2px; }
+  .res-grand em { font-style: normal; font-size: 22px; color: var(--doux); margin-left: 4px; font-weight: 700; }
+  .precision { display: inline-block; margin-top: 6px; padding: 5px 12px; border-radius: 999px; background: rgba(255,90,31,.14); color: var(--orange-clair); font-size: 13px; font-weight: 700; }
+  .res-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .res-duo > div { background: var(--carte); border: 1px solid var(--trait); border-radius: 18px; padding: 14px; text-align: left; }
+  .res-duo b { font-size: 30px; margin-top: 6px; }
+  .res-duo b.o { color: var(--orange); }
+  .res-duo .note { display: block; font-size: 12px; color: var(--doux); margin-top: 2px; }
+
+  /* Création du plan */
+  .titre-plan { font-size: clamp(26px, 7.4vw, 32px); }
+  .anneau { position: relative; margin-top: 34px; width: 190px; height: 190px; }
+  .anneau svg { filter: drop-shadow(0 0 18px rgba(255,90,31,.45)); }
+  .anneau-valeur { position: absolute; inset: 0; display: grid; place-items: center; font-size: 46px; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .coche { width: 52px; height: 52px; border-radius: 50%; background: var(--orange); color: #111; display: grid; place-items: center; font-size: 26px; font-weight: 800; box-shadow: 0 0 36px -6px rgba(255,90,31,.8); }
+  .contenu { width: 100%; margin-top: 18px; display: grid; gap: 8px; text-align: left; }
+  .contenu div { display: flex; gap: 12px; align-items: flex-start; background: var(--carte); border: 1px solid var(--trait); border-radius: 16px; padding: 12px 14px; opacity: 0; animation: monte .45s cubic-bezier(.22,1,.36,1) forwards; }
+  .contenu div:nth-child(2) { animation-delay: .12s; } .contenu div:nth-child(3) { animation-delay: .24s; } .contenu div:nth-child(4) { animation-delay: .36s; }
+  .contenu i { flex: none; width: 22px; height: 22px; border-radius: 50%; background: rgba(255,90,31,.16); color: var(--orange); display: grid; place-items: center; font-style: normal; font-size: 13px; font-weight: 800; margin-top: 1px; }
+  .contenu b { display: block; font-size: 15px; }
+  .contenu span { display: block; font-size: 13px; color: var(--doux); margin-top: 2px; line-height: 1.35; }
+
+  .cache { display: none !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ecran, .progres span::after, .bloc { transition: none; }
+    .rond { animation-duration: 2s; }
+  }
+  .molette { width: 100%; }
+  .molette .valeur { margin-top: 26px; }
+  .molette .curseur { margin-top: 22px; }
+  .sous { max-width: 340px; }
+
+  /* ---------- Mode réponse ---------- */
+  .scene.reponse { overflow-y: auto; }
+  .saisie { width: 100%; display: grid; gap: 10px; margin-top: 18px; }
+  .ligne { background: var(--carte); border: 1px solid var(--trait); border-radius: 16px; padding: 10px 14px 6px; text-align: left; }
+  .ligne-tete { display: flex; justify-content: space-between; align-items: baseline; }
+  .ligne-tete small { font-size: 13px; color: var(--doux); font-weight: 600; }
+  .ligne-tete b { font-size: 22px; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .ligne-tete b em { font-style: normal; font-size: 14px; color: var(--doux); margin-left: 3px; }
+  .ligne input[type=range] { height: 30px; }
+  .sexe { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .sexe button { height: 46px; border-radius: 14px; border: 1px solid var(--trait); background: var(--carte); color: var(--texte); font: inherit; font-weight: 700; font-size: 16px; cursor: pointer; }
+  .sexe button.choisie { border-color: var(--orange); background: rgba(255,90,31,.12); box-shadow: 0 0 0 1px var(--orange); }
+  .erreur { margin-top: 12px; color: #ff8a8a; font-size: 14px; }
+  .courbe { width: 100%; background: var(--carte); border: 1px solid var(--trait); border-radius: 18px; padding: 12px 12px 6px; margin-top: 10px; text-align: left; }
+  .courbe small { font-size: 13px; color: var(--doux); font-weight: 600; }
+  .courbe svg { display: block; width: 100%; height: 96px; margin-top: 4px; }
+  .courbe .axes { display: flex; justify-content: space-between; font-size: 11px; color: var(--pale); padding: 0 2px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="marque"><div class="marque-logo"><svg viewBox="0 0 100 100" fill="none" aria-hidden="true"><circle cx="30.5" cy="46" r="11.5" stroke="currentColor" stroke-width="6"/><rect x="19" y="61" width="23" height="34" rx="11.5" stroke="currentColor" stroke-width="6"/><circle cx="69.5" cy="22" r="13.5" fill="currentColor"/><rect x="56" y="40" width="27" height="55" rx="13.5" fill="currentColor"/></svg></div>Grandimi</div>
+
+  <div class="scene reponse">
+    <!-- Saisie : uniquement ce qu'on trouve dans un commentaire. -->
+    <section class="ecran actif" id="ecranSaisie" style="justify-content:flex-start;padding-top:14px">
+      <div class="etiquette">Tes infos</div>
+      <h1 style="font-size:30px">Prédis ta<br><span class="clair">taille adulte</span></h1>
+      <div class="saisie">
+        <div class="sexe">
+          <button type="button" data-sexe="M" class="choisie">Garçon</button>
+          <button type="button" data-sexe="F">Fille</button>
+        </div>
+        <div class="ligne" data-id="age" data-min="10" data-max="20" data-pas="1" data-val="16" data-unite="ans" data-titre="Ton âge"></div>
+        <div class="ligne" data-id="taille" data-min="120" data-max="205" data-pas="1" data-val="175" data-unite="cm" data-titre="Ta taille"></div>
+        <div class="ligne" data-id="pere" data-min="150" data-max="210" data-pas="1" data-val="180" data-unite="cm" data-titre="Taille de ton père"></div>
+        <div class="ligne" data-id="mere" data-min="145" data-max="200" data-pas="1" data-val="166" data-unite="cm" data-titre="Taille de ta mère"></div>
+      </div>
+      <button class="bouton" id="calculer" style="margin-top:18px">Calculer</button>
+      <p class="erreur" id="erreur" hidden></p>
+    </section>
+
+    <!-- Calcul -->
+    <section class="ecran" id="ecranCalcul">
+      <div class="icone"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
+      <div class="etiquette">Calcul</div>
+      <h1>On calcule<br><span class="clair">ton potentiel.</span></h1>
+      <div class="rond"></div>
+      <div class="etape-calcul" id="etapeCalcul">On croise tes réponses…</div>
+    </section>
+
+    <!-- Résultat : chiffres du vrai moteur, libellés du vrai site. -->
+    <section class="ecran" id="ecranResultat" style="justify-content:flex-start;padding-top:14px">
+      <div class="etiquette">Ton résultat</div>
+      <h1 style="font-size:30px">Voici<br><span class="clair">ton potentiel.</span></h1>
+      <div class="res" style="margin-top:16px">
+        <div class="res-grand">
+          <small>Taille potentielle</small>
+          <b><span id="rPotentielle">0</span><em>cm</em></b>
+          <span class="precision">Précision 98 %</span>
+        </div>
+        <div class="res-duo">
+          <div><small>Optimise jusqu’à</small><b class="o"><span id="rOptimise">0</span> cm</b></div>
+          <div><small>Plus grand que</small><b><span id="rPourcent">0</span> %</b><span class="note">de ton âge</span></div>
+        </div>
+      </div>
+      <div class="courbe">
+        <small>Taille / Âge</small>
+        <svg viewBox="0 0 300 96" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="remplissage" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5a1f" stop-opacity=".35"/><stop offset="1" stop-color="#ff5a1f" stop-opacity="0"/></linearGradient></defs>
+          <path id="aire" fill="url(#remplissage)"/>
+          <path id="ligne" fill="none" stroke="#ff5a1f" stroke-width="3" stroke-linecap="round"/>
+          <circle id="point" r="6" fill="#fff" stroke="#ff5a1f" stroke-width="3"/>
+        </svg>
+        <div class="axes" id="axes"></div>
+      </div>
+      <button class="bouton" id="nouveau" style="margin-top:16px">Nouvelle prédiction</button>
+    </section>
+  </div>
+</div>
+
+<script>
+(function () {
+  /* Le vrai moteur de Grandimi (le même que le site). Le compte d'envoi est
+     dédié aux réponses TikTok : les prédictions faites ici y sont rangées,
+     sans se mélanger aux vrais visiteurs. */
+  var API = 'https://grandimi-api.onrender.com/api/v2/predict-height';
+  var EMAIL = 'reponses-tiktok@grandimi.com';
+
+  var ecrans = { saisie: document.getElementById('ecranSaisie'), calcul: document.getElementById('ecranCalcul'), resultat: document.getElementById('ecranResultat') };
+  var valeurs = { sexe: 'M' };
+  var minuteries = [];
+
+  function fr(v) { return String(v).replace('.', ','); }
+  function vibre() { try { navigator.vibrate && navigator.vibrate(8); } catch (e) {} }
+  function montrer(nom) {
+    Object.keys(ecrans).forEach(function (k) { ecrans[k].classList.toggle('actif', k === nom); });
+  }
+
+  // Les lignes de saisie : un titre, la valeur en gros, un curseur.
+  document.querySelectorAll('.ligne').forEach(function (l) {
+    var d = l.dataset;
+    l.innerHTML = '<div class="ligne-tete"><small>' + d.titre + '</small><b><span></span><em>' + d.unite + '</em></b></div>' +
+      '<input type="range" min="' + d.min + '" max="' + d.max + '" step="' + d.pas + '" value="' + d.val + '" aria-label="' + d.titre + '">';
+    var input = l.querySelector('input'), affiche = l.querySelector('b span');
+    function maj() {
+      input.style.setProperty('--p', ((input.value - input.min) / (input.max - input.min) * 100) + '%');
+      affiche.textContent = fr(input.value);
+      valeurs[d.id] = Number(input.value);
+    }
+    input.addEventListener('input', maj);
+    input.addEventListener('change', vibre);
+    maj();
+  });
+
+  document.querySelectorAll('[data-sexe]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      vibre();
+      valeurs.sexe = b.dataset.sexe;
+      document.querySelectorAll('[data-sexe]').forEach(function (x) { x.classList.toggle('choisie', x === b); });
+    });
+  });
+
+  function compter(el, cible, decimales) {
+    var debut = null, f = Math.pow(10, decimales || 0);
+    function pas(t) {
+      if (debut === null) debut = t;
+      var p = Math.min(1, (t - debut) / 1100);
+      var v = Math.round(cible * (1 - Math.pow(1 - p, 3)) * f) / f;
+      el.textContent = fr(decimales ? v.toFixed(decimales) : v);
+      if (p < 1) requestAnimationFrame(pas);
+    }
+    requestAnimationFrame(pas);
+  }
+
+  // Courbe simple : de la taille actuelle (âge actuel) à la taille potentielle (~19 ans).
+  function dessinerCourbe(age, taille, finale) {
+    var debut = Math.max(10, Math.min(age, 18)), fin = Math.max(debut + 2, 21);
+    var bas = Math.min(taille, finale) - 6, haut = Math.max(taille, finale) + 3;
+    function x(a) { return 6 + (a - debut) / (fin - debut) * 288; }
+    function y(h) { return 90 - (h - bas) / (haut - bas) * 80; }
+    var pts = [];
+    for (var a = debut; a <= fin + 0.001; a += 0.25) {
+      // Rapprochement progressif de la taille finale, aplati après ~19 ans.
+      var k = 1 - Math.exp(-(a - debut) * 1.1);
+      var h = taille + (finale - taille) * Math.min(1, k * 1.05);
+      pts.push([x(a), y(Math.min(h, finale))]);
+    }
+    var d = 'M' + pts.map(function (p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' L');
+    document.getElementById('ligne').setAttribute('d', d);
+    document.getElementById('aire').setAttribute('d', d + ' L' + x(fin).toFixed(1) + ' 96 L' + x(debut).toFixed(1) + ' 96 Z');
+    var point = document.getElementById('point');
+    point.setAttribute('cx', x(debut)); point.setAttribute('cy', y(taille));
+    var axes = document.getElementById('axes');
+    axes.innerHTML = '';
+    for (var g = Math.ceil(debut); g <= fin; g += Math.max(1, Math.round((fin - debut) / 5))) {
+      var s = document.createElement('span'); s.textContent = g + ' ans'; axes.appendChild(s);
+    }
+  }
+
+  document.getElementById('calculer').addEventListener('click', function () {
+    vibre();
+    var erreur = document.getElementById('erreur');
+    erreur.hidden = true;
+    montrer('calcul');
+    var texte = document.getElementById('etapeCalcul');
+    texte.textContent = 'On croise tes réponses…';
+    minuteries.push(setTimeout(function () { texte.textContent = 'On regarde ta génétique…'; }, 900));
+    minuteries.push(setTimeout(function () { texte.textContent = 'On estime ta fenêtre de croissance…'; }, 1800));
+
+    // Poids non donné dans un commentaire : indice de masse corporelle moyen (20).
+    var poids = Math.round(20 * Math.pow(valeurs.taille / 100, 2));
+    var corps = {
+      email: EMAIL, age: valeurs.age, sex: valeurs.sexe, height_cm: valeurs.taille, weight_kg: poids,
+      father_height_cm: valeurs.pere, mother_height_cm: valeurs.mere,
+      height_velocity_cm: 0, shoe_size_eu: 0, sleep_hours_per_night: 8, exercise_min_per_day: 30,
+      voix_muee: 'unknown', pilosite_visage: '', pilosite_aisselles: '',
+      menarche_declaree: false, menarche_survenue: false, age_menarche_annees: 0
+    };
+    var depart = Date.now();
+    var delai = new Promise(function (_, non) { setTimeout(function () { non(new Error('Le serveur met trop de temps. Réessaie.')); }, 20000); });
+    var appel = fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corps) })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || 'Calcul impossible'); return j; }); });
+
+    Promise.race([appel, delai]).then(function (res) {
+      // L'animation dure au moins 2,6 s, même si le serveur répond vite.
+      var reste = Math.max(0, 2600 - (Date.now() - depart));
+      setTimeout(function () {
+        minuteries.forEach(clearTimeout); minuteries = [];
+        var potentielle = Number(res.predicted_height_cm);
+        var optimise = Number(res.potential_height_cm) || potentielle;
+        montrer('resultat');
+        compter(document.getElementById('rPotentielle'), potentielle, 1);
+        compter(document.getElementById('rOptimise'), optimise, 1);
+        compter(document.getElementById('rPourcent'), Math.round(Number(res.percentile_age) || 50), 0);
+        dessinerCourbe(valeurs.age, valeurs.taille, potentielle);
+        vibre();
+      }, reste);
+    }).catch(function (e) {
+      minuteries.forEach(clearTimeout); minuteries = [];
+      montrer('saisie');
+      erreur.textContent = e.message;
+      erreur.hidden = false;
+    });
+  });
+
+  document.getElementById('nouveau').addEventListener('click', function () { vibre(); montrer('saisie'); });
+})();
+</script>
+</body>
+</html>
