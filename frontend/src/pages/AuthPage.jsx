@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Spinner from '../components/Spinner';
 import apiClient from '../lib/api';
+import { enregistrerPredictionServeur } from '../lib/prediction-serveur';
 import '../styles/auth-page.css';
 
 function AuthPage({ onAuthComplete }) {
@@ -25,32 +26,10 @@ function AuthPage({ onAuthComplete }) {
         localStorage.setItem('user', JSON.stringify(response.user));
         localStorage.setItem('token', response.token);
 
-        // Charger les prédictions depuis le backend
+        // Recharger la prédiction complète (âge, sexe, poids…) : sans elle,
+        // le plan d'un abonné qui se reconnecte répondait « âge obligatoire ».
         const predictions = await apiClient.getMyPredictions();
-        if (predictions && predictions.length > 0) {
-          const latestPrediction = predictions[0];
-          /* L AVERTISSEMENT MEDICAL NE SURVIT PAS A CETTE RECONSTRUCTION.
-
-             predictions.predicted_height et confidence_* existent en base,
-             mais ni out_of_domain ni warning : le modele les calcule a
-             chaque appel et ils ne sont pas persistes. Un utilisateur hors
-             des courbes qui se reconnecte retrouve donc son chiffre sans le
-             renvoi vers un medecin qui l accompagnait.
-
-             Le combler demande deux colonnes et une migration, pas une
-             retouche ici — on ne recalcule pas le modele cote navigateur.
-             Note dans TODO-ESTIMATEUR.md. */
-          localStorage.setItem('predictionData', JSON.stringify({
-            predicted_height_cm: latestPrediction.predicted_height,
-            confidence_range: {
-              min: latestPrediction.confidence_min,
-              max: latestPrediction.confidence_max,
-            },
-            confidence_level: latestPrediction.confidence_level,
-            current_height_cm: latestPrediction.height_cm,
-            email: email,
-          }));
-        }
+        enregistrerPredictionServeur(predictions, email);
       } else if (mode === 'signup') {
         if (!email || !password) throw new Error('Email et mot de passe requis');
 
@@ -58,6 +37,15 @@ function AuthPage({ onAuthComplete }) {
         const response = await apiClient.signup({ email, password });
         localStorage.setItem('user', JSON.stringify(response.user));
         localStorage.setItem('token', response.token);
+
+        // Enfant dont le parent a payé depuis un autre téléphone : sans ce
+        // rechargement, il atterrissait sur l'accueil au lieu de son plan.
+        try {
+          const predictions = await apiClient.getMyPredictions();
+          enregistrerPredictionServeur(predictions, email);
+        } catch {
+          // Pas de prédiction lisible : l'accueil proposera le questionnaire.
+        }
       }
 
       setLoading(false);
@@ -179,26 +167,19 @@ function AuthPage({ onAuthComplete }) {
 
           {mode === 'forgot' && (
             <>
-              <h1>Réinitialiser le mot de passe</h1>
-              <p className="subtitle">Saisis ton email pour recevoir un lien</p>
-
-              <form onSubmit={(e) => { e.preventDefault(); alert('Lien envoyé !'); }} className="auth-form">
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="toi@example.com"
-                    required
-                  />
-                </div>
-
-                <button type="submit" className="btn-primary btn-full">
-                  Envoyer le lien
-                </button>
-              </form>
+              <h1>Mot de passe oublié</h1>
+              {/* Il n'existe pas encore d'envoi automatique de lien : l'ancien
+                  formulaire affichait « Lien envoyé ! » sans rien envoyer. */}
+              <p className="subtitle">
+                Écris-nous depuis l’adresse de ton compte, on rétablit ton accès rapidement.
+              </p>
+              <a
+                className="btn-primary btn-full"
+                href="mailto:grandimi14@gmail.com?subject=Mot%20de%20passe%20oubli%C3%A9%20Grandimi"
+                style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
+              >
+                Écrire à grandimi14@gmail.com
+              </a>
 
               <div className="auth-footer">
                 <button className="btn-tertiary" onClick={() => setMode('login')}>← Retour à la connexion</button>

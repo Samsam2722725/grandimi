@@ -3491,3 +3491,7 @@
 .plan-creation {
   padding-bottom: 120px;
 }
+
+/* Mention discrète sous le champ e-mail (politique de confidentialité). */
+.funnel-help--discret { font-size: 12px; opacity: 0.75; margin-top: 4px; }
+.funnel-help--discret a { color: inherit; text-decoration: underline; }

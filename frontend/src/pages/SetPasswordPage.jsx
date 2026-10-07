@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import Spinner from '../components/Spinner';
 import apiClient from '../lib/api';
+import { enregistrerPredictionServeur } from '../lib/prediction-serveur';
 import '../styles/auth-page.css';
 
-function SetPasswordPage({ onAuthComplete }) {
+function SetPasswordPage({ onAuthComplete, onSeConnecter }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -21,7 +22,10 @@ function SetPasswordPage({ onAuthComplete }) {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const emailFromWhop = params.get('customer_email');
+    // L'adresse de la page est nettoyée après un paiement : l'adresse Whop
+    // a été mise de côté juste avant (App.jsx).
+    const emailFromWhop =
+      params.get('customer_email') || sessionStorage.getItem('grandimi:email_whop');
     const savedEmail = localStorage.getItem('userEmail');
 
     /* L'adresse saisie sur Grandimi passe AVANT celle renvoyée par Whop.
@@ -85,31 +89,13 @@ function SetPasswordPage({ onAuthComplete }) {
       localStorage.setItem('user', JSON.stringify(response.user));
       localStorage.setItem('token', response.token);
 
-      // Charger les prédictions depuis le backend
-      const predictions = await apiClient.getMyPredictions();
-      if (predictions && predictions.length > 0) {
-        const latestPrediction = predictions[0];
-        /* L AVERTISSEMENT MEDICAL NE SURVIT PAS A CETTE RECONSTRUCTION.
-
-           predictions.predicted_height et confidence_* existent en base,
-           mais ni out_of_domain ni warning : le modele les calcule a
-           chaque appel et ils ne sont pas persistes. Un utilisateur hors
-           des courbes qui se reconnecte retrouve donc son chiffre sans le
-           renvoi vers un medecin qui l accompagnait.
-
-           Le combler demande deux colonnes et une migration, pas une
-           retouche ici — on ne recalcule pas le modele cote navigateur.
-           Note dans TODO-ESTIMATEUR.md. */
-        localStorage.setItem('predictionData', JSON.stringify({
-          predicted_height_cm: latestPrediction.predicted_height,
-          confidence_range: {
-            min: latestPrediction.confidence_min,
-            max: latestPrediction.confidence_max,
-          },
-          confidence_level: latestPrediction.confidence_level,
-          current_height: latestPrediction.height_cm,
-          email: email,
-        }));
+      // Garder la prédiction complète du questionnaire si elle est là ;
+      // sinon la reconstruire depuis la base (âge, sexe, poids compris).
+      try {
+        const predictions = await apiClient.getMyPredictions();
+        enregistrerPredictionServeur(predictions, email);
+      } catch {
+        // Illisible : le plan retombera sur l'accueil, pas sur une page vide.
       }
 
       setLoading(false);
@@ -139,7 +125,19 @@ function SetPasswordPage({ onAuthComplete }) {
             {error && (
               <div className="alert alert-error">
                 <span className="alert-icon">✕</span>
-                <div>{error}</div>
+                <div>
+                  {error}
+                  {/* Compte qui a déjà un mot de passe (onglet rechargé,
+                      réabonnement) : l'ancienne page n'offrait aucune issue. */}
+                  {/existe déjà/i.test(error) && onSeConnecter && (
+                    <>
+                      {' '}
+                      <button type="button" className="btn-tertiary" onClick={onSeConnecter}>
+                        Se connecter
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             )}
 

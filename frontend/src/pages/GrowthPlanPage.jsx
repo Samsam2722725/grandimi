@@ -68,6 +68,11 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
           current_height_cm: predictionData.current_height_cm,
           predicted_height_cm: predictionData.predicted_height_cm,
           weight_kg: predictionData.weight_kg,
+          // Les réponses du questionnaire : sans elles, le serveur prenait
+          // ses valeurs par défaut et tout le monde lisait « tu bouges
+          // 30 min par jour » dans un plan dit personnalisé.
+          sleep_hours_per_night: predictionData.sleep_hours_per_night || undefined,
+          exercise_min_per_day: predictionData.exercise_min_per_day || undefined,
           month: mois,
         });
 
@@ -87,7 +92,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
     // panne ici ne doit pas empêcher d'afficher le plan lui-même, donc on
     // avale l'erreur plutôt que de la remonter à setError.
     apiClient
-      .getTodayTasks()
+      .getTodayTasks(dateDuJour())
       .then((res) => setCompletedKeys(new Set(res.completed_keys || [])))
       .catch(() => {});
 
@@ -106,7 +111,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
     });
 
     if (APERCU_PLAN) return;
-    apiClient.toggleTask(cle).catch(() => {
+    apiClient.toggleTask(cle, dateDuJour()).catch(() => {
       // Échec réseau : on annule l'optimisme plutôt que de laisser
       // l'écran mentir sur ce qui est réellement enregistré.
       setCompletedKeys((prev) => {

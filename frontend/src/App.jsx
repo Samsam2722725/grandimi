@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 /* design-system-v2.css n'est plus importé ici : il l'est depuis
    index.css, dans @layer base (cf. commentaire là-bas). L'importer
    à nouveau ici le remettrait hors couche. */
@@ -136,6 +136,8 @@ function App() {
   );
   // Compte enfant à créditer quand un parent arrive par le lien partagé.
   const [parentChildUserId, setParentChildUserId] = useState(null);
+  // Paiement parent : l'accès de l'enfant est-il confirmé par le serveur ?
+  const [giftConfirme, setGiftConfirme] = useState(true);
 
   // Une vue par écran : l'URL ne change jamais dans cette SPA,
   // donc PostHog ne peut pas la déduire tout seul.
@@ -160,10 +162,17 @@ function App() {
      on a laissé passer vers les résultats et le paywall. On le relance ici
      toutes les 20 s, discrètement, jusqu'à obtenir la vraie prédiction et
      l'identifiant du compte — avant que le plan payant en ait besoin. */
+  /* Bornée : une réponse refusée par le serveur (400 : valeur hors limites)
+     ne se corrige pas en réessayant — on arrête. Les autres échecs sont
+     retentés de plus en plus espacés, 5 fois au plus. Une relance toutes
+     les 20 s sans fin épuisait la limite de calculs de toute la connexion
+     (wifi familial, lycée) pour les autres visiteurs. */
   useEffect(() => {
     if (!predictionData?.prediction_en_attente || !predictionData.payload_prediction) return undefined;
     let annule = false;
     let minuterie;
+    let essai = 0;
+    const DELAIS = [3000, 20000, 60000, 180000, 300000];
     const essayer = async () => {
       try {
         const res = await apiClient.predictHeightV2(predictionData.payload_prediction);
@@ -172,17 +181,24 @@ function App() {
         setPredictionData(complet);
         localStorage.setItem('predictionData', JSON.stringify(complet));
         if (res.user_id) {
+          // Le compte de CETTE analyse, pas celui d'une analyse précédente
+          // faite sur le même téléphone (frère, sœur, autre adresse).
           const utilisateur = JSON.parse(localStorage.getItem('user') || '{}');
           localStorage.setItem(
             'user',
-            JSON.stringify({ ...utilisateur, id: utilisateur.id || res.user_id, email: complet.email }),
+            JSON.stringify({ ...utilisateur, id: res.user_id, email: complet.email }),
           );
         }
-      } catch {
-        if (!annule) minuterie = setTimeout(essayer, 20000);
+      } catch (err) {
+        if (annule) return;
+        const refusDefinitif = err && err.status >= 400 && err.status < 500 && err.status !== 429;
+        essai += 1;
+        if (!refusDefinitif && essai < DELAIS.length) {
+          minuterie = setTimeout(essayer, DELAIS[essai]);
+        }
       }
     };
-    minuterie = setTimeout(essayer, 3000);
+    minuterie = setTimeout(essayer, DELAIS[0]);
     return () => {
       annule = true;
       clearTimeout(minuterie);
@@ -262,6 +278,18 @@ function App() {
         'user',
         JSON.stringify({ ...utilisateur, id: data.user_id, email: data.email }),
       );
+    } else if (!localStorage.getItem('token')) {
+      /* Analyse « en attente » (pas encore d'identifiant) sur un téléphone
+         qui a déjà servi : l'ancien identifiant appartient à quelqu'un
+         d'autre. Le garder enverrait le paiement et le lien parent sur le
+         mauvais compte ; la relance en arrière-plan posera le bon. */
+      try {
+        const utilisateur = JSON.parse(localStorage.getItem('user') || '{}');
+        delete utilisateur.id;
+        localStorage.setItem('user', JSON.stringify({ ...utilisateur, email: data.email }));
+      } catch {
+        localStorage.removeItem('user');
+      }
     }
 
     setCurrentPage('results');
@@ -345,7 +373,9 @@ function App() {
   const handlePaymentComplete = async () => {
     setIsAuthenticated(true);
 
-    for (let essai = 0; essai < 5; essai += 1) {
+    // Jusqu'à ~30 s : au-delà de 10 s de retard du webhook Whop, le client
+    // lisait « pas d'abonnement » alors qu'il venait de payer.
+    for (let essai = 0; essai < 10; essai += 1) {
       try {
         const res = await apiClient.checkPremium();
         if (res.is_premium) {
@@ -356,10 +386,10 @@ function App() {
       } catch {
         // Réseau : on retente, le compte est peut-être déjà crédité.
       }
-      await new Promise((resoudre) => setTimeout(resoudre, 2000));
+      await new Promise((resoudre) => setTimeout(resoudre, 3000));
     }
 
-    /* Toujours rien après dix secondes : on l'envoie sur « Mon compte »,
+    /* Toujours rien après trente secondes : on l'envoie sur « Mon compte »,
        qui lui montre l'état réel de son abonnement et le lien Whop,
        plutôt que sur un écran de plan qui répondra 402. */
     setIsPaid(false);
@@ -393,10 +423,51 @@ function App() {
     }
   }, [currentPage, predictionData, isAuthenticated, isPaid]);
 
+  /* On ne vide plus l'analyse en revenant à l'accueil : l'accueil propose
+     « Reprendre mon analyse ». La vider obligeait à refaire les 33 écrans
+     pour revoir son résultat et payer. */
   const handleBackHome = () => {
     setCurrentPage('home');
-    setPredictionData(null);
   };
+
+  const handleReprendre = () => {
+    if (isPaid && predictionData) {
+      ouvrirPlan();
+      return;
+    }
+    setCurrentPage(predictionData ? 'results' : 'home');
+  };
+
+  /* Bouton / geste « retour » du téléphone. L'adresse ne change jamais
+     dans ce site : sans ceci, « retour » faisait quitter le site à
+     n'importe quelle étape (et renvoyait sur TikTok). Une entrée
+     d'historique « garde » est posée ; « retour » la consomme, on recule
+     d'un écran dans le site, et on la repose. Sur l'accueil, on laisse
+     partir. */
+  const pageRef = useRef(currentPage);
+  pageRef.current = currentPage;
+  useEffect(() => {
+    const SANS_RETOUR = ['paiement', 'set-password', 'plan-setup', 'gift-confirmed', 'admin', 'parent'];
+    const surRetour = () => {
+      const page = pageRef.current;
+      if (page === 'home') {
+        window.history.back();
+        return;
+      }
+      window.history.pushState({ grandimi: true }, '');
+      if (SANS_RETOUR.includes(page)) return;
+      if (page === 'questionnaire') {
+        window.dispatchEvent(new CustomEvent('grandimi:retour'));
+      } else if (page === 'paywall') {
+        setCurrentPage('results');
+      } else {
+        setCurrentPage('home');
+      }
+    };
+    window.history.pushState({ grandimi: true }, '');
+    window.addEventListener('popstate', surRetour);
+    return () => window.removeEventListener('popstate', surRetour);
+  }, []);
 
   const handleLogin = () => {
     setCurrentPage('auth');
@@ -453,7 +524,7 @@ function App() {
       const idPaiement = params.get('payment_id') || params.get('receipt_id') || '';
 
       const reclamer = async () => {
-        if (!idPaiement || !idCompte) return;
+        if (!idPaiement || !idCompte) return false;
         /* Le client revient parfois avant le webhook de Whop. « pending »
            n'est donc pas un échec : on redemande pendant une quinzaine de
            secondes avant de laisser tomber. */
@@ -463,22 +534,42 @@ function App() {
               paymentId: idPaiement,
               userId: idCompte,
             });
-            if (res.status === 'granted' || res.status === 'already_granted') return;
+            if (res.status === 'granted' || res.status === 'already_granted') return true;
           } catch {
             // Réseau : on retente.
           }
           await new Promise((resoudre) => setTimeout(resoudre, 2500));
         }
+        return false;
       };
 
       const versMotDePasse = () => {
         if (annule) return;
+        // Déjà connecté (réabonnement, ou onglet rechargé après avoir
+        // choisi son mot de passe) : pas de second mot de passe, on vérifie
+        // l'accès directement. Sinon le serveur répondait « un compte
+        // existe déjà », sans issue.
+        if (localStorage.getItem('token')) {
+          handlePaymentComplete();
+          return;
+        }
         setCurrentPage('set-password');
       };
 
+      // L'adresse de Whop (customer_email) sert à l'écran mot de passe :
+      // on la garde avant de nettoyer l'adresse de la page.
+      const emailWhop = params.get('customer_email');
+      if (emailWhop) sessionStorage.setItem('grandimi:email_whop', emailWhop);
+
       (async () => {
-        await reclamer();
+        const accorde = await reclamer();
         if (annule) return;
+
+        /* L'adresse « ?status=success&payment_id=… » restait affichée : à
+           chaque rechargement (Safari recharge souvent les onglets), le
+           client retombait sur « choisis un mot de passe » et une erreur.
+           On l'efface une fois le retour traité. */
+        window.history.replaceState(window.history.state, '', window.location.pathname);
 
         /* Paiement parent : on sait de source sûre que le payeur n'est
            pas le bénéficiaire — c'est son propre navigateur qui l'a noté
@@ -491,6 +582,7 @@ function App() {
            proposerait de « créer son mot de passe » ouvrirait un compte
            fantôme pendant que l'accès de l'enfant, lui, est déjà prêt. */
         if (estCadeau) {
+          setGiftConfirme(accorde);
           setCurrentPage('gift-confirmed');
           return;
         }
@@ -594,6 +686,9 @@ function App() {
         <HomePage
           onStartQuestionnaire={handleStartQuestionnaire}
           onLogin={handleLogin}
+          onReprendre={handleReprendre}
+          analyseEnCours={Boolean(predictionData)}
+          abonne={isPaid && Boolean(predictionData)}
         />
       )}
 
@@ -615,7 +710,7 @@ function App() {
 
       {/* Set password after payment */}
       {currentPage === 'set-password' && (
-        <SetPasswordPage onAuthComplete={handlePaymentComplete} />
+        <SetPasswordPage onAuthComplete={handlePaymentComplete} onSeConnecter={handleLogin} />
       )}
 
       {/* Paiement cadeau confirmé : le payeur n'est pas le bénéficiaire,
@@ -625,7 +720,7 @@ function App() {
       )}
 
       {currentPage === 'gift-confirmed' && (
-        <GiftConfirmedPage onBackHome={handleBackHome} />
+        <GiftConfirmedPage onBackHome={handleBackHome} confirme={giftConfirme} />
       )}
 
       {/* Results (visible after auth) */}
@@ -641,7 +736,7 @@ function App() {
       {/* La paywall redirige vers Whop : l'accès n'est plus accordé
           côté client, mais par le webhook après paiement réel. */}
       {currentPage === 'paywall' && predictionData && (
-        <PaywallPage onBackHome={handleBackHome} />
+        <PaywallPage onBackHome={() => setCurrentPage('results')} />
       )}
 
       {/* Growth Plan (after payment) */}

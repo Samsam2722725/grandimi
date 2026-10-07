@@ -137,7 +137,7 @@ function PlanSetupPage({ onTermine }) {
          même à son plan, avec les horaires par défaut. */
       setErreur(
         err.message ||
-          'Impossible d’enregistrer pour le moment. Tu peux continuer, et régler ça depuis ton compte.',
+          'Impossible d’enregistrer pour le moment. Tu peux voir ton plan avec les horaires par défaut.',
       )
       setEnvoi(false)
     }
@@ -246,9 +246,15 @@ function PlanSetupPage({ onTermine }) {
       footer={
         <>
           {erreur && (
-            <p className="funnel-error" role="alert">
-              {erreur}
-            </p>
+            <>
+              <p className="funnel-error" role="alert">
+                {erreur}
+              </p>
+              {/* Quelqu'un qui vient de payer ne doit pas tourner en rond ici. */}
+              <button type="button" className="funnel-link" onClick={onTermine}>
+                Voir mon plan quand même →
+              </button>
+            </>
           )}
           <FunnelButton
             onClick={dernier ? envoyer : avancer}

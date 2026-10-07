@@ -33,7 +33,11 @@ import '../styles/paywall-night.css';
    simplement le mot de passe manquant et ouvre l'accès (cf. Signup dans
    internal/api/handlers.go — un compte DÉJÀ protégé par un mot de passe,
    lui, est refusé). Restait à l'écrire quelque part. */
-function GiftConfirmedPage({ onBackHome }) {
+/* `confirme` : vrai seulement si le serveur a dit que l'accès est bien
+   posé sur le compte de l'enfant (« granted »). Sinon on n'affirme pas
+   « C'est réglé » : le paiement est reçu, l'activation peut prendre un
+   moment, et le parent a un contact si elle n'arrive pas. */
+function GiftConfirmedPage({ onBackHome, confirme = true }) {
   return (
     <div className="night paywall">
       <main className="paywall-scroll">
@@ -42,12 +46,29 @@ function GiftConfirmedPage({ onBackHome }) {
           Paiement confirmé
         </p>
 
-        <h1 className="paywall-title">C’est réglé, merci.</h1>
-        <p className="paywall-subtitle">
-          L’abonnement est activé sur le compte de votre enfant — pas sur celui-ci. Vous
-          avez payé depuis le lien qu’il vous a envoyé, donc l’accès s’ouvre directement
-          chez lui.
-        </p>
+        {confirme ? (
+          <>
+            <h1 className="paywall-title">C’est réglé, merci.</h1>
+            <p className="paywall-subtitle">
+              L’abonnement est activé sur le compte de votre enfant — pas sur celui-ci. Vous
+              avez payé depuis le lien qu’il vous a envoyé, donc l’accès s’ouvre directement
+              chez lui.
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className="paywall-title">Paiement reçu, merci.</h1>
+            <p className="paywall-subtitle">
+              L’activation sur le compte de votre enfant est en cours : elle prend en
+              général quelques minutes. Si son plan ne s’ouvre pas d’ici une heure,
+              écrivez-nous à{' '}
+              <a href="mailto:grandimi14@gmail.com?subject=Activation%20abonnement%20enfant">
+                grandimi14@gmail.com
+              </a>{' '}
+              en indiquant l’adresse e-mail de votre enfant : on l’active à la main.
+            </p>
+          </>
+        )}
 
         <section className="parent-suite" aria-labelledby="gift-suite-titre">
           <h2 className="paywall-section-title" id="gift-suite-titre">
@@ -70,7 +91,7 @@ function GiftConfirmedPage({ onBackHome }) {
 
           <ol className="parent-etapes">
             <li>Aller sur grandimi.com et cliquer sur « Se connecter »</li>
-            <li>Choisir « Créer un compte »</li>
+            <li>Choisir « Choisir mon mot de passe »</li>
             <li>
               Saisir <strong>exactement la même adresse e-mail</strong> que celle utilisée
               pour son estimation, puis choisir un mot de passe

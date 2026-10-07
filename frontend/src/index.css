@@ -225,3 +225,17 @@
   content-visibility: auto;
   contain-intrinsic-size: auto 900px;
 }
+
+/* « Reprendre mon analyse » sur l'accueil : visible, mais second derrière
+   « Commencer mon analyse ». */
+.bouton-reprendre {
+  min-height: 46px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1.5px solid #ff5a1f;
+  background: rgba(255, 90, 31, 0.1);
+  color: #ff8a4c;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}

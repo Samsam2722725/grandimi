@@ -16,6 +16,7 @@ import {
   lienParentOuvert,
   paywallVue,
   planChoisi as mesurerPlanChoisi,
+  capture,
 } from '../lib/analytics'
 
 /* Deux offres, mêmes fonctionnalités : seul le rythme de facturation
@@ -105,7 +106,18 @@ function lireLaPrediction() {
 }
 
 function PaywallPage({ onBackHome }) {
-  const [email] = useState(() => localStorage.getItem('userEmail') || '')
+  // Repli sur l'adresse du compte connecté : un ancien abonné qui se
+  // reconnecte sur un nouveau téléphone n'a pas d'adresse de questionnaire
+  // en mémoire, et voyait un bouton grisé sans explication.
+  const [email] = useState(() => {
+    const duQuestionnaire = localStorage.getItem('userEmail')
+    if (duQuestionnaire) return duQuestionnaire
+    try {
+      return JSON.parse(localStorage.getItem('user') || '{}').email || ''
+    } catch {
+      return ''
+    }
+  })
   const prediction = useState(lireLaPrediction)[0]
   const [loading, setLoading] = useState(false)
   /* Passe à vrai quand la redirection dépasse DELAI_AVANT_MESSAGE_MS, pour
@@ -247,7 +259,7 @@ function PaywallPage({ onBackHome }) {
     }
   })()
   const lienParent = idEnfant
-    ? `${window.location.origin}/?parent=${encodeURIComponent(idEnfant)}`
+    ? `${window.location.origin}/?parent=${encodeURIComponent(idEnfant)}&offre=${planChoisi}`
     : ''
 
   const copierLien = async () => {
@@ -295,14 +307,44 @@ function PaywallPage({ onBackHome }) {
   }, [])
 
   useEffect(() => {
-    window.grandimiPaiementTermine = (resultat) => {
-      const id = resultat && resultat.receipt_id
+    /* Le script Whop appelle cette fonction avec TROIS valeurs, dans cet
+       ordre : l'identifiant de l'offre, l'identifiant du paiement (pay_…),
+       puis un objet de détails. L'ancienne version lisait `receipt_id` sur
+       la première (un simple texte « plan_… ») : l'identifiant du paiement
+       était toujours perdu, et le paiement n'était rattaché au compte que
+       par l'e-mail tapé chez Whop. On accepte aussi un objet seul, au cas
+       où Whop change sa façon d'appeler. */
+    window.grandimiPaiementTermine = (premier, idPaiement, details) => {
+      const id =
+        (typeof idPaiement === 'string' && idPaiement) ||
+        (details && details.receipt_id) ||
+        (premier && typeof premier === 'object' && premier.receipt_id) ||
+        ''
+      capture('whop_paiement_termine', { etape: id ? 'avec_id' : 'sans_id' })
       window.location.href = id
         ? `/?payment_id=${encodeURIComponent(id)}&status=success`
         : '/?status=success'
     }
+
+    /* Ce qui se passe DANS le formulaire Whop était invisible : on ne
+       savait pas si des cartes étaient refusées. Chaque erreur de paiement
+       et chaque étape du formulaire (une seule fois chacune) est mesurée. */
+    const etapesVues = new Set()
+    window.grandimiPaiementErreur = (...args) => {
+      const code = args.map((a) => (a && typeof a === 'object' ? a.code || a.message || '' : a)).filter(Boolean).join(' ')
+      capture('whop_erreur_paiement', { etape: String(code || 'inconnue').slice(0, 80) })
+    }
+    window.grandimiPaiementEtat = (...args) => {
+      const etat = args.map((a) => (a && typeof a === 'object' ? a.state || a.step || '' : a)).filter(Boolean).join(' ')
+      const cle = String(etat || 'inconnu').slice(0, 60)
+      if (etapesVues.has(cle)) return
+      etapesVues.add(cle)
+      capture('whop_etat', { etape: cle })
+    }
     return () => {
       delete window.grandimiPaiementTermine
+      delete window.grandimiPaiementErreur
+      delete window.grandimiPaiementEtat
     }
   }, [])
 
@@ -311,6 +353,17 @@ function PaywallPage({ onBackHome }) {
       setErreur(null)
       checkoutOuvert(planChoisi)
       setFeuilleOuverte(true)
+      /* Bloqueur de pub, navigateur intégré, réseau lent : si le formulaire
+         Whop n'est toujours pas là après 4 s, on part sur la page de
+         paiement whop.com déjà préparée, au lieu de laisser un panneau vide. */
+      setTimeout(() => {
+        const bloc = document.querySelector('.pw2-feuille-whop')
+        const monte = bloc && (bloc.querySelector('iframe') || bloc.hasAttribute('data-whop-checkout-mounted'))
+        if (!monte && urlPrechargee) {
+          capture('whop_repli_redirection', { etape: planChoisi })
+          window.location.href = urlPrechargee
+        }
+      }, 4000)
       return
     }
 
@@ -504,6 +557,8 @@ function PaywallPage({ onBackHome }) {
               data-whop-checkout-prefill-email={email}
               data-whop-checkout-theme="dark"
               data-whop-checkout-on-complete="grandimiPaiementTermine"
+              data-whop-checkout-on-payment-error="grandimiPaiementErreur"
+              data-whop-checkout-on-state-change="grandimiPaiementEtat"
               data-whop-checkout-return-url={`${window.location.origin}/`}
             />
           </div>

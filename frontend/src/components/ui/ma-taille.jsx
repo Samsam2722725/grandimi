@@ -134,8 +134,10 @@ export function MaTaille({ predictionData, onMiseAJour }) {
           </button>
         </div>
         <p className="ma-taille-aide">
-          Mesure-toi chaque semaine, le matin, pieds nus, dos au mur. Chaque mesure recalcule ton
-          estimation.
+          Mesure-toi chaque semaine, le matin, pieds nus, dos au mur.{' '}
+          {predictionData.payload_prediction
+            ? 'Chaque mesure recalcule ton estimation.'
+            : 'Chaque mesure est enregistrée dans ton suivi.'}
         </p>
         {erreur && (
           <p className="funnel-error" role="alert">

@@ -107,7 +107,7 @@ const FAQ = [
   },
 ]
 
-function HomePage({ onStartQuestionnaire, onLogin }) {
+function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, abonne }) {
   /* Les boutons de la page mènent tous au même questionnaire. Agrégés, ils ne
      disent rien : on sait combien de gens démarrent, pas ce qui les a décidés,
      donc pas quelle section mérite d'exister. Chaque bouton déclare son
@@ -234,12 +234,14 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
               logotype. On dégraisse au lieu de rétrécir la cible tactile —
               les 44px de hauteur sont conservés partout. */}
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            {/* Un abonné qui revient trouve son plan ici, au lieu de devoir
+                se reconnecter et refaire le chemin à chaque visite. */}
             <button
               type="button"
-              onClick={onLogin}
+              onClick={abonne ? onReprendre : onLogin}
               className="inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-sm font-semibold whitespace-nowrap text-ink transition-colors hover:bg-ink/6 sm:border sm:border-ink sm:px-6"
             >
-              Se connecter
+              {abonne ? 'Mon plan' : 'Se connecter'}
             </button>
 
             <button
@@ -408,6 +410,18 @@ function HomePage({ onStartQuestionnaire, onLogin }) {
                   <LiquidMetalButton label="Commencer mon analyse" onClick={() => demarrer('hero')} />
                 </Suspense>
               </div>
+
+              {/* Retour d'un visiteur qui a déjà fait son analyse (il est allé
+                  demander à ses parents, a fermé TikTok, a rechargé) : sans ce
+                  bouton, il devait refaire les 33 écrans pour revoir son
+                  résultat et payer. */}
+              {analyseEnCours && !abonne && (
+                <div className="rise mt-5" style={{ animationDelay: '300ms' }}>
+                  <button type="button" className="bouton-reprendre" onClick={onReprendre}>
+                    Reprendre mon analyse →
+                  </button>
+                </div>
+              )}
             </div>
           </SonarGrid>
         </section>

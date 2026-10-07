@@ -118,10 +118,10 @@ function chargerEtat() {
     const brut = localStorage.getItem(STOCKAGE)
     if (!brut) return null
     const donnees = JSON.parse(brut)
-    // Ne jamais reprendre en plein milieu de l'écran final : la saisie
-    // d'e-mail et l'appel serveur repartent proprement du début de cet
-    // écran plutôt que de rejouer un état d'analyse à moitié fait.
-    if (etapesPour(donnees.reponses)[donnees.index] === 'resultats-la') return null
+    // Reprise aussi sur l'écran e-mail : l'état de l'envoi n'est pas
+    // sauvegardé, donc on y revient simplement devant le champ e-mail vide.
+    // L'ancienne version renvoyait à l'écran 1 : un rechargement à cet
+    // endroit (vérifier son adresse dans Gmail…) effaçait les 33 réponses.
     return donnees
   } catch {
     return null
@@ -333,10 +333,15 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
   }
 
   function avancer() {
+    // Annule l'avance automatique en attente : sans ça, toucher une réponse
+    // puis « Continuer » avançait deux fois et sautait la question suivante
+    // (sexe, date de naissance — âge par défaut de 18 ans, prédiction fausse).
+    clearTimeout(minuterieAvance.current)
     setIndex((precedent) => Math.min(etapes.length - 1, precedent + 1))
   }
 
   function reculer() {
+    clearTimeout(minuterieAvance.current)
     if (index === 0) {
       tunnelAbandonne(etape, index + 1)
       onCancel()
@@ -344,6 +349,12 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
     }
     setIndex((precedent) => Math.max(0, precedent - 1))
   }
+
+  useEffect(() => {
+    const surRetour = () => reculer()
+    window.addEventListener('grandimi:retour', surRetour)
+    return () => window.removeEventListener('grandimi:retour', surRetour)
+  })
 
   function definirNaissance(prochaine) {
     setReponses((precedent) => ({
@@ -448,7 +459,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       case 'sexe':
         return reponses.sexe != null
       case 'age':
-        return reponses.age != null && reponses.age >= 8 && reponses.age <= 25
+        return reponses.age != null && reponses.age >= 8 && reponses.age <= 22
       case 'taille':
         return reponses.taille > 0
       case 'poids':
@@ -456,7 +467,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
       case 'exercice-freq':
         return reponses.exerciceFreq != null
       case 'sommeil':
-        return reponses.sommeil >= 5
+        return reponses.sommeil >= 4
       case 'pilosite-aisselles':
         return true
       case 'pilosite-visage':
@@ -535,6 +546,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
             onChange={(v) => definir('taille', v)}
             unite={unites.taille}
             onChangeUnite={(u) => setUnites((p) => ({ ...p, taille: u }))}
+            min={120}
+            max={209}
           />
         )
       case 'poids':
@@ -585,8 +598,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
             onInconnu={() => choisirEtAvancer('pere', null)}
             unite={unites.pere}
             onChangeUnite={(u) => setUnites((p) => ({ ...p, pere: u }))}
-            min={130}
-            max={210}
+            min={141}
+            max={219}
             inconnuDefaut={TAILLE_PERE_INCONNUE_CM}
           />
         )
@@ -598,8 +611,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
             onInconnu={() => choisirEtAvancer('mere', null)}
             unite={unites.mere}
             onChangeUnite={(u) => setUnites((p) => ({ ...p, mere: u }))}
-            min={120}
-            max={200}
+            min={141}
+            max={209}
             inconnuDefaut={TAILLE_MERE_INCONNUE_CM}
           />
         )
@@ -778,6 +791,13 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <p className="funnel-help">C'est ce qui te permet de retrouver ton compte et ton plan.</p>
+              {/* Les réponses sur la puberté sont des données de santé de
+                  mineurs : on informe au moment où l'adresse est donnée. */}
+              <p className="funnel-help funnel-help--discret">
+                En continuant, tu acceptes notre{' '}
+                <a href="/privacy.html" target="_blank" rel="noopener">politique de confidentialité</a>.
+                Tes réponses servent uniquement à calculer ta prédiction.
+              </p>
 
               <FunnelButton
                 disabled={!emailPlausible}
@@ -786,7 +806,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel }) {
                   lancerAnalyse()
                 }}
               >
-                Révéler mes résultats
+                Voir mon analyse
               </FunnelButton>
             </div>
           </div>

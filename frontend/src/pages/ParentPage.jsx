@@ -57,7 +57,12 @@ function ParentPage({ childUserId }) {
   const [loading, setLoading] = useState(false);
   const [attenteLongue, setAttenteLongue] = useState(false);
   const [erreur, setErreur] = useState(null);
-  const [planChoisi, setPlanChoisi] = useState('monthly');
+  // L'offre que l'enfant avait choisie (&offre= dans le lien) : le parent
+  // tombait sur le mensuel alors que l'enfant lui demandait l'annuel.
+  const [planChoisi, setPlanChoisi] = useState(() => {
+    const offre = new URLSearchParams(window.location.search).get('offre');
+    return offre === 'annual' || offre === 'monthly' ? offre : 'monthly';
+  });
   const [plans, setPlans] = useState(PLANS_PAR_DEFAUT);
 
   /* Le chemin parent est passé en action de premier rang sur la
@@ -212,7 +217,7 @@ function ParentPage({ childUserId }) {
 
           <ol className="parent-etapes">
             <li>Aller sur grandimi.com et cliquer sur « Se connecter »</li>
-            <li>Choisir « Créer un compte »</li>
+            <li>Choisir « Choisir mon mot de passe »</li>
             <li>
               Saisir <strong>exactement la même adresse e-mail</strong> que celle utilisée
               pour son estimation, puis choisir un mot de passe
@@ -314,7 +319,7 @@ function ParentPage({ childUserId }) {
             <summary>Comment mon enfant y accède-t-il ensuite ?</summary>
             <p>
               Il retourne sur grandimi.com et choisit un mot de passe. Sur un autre
-              appareil, il clique « Se connecter » puis « Créer un compte », avec la même
+              appareil, il clique « Se connecter » puis « Choisir mon mot de passe », avec la même
               adresse e-mail qu’à son estimation.
             </p>
           </details>

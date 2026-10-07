@@ -724,7 +724,7 @@ export function MoletteDateNaissance({ jour, mois, annee, onChange }) {
         label="Année"
         value={annee}
         onChange={(v) => onChange({ jour, mois, annee: v })}
-        min={anneeCourante - 25}
+        min={anneeCourante - 21}
         max={anneeCourante - 8}
         step={1}
         format={(v) => String(v)}
