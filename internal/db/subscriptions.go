@@ -54,6 +54,25 @@ func GetLatestSubscription(userID string) (*SubscriptionDetails, error) {
 	return &s, nil
 }
 
+// DebutPremierAbonnement renvoie la date du tout premier abonnement d'un
+// compte, au format RFC 3339 (« 2026-09-28T10:51:07Z »), ou "" s'il n'en a
+// aucun. Le plan mensuel compte ses mois à partir de là : partir de la
+// création du compte (le jour du questionnaire) décalait le mois pour qui
+// paie plusieurs jours après son estimation.
+func DebutPremierAbonnement(userID string) (string, error) {
+	var debut string
+	err := DB.QueryRowContext(context.Background(),
+		`SELECT COALESCE(to_char(MIN(created_at) AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"'), '')
+		 FROM   subscriptions
+		 WHERE  user_id = $1`,
+		userID,
+	).Scan(&debut)
+	if err != nil {
+		return "", err
+	}
+	return debut, nil
+}
+
 // UpdateSubscriptionFromWebhook applique au plan, à la date de
 // renouvellement et au lien de gestion Whop la ligne créée par
 // CreateSubscription pour ce même membership.activated.

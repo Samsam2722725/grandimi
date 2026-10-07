@@ -559,16 +559,43 @@ func CheckPremium(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"user_id":            user.ID,
 		"is_premium":         user.IsPremium,
-		"subscription_month": moisAbonnement(user.CreatedAt),
+		"subscription_month": moisAbonnement(debutAbonnement(user)),
 	})
 }
 
-// Le plan livré dépend du mois d'abonnement en cours. Faute de date de
-// souscription en base, on part de la création du compte : les deux
-// coïncident pour un client qui paie dans la foulée de son estimation.
+// debutAbonnement : la date du premier abonnement du compte, et à défaut
+// la date de création du compte.
+func debutAbonnement(user *db.User) string {
+	if debut, err := db.DebutPremierAbonnement(user.ID); err == nil && debut != "" {
+		return debut
+	}
+	return user.CreatedAt
+}
+
+// Le plan livré dépend du mois d'abonnement en cours.
+//
+// La date arrivait de Postgres sous la forme « 2026-09-10 12:34:56.123+00 »
+// (created_at::text), que time.RFC3339 ne sait pas lire : la lecture
+// échouait TOUJOURS, et tout abonné restait au « Mois 1 » pour toujours,
+// alors que les CGV promettent un nouveau plan chaque mois. On accepte
+// désormais les deux formes.
 func moisAbonnement(creeLe string) int {
-	debut, err := time.Parse(time.RFC3339, creeLe)
-	if err != nil {
+	formats := []string{
+		time.RFC3339,
+		"2006-01-02 15:04:05.999999999-07",
+		"2006-01-02 15:04:05.999999999-07:00",
+		"2006-01-02 15:04:05-07",
+	}
+	var debut time.Time
+	lu := false
+	for _, f := range formats {
+		if t, err := time.Parse(f, creeLe); err == nil {
+			debut = t
+			lu = true
+			break
+		}
+	}
+	if !lu {
 		return 1
 	}
 

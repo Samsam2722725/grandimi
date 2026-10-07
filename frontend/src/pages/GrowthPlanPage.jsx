@@ -599,14 +599,14 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
 
       {/* Supplements section (always visible) */}
       <section className="supplements-section">
-        <h2>Suppléments recommandés</h2>
+        <h2>Nutriments clés</h2>
         <div className="supplements-grid">
           {plan.supplements.map((supp, idx) => (
             <div key={idx} className="supplement-card card">
               <h3>{supp.name}</h3>
               <div className="supplement-info">
-                <span className="dosage">Dosage : {supp.dosage}</span>
-                <span className="frequency">Fréquence : {supp.frequency}</span>
+                <span className="dosage">{supp.dosage}</span>
+                <span className="frequency">{supp.safety || supp.frequency}</span>
               </div>
             </div>
           ))}

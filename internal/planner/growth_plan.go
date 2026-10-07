@@ -352,52 +352,46 @@ func generateSleepPlan(req GrowthPlanRequest) SleepPlan {
 	return plan
 }
 
-// generateSupplements creates supplement recommendations
+// generateSupplements : les nutriments clés de la croissance, apportés
+// par l'alimentation.
+//
+// La version précédente donnait des doses de comprimés (calcium
+// 1000-1300 mg, zinc 8-11 mg, multivitamines) marquées « adapté à ton
+// âge », à des mineurs, sans avis médical — et contredisait la Leçon 1
+// (« les compléments ne corrigent qu'un manque réel, sur avis médical »).
+// On garde la même structure (nom, quantité, fréquence) pour l'écran,
+// mais en repères alimentaires.
 func generateSupplements(req GrowthPlanRequest) []Supplement {
-	supplements := []Supplement{
+	conseilMedical := "Un complément seulement en cas de manque, sur avis médical"
+	return []Supplement{
 		{
-			Name:            "Multivitamines",
-			Dosage:          "1 comprimé",
+			Name:            "Calcium",
+			Dosage:          "3 produits laitiers (ou boissons végétales enrichies) par jour",
 			Frequency:       "tous les jours",
-			BestTakingTime:  "au petit-déjeuner",
-			Purpose:         "Comble les manques de l'alimentation",
+			BestTakingTime:  "répartis sur les repas",
+			Purpose:         "C'est la matière de l'os",
 			ResearchSupport: "démontré",
-			Safety:          "adapté à ton âge",
+			Safety:          conseilMedical,
 		},
 		{
-			Name:            "Calcium + vitamine D",
-			Dosage:          "1000 à 1300 mg de calcium, 600 UI de vitamine D",
-			Frequency:       "tous les jours",
-			BestTakingTime:  "pendant les repas",
-			Purpose:         "Le calcium construit l'os, la vitamine D permet de l'absorber",
+			Name:            "Vitamine D",
+			Dosage:          "Lumière du jour + poissons gras 1 à 2 fois par semaine",
+			Frequency:       "chaque semaine",
+			BestTakingTime:  "dehors en journée",
+			Purpose:         "Sans elle, le calcium est mal absorbé",
 			ResearchSupport: "démontré",
-			Safety:          "adapté à ton âge",
+			Safety:          "En hiver, demande à ton médecin si un complément est utile",
 		},
 		{
-			Name:            "Zinc",
-			Dosage:          "8 à 11 mg",
-			Frequency:       "tous les jours",
-			BestTakingTime:  "au dîner",
-			Purpose:         "Indispensable à l'hormone de croissance",
+			Name:            "Zinc et protéines",
+			Dosage:          "Viande, œufs, poisson, légumineuses à chaque repas",
+			Frequency:       "à chaque repas",
+			BestTakingTime:  "midi et soir",
+			Purpose:         "Ils participent à la croissance de l'os et du muscle",
 			ResearchSupport: "démontré",
-			Safety:          "adapté à ton âge",
+			Safety:          conseilMedical,
 		},
 	}
-
-	// Add additional based on deficiencies
-	if req.NutritionLevel == "poor" {
-		supplements = append(supplements, Supplement{
-			Name:            "Fer + B12",
-			Dosage:          "Selon l'âge",
-			Frequency:       "tous les jours",
-			BestTakingTime:  "pendant les repas (le fer avec de la vitamine C)",
-			Purpose:         "Transport de l'oxygène, énergie",
-			ResearchSupport: "démontré",
-			Safety:          "demande la dose à un médecin",
-		})
-	}
-
-	return supplements
 }
 
 // generateDailyHabits creates daily habits to build
@@ -541,19 +535,31 @@ func generateMotivation(req GrowthPlanRequest) string {
 
 // Helper functions
 func calculateCalories(age float64, sex string, weight float64) int {
-	// Approximate based on age, sex, weight
-	base := 1800.0
-	if sex == "M" {
-		base = 2200.0
+	// Repères d'apport énergétique pour des adolescents moyennement actifs
+	// (ordres de grandeur des références EFSA/ANSES), selon l'âge et le
+	// sexe uniquement. L'ancienne formule multipliait par le poids : plus
+	// un ado était lourd, plus on lui disait de manger (~3 500 kcal), et
+	// une ado mince recevait ~1 260 kcal, bien en dessous de ses besoins
+	// de croissance. Le poids n'est volontairement plus utilisé.
+	_ = weight
+	garcon := sex == "M"
+	switch {
+	case age < 10:
+		return 1800
+	case age < 14:
+		if garcon {
+			return 2300
+		}
+		return 2100
+	case age < 18:
+		if garcon {
+			return 2700
+		}
+		return 2200
+	default:
+		if garcon {
+			return 2600
+		}
+		return 2100
 	}
-
-	// Increase for growth years (12-18)
-	if age >= 12 && age <= 18 {
-		base *= 1.2
-	}
-
-	// Adjust for weight
-	base = base * (weight / 60.0) // Normalize to 60kg baseline
-
-	return int(base)
 }
