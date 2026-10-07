@@ -102,6 +102,16 @@ function pagePreviewDemandee(params) {
   return pages[valeur] ?? null;
 }
 
+/* Le jeton de session vaut « idCompte.expiration.signature ». On le lit
+   pour savoir s'il est encore valable et s'il appartient au bon compte :
+   un jeton expiré, ou celui d'un frère connecté sur le téléphone familial,
+   ne doit pas faire sauter l'écran du mot de passe. */
+function jetonValidePour(idCompte) {
+  const [idJeton, expiration] = (localStorage.getItem('token') || '').split('.');
+  if (!idJeton || !(Number(expiration) * 1000 > Date.now())) return false;
+  return !idCompte || idJeton === idCompte;
+}
+
 function App() {
   /* Un client qui revient de Whop voyait la page d'accueil marchande le
      temps que la vérification d'achat réponde — soit jusqu'à une minute
@@ -285,7 +295,10 @@ function App() {
          mauvais compte ; la relance en arrière-plan posera le bon. */
       try {
         const utilisateur = JSON.parse(localStorage.getItem('user') || '{}');
-        delete utilisateur.id;
+        const autreAdresse =
+          utilisateur.email &&
+          String(utilisateur.email).trim().toLowerCase() !== String(data.email || '').trim().toLowerCase();
+        if (autreAdresse) delete utilisateur.id;
         localStorage.setItem('user', JSON.stringify({ ...utilisateur, email: data.email }));
       } catch {
         localStorage.removeItem('user');
@@ -318,6 +331,10 @@ function App() {
 
   const handleViewPlan = () => {
     if (!isPaid) {
+      // Analyse toujours « en attente » : on relance le calcul (nouvel
+      // objet = nouveau cycle d'essais), pour que l'identifiant du compte
+      // soit là avant un paiement ou un lien parent.
+      if (predictionData?.prediction_en_attente) setPredictionData({ ...predictionData });
       setCurrentPage('paywall');
       return;
     }
@@ -372,6 +389,17 @@ function App() {
      s'ouvrir ne doit pas se lire comme un refus. */
   const handlePaymentComplete = async () => {
     setIsAuthenticated(true);
+    // Écran d'attente pendant la vérification (jusqu'à 30 s) : sans lui, le
+    // formulaire restait affiché et le client revalidait (« compte existe déjà »).
+    setCurrentPage('paiement');
+    // La prédiction reconstruite par l'écran mot de passe est dans le
+    // navigateur : on la recharge, sinon le plan renvoyait sur « Mon compte ».
+    try {
+      const donnees = JSON.parse(localStorage.getItem('predictionData') || 'null');
+      if (donnees) setPredictionData(donnees);
+    } catch {
+      // illisible : on continue
+    }
 
     // Jusqu'à ~30 s : au-delà de 10 s de retard du webhook Whop, le client
     // lisait « pas d'abonnement » alors qu'il venait de payer.
@@ -383,7 +411,14 @@ function App() {
           await ouvrirPlan();
           return;
         }
-      } catch {
+      } catch (err) {
+        // Jeton refusé (expiré) : inutile d'insister, on fait se reconnecter.
+        if (err && err.status === 401) {
+          localStorage.removeItem('token');
+          setIsAuthenticated(false);
+          setCurrentPage('auth');
+          return;
+        }
         // Réseau : on retente, le compte est peut-être déjà crédité.
       }
       await new Promise((resoudre) => setTimeout(resoudre, 3000));
@@ -447,12 +482,21 @@ function App() {
   const pageRef = useRef(currentPage);
   pageRef.current = currentPage;
   useEffect(() => {
-    const SANS_RETOUR = ['paiement', 'set-password', 'plan-setup', 'gift-confirmed', 'admin', 'parent'];
-    const surRetour = () => {
+    const SANS_RETOUR = ['paiement', 'set-password', 'plan-setup', 'admin'];
+    const LAISSER_PARTIR = ['home', 'parent', 'gift-confirmed'];
+    const surRetour = (e) => {
       const page = pageRef.current;
-      if (page === 'home') {
-        window.history.back();
+      if (LAISSER_PARTIR.includes(page)) {
+        // On ne sort que si l'on vient de consommer la garde (on est sur
+        // l'entrée d'origine) : un retour depuis une ancre (#faq) reste
+        // sur la page. Le parent arrivé par WhatsApp peut y retourner.
+        if (e.state && e.state.grandimi === 'origine') window.history.back();
         return;
+      }
+      // Une adresse de retour de paiement restée sur l'entrée d'origine ne
+      // doit pas réapparaître (rechargement = nouvel écran de paiement).
+      if (page !== 'paiement' && retourDePaiementReussi(new URLSearchParams(window.location.search))) {
+        window.history.replaceState(window.history.state, '', window.location.pathname);
       }
       window.history.pushState({ grandimi: true }, '');
       if (SANS_RETOUR.includes(page)) return;
@@ -464,10 +508,20 @@ function App() {
         setCurrentPage('home');
       }
     };
+    window.history.replaceState({ grandimi: 'origine' }, '');
     window.history.pushState({ grandimi: true }, '');
     window.addEventListener('popstate', surRetour);
     return () => window.removeEventListener('popstate', surRetour);
   }, []);
+
+  // Garde manquante (vue TikTok neuve, retour depuis le cache) : on la
+  // repose dès qu'on quitte l'accueil, sinon « retour » fermerait le site
+  // en plein questionnaire.
+  useEffect(() => {
+    if (currentPage !== 'home' && window.history.state?.grandimi !== true) {
+      window.history.pushState({ grandimi: true }, '');
+    }
+  }, [currentPage]);
 
   const handleLogin = () => {
     setCurrentPage('auth');
@@ -528,7 +582,9 @@ function App() {
         /* Le client revient parfois avant le webhook de Whop. « pending »
            n'est donc pas un échec : on redemande pendant une quinzaine de
            secondes avant de laisser tomber. */
-        for (let essai = 0; essai < 6 && !annule; essai += 1) {
+        // Paiement parent : rien ne réessaiera après cet écran, on attend ~60 s.
+        const essaisMax = estCadeau ? 24 : 6;
+        for (let essai = 0; essai < essaisMax && !annule; essai += 1) {
           try {
             const res = await apiClient.reclamerPaiement({
               paymentId: idPaiement,
@@ -549,7 +605,7 @@ function App() {
         // choisi son mot de passe) : pas de second mot de passe, on vérifie
         // l'accès directement. Sinon le serveur répondait « un compte
         // existe déjà », sans issue.
-        if (localStorage.getItem('token')) {
+        if (jetonValidePour(idCompte)) {
           handlePaymentComplete();
           return;
         }

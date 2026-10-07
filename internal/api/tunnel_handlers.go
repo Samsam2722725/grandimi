@@ -55,6 +55,12 @@ var evenementsTunnel = map[string]bool{
 	"lien_parent_copie":       true,
 	"parent_page_vue":         true,
 	"resiliation_demandee":    true,
+	// Ce qui se passe dans le formulaire de paiement Whop intégré
+	// (frontend/src/pages/PaywallPage.jsx).
+	"whop_paiement_termine":  true,
+	"whop_erreur_paiement":   true,
+	"whop_etat":              true,
+	"whop_repli_redirection": true,
 }
 
 const (

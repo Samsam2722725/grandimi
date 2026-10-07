@@ -59,9 +59,8 @@ function GiftConfirmedPage({ onBackHome, confirme = true }) {
           <>
             <h1 className="paywall-title">Paiement reçu, merci.</h1>
             <p className="paywall-subtitle">
-              L’activation sur le compte de votre enfant est en cours : elle prend en
-              général quelques minutes. Si son plan ne s’ouvre pas d’ici une heure,
-              écrivez-nous à{' '}
+              Nous n’avons pas encore pu confirmer l’activation sur le compte de votre
+              enfant. Si son plan ne s’ouvre pas quand il se connecte, écrivez-nous à{' '}
               <a href="mailto:grandimi14@gmail.com?subject=Activation%20abonnement%20enfant">
                 grandimi14@gmail.com
               </a>{' '}

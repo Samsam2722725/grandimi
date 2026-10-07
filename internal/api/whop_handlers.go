@@ -563,13 +563,15 @@ func CheckPremium(c *gin.Context) {
 	})
 }
 
-// debutAbonnement : la date du premier abonnement du compte, et à défaut
-// la date de création du compte.
+// debutAbonnement : la date de l'abonnement en cours. Sans ligne
+// d'abonnement (accès donné à la main, réclamation avant le webhook), on
+// renvoie "" : le plan démarre au mois 1, plutôt que de compter depuis la
+// création du compte (un compte créé en août commencerait au mois 3).
 func debutAbonnement(user *db.User) string {
 	if debut, err := db.DebutPremierAbonnement(user.ID); err == nil && debut != "" {
 		return debut
 	}
-	return user.CreatedAt
+	return ""
 }
 
 // Le plan livré dépend du mois d'abonnement en cours.

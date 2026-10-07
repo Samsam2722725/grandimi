@@ -295,6 +295,19 @@ function PaywallPage({ onBackHome }) {
      aboutit, Whop nous donne l'identifiant du paiement (pay_…) et on
      reprend exactement le retour habituel (?payment_id=…&status=success). */
   const [feuilleOuverte, setFeuilleOuverte] = useState(false)
+  // Minuterie du repli vers whop.com : annulée si l'on ferme le paiement,
+  // change d'offre ou quitte la page (sinon on envoyait sur Whop quelqu'un
+  // qui venait d'annuler).
+  const repliRef = useRef(null)
+  const feuilleOuverteRef = useRef(false)
+  feuilleOuverteRef.current = feuilleOuverte
+  useEffect(() => () => clearTimeout(repliRef.current), [])
+  useEffect(() => {
+    if (!feuilleOuverte) clearTimeout(repliRef.current)
+  }, [feuilleOuverte])
+  useEffect(() => {
+    clearTimeout(repliRef.current)
+  }, [planChoisi])
   const planWhop = urlPrechargee ? (urlPrechargee.match(/checkout\/(plan_[A-Za-z0-9]+)/) || [])[1] : null
 
   useEffect(() => {
@@ -316,8 +329,8 @@ function PaywallPage({ onBackHome }) {
        où Whop change sa façon d'appeler. */
     window.grandimiPaiementTermine = (premier, idPaiement, details) => {
       const id =
-        (typeof idPaiement === 'string' && idPaiement) ||
         (details && details.receipt_id) ||
+        (typeof idPaiement === 'string' && idPaiement) ||
         (premier && typeof premier === 'object' && premier.receipt_id) ||
         ''
       capture('whop_paiement_termine', { etape: id ? 'avec_id' : 'sans_id' })
@@ -356,12 +369,15 @@ function PaywallPage({ onBackHome }) {
       /* Bloqueur de pub, navigateur intégré, réseau lent : si le formulaire
          Whop n'est toujours pas là après 4 s, on part sur la page de
          paiement whop.com déjà préparée, au lieu de laisser un panneau vide. */
-      setTimeout(() => {
+      clearTimeout(repliRef.current)
+      const urlDeCetteOffre = urlPrechargee
+      repliRef.current = setTimeout(() => {
+        if (!feuilleOuverteRef.current) return
         const bloc = document.querySelector('.pw2-feuille-whop')
         const monte = bloc && (bloc.querySelector('iframe') || bloc.hasAttribute('data-whop-checkout-mounted'))
-        if (!monte && urlPrechargee) {
+        if (!monte && urlDeCetteOffre) {
           capture('whop_repli_redirection', { etape: planChoisi })
-          window.location.href = urlPrechargee
+          window.location.href = urlDeCetteOffre
         }
       }, 4000)
       return

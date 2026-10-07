@@ -54,9 +54,10 @@ func GetLatestSubscription(userID string) (*SubscriptionDetails, error) {
 	return &s, nil
 }
 
-// DebutPremierAbonnement renvoie la date du tout premier abonnement d'un
-// compte, au format RFC 3339 (« 2026-09-28T10:51:07Z »), ou "" s'il n'en a
-// aucun. Le plan mensuel compte ses mois à partir de là : partir de la
+// DebutPremierAbonnement renvoie la date de début de l'abonnement ACTIF
+// d'un compte (le plus ancien s'il y en a plusieurs), au format RFC 3339
+// (« 2026-09-28T10:51:07Z »), ou "" s'il n'en a aucun. Un abonné qui
+// revient après une résiliation repart au mois 1. Le plan mensuel compte ses mois à partir de là : partir de la
 // création du compte (le jour du questionnaire) décalait le mois pour qui
 // paie plusieurs jours après son estimation.
 func DebutPremierAbonnement(userID string) (string, error) {
@@ -64,7 +65,7 @@ func DebutPremierAbonnement(userID string) (string, error) {
 	err := DB.QueryRowContext(context.Background(),
 		`SELECT COALESCE(to_char(MIN(created_at) AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"'), '')
 		 FROM   subscriptions
-		 WHERE  user_id = $1`,
+		 WHERE  user_id = $1 AND status = 'active'`,
 		userID,
 	).Scan(&debut)
 	if err != nil {
