@@ -253,12 +253,20 @@ function indexEtapePreview(reponses) {
   return i >= 0 ? i : null
 }
 
-function OnboardingFlow({ onPredictionComplete, onCancel }) {
-  const etatSauvegarde = useMemo(() => chargerEtat(), [])
+function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
+  // Sexe choisi sur l'accueil : on repart d'un questionnaire neuf, profil
+  // « ado » et sexe remplis, directement à la question suivante.
+  const etatSauvegarde = useMemo(() => (sexeDepart ? null : chargerEtat()), [sexeDepart])
 
-  const [reponses, setReponses] = useState(etatSauvegarde?.reponses ?? reponsesInitiales())
+  const [reponses, setReponses] = useState(() =>
+    etatSauvegarde?.reponses ??
+    (sexeDepart ? { ...reponsesInitiales(), profil: 'ado', sexe: sexeDepart } : reponsesInitiales()),
+  )
   const [index, setIndex] = useState(
-    () => indexEtapePreview(reponses) ?? etatSauvegarde?.index ?? 0,
+    () =>
+      indexEtapePreview(reponses) ??
+      etatSauvegarde?.index ??
+      (sexeDepart ? etapesPour(reponses).indexOf('sexe') + 1 : 0),
   )
   const [unites, setUnites] = useState(etatSauvegarde?.unites ?? unitesInitiales())
 

@@ -267,7 +267,11 @@ function App() {
     };
   }, []);
 
-  const handleStartQuestionnaire = () => {
+  // Accueil : le choix Garçon / Fille est la première question. On
+  // démarre un questionnaire neuf avec le sexe déjà rempli.
+  const [sexeDepart, setSexeDepart] = useState(null);
+  const handleStartQuestionnaire = (sexe) => {
+    setSexeDepart(sexe === 'M' || sexe === 'F' ? sexe : null);
     setCurrentPage('questionnaire');
   };
 
@@ -750,6 +754,7 @@ function App() {
 
       {currentPage === 'questionnaire' && (
         <OnboardingFlow
+          sexeDepart={sexeDepart}
           onPredictionComplete={handlePredictionComplete}
           onCancel={handleBackHome}
         />

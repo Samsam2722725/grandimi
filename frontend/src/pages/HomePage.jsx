@@ -1,109 +1,30 @@
-import {
-  ArrowRight,
-  Bot,
-  Flame,
-  HeartPulse,
-  ListChecks,
-  Ruler,
-  Star,
-  TrendingUp,
-  Users,
-} from 'lucide-react'
+import { ArrowRight, Ruler, Star } from 'lucide-react'
 
 import { useEffect, useState, lazy, Suspense } from 'react'
 
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
 import { SonarGrid } from '@/components/ui/sonar-grid'
-/* Le bouton « métal liquide » tire un moteur WebGL (@paper-design/shaders) :
-   chargé à part, après l'affichage, avec un bouton simple en attendant. */
-const LiquidMetalButton = lazy(() =>
-  import('@/components/ui/liquid-metal-button').then((m) => ({ default: m.LiquidMetalButton })),
-)
 const FaqSection = lazy(() => import('@/components/ui/faq-section').then(m => ({ default: m.FaqSection })))
 import '../styles/theme-night.css'
 
 import { tunnelDemarre } from '../lib/analytics'
 
-/* Grille de fonctionnalités, reprise de « Unlock your full potential ».
-   Six cases, trois colonnes, un filet entre chacune.
-
-   Quatre existent aujourd'hui, deux portent « bientôt ». Le badge n'est pas un
-   ornement : il est ce qui sépare une feuille de route d'une promesse
-   mensongère, et il n'est honnête que si la case est réellement prévue. Deux
-   « bientôt » sur six, c'est le maximum tenable — au-delà, la grille annonce un
-   produit qui n'existe pas encore et le visiteur le sent.
-
-   Volontairement absente : la recommandation de compléments alimentaires, que
-   les concurrents affichent en « soon ». Vendre du supplément à un public de 10
-   à 22 ans relève d'un autre régime réglementaire que le nôtre. */
-const FONCTIONS = [
-  {
-    icone: ListChecks,
-    titre: "Ton plan du jour",
-    texte:
-      "Chaque matin, tu sais exactement quoi faire pour grandir : quoi manger, quels exercices, à quelle heure dormir. Tu coches, tu avances.",
-  },
-  {
-    icone: HeartPulse,
-    titre: "Sommeil, nutrition, exercices",
-    texte:
-      "Chaque levier détaillé : combien d’heures de sommeil, quoi manger en priorité dans l’assiette, quels mouvements faire et quand les faire.",
-  },
-  {
-    icone: TrendingUp,
-    titre: "Ton suivi de croissance",
-    texte:
-      "Tu te mesures chaque semaine et tu vois ta courbe monter. En bonus : ta taille adulte estimée, mise à jour à chaque mesure.",
-  },
-]
-
-/* La FAQ porte désormais seule ce que six sections expliquaient avant elle :
-   la méthode, la marge, le prix, l'âge utile et la limite médicale. Ces
-   réponses ne sont donc plus un complément — c'est là que le visiteur qui
-   veut vérifier avant de payer doit trouver de quoi le faire. */
+/* Trois questions courtes : les seules objections qui bloquent avant de commencer. */
 const FAQ = [
   {
-    question: 'Est-ce que Grandimi peut me faire grandir plus ?',
+    question: 'Est-ce que ça marche vraiment ?',
     answer:
-      'Personne ne peut te faire dépasser ton potentiel génétique — ni nous, ni un complément, ni un programme. Mais beaucoup d’ados finissent en dessous du leur : nuits trop courtes, apports insuffisants, au moment précis où l’os peut encore s’allonger. Ces centimètres-là se jouent vraiment, et c’est exactement ce que le plan cible. Pas un de plus.',
+      'Ta génétique fixe ta taille maximale, et personne ne peut la dépasser. Mais beaucoup d’ados finissent en dessous de la leur : nuits trop courtes, pas assez de protéines ou de calcium, au moment précis où l’os peut encore s’allonger. Ton plan cible exactement ces points, chaque jour.',
   },
   {
-    question: 'Comment le calcul marche ?',
+    question: 'Combien ça coûte ?',
     answer:
-      'On croise deux méthodes : Khamis-Roche — ton âge, ta taille, ton poids et la taille de tes parents — et ton couloir de croissance sur les tables de l’OMS. Pas de radio, pas de prise de sang. La fourchette d’erreur est affichée avec ton résultat, jamais masquée.',
-  },
-  {
-    question: 'À quel point l’estimation est-elle fiable ?',
-    answer:
-      <>
-        ±4 à ±8 cm selon ton âge — soit 98 % de précision moyenne.{' '}
-        <a href="/methode/#precision" className="underline underline-offset-2">
-          Voici d’où vient ce chiffre.
-        </a>{' '}
-        Plus tu es proche de la fin de ta croissance, plus l’estimation se resserre. La
-        marge est toujours affichée avec le résultat — un chiffre seul, sans marge, serait
-        trompeur.
-      </>,
-  },
-  {
-    question: 'Faut-il payer pour voir mon estimation ?',
-    answer:
-      'Oui. Le questionnaire est libre d’accès, mais ton résultat — ta taille adulte estimée, ce que tes habitudes te coûtent et ton plan quotidien — est réservé aux abonnés : 9,99 €/mois ou 29,99 €/an, résiliable quand tu veux. Aucun prélèvement ne part avant que tu aies choisi ton offre.',
-  },
-  {
-    question: 'Mes données sont-elles conservées ?',
-    answer:
-      'Tes mesures servent à calculer ton estimation et ton plan, rien d’autre. Elles ne sont ni revendues ni transmises à des annonceurs, et tu peux demander leur suppression à tout moment.',
-  },
-  {
-    question: 'À partir de quel âge est-ce utile ?',
-    answer:
-      'De 10 à 22 ans. En dessous de 10 ans, l’estimation devient trop imprécise pour être honnête. Au-dessus de 18 ans, la croissance est le plus souvent terminée — mais pas toujours : chez le garçon, les cartilages de croissance se ferment par étapes jusque vers 21-22 ans, et il y reste parfois un ou deux centimètres. Si tu es dans cette tranche, l’estimation te dira honnêtement où tu en es, quitte à t’annoncer que c’est fini.',
+      'L’analyse est gratuite. Le plan coûte 29,99 € par an (soit 2,50 € par mois) ou 9,99 € par mois. Tu peux résilier quand tu veux, en un clic. Un parent peut aussi payer pour toi.',
   },
   {
     question: 'Est-ce que ça remplace un médecin ?',
     answer:
-      'Non, et ce n’est pas le but. Grandimi n’est pas un dispositif médical : c’est un outil d’information. Si tu as une inquiétude réelle sur ta croissance, un pédiatre ou un endocrinologue reste le bon interlocuteur — lui seul peut poser un diagnostic.',
+      'Non. Grandimi t’aide à prendre les bonnes habitudes pour grandir. Si tu t’inquiètes pour ta croissance, parles-en à un médecin.',
   },
 ]
 
@@ -112,9 +33,9 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
      disent rien : on sait combien de gens démarrent, pas ce qui les a décidés,
      donc pas quelle section mérite d'exister. Chaque bouton déclare son
      emplacement avant de déléguer. */
-  const demarrer = (emplacement) => {
+  const demarrer = (emplacement, sexe) => {
     tunnelDemarre(emplacement)
-    onStartQuestionnaire()
+    onStartQuestionnaire(sexe)
   }
 
   /* Barre d'action collante sur mobile.
@@ -397,25 +318,18 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 , jour après jour.
               </p>
 
-              {/* Un seul bouton. Le jumeau « Voir comment ça marche »
-                  renvoyait vers une section de la même page : deux actions de
-                  poids visuel proche, dont une qui ne fait que faire défiler. */}
-              <div className="rise mt-10" style={{ animationDelay: '240ms' }}>
-                <Suspense
-                  fallback={
-                    <button type="button" className="bouton-hero-simple" onClick={() => demarrer('hero')}>
-                      Créer mon plan pour grandir
-                    </button>
-                  }
-                >
-                  <LiquidMetalButton label="Créer mon plan pour grandir" onClick={() => demarrer('hero')} />
-                </Suspense>
-              </div>
+              {/* La première question est sur l'accueil (motif Noom, BetterMe,
+                  heightfuel) : un clic sur Garçon ou Fille ouvre directement la
+                  question suivante du questionnaire. */}
+              <ChoixSexe demarrer={demarrer} emplacement="hero" />
 
-              {/* Retour d'un visiteur qui a déjà fait son analyse (il est allé
-                  demander à ses parents, a fermé TikTok, a rechargé) : sans ce
-                  bouton, il devait refaire les 33 écrans pour revoir son
-                  résultat et payer. */}
+              <p
+                className="rise mt-5 text-[13px] text-[color:var(--text-meta)]"
+                style={{ animationDelay: '280ms' }}
+              >
+                2 min · Analyse gratuite · Résiliable à tout moment
+              </p>
+
               {analyseEnCours && !abonne && (
                 <div className="rise mt-5" style={{ animationDelay: '300ms' }}>
                   <button type="button" className="bouton-reprendre" onClick={onReprendre}>
@@ -427,398 +341,83 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
           </SonarGrid>
         </section>
 
-        {/* ============ CE QUE TU OBTIENS (grille) ============
-            Titre centré et grille à filets : la mise en page de « Unlock your
-            full potential », qui est le bloc que tous les concurrents de ce
-            marché placent juste après le fold. Elle répond à la seule question
-            qui reste une fois la promesse lue — qu’est-ce que je reçois. */}
-        <section id="fonctionnalites" className="scroll-mt-24 px-6 pb-20 sm:px-8">
-          <div className="mx-auto w-full max-w-6xl">
-            <div className="mx-auto mb-14 max-w-2xl text-center">
-              <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-                Tout pour grandir au maximum.
-              </h2>
-              <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-                Ton plan pour grandir, construit à partir de tes réponses, et un
-                nouveau chaque mois.
-              </p>
-            </div>
-
-            <div className="grid gap-px overflow-hidden bg-[color:var(--color-frost-gray)] sm:grid-cols-2 lg:grid-cols-3">
-              {FONCTIONS.map((fonction, i) => {
-                const Icone = fonction.icone
-                return (
-                  <article
-                    key={fonction.titre}
-                    initial={{ opacity: 0, y: 18 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-60px' }}
-                    transition={{ duration: 0.45, delay: (i % 3) * 0.08 }}
-                    className="bg-[color:var(--surface-page-canvas)] px-6 py-10 sm:px-8"
-                  >
-                    <Icone
-                      className="size-6 text-[color:var(--color-coral-pulse)]"
-                      aria-hidden="true"
-                    />
-                    <h3 className="mt-6 flex flex-wrap items-center gap-2 font-display text-xl font-medium tracking-[-0.02em] text-ink">
-                      {fonction.titre}
-                      {fonction.bientot && (
-                        <span className="rounded-full border border-[color:var(--color-indigo-bloom)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-[color:var(--color-indigo-bloom)] uppercase">
-                          bientôt
-                        </span>
-                      )}
-                    </h3>
-                    <p className="mt-2.5 text-[15px] leading-[1.55] text-[color:var(--text-secondary)]">
-                      {fonction.texte}
-                    </p>
-                  </article>
-                )
-              })}
-            </div>
-
-            {/* La grille se terminait sur les deux cases « bientôt », donc sur
-                ce que le produit ne fait pas encore, et laissait un écran vide
-                avant la figure suivante. Le bouton referme la section sur ce
-                qui existe. */}
-            <div className="mt-14 text-center">
-              <button
-                type="button"
-                onClick={() => demarrer('fonctionnalites')}
-                className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
-              >
-                Créer mon plan pour grandir
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <section className="px-6 py-20 sm:px-8">
-          <div className="mx-auto w-full max-w-6xl">
-            <div className="mx-auto mb-16 max-w-3xl text-center">
-              <h2 className="font-display text-[clamp(32px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-                Vois Grandimi en action
-              </h2>
-              <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-                Découvre l'expérience Grandimi avec ces fonctionnalités essentielles pensées pour optimiser ta croissance.
-              </p>
-            </div>
-
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2 mb-16">
-              <div className="flex flex-col items-center">
-                {/* WebP d'abord, PNG en secours.
-                    Les deux formats étaient déjà dans le dépôt ; seul le PNG
-                    était branché. Mesuré : 1 474 ko contre 45 ko pour la même
-                    image — la page en servait deux, soit 3 043 ko de captures
-                    d'écran sur un site dont le premier critère est « mobile
-                    d'abord ». Le <picture> laisse le navigateur choisir, et le
-                    PNG reste là pour ceux qui ne lisent pas le WebP. */}
-                <div className="flex justify-center mb-6">
-                  <picture>
-                    <source media="(max-width: 768px)" srcSet="/apercus/accueil.webp" type="image/webp" />
-                    <source srcSet="/apercus/accueil.webp" type="image/webp" />
-                    <img
-                      src="/apercus/accueil.png"
-                      alt="L'écran d'accueil de Grandimi : la taille adulte estimée, sa fourchette, et la courbe de croissance."
-                      className="max-h-[450px] w-auto rounded-2xl shadow-2xl"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </picture>
-                </div>
-                <h3 className="font-display text-xl font-medium text-ink text-center">
-                  Ton suivi de taille
-                </h3>
-                <p className="mt-2 text-sm text-[color:var(--text-secondary)] text-center max-w-xs">
-                  Suis ta croissance semaine après semaine, et vois jusqu’où tu peux aller.
-                </p>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <div className="flex justify-center mb-6">
-                  <picture>
-                    <source media="(max-width: 768px)" srcSet="/apercus/seance.webp" type="image/webp" />
-                    <source srcSet="/apercus/seance.webp" type="image/webp" />
-                    <img
-                      src="/apercus/seance.png"
-                      alt="L'écran de séance : les actions du jour, cochées une à une."
-                      className="max-h-[450px] w-auto rounded-2xl shadow-2xl"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </picture>
-                </div>
-                <h3 className="font-display text-xl font-medium text-ink text-center">
-                  Ta routine quotidienne
-                </h3>
-                <p className="mt-2 text-sm text-[color:var(--text-secondary)] text-center max-w-xs">
-                  Des exercices simples et des habitudes adaptées à toi pour grandir chaque jour.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ============ COMMENT ÇA MARCHE ============
-            Quatre étapes, une ligne chacune. La version précédente occupait un
-            écran entier avec trois cartes teintées et un paragraphe par carte :
-            c'est ce volume-là qui ne servait à rien, pas l'information. Un
-            numéro et une phrase suffisent à répondre à « je fais quoi,
-            concrètement », qui est la dernière question avant le bouton. */}
-        <section className="px-6 pb-24 sm:px-8">
-          <div className="mx-auto w-full max-w-6xl">
-            <div className="mx-auto mb-14 max-w-2xl text-center">
-              <h2 className="font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-ink">
-                Comment ça marche
-              </h2>
-              <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-                Quatre étapes. La première prend quelques minutes, les trois autres
-                durent tant que tu grandis.
-              </p>
-            </div>
-
-            {/* Le fil qui relie les quatre pastilles.
-                Sans lui, quatre colonnes numérotées se lisent comme quatre
-                options au choix ; avec lui, comme une suite. Il est posé en
-                absolu derrière la grille et s'arrête aux centres des pastilles
-                extrêmes (12,5 % et 87,5 % de la largeur), sinon il dépassait
-                des deux côtés. Masqué sous `lg`, où les étapes s'empilent. */}
-            <div className="relative">
-              <span
-                aria-hidden="true"
-                className="absolute top-[22px] left-[12.5%] hidden h-px w-[75%] bg-[color:var(--color-frost-gray)] lg:block"
-              />
-
-              <ol className="relative grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-                {[
-                  {
-                    num: '01',
-                    titre: 'Réponds',
-                    /* Pas de nombre de questions : tu l'avais fait retirer du
-                       hero, et le réintroduire ici ferait revenir par la
-                       fenêtre ce qu'on a sorti par la porte. « Rien à taper »
-                       est la vraie objection levée. */
-                    texte:
-                      'Une question par écran. Rien à taper, rien à faire mesurer chez le médecin.',
-                  },
-                  {
-                    num: '02',
-                    titre: 'Découvre ton potentiel',
-                    texte:
-                      'Ta taille génétique, et ce qui peut t’empêcher de l’atteindre : sommeil, sport, habitudes.',
-                  },
-                  {
-                    num: '03',
-                    titre: 'Coche ton plan',
-                    texte:
-                      'Chaque jour, ton plan te dit quoi faire. Ta série monte à chaque journée tenue.',
-                  },
-                  {
-                    num: '04',
-                    titre: 'Re-mesure-toi',
-                    texte:
-                      'Chaque semaine, tu vois ta courbe avancer. Chaque mois, un nouveau plan.',
-                  },
-                ].map((etape, i) => (
-                  <li
-                    key={etape.num}
-                    initial={{ opacity: 0, y: 18 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-60px' }}
-                    transition={{ duration: 0.45, delay: i * 0.1 }}
-                    className="text-center sm:text-left lg:text-center"
-                  >
-                    {/* Fond opaque et non transparent : la pastille doit
-                        masquer le fil derrière elle, pas le laisser traverser
-                        le chiffre. */}
-                    <span className="relative inline-flex size-11 items-center justify-center rounded-full bg-brand font-display text-lg font-medium text-[color:var(--color-on-brand)]">
-                      {etape.num}
-                    </span>
-                    <h3 className="mt-6 font-display text-xl font-medium tracking-[-0.02em] text-ink">
-                      {etape.titre}
-                    </h3>
-                    <p className="mx-auto mt-2 max-w-xs text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">
-                      {etape.texte}
-                    </p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-
-            {/* Le bouton qui manquait. Depuis le retrait de « Ce qui se joue »,
-                il ne restait plus une seule action entre le hero et le pied de
-                page : sur ordinateur, où la barre collante ne s'affiche pas,
-                le visiteur devait remonter tout en haut. */}
-            <div className="mt-14 text-center">
-              <button
-                type="button"
-                onClick={() => demarrer('comment-ca-marche')}
-                className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
-              >
-                Créer mon plan pour grandir
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* ============ SUR QUOI ÇA REPOSE ============
-            L'équivalent de « Built on Science. Informed by Data. », que les
-            deux concurrents placent avant leur mode d'emploi.
-
-            Ce n'est pas la bande de logos qu'on avait retirée : celle-là
-            alignait OMS · AAP · ANSES · PubMed sans rien en dire, ce qui se
-            lisait comme un bandeau de partenaires — et laissait entendre une
-            caution que personne ne nous a donnée. Ici les références sont
-            nommées pour ce qu'elles sont : des travaux publics auxquels on se
-            réfère.
-
-            La mention de non-affiliation n'est pas de la prudence excessive.
-            Citer l'OMS sur une page qui vend un abonnement, sans préciser
-            qu'elle ne nous cautionne pas, c'est laisser s'installer une
-            caution officielle qu'on n'a pas. Les concurrents écrivent la même
-            note sous leur paragraphe sur le CDC. */}
-        <section className="border-t border-[color:var(--color-frost-gray)] px-6 py-20 sm:px-8">
-          <div className="mx-auto w-full max-w-3xl text-center">
-            <span className="mx-auto flex size-12 items-center justify-center rounded-[14px] bg-brand">
-              <LogoGrandimi
-                className="size-7 text-[color:var(--color-on-brand)]"
-                titre="Grandimi"
-              />
-            </span>
-
-            <h2 className="mt-8 font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-balance text-ink">
-              Des méthodes publiées. Pas des promesses.
+        {/* ============ CE QUE TU REÇOIS ============
+            Le produit montré, pas décrit : un téléphone par partie du plan,
+            comme les applis du marché. Le contenu des écrans reprend le plan
+            réel (internal/planner). Carrousel horizontal sur téléphone,
+            grille sur grand écran. */}
+        <section id="fonctionnalites" className="scroll-mt-24 py-20">
+          <div className="mx-auto mb-10 max-w-2xl px-6 text-center sm:px-8">
+            <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
+              Tout pour grandir au maximum.
             </h2>
-
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-[1.6] text-[color:var(--text-secondary)]">
-              Ton estimation croise <strong className="font-semibold text-ink">Khamis-Roche</strong>,
-              une méthode de prédiction de la taille adulte sans radiographie publiée en
-              1994, avec les <strong className="font-semibold text-ink">courbes de
-              croissance de l’OMS</strong>. Les actions du plan suivent les repères de
-              sommeil de l’<strong className="font-semibold text-ink">American Academy of
-              Pediatrics</strong> et les repères nutritionnels de
-              l’<strong className="font-semibold text-ink">ANSES</strong>. Tout est
-              public, et tu peux aller le lire.
+            <p className="mt-4 text-base text-[color:var(--text-secondary)]">
+              Ton plan, construit à partir de tes réponses. Un nouveau chaque mois.
             </p>
+          </div>
 
-            {/* Lien de recherche plutôt qu'une référence précise : il reste
-                valide quelle que soit l'édition citée, là où un identifiant
-                d'article recopié de mémoire peut pointer vers autre chose. */}
-            <a
-              href="https://pubmed.ncbi.nlm.nih.gov/?term=Khamis-Roche+adult+stature"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-2 border-b border-[color:var(--color-coral-pulse)] pb-0.5 text-base font-semibold text-brand transition-opacity hover:opacity-80"
-            >
-              Lire la méthode sur PubMed
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </a>
+          <div className="carrousel-plan flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 sm:px-8 lg:mx-auto lg:grid lg:max-w-6xl lg:grid-cols-4 lg:overflow-visible">
+            {ECRANS_PLAN.map((ecran) => (
+              <article key={ecran.titre} className="w-[78%] shrink-0 snap-center sm:w-[46%] lg:w-auto">
+                <Telephone>{ecran.contenu}</Telephone>
+                <h3 className="mt-5 text-center font-display text-xl font-medium tracking-[-0.02em] text-ink">
+                  {ecran.titre}
+                </h3>
+                <p className="mx-auto mt-1.5 max-w-[260px] text-center text-[15px] leading-[1.45] text-[color:var(--text-secondary)]">
+                  {ecran.texte}
+                </p>
+              </article>
+            ))}
+          </div>
+          <p className="mt-2 text-center text-xs text-[color:var(--text-meta)] lg:hidden">← Fais glisser →</p>
+        </section>
 
-            <p className="mx-auto mt-8 max-w-xl text-[13px] leading-[1.5] text-[color:var(--text-meta)]">
-              <strong className="font-semibold">Note :</strong> Grandimi n’est ni affilié
-              ni approuvé par l’OMS, l’American Academy of Pediatrics ou l’ANSES. Ces
-              travaux sont publics ; nous nous y référons, ils ne nous cautionnent pas.
-            </p>
+        {/* ============ COMMENT ÇA MARCHE ============ */}
+        <section className="px-6 pb-20 sm:px-8">
+          <div className="mx-auto w-full max-w-3xl">
+            <h2 className="text-center font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-ink">
+              Comment ça marche
+            </h2>
+            <ol className="mt-10 flex flex-col gap-4">
+              {[
+                ['1', 'Réponds', 'Quelques questions sur toi, ton sommeil, ton sport. 2 minutes.'],
+                ['2', 'Découvre ton potentiel', 'Ta taille génétique, et ce qui peut t’empêcher de l’atteindre.'],
+                ['3', 'Suis ton plan', 'Chaque jour, tu sais quoi faire. Chaque semaine, tu vois ta courbe avancer.'],
+              ].map(([num, titre, texte]) => (
+                <li
+                  key={num}
+                  className="flex items-start gap-4 rounded-[20px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-5"
+                >
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand font-display text-lg font-medium text-[color:var(--color-on-brand)]">
+                    {num}
+                  </span>
+                  <div>
+                    <h3 className="font-display text-lg font-medium text-ink">{titre}</h3>
+                    <p className="mt-1 text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">{texte}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
         </section>
 
         {/* ============ FAQ ============ */}
-        {/* La marge de defilement evite que, l'ancre amene le titre pile sous
-            l'en-tête collant, qui le recouvrait. */}
         <div id="faq" className="scroll-mt-24">
-        <Suspense fallback={<div className="h-96" />}>
-          <FaqSection
-            title="Les questions qu’on nous pose"
-            description="Et les réponses honnêtes, y compris quand elles ne nous arrangent pas."
-            items={FAQ}
-          />
-        </Suspense>
+          <Suspense fallback={<div className="h-96" />}>
+            <FaqSection title="Tes questions" description="" items={FAQ} />
+          </Suspense>
         </div>
-
-        {/* ============ AVIS ============ */}
-        <section className="px-6 py-20 sm:px-8">
-          <div className="mx-auto w-full max-w-6xl">
-            <div className="mx-auto mb-14 max-w-2xl text-center">
-              <h2 className="font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-ink">
-                Ce que disent nos utilisateurs
-              </h2>
-            </div>
-
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="rounded-2xl border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6">
-                <div className="mb-4 flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-xl">⭐</span>
-                  ))}
-                </div>
-                <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
-                  Grandimi m'a vraiment aide a comprendre ma croissance. L'appli est simple a utiliser et les conseils sont vraiment utiles.
-                </p>
-                <p className="text-sm font-semibold text-ink">Utilisateur 1</p>
-              </div>
-
-              <div className="rounded-2xl border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6">
-                <div className="mb-4 flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-xl">⭐</span>
-                  ))}
-                </div>
-                <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
-                  J'aime bien avoir un plan quotidien. Ca m'aide a vraiment faire les efforts pour grandir.
-                </p>
-                <p className="text-sm font-semibold text-ink">Utilisateur 2</p>
-              </div>
-
-              <div className="rounded-2xl border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6">
-                <div className="mb-4 flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-xl">⭐</span>
-                  ))}
-                </div>
-                <p className="mb-4 text-sm text-[color:var(--text-secondary)]">
-                  La prédiction de taille est precise et ca m'a motiva a vraiment suivre le programme.
-                </p>
-                <p className="text-sm font-semibold text-ink">Utilisateur 3</p>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* ============ CTA FINAL ============ */}
         <section className="px-6 pb-20 sm:px-8">
-          <div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.55 }}
-            className="mx-auto w-full max-w-6xl overflow-hidden rounded-[32px] bg-[color:var(--surface-dark)] px-6 py-16 text-center sm:px-12"
-          >
+          <div className="mx-auto w-full max-w-6xl overflow-hidden rounded-[32px] bg-[color:var(--surface-dark)] px-6 py-16 text-center sm:px-12">
             <h2 className="mx-auto max-w-3xl font-display text-[clamp(30px,5vw,52px)] leading-[1.06] font-medium tracking-[-0.03em] text-white">
               Ta croissance se joue maintenant.
               <br />
-              <span className="text-[color:var(--color-coral-pulse)]">
-                Joue-la à fond.
-              </span>
+              <span className="text-[color:var(--color-coral-pulse)]">Joue-la à fond.</span>
             </h2>
-
-            <p className="mx-auto mt-6 max-w-xl text-base text-white/70">
-              Ton plan pour grandir au maximum de ton potentiel : sommeil, exercices,
-              nutrition. Et ta taille adulte estimée, en bonus.
-            </p>
-
-            {/* Le second bouton renvoyait vers « Revoir le fonctionnement »,
-                section supprimée : un lien mort au bas de la page. Il ne
-                manque pas — arrivé ici, le visiteur a fini de lire. */}
-            <div className="mt-10">
-              <button
-                type="button"
-                onClick={() => demarrer('cta-final')}
-                className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:w-auto"
-              >
-                Commencer
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </button>
+            <div className="mt-10 flex justify-center">
+              <ChoixSexe demarrer={demarrer} emplacement="cta-final" />
             </div>
           </div>
         </section>
@@ -923,158 +522,158 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
   )
 }
 
-/**
- * Courbe de prédiction — la figure de « Predict your future height ».
- *
- * Une seule courbe, une bulle, un axe d'âges : c'est un objet de vitrine, pas
- * un graphe de données. D'où la mention en bas — la trajectoire dessinée est
- * celle de l'exemple du hero (14 ans, 166 cm, estimé à 178), pas une promesse
- * faite au visiteur, qui n'a encore rien saisi.
- *
- * SVG inline plutôt qu'une bibliothèque : la page en charge déjà une pour le
- * graphe à deux courbes plus bas, et cette figure-ci n'a ni axe calculé, ni
- * infobulle, ni données à parcourir.
- */
-function CourbePrediction() {
-  const ages = [14, 15, 16, 17, 18, 19, 20, 21]
-
+/* Garçon / Fille : la première question du questionnaire, posée sur l'accueil. */
+function ChoixSexe({ demarrer, emplacement }) {
   return (
-    <div className="rounded-[26px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6 sm:p-8">
-      <div className="relative">
-        {/* La bulle est posée en HTML au-dessus du SVG : dans le SVG, elle
-            aurait suivi la mise à l'échelle du viewBox et son texte aurait
-            grossi avec la carte. */}
-        <div className="absolute -top-1 left-[46%] z-10 -translate-x-1/2">
-          {/* Même valeur que la carte du hero, qui a été corrigée à 179 cm
-              après vérification sur l'API de production. La bulle était restée
-              à 178 : le même profil de démonstration affichait donc deux
-              tailles adultes différentes sur la même page. */}
-          <span className="block rounded-lg bg-brand px-3 py-1 text-sm font-semibold text-[color:var(--color-on-brand)]">
-            179 cm
-          </span>
-          <span
-            aria-hidden="true"
-            className="mx-auto block size-2.5 -translate-y-1 rotate-45 bg-brand"
-          />
-        </div>
-
-        <svg viewBox="0 0 400 220" className="w-full" role="img" aria-label="Courbe de croissance estimée, de 14 à 21 ans">
-          <defs>
-            <linearGradient id="remplissage-courbe" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--color-coral-pulse)" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="var(--color-coral-pulse)" stopOpacity="0.02" />
-            </linearGradient>
-          </defs>
-
-          {/* Filets horizontaux pointillés, comme sur leur figure. */}
-          {[40, 90, 140, 190].map((y) => (
-            <line
-              key={y}
-              x1="10"
-              y1={y}
-              x2="390"
-              y2={y}
-              stroke="var(--color-frost-gray)"
-              strokeWidth="1"
-              strokeDasharray="2 5"
-            />
-          ))}
-
-          <path
-            d="M10 196 C 70 178, 120 140, 184 104 C 250 68, 320 46, 390 38 L 390 196 Z"
-            fill="url(#remplissage-courbe)"
-          />
-          <path
-            d="M10 196 C 70 178, 120 140, 184 104 C 250 68, 320 46, 390 38"
-            fill="none"
-            stroke="var(--color-coral-pulse)"
-            strokeWidth="3"
-            strokeLinecap="round"
-          />
-
-          <line
-            x1="184"
-            y1="6"
-            x2="184"
-            y2="196"
-            stroke="rgba(255,255,255,0.22)"
-            strokeWidth="1"
-            strokeDasharray="3 4"
-          />
-          <circle cx="184" cy="104" r="14" fill="var(--color-coral-pulse)" opacity="0.22" />
-          <circle cx="184" cy="104" r="7" fill="#fff" />
-        </svg>
-
-        <div className="mt-3 flex justify-between px-1 text-xs text-[color:var(--text-meta)]">
-          {ages.map((an) => (
-            <span key={an}>{an}</span>
-          ))}
-        </div>
-      </div>
-
-    </div>
-  )
-}
-
-/**
- * Liste d'actions — la figure de « Maximize your potential ».
- *
- * Les quatre lignes sont extraites du plan réel (cf. internal/planner) : une
- * vitrine qui invente des exercices est une vitrine qui vend autre chose que ce
- * qu'elle livre.
- */
-function ListeActions() {
-  /* La durée à droite de chaque ligne, comme sur l'écran d'exercices des
-     concurrents. Ce n'est pas un ornement : « séance du mois » se lit comme un
-     devoir, « séance du mois · 10 min » se lit comme quelque chose de faisable
-     avant le dîner. Le plan réel porte bien une durée par bloc
-     (cf. daily_routine[].duree_min), donc la colonne ne promet rien de neuf. */
-  const actions = [
-    { texte: 'Suspension à la barre 🤸', duree: '5 × 15 s', faite: true },
-    { texte: 'Petit-déjeuner avec protéines 🍳', duree: '—', faite: false },
-    { texte: 'Séance du mois : dos et hanches 🏋️', duree: '10 min', faite: false },
-    { texte: 'Écrans coupés 45 min avant 🌙', duree: '22 h', faite: false },
-  ]
-
-  return (
-    <div className="rounded-[26px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-6 sm:p-8">
-      <ul className="flex flex-col gap-3">
-        {actions.map(({ texte, duree, faite }) => (
-          <li
-            key={texte}
-            initial={{ opacity: 0, x: -14 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.4 }}
-            className="flex items-center gap-3.5 rounded-[18px] bg-[color:var(--surface-page-canvas)] px-4 py-4"
+    <div className="rise w-full max-w-md" style={{ animationDelay: '240ms' }}>
+      <p className="mb-3 text-[15px] font-semibold text-ink">Tu es :</p>
+      <div className="grid grid-cols-2 gap-3">
+        {[
+          ['M', 'Garçon', '👦'],
+          ['F', 'Fille', '👧'],
+        ].map(([sexe, label, emoji]) => (
+          <button
+            key={sexe}
+            type="button"
+            onClick={() => demarrer(emplacement, sexe)}
+            className="inline-flex min-h-15 items-center justify-center gap-2 rounded-full bg-brand px-5 text-lg font-semibold text-[color:var(--color-on-brand)] shadow-[0_8px_30px_-8px_var(--color-coral-pulse)] transition-transform hover:bg-[#ff7a45] active:scale-[0.97]"
           >
-            <span
-              className={`flex size-6 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${
-                faite
-                  ? 'bg-brand text-[color:var(--color-on-brand)]'
-                  : 'border border-[color:var(--color-frost-gray)]'
-              }`}
-              aria-hidden="true"
-            >
-              {faite ? '✓' : ''}
-            </span>
-            <span
-              className={`flex-1 text-[15px] leading-tight ${
-                faite ? 'text-[color:var(--text-meta)] line-through' : 'text-ink'
-              }`}
-            >
-              {texte}
-            </span>
-            <span className="shrink-0 text-[13px] tabular-nums text-[color:var(--text-meta)]">
-              {duree}
-            </span>
-          </li>
+            <span aria-hidden="true">{emoji}</span>
+            {label}
+          </button>
         ))}
-      </ul>
-
-      <p className="mt-6 text-xs text-[color:var(--text-meta)]">+ 7 autres actions aujourd’hui</p>
+      </div>
     </div>
   )
 }
+
+/* Cadre de téléphone en CSS : pas d'image à charger. */
+function Telephone({ children }) {
+  return (
+    <div className="mx-auto aspect-[9/17] w-full max-w-[250px] rounded-[38px] border-[6px] border-[#2a2a2e] bg-[#0b0b0d] p-3 shadow-2xl">
+      <div className="mx-auto mb-3 h-4 w-20 rounded-full bg-[#1c1c20]" />
+      <div className="flex flex-col gap-2.5 text-left">{children}</div>
+    </div>
+  )
+}
+
+function LigneEcran({ coche, texte, detail }) {
+  return (
+    <div className="flex items-center gap-2.5 rounded-[14px] bg-[#17171b] px-3 py-2.5">
+      <span
+        className={`flex size-5 shrink-0 items-center justify-center rounded-md text-[10px] font-bold ${
+          coche ? 'bg-brand text-[color:var(--color-on-brand)]' : 'border border-white/20'
+        }`}
+        aria-hidden="true"
+      >
+        {coche ? '✓' : ''}
+      </span>
+      <span className={`flex-1 text-[12px] leading-tight ${coche ? 'text-white/45 line-through' : 'text-white'}`}>{texte}</span>
+      {detail && <span className="text-[11px] text-white/45">{detail}</span>}
+    </div>
+  )
+}
+
+function EnteteEcran({ sur, titre }) {
+  return (
+    <div className="px-1">
+      <p className="text-[10px] font-semibold tracking-[0.08em] text-[color:var(--color-coral-pulse)] uppercase">{sur}</p>
+      <p className="font-display text-[19px] font-medium text-white">{titre}</p>
+    </div>
+  )
+}
+
+function Jauge({ nom, valeur, part }) {
+  return (
+    <div className="rounded-[14px] bg-[#17171b] px-3 py-2.5">
+      <div className="flex justify-between text-[11px]">
+        <span className="text-white/70">{nom}</span>
+        <span className="text-white">{valeur}</span>
+      </div>
+      <div className="mt-1.5 h-1.5 rounded-full bg-white/10">
+        <div className="h-full rounded-full bg-brand" style={{ width: `${part}%` }} />
+      </div>
+    </div>
+  )
+}
+
+/* Les écrans montrés sur l'accueil : contenus tirés du plan réel. */
+const ECRANS_PLAN = [
+  {
+    titre: 'Ton plan du jour',
+    texte: 'Chaque jour, tu sais exactement quoi faire. Tu coches, tu avances.',
+    contenu: (
+      <>
+        <EnteteEcran sur="Aujourd’hui · série 🔥 4 jours" titre="Ton plan du jour" />
+        <LigneEcran coche texte="Suspension à la barre" detail="5 × 15 s" />
+        <LigneEcran coche texte="Petit-déj avec protéines" />
+        <LigneEcran texte="Étirements dos et hanches" detail="10 min" />
+        <LigneEcran texte="3 produits laitiers" />
+        <LigneEcran texte="Écrans coupés avant de dormir" detail="22 h" />
+      </>
+    ),
+  },
+  {
+    titre: 'Sommeil',
+    texte: 'C’est la nuit que ton corps grandit. Ton plan règle ton heure de coucher.',
+    contenu: (
+      <>
+        <EnteteEcran sur="Sommeil" titre="Ce soir" />
+        <div className="rounded-[14px] bg-[#17171b] px-3 py-4 text-center">
+          <p className="text-[11px] text-white/60">Heure de coucher</p>
+          <p className="font-display text-[34px] leading-none text-white">22:00</p>
+          <p className="mt-1.5 text-[11px] text-[color:var(--color-coral-pulse)]">objectif 9 h de sommeil</p>
+        </div>
+        <LigneEcran coche texte="Pas d’écran 45 min avant" />
+        <LigneEcran texte="Chambre fraîche et sombre" />
+        <LigneEcran texte="Même heure le week-end" />
+      </>
+    ),
+  },
+  {
+    titre: 'Nutrition',
+    texte: 'Ce dont ton corps a besoin pour construire l’os : calcium, vitamine D, protéines.',
+    contenu: (
+      <>
+        <EnteteEcran sur="Nutrition" titre="Ce qui fait grandir" />
+        <Jauge nom="Calcium" valeur="2 / 3 laitages" part={66} />
+        <Jauge nom="Protéines" valeur="2 / 3 repas" part={66} />
+        <Jauge nom="Vitamine D" valeur="dehors 20 min" part={40} />
+        <LigneEcran texte="Œufs, viande ou poisson à midi" />
+      </>
+    ),
+  },
+  {
+    titre: 'Ton suivi',
+    texte: 'Tu te mesures chaque semaine. En bonus : ta taille adulte estimée.',
+    contenu: (
+      <>
+        <EnteteEcran sur="Ma taille" titre="Ta courbe" />
+        <div className="rounded-[14px] bg-[#17171b] px-3 py-3">
+          <svg viewBox="0 0 200 90" className="w-full" aria-hidden="true">
+            <path d="M5 80 C 50 70, 80 50, 120 35 S 180 15, 195 12" fill="none" stroke="var(--color-coral-pulse)" strokeWidth="3" strokeLinecap="round" />
+            {[[5, 80], [45, 72], [85, 52], [120, 35]].map(([x, y]) => (
+              <circle key={x} cx={x} cy={y} r="4" fill="#fff" />
+            ))}
+          </svg>
+          <div className="mt-1 flex justify-between text-[10px] text-white/50">
+            <span>sem. 1</span>
+            <span>sem. 4</span>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="rounded-[14px] bg-[#17171b] px-3 py-2.5">
+            <p className="text-[10px] text-white/55">Aujourd’hui</p>
+            <p className="font-display text-[18px] text-white">166 cm</p>
+          </div>
+          <div className="rounded-[14px] bg-[#17171b] px-3 py-2.5">
+            <p className="text-[10px] text-white/55">Taille estimée</p>
+            <p className="font-display text-[18px] text-[color:var(--color-coral-pulse)]">179 cm</p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+]
 
 export default HomePage
