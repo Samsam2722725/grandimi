@@ -465,7 +465,7 @@ function PaywallPage({ onBackHome }) {
       </header>
 
       <main className="paywall-scroll pw2">
-        <h1 className="pw2-titre">Choisis ton offre</h1>
+        <h1 className="pw2-titre">Ton plan pour grandir est prêt</h1>
 
         <div className="pw2-etoiles" aria-label="5 étoiles sur 5">
           {[0, 1, 2, 3, 4].map((n) => (

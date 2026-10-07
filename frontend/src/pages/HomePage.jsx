@@ -38,22 +38,22 @@ import { tunnelDemarre } from '../lib/analytics'
    à 22 ans relève d'un autre régime réglementaire que le nôtre. */
 const FONCTIONS = [
   {
-    icone: TrendingUp,
-    titre: "Estimation qui se met à jour",
-    texte:
-      "Ta taille adulte estimée, recalculée chaque mois selon ton évolution, tes habitudes et les principaux facteurs qui influencent ta croissance.",
-  },
-  {
     icone: ListChecks,
-    titre: "Plan quotidien",
+    titre: "Ton plan du jour",
     texte:
-      "Onze actions à cocher, du lever au coucher. Chaque action cible un facteur de croissance : alimentation, sommeil, posture, compléments alimentaires.",
+      "Chaque matin, tu sais exactement quoi faire pour grandir : quoi manger, quels exercices, à quelle heure dormir. Tu coches, tu avances.",
   },
   {
     icone: HeartPulse,
     titre: "Sommeil, nutrition, exercices",
     texte:
       "Chaque levier détaillé : combien d’heures de sommeil, quoi manger en priorité dans l’assiette, quels mouvements faire et quand les faire.",
+  },
+  {
+    icone: TrendingUp,
+    titre: "Ton suivi de croissance",
+    texte:
+      "Tu te mesures chaque semaine et tu vois ta courbe monter. En bonus : ta taille adulte estimée, mise à jour à chaque mesure.",
   },
 ]
 
@@ -364,8 +364,8 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 className="rise night-title-gradient mt-7 font-display text-[clamp(44px,7.2vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
-                Prédis ta taille adulte.<br />
-                Atteins ton plein potentiel avec{' '}
+                Grandis au maximum
+                de ton potentiel avec{' '}
                 <span className="text-[color:var(--color-brand-display)]">Grandimi</span>.
               </h1>
 
@@ -391,9 +391,10 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 className="rise mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
                 style={{ animationDelay: '100ms' }}
               >
-                Tu ne contrôles pas tes gènes, mais tu peux{' '}
-                <span className="text-[color:var(--color-brand-display)] font-semibold">optimiser ta croissance</span>
-                . Grandimi te dit où tu en es, et quoi faire chaque jour.
+                Ta génétique fixe la limite. Ton sommeil, ton alimentation et tes exercices
+                décident si tu l’atteins. Grandimi te donne{' '}
+                <span className="text-[color:var(--color-brand-display)] font-semibold">ton plan pour grandir</span>
+                , jour après jour.
               </p>
 
               {/* Un seul bouton. Le jumeau « Voir comment ça marche »
@@ -403,11 +404,11 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 <Suspense
                   fallback={
                     <button type="button" className="bouton-hero-simple" onClick={() => demarrer('hero')}>
-                      Commencer mon analyse
+                      Créer mon plan pour grandir
                     </button>
                   }
                 >
-                  <LiquidMetalButton label="Commencer mon analyse" onClick={() => demarrer('hero')} />
+                  <LiquidMetalButton label="Créer mon plan pour grandir" onClick={() => demarrer('hero')} />
                 </Suspense>
               </div>
 
@@ -435,11 +436,11 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto mb-14 max-w-2xl text-center">
               <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-                Débloque ton potentiel.
+                Tout pour grandir au maximum.
               </h2>
               <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-                On calcule ce qu’il te reste à prendre, et on te donne le plan qui va
-                le chercher.
+                Ton plan pour grandir, construit à partir de tes réponses, et un
+                nouveau chaque mois.
               </p>
             </div>
 
@@ -485,7 +486,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 onClick={() => demarrer('fonctionnalites')}
                 className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
               >
-                Commencer mon analyse
+                Créer mon plan pour grandir
                 <ArrowRight className="size-4" aria-hidden="true" />
               </button>
             </div>
@@ -526,10 +527,10 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                   </picture>
                 </div>
                 <h3 className="font-display text-xl font-medium text-ink text-center">
-                  Prédiction de taille
+                  Ton suivi de taille
                 </h3>
                 <p className="mt-2 text-sm text-[color:var(--text-secondary)] text-center max-w-xs">
-                  Vois ta taille future avec précision et suis ta croissance vers ton potentiel génétique.
+                  Suis ta croissance semaine après semaine, et vois jusqu’où tu peux aller.
                 </p>
               </div>
 
@@ -551,7 +552,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                   Ta routine quotidienne
                 </h3>
                 <p className="mt-2 text-sm text-[color:var(--text-secondary)] text-center max-w-xs">
-                  Des exercices simples et des habitudes adaptees a toi pour maximiser chaque jour.
+                  Des exercices simples et des habitudes adaptées à toi pour grandir chaque jour.
                 </p>
               </div>
             </div>
@@ -602,21 +603,21 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                   },
                   {
                     num: '02',
-                    titre: 'Découvre ton chiffre',
+                    titre: 'Découvre ton potentiel',
                     texte:
-                      'Ta taille adulte estimée, avec sa fourchette. Et ce que tes habitudes te coûtent, en centimètres.',
+                      'Ta taille génétique, et ce qui peut t’empêcher de l’atteindre : sommeil, sport, habitudes.',
                   },
                   {
                     num: '03',
                     titre: 'Coche ton plan',
                     texte:
-                      'Onze actions par jour, du lever au coucher. Ta série monte à chaque journée tenue.',
+                      'Chaque jour, ton plan te dit quoi faire. Ta série monte à chaque journée tenue.',
                   },
                   {
                     num: '04',
                     titre: 'Re-mesure-toi',
                     texte:
-                      'Un mois plus tard, l’estimation se resserre et le plan change. Puis on recommence.',
+                      'Chaque semaine, tu vois ta courbe avancer. Chaque mois, un nouveau plan.',
                   },
                 ].map((etape, i) => (
                   <li
@@ -654,7 +655,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 onClick={() => demarrer('comment-ca-marche')}
                 className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-8 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
               >
-                Commencer mon analyse
+                Créer mon plan pour grandir
                 <ArrowRight className="size-4" aria-hidden="true" />
               </button>
             </div>
@@ -794,16 +795,16 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             className="mx-auto w-full max-w-6xl overflow-hidden rounded-[32px] bg-[color:var(--surface-dark)] px-6 py-16 text-center sm:px-12"
           >
             <h2 className="mx-auto max-w-3xl font-display text-[clamp(30px,5vw,52px)] leading-[1.06] font-medium tracking-[-0.03em] text-white">
-              Ton analyse t’attend.
+              Ta croissance se joue maintenant.
               <br />
               <span className="text-[color:var(--color-coral-pulse)]">
-                La fenêtre, elle, se referme.
+                Joue-la à fond.
               </span>
             </h2>
 
             <p className="mx-auto mt-6 max-w-xl text-base text-white/70">
-              Ta taille adulte estimée, ce que tes habitudes te coûtent, et 11 actions
-              par jour pour aller chercher les centimètres qui te restent.
+              Ton plan pour grandir au maximum de ton potentiel : sommeil, exercices,
+              nutrition. Et ta taille adulte estimée, en bonus.
             </p>
 
             {/* Le second bouton renvoyait vers « Revoir le fonctionnement »,
