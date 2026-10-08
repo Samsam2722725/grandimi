@@ -192,20 +192,6 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               ))}
             </div>
 
-            {/* Confiance : trois badges cochés, lisibles en une seconde. */}
-            <div className="mt-6 flex flex-wrap justify-center gap-2">
-              {['Repères de l’OMS', 'Conseils de pédiatres', 'Nutrition ANSES'].map((label) => (
-                <span
-                  key={label}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#ff6a2b]/30 bg-[#ff6a2b]/[0.06] px-3 py-1.5 text-[12px] font-semibold text-[#e8e2dc]"
-                >
-                  <svg viewBox="0 0 16 16" className="size-3.5 text-[#ff6a2b]" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M3 8.5l3 3 7-7" />
-                  </svg>
-                  {label}
-                </span>
-              ))}
-            </div>
           </div>
         </section>
 
