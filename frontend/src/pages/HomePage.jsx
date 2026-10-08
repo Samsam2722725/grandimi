@@ -126,6 +126,9 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               Méthode basée sur la science
               <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
             </p>
+            <p className="rise mt-3 text-[14px] font-semibold text-[#e8e2dc]">
+              De 12 à 21 ans, tu peux encore grandir.
+            </p>
 
             <h1
               className="rise mt-5 font-['Syne',sans-serif] text-[clamp(36px,10vw,84px)] leading-[1] font-extrabold tracking-[-0.04em] text-[#f4efe9]"
