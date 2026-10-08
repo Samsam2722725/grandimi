@@ -1,4 +1,4 @@
-import { Ruler, Star } from 'lucide-react'
+import { Ruler, TrendingUp } from 'lucide-react'
 
 import { useEffect, useState, lazy, Suspense } from 'react'
 
@@ -143,243 +143,63 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
       </header>
 
       <main className="accueil-main">
-        {/* ============ HERO ============
-            Deux colonnes asymétriques, texte aligné à gauche. La pile
-            centrée précédente laissait 60 % du fold vide et repoussait
-            le moment magique (la carte résultat) sous la ligne de
-            flottaison. Ici il est visible tout de suite.
-            Entrées en CSS (.rise) et non en JS : cf. index.css. */}
-        {/* Le fond à particules animées a été retiré.
-            C'est le composant le plus reconnaissable des bibliothèques dont
-            se servent les générateurs de sites : posé derrière un titre, il
-            annonce « site fait à la chaîne » avant que le texte ait le temps
-            de dire quoi que ce soit. Sur un marché où chaque concurrent se
-            vend comme « IA à 99 % de précision », ressembler à un site
-            généré range Grandimi avec eux — c'est-à-dire exactement à
-            l'opposé de ce que le contenu de cette page défend.
-
-            Ce que le retrait a révélé : le halo orange, qui était censé
-            prendre le relais, ne s'affichait pas. Posé en `-z-10`, il
-            passait DERRIÈRE le fond de page et n'éclairait rien. La chaleur
-            visible avant venait de la traînée des particules, pas de lui.
-            Corrigé ci-dessous — c'est maintenant lui qui donne au hero sa
-            profondeur, sans texture ni animation. */}
-        {/* `overflow-hidden` : le halo est un cercle de 620px décalé de 80px
-            hors du bord droit. Sans découpe, il pousse la largeur du
-            document à 455px sur un écran de 375 et la page défile
-            latéralement — mesuré, puis corrigé. La découpe ne change rien à
-            son rendu à l'intérieur de la section. */}
-        {/* SonarGrid porte le fond du hero : un champ de points qui répond au
-            toucher par une onde. Le canevas lit `text-primary`, qui vaut ici
-            `--color-coral-pulse` — il prend donc l'orange de la marque sans
-            réglage de couleur.
-
-            Il s'endort dès qu'aucune onde n'est vivante, s'arrête hors écran
-            et dans un onglet caché, et rend une grille figée sous
-            `prefers-reduced-motion`. C'est ce qui le sépare d'un fond animé
-            qui tourne en permanence et vide la batterie d'un téléphone. */}
-        {/* Le composant rend un <div> : la <section> l'enveloppe pour garder
-            sa valeur sémantique, et lui porte les marges. Le contenu du hero
-            est SON enfant, et non un frère posé par-dessus : sans ça,
-            `pointerdown` ne remonte jamais jusqu'à lui et le clic n'émet
-            aucune onde. Mesuré — la première version était muette au clic. */}
-        <section className="relative overflow-hidden border-b border-[color:var(--color-frost-gray)]">
-          <SonarGrid
-            spacing={30}
-            dotRadius={1.3}
-            baseOpacity={0.07}
-            pingEvery={3.6}
-            ringWidth={110}
-            amplitude={2}
-            pingArea={[0.1, 0.12, 0.9, 0.88]}
-            className="px-6 pt-16 pb-20 sm:px-8 lg:pt-24 lg:pb-28"
-          >
-            {/* Halo orange, recentré avec le contenu.
-                Il était calé en haut à droite pour éclairer une colonne de
-                texte alignée à gauche ; le hero est désormais centré, donc le
-                halo l'est aussi, sinon il éclaire un bord vide. */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute -top-40 left-1/2 z-0 size-[680px] -translate-x-1/2 rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.17] blur-[140px]"
-            />
-
-            {/* Voile radial sous la colonne de texte.
-                Les points du champ passent DERRIÈRE le texte : sur le titre,
-                à 88px, ils se lisent comme une texture ; sur le sous-titre,
-                à 17px et en gris, un point orange tombé sur une lettre est du
-                bruit. Le voile éteint le champ au centre et le laisse entier
-                sur les bords. C'est la parade que la démo du composant
-                applique elle-même.
-
-                Sur grand écran, une ellipse à 46% de large ne couvrait que la
-                colonne de texte : au-delà, la grille de points restait à son
-                opacité pleine et tranchait net contre le fond nu, un bloc de
-                points d'un côté, du noir vide de l'autre — mesuré sur 1440px.
-                L'ellipse est élargie pour couvrir la section quasi entière,
-                et un palier avant le fondu adoucit la transition au lieu de
-                la couper à bord franc. */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_140%_110%_at_50%_38%,var(--surface-page-canvas)_0%,var(--surface-page-canvas)_20%,transparent_100%)]"
-            />
-
-            {/* Composition centrée, sans visuel latéral.
-                Les trois téléphones sont retirés du fold : ils tenaient la
-                moitié droite sur grand écran et ne s'affichaient pas du tout
-                sur téléphone, où la colonne de texte était donc déjà seule.
-                Le centrage aligne les deux tailles d'écran sur la même
-                lecture — pastille, titre, promesse, action — et rend au titre
-                toute la largeur. */}
-            <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center">
-              {/* Pastille de preuve, au-dessus du titre : le signal de
-                  crédibilité arrive avant la promesse, pas après. */}
-              <p
-                className="rise inline-flex items-center gap-2 rounded-full border border-[color:var(--color-brand-display)]/40 bg-[#2a1109] px-4 py-1.5 text-[13px] font-semibold text-[color:var(--color-brand-display)]"
-                style={{ animationDelay: '40ms' }}
-              >
-                <Star className="size-3.5 shrink-0" aria-hidden="true" />
-                Basé sur la science
-              </p>
-
-              <h1
-                /* L'impact vient de l'échelle et du serrage, pas de la
-                   graisse. Fraunces est la seule chose ici qu'aucun
-                   concurrent n'a : on la pousse à 88px en plein écran,
-                   interligne sous 1 pour que les lignes forment un bloc, et
-                   interlettrage à -0,045em. */
-                className="rise night-title-gradient mt-7 font-display text-[clamp(44px,7.2vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-balance"
-                style={{ animationDelay: '80ms' }}
-              >
-                Atteins ta{' '}
-                <span className="text-[color:var(--color-brand-display)]">taille maximale</span>.
-              </h1>
-
-              {/* Sous-titre qui se défait et se refait toutes les 3 secondes.
-                  `trigger` bascule sur une minuterie : à false, AnimatePresence
-                  joue la sortie mot à mot ; à true, l'entrée. Le cycle complet
-                  dure 3 s, dont environ 1,2 s d'animation — le texte reste donc
-                  lisible et immobile la majeure partie du temps.
-
-                  La minuterie ne tourne pas sous `prefers-reduced-motion` :
-                  faire clignoter une phrase en boucle est exactement ce que
-                  cette préférence existe pour éviter. */}
-              {/* Décalage entre mots à 0,015 s et non les 0,05 du preset
-                  « blur » : la phrase fait vingt-trois mots, donc le preset
-                  mettrait 1,15 s rien qu'à lancer le dernier, et la sortie ne
-                  tiendrait pas dans les 0,7 s du cycle. Ici sortie et entrée
-                  durent chacune ~0,65 s. */}
-              {/* Texte visible dès le premier affichage : l'animation mot par
-                  mot (framer-motion) le laissait invisible tant que la
-                  bibliothèque n'était pas chargée, et c'est ce que PageSpeed
-                  mesurait comme contenu principal affiché trop tard. */}
-              <p
-                className="rise mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
-                style={{ animationDelay: '100ms' }}
-              >
-                Ton programme corrige ce qui freine ta croissance : sommeil, sport,
-                alimentation, posture. Jour après jour.
-              </p>
-
-              {/* La première question est sur l'accueil (motif Noom, BetterMe,
-                  heightfuel) : un clic sur Garçon ou Fille ouvre directement la
-                  question suivante du questionnaire. */}
-              <ChoixSexe demarrer={demarrer} emplacement="hero" />
-
-              <p
-                className="rise mt-5 text-[13px] text-[color:var(--text-meta)]"
-                style={{ animationDelay: '280ms' }}
-              >
-                2 min · Analyse gratuite · Résiliable à tout moment
-              </p>
-
-              {analyseEnCours && !abonne && (
-                <div className="rise mt-5" style={{ animationDelay: '300ms' }}>
-                  <button type="button" className="bouton-reprendre" onClick={onReprendre}>
-                    Reprendre mon analyse →
-                  </button>
-                </div>
-              )}
-            </div>
-          </SonarGrid>
-        </section>
-
-        {/* ============ CE QUE TU REÇOIS ============
-            Le produit montré, pas décrit : un téléphone par partie du plan,
-            comme les applis du marché. Le contenu des écrans reprend le plan
-            réel (internal/planner). Carrousel horizontal sur téléphone,
-            grille sur grand écran. */}
-        <section id="fonctionnalites" className="scroll-mt-24 py-20">
-          <div className="mx-auto mb-10 max-w-2xl px-6 text-center sm:px-8">
-            <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-              Ton programme pour grandir.
-            </h2>
-            <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-              Construit à partir de tes réponses.
+        {/* Un seul écran, sur le modèle de heightfuel.com : étiquette, titre,
+            une phrase, un bouton, trois repères, un visuel. */}
+        <section className="relative overflow-hidden px-6 pt-14 pb-20 sm:px-8">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-40 left-1/2 size-[620px] -translate-x-1/2 rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.16] blur-[140px]"
+          />
+          <div className="relative mx-auto flex w-full max-w-2xl flex-col items-center text-center">
+            <p className="rise text-[12px] font-semibold tracking-[0.18em] text-[color:var(--color-brand-display)] uppercase">
+              — Basé sur la science —
             </p>
-          </div>
 
-          <div className="carrousel-plan flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 sm:px-8 lg:mx-auto lg:grid lg:max-w-6xl lg:grid-cols-4 lg:overflow-visible">
-            {ECRANS_PLAN.map((ecran) => (
-              <article key={ecran.titre} className="w-[78%] shrink-0 snap-center sm:w-[46%] lg:w-auto">
-                <Telephone>{ecran.contenu}</Telephone>
-                <h3 className="mt-5 text-center font-display text-xl font-medium tracking-[-0.02em] text-ink">
-                  {ecran.titre}
-                </h3>
-                <p className="mx-auto mt-1.5 max-w-[260px] text-center text-[15px] leading-[1.45] text-[color:var(--text-secondary)]">
-                  {ecran.texte}
-                </p>
-              </article>
-            ))}
-          </div>
-          <p className="mt-2 text-center text-xs text-[color:var(--text-meta)] lg:hidden">← Fais glisser →</p>
-        </section>
-
-        {/* ============ COMMENT ÇA MARCHE ============ */}
-        <section className="px-6 pb-20 sm:px-8">
-          <div className="mx-auto w-full max-w-3xl">
-            <h2 className="text-center font-display text-[clamp(28px,4.5vw,44px)] leading-[1.1] font-medium tracking-[-0.03em] text-ink">
-              Comment ça marche
-            </h2>
-            <ol className="mt-10 flex flex-col gap-4">
-              {[
-                ['1', 'Réponds', 'Quelques questions sur toi, ton sommeil, ton sport. 2 minutes.'],
-                ['2', 'Découvre ton potentiel', 'Ta taille génétique, et ce qui peut t’empêcher de l’atteindre.'],
-                ['3', 'Suis ton plan', 'Chaque jour, tu sais quoi faire. Chaque semaine, tu vois ta courbe avancer.'],
-              ].map(([num, titre, texte]) => (
-                <li
-                  key={num}
-                  className="flex items-start gap-4 rounded-[20px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] p-5"
-                >
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand font-display text-lg font-medium text-[color:var(--color-on-brand)]">
-                    {num}
-                  </span>
-                  <div>
-                    <h3 className="font-display text-lg font-medium text-ink">{titre}</h3>
-                    <p className="mt-1 text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">{texte}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-
-        {/* ============ FAQ ============ */}
-        <div id="faq" className="scroll-mt-24">
-          <Suspense fallback={<div className="h-96" />}>
-            <FaqSection title="Tes questions" description="" items={FAQ} />
-          </Suspense>
-        </div>
-
-        {/* ============ CTA FINAL ============ */}
-        <section className="px-6 pb-20 sm:px-8">
-          <div className="mx-auto w-full max-w-6xl overflow-hidden rounded-[32px] bg-[color:var(--surface-dark)] px-6 py-16 text-center sm:px-12">
-            <h2 className="mx-auto max-w-3xl font-display text-[clamp(30px,5vw,52px)] leading-[1.06] font-medium tracking-[-0.03em] text-white">
-              Ta croissance se joue maintenant.
+            <h1
+              className="rise mt-6 font-display text-[clamp(48px,11vw,92px)] leading-[0.95] font-medium tracking-[-0.045em] text-ink"
+              style={{ animationDelay: '60ms' }}
+            >
+              Atteins ta
               <br />
-              <span className="text-[color:var(--color-coral-pulse)]">Joue-la à fond.</span>
-            </h2>
-            <div className="mt-10 flex justify-center">
-              <ChoixSexe demarrer={demarrer} emplacement="cta-final" />
+              <span className="text-[color:var(--color-brand-display)]">taille maximale</span>
+            </h1>
+
+            <p
+              className="rise mt-6 max-w-md text-[17px] leading-[1.5] text-[color:var(--text-secondary)]"
+              style={{ animationDelay: '120ms' }}
+            >
+              Réponds à quelques questions. Reçois ton programme pour grandir : chaque
+              exercice, chaque repas, chaque nuit de sommeil, jour après jour.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => demarrer('hero')}
+              className="rise mt-9 inline-flex min-h-15 w-full max-w-md items-center justify-center gap-2 rounded-full bg-brand px-8 text-lg font-semibold text-[color:var(--color-on-brand)] shadow-[0_10px_40px_-8px_var(--color-coral-pulse)] transition-transform hover:bg-[#ff7a45] active:scale-[0.97]"
+              style={{ animationDelay: '180ms' }}
+            >
+              Commencer mon analyse →
+            </button>
+
+            <p
+              className="rise mt-5 flex flex-wrap justify-center gap-x-4 gap-y-1 text-[13px] text-[color:var(--text-meta)]"
+              style={{ animationDelay: '220ms' }}
+            >
+              <span>• 2 minutes</span>
+              <span>• Analyse gratuite</span>
+              <span>• Résiliable à tout moment</span>
+            </p>
+
+            {analyseEnCours && !abonne && (
+              <button type="button" className="bouton-reprendre mt-6" onClick={onReprendre}>
+                Reprendre mon analyse →
+              </button>
+            )}
+
+            <div className="rise mt-14 flex justify-center" style={{ animationDelay: '260ms' }} aria-hidden="true">
+              <span className="flex size-32 items-center justify-center rounded-[32px] bg-[color:var(--color-coral-pulse)]/10 shadow-[0_0_80px_-10px_var(--color-coral-pulse)]">
+                <TrendingUp className="size-16 text-[color:var(--color-brand-display)]" strokeWidth={2.2} />
+              </span>
             </div>
           </div>
         </section>
@@ -456,37 +276,6 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
         </div>
       </footer>
 
-      {/* ============ BARRE D'ACTION MOBILE ============
-          Masquée dès `md` : au-delà, le bouton de l'en-tête reste visible et
-          une seconde action permanente ne ferait que manger l'écran.
-          `translate-y` plutôt que `display` : la barre glisse au lieu
-          d'apparaître d'un coup, et l'élément reste dans l'arbre pour ne pas
-          téléporter le focus. */}
-      <div
-        className={`fixed inset-x-0 bottom-0 z-50 border-t border-[color:var(--color-frost-gray)] bg-[color:var(--surface-page-canvas)] px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom,0px))] transition-transform duration-300 ease-out md:hidden ${
-          barreVisible ? 'translate-y-0' : 'translate-y-full'
-        }`}
-        // Hors écran, la barre ne doit pas être atteignable au clavier ni
-        // annoncée : sinon Tab part sur un bouton que personne ne voit.
-        aria-hidden={!barreVisible}
-        {...(barreVisible ? {} : { inert: '' })}
-      >
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            ['M', 'Garçon'],
-            ['F', 'Fille'],
-          ].map(([sexe, label]) => (
-            <button
-              key={sexe}
-              type="button"
-              onClick={() => demarrer('barre-mobile', sexe)}
-              className="inline-flex min-h-13 items-center justify-center rounded-full bg-brand px-4 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }
