@@ -1,7 +1,7 @@
 /* Les offres du paywall « comment grandir ».
 
    Chaque durée existe à deux prix, deux vrais plans Whop :
-   - le prix réduit (clé `m1`, `m3`, `m12`), proposé pendant les 15 minutes
+   - le prix réduit (clé `m1`, `m3`, `vie`), proposé pendant les 15 minutes
      qui suivent l'arrivée sur le paywall ;
    - le prix normal (clé `…_normal`), appliqué ensuite et affiché barré
      pendant la réduction. La réduction est donc réelle : une fois le
@@ -27,12 +27,12 @@ export const OFFRES = [
     populaire: true,
   },
   {
-    duree: 'm12',
-    nom: '12 mois',
-    jours: 365,
-    reduit: 69.99,
-    normal: 99.99,
-    facture: 'par an',
+    duree: 'vie',
+    nom: 'À vie',
+    jours: null,
+    reduit: 59.99,
+    normal: 79.99,
+    facture: 'une seule fois',
     avantages: ['Tout le 3 mois', '+ Ton coach perso 24 h/24'],
   },
 ]

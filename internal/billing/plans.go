@@ -24,10 +24,10 @@ const (
 	// ensuite. Les deux sont de vrais plans Whop.
 	Mois1        PlanKey = "m1"
 	Mois3        PlanKey = "m3"
-	Mois12       PlanKey = "m12"
+	AVie         PlanKey = "vie"
 	Mois1Normal  PlanKey = "m1_normal"
 	Mois3Normal  PlanKey = "m3_normal"
-	Mois12Normal PlanKey = "m12_normal"
+	AVieNormal   PlanKey = "vie_normal"
 )
 
 type Plan struct {
@@ -60,10 +60,10 @@ var plans = map[PlanKey]Plan{
 	},
 	Mois1:        {Key: Mois1, Label: "1 mois", PriceEUR: 14.99, Interval: "month", WhopPlanIDEnv: "WHOP_PLAN_ID_M1"},
 	Mois3:        {Key: Mois3, Label: "3 mois", PriceEUR: 29.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3"},
-	Mois12:       {Key: Mois12, Label: "12 mois", PriceEUR: 69.99, Interval: "year", WhopPlanIDEnv: "WHOP_PLAN_ID_M12"},
+	AVie:         {Key: AVie, Label: "À vie", PriceEUR: 59.99, Interval: "lifetime", WhopPlanIDEnv: "WHOP_PLAN_ID_VIE"},
 	Mois1Normal:  {Key: Mois1Normal, Label: "1 mois", PriceEUR: 19.99, Interval: "month", WhopPlanIDEnv: "WHOP_PLAN_ID_M1_NORMAL"},
 	Mois3Normal:  {Key: Mois3Normal, Label: "3 mois", PriceEUR: 39.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3_NORMAL"},
-	Mois12Normal: {Key: Mois12Normal, Label: "12 mois", PriceEUR: 99.99, Interval: "year", WhopPlanIDEnv: "WHOP_PLAN_ID_M12_NORMAL"},
+	AVieNormal:   {Key: AVieNormal, Label: "À vie", PriceEUR: 79.99, Interval: "lifetime", WhopPlanIDEnv: "WHOP_PLAN_ID_VIE_NORMAL"},
 }
 
 // ParIDWhop retrouve l'offre à partir de l'id de plan Whop reçu par le
@@ -94,7 +94,7 @@ func Get(key string) (Plan, bool) {
 func All() []Plan {
 	return []Plan{
 		plans[Monthly], plans[Annual],
-		plans[Mois1], plans[Mois3], plans[Mois12],
-		plans[Mois1Normal], plans[Mois3Normal], plans[Mois12Normal],
+		plans[Mois1], plans[Mois3], plans[AVie],
+		plans[Mois1Normal], plans[Mois3Normal], plans[AVieNormal],
 	}
 }

@@ -112,6 +112,9 @@ func resoudrePeriodeFin(renewalPeriodEnd, planType string) time.Time {
 			return time.Now().AddDate(1, 0, 0)
 		case "quarter":
 			return time.Now().AddDate(0, 3, 0)
+		case "lifetime":
+			// Achat unique : l'accès ne s'arrête pas.
+			return time.Now().AddDate(100, 0, 0)
 		}
 	}
 	return time.Now().AddDate(0, 1, 0)

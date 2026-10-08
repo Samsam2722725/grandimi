@@ -460,8 +460,8 @@ function PaywallPage({ onBackHome }) {
               </span>
             </span>
             <span className="pw3-offre-droite">
-              <span className="pw3-offre-jour">{euros(prixOffre(o) / o.jours)}</span>
-              <span className="pw3-offre-par">/ jour</span>
+              <span className="pw3-offre-jour">{o.jours ? euros(prixOffre(o) / o.jours) : euros(prixOffre(o))}</span>
+              <span className="pw3-offre-par">{o.jours ? '/ jour' : 'pour toujours'}</span>
             </span>
           </button>
         )
