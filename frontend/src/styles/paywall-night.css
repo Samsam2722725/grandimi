@@ -1166,3 +1166,6 @@
   .pw3-offres { gap: 12px; }
   .pw3-offre-bandeau { font-size: 11.5px; }
 }
+
+.pw3-offre-renouv { font-size: 12px; color: #8a847e; }
+.pw3 .pw3-offre-renouv { padding-right: 0; }

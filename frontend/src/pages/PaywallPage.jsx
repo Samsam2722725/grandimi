@@ -453,6 +453,7 @@ function PaywallPage({ onBackHome }) {
               <span className="pw3-offre-total">
                 {reductionActive && <s>{euros(o.normal)}</s>} {euros(prixOffre(o))} {o.facture}
               </span>
+              {o.jours && <span className="pw3-offre-renouv">Se renouvelle seul · résiliable en 1 clic</span>}
               <span className="pw3-offre-avantages">
                 {o.avantages.map((a) => (
                   <span key={a}>{a}</span>
@@ -499,7 +500,7 @@ function PaywallPage({ onBackHome }) {
         <h1 className="pw3-titre">
           Atteins ta <span>taille maximale</span>
         </h1>
-        <p className="pw3-sous-titre">Ton plan pour grandir au maximum : quoi faire chaque jour pour ton sommeil, ta posture, ton sport et ton alimentation.</p>
+        <p className="pw3-sous-titre">Ton plan pour grandir au maximum : quoi faire chaque jour pour ton sommeil, ta posture, ton sport et ton alimentation. Il change chaque mois, au rythme de ta croissance.</p>
 
         <h2 className="pw3-choisis">Choisis ton plan.</h2>
         {blocOffres}
@@ -529,9 +530,10 @@ function PaywallPage({ onBackHome }) {
             {[
               ['Ton diagnostic : ce qui te freine', 'Ce qui freine ta croissance, d’après tes réponses.'],
               ['Ton plan personnalisé : exercices, posture, sommeil, alimentation', 'Chaque jour, exactement quoi faire pour grandir. Tu coches, tu avances.'],
+              ['Un plan qui change chaque mois', 'Nouveaux exercices, nouveaux objectifs, au rythme de ta croissance.'],
               ['Plus grand tout de suite : ta posture corrigée', 'Ta posture te vole des centimètres. On te les rend.'],
               ['Ton guide pour grandir', 'Tout ce qui fait grandir, expliqué simplement.'],
-              ['Ta taille adulte estimée', 'Avec les offres 3 mois et À vie.'],
+              ['Ta taille adulte estimée', 'Calculée avec la méthode Khamis-Roche, utilisée par les pédiatres, à partir de ta taille, ton âge et la taille de tes parents. Avec les offres 3 mois et À vie.'],
             ].map(([titre, texte]) => (
               <li key={titre}>
                 <Check size={16} strokeWidth={3} aria-hidden="true" />
