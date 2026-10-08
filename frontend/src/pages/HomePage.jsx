@@ -126,7 +126,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#ff6a2b] opacity-70" />
                 <span className="relative inline-flex size-2 rounded-full bg-[#ff6a2b]" />
               </span>
-              De 12 à 21 ans, tu peux encore grandir.
+              Même à 21 ans, tu peux encore grandir.
             </p>
 
             <h1
