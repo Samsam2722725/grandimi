@@ -206,22 +206,20 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               Tout pour atteindre ta taille maximale, tant que ton corps grandit encore. Ne laisse aucun centimètre de côté.
             </p>
 
-            <div className="mt-10 border-t border-white/10">
+            {/* Grille à la TrendSaaS : ce qu'on reçoit, en chiffres vrais. */}
+            <div className="mt-10 grid grid-cols-2 border-t border-white/10">
               {[
-                ['Parais plus grand tout de suite', 'Ta posture cache des centimètres. Tiens-toi droit, et ça se voit dès les premières semaines.'],
-                ['Ce qui te freine', 'On repère ce qui t’empêche de grandir : sommeil, sport, ce que tu manges, posture.'],
-                ['Ta routine du jour', 'Quelques minutes d’exercices et d’étirements. Tu sais quoi faire, tu coches.'],
-                ['Dors pour grandir', 'C’est la nuit que ton corps grandit. On te donne ton heure de coucher.'],
-                ['Mange pour grandir', 'Ce qu’il faut dans ton assiette pour grandir, sans régime compliqué.'],
-                ['Vois-toi grandir', 'Tu te mesures chaque semaine, et ta courbe monte.'],
-                ['Bonus : ta taille adulte estimée', 'Découvre jusqu’où tu peux aller, et vois ton estimation se mettre à jour à chaque mesure.'],
-              ].map(([titre, texte], i) => (
-                <div key={titre} className="flex gap-4 border-b border-white/10 py-6">
-                  <span className="pt-1 font-['Spline_Sans_Mono',monospace] text-[12px] text-[#ff6a2b]">{String(i + 1).padStart(2, '0')}</span>
-                  <div>
-                    <h3 className="font-['Syne',sans-serif] text-[19px] font-bold tracking-[-0.01em] text-[#f4efe9]">{titre}</h3>
-                    <p className="mt-1.5 text-[15px] leading-[1.55] text-[#a39d97]">{texte}</p>
-                  </div>
+                ['20+', 'questions sur ta situation réelle'],
+                ['4', 'piliers : posture, sommeil, sport, alimentation'],
+                ['7j/7', 'ta routine du jour, à cocher'],
+                ['1', 'nouveau plan chaque mois'],
+              ].map(([chiffre, texte], i) => (
+                <div
+                  key={texte}
+                  className={`border-b border-white/10 py-7 ${i % 2 === 0 ? 'border-r pr-4' : 'pl-5'}`}
+                >
+                  <p className="font-sans text-[36px] leading-none font-bold tracking-[-0.03em] text-[#f4efe9]">{chiffre}</p>
+                  <p className="mt-3 text-[14px] leading-snug text-[#8a847e]">{texte}</p>
                 </div>
               ))}
             </div>
