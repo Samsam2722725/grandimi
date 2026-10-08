@@ -157,7 +157,7 @@ export const TEXTES_ETAPE = {
   },
   sports: {
     titre: 'Quels sports pratiques-tu ?',
-    sousTitre: 'Ton plan sera construit autour de tes sports',
+    sousTitre: 'Bouger régulièrement aide ton corps à grandir',
   },
   'exercice-freq': {
     titre: "Combien d'heures d'exercice par semaine ?",
@@ -298,7 +298,7 @@ export const TEXTES_ETAPE = {
   },
   assis: {
     titre: 'Combien d’heures es-tu assis par jour ?',
-    sousTitre: 'Tu perds jusqu’à 1 à 2 cm de hauteur dans la journée, assis',
+    sousTitre: 'Rester assis des heures tasse ta posture et te fait paraître plus petit',
   },
   posture: {
     titre: 'Comment tu te tiens, en général ?',
@@ -314,7 +314,7 @@ export const TEXTES_ETAPE = {
   },
   pourquoi: {
     titre: 'Pourquoi tu veux grandir ?',
-    sousTitre: 'Dernière question : ton plan sera centré là-dessus',
+    sousTitre: 'Dernière question, et ton plan est prêt',
   },
   'profil-croissance': {
     titre: 'Ton profil de croissance',
