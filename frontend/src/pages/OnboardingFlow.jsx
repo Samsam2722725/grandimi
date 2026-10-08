@@ -902,7 +902,17 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
       <ProgressionAnalyse titre={`On assemble ton plan à partir de tes ${etapes.filter((e) => TYPE_ETAPE[e] === 'question').length} réponses`} pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
         {!animationTerminee ? null : !emailEnvoye ? (
           <div className="resultats-overlay">
-            <div className="resultats-overlay-carte">
+            {/* Un vrai formulaire : la touche « OK » du clavier du téléphone
+                valide, sans aller chercher le bouton sous le clavier. */}
+            <form
+              className="resultats-overlay-carte"
+              onSubmit={(e) => {
+                e.preventDefault()
+                if (!emailPlausible) return
+                localStorage.setItem('userEmail', email.trim())
+                lancerAnalyse()
+              }}
+            >
               <h2 className="resultats-overlay-titre">{texte.titre}</h2>
               <p className="resultats-overlay-text">{texte.sousTitre}</p>
 
@@ -910,6 +920,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
                 type="email"
                 inputMode="email"
                 autoComplete="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                enterKeyHint="go"
                 className="resultats-gate-input"
                 placeholder="ton@email.com"
                 value={email}
@@ -924,16 +938,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
                 Tes réponses servent uniquement à construire ton plan.
               </p>
 
-              <FunnelButton
-                disabled={!emailPlausible}
-                onClick={() => {
-                  localStorage.setItem('userEmail', email.trim())
-                  lancerAnalyse()
-                }}
-              >
+              <FunnelButton type="submit" disabled={!emailPlausible}>
                 Voir mon plan
               </FunnelButton>
-            </div>
+            </form>
           </div>
         ) : (
           <div className="interstitial-action is-ready analyse-action">

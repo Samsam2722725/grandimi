@@ -184,7 +184,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               ].map(([chiffre, texte], i) => (
                 <div key={texte} className={`py-5 ${i > 0 ? 'border-l border-white/10' : ''}`}>
                   <p className="font-['Syne',sans-serif] text-[20px] leading-none font-extrabold text-[#ff6a2b]">{chiffre}</p>
-                  <p className="mt-2 font-['Spline_Sans_Mono',monospace] text-[10px] tracking-[0.12em] text-[#8a847e] uppercase">{texte}</p>
+                  <p className="mt-2 font-['Spline_Sans_Mono',monospace] text-[11px] tracking-[0.08em] text-[#8a847e] uppercase">{texte}</p>
                 </div>
               ))}
             </div>
@@ -239,7 +239,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             <span className="font-['Syne',sans-serif] text-lg font-extrabold tracking-[-0.04em] text-ink">Grandimi</span>
             <span>Ton programme pour grandir.</span>
           </div>
-          <nav className="flex flex-wrap gap-x-5 gap-y-2">
+          <nav className="flex flex-wrap gap-x-5 [&>a]:inline-flex [&>a]:min-h-11 [&>a]:items-center">
             <a href="/que-faire-pour-grandir/" className="hover:text-ink">Guides</a>
             <a href="/cgv.html" className="hover:text-ink">Conditions de vente</a>
             <a href="/mentions-legales.html" className="hover:text-ink">Mentions légales</a>

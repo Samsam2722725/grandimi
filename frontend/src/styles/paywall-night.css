@@ -1154,3 +1154,15 @@
 /* Prix par jour en haut à droite, avantages sur toute la largeur. */
 .pw3 .pw3-offre-droite { position: absolute; top: 16px; right: 16px; padding-top: 0; }
 .pw3 .pw3-offre-nom, .pw3 .pw3-offre-total { padding-right: 104px; }
+
+/* Téléphone : la première offre doit apparaître sans défiler. */
+@media (max-width: 600px) {
+  .pw3-minuteur { margin: 2px 0 12px; padding: 9px 12px; font-size: 13px; }
+  .pw3-minuteur strong { font-size: 14px; }
+  .pw3-pret { padding: 4px 10px; font-size: 12px; }
+  .pw3-titre { margin-top: 8px; font-size: clamp(26px, 7.6vw, 34px); }
+  .pw3-sous-titre { margin-top: 8px; font-size: 14px; line-height: 1.45; }
+  .pw3-choisis { margin: 16px 0 10px; font-size: 20px; }
+  .pw3-offres { gap: 12px; }
+  .pw3-offre-bandeau { font-size: 11.5px; }
+}
