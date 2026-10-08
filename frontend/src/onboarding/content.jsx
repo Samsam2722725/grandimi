@@ -25,7 +25,6 @@ import { TailleFinaleChart } from '@/components/ui/taille-finale-chart'
 import { JaugePotentiel } from '@/components/ui/jauge-potentiel'
 import { Lecons, SuiviSemaines, TelephoneRoutine } from '@/components/ui/resultats-visuels'
 import { ActionsDuJour } from '@/components/ui/actions-du-jour'
-import { Toise } from '@/components/ui/toise'
 import {
   cmVersPouceTotal,
   euVersUs,
@@ -1072,34 +1071,39 @@ export function tailleGenetique(reponses) {
 }
 
 
+/* Copié du site heightfuel.com : le « plafond génétique », c'est-à-dire le
+   maximum que les gènes permettent — pas une prédiction. C'est l'écart
+   entre ce plafond et la taille du jour qui donne envie de continuer. */
 export function EcranGenetique({ reponses }) {
   const cible = tailleGenetique(reponses)
   const ecart = cible - reponses.taille
-  const valeurs = [cible, reponses.taille, reponses.pere, reponses.mere].filter((v) => v != null)
-  const bas = Math.floor((Math.min(...valeurs) - 4) / 5) * 5
-  const haut = Math.ceil((Math.max(...valeurs) + 4) / 5) * 5
+  const barres = [
+    ...(reponses.pere != null ? [['Père', reponses.pere]] : []),
+    ...(reponses.mere != null ? [['Mère', reponses.mere]] : []),
+    ['Toi aujourd’hui', reponses.taille],
+  ]
+  const max = Math.max(cible, ...barres.map(([, v]) => v))
+  const min = Math.min(...barres.map(([, v]) => v)) - 20
+  const largeur = (v) => Math.max(12, ((v - min) / (max - min)) * 100)
   return (
     <div className="ecran-genetique">
       <p className="ecran-genetique-chiffre">{cible} cm</p>
-      <p className="ecran-genetique-label">Ta taille génétique estimée</p>
-      <div className="ecran-genetique-toise">
-        <Toise
-          min={bas}
-          max={haut}
-          hauteur={typeof window !== 'undefined' && window.innerHeight < 760 ? 160 : 230}
-          anime
-          reperes={[
-            ...(reponses.mere != null ? [{ cm: reponses.mere, label: 'Mère' }] : []),
-            ...(reponses.pere != null ? [{ cm: reponses.pere, label: 'Père' }] : []),
-            { cm: reponses.taille, label: 'Toi' },
-            { cm: cible, depuis: reponses.taille, label: 'Ta génétique', valeur: false, accent: true },
-          ]}
-        />
+      <p className="ecran-genetique-label">Ton plafond génétique</p>
+      <div className="genetique-barres">
+        {barres.map(([label, v], i) => (
+          <div key={label} className={'genetique-ligne' + (i === barres.length - 1 ? ' is-toi' : '')}>
+            <span className="genetique-ligne-label">{label}</span>
+            <span className="genetique-ligne-piste">
+              <span className="genetique-ligne-plein" style={{ width: largeur(v) + '%', animationDelay: 0.15 + i * 0.12 + 's' }} />
+            </span>
+            <span className="genetique-ligne-cm">{v} cm</span>
+          </div>
+        ))}
       </div>
       <p className="ecran-genetique-texte">
         {ecart > 0
-          ? `Ta génétique te place à ${cible} cm, soit ${ecart} cm au-dessus de ta taille actuelle. Les prochaines questions montrent ce qui peut t’empêcher de les atteindre.`
-          : `Tu es déjà au niveau de ta taille génétique. Les prochaines questions montrent comment aller chercher le maximum.`}
+          ? `Tes gènes te permettent d’aller jusqu’à ${cible} cm, soit ${ecart} cm au-dessus de toi. Les prochaines questions montrent ce qui peut t’en empêcher.`
+          : `Tu es déjà au niveau de ton plafond génétique. Les prochaines questions montrent comment aller chercher le maximum.`}
       </p>
     </div>
   )

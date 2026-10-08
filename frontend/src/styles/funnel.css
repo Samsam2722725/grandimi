@@ -3637,3 +3637,17 @@
   .choice-card { padding-top: 9px; padding-bottom: 9px; }
   .funnel-content { padding-bottom: 12px; }
 }
+
+/* ---------- Plafond génétique : barres (copie heightfuel) ---------- */
+.genetique-barres { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+.genetique-ligne { display: grid; grid-template-columns: 112px 1fr 58px; align-items: center; gap: 10px; text-align: left; }
+.genetique-ligne-label { font-size: 13px; color: var(--funnel-muted); }
+.genetique-ligne-piste { height: 8px; border-radius: 999px; background: var(--funnel-line); overflow: hidden; }
+.genetique-ligne-plein {
+  display: block; height: 100%; border-radius: 999px; background: rgba(244, 239, 233, 0.45);
+  transform-origin: left; animation: frise-pousse 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.genetique-ligne.is-toi .genetique-ligne-label { color: var(--funnel-text); font-weight: 700; }
+.genetique-ligne.is-toi .genetique-ligne-plein { background: linear-gradient(90deg, #ff5a1f, #ff8a2a); box-shadow: 0 0 10px rgba(255, 90, 31, 0.7); }
+.genetique-ligne-cm { text-align: right; font-size: 14px; font-weight: 700; color: var(--funnel-text); }
+@media (prefers-reduced-motion: reduce) { .genetique-ligne-plein { animation: none; } }
