@@ -532,7 +532,7 @@ function PaywallPage({ onBackHome }) {
               ['Un plan qui change chaque mois', 'Nouveaux exercices, nouveaux objectifs, au rythme de ta croissance.'],
               ['Plus grand tout de suite : ta posture corrigée', 'Ta posture te vole des centimètres. On te les rend.'],
               ['Ton guide pour grandir', 'Tout ce qui fait grandir, expliqué simplement.'],
-              ['Ta taille adulte estimée, 98 % de précision', 'Méthode Khamis-Roche, utilisée par les pédiatres. Avec les offres 3 mois et À vie.'],
+              ['Ta taille adulte estimée, 98 % de précision', ''],
             ].map(([titre, texte]) => (
               <li key={titre}>
                 <Check size={16} strokeWidth={3} aria-hidden="true" />
