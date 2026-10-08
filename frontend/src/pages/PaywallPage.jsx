@@ -532,7 +532,6 @@ function PaywallPage({ onBackHome }) {
               ['Plus grand tout de suite : ta posture corrigée', 'Ta posture te vole des centimètres. On te les rend.'],
               ['Ton guide pour grandir', 'Tout ce qui fait grandir, expliqué simplement.'],
               ['Ta taille adulte estimée', 'Avec les offres 3 mois et À vie.'],
-              ['Ton coach perso 24 h/24', 'Avec l’offre À vie.'],
             ].map(([titre, texte]) => (
               <li key={titre}>
                 <Check size={16} strokeWidth={3} aria-hidden="true" />

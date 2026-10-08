@@ -33,7 +33,7 @@ export const OFFRES = [
     reduit: 59.99,
     normal: 79.99,
     facture: 'une seule fois',
-    avantages: ['Tout le 3 mois', '+ Ton coach perso 24 h/24'],
+    avantages: ['Tout le 3 mois', '+ Paie une fois, garde tout pour toujours'],
   },
 ]
 
