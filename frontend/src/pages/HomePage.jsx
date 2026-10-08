@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react'
+import { Toise } from '@/components/ui/toise'
 
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
 const FaqSection = lazy(() => import('@/components/ui/faq-section').then(m => ({ default: m.FaqSection })))
@@ -168,21 +169,19 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               </button>
             )}
 
-            {/* Icône néon, comme heightfuel : silhouette et flèche qui monte. */}
-            <div className="rise mt-12" style={{ animationDelay: '240ms' }} aria-hidden="true">
-              <svg
-                viewBox="0 0 80 96"
-                className="h-36 w-auto text-[#ff6a2b] [filter:drop-shadow(0_0_10px_rgba(255,106,43,0.9))_drop-shadow(0_0_30px_rgba(255,90,31,0.5))]"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M14 90V12M14 12L5 23M14 12l9 11" />
-                <circle cx="52" cy="17" r="9" />
-                <path d="M52 30v28M52 38l-13 9M52 38l13 9M52 58l-9 30M52 58l9 30" />
-              </svg>
+            {/* Signature : la toise. Le trait orange monte de ta taille
+                d'aujourd'hui vers ta taille max — la question de la page. */}
+            <div className="rise mt-12 w-full" style={{ animationDelay: '240ms' }}>
+              <Toise
+                min={155}
+                max={190}
+                hauteur={240}
+                anime
+                reperes={[
+                  { cm: 166, label: 'Toi aujourd’hui', valeur: false },
+                  { cm: 183, depuis: 166, label: 'Ta taille max', texte: '? cm', accent: true },
+                ]}
+              />
             </div>
 
             {/* Rangée de chiffres, comme heightfuel — uniquement du vrai. */}

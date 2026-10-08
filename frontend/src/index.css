@@ -239,3 +239,84 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+/* ============ TOISE — élément signature (components/ui/toise.jsx) ============ */
+.toise {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+.toise-regle {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 58px;
+  border-right: 2px solid rgba(244, 239, 233, 0.22);
+}
+.toise-trait {
+  position: absolute;
+  right: 0;
+  width: 10px;
+  height: 1px;
+  background: rgba(244, 239, 233, 0.18);
+}
+.toise-trait.is-cinq { width: 16px; background: rgba(244, 239, 233, 0.3); }
+.toise-trait.is-dix { width: 24px; height: 2px; margin-top: -0.5px; background: rgba(244, 239, 233, 0.5); }
+.toise-chiffre {
+  position: absolute;
+  right: 30px;
+  top: -8px;
+  font-family: 'Spline Sans Mono', ui-monospace, monospace;
+  font-size: 11px;
+  color: rgba(244, 239, 233, 0.45);
+}
+.toise-repere {
+  position: absolute;
+  left: 46px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateY(-50%);
+}
+.toise-repere-ligne {
+  flex: 0 0 40px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(244, 239, 233, 0.55);
+}
+.toise-repere-texte { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+.toise-repere-label {
+  font-family: 'Spline Sans Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(244, 239, 233, 0.6);
+}
+.toise-repere-cm { font-weight: 700; font-size: 15px; color: #f4efe9; }
+.toise-repere.is-accent .toise-repere-ligne {
+  flex-basis: 64px;
+  height: 3px;
+  background: #ff6a2b;
+  box-shadow: 0 0 12px rgba(255, 106, 43, 0.9), 0 0 28px rgba(255, 90, 31, 0.5);
+}
+.toise-repere.is-accent .toise-repere-label { color: #ff8a52; }
+.toise-repere.is-accent .toise-repere-cm {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: #ff6a2b;
+  text-shadow: 0 0 18px rgba(255, 90, 31, 0.45);
+}
+/* Le trait orange monte, comme une marque au crayon qu'on remonte. */
+.toise-repere.is-anime { animation: toise-monte 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+@keyframes toise-monte {
+  from { transform: translateY(calc(-50% + var(--depart))); opacity: 0.4; }
+  to { transform: translateY(-50%); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toise-repere.is-anime { animation: none; }
+}
+
+.toise-repere.is-accent { z-index: 2; }
+.toise-repere-texte { transition: transform 0.2s; }

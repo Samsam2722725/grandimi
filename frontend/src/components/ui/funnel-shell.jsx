@@ -56,25 +56,23 @@ export function FunnelShell({
           /* Un segment par chapitre : on sait combien de parties il reste,
              pas seulement qu'une barre avance lentement. */
           <div
-            className="funnel-chapitres"
+            className="funnel-chapitres funnel-regle"
             role="progressbar"
             aria-label={`Partie ${chapitres.actif + 1} sur ${chapitres.noms.length} : ${chapitres.noms[chapitres.actif]}`}
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={Math.round(progress * 100)}
           >
-            {chapitres.noms.map((nom, i) => {
-              const remplissage =
-                i < chapitres.actif ? 1 : i > chapitres.actif ? 0 : chapitres.avancement
-              return (
-                <span key={nom} className="funnel-chapitre">
-                  <span
-                    className="funnel-chapitre-fill"
-                    style={{ width: `${Math.max(i === chapitres.actif ? 8 : 0, remplissage * 100)}%` }}
-                  />
-                </span>
-              )
-            })}
+            {/* Règle graduée : chaque réponse fait « grandir » le trait orange,
+                comme une marque sur une toise. Un grand trait par partie. */}
+            <span className="funnel-regle-fill" style={{ width: `${Math.max(3, Math.min(100, progress * 100))}%` }} />
+            {Array.from({ length: 41 }, (_, i) => (
+              <span
+                key={i}
+                className={'funnel-regle-trait' + (i % 8 === 0 ? ' is-grand' : '')}
+                style={{ left: `${i * 2.5}%` }}
+              />
+            ))}
           </div>
         ) : (
           <div

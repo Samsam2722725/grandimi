@@ -3550,3 +3550,42 @@
 }
 .ecran-profil-label { color: var(--funnel-muted); }
 .ecran-profil-valeur { font-weight: 700; color: var(--funnel-text); text-align: right; }
+
+/* ---------- Règle graduée (progression du questionnaire) ---------- */
+.funnel-chapitres.funnel-regle {
+  display: block;
+  position: relative;
+  height: 16px;
+  border-bottom: 2px solid rgba(244, 239, 233, 0.18);
+}
+.funnel-regle-trait {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  height: 6px;
+  background: rgba(244, 239, 233, 0.28);
+}
+.funnel-regle-trait.is-grand { height: 12px; width: 2px; background: rgba(244, 239, 233, 0.45); }
+.funnel-regle-fill {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #ff5a1f, #ff8a2a);
+  box-shadow: 0 0 10px rgba(255, 90, 31, 0.8);
+  transition: width 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.funnel-regle-fill::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  bottom: 0;
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+  background: #ff6a2b;
+  box-shadow: 0 0 10px rgba(255, 106, 43, 0.9);
+}
+
+.ecran-genetique-toise { margin-top: 26px; }

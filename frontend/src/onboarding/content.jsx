@@ -25,6 +25,7 @@ import { TailleFinaleChart } from '@/components/ui/taille-finale-chart'
 import { JaugePotentiel } from '@/components/ui/jauge-potentiel'
 import { Lecons, SuiviSemaines, TelephoneRoutine } from '@/components/ui/resultats-visuels'
 import { ActionsDuJour } from '@/components/ui/actions-du-jour'
+import { Toise } from '@/components/ui/toise'
 import {
   cmVersPouceTotal,
   euVersUs,
@@ -1070,31 +1071,30 @@ export function tailleGenetique(reponses) {
   return Math.round(cible)
 }
 
-function Barre({ label, valeur, max, accent }) {
-  const part = Math.max(8, Math.min(100, (valeur / max) * 100))
-  return (
-    <div className="genetique-barre">
-      <span className="genetique-barre-label">{label}</span>
-      <span className="genetique-barre-piste">
-        <span className={'genetique-barre-plein' + (accent ? ' is-accent' : '')} style={{ width: part + '%' }} />
-      </span>
-      <span className="genetique-barre-valeur">{valeur} cm</span>
-    </div>
-  )
-}
 
 export function EcranGenetique({ reponses }) {
   const cible = tailleGenetique(reponses)
   const ecart = cible - reponses.taille
-  const max = Math.max(cible, reponses.taille, reponses.pere || 0, reponses.mere || 0) + 5
+  const valeurs = [cible, reponses.taille, reponses.pere, reponses.mere].filter((v) => v != null)
+  const bas = Math.floor((Math.min(...valeurs) - 4) / 5) * 5
+  const haut = Math.ceil((Math.max(...valeurs) + 4) / 5) * 5
   return (
     <div className="ecran-genetique">
       <p className="ecran-genetique-chiffre">{cible} cm</p>
       <p className="ecran-genetique-label">Ta taille génétique estimée</p>
-      <div className="ecran-genetique-barres">
-        {reponses.pere != null && <Barre label="Père" valeur={reponses.pere} max={max} />}
-        {reponses.mere != null && <Barre label="Mère" valeur={reponses.mere} max={max} />}
-        <Barre label="Toi" valeur={reponses.taille} max={max} accent />
+      <div className="ecran-genetique-toise">
+        <Toise
+          min={bas}
+          max={haut}
+          hauteur={230}
+          anime
+          reperes={[
+            ...(reponses.mere != null ? [{ cm: reponses.mere, label: 'Mère' }] : []),
+            ...(reponses.pere != null ? [{ cm: reponses.pere, label: 'Père' }] : []),
+            { cm: reponses.taille, label: 'Toi' },
+            { cm: cible, depuis: reponses.taille, label: 'Ta génétique', valeur: false, accent: true },
+          ]}
+        />
       </div>
       <p className="ecran-genetique-texte">
         {ecart > 0
