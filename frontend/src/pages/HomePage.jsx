@@ -12,29 +12,29 @@ import { tunnelDemarre } from '../lib/analytics'
 /* Trois questions courtes : les seules objections qui bloquent avant de commencer. */
 const FAQ = [
   {
-    question: 'Est-ce que ça marche vraiment ?',
+    question: 'Ça marche vraiment, ou c’est encore un truc bidon ?',
     answer:
-      'Ta génétique fixe ta taille maximale. Mais beaucoup d’ados finissent en dessous de la leur : nuits trop courtes, pas assez de protéines ou de calcium, peu de sport, mauvaise posture, au moment précis où l’os peut encore s’allonger. Ton programme corrige exactement ces points, chaque jour.',
+      'Personne ne peut dépasser ses gènes. Mais beaucoup d’ados finissent en dessous de leur taille maximale : trop peu de sommeil, pas assez de protéines ou de calcium, peu de sport, mauvaise posture. Ton programme corrige ces points-là, chaque jour. Rien de magique, juste ce qui compte vraiment.',
   },
   {
-    question: 'Jusqu’à quel âge on peut grandir ?',
+    question: 'J’ai 17 ans, c’est trop tard ?',
     answer:
-      'Tant que tes cartilages de croissance sont ouverts : en général jusqu’à 16-18 ans chez les filles et 18-21 ans chez les garçons. Plus tu commences tôt, plus ton programme a d’effet. Et la posture, elle, se travaille à tout âge.',
+      'Pas forcément. Chez les garçons, les cartilages de croissance restent souvent ouverts jusqu’à 18-21 ans. Et la posture, elle, se travaille à tout âge : c’est souvent 1 à 2 cm de hauteur gagnés à l’œil.',
   },
   {
-    question: 'Combien de temps par jour ?',
+    question: 'Pourquoi autant de questions ? C’est long.',
     answer:
-      'Quelques minutes d’exercices, et des habitudes simples à intégrer à ta journée : ton heure de coucher, ce que tu mets dans ton assiette. Ton plan te dit exactement quoi faire.',
+      'Deux minutes. Chaque réponse sert à construire ton programme : ton sommeil, ton sport, la taille de tes parents. Sans elles, on te donnerait le même plan qu’à tout le monde.',
   },
   {
-    question: 'Combien ça coûte ?',
+    question: 'Pourquoi me demander mon e-mail ?',
     answer:
-      'L’analyse est gratuite. Ensuite, le programme est en abonnement, résiliable quand tu veux en un clic. Un parent peut aussi payer pour toi.',
+      'Pour enregistrer ton analyse et te retrouver si tu changes de téléphone. Pas de spam, et on ne le transmet à personne.',
   },
   {
-    question: 'Est-ce que ça remplace un médecin ?',
+    question: 'Je n’ai pas de carte bancaire, je fais comment ?',
     answer:
-      'Non. Grandimi t’aide à prendre les bonnes habitudes pour grandir. Si tu t’inquiètes pour ta croissance, parles-en à un médecin.',
+      'Tu peux envoyer le lien de paiement à un parent : il paie de son côté, et ton programme s’ouvre chez toi.',
   },
 ]
 
@@ -216,7 +216,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
         {/* FAQ : les questions qui bloquent avant de commencer. */}
         <div id="faq" className="scroll-mt-24">
           <Suspense fallback={<div className="h-96" />}>
-            <FaqSection title="Questions fréquentes" description="" items={FAQ} />
+            <FaqSection title="Les questions qu’on nous pose souvent" description="" items={FAQ} />
           </Suspense>
         </div>
       </main>
