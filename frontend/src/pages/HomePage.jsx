@@ -1,4 +1,4 @@
-import { Ruler, TrendingUp } from 'lucide-react'
+import { TrendingUp } from 'lucide-react'
 
 import { useEffect, useState, lazy, Suspense } from 'react'
 
@@ -14,12 +14,22 @@ const FAQ = [
   {
     question: 'Est-ce que ça marche vraiment ?',
     answer:
-      'Ta génétique fixe ta taille maximale, et personne ne peut la dépasser. Mais beaucoup d’ados finissent en dessous de la leur : nuits trop courtes, pas assez de protéines ou de calcium, au moment précis où l’os peut encore s’allonger. Ton plan cible exactement ces points, chaque jour.',
+      'Ta génétique fixe ta taille maximale. Mais beaucoup d’ados finissent en dessous de la leur : nuits trop courtes, pas assez de protéines ou de calcium, peu de sport, mauvaise posture, au moment précis où l’os peut encore s’allonger. Ton programme corrige exactement ces points, chaque jour.',
+  },
+  {
+    question: 'Jusqu’à quel âge on peut grandir ?',
+    answer:
+      'Tant que tes cartilages de croissance sont ouverts : en général jusqu’à 16-18 ans chez les filles et 18-21 ans chez les garçons. Plus tu commences tôt, plus ton programme a d’effet. Et la posture, elle, se travaille à tout âge.',
+  },
+  {
+    question: 'Combien de temps par jour ?',
+    answer:
+      'Quelques minutes d’exercices, et des habitudes simples à intégrer à ta journée : ton heure de coucher, ce que tu mets dans ton assiette. Ton plan te dit exactement quoi faire.',
   },
   {
     question: 'Combien ça coûte ?',
     answer:
-      'L’analyse est gratuite. Le plan coûte 29,99 € par an (soit 2,50 € par mois) ou 9,99 € par mois. Tu peux résilier quand tu veux, en un clic. Un parent peut aussi payer pour toi.',
+      'L’analyse est gratuite. Ensuite, le programme est en abonnement, résiliable quand tu veux en un clic. Un parent peut aussi payer pour toi.',
   },
   {
     question: 'Est-ce que ça remplace un médecin ?',
@@ -203,76 +213,27 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             </div>
           </div>
         </section>
+        {/* FAQ : les questions qui bloquent avant de commencer. */}
+        <div id="faq" className="scroll-mt-24">
+          <Suspense fallback={<div className="h-96" />}>
+            <FaqSection title="Questions fréquentes" description="" items={FAQ} />
+          </Suspense>
+        </div>
       </main>
 
-      {/* ============ PIED DE PAGE ============ */}
-      {/* Réserve basse permanente sur mobile : la barre d'action se pose
-          par-dessus le pied de page, et les liens légaux doivent rester
-          cliquables une fois arrivé en bas. */}
-      <footer className="border-t border-[color:var(--color-frost-gray)] px-6 pt-10 pb-28 sm:px-8 md:pb-10">
-        <div className="mx-auto w-full max-w-6xl">
-          {/* Onze liens rangés en trois colonnes, identiques à ceux des pages
-              statiques.
-
-              La rangée à plat d'avant mélangeait « Calculer sa taille adulte »
-              et « CGV » sur la même ligne : un lecteur ne distinguait pas un
-              guide d'une mention légale, et six pages de contenu se lisaient
-              comme du remplissage juridique. Les colonnes disent ce que chaque
-              lien est avant même qu'on le lise.
-
-              Le même bloc partout, c'est ce qui fait la différence entre un
-              pied de page et un pied de page utile : présent sur chaque page,
-              il pousse en permanence vers les pages qui doivent se positionner.
-
-              L'avertissement médical n'est pas décoratif non plus. Sur un site
-              de santé qui s'adresse à des mineurs, dire qui édite, comment le
-              joindre et que ce n'est pas un avis médical est un critère
-              d'évaluation à part entière — et la moindre des choses. */}
-          <div className="flex items-center gap-2.5 text-ink">
-            <span className="flex size-7 items-center justify-center rounded-full bg-brand">
-              <Ruler className="size-3.5 text-[color:var(--color-on-brand)]" aria-hidden="true" />
-            </span>
-            <span className="font-display text-lg font-semibold tracking-[-0.02em]">
-              Grandimi
-            </span>
+      {/* Pied de page court, une ligne : nom, phrase, liens légaux. */}
+      <footer className="border-t border-[color:var(--color-frost-gray)] px-6 py-8 sm:px-8">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 text-sm text-[color:var(--text-meta)] sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-6">
+            <span className="font-display text-lg font-semibold text-ink">Grandimi</span>
+            <span>Ton programme pour grandir.</span>
           </div>
-
-          <div className="mt-8 grid grid-cols-1 gap-8 text-sm text-muted-foreground sm:grid-cols-3">
-            <div>
-              <p className="mb-3 font-semibold text-ink">Outils</p>
-              <a href="/" className="block py-3 hover:text-ink transition-colors">Faire l’estimation</a>
-              <a href="/calculer-sa-taille-adulte/" className="block py-3 hover:text-ink transition-colors">Calculer sa taille adulte</a>
-              <a href="/comparatif-calculateurs-taille/" className="block py-3 hover:text-ink transition-colors">Comparatif des calculateurs</a>
-            </div>
-
-            <div>
-              <p className="mb-3 font-semibold text-ink">Guides</p>
-              <a href="/questions-croissance/" className="block py-3 hover:text-ink transition-colors">Questions sur la croissance</a>
-              <a href="/methodes-taille-adulte/" className="block py-3 hover:text-ink transition-colors">Prédire sa taille adulte</a>
-              <a href="/que-faire-pour-grandir/" className="block py-3 hover:text-ink transition-colors">Que faire pour grandir</a>
-              <a href="/croissance-terminee/" className="block py-3 hover:text-ink transition-colors">Savoir si on a fini de grandir</a>
-              <a href="/poussee-de-croissance/" className="block py-3 hover:text-ink transition-colors">La poussée de croissance</a>
-            </div>
-
-            <div>
-              <p className="mb-3 font-semibold text-ink">Grandimi</p>
-              <a href="/methode/" className="block py-3 hover:text-ink transition-colors">Notre méthode</a>
-              <a href="mailto:grandimi14@gmail.com" className="block py-3 hover:text-ink transition-colors">Contact</a>
-              <a href="/mentions-legales.html" className="block py-3 hover:text-ink transition-colors">Mentions légales</a>
-              <a href="/cgv.html" className="block py-3 hover:text-ink transition-colors">CGV</a>
-              <a href="/privacy.html" className="block py-3 hover:text-ink transition-colors">Confidentialité</a>
-            </div>
-          </div>
-
-          <p className="mt-8 border-t border-[color:var(--color-frost-gray)] pt-6 text-xs leading-relaxed text-muted-foreground">
-            Grandimi n’est pas un dispositif médical et ne pose aucun diagnostic. Les
-            estimations et les repères publiés ici sont statistiques, et ne remplacent pas
-            l’avis d’un pédiatre ou d’un endocrinologue.
-          </p>
-
-          <p className="mt-3 text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Grandimi · Fait en France · Science, pas promesses
-          </p>
+          <nav className="flex flex-wrap gap-x-5 gap-y-2">
+            <a href="/cgv.html" className="hover:text-ink">Conditions de vente</a>
+            <a href="/mentions-legales.html" className="hover:text-ink">Mentions légales</a>
+            <a href="/privacy.html" className="hover:text-ink">Confidentialité</a>
+            <a href="mailto:grandimi14@gmail.com" className="hover:text-ink">Contact</a>
+          </nav>
         </div>
       </footer>
 
