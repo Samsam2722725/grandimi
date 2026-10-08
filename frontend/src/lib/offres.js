@@ -71,45 +71,41 @@ export function pointsFaibles(prediction) {
   return liste.slice(0, 3)
 }
 
-/* « Ton plan contient — fait pour toi » (repris de heightfuel) : ce que
-   contient le plan, avec une précision tirée des réponses quand elle
-   existe. Rien n'est dit qui ne vienne pas du questionnaire. */
+/* « Ton plan contient — fait pour toi » (repris de heightfuel) : un titre
+   qui donne le résultat, une ligne qui dit comment, et une précision tirée
+   des réponses quand elle existe. Chaque action citée est dans le plan
+   (internal/planner). Le plus fort d'abord : paraître plus grand vite. */
 export function contenuPlan(prediction) {
   const h = prediction.habitudes || {}
   const faibles = pointsFaibles(prediction)
   const sommeil = Number(prediction.sleep_hours_per_night)
 
-  let precisionSommeil = ''
-  if (h.coucher === 'apres-minuit') precisionSommeil = ' (tu t’endors après minuit)'
-  else if (h.coucher === '23h-minuit') precisionSommeil = ' (tu t’endors entre 23 h et minuit)'
-  else if (sommeil && sommeil < 8) precisionSommeil = ` (tu dors ${String(sommeil).replace('.', ',')} h par nuit)`
+  let posture = ''
+  if (h.posture === 'voute') posture = ' (tu es souvent voûté)'
+  else if (h.posture === 'un-peu-voute') posture = ' (tu es un peu voûté)'
 
-  let precisionRepas = ''
-  if (h.proteines === 'rarement') precisionRepas = ' (tu manges rarement des protéines)'
-  else if (h.proteines === 'un-repas') precisionRepas = ' (tu as des protéines à un seul repas)'
-  else if (h.laitages === 'aucun') precisionRepas = ' (tu ne prends aucun produit laitier)'
+  let nuit = ''
+  if (h.coucher === 'apres-minuit') nuit = ' (tu t’endors après minuit)'
+  else if (h.coucher === '23h-minuit') nuit = ' (tu t’endors entre 23 h et minuit)'
+  else if (sommeil && sommeil < 8) nuit = ` (tu dors ${String(sommeil).replace('.', ',')} h par nuit)`
 
-  let precisionSport = ', adaptés à ton niveau de sport'
-  if (h.exercice_freq === '0-2') precisionSport = ', pour démarrer en douceur (tu fais peu de sport)'
-  else if (h.exercice_freq === '6+') precisionSport = ', en plus de ton sport'
-
-  let precisionPosture = ''
-  if (h.posture === 'voute') precisionPosture = ' Tu nous as dit être souvent voûté.'
-  else if (h.posture === 'un-peu-voute') precisionPosture = ' Tu nous as dit être un peu voûté.'
+  let repas = ''
+  if (h.proteines === 'rarement') repas = ' (tu manges rarement des protéines)'
+  else if (h.proteines === 'un-repas') repas = ' (tu as des protéines à un seul repas)'
+  else if (h.laitages === 'aucun') repas = ' (tu ne prends aucun produit laitier)'
 
   return [
+    { titre: 'Parais plus grand dès les premières semaines', texte: `Gainage, épaules ouvertes, dos aligné : ta posture redressée${posture}.` },
+    { titre: 'Dors pour grandir', texte: `Coucher avancé de 15 min par semaine, écrans coupés 45 min avant${nuit}.` },
+    { titre: 'Décompresse ta colonne', texte: 'Suspension à la barre et étirements, 10 min par jour.' },
+    { titre: 'Mange pour grandir', texte: `Protéines à chaque repas, calcium et vitamine D${repas}.` },
     {
-      titre: 'Ton diagnostic : ce qui te freine',
+      titre: 'Ton plan, jour par jour',
       texte: faibles.length
-        ? `Tes points faibles, d’après tes réponses : ${faibles.join(', ')}.`
-        : 'Ce qui freine ta croissance, d’après tes réponses.',
+        ? `On corrige d’abord ce qui te freine : ${faibles.join(', ')}. Un nouveau thème chaque mois.`
+        : 'On corrige d’abord ce qui te freine. Un nouveau thème chaque mois.',
     },
-    { titre: 'Ton programme jour par jour', texte: 'Chaque jour, quoi faire. Tu coches, tu avances. Il change chaque mois, au rythme de ta croissance.' },
-    { titre: 'Tes exercices pour grandir', texte: `Étirements, suspension, posture : quelques minutes par jour${precisionSport}.` },
-    { titre: 'Ton protocole sommeil', texte: `Ton heure de coucher avancée petit à petit${precisionSommeil}.` },
-    { titre: 'Ton alimentation pour grandir', texte: `Protéines, calcium, vitamine D : quoi manger chaque jour${precisionRepas}.` },
-    { titre: 'Ta posture corrigée', texte: `Ta posture te vole des centimètres. On te les rend.${precisionPosture}` },
-    { titre: 'Ton guide pour grandir', texte: 'Tout ce qui fait grandir, expliqué simplement.' },
-    { titre: 'Ta taille adulte estimée, 98 % de précision', texte: '' },
+    { titre: 'Ton guide pour grandir', texte: 'Ce qui marche vraiment, les mythes à oublier.' },
+    { titre: 'Ta taille adulte estimée', texte: '98 % de précision.' },
   ]
 }
