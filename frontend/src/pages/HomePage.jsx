@@ -16,7 +16,7 @@ const FAQ = [
   {
     question: 'Qu’est-ce que je reçois ?',
     answer:
-      'Ton programme pour grandir : ta routine du jour, ta posture, ton heure de coucher, quoi manger, et ton suivi chaque semaine.',
+      'Ton programme pour grandir : ta routine du jour, ta posture, ton heure de coucher, quoi manger, ton suivi chaque semaine. Et en bonus, ta taille adulte estimée.',
   },
   {
     question: 'Quand je vois des résultats ?',
@@ -127,9 +127,9 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               className="rise mt-6 font-display text-[clamp(46px,11vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-ink"
               style={{ animationDelay: '60ms' }}
             >
-              Débloque tout ton
+              Deviens le plus
               <br />
-              <span className="text-[color:var(--color-brand-display)]">potentiel de taille</span>
+              <span className="text-[color:var(--color-brand-display)]">grand possible</span>
             </h1>
 
             <p
@@ -137,7 +137,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               style={{ animationDelay: '120ms' }}
             >
               Ton corps grandit encore. Chaque nuit, chaque repas, chaque exercice compte.
-              On te dit exactement quoi faire.
+              On te dit exactement quoi faire, pour toi.
             </p>
 
             <button
@@ -160,9 +160,8 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
         {/* PREUVE — de vraies personnes sont déjà passées par Grandimi. */}
         <section className="px-6 pb-16 sm:px-8">
           <div className="mx-auto w-full max-w-2xl rounded-[28px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] px-6 py-8 text-center">
-            <p className="text-[15px] text-[color:var(--text-secondary)]">Déjà</p>
-            <p className="mt-1 font-display text-[56px] leading-none font-medium text-[color:var(--color-brand-display)]">200+</p>
-            <p className="mt-3 text-[17px] font-semibold text-ink">jeunes ont déjà commencé avec Grandimi</p>
+            <p className="font-display text-[56px] leading-none font-medium text-[color:var(--color-brand-display)]">200+</p>
+            <p className="mt-3 text-[17px] font-semibold text-ink">analyses déjà faites sur Grandimi</p>
             <p className="mx-auto mt-3 max-w-sm text-[12px] leading-[1.5] text-[color:var(--text-meta)]">
               Construit sur les repères de l’Organisation mondiale de la Santé, des pédiatres et de
               l’ANSES pour la nutrition.
@@ -188,6 +187,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 ['Dors pour grandir', 'C’est la nuit que ton corps grandit. On te donne ton heure de coucher.'],
                 ['Mange pour grandir', 'Ce qu’il faut dans ton assiette pour grandir, sans régime compliqué.'],
                 ['Vois-toi grandir', 'Tu te mesures chaque semaine, et ta courbe monte.'],
+                ['Bonus : ta taille adulte estimée', 'Découvre jusqu’où tu peux aller, et vois ton estimation se mettre à jour à chaque mesure.'],
               ].map(([titre, texte]) => (
                 <div
                   key={titre}
