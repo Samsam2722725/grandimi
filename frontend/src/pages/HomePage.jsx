@@ -209,10 +209,10 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             {/* Grille à la TrendSaaS : ce qu'on reçoit, en chiffres vrais. */}
             <div className="mt-10 grid grid-cols-2 border-t border-white/10">
               {[
-                ['Parais plus grand', 'dès les premières semaines, grâce à ta posture'],
                 ['Ne perds aucun centimètre', 'on repère ce qui freine ta croissance (sommeil, sport, alimentation) et on le corrige'],
-                ['Ta taille future', 'découvre ta taille adulte estimée'],
                 ['Plan personnalisé', 'tes exercices, ton sommeil et ton alimentation, chaque jour, selon tes réponses'],
+                ['Parais plus grand', 'dès les premières semaines, grâce à ta posture'],
+                ['Ta taille future', 'découvre ta taille adulte estimée'],
               ].map(([chiffre, texte], i) => (
                 <div
                   key={texte}
