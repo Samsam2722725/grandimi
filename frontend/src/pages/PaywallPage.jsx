@@ -3,7 +3,7 @@ import { Check, CreditCard, ShieldCheck, Wallet, X } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
-import { OFFRES, finReduction, euros, pointsFaibles } from '../lib/offres'
+import { OFFRES, finReduction, euros } from '../lib/offres'
 import '../styles/funnel.css'
 /* Feuille dédiée, et non paywall.css : cette dernière habille encore
    ParentPage (page claire, destinée à un adulte arrivé par lien partagé) et
@@ -226,7 +226,7 @@ function PaywallPage({ onBackHome }) {
 
   const offre = OFFRES.find((o) => o.duree === planChoisi) || OFFRES[1]
   const prixOffre = (o) => (reductionActive ? o.reduit : o.normal)
-  const faibles = pointsFaibles(prediction)
+
 
   /* Lien à transmettre au parent. Il porte l'id du compte enfant pour que le
      webhook Whop crédite ce compte-là et non celui du payeur. L'id est écrit
@@ -499,11 +499,6 @@ function PaywallPage({ onBackHome }) {
         <h1 className="pw3-titre">
           Atteins ta <span>taille maximale</span>
         </h1>
-        <p className="pw3-sous-titre">
-          {faibles.length
-            ? <>Tes réponses montrent ce qui te freine : <strong>{faibles.join(', ')}</strong>. Ton plan le corrige, jour après jour.</>
-            : <>Tu as déjà de bonnes bases. Ton plan va chercher le maximum, jour après jour.</>}
-        </p>
 
         <h2 className="pw3-choisis">Choisis ton plan.</h2>
         {blocOffres}
