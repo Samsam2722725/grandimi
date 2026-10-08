@@ -22,12 +22,12 @@ const (
 	// existe à deux prix : le prix réduit, proposé pendant les 15 minutes
 	// qui suivent l'arrivée sur le paywall, et le prix normal, appliqué
 	// ensuite. Les deux sont de vrais plans Whop.
-	Mois1        PlanKey = "m1"
-	Mois3        PlanKey = "m3"
-	AVie         PlanKey = "vie"
-	Mois1Normal  PlanKey = "m1_normal"
-	Mois3Normal  PlanKey = "m3_normal"
-	AVieNormal   PlanKey = "vie_normal"
+	Mois1       PlanKey = "m1"
+	Mois3       PlanKey = "m3"
+	AVie        PlanKey = "vie"
+	Mois1Normal PlanKey = "m1_normal"
+	Mois3Normal PlanKey = "m3_normal"
+	AVieNormal  PlanKey = "vie_normal"
 )
 
 type Plan struct {
@@ -58,12 +58,12 @@ var plans = map[PlanKey]Plan{
 		Interval:      "year",
 		WhopPlanIDEnv: "WHOP_PLAN_ID_ANNUAL",
 	},
-	Mois1:        {Key: Mois1, Label: "1 mois", PriceEUR: 14.99, Interval: "month", WhopPlanIDEnv: "WHOP_PLAN_ID_M1"},
-	Mois3:        {Key: Mois3, Label: "3 mois", PriceEUR: 29.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3"},
-	AVie:         {Key: AVie, Label: "À vie", PriceEUR: 59.99, Interval: "lifetime", WhopPlanIDEnv: "WHOP_PLAN_ID_VIE"},
-	Mois1Normal:  {Key: Mois1Normal, Label: "1 mois", PriceEUR: 19.99, Interval: "month", WhopPlanIDEnv: "WHOP_PLAN_ID_M1_NORMAL"},
-	Mois3Normal:  {Key: Mois3Normal, Label: "3 mois", PriceEUR: 39.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3_NORMAL"},
-	AVieNormal:   {Key: AVieNormal, Label: "À vie", PriceEUR: 79.99, Interval: "lifetime", WhopPlanIDEnv: "WHOP_PLAN_ID_VIE_NORMAL"},
+	Mois1:       {Key: Mois1, Label: "1 mois", PriceEUR: 14.99, Interval: "month", WhopPlanIDEnv: "WHOP_PLAN_ID_M1"},
+	Mois3:       {Key: Mois3, Label: "3 mois", PriceEUR: 29.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3"},
+	AVie:        {Key: AVie, Label: "À vie", PriceEUR: 59.99, Interval: "lifetime", WhopPlanIDEnv: "WHOP_PLAN_ID_VIE"},
+	Mois1Normal: {Key: Mois1Normal, Label: "1 mois", PriceEUR: 19.99, Interval: "month", WhopPlanIDEnv: "WHOP_PLAN_ID_M1_NORMAL"},
+	Mois3Normal: {Key: Mois3Normal, Label: "3 mois", PriceEUR: 39.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3_NORMAL"},
+	AVieNormal:  {Key: AVieNormal, Label: "À vie", PriceEUR: 79.99, Interval: "lifetime", WhopPlanIDEnv: "WHOP_PLAN_ID_VIE_NORMAL"},
 }
 
 // ParIDWhop retrouve l'offre à partir de l'id de plan Whop reçu par le
