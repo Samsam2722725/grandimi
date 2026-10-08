@@ -156,15 +156,15 @@ export const TEXTES_ETAPE = {
   },
   sports: {
     titre: 'Quels sports pratiques-tu ?',
-    sousTitre: 'Bouger régulièrement aide ton corps à grandir',
+    sousTitre: 'Pour savoir où tu en es',
   },
   'exercice-freq': {
     titre: "Combien d'heures d'exercice par semaine ?",
-    sousTitre: "L'exercice influence l'hormone de croissance et la récupération",
+    sousTitre: 'Pour savoir où tu en es',
   },
   sommeil: {
     titre: 'Combien d’heures dors-tu par nuit ?',
-    sousTitre: 'C’est pendant ton sommeil profond que ton corps libère l’hormone de croissance',
+    sousTitre: 'Ton sommeil compte plus que tu ne crois pour ta taille',
   },
   pere: {
     titre: 'Combien mesure ton père ?',
@@ -289,27 +289,27 @@ export const TEXTES_ETAPE = {
   },
   coucher: {
     titre: 'À quelle heure tu t’endors ?',
-    sousTitre: 'L’hormone de croissance est surtout libérée pendant ton premier sommeil profond',
+    sousTitre: 'Ton heure compte autant que ta durée de sommeil',
   },
   telephone: {
     titre: 'Tu regardes ton téléphone au lit ?',
-    sousTitre: 'La lumière des écrans retarde ton endormissement',
+    sousTitre: 'Une habitude que beaucoup sous-estiment',
   },
   assis: {
     titre: 'Combien d’heures es-tu assis par jour ?',
-    sousTitre: 'Rester assis des heures tasse ta posture et te fait paraître plus petit',
+    sousTitre: 'Ça joue plus sur ta taille que tu ne le penses',
   },
   posture: {
     titre: 'Comment tu te tiens, en général ?',
-    sousTitre: 'Une mauvaise posture peut te faire perdre plusieurs centimètres à l’œil',
+    sousTitre: 'Ta posture peut te faire paraître plus petit que tu ne l’es',
   },
   proteines: {
     titre: 'Tu manges des protéines à chaque repas ?',
-    sousTitre: 'Les protéines donnent à ton corps de quoi construire tes os et tes muscles',
+    sousTitre: 'Ce que tu manges peut freiner ta croissance',
   },
   laitages: {
     titre: 'Combien de produits laitiers par jour ?',
-    sousTitre: 'Le calcium, c’est la matière de tes os',
+    sousTitre: 'Ce que tu manges peut freiner ta croissance',
   },
   pourquoi: {
     titre: 'Pourquoi tu veux grandir ?',
@@ -380,48 +380,48 @@ export const OPTIONS_SPORTS = [
 ]
 
 export const OPTIONS_EXERCICE_FREQ = [
-  { valeur: '0-2', label: '0-2 heures', hint: 'Gros potentiel ici : on commence en douceur' },
-  { valeur: '3-5', label: '3-5 heures', hint: 'Bonne base' },
-  { valeur: '6+', label: '6+ heures', hint: 'Excellent : on va l’optimiser' },
+  { valeur: '0-2', label: '0-2 heures', hint: 'Point faible' },
+  { valeur: '3-5', label: '3-5 heures', hint: 'À améliorer' },
+  { valeur: '6+', label: '6+ heures', hint: 'Point fort' },
 ]
 
 export const OPTIONS_COUCHER = [
-  { valeur: 'avant-22h', label: 'Avant 22 h', hint: 'Parfait pour grandir' },
-  { valeur: '22h-23h', label: 'Entre 22 h et 23 h', hint: 'Bien, on peut encore améliorer' },
-  { valeur: '23h-minuit', label: 'Entre 23 h et minuit', hint: 'Tu perds une partie de ton sommeil profond' },
-  { valeur: 'apres-minuit', label: 'Après minuit', hint: 'Gros potentiel ici' },
+  { valeur: 'avant-22h', label: 'Avant 22 h', hint: 'Point fort' },
+  { valeur: '22h-23h', label: 'Entre 22 h et 23 h', hint: 'À améliorer' },
+  { valeur: '23h-minuit', label: 'Entre 23 h et minuit', hint: 'Point faible' },
+  { valeur: 'apres-minuit', label: 'Après minuit', hint: 'Point faible' },
 ]
 
 export const OPTIONS_TELEPHONE = [
-  { valeur: 'jamais', label: 'Jamais', hint: 'Parfait' },
-  { valeur: 'parfois', label: 'Parfois', hint: 'À surveiller' },
-  { valeur: 'tous-les-soirs', label: 'Tous les soirs', hint: 'Ça retarde ton sommeil profond' },
+  { valeur: 'jamais', label: 'Jamais', hint: 'Point fort' },
+  { valeur: 'parfois', label: 'Parfois', hint: 'À améliorer' },
+  { valeur: 'tous-les-soirs', label: 'Tous les soirs', hint: 'Point faible' },
 ]
 
 export const OPTIONS_ASSIS = [
-  { valeur: 'moins-4h', label: 'Moins de 4 heures', hint: 'Bien' },
-  { valeur: '4h-8h', label: 'Entre 4 et 8 heures', hint: 'Ta posture en prend un coup' },
-  { valeur: 'plus-8h', label: 'Plus de 8 heures', hint: 'Gros potentiel ici' },
+  { valeur: 'moins-4h', label: 'Moins de 4 heures', hint: 'Point fort' },
+  { valeur: '4h-8h', label: 'Entre 4 et 8 heures', hint: 'À améliorer' },
+  { valeur: 'plus-8h', label: 'Plus de 8 heures', hint: 'Point faible' },
 ]
 
 export const OPTIONS_POSTURE = [
-  { valeur: 'droit', label: 'Bien droit', hint: 'Bonne base' },
-  { valeur: 'un-peu-voute', label: 'Un peu voûté', hint: 'Des centimètres à récupérer' },
-  { valeur: 'voute', label: 'Souvent voûté', hint: 'Gros potentiel ici' },
-  { valeur: 'ne-sais-pas', label: 'Je ne sais pas', hint: 'On va le travailler quand même' },
+  { valeur: 'droit', label: 'Bien droit', hint: 'Point fort' },
+  { valeur: 'un-peu-voute', label: 'Un peu voûté', hint: 'À améliorer' },
+  { valeur: 'voute', label: 'Souvent voûté', hint: 'Point faible' },
+  { valeur: 'ne-sais-pas', label: 'Je ne sais pas', hint: 'On le vérifie dans ton analyse' },
 ]
 
 export const OPTIONS_PROTEINES = [
-  { valeur: 'chaque-repas', label: 'Oui, à chaque repas', hint: 'Excellent' },
-  { valeur: 'un-repas', label: 'À un repas par jour', hint: 'À renforcer' },
-  { valeur: 'rarement', label: 'Rarement', hint: 'Sans doute ton premier manque' },
-  { valeur: 'ne-sais-pas', label: 'Je ne sais pas', hint: 'On va le voir ensemble' },
+  { valeur: 'chaque-repas', label: 'Oui, à chaque repas', hint: 'Point fort' },
+  { valeur: 'un-repas', label: 'À un repas par jour', hint: 'À améliorer' },
+  { valeur: 'rarement', label: 'Rarement', hint: 'Point faible' },
+  { valeur: 'ne-sais-pas', label: 'Je ne sais pas', hint: 'On le vérifie dans ton analyse' },
 ]
 
 export const OPTIONS_LAITAGES = [
-  { valeur: '3-plus', label: '3 ou plus', hint: 'Bonne base de calcium' },
-  { valeur: '1-2', label: '1 ou 2', hint: 'Un peu juste' },
-  { valeur: 'aucun', label: 'Aucun', hint: 'On trouvera d’autres sources de calcium' },
+  { valeur: '3-plus', label: '3 ou plus', hint: 'Point fort' },
+  { valeur: '1-2', label: '1 ou 2', hint: 'À améliorer' },
+  { valeur: 'aucun', label: 'Aucun', hint: 'Point faible' },
 ]
 
 export const OPTIONS_POURQUOI = [
@@ -1122,7 +1122,7 @@ export function verdictAge(age, sexe) {
 /** Ligne de verdict sous la molette du sommeil. */
 export function verdictSommeil(heures) {
   if (heures == null) return null
-  if (heures < 7) return 'Ça freine ta croissance : gros potentiel ici'
-  if (heures < 9) return 'Correct, mais tu peux encore gagner'
-  return 'Parfait pour grandir'
+  if (heures < 7) return 'Point faible'
+  if (heures < 9) return 'À améliorer'
+  return 'Point fort'
 }
