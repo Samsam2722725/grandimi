@@ -57,7 +57,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
           supprime la cause. */}
       <header className="sticky top-0 z-50 border-b border-[color:var(--color-frost-gray)] bg-[color:var(--surface-page-canvas)]">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-8">
-          <a href="#" className="flex min-w-0 items-center gap-2.5 text-ink">
+          <a href="#" className="flex min-w-0 items-center gap-2 text-ink">
             {/* La marque remplace l'icône de règle générique. Le carré orange
                 est la forme du logo, pas une pastille décorative : c'est sous
                 cette vignette que le site sera reconnu dans un onglet, une
@@ -68,7 +68,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 titre="Grandimi"
               />
             </span>
-            <span className="font-display text-lg max-[359px]:hidden sm:text-xl font-semibold tracking-[-0.02em]">
+            <span className="font-['Syne',sans-serif] text-[15px] max-[379px]:hidden sm:text-xl font-extrabold tracking-[-0.04em]">
               Grandimi
             </span>
           </a>
@@ -102,7 +102,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             <button
               type="button"
               onClick={() => demarrer('en-tete')}
-              className="inline-flex min-h-11 shrink-0 items-center rounded-full bg-brand px-3.5 text-[13px] sm:text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:px-6"
+              className="inline-flex min-h-11 shrink-0 items-center rounded-full bg-gradient-to-r from-[#ff7a2e] to-[#ff4d1a] px-3.5 text-[13px] sm:text-sm font-bold whitespace-nowrap text-white shadow-[0_0_18px_rgba(255,90,31,0.4)] sm:px-6"
             >
               Commencer
             </button>
@@ -111,29 +111,35 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
         </div>
       </header>
 
-      <main className="accueil-main">
-        {/* HAUT — copié de heightfuel.com : étiquette, titre, phrase, bouton. */}
-        <section className="relative overflow-hidden px-6 pt-14 pb-16 sm:px-8">
+      <main className="accueil-main bg-[#060608]">
+        {/* HAUT — mise en page et style de heightfuel.com, en orange :
+            étiquette mono entre deux traits, titre Syne extra-gras, bouton
+            pilule lumineux, icône néon, rangée de chiffres. */}
+        <section className="relative overflow-hidden px-5 pt-12 pb-14 sm:px-8">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -top-40 left-1/2 size-[620px] -translate-x-1/2 rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.16] blur-[140px]"
+            className="pointer-events-none absolute -top-48 left-1/2 size-[640px] -translate-x-1/2 rounded-full bg-[#ff5a1f] opacity-[0.14] blur-[150px]"
           />
           <div className="relative mx-auto flex w-full max-w-2xl flex-col items-center text-center">
-            <p className="rise text-[12px] font-semibold tracking-[0.18em] text-[color:var(--color-brand-display)] uppercase">
+            <p className="rise flex items-center gap-3 font-['Spline_Sans_Mono',monospace] text-[11px] font-medium tracking-[0.2em] text-[#ff7a45] uppercase">
+              <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
               Méthode basée sur la science
+              <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
             </p>
 
             <h1
-              className="rise mt-6 font-display text-[clamp(46px,11vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-ink"
+              className="rise mt-5 font-['Syne',sans-serif] text-[clamp(36px,10vw,84px)] leading-[1] font-extrabold tracking-[-0.04em] text-[#f4efe9]"
               style={{ animationDelay: '60ms' }}
             >
               Deviens le plus
               <br />
-              <span className="text-[color:var(--color-brand-display)]">grand possible</span>
+              <span className="bg-gradient-to-r from-[#ff8a3d] to-[#ff4d1a] bg-clip-text text-transparent [filter:drop-shadow(0_0_24px_rgba(255,90,31,0.35))]">
+                grand possible
+              </span>
             </h1>
 
             <p
-              className="rise mt-6 max-w-md text-[17px] leading-[1.5] text-[color:var(--text-secondary)]"
+              className="rise mt-5 max-w-md text-[16px] leading-[1.6] text-[#a39d97]"
               style={{ animationDelay: '120ms' }}
             >
               Ton corps grandit encore. Chaque nuit, chaque repas, chaque exercice compte.
@@ -143,28 +149,51 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             <button
               type="button"
               onClick={() => demarrer('hero')}
-              className="rise mt-9 inline-flex min-h-15 w-full max-w-md items-center justify-center gap-2 rounded-full bg-brand px-8 text-lg font-semibold text-[color:var(--color-on-brand)] shadow-[0_10px_40px_-8px_var(--color-coral-pulse)] transition-transform hover:bg-[#ff7a45] active:scale-[0.97]"
+              className="rise mt-8 inline-flex min-h-14 w-full max-w-md items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#ff7a2e] to-[#ff4d1a] px-8 text-[17px] font-bold text-white shadow-[0_0_28px_rgba(255,90,31,0.45)] transition-transform active:scale-[0.97]"
               style={{ animationDelay: '180ms' }}
             >
               Je commence →
             </button>
 
             {analyseEnCours && !abonne && (
-              <button type="button" className="bouton-reprendre mt-6" onClick={onReprendre}>
+              <button type="button" className="bouton-reprendre mt-5" onClick={onReprendre}>
                 Reprendre mon analyse →
               </button>
             )}
-          </div>
-        </section>
 
-        {/* PREUVE — de vraies personnes sont déjà passées par Grandimi. */}
-        <section className="px-6 pb-16 sm:px-8">
-          <div className="mx-auto w-full max-w-2xl rounded-[28px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] px-6 py-8 text-center">
-            <p className="font-display text-[56px] leading-none font-medium text-[color:var(--color-brand-display)]">200+</p>
-            <p className="mt-3 text-[17px] font-semibold text-ink">analyses déjà faites sur Grandimi</p>
-            <p className="mx-auto mt-3 max-w-sm text-[12px] leading-[1.5] text-[color:var(--text-meta)]">
-              Construit sur les repères de l’Organisation mondiale de la Santé, des pédiatres et de
-              l’ANSES pour la nutrition.
+            {/* Icône néon, comme heightfuel : silhouette et flèche qui monte. */}
+            <div className="rise mt-12" style={{ animationDelay: '240ms' }} aria-hidden="true">
+              <svg
+                viewBox="0 0 80 96"
+                className="h-36 w-auto text-[#ff6a2b] [filter:drop-shadow(0_0_10px_rgba(255,106,43,0.9))_drop-shadow(0_0_30px_rgba(255,90,31,0.5))]"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M14 90V12M14 12L5 23M14 12l9 11" />
+                <circle cx="52" cy="17" r="9" />
+                <path d="M52 30v28M52 38l-13 9M52 38l13 9M52 58l-9 30M52 58l9 30" />
+              </svg>
+            </div>
+
+            {/* Rangée de chiffres, comme heightfuel — uniquement du vrai. */}
+            <div className="rise mt-10 grid w-full max-w-md grid-cols-3 border-y border-white/10" style={{ animationDelay: '280ms' }}>
+              {[
+                ['200+', 'analyses faites'],
+                ['2 min', 'pour commencer'],
+                ['100 %', 'fait pour toi'],
+              ].map(([chiffre, texte], i) => (
+                <div key={texte} className={`py-5 ${i > 0 ? 'border-l border-white/10' : ''}`}>
+                  <p className="font-['Syne',sans-serif] text-[20px] leading-none font-extrabold text-[#ff6a2b]">{chiffre}</p>
+                  <p className="mt-2 font-['Spline_Sans_Mono',monospace] text-[10px] tracking-[0.12em] text-[#8a847e] uppercase">{texte}</p>
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-5 text-[12px] text-[#6f6a65]">
+              Basé sur les repères de l’OMS, des pédiatres et de l’ANSES.
             </p>
           </div>
         </section>
@@ -172,14 +201,15 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
         {/* BÉNÉFICES — copié de tallerapp.xyz (« Unlock your full potential »). */}
         <section id="fonctionnalites" className="px-6 pb-20 sm:px-8">
           <div className="mx-auto w-full max-w-2xl">
-            <h2 className="text-center font-display text-[clamp(32px,7vw,48px)] leading-[1.05] font-medium tracking-[-0.03em] text-ink">
-              Plus grand. Plus confiant.
+            <p className="text-center font-['Spline_Sans_Mono',monospace] text-[11px] tracking-[0.2em] text-[#8a847e] uppercase">Ce que tu reçois</p>
+            <h2 className="mt-3 text-center font-['Syne',sans-serif] text-[clamp(32px,8vw,52px)] leading-[1.02] font-extrabold tracking-[-0.035em] text-[#f4efe9]">
+              Plus grand. <span className="text-[#ff6a2b]">Plus confiant.</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-md text-center text-[16px] text-[color:var(--text-secondary)]">
+            <p className="mx-auto mt-4 max-w-md text-center text-[16px] leading-[1.6] text-[#a39d97]">
               Tout pour atteindre ta taille maximale, tant que ton corps grandit encore. Ne laisse aucun centimètre de côté.
             </p>
 
-            <div className="mt-10 flex flex-col gap-3">
+            <div className="mt-10 border-t border-white/10">
               {[
                 ['Parais plus grand tout de suite', 'Ta posture cache des centimètres. Tiens-toi droit, et ça se voit dès les premières semaines.'],
                 ['Ce qui te freine', 'On repère ce qui t’empêche de grandir : sommeil, sport, ce que tu manges, posture.'],
@@ -188,13 +218,13 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 ['Mange pour grandir', 'Ce qu’il faut dans ton assiette pour grandir, sans régime compliqué.'],
                 ['Vois-toi grandir', 'Tu te mesures chaque semaine, et ta courbe monte.'],
                 ['Bonus : ta taille adulte estimée', 'Découvre jusqu’où tu peux aller, et vois ton estimation se mettre à jour à chaque mesure.'],
-              ].map(([titre, texte]) => (
-                <div
-                  key={titre}
-                  className="rounded-[22px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] px-5 py-5"
-                >
-                  <h3 className="font-display text-[20px] font-medium text-ink">{titre}</h3>
-                  <p className="mt-1.5 text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">{texte}</p>
+              ].map(([titre, texte], i) => (
+                <div key={titre} className="flex gap-4 border-b border-white/10 py-6">
+                  <span className="pt-1 font-['Spline_Sans_Mono',monospace] text-[12px] text-[#ff6a2b]">{String(i + 1).padStart(2, '0')}</span>
+                  <div>
+                    <h3 className="font-['Syne',sans-serif] text-[19px] font-bold tracking-[-0.01em] text-[#f4efe9]">{titre}</h3>
+                    <p className="mt-1.5 text-[15px] leading-[1.55] text-[#a39d97]">{texte}</p>
+                  </div>
                 </div>
               ))}
             </div>
