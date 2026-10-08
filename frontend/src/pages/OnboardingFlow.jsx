@@ -171,6 +171,8 @@ const ETAPES_ANALYSE = [
 const DUREE_MONTEE_MS = 11000
 const PLAFOND_ATTENTE = 96
 const DUREE_FINALE_MS = 550
+// Animation complète « on assemble ton plan », jouée avant l'e-mail.
+const DUREE_INTRO_MS = 6000
 
 /* L'anneau monte tout seul dès que l'écran s'affiche — pas besoin d'avoir
    soumis l'e-mail pour ça — et plafonne à 96 % tant que le serveur n'a pas
@@ -197,7 +199,8 @@ function useProgressionAnimee(actif, pretALivrer) {
       return undefined
     }
 
-    const duree = pretALivrer ? DUREE_FINALE_MS : DUREE_MONTEE_MS
+    const depart0 = pourcentageRef.current
+    const duree = pretALivrer ? (depart0 > 0 ? DUREE_FINALE_MS : DUREE_INTRO_MS) : DUREE_MONTEE_MS
     const depart = pourcentageRef.current
     let debut
     let frame
@@ -318,9 +321,12 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     avancement: (dansChapitre.indexOf(etape) + 1) / dansChapitre.length,
   }
 
+  /* L'animation « on assemble ton plan » se joue EN ENTIER d'abord ;
+     l'e-mail n'est demandé qu'ensuite, sur « Ton plan est prêt ».
+     Avant, le formulaire la recouvrait dès la première seconde. */
   const [pourcentageAnalyse, animationTerminee] = useProgressionAnimee(
     etape === 'resultats-la',
-    !!resultatApi,
+    true,
   )
 
   useEffect(() => {
@@ -481,9 +487,9 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   // `resultatApi` directement, pour ne jamais couper l'animation en plein
   // mouvement.
   useEffect(() => {
-    if (animationTerminee) terminerAnalyse()
+    if (emailEnvoye && resultatApi) terminerAnalyse()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animationTerminee])
+  }, [emailEnvoye, resultatApi])
 
   // ---------- Validation par écran ----------
 
@@ -897,7 +903,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     const emailPlausible = EMAIL_VALIDE.test(email.trim())
     return (
       <ProgressionAnalyse titre={`On assemble ton plan à partir de tes ${etapes.filter((e) => TYPE_ETAPE[e] === 'question').length} réponses`} pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
-        {!emailEnvoye ? (
+        {!animationTerminee ? null : !emailEnvoye ? (
           <div className="resultats-overlay">
             <div className="resultats-overlay-carte">
               <h2 className="resultats-overlay-titre">{texte.titre}</h2>
@@ -918,7 +924,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
               <p className="funnel-help funnel-help--discret">
                 En continuant, tu acceptes notre{' '}
                 <a href="/privacy.html" target="_blank" rel="noopener">politique de confidentialité</a>.
-                Tes réponses servent uniquement à calculer ta prédiction.
+                Tes réponses servent uniquement à construire ton plan.
               </p>
 
               <FunnelButton

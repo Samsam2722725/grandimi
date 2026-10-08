@@ -277,8 +277,8 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Ton objectif. On va voir s’il est à ta portée',
   },
   'resultats-la': {
-    titre: 'Ton plan est presque prêt',
-    sousTitre: 'Entre ton e-mail pour enregistrer ton analyse et ton plan',
+    titre: 'Ton plan est prêt ✓',
+    sousTitre: 'Entre ton e-mail pour le voir et le retrouver quand tu veux',
   },
   'bonne-nouvelle': {
     titre: 'Bonne nouvelle',
