@@ -499,6 +499,7 @@ function PaywallPage({ onBackHome }) {
         <h1 className="pw3-titre">
           Atteins ta <span>taille maximale</span>
         </h1>
+        <p className="pw3-sous-titre">Ton plan pour grandir au maximum : quoi faire chaque jour pour ton sommeil, ta posture, ton sport et ton alimentation.</p>
 
         <h2 className="pw3-choisis">Choisis ton plan.</h2>
         {blocOffres}
@@ -526,12 +527,11 @@ function PaywallPage({ onBackHome }) {
           <h2>Ce que tu obtiens</h2>
           <ul>
             {[
-              ['Ton diagnostic', 'Ce qui freine ta croissance, d’après tes réponses : sommeil, sport, alimentation, posture.'],
-              ['Ton programme jour par jour', 'Chaque jour, exactement quoi faire pour grandir. Tu coches, tu avances.'],
-              ['Tes exercices du jour', 'Étirements, posture, mouvements : quelques minutes par jour.'],
-              ['Ton sommeil', 'Ton heure de coucher avancée petit à petit, pour que ça tienne.'],
-              ['Ton alimentation pour grandir', 'Ce qu’il faut dans ton assiette pour construire tes os.'],
-              ['Ton suivi', 'Ta courbe chaque semaine et ta série 🔥 de jours tenus.'],
+              ['Ton diagnostic : ce qui te freine', 'Ce qui freine ta croissance, d’après tes réponses.'],
+              ['Ton plan du jour : exercices, posture, sommeil, alimentation', 'Chaque jour, exactement quoi faire pour grandir. Tu coches, tu avances.'],
+              ['Ton guide pour grandir', 'Tout ce qui fait grandir, expliqué simplement.'],
+              ['Ta taille adulte estimée', 'Avec les offres 3 mois et À vie.'],
+              ['Ton coach perso 24 h/24', 'Avec l’offre À vie.'],
             ].map(([titre, texte]) => (
               <li key={titre}>
                 <Check size={16} strokeWidth={3} aria-hidden="true" />
