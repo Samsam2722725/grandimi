@@ -210,9 +210,9 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             <div className="mt-10 grid grid-cols-2 border-t border-white/10">
               {[
                 ['Parais plus grand', 'dès les premières semaines, grâce à ta posture'],
-                ['Zéro cm perdu', 'on corrige ce qui freine ta croissance'],
-                ['Ta taille future', 'découvre la taille que tu peux atteindre'],
-                ['Plan personnalisé', 'exercices, sommeil et alimentation selon tes réponses'],
+                ['Ne perds aucun centimètre', 'on repère ce qui freine ta croissance (sommeil, sport, alimentation) et on le corrige'],
+                ['Ta taille future', 'découvre ta taille adulte estimée'],
+                ['Plan personnalisé', 'tes exercices, ton sommeil et ton alimentation, chaque jour, selon tes réponses'],
               ].map(([chiffre, texte], i) => (
                 <div
                   key={texte}
