@@ -500,7 +500,6 @@ function PaywallPage({ onBackHome }) {
         <h1 className="pw3-titre">
           Atteins ta <span>taille maximale</span>
         </h1>
-        <p className="pw3-sous-titre">Ton plan pour grandir au maximum : quoi faire chaque jour pour ton sommeil, ta posture, ton sport et ton alimentation. Il change chaque mois, au rythme de ta croissance.</p>
 
         <h2 className="pw3-choisis">Choisis ton plan.</h2>
         {blocOffres}
