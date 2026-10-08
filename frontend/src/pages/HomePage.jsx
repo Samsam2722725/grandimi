@@ -203,16 +203,16 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               Deviens le plus <span className="text-[#ff6a2b]">grand possible</span>
             </h2>
             <p className="mx-auto mt-4 max-w-md text-center text-[16px] leading-[1.6] text-[#a39d97]">
-              Tout pour atteindre ta taille maximale, tant que ton corps grandit encore. Ne laisse aucun centimètre de côté.
+              Sommeil, sport, alimentation, posture : tout ce qui fait grandir, réuni dans un seul programme.
             </p>
 
             {/* Grille à la TrendSaaS : ce qu'on reçoit, en chiffres vrais. */}
             <div className="mt-10 grid grid-cols-2 border-t border-white/10">
               {[
-                ['Ne perds aucun centimètre', 'on repère ce qui freine ta croissance (sommeil, sport, alimentation) et on le corrige'],
-                ['Plan personnalisé', 'tes exercices, ton sommeil et ton alimentation, chaque jour, selon tes réponses'],
-                ['Parais plus grand', 'dès les premières semaines, grâce à ta posture'],
-                ['Ta taille future', 'découvre ta taille adulte estimée'],
+                ['Aucun centimètre perdu', 'On trouve ce qui bloque ta croissance. Et on le règle.'],
+                ['Ton plan sur mesure', 'Chaque jour, exactement quoi faire pour grandir. Calculé pour toi.'],
+                ['Plus grand, tout de suite', 'Ta posture te vole des centimètres. On te les rend.'],
+                ['Ta taille future', 'Découvre jusqu’où tu peux monter.'],
               ].map(([chiffre, texte], i) => (
                 <div
                   key={texte}
