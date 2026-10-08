@@ -470,6 +470,65 @@ function PaywallPage({ onBackHome }) {
     </section>
   )
 
+  /* Comme TrendSaaS : le bouton vit dans la page, sous chaque bloc
+     d'offres, et non dans une barre fixe qui mange le bas de l'écran. */
+  const blocAction = (
+    <div className="pw3-action">
+        <button
+          type="button"
+          className="funnel-cta"
+          onClick={lancerPaiement}
+          disabled={!emailValide || loading}
+        >
+          {loading ? (
+            <>
+              <Spinner />
+              Redirection…
+            </>
+          ) : (
+            'Continuer'
+          )}
+        </button>
+
+        <p className="pw2-facture">
+          {`Facturé ${euros(prixOffre(offre))} ${offre.facture}`}
+          {' · '}
+          <a href="/cgv.html">Conditions</a> · Résiliable à tout moment
+        </p>
+
+        {/* `role="status"` et non un paragraphe muet : le message apparaît
+            plusieurs secondes après le clic, donc un lecteur d'écran doit
+            l'annoncer sans que l'utilisateur ait à aller le chercher. */}
+        {attenteLongue && (
+          <p className="paywall-attente" role="status">
+            On ouvre la page de paiement sécurisée de Whop. Ça peut prendre
+            quelques secondes — ne ferme pas.
+          </p>
+        )}
+
+        {/* Deuxième action de plein droit, pas un lien replié au milieu de la
+            page. L'utilisateur type a 14 ans et pas de carte bancaire : lui
+            faire chercher ce chemin, c'est le perdre. Contour et non aplat —
+            la hiérarchie reste lisible. */}
+        {lienParent && proposerLeParent && (
+          <button
+            type="button"
+            className="paywall-parent-cta"
+            onClick={() => {
+              lienParentOuvert()
+              setLienParentVisible(true)
+              blocParentRef.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+              })
+            }}
+          >
+            Je n’ai pas de carte — faire payer par un parent
+          </button>
+        )}
+    </div>
+  )
+
   return (
     <div className="night paywall">
       {/* Mise en page calquée sur le paywall GoTall, à la demande du
@@ -503,6 +562,7 @@ function PaywallPage({ onBackHome }) {
 
         <h2 className="pw3-choisis">Choisis ton plan.</h2>
         {blocOffres}
+        {blocAction}
 
         <div className="paywall-paiement">
           <p className="paywall-paiement-titre">
@@ -533,13 +593,12 @@ function PaywallPage({ onBackHome }) {
               ['Plus grand tout de suite : ta posture corrigée', 'Ta posture te vole des centimètres. On te les rend.'],
               ['Ton guide pour grandir', 'Tout ce qui fait grandir, expliqué simplement.'],
               ['Ta taille adulte estimée, 98 % de précision', ''],
-            ].map(([titre, texte]) => (
+            ].map(([titre]) => (
               <li key={titre}>
-                <Check size={16} strokeWidth={3} aria-hidden="true" />
-                <span>
-                  <strong>{titre}</strong>
-                  {texte}
+                <span className="pw3-obtiens-coche" aria-hidden="true">
+                  <Check size={14} strokeWidth={3} />
                 </span>
+                <strong>{titre}</strong>
               </li>
             ))}
           </ul>
@@ -565,6 +624,7 @@ function PaywallPage({ onBackHome }) {
         {/* Comme TrendSaaS : les offres reviennent en bas de page. */}
         <h2 className="pw3-choisis">Reprends là où tu en étais</h2>
         {blocOffres}
+        {blocAction}
 
         {lienParent && proposerLeParent && (
           <section className="paywall-parent" ref={blocParentRef}>
@@ -621,60 +681,6 @@ function PaywallPage({ onBackHome }) {
         </div>
       )}
 
-      <footer className="funnel-footer">
-        <button
-          type="button"
-          className="funnel-cta"
-          onClick={lancerPaiement}
-          disabled={!emailValide || loading}
-        >
-          {loading ? (
-            <>
-              <Spinner />
-              Redirection…
-            </>
-          ) : (
-            'Continuer'
-          )}
-        </button>
-
-        <p className="pw2-facture">
-          {`Facturé ${euros(prixOffre(offre))} ${offre.facture}`}
-          {' · '}
-          <a href="/cgv.html">Conditions</a> · Résiliable à tout moment
-        </p>
-
-        {/* `role="status"` et non un paragraphe muet : le message apparaît
-            plusieurs secondes après le clic, donc un lecteur d'écran doit
-            l'annoncer sans que l'utilisateur ait à aller le chercher. */}
-        {attenteLongue && (
-          <p className="paywall-attente" role="status">
-            On ouvre la page de paiement sécurisée de Whop. Ça peut prendre
-            quelques secondes — ne ferme pas.
-          </p>
-        )}
-
-        {/* Deuxième action de plein droit, pas un lien replié au milieu de la
-            page. L'utilisateur type a 14 ans et pas de carte bancaire : lui
-            faire chercher ce chemin, c'est le perdre. Contour et non aplat —
-            la hiérarchie reste lisible. */}
-        {lienParent && proposerLeParent && (
-          <button
-            type="button"
-            className="paywall-parent-cta"
-            onClick={() => {
-              lienParentOuvert()
-              setLienParentVisible(true)
-              blocParentRef.current?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center',
-              })
-            }}
-          >
-            Je n’ai pas de carte — faire payer par un parent
-          </button>
-        )}
-      </footer>
     </div>
   )
 }

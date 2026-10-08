@@ -1169,3 +1169,31 @@
 
 .pw3-offre-renouv { font-size: 12px; color: #8a847e; }
 .pw3 .pw3-offre-renouv { padding-right: 0; }
+
+/* ---------- Design TrendSaaS (08/10/2026) ----------
+   Bouton dans la page sous chaque bloc d'offres (plus de barre fixe),
+   « Ce que tu obtiens » en cartes avec coche ronde et titre seul, prix
+   par jour en gras simple. */
+.pw3-action { display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-top: 16px; }
+.pw3-action .funnel-cta { width: 100%; min-height: 56px; }
+.pw3-action .pw2-facture { margin: 2px 0 0; font-size: 12px; line-height: 1.4; }
+.pw3-action .paywall-parent-cta {
+  border: 0; background: none; padding: 8px 6px; min-height: 44px; font-size: 14px; font-weight: 600;
+  text-decoration: underline; color: rgba(255, 255, 255, 0.75); cursor: pointer;
+}
+.paywall .paywall-scroll.pw3 { padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
+.pw3 .paywall-paiement { margin-top: 10px; }
+
+.pw3-obtiens ul { gap: 10px; }
+.pw3-obtiens li {
+  align-items: center; gap: 12px; padding: 14px 16px; border-radius: 14px;
+  border: 1px solid rgba(244, 239, 233, 0.1); background: #121110;
+}
+.pw3-obtiens strong { font-size: 15px; line-height: 1.35; }
+.pw3-obtiens-coche {
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid #ff6a2b; color: #ff6a2b;
+}
+.pw3-obtiens li .pw3-obtiens-coche svg { margin: 0; color: currentColor; }
+
+.pw3-offre-jour { font-family: inherit; font-weight: 800; font-size: 22px; letter-spacing: -0.02em; }
