@@ -59,6 +59,17 @@ import {
   EcranEtudesPubliees,
   EcranAvisUtilisateurs,
   EcranPlusQueGenes,
+  EcranGenetique,
+  EcranBonneNouvelle,
+  EcranProfilCroissance,
+  verdictAge,
+  OPTIONS_COUCHER,
+  OPTIONS_TELEPHONE,
+  OPTIONS_ASSIS,
+  OPTIONS_POSTURE,
+  OPTIONS_PROTEINES,
+  OPTIONS_LAITAGES,
+  OPTIONS_POURQUOI,
 } from '../onboarding/content.jsx'
 import {
   ageDepuisNaissance,
@@ -77,8 +88,15 @@ function anneeParDefaut() {
 function reponsesInitiales() {
   const naissance = { jour: 1, mois: 1, annee: anneeParDefaut() }
   return {
-    profil: null,
+    profil: 'ado',
     motivation: [],
+    coucher: null,
+    telephone: null,
+    assis: null,
+    posture: null,
+    proteines: null,
+    laitages: null,
+    pourquoi: null,
     sexe: null,
     naissance,
     // Calculé dès l'état initial, et pas seulement à la première
@@ -142,11 +160,11 @@ function basculerDansListe(liste, valeur, exclusif) {
 const EMAIL_VALIDE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const ETAPES_ANALYSE = [
-  { label: 'Analyse des facteurs', seuil: 20 },
-  { label: 'Projection génétique', seuil: 40 },
-  { label: 'Fenêtre de croissance', seuil: 60 },
-  { label: 'Construction du plan', seuil: 80 },
-  { label: 'Création de routine', seuil: 100 },
+  { label: 'Ta taille génétique', seuil: 20 },
+  { label: 'Ton sommeil', seuil: 40 },
+  { label: 'Ton sport et ta posture', seuil: 60 },
+  { label: 'Ton alimentation', seuil: 80 },
+  { label: 'Ton plan du jour', seuil: 100 },
 ]
 
 const DUREE_MONTEE_MS = 11000
@@ -345,6 +363,16 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     // puis « Continuer » avançait deux fois et sautait la question suivante
     // (sexe, date de naissance — âge par défaut de 18 ans, prédiction fausse).
     clearTimeout(minuterieAvance.current)
+    /* La molette affiche une taille par défaut : la garder et toucher
+       « Continuer », c'est la choisir. Seul « Je ne sais pas » laisse la
+       taille du parent inconnue. */
+    // Mise à jour fonctionnelle : avancer() peut être appelé par une
+    // minuterie créée avant le dernier rendu, donc sur un état périmé.
+    setReponses((p) => {
+      if (etape === 'pere' && p.pere == null && !p.pereInconnu) return { ...p, pere: TAILLE_PERE_INCONNUE_CM }
+      if (etape === 'mere' && p.mere == null && !p.mereInconnu) return { ...p, mere: TAILLE_MERE_INCONNUE_CM }
+      return p
+    })
     setIndex((precedent) => Math.min(etapes.length - 1, precedent + 1))
   }
 
@@ -496,6 +524,14 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         return true
       case 'taille-ideale':
         return reponses.tailleIdeale > 0
+      case 'coucher':
+      case 'telephone':
+      case 'assis':
+      case 'posture':
+      case 'proteines':
+      case 'laitages':
+      case 'pourquoi':
+        return reponses[etape] != null
       default:
         return true
     }
@@ -540,12 +576,15 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         )
       case 'age':
         return (
-          <MoletteDateNaissance
-            jour={reponses.naissance.jour}
-            mois={reponses.naissance.mois}
-            annee={reponses.naissance.annee}
-            onChange={definirNaissance}
-          />
+          <>
+            <MoletteDateNaissance
+              jour={reponses.naissance.jour}
+              mois={reponses.naissance.mois}
+              annee={reponses.naissance.annee}
+              onChange={definirNaissance}
+            />
+            <p className="verdict-age">{verdictAge(reponses.age, reponses.sexe)}</p>
+          </>
         )
       case 'taille':
         return (
@@ -602,8 +641,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         return (
           <MoletteTailleAvecInconnu
             valeurCm={reponses.pere}
-            onChange={(v) => definir('pere', v)}
-            onInconnu={() => choisirEtAvancer('pere', null)}
+            onChange={(v) => { definir('pereInconnu', false); definir('pere', v) }}
+            onInconnu={() => { definir('pereInconnu', true); choisirEtAvancer('pere', null) }}
             unite={unites.pere}
             onChangeUnite={(u) => setUnites((p) => ({ ...p, pere: u }))}
             min={141}
@@ -615,8 +654,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         return (
           <MoletteTailleAvecInconnu
             valeurCm={reponses.mere}
-            onChange={(v) => definir('mere', v)}
-            onInconnu={() => choisirEtAvancer('mere', null)}
+            onChange={(v) => { definir('mereInconnu', false); definir('mere', v) }}
+            onInconnu={() => { definir('mereInconnu', true); choisirEtAvancer('mere', null) }}
             unite={unites.mere}
             onChangeUnite={(u) => setUnites((p) => ({ ...p, mere: u }))}
             min={141}
@@ -724,6 +763,75 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             options={OPTIONS_CROISSANCE_LENTE}
           />
         )
+      case 'coucher':
+        return (
+          <ListeChoixUnique
+            label={texte.titre}
+            valeur={reponses.coucher}
+            onChoisir={(v) => choisirEtAvancer('coucher', v)}
+            options={OPTIONS_COUCHER}
+          />
+        )
+      case 'telephone':
+        return (
+          <ListeChoixUnique
+            label={texte.titre}
+            valeur={reponses.telephone}
+            onChoisir={(v) => choisirEtAvancer('telephone', v)}
+            options={OPTIONS_TELEPHONE}
+          />
+        )
+      case 'assis':
+        return (
+          <ListeChoixUnique
+            label={texte.titre}
+            valeur={reponses.assis}
+            onChoisir={(v) => choisirEtAvancer('assis', v)}
+            options={OPTIONS_ASSIS}
+          />
+        )
+      case 'posture':
+        return (
+          <ListeChoixUnique
+            label={texte.titre}
+            valeur={reponses.posture}
+            onChoisir={(v) => choisirEtAvancer('posture', v)}
+            options={OPTIONS_POSTURE}
+          />
+        )
+      case 'proteines':
+        return (
+          <ListeChoixUnique
+            label={texte.titre}
+            valeur={reponses.proteines}
+            onChoisir={(v) => choisirEtAvancer('proteines', v)}
+            options={OPTIONS_PROTEINES}
+          />
+        )
+      case 'laitages':
+        return (
+          <ListeChoixUnique
+            label={texte.titre}
+            valeur={reponses.laitages}
+            onChoisir={(v) => choisirEtAvancer('laitages', v)}
+            options={OPTIONS_LAITAGES}
+          />
+        )
+      case 'pourquoi':
+        return (
+          <ListeChoixUnique
+            label={texte.titre}
+            valeur={reponses.pourquoi}
+            onChoisir={(v) => choisirEtAvancer('pourquoi', v)}
+            options={OPTIONS_POURQUOI}
+          />
+        )
+      case 'genetique':
+        return <EcranGenetique reponses={reponses} />
+      case 'bonne-nouvelle':
+        return <EcranBonneNouvelle />
+      case 'profil-croissance':
+        return <EcranProfilCroissance reponses={reponses} />
       case 'modele-prediction':
         return <EcranModelePrediction />
       case 'precision':
@@ -782,7 +890,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     // PaywallPage.jsx qui relit `localStorage.userEmail`).
     const emailPlausible = EMAIL_VALIDE.test(email.trim())
     return (
-      <ProgressionAnalyse titre="On analyse tes réponses" pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
+      <ProgressionAnalyse titre="On construit ton plan" pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
         {!emailEnvoye ? (
           <div className="resultats-overlay">
             <div className="resultats-overlay-carte">
@@ -814,7 +922,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
                   lancerAnalyse()
                 }}
               >
-                Voir mon analyse
+                Voir mon plan
               </FunnelButton>
             </div>
           </div>

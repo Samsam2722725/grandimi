@@ -39,44 +39,35 @@ import {
    ORDRE DES 38 ÉCRANS
    ============================================================ */
 export const ORDRE_ETAPES = [
-  'profil',
+  // Toi
   'sexe',
   'age',
+  'bonne-nouvelle',
   'taille',
+  'taille-ideale',
   'poids',
-  'pointure',
-  // 'motivation' retiré à la demande du client : la réponse ne servait à rien.
-  'sports',
-  'exercice-freq',
-  'sommeil',
+  // Famille
   'pere',
   'mere',
-  'proches',
-  'pilosite-aisselles',
-  'regles',
-  'pilosite-visage',
+  'genetique',
   'vitesse-croissance',
-  'epaules',
-  'odeur',
-  'acne',
-  'muscles',
+  'regles',
   'voix',
-  'croissance-lente',
-  'modele-prediction',
-  'precision',
-  'resultats-long-terme',
-  'potentiel-gain',
-  'optimiser-potentiel',
-  'grandimi-aide',
-  'height-tracker',
-  'exercices-quotidiens',
-  'programme-optimal',
-  'guide-grandir',
+  // Sommeil
+  'sommeil',
+  'coucher',
+  'telephone',
+  // Sport
+  'exercice-freq',
+  'sports',
+  'assis',
+  'posture',
+  // Alimentation
+  'proteines',
+  'laitages',
   'verite-brutale',
-  'etudes-publiees',
-  'avis-utilisateurs',
-  'taille-ideale',
-  'plus-que-genes',
+  'pourquoi',
+  'profil-croissance',
   'resultats-la',
 ]
 
@@ -118,6 +109,16 @@ export const TYPE_ETAPE = {
   'etudes-publiees': 'affichage',
   'avis-utilisateurs': 'affichage',
   'taille-ideale': 'question',
+  'bonne-nouvelle': 'affichage',
+  genetique: 'affichage',
+  coucher: 'question',
+  telephone: 'question',
+  assis: 'question',
+  posture: 'question',
+  proteines: 'question',
+  laitages: 'question',
+  pourquoi: 'question',
+  'profil-croissance': 'affichage',
   'plus-que-genes': 'interstitielle',
   'resultats-la': 'interstitielle',
 }
@@ -276,8 +277,48 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Choisis la taille que tu veux atteindre',
   },
   'resultats-la': {
-    titre: 'Il est maintenant temps de découvrir',
-    sousTitre: 'Ce que Grandimi dit sur ton potentiel de croissance',
+    titre: 'Ton plan est presque prêt',
+    sousTitre: 'Entre ton e-mail pour enregistrer ton analyse et ton plan',
+  },
+  'bonne-nouvelle': {
+    titre: 'Bonne nouvelle',
+    sousTitre: 'Chez les garçons, la croissance continue souvent jusqu’à 18-21 ans. On va voir où tu en es.',
+  },
+  genetique: {
+    titre: 'Ton analyse génétique',
+    sousTitre: 'Calculée à partir de la taille de tes parents',
+  },
+  coucher: {
+    titre: 'À quelle heure tu t’endors ?',
+    sousTitre: 'L’hormone de croissance est surtout libérée pendant ton premier sommeil profond',
+  },
+  telephone: {
+    titre: 'Tu regardes ton téléphone au lit ?',
+    sousTitre: 'La lumière des écrans retarde ton endormissement',
+  },
+  assis: {
+    titre: 'Combien d’heures es-tu assis par jour ?',
+    sousTitre: 'Rester assis longtemps tasse ta colonne et abîme ta posture',
+  },
+  posture: {
+    titre: 'Comment tu te tiens, en général ?',
+    sousTitre: 'Une mauvaise posture peut te faire perdre plusieurs centimètres à l’œil',
+  },
+  proteines: {
+    titre: 'Tu manges des protéines à chaque repas ?',
+    sousTitre: 'Viande, poisson, œufs, légumineuses : ce qui construit ton corps',
+  },
+  laitages: {
+    titre: 'Combien de produits laitiers par jour ?',
+    sousTitre: 'Le calcium, c’est la matière de tes os',
+  },
+  pourquoi: {
+    titre: 'Pourquoi tu veux grandir ?',
+    sousTitre: 'Dernière question : ton plan sera centré là-dessus',
+  },
+  'profil-croissance': {
+    titre: 'Ton profil de croissance',
+    sousTitre: 'Construit à partir de tes réponses : voilà avec quoi on travaille',
   },
 }
 
@@ -340,9 +381,56 @@ export const OPTIONS_SPORTS = [
 ]
 
 export const OPTIONS_EXERCICE_FREQ = [
-  { valeur: '0-2', label: '0-2 heures' },
-  { valeur: '3-5', label: '3-5 heures' },
-  { valeur: '6+', label: '6+ heures' },
+  { valeur: '0-2', label: '0-2 heures', hint: 'Gros potentiel ici : on commence en douceur' },
+  { valeur: '3-5', label: '3-5 heures', hint: 'Bonne base' },
+  { valeur: '6+', label: '6+ heures', hint: 'Excellent : on va l’optimiser' },
+]
+
+export const OPTIONS_COUCHER = [
+  { valeur: 'avant-22h', label: 'Avant 22 h', hint: 'Parfait pour grandir' },
+  { valeur: '22h-23h', label: 'Entre 22 h et 23 h', hint: 'Bien, on peut encore améliorer' },
+  { valeur: '23h-minuit', label: 'Entre 23 h et minuit', hint: 'Tu perds une partie de ton sommeil profond' },
+  { valeur: 'apres-minuit', label: 'Après minuit', hint: 'Gros potentiel ici' },
+]
+
+export const OPTIONS_TELEPHONE = [
+  { valeur: 'jamais', label: 'Jamais', hint: 'Parfait' },
+  { valeur: 'parfois', label: 'Parfois', hint: 'À surveiller' },
+  { valeur: 'tous-les-soirs', label: 'Tous les soirs', hint: 'Ça retarde ton sommeil profond' },
+]
+
+export const OPTIONS_ASSIS = [
+  { valeur: 'moins-4h', label: 'Moins de 4 heures', hint: 'Bien' },
+  { valeur: '4h-8h', label: 'Entre 4 et 8 heures', hint: 'Ta posture en prend un coup' },
+  { valeur: 'plus-8h', label: 'Plus de 8 heures', hint: 'Gros potentiel ici' },
+]
+
+export const OPTIONS_POSTURE = [
+  { valeur: 'droit', label: 'Bien droit', hint: 'Bonne base' },
+  { valeur: 'un-peu-voute', label: 'Un peu voûté', hint: 'Des centimètres à récupérer' },
+  { valeur: 'voute', label: 'Souvent voûté', hint: 'Gros potentiel ici' },
+  { valeur: 'ne-sais-pas', label: 'Je ne sais pas', hint: 'On va le travailler quand même' },
+]
+
+export const OPTIONS_PROTEINES = [
+  { valeur: 'chaque-repas', label: 'Oui, à chaque repas', hint: 'Excellent' },
+  { valeur: 'un-repas', label: 'À un repas par jour', hint: 'À renforcer' },
+  { valeur: 'rarement', label: 'Rarement', hint: 'Sans doute ton premier manque' },
+  { valeur: 'ne-sais-pas', label: 'Je ne sais pas', hint: 'On va le voir ensemble' },
+]
+
+export const OPTIONS_LAITAGES = [
+  { valeur: '3-plus', label: '3 ou plus', hint: 'Bonne base de calcium' },
+  { valeur: '1-2', label: '1 ou 2', hint: 'Un peu juste' },
+  { valeur: 'aucun', label: 'Aucun', hint: 'On trouvera d’autres sources de calcium' },
+]
+
+export const OPTIONS_POURQUOI = [
+  { valeur: 'confiance', label: 'Avoir plus confiance en moi' },
+  { valeur: 'plaire', label: 'Plaire, faire bonne impression' },
+  { valeur: 'sport', label: 'Être meilleur en sport' },
+  { valeur: 'regard', label: 'Qu’on me regarde autrement' },
+  { valeur: 'max', label: 'Atteindre mon maximum' },
 ]
 
 export const OPTIONS_PROCHES = [
@@ -376,25 +464,27 @@ const ETAPES_GARCON = new Set(['pilosite-visage', 'voix', 'epaules', 'muscles'])
 /* Les quatre chapitres du parcours, affichés en tête d'écran (segments +
    libellé). Tout ce qui n'est ni « toi », ni « famille », ni « puberté »
    appartient au dernier chapitre, celui qui présente le plan. */
-export const CHAPITRES = ['Toi', 'Ta famille', 'Ta puberté', 'Ton plan']
+export const CHAPITRES = ['Toi', 'Famille', 'Sommeil', 'Sport', 'Alimentation']
 const CHAPITRE_DE = {
-  profil: 0, sexe: 0, age: 0, taille: 0, poids: 0, pointure: 0,
-  motivation: 0, sports: 0, 'exercice-freq': 0, sommeil: 0,
-  pere: 1, mere: 1, proches: 1,
-  regles: 2, 'pilosite-aisselles': 2, 'pilosite-visage': 2,
-  'vitesse-croissance': 2, epaules: 2, odeur: 2, acne: 2, muscles: 2,
-  voix: 2, 'croissance-lente': 2,
+  sexe: 0, age: 0, 'bonne-nouvelle': 0, taille: 0, 'taille-ideale': 0, poids: 0,
+  pere: 1, mere: 1, genetique: 1, 'vitesse-croissance': 1, regles: 1, voix: 1,
+  sommeil: 2, coucher: 2, telephone: 2,
+  'exercice-freq': 3, sports: 3, assis: 3, posture: 3,
+  proteines: 4, laitages: 4, 'verite-brutale': 4, pourquoi: 4, 'profil-croissance': 4,
 }
 
 export function chapitreDe(etape) {
-  return CHAPITRE_DE[etape] ?? 3
+  return CHAPITRE_DE[etape] ?? 4
 }
 
 export function etapesPour(reponses) {
   const fille = reponses?.sexe === 'F'
   return ORDRE_ETAPES.filter((etape) => {
-    if (fille && ETAPES_GARCON.has(etape)) return false
+    if (etape === 'voix') return !fille
     if (etape === 'regles') return fille && reponses.age >= 15
+    if (etape === 'bonne-nouvelle') return !fille && reponses.age >= 16
+    // Sans la taille d'au moins un parent, pas de taille génétique à montrer.
+    if (etape === 'genetique') return reponses.pere != null || reponses.mere != null
     return true
   })
 }
@@ -444,10 +534,10 @@ export const OPTIONS_MUSCLES = [
 ]
 
 export const OPTIONS_VOIX = [
-  { valeur: 'non', label: 'Pas de changement' },
-  { valeur: 'un-peu', label: 'Un peu plus grave' },
-  { valeur: 'complet', label: 'Complètement plus grave' },
-  { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
+  { valeur: 'non', label: 'Pas de changement', hint: 'Ta grande poussée est sans doute devant toi' },
+  { valeur: 'un-peu', label: 'Un peu plus grave', hint: 'Tu es en pleine croissance' },
+  { valeur: 'complet', label: 'Complètement plus grave', hint: 'La dernière ligne droite : chaque centimètre compte' },
+  { valeur: 'ne-sais-pas', label: 'Je ne sais pas', hint: 'Pas grave, on s’en sert pour affiner' },
 ]
 
 export const OPTIONS_CROISSANCE_LENTE = [
@@ -459,11 +549,11 @@ export const OPTIONS_CROISSANCE_LENTE = [
 ]
 
 export const OPTIONS_VITESSE_CROISSANCE = [
-  { valeur: "moins-2cm", label: "< 2 cm" },
-  { valeur: "2-5cm", label: "2-5 cm" },
-  { valeur: "6-9cm", label: "6-9 cm" },
-  { valeur: "plus-10cm", label: "10+ cm" },
-  { valeur: "ne-sais-pas", label: "Je ne sais pas" },
+  { valeur: "moins-2cm", label: "Moins de 2 cm", hint: "Ta croissance ralentit : chaque centimètre compte" },
+  { valeur: "2-5cm", label: "2 à 5 cm", hint: "Tu grandis encore" },
+  { valeur: "6-9cm", label: "6 à 9 cm", hint: "Tu es en pleine poussée" },
+  { valeur: "plus-10cm", label: "10 cm ou plus", hint: "Grosse poussée : c’est le moment de tout optimiser" },
+  { valeur: "ne-sais-pas", label: "Je ne sais pas", hint: "Pas grave, on estime à partir de ton âge" },
 ]
 
 /* ============================================================
@@ -480,6 +570,7 @@ export function ListeChoixUnique({ options, valeur, onChoisir, label }) {
           selected={valeur === option.valeur}
           onSelect={() => onChoisir(option.valeur)}
           title={option.label}
+          hint={option.hint}
           icon={option.icon}
         />
       ))}
@@ -964,3 +1055,100 @@ export function EcranPlusQueGenes({ onContinue }) {
   )
 }
 
+
+
+/* ============================================================
+   ÉCRANS AJOUTÉS (questionnaire « comment grandir »)
+   ============================================================ */
+
+/** Taille génétique : la formule de la taille cible parentale (Tanner),
+ *  sans arrondi trompeur. Sert de résultat gratuit au milieu du parcours. */
+export function tailleGenetique(reponses) {
+  const pere = reponses.pere ?? reponses.mere + 13
+  const mere = reponses.mere ?? reponses.pere - 13
+  const cible = reponses.sexe === 'F' ? (pere + mere - 13) / 2 : (pere + mere + 13) / 2
+  return Math.round(cible)
+}
+
+function Barre({ label, valeur, max, accent }) {
+  const part = Math.max(8, Math.min(100, (valeur / max) * 100))
+  return (
+    <div className="genetique-barre">
+      <span className="genetique-barre-label">{label}</span>
+      <span className="genetique-barre-piste">
+        <span className={'genetique-barre-plein' + (accent ? ' is-accent' : '')} style={{ width: part + '%' }} />
+      </span>
+      <span className="genetique-barre-valeur">{valeur} cm</span>
+    </div>
+  )
+}
+
+export function EcranGenetique({ reponses }) {
+  const cible = tailleGenetique(reponses)
+  const ecart = cible - reponses.taille
+  const max = Math.max(cible, reponses.taille, reponses.pere || 0, reponses.mere || 0) + 5
+  return (
+    <div className="ecran-genetique">
+      <p className="ecran-genetique-chiffre">{cible} cm</p>
+      <p className="ecran-genetique-label">Ta taille génétique estimée</p>
+      <div className="ecran-genetique-barres">
+        {reponses.pere != null && <Barre label="Père" valeur={reponses.pere} max={max} />}
+        {reponses.mere != null && <Barre label="Mère" valeur={reponses.mere} max={max} />}
+        <Barre label="Toi" valeur={reponses.taille} max={max} accent />
+      </div>
+      <p className="ecran-genetique-texte">
+        {ecart > 0
+          ? `Ta génétique te place à ${cible} cm, soit ${ecart} cm au-dessus de ta taille actuelle. Les prochaines questions montrent ce qui peut t’empêcher de les atteindre.`
+          : `Tu es déjà au niveau de ta taille génétique. Les prochaines questions montrent comment aller chercher le maximum.`}
+      </p>
+    </div>
+  )
+}
+
+export function EcranBonneNouvelle() {
+  return (
+    <div className="ecran-bonne-nouvelle">
+      <p className="ecran-bonne-nouvelle-chiffre">18-21 ans</p>
+      <p className="ecran-bonne-nouvelle-texte">
+        C’est l’âge où les cartilages de croissance des garçons se ferment, souvent. Beaucoup pensent avoir fini de grandir à 16 ou 17 ans, alors qu’il leur reste de la marge.
+      </p>
+    </div>
+  )
+}
+
+const LIBELLES_COUCHER = { 'avant-22h': 'Avant 22 h', '22h-23h': '22 h - 23 h', '23h-minuit': '23 h - minuit', 'apres-minuit': 'Après minuit' }
+
+export function EcranProfilCroissance({ reponses }) {
+  const lignes = [
+    ['Âge', `${Math.floor(reponses.age)} ans`],
+    ['Taille actuelle', `${reponses.taille} cm`],
+    ['Objectif', `${reponses.tailleIdeale} cm`],
+    ['Sommeil', `${reponses.sommeil} h par nuit${reponses.coucher ? ' · ' + LIBELLES_COUCHER[reponses.coucher] : ''}`],
+    ['Sport', reponses.exerciceFreq ? `${reponses.exerciceFreq} h par semaine` : '—'],
+  ]
+  if (reponses.pere != null || reponses.mere != null) {
+    lignes.splice(3, 0, ['Taille génétique', `${tailleGenetique(reponses)} cm`])
+  }
+  return (
+    <ul className="ecran-profil">
+      {lignes.map(([label, valeur]) => (
+        <li key={label} className="ecran-profil-ligne">
+          <span className="ecran-profil-label">{label}</span>
+          <span className="ecran-profil-valeur">{valeur}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+/** Ligne de verdict sous la date de naissance, comme heightfuel. */
+export function verdictAge(age, sexe) {
+  if (age == null) return null
+  if (age < 16) return 'Ta croissance bat son plein : ton potentiel est au maximum'
+  if (age < 19) return sexe === 'F'
+    ? 'La dernière ligne droite : chaque centimètre compte'
+    : 'Beaucoup pensent avoir fini, mais c’est souvent la dernière ligne droite'
+  return sexe === 'F'
+    ? 'Ta posture peut encore te faire paraître plus grande'
+    : 'Chez les garçons, ça peut encore bouger. Et ta posture se travaille'
+}

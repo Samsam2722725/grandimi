@@ -200,6 +200,23 @@ export function fusionnerResultatPrediction(reponses, email, resultatApi) {
     sleep_hours_per_night: reponses.sommeil ?? 0,
     exercise_min_per_day: minutesExerciceParJour(reponses.exerciceFreq),
     taille_reve: reponses.tailleIdeale,
+    /* Réponses « comment grandir » : servent au diagnostic (ce qui te
+       freine) et au paywall, qui les reprend mot pour mot. */
+    habitudes: {
+      coucher: reponses.coucher,
+      telephone: reponses.telephone,
+      assis: reponses.assis,
+      posture: reponses.posture,
+      proteines: reponses.proteines,
+      laitages: reponses.laitages,
+      pourquoi: reponses.pourquoi,
+      exercice_freq: reponses.exerciceFreq,
+      sports: reponses.sports,
+      vitesse_croissance: reponses.vitesseCroissance,
+      voix: reponses.voix,
+      pere_cm: reponses.pere,
+      mere_cm: reponses.mere,
+    },
     // Le plan calcule les protéines sur le poids : sans lui, il
     // recevait undefined et annonçait 0 g par jour.
     weight_kg: reponses.poids,
