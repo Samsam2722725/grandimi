@@ -23,7 +23,7 @@ export const OFFRES = [
     reduit: 29.99,
     normal: 39.99,
     facture: 'tous les 3 mois',
-    avantages: ['Tout le 1 mois', '+ Ta taille adulte estimée'],
+    avantages: ['Tout le 1 mois', 'Ta taille adulte estimée'],
     populaire: true,
   },
   {
@@ -33,7 +33,7 @@ export const OFFRES = [
     reduit: 59.99,
     normal: 79.99,
     facture: 'une seule fois',
-    avantages: ['Tout le 3 mois', '+ Paie une fois, garde tout pour toujours'],
+    avantages: ['Tout le 3 mois', 'Paie une fois, garde tout pour toujours'],
   },
 ]
 

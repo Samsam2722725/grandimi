@@ -1132,3 +1132,25 @@
 .pw3-obtiens li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.45; color: #a39d97; }
 .pw3-obtiens li svg { flex-shrink: 0; margin-top: 3px; color: #ff6a2b; }
 .pw3-obtiens strong { display: block; color: #f4efe9; font-size: 15px; }
+
+/* ---------- Téléphone : cartes d'offre lisibles, barre du bas fine ----------
+   Les avantages passent de pastilles (qui se cassaient sur 2-3 lignes) à une
+   liste cochée, comme « Ce que tu obtiens ». La barre du bas garde ses trois
+   éléments (bouton, facture, parent) mais sur moins de hauteur. */
+.pw3 .pw3-offre-avantages { flex-direction: column; flex-wrap: nowrap; gap: 3px; margin-top: 6px; }
+.pw3 .pw3-offre-avantages span {
+  position: relative; padding: 0 0 0 18px; border: 0; border-radius: 0;
+  font-size: 13px; line-height: 1.35; color: #d9d3cd;
+}
+.pw3 .pw3-offre-avantages span::before {
+  content: '✓'; position: absolute; left: 0; top: 0; color: #ff6a2b; font-weight: 800;
+}
+.pw3 .pw3-offre.is-choisie .pw3-offre-avantages span { border: 0; color: #f4efe9; }
+.pw3 .pw3-offre-droite { align-self: flex-start; padding-top: 2px; }
+
+.paywall:has(.pw3) .funnel-footer .funnel-cta { min-height: 54px; }
+.paywall:has(.pw3) .pw2-facture { margin-top: 2px; font-size: 11.5px; }
+.paywall:has(.pw3) .funnel-footer .paywall-parent-cta { padding: 2px 6px; font-size: 13px; white-space: nowrap; }
+/* Prix par jour en haut à droite, avantages sur toute la largeur. */
+.pw3 .pw3-offre-droite { position: absolute; top: 16px; right: 16px; padding-top: 0; }
+.pw3 .pw3-offre-nom, .pw3 .pw3-offre-total { padding-right: 104px; }

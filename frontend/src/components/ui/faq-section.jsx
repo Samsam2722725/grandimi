@@ -7,16 +7,16 @@ import { cn } from '@/lib/utils'
 
 const FaqSection = React.forwardRef(
   ({ className, title, description, items, contactInfo, ...props }, ref) => (
-    <section ref={ref} className={cn('w-full py-20', className)} {...props}>
+    <section ref={ref} className={cn('w-full py-14 sm:py-20', className)} {...props}>
       <div className="mx-auto w-full max-w-3xl px-5">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.5 }}
-          className="mx-auto mb-12 max-w-2xl text-center"
+          className="mx-auto mb-8 max-w-2xl text-center sm:mb-12"
         >
-          <h2 className="mb-3 font-display text-[clamp(30px,5vw,44px)] leading-[1.1] font-medium tracking-[-0.02em] text-ink">
+          <h2 className="mb-3 font-['Syne',sans-serif] text-[clamp(28px,7vw,44px)] leading-[1.05] font-extrabold tracking-[-0.035em] text-[#f4efe9]">
             {title}
           </h2>
           {description && <p className="text-base text-muted-foreground">{description}</p>}
@@ -74,7 +74,7 @@ const FaqItem = ({ question, answer, index }) => {
         onClick={() => setIsOpen((v) => !v)}
         aria-expanded={isOpen}
         aria-controls={panelId}
-        className="flex w-full items-center justify-between gap-4 px-6 py-4 text-left"
+        className="flex min-h-14 w-full items-center justify-between gap-4 px-5 py-4 text-left"
       >
         <span
           className={cn(
@@ -129,7 +129,7 @@ const FaqItem = ({ question, answer, index }) => {
         )}
       >
         <div className="overflow-hidden">
-          <p className="px-6 pt-1 pb-5 text-[15px] leading-relaxed text-muted-foreground">
+          <p className="px-5 pt-1 pb-5 text-[15px] leading-relaxed text-muted-foreground">
             {answer}
           </p>
         </div>
