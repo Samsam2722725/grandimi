@@ -156,6 +156,11 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             >
               Je commence →
             </button>
+            <p className="rise mt-5 flex items-center justify-center gap-3 whitespace-nowrap font-['Spline_Sans_Mono',monospace] text-[11px] font-medium tracking-[0.2em] text-[#ff7a45] uppercase">
+              <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
+              Méthode basée sur la science
+              <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
+            </p>
 
             {analyseEnCours && !abonne && (
               <button type="button" className="bouton-reprendre mt-5" onClick={onReprendre}>
@@ -225,12 +230,6 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 </div>
               ))}
             </div>
-
-            <p className="mt-8 flex items-center justify-center gap-3 whitespace-nowrap font-['Spline_Sans_Mono',monospace] text-[11px] font-medium tracking-[0.2em] text-[#ff7a45] uppercase">
-              <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
-              Méthode basée sur la science
-              <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
-            </p>
           </div>
         </section>
 
