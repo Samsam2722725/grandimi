@@ -121,12 +121,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             className="pointer-events-none absolute -top-48 left-1/2 size-[640px] -translate-x-1/2 rounded-full bg-[#ff5a1f] opacity-[0.14] blur-[150px]"
           />
           <div className="relative mx-auto flex w-full max-w-2xl flex-col items-center text-center">
-            <p className="rise flex items-center gap-3 font-['Spline_Sans_Mono',monospace] text-[11px] font-medium tracking-[0.2em] text-[#ff7a45] uppercase">
-              <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
-              Méthode basée sur la science
-              <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
-            </p>
-            <p className="rise mt-2 inline-flex items-center gap-2 rounded-full border border-[#ff6a2b]/40 bg-[#ff6a2b]/[0.1] px-4 py-2 text-[14px] font-bold text-[#ff7a45]">
+            <p className="rise inline-flex items-center gap-2 rounded-full border border-[#ff6a2b]/40 bg-[#ff6a2b]/[0.1] px-4 py-2 text-[14px] font-bold text-[#ff7a45]">
               <span aria-hidden="true" className="relative flex size-2">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#ff6a2b] opacity-70" />
                 <span className="relative inline-flex size-2 rounded-full bg-[#ff6a2b]" />
@@ -230,6 +225,12 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 </div>
               ))}
             </div>
+
+            <p className="mt-8 flex items-center justify-center gap-3 whitespace-nowrap font-['Spline_Sans_Mono',monospace] text-[11px] font-medium tracking-[0.2em] text-[#ff7a45] uppercase">
+              <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
+              Méthode basée sur la science
+              <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
+            </p>
           </div>
         </section>
 
