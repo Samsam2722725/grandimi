@@ -183,7 +183,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               {[
                 ['200+', 'analyses faites'],
                 ['2 min', 'pour commencer'],
-                ['100 %', 'fait pour toi'],
+                ['12-21 ans', 'l’âge où tu peux encore grandir'],
               ].map(([chiffre, texte], i) => (
                 <div key={texte} className={`py-5 ${i > 0 ? 'border-l border-white/10' : ''}`}>
                   <p className="font-['Syne',sans-serif] text-[20px] leading-none font-extrabold text-[#ff6a2b]">{chiffre}</p>
