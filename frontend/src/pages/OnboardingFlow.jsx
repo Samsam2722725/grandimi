@@ -59,7 +59,6 @@ import {
   EcranEtudesPubliees,
   EcranAvisUtilisateurs,
   EcranPlusQueGenes,
-  EcranGenetique,
   EcranBonneNouvelle,
   EcranProfilCroissance,
   verdictAge,
@@ -161,7 +160,7 @@ function basculerDansListe(liste, valeur, exclusif) {
 const EMAIL_VALIDE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const ETAPES_ANALYSE = [
-  { label: 'Ta taille génétique', seuil: 20 },
+  { label: 'Ta taille adulte estimée', seuil: 20 },
   { label: 'Ton sommeil', seuil: 40 },
   { label: 'Ton sport et ta posture', seuil: 60 },
   { label: 'Ton alimentation', seuil: 80 },
@@ -838,8 +837,6 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             options={OPTIONS_POURQUOI}
           />
         )
-      case 'genetique':
-        return <EcranGenetique reponses={reponses} />
       case 'bonne-nouvelle':
         return <EcranBonneNouvelle age={reponses.age} />
       case 'profil-croissance':

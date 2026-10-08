@@ -49,7 +49,6 @@ export const ORDRE_ETAPES = [
   // Famille
   'pere',
   'mere',
-  'genetique',
   'vitesse-croissance',
   'regles',
   'voix',
@@ -169,11 +168,11 @@ export const TEXTES_ETAPE = {
   },
   pere: {
     titre: 'Combien mesure ton père ?',
-    sousTitre: 'Avec tes parents, on calcule ta taille génétique',
+    sousTitre: 'La taille de tes parents compte beaucoup dans la tienne',
   },
   mere: {
     titre: 'Combien mesure ta mère ?',
-    sousTitre: 'Avec tes parents, on calcule ta taille génétique',
+    sousTitre: 'La taille de tes parents compte beaucoup dans la tienne',
   },
   proches: {
     titre: 'As-tu des proches plus grands que ton père ?',
@@ -483,8 +482,6 @@ export function etapesPour(reponses) {
     if (etape === 'voix') return !fille
     if (etape === 'regles') return fille && reponses.age >= 15
     if (etape === 'bonne-nouvelle') return !fille && reponses.age >= 16
-    // Sans la taille d'au moins un parent, pas de taille génétique à montrer.
-    if (etape === 'genetique') return reponses.pere != null || reponses.mere != null
     return true
   })
 }
@@ -1061,53 +1058,8 @@ export function EcranPlusQueGenes({ onContinue }) {
    ÉCRANS AJOUTÉS (questionnaire « comment grandir »)
    ============================================================ */
 
-/** Taille génétique : la formule de la taille cible parentale (Tanner),
- *  sans arrondi trompeur. Sert de résultat gratuit au milieu du parcours. */
-export function tailleGenetique(reponses) {
-  const pere = reponses.pere ?? reponses.mere + 13
-  const mere = reponses.mere ?? reponses.pere - 13
-  const cible = reponses.sexe === 'F' ? (pere + mere - 13) / 2 : (pere + mere + 13) / 2
-  return Math.round(cible)
-}
 
 
-/* Copié du site heightfuel.com : le « plafond génétique », c'est-à-dire le
-   maximum que les gènes permettent — pas une prédiction. C'est l'écart
-   entre ce plafond et la taille du jour qui donne envie de continuer. */
-export function EcranGenetique({ reponses }) {
-  const cible = tailleGenetique(reponses)
-  const ecart = cible - reponses.taille
-  const barres = [
-    ...(reponses.pere != null ? [['Père', reponses.pere]] : []),
-    ...(reponses.mere != null ? [['Mère', reponses.mere]] : []),
-    ['Toi aujourd’hui', reponses.taille],
-  ]
-  const max = Math.max(cible, ...barres.map(([, v]) => v))
-  const min = Math.min(...barres.map(([, v]) => v)) - 20
-  const largeur = (v) => Math.max(12, ((v - min) / (max - min)) * 100)
-  return (
-    <div className="ecran-genetique">
-      <p className="ecran-genetique-chiffre">{cible} cm</p>
-      <p className="ecran-genetique-label">Ton plafond génétique</p>
-      <div className="genetique-barres">
-        {barres.map(([label, v], i) => (
-          <div key={label} className={'genetique-ligne' + (i === barres.length - 1 ? ' is-toi' : '')}>
-            <span className="genetique-ligne-label">{label}</span>
-            <span className="genetique-ligne-piste">
-              <span className="genetique-ligne-plein" style={{ width: largeur(v) + '%', animationDelay: 0.15 + i * 0.12 + 's' }} />
-            </span>
-            <span className="genetique-ligne-cm">{v} cm</span>
-          </div>
-        ))}
-      </div>
-      <p className="ecran-genetique-texte">
-        {ecart > 0
-          ? `Tes gènes te permettent d’aller jusqu’à ${cible} cm, soit ${ecart} cm au-dessus de toi. Les prochaines questions montrent ce qui peut t’en empêcher.`
-          : `Tu es déjà au niveau de ton plafond génétique. Les prochaines questions montrent comment aller chercher le maximum.`}
-      </p>
-    </div>
-  )
-}
 
 export function EcranBonneNouvelle({ age }) {
   const debut = 12
@@ -1143,9 +1095,6 @@ export function EcranProfilCroissance({ reponses }) {
     ['Sommeil', `${reponses.sommeil} h par nuit${reponses.coucher ? ' · ' + LIBELLES_COUCHER[reponses.coucher] : ''}`],
     ['Sport', reponses.exerciceFreq ? `${reponses.exerciceFreq} h par semaine` : '—'],
   ]
-  if (reponses.pere != null || reponses.mere != null) {
-    lignes.splice(3, 0, ['Taille génétique', `${tailleGenetique(reponses)} cm`])
-  }
   return (
     <ul className="ecran-profil">
       {lignes.map(([label, valeur]) => (
