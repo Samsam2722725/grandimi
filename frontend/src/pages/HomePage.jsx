@@ -209,16 +209,16 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             {/* Grille à la TrendSaaS : ce qu'on reçoit, en chiffres vrais. */}
             <div className="mt-10 grid grid-cols-2 border-t border-white/10">
               {[
-                ['20+', 'questions sur ta situation réelle'],
-                ['4', 'piliers : posture, sommeil, sport, alimentation'],
-                ['7j/7', 'ta routine du jour, à cocher'],
-                ['1', 'nouveau plan chaque mois'],
+                ['Parais plus grand', 'dès les premières semaines, grâce à ta posture'],
+                ['Zéro cm perdu', 'on corrige ce qui freine ta croissance'],
+                ['Grandis la nuit', 'ton sommeil réglé pour grandir'],
+                ['Fait pour toi', 'un plan construit sur tes réponses'],
               ].map(([chiffre, texte], i) => (
                 <div
                   key={texte}
                   className={`border-b border-white/10 py-7 ${i % 2 === 0 ? 'border-r pr-4' : 'pl-5'}`}
                 >
-                  <p className="font-sans text-[36px] leading-none font-bold tracking-[-0.03em] text-[#f4efe9]">{chiffre}</p>
+                  <p className="font-sans text-[22px] leading-[1.1] font-bold tracking-[-0.02em] text-[#f4efe9]">{chiffre}</p>
                   <p className="mt-3 text-[14px] leading-snug text-[#8a847e]">{texte}</p>
                 </div>
               ))}
