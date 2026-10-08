@@ -206,8 +206,8 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             {/* Grille à la TrendSaaS : ce qu'on reçoit, en chiffres vrais. */}
             <div className="mt-10 grid grid-cols-2 border-t border-white/10">
               {[
-                ['Aucun centimètre perdu', 'On trouve ce qui bloque ta croissance. Et on le règle.'],
-                ['Ton plan sur mesure', 'Chaque jour, exactement quoi faire pour grandir. Calculé pour toi.'],
+                ['Aucun centimètre perdu', 'Ton diagnostic : ce qui bloque ta croissance. Et on le règle.'],
+                ['Ton plan personnalisé', 'Chaque jour, quoi faire : exercices, posture, sommeil, alimentation.'],
                 ['Plus grand, tout de suite', 'Ta posture te vole des centimètres. On te les rend.'],
                 ['Ta taille future', 'Découvre jusqu’où tu peux monter.'],
               ].map(([chiffre, texte], i) => (

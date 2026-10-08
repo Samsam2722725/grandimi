@@ -164,7 +164,7 @@ const ETAPES_ANALYSE = [
   { label: 'Ton sommeil', seuil: 40 },
   { label: 'Ton sport et ta posture', seuil: 60 },
   { label: 'Ton alimentation', seuil: 80 },
-  { label: 'Ton plan du jour', seuil: 100 },
+  { label: 'Ton plan personnalisé', seuil: 100 },
 ]
 
 const DUREE_MONTEE_MS = 11000

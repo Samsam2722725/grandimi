@@ -36,7 +36,7 @@ import { checkoutOuvert, parentPageVue } from '../lib/analytics';
 
 const AVANTAGES = [
   'Ce qui freine sa croissance, et comment le corriger',
-  'Son plan du jour : exercices, posture, sommeil, alimentation',
+  'Son plan personnalisé : exercices, posture, sommeil, alimentation',
   'Son suivi : il se mesure chaque semaine',
   'Résiliable en ligne à tout moment',
 ];

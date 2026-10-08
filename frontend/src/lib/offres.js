@@ -14,7 +14,7 @@ export const OFFRES = [
     reduit: 14.99,
     normal: 19.99,
     facture: 'par mois',
-    avantages: ['Ton diagnostic : ce qui te freine', 'Ton plan du jour : exercices, posture, sommeil, alimentation', 'Ton guide pour grandir'],
+    avantages: ['Ton diagnostic : ce qui te freine', 'Ton plan personnalisé : exercices, posture, sommeil, alimentation', 'Ton guide pour grandir'],
   },
   {
     duree: 'm3',

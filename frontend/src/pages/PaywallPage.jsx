@@ -528,7 +528,8 @@ function PaywallPage({ onBackHome }) {
           <ul>
             {[
               ['Ton diagnostic : ce qui te freine', 'Ce qui freine ta croissance, d’après tes réponses.'],
-              ['Ton plan du jour : exercices, posture, sommeil, alimentation', 'Chaque jour, exactement quoi faire pour grandir. Tu coches, tu avances.'],
+              ['Ton plan personnalisé : exercices, posture, sommeil, alimentation', 'Chaque jour, exactement quoi faire pour grandir. Tu coches, tu avances.'],
+              ['Plus grand tout de suite : ta posture corrigée', 'Ta posture te vole des centimètres. On te les rend.'],
               ['Ton guide pour grandir', 'Tout ce qui fait grandir, expliqué simplement.'],
               ['Ta taille adulte estimée', 'Avec les offres 3 mois et À vie.'],
               ['Ton coach perso 24 h/24', 'Avec l’offre À vie.'],
