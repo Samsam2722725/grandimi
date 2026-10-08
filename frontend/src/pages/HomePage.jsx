@@ -213,6 +213,38 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             </div>
           </div>
         </section>
+        {/* Repères : uniquement des faits vrais sur le produit. */}
+        <section className="px-6 pb-16 sm:px-8">
+          <div className="mx-auto w-full max-w-4xl">
+            <p className="text-center font-mono text-[12px] tracking-[0.2em] text-[color:var(--text-meta)] uppercase">
+              Les références sur lesquelles on s’appuie
+            </p>
+            <p className="mt-5 flex flex-wrap justify-center gap-x-8 gap-y-3 font-display text-lg text-[color:var(--text-secondary)]">
+              <span>OMS</span>
+              <span>CDC</span>
+              <span>Khamis-Roche</span>
+              <span>ANSES</span>
+            </p>
+
+            <div className="mt-12 grid grid-cols-2 border-t border-[color:var(--color-frost-gray)]">
+              {[
+                ['20+', 'questions sur ta situation réelle'],
+                ['2 min', 'pour faire ton analyse'],
+                ['4', 'piliers : sommeil, sport, alimentation, posture'],
+                ['1', 'nouveau plan chaque mois'],
+              ].map(([chiffre, texte], i) => (
+                <div
+                  key={texte}
+                  className={`border-b border-[color:var(--color-frost-gray)] py-7 ${i % 2 === 0 ? 'border-r pr-4' : 'pl-5'}`}
+                >
+                  <p className="font-display text-[34px] leading-none font-medium text-ink">{chiffre}</p>
+                  <p className="mt-2 text-[14px] leading-snug text-[color:var(--text-meta)]">{texte}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* FAQ : les questions qui bloquent avant de commencer. */}
         <div id="faq" className="scroll-mt-24">
           <Suspense fallback={<div className="h-96" />}>
