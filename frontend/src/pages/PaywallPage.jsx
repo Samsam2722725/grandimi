@@ -430,6 +430,45 @@ function PaywallPage({ onBackHome }) {
      — c'est le défaut le moins coûteux des deux. */
   const proposerLeParent = prediction.profil !== 'parent'
 
+  const blocOffres = (
+    <section className="pw3-offres" role="radiogroup" aria-label="Choisir ton plan">
+      {OFFRES.map((o) => {
+        const choisie = planChoisi === o.duree
+        return (
+          <button
+            key={o.duree}
+            type="button"
+            role="radio"
+            aria-checked={choisie}
+            className={`pw3-offre ${choisie ? 'is-choisie' : ''}`}
+            onClick={() => {
+              setPlanChoisi(o.duree)
+              mesurerPlanChoisi(o.duree)
+            }}
+          >
+            {o.populaire && <span className="pw3-offre-bandeau">Le plus choisi</span>}
+            <span className="pw3-offre-coche" aria-hidden="true">{choisie && <Check size={14} strokeWidth={3} />}</span>
+            <span className="pw3-offre-gauche">
+              <span className="pw3-offre-nom">{o.nom}</span>
+              <span className="pw3-offre-total">
+                {reductionActive && <s>{euros(o.normal)}</s>} {euros(prixOffre(o))} {o.facture}
+              </span>
+              <span className="pw3-offre-avantages">
+                {o.avantages.map((a) => (
+                  <span key={a}>{a}</span>
+                ))}
+              </span>
+            </span>
+            <span className="pw3-offre-droite">
+              <span className="pw3-offre-jour">{euros(prixOffre(o) / o.jours)}</span>
+              <span className="pw3-offre-par">/ jour</span>
+            </span>
+          </button>
+        )
+      })}
+    </section>
+  )
+
   return (
     <div className="night paywall">
       {/* Mise en page calquée sur le paywall GoTall, à la demande du
@@ -467,42 +506,7 @@ function PaywallPage({ onBackHome }) {
         </p>
 
         <h2 className="pw3-choisis">Choisis ton plan.</h2>
-        <section className="pw3-offres" role="radiogroup" aria-label="Choisir ton plan">
-          {OFFRES.map((o) => {
-            const choisie = planChoisi === o.duree
-            return (
-              <button
-                key={o.duree}
-                type="button"
-                role="radio"
-                aria-checked={choisie}
-                className={`pw3-offre ${choisie ? 'is-choisie' : ''}`}
-                onClick={() => {
-                  setPlanChoisi(o.duree)
-                  mesurerPlanChoisi(o.duree)
-                }}
-              >
-                {o.populaire && <span className="pw3-offre-bandeau">Le plus choisi</span>}
-                <span className="pw3-offre-coche" aria-hidden="true">{choisie && <Check size={14} strokeWidth={3} />}</span>
-                <span className="pw3-offre-gauche">
-                  <span className="pw3-offre-nom">{o.nom}</span>
-                  <span className="pw3-offre-total">
-                    {reductionActive && <s>{euros(o.normal)}</s>} {euros(prixOffre(o))} {o.facture}
-                  </span>
-                  <span className="pw3-offre-avantages">
-                    {o.avantages.map((a) => (
-                      <span key={a}>{a}</span>
-                    ))}
-                  </span>
-                </span>
-                <span className="pw3-offre-droite">
-                  <span className="pw3-offre-jour">{euros(prixOffre(o) / o.jours)}</span>
-                  <span className="pw3-offre-par">/ jour</span>
-                </span>
-              </button>
-            )
-          })}
-        </section>
+        {blocOffres}
 
         <div className="paywall-paiement">
           <p className="paywall-paiement-titre">
@@ -522,13 +526,38 @@ function PaywallPage({ onBackHome }) {
           </p>
         )}
 
+        {/* Comme Taller et TrendSaaS : ce que tu obtiens, juste après les prix. */}
+        <section className="pw3-obtiens">
+          <h2>Ce que tu obtiens</h2>
+          <ul>
+            {[
+              ['Ton diagnostic', 'Ce qui freine ta croissance, d’après tes réponses : sommeil, sport, alimentation, posture.'],
+              ['Ton programme jour par jour', 'Chaque jour, exactement quoi faire pour grandir. Tu coches, tu avances.'],
+              ['Tes exercices du jour', 'Étirements, posture, mouvements : quelques minutes par jour.'],
+              ['Ton sommeil', 'Ton heure de coucher avancée petit à petit, pour que ça tienne.'],
+              ['Ton alimentation pour grandir', 'Ce qu’il faut dans ton assiette pour construire tes os.'],
+              ['Ton suivi', 'Ta courbe chaque semaine et ta série 🔥 de jours tenus.'],
+            ].map(([titre, texte]) => (
+              <li key={titre}>
+                <Check size={16} strokeWidth={3} aria-hidden="true" />
+                <span>
+                  <strong>{titre}</strong>
+                  {texte}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* FAQ dans le style TrendSaaS : les objections, avec ses mots à lui. */}
         <section className="pw3-faq">
           <h2>Les questions qu’on nous pose</h2>
           {[
+            ['J’ai 17 ans, ça peut encore marcher ?', 'Oui. Chez les garçons, la croissance continue souvent jusqu’à 18-21 ans. Et ta posture, elle, se travaille à tout âge.'],
+            ['En quoi c’est différent des conseils trouvés sur TikTok ?', 'Les vidéos donnent les mêmes conseils à tout le monde. Ton plan part de tes réponses et te dit quoi faire, chaque jour, dans le bon ordre.'],
+            ['Combien de temps avant de voir quelque chose ?', 'Ta posture, dès les premières semaines. Ta croissance, tu la suis sur ta courbe chaque semaine.'],
+            ['Comment je suis sûr d’avoir des résultats ?', 'Ton plan corrige précisément ce qui te freine. Tu te mesures chaque semaine : tu vois toi-même si ça avance.'],
             ['Je peux arrêter quand je veux ?', 'Oui. Tu résilies en un clic depuis ton compte, sans justification.'],
-            ['Quand je vois des résultats ?', 'Ta posture, dès les premières semaines. Ta croissance, tu la suis sur ta courbe chaque semaine.'],
-            ['Un parent peut payer ?', 'Oui : envoie-lui le lien de paiement, ton plan s’ouvre chez toi.'],
-            ['C’est quoi la différence avec des vidéos TikTok ?', 'Les vidéos donnent les mêmes conseils à tout le monde. Ton plan part de tes réponses et te dit quoi faire chaque jour.'],
           ].map(([q, r]) => (
             <details key={q} className="pw3-faq-item">
               <summary>{q}</summary>
@@ -536,6 +565,10 @@ function PaywallPage({ onBackHome }) {
             </details>
           ))}
         </section>
+
+        {/* Comme TrendSaaS : les offres reviennent en bas de page. */}
+        <h2 className="pw3-choisis">Reprends là où tu en étais</h2>
+        {blocOffres}
 
         {lienParent && proposerLeParent && (
           <section className="paywall-parent" ref={blocParentRef}>

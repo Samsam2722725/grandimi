@@ -1124,3 +1124,10 @@
 .pw3-faq-item summary::after { content: ' +'; color: #ff6a2b; }
 .pw3-faq-item[open] summary::after { content: ' −'; }
 .pw3-faq-item p { margin: 8px 0 0; font-size: 14px; line-height: 1.5; color: #a39d97; }
+
+.pw3-obtiens { margin-top: 28px; text-align: left; }
+.pw3-obtiens h2 { margin: 0 0 12px; font-size: 20px; font-weight: 800; color: #f4efe9; }
+.pw3-obtiens ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.pw3-obtiens li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.45; color: #a39d97; }
+.pw3-obtiens li svg { flex-shrink: 0; margin-top: 3px; color: #ff6a2b; }
+.pw3-obtiens strong { display: block; color: #f4efe9; font-size: 15px; }

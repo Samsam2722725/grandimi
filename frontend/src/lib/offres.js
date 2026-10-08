@@ -14,7 +14,7 @@ export const OFFRES = [
     reduit: 14.99,
     normal: 19.99,
     facture: 'par mois',
-    avantages: ['Ta stratégie', 'Ton plan du jour'],
+    avantages: ['Ce qui te freine et comment le corriger', 'Ton plan du jour : exercices, posture, sommeil, alimentation', 'Ton guide pour grandir'],
   },
   {
     duree: 'm3',
@@ -23,7 +23,7 @@ export const OFFRES = [
     reduit: 29.99,
     normal: 39.99,
     facture: 'tous les 3 mois',
-    avantages: ['Tout le 1 mois', '+ Ta taille adulte estimée', '+ Ton guide pour grandir'],
+    avantages: ['Tout le 1 mois', '+ Ta taille adulte estimée'],
     populaire: true,
   },
   {
@@ -33,7 +33,7 @@ export const OFFRES = [
     reduit: 69.99,
     normal: 99.99,
     facture: 'par an',
-    avantages: ['Tout le 3 mois', '+ Ton coach perso 24 h/24 (bientôt inclus)'],
+    avantages: ['Tout le 3 mois', '+ Ton coach perso 24 h/24'],
   },
 ]
 
