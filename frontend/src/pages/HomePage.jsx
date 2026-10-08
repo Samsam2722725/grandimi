@@ -1,4 +1,4 @@
-import { ArrowRight, Ruler, Star } from 'lucide-react'
+import { Ruler, Star } from 'lucide-react'
 
 import { useEffect, useState, lazy, Suspense } from 'react'
 
@@ -122,33 +122,6 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               Pas de sélecteur de langue tant qu'il n'y a qu'une langue : un
               menu déroulant qui ne propose rien est un bouton mort, et un
               drapeau « FR » laisse entendre qu'une version anglaise existe. */}
-          <nav className="hidden items-center gap-8 md:flex">
-            <a
-              href="#fonctionnalites"
-              className="text-[13px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase transition-colors hover:text-ink"
-            >
-              Fonctionnalités
-            </a>
-            <a
-              href="#faq"
-              className="text-[13px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase transition-colors hover:text-ink"
-            >
-              FAQ
-            </a>
-            {/* Troisième entrée, et la seule qui sorte de la page.
-                Les deux ancres au-dessus déplacent le visiteur DANS l'accueil ;
-                six pages de contenu existent désormais à côté, et rien en haut
-                de l'écran ne laissait deviner qu'elles existaient — le seul
-                chemin passait par le pied de page, entre « CGV » et
-                « Confidentialité ». Une entrée de menu suffit à ouvrir le
-                groupe, puisque ces six pages se lient toutes entre elles. */}
-            <a
-              href="/questions-croissance/"
-              className="text-[13px] font-semibold tracking-[0.06em] text-[color:var(--text-secondary)] uppercase transition-colors hover:text-ink"
-            >
-              Guides
-            </a>
-          </nav>
 
           {/* Sous 640px, les deux boutons pleins ne tenaient pas : la barre
               débordait de 10px et « Se connecter » passait par-dessus le
@@ -165,14 +138,6 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               {abonne ? 'Mon plan' : 'Se connecter'}
             </button>
 
-            <button
-              type="button"
-              onClick={() => demarrer('en-tete')}
-              className="hidden min-h-11 shrink-0 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:inline-flex sm:px-6"
-            >
-              Commencer
-              <ArrowRight className="hidden size-4 sm:block" aria-hidden="true" />
-            </button>
           </div>
         </div>
       </header>
@@ -285,9 +250,8 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 className="rise night-title-gradient mt-7 font-display text-[clamp(44px,7.2vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-balance"
                 style={{ animationDelay: '80ms' }}
               >
-                Grandis au maximum
-                de ton potentiel avec{' '}
-                <span className="text-[color:var(--color-brand-display)]">Grandimi</span>.
+                Atteins ta{' '}
+                <span className="text-[color:var(--color-brand-display)]">taille maximale</span>.
               </h1>
 
               {/* Sous-titre qui se défait et se refait toutes les 3 secondes.
@@ -312,10 +276,8 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 className="rise mt-6 max-w-xl text-[clamp(17px,2.4vw,21px)] leading-[1.5] text-pretty text-[color:var(--text-secondary)]"
                 style={{ animationDelay: '100ms' }}
               >
-                Ta génétique fixe la limite. Ton sommeil, ton alimentation et tes exercices
-                décident si tu l’atteins. Grandimi te donne{' '}
-                <span className="text-[color:var(--color-brand-display)] font-semibold">ton plan pour grandir</span>
-                , jour après jour.
+                Ton programme corrige ce qui freine ta croissance : sommeil, sport,
+                alimentation, posture. Jour après jour.
               </p>
 
               {/* La première question est sur l'accueil (motif Noom, BetterMe,
@@ -349,10 +311,10 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
         <section id="fonctionnalites" className="scroll-mt-24 py-20">
           <div className="mx-auto mb-10 max-w-2xl px-6 text-center sm:px-8">
             <h2 className="font-display text-[clamp(30px,5vw,48px)] leading-[1.08] font-medium tracking-[-0.03em] text-balance text-ink">
-              Tout pour grandir au maximum.
+              Ton programme pour grandir.
             </h2>
             <p className="mt-4 text-base text-[color:var(--text-secondary)]">
-              Ton plan, construit à partir de tes réponses. Un nouveau chaque mois.
+              Construit à partir de tes réponses.
             </p>
           </div>
 
@@ -509,14 +471,21 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
         aria-hidden={!barreVisible}
         {...(barreVisible ? {} : { inert: '' })}
       >
-        <button
-          type="button"
-          onClick={() => demarrer('barre-mobile')}
-          className="inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-brand px-6 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
-        >
-          Commencer
-          <ArrowRight className="size-4" aria-hidden="true" />
-        </button>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            ['M', 'Garçon'],
+            ['F', 'Fille'],
+          ].map(([sexe, label]) => (
+            <button
+              key={sexe}
+              type="button"
+              onClick={() => demarrer('barre-mobile', sexe)}
+              className="inline-flex min-h-13 items-center justify-center rounded-full bg-brand px-4 text-base font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )
@@ -529,16 +498,15 @@ function ChoixSexe({ demarrer, emplacement }) {
       <p className="mb-3 text-[15px] font-semibold text-ink">Tu es :</p>
       <div className="grid grid-cols-2 gap-3">
         {[
-          ['M', 'Garçon', '👦'],
-          ['F', 'Fille', '👧'],
-        ].map(([sexe, label, emoji]) => (
+          ['M', 'Garçon'],
+          ['F', 'Fille'],
+        ].map(([sexe, label]) => (
           <button
             key={sexe}
             type="button"
             onClick={() => demarrer(emplacement, sexe)}
             className="inline-flex min-h-15 items-center justify-center gap-2 rounded-full bg-brand px-5 text-lg font-semibold text-[color:var(--color-on-brand)] shadow-[0_8px_30px_-8px_var(--color-coral-pulse)] transition-transform hover:bg-[#ff7a45] active:scale-[0.97]"
           >
-            <span aria-hidden="true">{emoji}</span>
             {label}
           </button>
         ))}
@@ -600,52 +568,49 @@ function Jauge({ nom, valeur, part }) {
 /* Les écrans montrés sur l'accueil : contenus tirés du plan réel. */
 const ECRANS_PLAN = [
   {
+    titre: 'Ta stratégie',
+    texte: 'Ce qui freine ta croissance, d’après tes réponses, et comment le corriger.',
+    contenu: (
+      <>
+        <EnteteEcran sur="Ton analyse" titre="Ce qui te freine" />
+        <Jauge nom="Sommeil" valeur="7 h / 9 h" part={55} />
+        <Jauge nom="Sport" valeur="1 / 3 par semaine" part={33} />
+        <Jauge nom="Posture" valeur="à corriger" part={45} />
+        <LigneEcran texte="Ton plan cible ces 3 points" />
+      </>
+    ),
+  },
+  {
     titre: 'Ton plan du jour',
-    texte: 'Chaque jour, tu sais exactement quoi faire. Tu coches, tu avances.',
+    texte: 'Exercices et posture : tu sais exactement quoi faire, tu coches, tu avances.',
     contenu: (
       <>
-        <EnteteEcran sur="Aujourd’hui · série 🔥 4 jours" titre="Ton plan du jour" />
+        <EnteteEcran sur="Aujourd’hui · série de 4 jours" titre="Ton plan du jour" />
         <LigneEcran coche texte="Suspension à la barre" detail="5 × 15 s" />
-        <LigneEcran coche texte="Petit-déj avec protéines" />
+        <LigneEcran coche texte="Étirement du dos au mur" detail="1 min" />
+        <LigneEcran texte="Gainage posture" detail="2 min" />
         <LigneEcran texte="Étirements dos et hanches" detail="10 min" />
-        <LigneEcran texte="3 produits laitiers" />
-        <LigneEcran texte="Écrans coupés avant de dormir" detail="22 h" />
       </>
     ),
   },
   {
-    titre: 'Sommeil',
-    texte: 'C’est la nuit que ton corps grandit. Ton plan règle ton heure de coucher.',
+    titre: 'Sommeil et alimentation',
+    texte: 'Ton heure de coucher et ce qu’il faut dans ton assiette pour construire l’os.',
     contenu: (
       <>
-        <EnteteEcran sur="Sommeil" titre="Ce soir" />
-        <div className="rounded-[14px] bg-[#17171b] px-3 py-4 text-center">
+        <EnteteEcran sur="Ce soir" titre="Sommeil" />
+        <div className="rounded-[14px] bg-[#17171b] px-3 py-3 text-center">
           <p className="text-[11px] text-white/60">Heure de coucher</p>
-          <p className="font-display text-[34px] leading-none text-white">22:00</p>
-          <p className="mt-1.5 text-[11px] text-[color:var(--color-coral-pulse)]">objectif 9 h de sommeil</p>
+          <p className="font-display text-[30px] leading-none text-white">22:00</p>
         </div>
-        <LigneEcran coche texte="Pas d’écran 45 min avant" />
-        <LigneEcran texte="Chambre fraîche et sombre" />
-        <LigneEcran texte="Même heure le week-end" />
-      </>
-    ),
-  },
-  {
-    titre: 'Nutrition',
-    texte: 'Ce dont ton corps a besoin pour construire l’os : calcium, vitamine D, protéines.',
-    contenu: (
-      <>
-        <EnteteEcran sur="Nutrition" titre="Ce qui fait grandir" />
         <Jauge nom="Calcium" valeur="2 / 3 laitages" part={66} />
         <Jauge nom="Protéines" valeur="2 / 3 repas" part={66} />
-        <Jauge nom="Vitamine D" valeur="dehors 20 min" part={40} />
-        <LigneEcran texte="Œufs, viande ou poisson à midi" />
       </>
     ),
   },
   {
-    titre: 'Ton suivi',
-    texte: 'Tu te mesures chaque semaine. En bonus : ta taille adulte estimée.',
+    titre: 'En bonus : ta taille estimée',
+    texte: 'Tu te mesures chaque semaine, ta courbe se dessine, ton estimation se met à jour.',
     contenu: (
       <>
         <EnteteEcran sur="Ma taille" titre="Ta courbe" />
@@ -656,10 +621,6 @@ const ECRANS_PLAN = [
               <circle key={x} cx={x} cy={y} r="4" fill="#fff" />
             ))}
           </svg>
-          <div className="mt-1 flex justify-between text-[10px] text-white/50">
-            <span>sem. 1</span>
-            <span>sem. 4</span>
-          </div>
         </div>
         <div className="grid grid-cols-2 gap-2">
           <div className="rounded-[14px] bg-[#17171b] px-3 py-2.5">
