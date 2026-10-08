@@ -1106,6 +1106,7 @@
 .pw3-offre.is-choisie .pw3-offre-coche { border-color: #ff6a2b; background: #ff6a2b; }
 .pw3-offre-gauche { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
 .pw3-offre-nom { font-size: 17px; font-weight: 800; }
+.pw3-offre-remise { display: inline-block; margin-left: 8px; padding: 2px 7px; border-radius: 6px; background: #ff5a1f; color: #0b0b0c; font-size: 12px; font-weight: 800; vertical-align: 2px; }
 .pw3-offre-total { font-size: 13px; color: #a39d97; }
 .pw3-offre-total s { color: #6f6a65; margin-right: 2px; }
 .pw3-offre-avantages { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }

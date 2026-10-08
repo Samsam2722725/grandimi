@@ -449,7 +449,7 @@ function PaywallPage({ onBackHome }) {
             {o.populaire && <span className="pw3-offre-bandeau">Le plus choisi</span>}
             <span className="pw3-offre-coche" aria-hidden="true">{choisie && <Check size={14} strokeWidth={3} />}</span>
             <span className="pw3-offre-gauche">
-              <span className="pw3-offre-nom">{o.nom}</span>
+              <span className="pw3-offre-nom">{o.nom}{reductionActive && <span className="pw3-offre-remise">-{Math.round((1 - o.reduit / o.normal) * 100)} %</span>}</span>
               <span className="pw3-offre-total">
                 {reductionActive && <s>{euros(o.normal)}</s>} {euros(prixOffre(o))} {o.facture}
               </span>
