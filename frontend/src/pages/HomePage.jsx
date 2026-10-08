@@ -11,7 +11,7 @@ const FAQ = [
   {
     question: 'Est-ce que je peux encore grandir ?',
     answer:
-      'Si tu as entre 12 et 20 ans, tes cartilages de croissance sont très probablement encore ouverts : c’est maintenant que tout se joue. Ton analyse te dit où tu en es, et ton programme t’aide à prendre chaque centimètre que ta génétique te permet.',
+      'Tant que tes cartilages de croissance sont ouverts, oui : souvent jusqu’à 18-21 ans chez les garçons, 15-17 ans chez les filles. C’est maintenant que tout se joue. Ton analyse te dit où tu en es, et ton programme t’aide à prendre chaque centimètre que ta génétique te permet.',
   },
   {
     question: 'Qu’est-ce que je reçois exactement ?',
@@ -26,12 +26,12 @@ const FAQ = [
   {
     question: 'Pourquoi Grandimi plutôt que des vidéos sur TikTok ?',
     answer:
-      'Les vidéos donnent les mêmes conseils à tout le monde. Grandimi part de TES réponses (ton âge, ton sommeil, ton sport, la taille de tes parents) et te dit quoi faire chaque jour, dans le bon ordre.',
+      'Les vidéos donnent les mêmes conseils à tout le monde. Grandimi part de TES réponses (ton âge, ton sommeil, ton sport) et te dit quoi faire chaque jour, dans le bon ordre.',
   },
   {
     question: 'Et si je n’ai pas de carte bancaire ?',
     answer:
-      'Tu peux envoyer le lien de paiement à un parent : il paie de son côté, et ton programme s’ouvre chez toi. L’analyse, elle, est gratuite.',
+      'Tu peux envoyer le lien de paiement à un parent : il paie de son côté, et ton programme s’ouvre chez toi. Le questionnaire, lui, est gratuit.',
   },
 ]
 
@@ -152,8 +152,8 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
         {/* PREUVE — de vraies personnes sont déjà passées par Grandimi. */}
         <section className="px-6 pb-16 sm:px-8">
           <div className="mx-auto w-full max-w-2xl rounded-[28px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] px-6 py-8 text-center">
-            <p className="font-display text-[56px] leading-none font-medium text-[color:var(--color-brand-display)]">250+</p>
-            <p className="mt-3 text-[17px] font-semibold text-ink">ados ont déjà fait leur analyse Grandimi</p>
+            <p className="font-display text-[56px] leading-none font-medium text-[color:var(--color-brand-display)]">200+</p>
+            <p className="mt-3 text-[17px] font-semibold text-ink">analyses déjà faites sur Grandimi</p>
             <p className="mx-auto mt-3 max-w-sm text-[14px] leading-[1.5] text-[color:var(--text-meta)]">
               Construit sur les repères de l’Organisation mondiale de la Santé, des pédiatres et de
               l’ANSES pour la nutrition.
@@ -205,7 +205,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               Prêt à atteindre ton vrai potentiel ?
             </h2>
             <p className="mx-auto mt-4 max-w-md text-[16px] text-white/70">
-              Entre 12 et 20 ans, de petits changements t’aident à aller chercher ta taille maximale.
+              Tant que tu grandis, de petits changements t’aident à aller chercher ta taille maximale.
             </p>
             <button
               type="button"
