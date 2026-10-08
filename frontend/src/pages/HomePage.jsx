@@ -56,7 +56,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
           semi-transparence par-dessus le contenu suivant. Le fond plein
           supprime la cause. */}
       <header className="sticky top-0 z-50 border-b border-[color:var(--color-frost-gray)] bg-[color:var(--surface-page-canvas)]">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 sm:px-8">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-8">
           <a href="#" className="flex min-w-0 items-center gap-2.5 text-ink">
             {/* La marque remplace l'icône de règle générique. Le carré orange
                 est la forme du logo, pas une pastille décorative : c'est sous
@@ -68,7 +68,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 titre="Grandimi"
               />
             </span>
-            <span className="truncate font-display text-xl font-semibold tracking-[-0.02em]">
+            <span className="font-display text-lg max-[359px]:hidden sm:text-xl font-semibold tracking-[-0.02em]">
               Grandimi
             </span>
           </a>
@@ -88,15 +88,23 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               débordait de 10px et « Se connecter » passait par-dessus le
               logotype. On dégraisse au lieu de rétrécir la cible tactile —
               les 44px de hauteur sont conservés partout. */}
-          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-3">
             {/* Un abonné qui revient trouve son plan ici, au lieu de devoir
                 se reconnecter et refaire le chemin à chaque visite. */}
             <button
               type="button"
               onClick={abonne ? onReprendre : onLogin}
-              className="inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-sm font-semibold whitespace-nowrap text-ink transition-colors hover:bg-ink/6 sm:border sm:border-ink sm:px-6"
+              className="inline-flex min-h-11 shrink-0 items-center rounded-full px-1.5 text-[13px] sm:text-sm font-semibold whitespace-nowrap text-ink transition-colors hover:bg-ink/6 sm:border sm:border-ink sm:px-6"
             >
               {abonne ? 'Mon plan' : 'Se connecter'}
+            </button>
+            {/* Le bouton qui suit le visiteur : l'en-tête reste collé en haut. */}
+            <button
+              type="button"
+              onClick={() => demarrer('en-tete')}
+              className="inline-flex min-h-11 shrink-0 items-center rounded-full bg-brand px-3.5 text-[13px] sm:text-sm font-semibold whitespace-nowrap text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45] sm:px-6"
+            >
+              Commencer
             </button>
 
           </div>
@@ -198,24 +206,6 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
           </Suspense>
         </div>
 
-        {/* FIN — copié de tallerapp.xyz (« Ready to reach your true potential? »). */}
-        <section className="px-6 pb-20 sm:px-8">
-          <div className="mx-auto w-full max-w-2xl rounded-[32px] bg-[color:var(--surface-dark)] px-6 py-14 text-center">
-            <h2 className="font-display text-[clamp(30px,7vw,48px)] leading-[1.05] font-medium tracking-[-0.03em] text-white">
-              Prêt à atteindre ton vrai potentiel ?
-            </h2>
-            <p className="mx-auto mt-4 max-w-md text-[16px] text-white/70">
-              Tant que tu grandis, de petits changements t’aident à aller chercher ta taille maximale.
-            </p>
-            <button
-              type="button"
-              onClick={() => demarrer('cta-final')}
-              className="mt-8 inline-flex min-h-15 w-full max-w-md items-center justify-center rounded-full bg-brand px-8 text-lg font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
-            >
-              Commencer mon analyse →
-            </button>
-          </div>
-        </section>
       </main>
 
       {/* Pied de page court, une ligne : nom, phrase, liens légaux. */}
