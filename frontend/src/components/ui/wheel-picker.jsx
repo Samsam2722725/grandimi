@@ -29,7 +29,8 @@ export function WheelPicker({
   format = (v) => String(v),
   label,
   itemHeight = 52,
-  visibleCount = 5,
+  // 3 lignes au lieu de 5 sur les petits écrans : la molette tient sans défiler.
+  visibleCount = typeof window !== 'undefined' && window.innerHeight < 760 ? 3 : 5,
   className,
 }) {
   /* MONTER AUGMENTE, DESCENDRE DIMINUE — QUEL QUE SOIT LE GESTE.

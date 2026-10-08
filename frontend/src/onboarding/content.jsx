@@ -194,7 +194,7 @@ export const TEXTES_ETAPE = {
   },
   'vitesse-croissance': {
     titre: 'Combien as-tu grandi l’année dernière ?',
-    sousTitre: 'Si tu as grandi récemment, tes cartilages sont sans doute encore ouverts',
+    sousTitre: 'Si tu as grandi récemment, ta croissance n’est pas finie',
   },
   epaules: {
     titre: 'Tes épaules se sont-elles élargies ?',
@@ -550,11 +550,11 @@ export const OPTIONS_CROISSANCE_LENTE = [
 ]
 
 export const OPTIONS_VITESSE_CROISSANCE = [
-  { valeur: "moins-2cm", label: "Moins de 2 cm", hint: "Ta croissance ralentit : chaque centimètre compte" },
+  { valeur: "moins-2cm", label: "Moins de 2 cm", hint: "Ça ralentit : chaque cm compte" },
   { valeur: "2-5cm", label: "2 à 5 cm", hint: "Tu grandis encore" },
   { valeur: "6-9cm", label: "6 à 9 cm", hint: "Tu es en pleine poussée" },
-  { valeur: "plus-10cm", label: "10 cm ou plus", hint: "Grosse poussée : c’est le moment de tout optimiser" },
-  { valeur: "ne-sais-pas", label: "Je ne sais pas", hint: "Pas grave, on estime à partir de ton âge" },
+  { valeur: "plus-10cm", label: "10 cm ou plus", hint: "Grosse poussée : c’est le moment" },
+  { valeur: "ne-sais-pas", label: "Je ne sais pas", hint: "On estime avec ton âge" },
 ]
 
 /* ============================================================
@@ -1086,7 +1086,7 @@ export function EcranGenetique({ reponses }) {
         <Toise
           min={bas}
           max={haut}
-          hauteur={230}
+          hauteur={typeof window !== 'undefined' && window.innerHeight < 760 ? 160 : 230}
           anime
           reperes={[
             ...(reponses.mere != null ? [{ cm: reponses.mere, label: 'Mère' }] : []),

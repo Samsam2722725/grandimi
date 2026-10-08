@@ -3608,3 +3608,32 @@
 .frise-age-toi-label { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 13px; font-weight: 700; color: var(--funnel-text); }
 .frise-age-graduation { position: absolute; top: 20px; transform: translateX(-50%); font-family: 'Spline Sans Mono', ui-monospace, monospace; font-size: 11px; color: var(--funnel-muted); }
 @media (prefers-reduced-motion: reduce) { .frise-age-reste { animation: none; } }
+
+/* ---------- Tout tenir dans l'écran, sans faire défiler ----------
+   Mesuré à 375 × 667 (iPhone SE / 8) : 15 écrans sur 23 dépassaient de
+   30 à 220 px. On resserre l'espace, pas le contenu. */
+@media (max-height: 820px) {
+  .funnel-header { padding: 10px 20px; }
+  .funnel-title { font-size: clamp(24px, 7vw, 30px); }
+  .funnel-subtitle { font-size: 15px; line-height: 1.4; margin-top: 8px; }
+  .funnel-content { padding: 14px 0 18px; }
+  .funnel-content:has(> .funnel-choices) { padding-top: 12px; }
+  .funnel-choices { gap: 7px; }
+  .choice-card { padding: 10px 16px; border-radius: 14px; }
+  .choice-card-title { font-size: 15px; }
+  .choice-card-hint { font-size: 12.5px; line-height: 1.3; }
+  .funnel-footer { padding-top: 8px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+  .ecran-genetique-chiffre, .ecran-bonne-nouvelle-chiffre { font-size: 44px; }
+  .ecran-genetique-toise { margin-top: 14px; }
+  .ecran-genetique-texte { margin-top: 12px; font-size: 14px; }
+  .ecran-profil-ligne { padding: 11px 2px; font-size: 14px; }
+  .frise-age { padding-top: 8px; }
+  .frise-age-chiffre { font-size: 40px; }
+  .frise-age-piste { margin: 52px 8px 32px; }
+  .onb-mesure { gap: 10px; }
+}
+@media (max-height: 700px) {
+  .funnel-choices { gap: 6px; }
+  .choice-card { padding-top: 9px; padding-bottom: 9px; }
+  .funnel-content { padding-bottom: 12px; }
+}
