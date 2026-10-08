@@ -3,7 +3,7 @@ import { Check, CreditCard, ShieldCheck, Wallet, X } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
-import { OFFRES, finReduction, euros } from '../lib/offres'
+import { OFFRES, finReduction, euros, contenuPlan } from '../lib/offres'
 import '../styles/funnel.css'
 /* Feuille dédiée, et non paywall.css : cette dernière habille encore
    ParentPage (page claire, destinée à un adulte arrivé par lien partagé) et
@@ -584,21 +584,17 @@ function PaywallPage({ onBackHome }) {
 
         {/* Comme Taller et TrendSaaS : ce que tu obtiens, juste après les prix. */}
         <section className="pw3-obtiens">
-          <h2>Ce que tu obtiens</h2>
+          <h2>Ton plan contient — fait pour toi</h2>
           <ul>
-            {[
-              ['Ton diagnostic : ce qui te freine', 'Ce qui freine ta croissance, d’après tes réponses.'],
-              ['Ton plan personnalisé : exercices, posture, sommeil, alimentation', 'Chaque jour, exactement quoi faire pour grandir. Tu coches, tu avances.'],
-              ['Un plan qui change chaque mois', 'Nouveaux exercices, nouveaux objectifs, au rythme de ta croissance.'],
-              ['Plus grand tout de suite : ta posture corrigée', 'Ta posture te vole des centimètres. On te les rend.'],
-              ['Ton guide pour grandir', 'Tout ce qui fait grandir, expliqué simplement.'],
-              ['Ta taille adulte estimée, 98 % de précision', ''],
-            ].map(([titre]) => (
+            {contenuPlan(prediction).map(({ titre, texte }) => (
               <li key={titre}>
                 <span className="pw3-obtiens-coche" aria-hidden="true">
                   <Check size={14} strokeWidth={3} />
                 </span>
-                <strong>{titre}</strong>
+                <span>
+                  <strong>{titre}</strong>
+                  {texte && <span className="pw3-obtiens-texte">{texte}</span>}
+                </span>
               </li>
             ))}
           </ul>

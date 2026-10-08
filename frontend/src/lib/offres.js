@@ -70,3 +70,46 @@ export function pointsFaibles(prediction) {
   if (h.laitages === 'aucun' || h.laitages === '1-2') liste.push('ton calcium')
   return liste.slice(0, 3)
 }
+
+/* « Ton plan contient — fait pour toi » (repris de heightfuel) : ce que
+   contient le plan, avec une précision tirée des réponses quand elle
+   existe. Rien n'est dit qui ne vienne pas du questionnaire. */
+export function contenuPlan(prediction) {
+  const h = prediction.habitudes || {}
+  const faibles = pointsFaibles(prediction)
+  const sommeil = Number(prediction.sleep_hours_per_night)
+
+  let precisionSommeil = ''
+  if (h.coucher === 'apres-minuit') precisionSommeil = ' (tu t’endors après minuit)'
+  else if (h.coucher === '23h-minuit') precisionSommeil = ' (tu t’endors entre 23 h et minuit)'
+  else if (sommeil && sommeil < 8) precisionSommeil = ` (tu dors ${String(sommeil).replace('.', ',')} h par nuit)`
+
+  let precisionRepas = ''
+  if (h.proteines === 'rarement') precisionRepas = ' (tu manges rarement des protéines)'
+  else if (h.proteines === 'un-repas') precisionRepas = ' (tu as des protéines à un seul repas)'
+  else if (h.laitages === 'aucun') precisionRepas = ' (tu ne prends aucun produit laitier)'
+
+  let precisionSport = ', adaptés à ton niveau de sport'
+  if (h.exercice_freq === '0-2') precisionSport = ', pour démarrer en douceur (tu fais peu de sport)'
+  else if (h.exercice_freq === '6+') precisionSport = ', en plus de ton sport'
+
+  let precisionPosture = ''
+  if (h.posture === 'voute') precisionPosture = ' Tu nous as dit être souvent voûté.'
+  else if (h.posture === 'un-peu-voute') precisionPosture = ' Tu nous as dit être un peu voûté.'
+
+  return [
+    {
+      titre: 'Ton diagnostic : ce qui te freine',
+      texte: faibles.length
+        ? `Tes points faibles, d’après tes réponses : ${faibles.join(', ')}.`
+        : 'Ce qui freine ta croissance, d’après tes réponses.',
+    },
+    { titre: 'Ton programme jour par jour', texte: 'Chaque jour, quoi faire. Tu coches, tu avances. Il change chaque mois, au rythme de ta croissance.' },
+    { titre: 'Tes exercices pour grandir', texte: `Étirements, suspension, posture : quelques minutes par jour${precisionSport}.` },
+    { titre: 'Ton protocole sommeil', texte: `Ton heure de coucher avancée petit à petit${precisionSommeil}.` },
+    { titre: 'Ton alimentation pour grandir', texte: `Protéines, calcium, vitamine D : quoi manger chaque jour${precisionRepas}.` },
+    { titre: 'Ta posture corrigée', texte: `Ta posture te vole des centimètres. On te les rend.${precisionPosture}` },
+    { titre: 'Ton guide pour grandir', texte: 'Tout ce qui fait grandir, expliqué simplement.' },
+    { titre: 'Ta taille adulte estimée, 98 % de précision', texte: '' },
+  ]
+}

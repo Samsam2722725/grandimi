@@ -1197,3 +1197,9 @@
 .pw3-obtiens li .pw3-obtiens-coche svg { margin: 0; color: currentColor; }
 
 .pw3-offre-jour { font-family: inherit; font-weight: 800; font-size: 22px; letter-spacing: -0.02em; }
+
+/* Ton plan contient : titre + une phrase, comme heightfuel. */
+.pw3-obtiens li { align-items: flex-start; }
+.pw3-obtiens li .pw3-obtiens-coche { margin-top: 1px; }
+.pw3-obtiens strong { display: block; }
+.pw3-obtiens-texte { display: block; margin-top: 3px; font-size: 13.5px; line-height: 1.45; color: #a39d97; }
