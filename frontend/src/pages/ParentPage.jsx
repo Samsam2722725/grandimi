@@ -3,6 +3,7 @@ import { Check, Lock } from 'lucide-react';
 
 import Spinner from '../components/Spinner';
 import apiClient from '../lib/api';
+import { OFFRES, euros } from '../lib/offres';
 import '../styles/funnel.css';
 import '../styles/paywall-night.css';
 import { checkoutOuvert, parentPageVue } from '../lib/analytics';
@@ -34,20 +35,19 @@ import { checkoutOuvert, parentPageVue } from '../lib/analytics';
    avant, au-dessus du prix. */
 
 const AVANTAGES = [
-  'Un plan de croissance personnalisé, renouvelé chaque mois',
-  'Les 5 guides : exercices, nutrition, sommeil',
-  'Suivi des progrès et re-mesure chaque mois',
+  'Ce qui freine sa croissance, et comment le corriger',
+  'Son plan du jour : exercices, posture, sommeil, alimentation',
+  'Son suivi : il se mesure chaque semaine',
   'Résiliable en ligne à tout moment',
 ];
 
 /* Mêmes deux offres que la paywall enfant, mêmes valeurs par défaut :
    getPlans() ne fait que les confirmer, le montant réel restant décidé
    par le plan Whop choisi côté serveur. */
-const PLANS_PAR_DEFAUT = {
-  monthly: { key: 'monthly', label: 'Mensuel', price_eur: 9.99, interval: 'month' },
-  annual: { key: 'annual', label: 'Annuel', price_eur: 29.99, interval: 'year' },
-};
-const COUT_DOUZE_MENSUALITES = 12 * PLANS_PAR_DEFAUT.monthly.price_eur;
+/* Les trois offres du paywall (lib/offres.js). Le lien envoyé au parent
+   porte l'offre choisie et la fin de la réduction de l'enfant : tant
+   qu'elle court, le parent paie le même prix réduit ; après, le prix
+   normal s'applique, comme sur le paywall. */
 
 /* Au-delà de ce délai, on nomme l'attente au lieu de la laisser tourner. */
 const DELAI_AVANT_MESSAGE_MS = 4000;
@@ -59,11 +59,19 @@ function ParentPage({ childUserId }) {
   const [erreur, setErreur] = useState(null);
   // L'offre que l'enfant avait choisie (&offre= dans le lien) : le parent
   // tombait sur le mensuel alors que l'enfant lui demandait l'annuel.
+  const parametres = new URLSearchParams(window.location.search);
   const [planChoisi, setPlanChoisi] = useState(() => {
-    const offre = new URLSearchParams(window.location.search).get('offre');
-    return offre === 'annual' || offre === 'monthly' ? offre : 'monthly';
+    const offre = parametres.get('offre');
+    return OFFRES.some((o) => o.duree === offre) ? offre : 'm3';
   });
-  const [plans, setPlans] = useState(PLANS_PAR_DEFAUT);
+  const finReductionEnfant = Number(parametres.get('fin')) || 0;
+  const [maintenant, setMaintenant] = useState(() => Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setMaintenant(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const reductionActive = finReductionEnfant > maintenant;
+  const cleWhop = reductionActive ? planChoisi : `${planChoisi}_normal`;
 
   /* Le chemin parent est passé en action de premier rang sur la
      paywall sans avoir jamais été mesuré : on ignore s'il est
@@ -81,25 +89,17 @@ function ParentPage({ childUserId }) {
     let annule = false;
     apiClient
       .getPlans()
-      .then((res) => {
-        if (annule || !Array.isArray(res.plans)) return;
-        const parClef = {};
-        for (const p of res.plans) parClef[p.key] = p;
-        setPlans((precedent) => ({ ...precedent, ...parClef }));
-      })
+      .then(() => {})
       .catch(() => {});
     return () => {
       annule = true;
     };
   }, []);
 
-  const offre = plans[planChoisi];
-  const economieAnnuelle = COUT_DOUZE_MENSUALITES - plans.annual.price_eur;
-  const pourcentageEconomie = Math.round((economieAnnuelle / COUT_DOUZE_MENSUALITES) * 100);
+  const offre = OFFRES.find((o) => o.duree === planChoisi) || OFFRES[1];
+  const prixOffre = reductionActive ? offre.reduit : offre.normal;
   const emailValide = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const prixEcrit = (p) =>
-    `${p.price_eur.toFixed(2).replace('.', ',')} €${p.interval === 'year' ? '/an' : '/mois'}`;
 
   const lancerPaiement = async () => {
     setErreur(null);
@@ -115,7 +115,7 @@ function ParentPage({ childUserId }) {
       const { checkout_url: checkoutURL } = await apiClient.createCheckout({
         email,
         childUserId,
-        plan: planChoisi,
+        plan: cleWhop,
       });
 
       if (!checkoutURL) {
@@ -174,12 +174,12 @@ function ParentPage({ childUserId }) {
           <p className="parent-texte">
             Votre enfant a répondu à un questionnaire — âge, taille, poids, la vôtre et
             celle de l’autre parent, puis son sommeil, son alimentation et son activité.
-            Le calcul est fait, son analyse l’attend.
+            Son analyse est prête : on sait ce qui freine sa croissance.
           </p>
           <p className="parent-texte">
-            L’abonnement lui ouvre <strong>son estimation de taille adulte</strong> avec sa
-            marge d’erreur, et l’accompagnement qui va avec : sommeil, alimentation,
-            activité physique, renouvelé chaque mois selon sa progression.
+            L’abonnement lui ouvre <strong>son programme pour grandir</strong> : chaque jour,
+            quoi faire pour son sommeil, son alimentation, sa posture et ses exercices,
+            construit à partir de ses réponses.
           </p>
 
           <ul className="paywall-features">
@@ -236,43 +236,28 @@ function ParentPage({ childUserId }) {
         </section>
 
         <section className="paywall-offer" aria-labelledby="parent-offre-titre">
-          <div
-            className="paywall-plan-toggle"
-            role="radiogroup"
-            aria-label="Choisir la formule"
-          >
-            <button
-              type="button"
-              role="radio"
-              aria-checked={planChoisi === 'monthly'}
-              className={`paywall-plan-option ${planChoisi === 'monthly' ? 'active' : ''}`}
-              onClick={() => setPlanChoisi('monthly')}
-            >
-              Mensuel
-            </button>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={planChoisi === 'annual'}
-              className={`paywall-plan-option ${planChoisi === 'annual' ? 'active' : ''}`}
-              onClick={() => setPlanChoisi('annual')}
-            >
-              Annuel
-            </button>
+          <div className="paywall-plan-toggle" role="radiogroup" aria-label="Choisir la formule">
+            {OFFRES.map((o) => (
+              <button
+                key={o.duree}
+                type="button"
+                role="radio"
+                aria-checked={planChoisi === o.duree}
+                className={`paywall-plan-option ${planChoisi === o.duree ? 'active' : ''}`}
+                onClick={() => setPlanChoisi(o.duree)}
+              >
+                {o.nom}
+              </button>
+            ))}
           </div>
 
           <div className="paywall-offer-head">
-            <h2 id="parent-offre-titre">Plan de croissance</h2>
+            <h2 id="parent-offre-titre">Plan pour grandir · {offre.nom}</h2>
             <p className="paywall-price">
-              <span>{offre.price_eur.toFixed(2).replace('.', ',')} €</span>
-              {offre.interval === 'year' ? '/an' : '/mois'}
+              {reductionActive && <s style={{ opacity: 0.5, marginRight: 8, fontSize: '0.6em' }}>{euros(offre.normal)}</s>}
+              <span>{euros(prixOffre)}</span> {offre.facture}
             </p>
-            {planChoisi === 'annual' && (
-              <p className="paywall-savings">
-                Économisez près de {pourcentageEconomie} % par rapport à 12 mensualités à{' '}
-                {plans.monthly.price_eur.toFixed(2).replace('.', ',')} €.
-              </p>
-            )}
+            <p className="paywall-savings">{offre.avantages.join(' · ')}</p>
           </div>
         </section>
 
@@ -360,7 +345,7 @@ function ParentPage({ childUserId }) {
               Ouverture du paiement…
             </>
           ) : (
-            `Régler l’abonnement — ${prixEcrit(offre)}`
+            `Régler l’abonnement — ${euros(prixOffre)} ${offre.facture}`
           )}
         </button>
 

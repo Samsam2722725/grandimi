@@ -239,7 +239,7 @@ function PaywallPage({ onBackHome }) {
     }
   })()
   const lienParent = idEnfant
-    ? `${window.location.origin}/?parent=${encodeURIComponent(idEnfant)}&offre=${planChoisi}`
+    ? `${window.location.origin}/?parent=${encodeURIComponent(idEnfant)}&offre=${planChoisi}&fin=${fin}`
     : ''
 
   const copierLien = async () => {
