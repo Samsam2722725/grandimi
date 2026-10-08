@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react'
+import { SilhouetteRedresse } from '@/components/ui/silhouette-redresse'
 
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
 const FaqSection = lazy(() => import('@/components/ui/faq-section').then(m => ({ default: m.FaqSection })))
@@ -168,6 +169,11 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               </button>
             )}
 
+
+            {/* Image animée : la silhouette se redresse et grandit. */}
+            <div className="rise mt-10" style={{ animationDelay: '240ms' }}>
+              <SilhouetteRedresse />
+            </div>
 
             {/* Rangée de chiffres, comme heightfuel — uniquement du vrai. */}
             <div className="rise mt-10 grid w-full max-w-md grid-cols-3 border-y border-white/10" style={{ animationDelay: '280ms' }}>
