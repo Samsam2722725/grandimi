@@ -63,6 +63,7 @@ import {
   EcranBonneNouvelle,
   EcranProfilCroissance,
   verdictAge,
+  verdictSommeil,
   OPTIONS_COUCHER,
   OPTIONS_TELEPHONE,
   OPTIONS_ASSIS,
@@ -569,8 +570,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             valeur={reponses.sexe}
             onChoisir={(v) => choisirEtAvancer('sexe', v)}
             options={[
-              { valeur: 'M', label: 'Garçon' },
-              { valeur: 'F', label: 'Fille' },
+              { valeur: 'M', label: 'Garçon', hint: 'Croissance souvent jusqu’à 18-21 ans' },
+              { valeur: 'F', label: 'Fille', hint: 'Croissance souvent jusqu’à 15-17 ans' },
             ]}
           />
         )
@@ -631,11 +632,16 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             label={texte.titre}
             valeur={reponses.exerciceFreq}
             onChoisir={(v) => choisirEtAvancer('exerciceFreq', v)}
-            options={OPTIONS_EXERCICE_FREQ.map((o) => ({ valeur: o.valeur, label: o.label }))}
+            options={OPTIONS_EXERCICE_FREQ}
           />
         )
       case 'sommeil':
-        return <MoletteSommeil valeur={reponses.sommeil} onChange={(v) => definir('sommeil', v)} />
+        return (
+          <>
+            <MoletteSommeil valeur={reponses.sommeil} onChange={(v) => definir('sommeil', v)} />
+            <p className="verdict-age">{verdictSommeil(reponses.sommeil)}</p>
+          </>
+        )
 
       case 'pere':
         return (
@@ -890,7 +896,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     // PaywallPage.jsx qui relit `localStorage.userEmail`).
     const emailPlausible = EMAIL_VALIDE.test(email.trim())
     return (
-      <ProgressionAnalyse titre="On construit ton plan" pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
+      <ProgressionAnalyse titre={`On assemble ton plan à partir de tes ${etapes.filter((e) => TYPE_ETAPE[e] === 'question').length} réponses`} pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
         {!emailEnvoye ? (
           <div className="resultats-overlay">
             <div className="resultats-overlay-carte">

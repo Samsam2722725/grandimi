@@ -137,19 +137,19 @@ export const TEXTES_ETAPE = {
   },
   sexe: {
     titre: 'Tu es un garçon ou une fille ?',
-    sousTitre: "Le sexe influence ta taille à l’âge adulte",
+    sousTitre: 'Garçons et filles ne grandissent pas au même rythme',
   },
   age: {
     titre: 'Quand es-tu né(e) ?',
-    sousTitre: 'Ton âge nous aide à prédire quand tu vas grandir',
+    sousTitre: 'Ton âge dit combien de temps de croissance il te reste',
   },
   taille: {
     titre: 'Quelle est ta taille ?',
-    sousTitre: 'Fais glisser pour choisir ta taille actuelle',
+    sousTitre: 'Ton point de départ',
   },
   poids: {
     titre: 'Quel est ton poids ?',
-    sousTitre: 'Fais glisser pour choisir ton poids actuel',
+    sousTitre: 'Pour calculer ce que tu dois manger pour grandir',
   },
   pointure: {
     titre: 'Quelle est ta pointure ?',
@@ -157,7 +157,7 @@ export const TEXTES_ETAPE = {
   },
   sports: {
     titre: 'Quels sports pratiques-tu ?',
-    sousTitre: 'Le sport peut aider ton corps à grandir',
+    sousTitre: 'Ton plan sera construit autour de tes sports',
   },
   'exercice-freq': {
     titre: "Combien d'heures d'exercice par semaine ?",
@@ -165,15 +165,15 @@ export const TEXTES_ETAPE = {
   },
   sommeil: {
     titre: 'Combien d’heures dors-tu par nuit ?',
-    sousTitre: 'Bien dormir aide à grandir et à récupérer',
+    sousTitre: 'C’est pendant ton sommeil profond que ton corps libère l’hormone de croissance',
   },
   pere: {
     titre: 'Combien mesure ton père ?',
-    sousTitre: 'La taille des parents influence beaucoup ta taille',
+    sousTitre: 'Avec tes parents, on calcule ta taille génétique',
   },
   mere: {
     titre: 'Combien mesure ta mère ?',
-    sousTitre: 'La taille des parents influence beaucoup ta taille',
+    sousTitre: 'Avec tes parents, on calcule ta taille génétique',
   },
   proches: {
     titre: 'As-tu des proches plus grands que ton père ?',
@@ -193,7 +193,7 @@ export const TEXTES_ETAPE = {
   },
   'vitesse-croissance': {
     titre: 'Combien as-tu grandi l’année dernière ?',
-    sousTitre: 'Ta croissance l’année dernière montre le rythme de la puberté',
+    sousTitre: 'Si tu as grandi récemment, tes cartilages sont sans doute encore ouverts',
   },
   epaules: {
     titre: 'Tes épaules se sont-elles élargies ?',
@@ -274,7 +274,7 @@ export const TEXTES_ETAPE = {
   },
   'taille-ideale': {
     titre: 'Quelle est ta taille idéale ?',
-    sousTitre: 'Choisis la taille que tu veux atteindre',
+    sousTitre: 'Ton objectif. On va voir s’il est à ta portée',
   },
   'resultats-la': {
     titre: 'Ton plan est presque prêt',
@@ -298,7 +298,7 @@ export const TEXTES_ETAPE = {
   },
   assis: {
     titre: 'Combien d’heures es-tu assis par jour ?',
-    sousTitre: 'Rester assis longtemps tasse ta colonne et abîme ta posture',
+    sousTitre: 'Tu perds jusqu’à 1 à 2 cm de hauteur dans la journée, assis',
   },
   posture: {
     titre: 'Comment tu te tiens, en général ?',
@@ -306,7 +306,7 @@ export const TEXTES_ETAPE = {
   },
   proteines: {
     titre: 'Tu manges des protéines à chaque repas ?',
-    sousTitre: 'Viande, poisson, œufs, légumineuses : ce qui construit ton corps',
+    sousTitre: 'Les protéines donnent à ton corps de quoi construire tes os et tes muscles',
   },
   laitages: {
     titre: 'Combien de produits laitiers par jour ?',
@@ -426,11 +426,11 @@ export const OPTIONS_LAITAGES = [
 ]
 
 export const OPTIONS_POURQUOI = [
-  { valeur: 'confiance', label: 'Avoir plus confiance en moi' },
-  { valeur: 'plaire', label: 'Plaire, faire bonne impression' },
-  { valeur: 'sport', label: 'Être meilleur en sport' },
-  { valeur: 'regard', label: 'Qu’on me regarde autrement' },
-  { valeur: 'max', label: 'Atteindre mon maximum' },
+  { valeur: 'confiance', label: 'Avoir plus confiance en moi', hint: 'Tu te tiendras autrement' },
+  { valeur: 'plaire', label: 'Plaire, faire bonne impression', hint: 'La taille se remarque en quelques secondes' },
+  { valeur: 'sport', label: 'Être meilleur en sport', hint: 'Plus d’allonge, plus de présence' },
+  { valeur: 'regard', label: 'Qu’on me regarde autrement', hint: 'On ne regarde pas pareil quelqu’un de grand' },
+  { valeur: 'max', label: 'Atteindre mon maximum', hint: 'Ne laisser aucun centimètre de côté' },
 ]
 
 export const OPTIONS_PROCHES = [
@@ -1151,4 +1151,12 @@ export function verdictAge(age, sexe) {
   return sexe === 'F'
     ? 'Ta posture peut encore te faire paraître plus grande'
     : 'Chez les garçons, ça peut encore bouger. Et ta posture se travaille'
+}
+
+/** Ligne de verdict sous la molette du sommeil. */
+export function verdictSommeil(heures) {
+  if (heures == null) return null
+  if (heures < 7) return 'Ça freine ta croissance : gros potentiel ici'
+  if (heures < 9) return 'Correct, mais tu peux encore gagner'
+  return 'Parfait pour grandir'
 }
