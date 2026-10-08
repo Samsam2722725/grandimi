@@ -1,5 +1,4 @@
 import { lazy, Suspense } from 'react'
-import { Toise } from '@/components/ui/toise'
 
 import { LogoGrandimi } from '@/components/ui/logo-grandimi'
 const FaqSection = lazy(() => import('@/components/ui/faq-section').then(m => ({ default: m.FaqSection })))
@@ -169,20 +168,6 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               </button>
             )}
 
-            {/* Signature : la toise. Le trait orange monte de ta taille
-                d'aujourd'hui vers ta taille max — la question de la page. */}
-            <div className="rise mt-12 w-full" style={{ animationDelay: '240ms' }}>
-              <Toise
-                min={155}
-                max={190}
-                hauteur={240}
-                anime
-                reperes={[
-                  { cm: 166, label: 'Toi aujourd’hui', valeur: false },
-                  { cm: 183, depuis: 166, label: 'Ta taille max', texte: '? cm', accent: true },
-                ]}
-              />
-            </div>
 
             {/* Rangée de chiffres, comme heightfuel — uniquement du vrai. */}
             <div className="rise mt-10 grid w-full max-w-md grid-cols-3 border-y border-white/10" style={{ animationDelay: '280ms' }}>
