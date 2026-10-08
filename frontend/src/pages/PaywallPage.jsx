@@ -453,7 +453,7 @@ function PaywallPage({ onBackHome }) {
               <span className="pw3-offre-total">
                 {reductionActive && <s>{euros(o.normal)}</s>} {euros(prixOffre(o))} {o.facture}
               </span>
-              {o.jours && <span className="pw3-offre-renouv">Se renouvelle seul · résiliable en 1 clic</span>}
+              {o.jours && <span className="pw3-offre-renouv">Se renouvelle automatiquement</span>}
               <span className="pw3-offre-avantages">
                 {o.avantages.map((a) => (
                   <span key={a}>{a}</span>
