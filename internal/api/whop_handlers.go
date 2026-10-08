@@ -90,8 +90,8 @@ type WhopWebhookPayload struct {
 // que d'échouer le webhook : mieux vaut créditer un mauvais libellé de
 // plan qu'un client qui a payé et reste sans accès.
 func resoudreTypePlan(whopPlanID string) string {
-	if whopPlanID != "" && whopPlanID == os.Getenv("WHOP_PLAN_ID_ANNUAL") {
-		return string(billing.Annual)
+	if p, ok := billing.ParIDWhop(whopPlanID, os.Getenv); ok {
+		return string(p.Key)
 	}
 	return string(billing.Monthly)
 }
@@ -106,8 +106,13 @@ func resoudrePeriodeFin(renewalPeriodEnd, planType string) time.Time {
 			return t
 		}
 	}
-	if planType == string(billing.Annual) {
-		return time.Now().AddDate(1, 0, 0)
+	if p, ok := billing.Get(planType); ok {
+		switch p.Interval {
+		case "year":
+			return time.Now().AddDate(1, 0, 0)
+		case "quarter":
+			return time.Now().AddDate(0, 3, 0)
+		}
 	}
 	return time.Now().AddDate(0, 1, 0)
 }

@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect } from 'react'
-import { CreditCard, ShieldCheck, Star, Wallet, X } from 'lucide-react'
+import { Check, CreditCard, ShieldCheck, Wallet, X } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
-import { AVIS } from '@/components/ui/avis'
+import { OFFRES, finReduction, euros, pointsFaibles } from '../lib/offres'
 import '../styles/funnel.css'
 /* Feuille dédiée, et non paywall.css : cette dernière habille encore
    ParentPage (page claire, destinée à un adulte arrivé par lien partagé) et
@@ -37,38 +37,6 @@ const PLANS_PAR_DEFAUT = {
   annual: { key: 'annual', label: 'Annuel', price_eur: 29.99, interval: 'year' },
 }
 
-
-/* Douze mensualités : le seul repère auquel comparer l'annuel. Jamais
-   présenté comme un ancien prix, seulement comme le calcul qui justifie
-   « économisez ».
-
-   CALCULÉ SUR LE PRIX REÇU DU SERVEUR, PAS SUR LA VALEUR DE REPLI.
-   C'était une constante bâtie sur PLANS_PAR_DEFAUT, donc figée à 4,99 €.
-   Le jour où le tarif mensuel change côté serveur, la carte annonçait le
-   nouveau montant pendant que la pastille gardait l'ancienne remise :
-   à 9,99 €/mois elle aurait affiché « − 50 % » là où la vraie remise est
-   de 75 %. Une réduction fausse sur une page de paiement n'est pas une
-   coquille, c'est une allégation commerciale inexacte. */
-function coutDouzeMensualites(plans) {
-  return 12 * plans.monthly.price_eur
-}
-
-/* Le prix ramené à la semaine.
-
-   52,18 semaines par an et non 52 : l'année fait 365,25 jours. L'écart
-   est d'un centime sur l'offre annuelle, mais un prix affiché se
-   vérifie à la calculatrice, et un centime faux sur une page dont
-   l'argument est l'honnêteté coûte plus que le centime.
-
-   Le mois vaut donc 52,18 / 12 = 4,348 semaines, pas 4. Diviser par 4
-   annoncerait 2,50 € au lieu de 2,30 € : une surestimation, mais une
-   erreur quand même — et elle irait contre nous. */
-const SEMAINES_PAR_AN = 365.25 / 7
-
-function coutHebdomadaire(plan) {
-  const semaines = plan.interval === 'year' ? SEMAINES_PAR_AN : SEMAINES_PAR_AN / 12
-  return (plan.price_eur / semaines).toFixed(2).replace('.', ',')
-}
 
 /* Au-delà de ce délai, on nomme l'attente au lieu de la laisser tourner.
    Même valeur que ParentPage : les deux écrans mènent au même Whop. */
@@ -134,8 +102,21 @@ function PaywallPage({ onBackHome }) {
      côté de l'offre qui coûte le moins cher au mois — et du seul format
      qu'un parent accepte volontiers, un paiement par an plutôt qu'un
      prélèvement mensuel sur le compte de son enfant. */
-  const [planChoisi, setPlanChoisi] = useState('annual')
-  const [plans, setPlans] = useState(PLANS_PAR_DEFAUT)
+  const [planChoisi, setPlanChoisi] = useState('m3')
+  const [, setPlans] = useState(PLANS_PAR_DEFAUT)
+
+  /* Minuteur de la réduction : 15 minutes réelles, fixées au premier
+     affichage. À zéro, on bascule sur les plans Whop au prix normal. */
+  const [fin] = useState(finReduction)
+  const [maintenant, setMaintenant] = useState(() => Date.now())
+  useEffect(() => {
+    const t = setInterval(() => setMaintenant(Date.now()), 1000)
+    return () => clearInterval(t)
+  }, [])
+  const resteMs = Math.max(0, fin - maintenant)
+  const reductionActive = resteMs > 0
+  const minuteur = `${String(Math.floor(resteMs / 60000)).padStart(2, '0')}:${String(Math.floor((resteMs % 60000) / 1000)).padStart(2, '0')}`
+  const cleWhop = reductionActive ? planChoisi : `${planChoisi}_normal`
 
   /* Les montants par défaut sont déjà corrects ; cet appel ne fait que
      les confirmer. S'il échoue (réseau, backend pas encore redéployé),
@@ -208,7 +189,7 @@ function PaywallPage({ onBackHome }) {
     })()
 
     apiClient
-      .createCheckout({ email, userId: utilisateur.id, plan: planChoisi })
+      .createCheckout({ email, userId: utilisateur.id, plan: cleWhop })
       .then((res) => {
         if (!annule && res.checkout_url) setUrlPrechargee(res.checkout_url)
       })
@@ -219,7 +200,7 @@ function PaywallPage({ onBackHome }) {
     return () => {
       annule = true
     }
-  }, [planChoisi, email, emailValide])
+  }, [cleWhop, email, emailValide])
 
   /* Une fois l'URL connue, on demande au navigateur de télécharger la page
      Whop en tâche de fond : au clic, elle est déjà là au lieu d'arriver. */
@@ -243,10 +224,9 @@ function PaywallPage({ onBackHome }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const offre = plans[planChoisi]
-  const douzeMensualites = coutDouzeMensualites(plans)
-  const economieAnnuelle = douzeMensualites - plans.annual.price_eur
-  const pourcentageEconomie = Math.round((economieAnnuelle / douzeMensualites) * 100)
+  const offre = OFFRES.find((o) => o.duree === planChoisi) || OFFRES[1]
+  const prixOffre = (o) => (reductionActive ? o.reduit : o.normal)
+  const faibles = pointsFaibles(prediction)
 
   /* Lien à transmettre au parent. Il porte l'id du compte enfant pour que le
      webhook Whop crédite ce compte-là et non celui du payeur. L'id est écrit
@@ -418,7 +398,7 @@ function PaywallPage({ onBackHome }) {
           await apiClient.createCheckout({
             email,
             userId: utilisateur.id,
-            plan: planChoisi,
+            plan: cleWhop,
           })
         ).checkout_url
 
@@ -464,44 +444,60 @@ function PaywallPage({ onBackHome }) {
         <span className="pw2-logo">Grandimi</span>
       </header>
 
-      <main className="paywall-scroll pw2">
-        <h1 className="pw2-titre">Ton plan pour grandir est prêt</h1>
-
-        <div className="pw2-etoiles" aria-label="5 étoiles sur 5">
-          {[0, 1, 2, 3, 4].map((n) => (
-            <Star key={n} size={34} fill="currentColor" strokeWidth={0} aria-hidden="true" />
-          ))}
+      <main className="paywall-scroll pw2 pw3">
+        {/* Copié de TrendSaaS : bandeau du minuteur, puis « Choisis ton plan »,
+            trois offres, le prix par jour en gros, les avantages en étiquettes.
+            Le minuteur est réel : à zéro, le prix normal s'applique. */}
+        <div className={`pw3-minuteur ${reductionActive ? '' : 'is-fini'}`} role="timer">
+          {reductionActive ? (
+            <>⚡ Ton offre est réservée <strong>{minuteur}</strong> — prix réduit</>
+          ) : (
+            <>Réduction expirée — tarif normal appliqué</>
+          )}
         </div>
 
-        <blockquote className="pw2-avis">
-          <p>« {AVIS[0].texte} »</p>
-          <cite>— {AVIS[0].prenom}, {AVIS[0].age} ans</cite>
-        </blockquote>
+        <p className="pw3-pret">Ton plan est prêt ✓</p>
+        <h1 className="pw3-titre">
+          Atteins ta <span>taille maximale</span>
+        </h1>
+        <p className="pw3-sous-titre">
+          {faibles.length
+            ? <>Tes réponses montrent ce qui te freine : <strong>{faibles.join(', ')}</strong>. Ton plan le corrige, jour après jour.</>
+            : <>Tu as déjà de bonnes bases. Ton plan va chercher le maximum, jour après jour.</>}
+        </p>
 
-        <section className="pw2-offres" role="radiogroup" aria-label="Choisir la formule">
-          {['annual', 'monthly'].map((clef) => {
-            const plan = plans[clef]
-            const selectionne = planChoisi === clef
-            const annuel = clef === 'annual'
+        <h2 className="pw3-choisis">Choisis ton plan.</h2>
+        <section className="pw3-offres" role="radiogroup" aria-label="Choisir ton plan">
+          {OFFRES.map((o) => {
+            const choisie = planChoisi === o.duree
             return (
               <button
-                key={clef}
+                key={o.duree}
                 type="button"
                 role="radio"
-                aria-checked={selectionne}
-                className={`pw2-offre ${selectionne ? 'is-choisie' : ''}`}
+                aria-checked={choisie}
+                className={`pw3-offre ${choisie ? 'is-choisie' : ''}`}
                 onClick={() => {
-                  setPlanChoisi(clef)
-                  mesurerPlanChoisi(clef)
+                  setPlanChoisi(o.duree)
+                  mesurerPlanChoisi(o.duree)
                 }}
               >
-                {annuel && <span className="pw2-offre-bandeau">Meilleure offre · − {pourcentageEconomie} %</span>}
-                <span className="pw2-offre-ligne">
-                  <span className="pw2-offre-nom">{annuel ? 'Offre annuelle' : 'Offre mensuelle'}</span>
-                  <span className="pw2-offre-prix">{coutHebdomadaire(plan)} €/semaine</span>
+                {o.populaire && <span className="pw3-offre-bandeau">Le plus choisi</span>}
+                <span className="pw3-offre-coche" aria-hidden="true">{choisie && <Check size={14} strokeWidth={3} />}</span>
+                <span className="pw3-offre-gauche">
+                  <span className="pw3-offre-nom">{o.nom}</span>
+                  <span className="pw3-offre-total">
+                    {reductionActive && <s>{euros(o.normal)}</s>} {euros(prixOffre(o))} {o.facture}
+                  </span>
+                  <span className="pw3-offre-avantages">
+                    {o.avantages.map((a) => (
+                      <span key={a}>{a}</span>
+                    ))}
+                  </span>
                 </span>
-                <span className="pw2-offre-total">
-                  {plan.price_eur.toFixed(2).replace('.', ',')} € {annuel ? 'par an' : 'par mois, sans engagement'}
+                <span className="pw3-offre-droite">
+                  <span className="pw3-offre-jour">{euros(prixOffre(o) / o.jours)}</span>
+                  <span className="pw3-offre-par">/ jour</span>
                 </span>
               </button>
             )
@@ -525,6 +521,21 @@ function PaywallPage({ onBackHome }) {
             {erreur}
           </p>
         )}
+
+        <section className="pw3-faq">
+          <h2>Les questions qu’on nous pose</h2>
+          {[
+            ['Je peux arrêter quand je veux ?', 'Oui. Tu résilies en un clic depuis ton compte, sans justification.'],
+            ['Quand je vois des résultats ?', 'Ta posture, dès les premières semaines. Ta croissance, tu la suis sur ta courbe chaque semaine.'],
+            ['Un parent peut payer ?', 'Oui : envoie-lui le lien de paiement, ton plan s’ouvre chez toi.'],
+            ['C’est quoi la différence avec des vidéos TikTok ?', 'Les vidéos donnent les mêmes conseils à tout le monde. Ton plan part de tes réponses et te dit quoi faire chaque jour.'],
+          ].map(([q, r]) => (
+            <details key={q} className="pw3-faq-item">
+              <summary>{q}</summary>
+              <p>{r}</p>
+            </details>
+          ))}
+        </section>
 
         {lienParent && proposerLeParent && (
           <section className="paywall-parent" ref={blocParentRef}>
@@ -594,14 +605,12 @@ function PaywallPage({ onBackHome }) {
               Redirection…
             </>
           ) : (
-            'Commencer mon parcours'
+            'Continuer'
           )}
         </button>
 
         <p className="pw2-facture">
-          {offre.interval === 'year'
-            ? `Facturé ${offre.price_eur.toFixed(2).replace('.', ',')} € par an`
-            : `Facturé ${offre.price_eur.toFixed(2).replace('.', ',')} € par mois, sans engagement`}
+          {`Facturé ${euros(prixOffre(offre))} ${offre.facture}`}
           {' · '}
           <a href="/cgv.html">Conditions</a> · Résiliable à tout moment
         </p>

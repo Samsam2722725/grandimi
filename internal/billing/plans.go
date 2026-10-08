@@ -14,8 +14,20 @@ package billing
 type PlanKey string
 
 const (
+	// Anciennes offres : gardées pour les abonnés déjà inscrits.
 	Monthly PlanKey = "monthly"
 	Annual  PlanKey = "annual"
+
+	// Offres du paywall « comment grandir » (octobre 2026). Chaque durée
+	// existe à deux prix : le prix réduit, proposé pendant les 15 minutes
+	// qui suivent l'arrivée sur le paywall, et le prix normal, appliqué
+	// ensuite. Les deux sont de vrais plans Whop.
+	Mois1        PlanKey = "m1"
+	Mois3        PlanKey = "m3"
+	Mois12       PlanKey = "m12"
+	Mois1Normal  PlanKey = "m1_normal"
+	Mois3Normal  PlanKey = "m3_normal"
+	Mois12Normal PlanKey = "m12_normal"
 )
 
 type Plan struct {
@@ -46,6 +58,26 @@ var plans = map[PlanKey]Plan{
 		Interval:      "year",
 		WhopPlanIDEnv: "WHOP_PLAN_ID_ANNUAL",
 	},
+	Mois1:        {Key: Mois1, Label: "1 mois", PriceEUR: 14.99, Interval: "month", WhopPlanIDEnv: "WHOP_PLAN_ID_M1"},
+	Mois3:        {Key: Mois3, Label: "3 mois", PriceEUR: 29.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3"},
+	Mois12:       {Key: Mois12, Label: "12 mois", PriceEUR: 69.99, Interval: "year", WhopPlanIDEnv: "WHOP_PLAN_ID_M12"},
+	Mois1Normal:  {Key: Mois1Normal, Label: "1 mois", PriceEUR: 19.99, Interval: "month", WhopPlanIDEnv: "WHOP_PLAN_ID_M1_NORMAL"},
+	Mois3Normal:  {Key: Mois3Normal, Label: "3 mois", PriceEUR: 39.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3_NORMAL"},
+	Mois12Normal: {Key: Mois12Normal, Label: "12 mois", PriceEUR: 99.99, Interval: "year", WhopPlanIDEnv: "WHOP_PLAN_ID_M12_NORMAL"},
+}
+
+// ParIDWhop retrouve l'offre à partir de l'id de plan Whop reçu par le
+// webhook. ok est false si l'id ne correspond à aucune offre configurée.
+func ParIDWhop(whopPlanID string, lireEnv func(string) string) (Plan, bool) {
+	if whopPlanID == "" {
+		return Plan{}, false
+	}
+	for _, p := range plans {
+		if lireEnv(p.WhopPlanIDEnv) == whopPlanID {
+			return p, true
+		}
+	}
+	return Plan{}, false
 }
 
 // Get renvoie le plan pour une clé donnée ("monthly"/"annual"). ok est
@@ -60,5 +92,9 @@ func Get(key string) (Plan, bool) {
 // All renvoie les deux offres, pour l'endpoint qui sert les tarifs au
 // frontend (évite de dupliquer les montants dans le JS).
 func All() []Plan {
-	return []Plan{plans[Monthly], plans[Annual]}
+	return []Plan{
+		plans[Monthly], plans[Annual],
+		plans[Mois1], plans[Mois3], plans[Mois12],
+		plans[Mois1Normal], plans[Mois3Normal], plans[Mois12Normal],
+	}
 }

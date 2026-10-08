@@ -309,7 +309,8 @@ function App() {
       }
     }
 
-    setCurrentPage('results');
+    // Pas d'écran de résultats sous cadenas : le paywall fait le diagnostic.
+    setCurrentPage('paywall');
   };
 
   /* Le plan ne s’ouvre qu’une fois ses horaires connus.
@@ -474,7 +475,7 @@ function App() {
       ouvrirPlan();
       return;
     }
-    setCurrentPage(predictionData ? 'results' : 'home');
+    setCurrentPage(predictionData ? 'paywall' : 'home');
   };
 
   /* Bouton / geste « retour » du téléphone. L'adresse ne change jamais
@@ -507,7 +508,7 @@ function App() {
       if (page === 'questionnaire') {
         window.dispatchEvent(new CustomEvent('grandimi:retour'));
       } else if (page === 'paywall') {
-        setCurrentPage('results');
+        setCurrentPage('home');
       } else {
         setCurrentPage('home');
       }
@@ -797,7 +798,7 @@ function App() {
       {/* La paywall redirige vers Whop : l'accès n'est plus accordé
           côté client, mais par le webhook après paiement réel. */}
       {currentPage === 'paywall' && predictionData && (
-        <PaywallPage onBackHome={() => setCurrentPage('results')} />
+        <PaywallPage onBackHome={() => setCurrentPage('home')} />
       )}
 
       {/* Growth Plan (after payment) */}
