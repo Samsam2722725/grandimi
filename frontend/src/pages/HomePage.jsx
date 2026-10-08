@@ -211,8 +211,8 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               {[
                 ['Parais plus grand', 'dès les premières semaines, grâce à ta posture'],
                 ['Zéro cm perdu', 'on corrige ce qui freine ta croissance'],
-                ['Grandis la nuit', 'ton sommeil réglé pour grandir'],
-                ['Fait pour toi', 'un plan construit sur tes réponses'],
+                ['Ta taille future', 'découvre la taille que tu peux atteindre'],
+                ['Plan personnalisé', 'exercices, sommeil et alimentation selon tes réponses'],
               ].map(([chiffre, texte], i) => (
                 <div
                   key={texte}
