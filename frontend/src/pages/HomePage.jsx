@@ -131,10 +131,10 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               className="rise mt-5 font-['Syne',sans-serif] text-[clamp(36px,10vw,84px)] leading-[1] font-extrabold tracking-[-0.04em] text-[#f4efe9]"
               style={{ animationDelay: '60ms' }}
             >
-              Deviens le plus
+              Plus grand.
               <br />
               <span className="bg-gradient-to-r from-[#ff8a3d] to-[#ff4d1a] bg-clip-text text-transparent [filter:drop-shadow(0_0_24px_rgba(255,90,31,0.35))]">
-                grand possible
+                Plus confiant.
               </span>
             </h1>
 
@@ -142,8 +142,8 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               className="rise mt-5 max-w-md text-[16px] leading-[1.6] text-[#a39d97]"
               style={{ animationDelay: '120ms' }}
             >
-              Ton corps grandit encore. Chaque nuit, chaque repas, chaque exercice compte.
-              On te dit exactement quoi faire, pour toi.
+              Ton programme pour grandir au maximum, fait pour toi. Chaque nuit, chaque
+              repas, chaque exercice compte.
             </p>
 
             <button
@@ -200,7 +200,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
           <div className="mx-auto w-full max-w-2xl">
             <p className="text-center font-['Spline_Sans_Mono',monospace] text-[11px] tracking-[0.2em] text-[#8a847e] uppercase">Ce que tu reçois</p>
             <h2 className="mt-3 text-center font-['Syne',sans-serif] text-[clamp(32px,8vw,52px)] leading-[1.02] font-extrabold tracking-[-0.035em] text-[#f4efe9]">
-              Plus grand. <span className="text-[#ff6a2b]">Plus confiant.</span>
+              Deviens le plus <span className="text-[#ff6a2b]">grand possible</span>
             </h2>
             <p className="mx-auto mt-4 max-w-md text-center text-[16px] leading-[1.6] text-[#a39d97]">
               Tout pour atteindre ta taille maximale, tant que ton corps grandit encore. Ne laisse aucun centimètre de côté.
