@@ -11,27 +11,27 @@ const FAQ = [
   {
     question: 'Est-ce que je peux encore grandir ?',
     answer:
-      'Tant que tes cartilages de croissance sont ouverts, oui : souvent jusqu’à 18-21 ans chez les garçons, 15-17 ans chez les filles. C’est maintenant que tout se joue. Ton analyse te dit où tu en es, et ton programme t’aide à prendre chaque centimètre que ta génétique te permet.',
+      'Oui, tant que ton corps grandit : souvent jusqu’à 18-21 ans pour les garçons, 15-17 ans pour les filles. C’est maintenant que ça se joue.',
   },
   {
-    question: 'Qu’est-ce que je reçois exactement ?',
+    question: 'Qu’est-ce que je reçois ?',
     answer:
-      'Ton analyse de croissance, puis ton programme : ta routine du jour (exercices, étirements, posture), ton heure de coucher, ce qu’il faut dans ton assiette, et ton suivi semaine après semaine. Tout est construit à partir de tes réponses.',
+      'Ton programme pour grandir : ta routine du jour, ta posture, ton heure de coucher, quoi manger, et ton suivi chaque semaine.',
   },
   {
-    question: 'Quand est-ce que je vois des résultats ?',
+    question: 'Quand je vois des résultats ?',
     answer:
-      'La posture, c’est dès les premières semaines : tu te tiens plus droit, tu parais plus grand. Pour la croissance, ton suivi hebdomadaire te montre ta courbe avancer.',
+      'La posture, dès les premières semaines : tu parais plus grand. Ta croissance, tu la vois sur ta courbe chaque semaine.',
   },
   {
-    question: 'Pourquoi Grandimi plutôt que des vidéos sur TikTok ?',
+    question: 'Pourquoi pas juste des vidéos TikTok ?',
     answer:
-      'Les vidéos donnent les mêmes conseils à tout le monde. Grandimi part de TES réponses (ton âge, ton sommeil, ton sport) et te dit quoi faire chaque jour, dans le bon ordre.',
+      'Les vidéos donnent les mêmes conseils à tout le monde. Ton programme part de TES réponses et te dit quoi faire chaque jour.',
   },
   {
-    question: 'Et si je n’ai pas de carte bancaire ?',
+    question: 'J’ai pas de carte bancaire',
     answer:
-      'Tu peux envoyer le lien de paiement à un parent : il paie de son côté, et ton programme s’ouvre chez toi. Le questionnaire, lui, est gratuit.',
+      'Envoie le lien de paiement à un parent : il paie, et ton programme s’ouvre chez toi.',
   },
 ]
 
@@ -120,7 +120,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
           />
           <div className="relative mx-auto flex w-full max-w-2xl flex-col items-center text-center">
             <p className="rise text-[12px] font-semibold tracking-[0.18em] text-[color:var(--color-brand-display)] uppercase">
-              Optimisation de la taille basée sur la science
+              Méthode basée sur la science
             </p>
 
             <h1
@@ -136,8 +136,8 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               className="rise mt-6 max-w-md text-[17px] leading-[1.5] text-[color:var(--text-secondary)]"
               style={{ animationDelay: '120ms' }}
             >
-              Réponds à 20 questions. Reçois ton programme pour grandir, fait pour toi :
-              tes exercices, ton sommeil, ton alimentation, jour après jour.
+              Ton corps grandit encore. Chaque nuit, chaque repas, chaque exercice compte.
+              On te dit exactement quoi faire.
             </p>
 
             <button
@@ -146,7 +146,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               className="rise mt-9 inline-flex min-h-15 w-full max-w-md items-center justify-center gap-2 rounded-full bg-brand px-8 text-lg font-semibold text-[color:var(--color-on-brand)] shadow-[0_10px_40px_-8px_var(--color-coral-pulse)] transition-transform hover:bg-[#ff7a45] active:scale-[0.97]"
               style={{ animationDelay: '180ms' }}
             >
-              Commencer mon analyse →
+              Je commence →
             </button>
 
             {analyseEnCours && !abonne && (
@@ -160,9 +160,10 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
         {/* PREUVE — de vraies personnes sont déjà passées par Grandimi. */}
         <section className="px-6 pb-16 sm:px-8">
           <div className="mx-auto w-full max-w-2xl rounded-[28px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] px-6 py-8 text-center">
-            <p className="font-display text-[56px] leading-none font-medium text-[color:var(--color-brand-display)]">200+</p>
-            <p className="mt-3 text-[17px] font-semibold text-ink">analyses déjà faites sur Grandimi</p>
-            <p className="mx-auto mt-3 max-w-sm text-[14px] leading-[1.5] text-[color:var(--text-meta)]">
+            <p className="text-[15px] text-[color:var(--text-secondary)]">Déjà</p>
+            <p className="mt-1 font-display text-[56px] leading-none font-medium text-[color:var(--color-brand-display)]">200+</p>
+            <p className="mt-3 text-[17px] font-semibold text-ink">jeunes ont déjà commencé avec Grandimi</p>
+            <p className="mx-auto mt-3 max-w-sm text-[12px] leading-[1.5] text-[color:var(--text-meta)]">
               Construit sur les repères de l’Organisation mondiale de la Santé, des pédiatres et de
               l’ANSES pour la nutrition.
             </p>
@@ -173,19 +174,20 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
         <section id="fonctionnalites" className="px-6 pb-20 sm:px-8">
           <div className="mx-auto w-full max-w-2xl">
             <h2 className="text-center font-display text-[clamp(32px,7vw,48px)] leading-[1.05] font-medium tracking-[-0.03em] text-ink">
-              Tout pour atteindre ta taille maximale
+              Plus grand. Plus confiant.
             </h2>
             <p className="mx-auto mt-4 max-w-md text-center text-[16px] text-[color:var(--text-secondary)]">
-              On analyse ton potentiel de croissance, et on te donne le programme pour l’atteindre.
+              Tout pour atteindre ta taille maximale, tant que ton corps grandit encore. Ne laisse aucun centimètre de côté.
             </p>
 
             <div className="mt-10 flex flex-col gap-3">
               {[
-                ['Ton analyse de croissance', 'Ce qui freine ta croissance aujourd’hui, d’après tes réponses : sommeil, sport, alimentation, posture.'],
-                ['Ta routine quotidienne', 'Chaque jour, tu sais quoi faire : exercices, étirements, posture. Quelques minutes, et tu coches.'],
-                ['Sommeil et alimentation', 'Ton heure de coucher, et ce que ton corps doit recevoir pour construire l’os : calcium, protéines, vitamine D.'],
-                ['Ta posture', 'Récupère les centimètres cachés dans ta posture. Tiens-toi droit, parais plus grand dès les premières semaines.'],
-                ['Ton suivi', 'Tu te mesures chaque semaine, tu vois ta courbe avancer, et ton plan évolue chaque mois avec toi.'],
+                ['Parais plus grand tout de suite', 'Ta posture cache des centimètres. Tiens-toi droit, et ça se voit dès les premières semaines.'],
+                ['Ce qui te freine', 'On repère ce qui t’empêche de grandir : sommeil, sport, ce que tu manges, posture.'],
+                ['Ta routine du jour', 'Quelques minutes d’exercices et d’étirements. Tu sais quoi faire, tu coches.'],
+                ['Dors pour grandir', 'C’est la nuit que ton corps grandit. On te donne ton heure de coucher.'],
+                ['Mange pour grandir', 'Ce qu’il faut dans ton assiette pour grandir, sans régime compliqué.'],
+                ['Vois-toi grandir', 'Tu te mesures chaque semaine, et ta courbe monte.'],
               ].map(([titre, texte]) => (
                 <div
                   key={titre}
