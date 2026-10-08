@@ -9,29 +9,29 @@ import { tunnelDemarre } from '../lib/analytics'
 /* Les vraies objections d'un ado avant de commencer. */
 const FAQ = [
   {
-    question: 'Ça marche vraiment, ou c’est encore un truc bidon ?',
+    question: 'Est-ce que je peux encore grandir ?',
     answer:
-      'Personne ne peut dépasser ses gènes. Mais beaucoup d’ados finissent en dessous de leur taille maximale : trop peu de sommeil, pas assez de protéines ou de calcium, peu de sport, mauvaise posture. Ton programme corrige ces points-là, chaque jour. Rien de magique, juste ce qui compte vraiment.',
+      'Si tu as entre 12 et 20 ans, tes cartilages de croissance sont très probablement encore ouverts : c’est maintenant que tout se joue. Ton analyse te dit où tu en es, et ton programme t’aide à prendre chaque centimètre que ta génétique te permet.',
   },
   {
-    question: 'J’ai 17 ans, c’est trop tard ?',
+    question: 'Qu’est-ce que je reçois exactement ?',
     answer:
-      'Pas forcément. Chez les garçons, les cartilages de croissance restent souvent ouverts jusqu’à 18-21 ans. Et la posture, elle, se travaille à tout âge : bien droit, tu paraîtras tout de suite plus grand.',
+      'Ton analyse de croissance, puis ton programme : ta routine du jour (exercices, étirements, posture), ton heure de coucher, ce qu’il faut dans ton assiette, et ton suivi semaine après semaine. Tout est construit à partir de tes réponses.',
   },
   {
-    question: 'Pourquoi autant de questions ? C’est long.',
+    question: 'Quand est-ce que je vois des résultats ?',
     answer:
-      'Deux minutes. Chaque réponse sert à construire ton programme : ton sommeil, ton sport, la taille de tes parents. Sans elles, on te donnerait le même plan qu’à tout le monde.',
+      'La posture, c’est dès les premières semaines : tu te tiens plus droit, tu parais plus grand. Pour la croissance, ton suivi hebdomadaire te montre ta courbe avancer.',
   },
   {
-    question: 'Pourquoi me demander mon e-mail ?',
+    question: 'Pourquoi Grandimi plutôt que des vidéos sur TikTok ?',
     answer:
-      'Pour enregistrer ton analyse et te retrouver si tu changes de téléphone. Pas de spam, et on ne le transmet à personne.',
+      'Les vidéos donnent les mêmes conseils à tout le monde. Grandimi part de TES réponses (ton âge, ton sommeil, ton sport, la taille de tes parents) et te dit quoi faire chaque jour, dans le bon ordre.',
   },
   {
-    question: 'Je n’ai pas de carte bancaire, je fais comment ?',
+    question: 'Et si je n’ai pas de carte bancaire ?',
     answer:
-      'Tu peux envoyer le lien de paiement à un parent : il paie de son côté, et ton programme s’ouvre chez toi.',
+      'Tu peux envoyer le lien de paiement à un parent : il paie de son côté, et ton programme s’ouvre chez toi. L’analyse, elle, est gratuite.',
   },
 ]
 
@@ -104,33 +104,32 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
       </header>
 
       <main className="accueil-main">
-        {/* Un seul écran, sur le modèle de heightfuel.com : étiquette, titre,
-            une phrase, un bouton, trois repères, un visuel. */}
-        <section className="relative overflow-hidden px-6 pt-14 pb-20 sm:px-8">
+        {/* HAUT — copié de heightfuel.com : étiquette, titre, phrase, bouton. */}
+        <section className="relative overflow-hidden px-6 pt-14 pb-16 sm:px-8">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -top-40 left-1/2 size-[620px] -translate-x-1/2 rounded-full bg-[color:var(--color-coral-pulse)] opacity-[0.16] blur-[140px]"
           />
           <div className="relative mx-auto flex w-full max-w-2xl flex-col items-center text-center">
             <p className="rise text-[12px] font-semibold tracking-[0.18em] text-[color:var(--color-brand-display)] uppercase">
-              — Basé sur la science —
+              Optimisation de la taille basée sur la science
             </p>
 
             <h1
-              className="rise mt-6 font-display text-[clamp(48px,11vw,92px)] leading-[0.95] font-medium tracking-[-0.045em] text-ink"
+              className="rise mt-6 font-display text-[clamp(46px,11vw,88px)] leading-[0.98] font-medium tracking-[-0.045em] text-ink"
               style={{ animationDelay: '60ms' }}
             >
-              Atteins ta
+              Débloque tout ton
               <br />
-              <span className="text-[color:var(--color-brand-display)]">taille maximale</span>
+              <span className="text-[color:var(--color-brand-display)]">potentiel de taille</span>
             </h1>
 
             <p
               className="rise mt-6 max-w-md text-[17px] leading-[1.5] text-[color:var(--text-secondary)]"
               style={{ animationDelay: '120ms' }}
             >
-              Réponds à quelques questions. Reçois ton programme pour grandir : tes
-              exercices, ton sommeil, ton alimentation, jour après jour.
+              Réponds à 20 questions. Reçois ton programme pour grandir, fait pour toi :
+              tes exercices, ton sommeil, ton alimentation, jour après jour.
             </p>
 
             <button
@@ -142,82 +141,81 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               Commencer mon analyse →
             </button>
 
-            <p
-              className="rise mt-5 flex flex-wrap justify-center gap-x-4 gap-y-1 text-[13px] text-[color:var(--text-meta)]"
-              style={{ animationDelay: '220ms' }}
-            >
-              <span>• 250+ analyses déjà faites</span>
-              <span>• 2 minutes</span>
-              <span>• Analyse gratuite</span>
-              <span>• Résiliable à tout moment</span>
-            </p>
-
             {analyseEnCours && !abonne && (
               <button type="button" className="bouton-reprendre mt-6" onClick={onReprendre}>
                 Reprendre mon analyse →
               </button>
             )}
-
-            <div className="rise mt-14 flex justify-center" style={{ animationDelay: '260ms' }} aria-hidden="true">
-              <span className="flex size-32 items-center justify-center rounded-[32px] bg-[color:var(--color-coral-pulse)]/10 shadow-[0_0_80px_-10px_var(--color-coral-pulse)]">
-                <svg viewBox="0 0 64 64" className="size-20 text-[color:var(--color-brand-display)]" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M14 58V8M14 8l-6 7M14 8l6 7" />
-                  <circle cx="40" cy="14" r="6" />
-                  <path d="M40 22v18M40 28l-9 6M40 28l9 6M40 40l-6 18M40 40l6 18" />
-                  <path d="M24 20h4M24 32h4M24 44h4" strokeWidth="2" />
-                </svg>
-              </span>
-            </div>
           </div>
         </section>
-        {/* Repères : uniquement des faits vrais sur le produit. */}
+
+        {/* PREUVE — de vraies personnes sont déjà passées par Grandimi. */}
         <section className="px-6 pb-16 sm:px-8">
-          <div className="mx-auto w-full max-w-4xl">
-            <p className="text-center font-mono text-[12px] tracking-[0.2em] text-[color:var(--text-meta)] uppercase">
-              Les références sur lesquelles on s’appuie
+          <div className="mx-auto w-full max-w-2xl rounded-[28px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] px-6 py-8 text-center">
+            <p className="font-display text-[56px] leading-none font-medium text-[color:var(--color-brand-display)]">250+</p>
+            <p className="mt-3 text-[17px] font-semibold text-ink">ados ont déjà fait leur analyse Grandimi</p>
+            <p className="mx-auto mt-3 max-w-sm text-[14px] leading-[1.5] text-[color:var(--text-meta)]">
+              Construit sur les repères de l’Organisation mondiale de la Santé, des pédiatres et de
+              l’ANSES pour la nutrition.
             </p>
-            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {[
-                ['OMS', 'Organisation mondiale de la Santé'],
-                ['AAP', 'Académie américaine de pédiatrie'],
-                ['ANSES', 'Agence française de nutrition'],
-                ['Khamis-Roche', 'Méthode de calcul de la taille'],
-              ].map(([sigle, nom]) => (
-                <div
-                  key={sigle}
-                  className="flex flex-col items-center justify-center rounded-[18px] border border-[color:var(--color-frost-gray)] px-3 py-4 text-center"
-                >
-                  <span className="font-display text-[22px] leading-none font-semibold text-ink">{sigle}</span>
-                  <span className="mt-1.5 text-[12px] leading-snug text-[color:var(--text-meta)]">{nom}</span>
-                </div>
-              ))}
-            </div>
+          </div>
+        </section>
 
-            <div className="mt-12 grid grid-cols-2 border-t border-[color:var(--color-frost-gray)]">
+        {/* BÉNÉFICES — copié de tallerapp.xyz (« Unlock your full potential »). */}
+        <section id="fonctionnalites" className="px-6 pb-20 sm:px-8">
+          <div className="mx-auto w-full max-w-2xl">
+            <h2 className="text-center font-display text-[clamp(32px,7vw,48px)] leading-[1.05] font-medium tracking-[-0.03em] text-ink">
+              Tout pour atteindre ta taille maximale
+            </h2>
+            <p className="mx-auto mt-4 max-w-md text-center text-[16px] text-[color:var(--text-secondary)]">
+              On analyse ton potentiel de croissance, et on te donne le programme pour l’atteindre.
+            </p>
+
+            <div className="mt-10 flex flex-col gap-3">
               {[
-                ['20+', 'questions sur ta situation réelle'],
-                ['2 min', 'pour faire ton analyse'],
-                ['4', 'piliers : sommeil, sport, alimentation, posture'],
-                ['1', 'nouveau plan chaque mois'],
-              ].map(([chiffre, texte], i) => (
+                ['Ton analyse de croissance', 'Ce qui freine ta croissance aujourd’hui, d’après tes réponses : sommeil, sport, alimentation, posture.'],
+                ['Ta routine quotidienne', 'Chaque jour, tu sais quoi faire : exercices, étirements, posture. Quelques minutes, et tu coches.'],
+                ['Sommeil et alimentation', 'Ton heure de coucher, et ce que ton corps doit recevoir pour construire l’os : calcium, protéines, vitamine D.'],
+                ['Ta posture', 'Récupère les centimètres cachés dans ta posture. Tiens-toi droit, parais plus grand dès les premières semaines.'],
+                ['Ton suivi', 'Tu te mesures chaque semaine, tu vois ta courbe avancer, et ton plan évolue chaque mois avec toi.'],
+              ].map(([titre, texte]) => (
                 <div
-                  key={texte}
-                  className={`border-b border-[color:var(--color-frost-gray)] py-7 ${i % 2 === 0 ? 'border-r pr-4' : 'pl-5'}`}
+                  key={titre}
+                  className="rounded-[22px] border border-[color:var(--color-frost-gray)] bg-[color:var(--surface-card)] px-5 py-5"
                 >
-                  <p className="font-display text-[34px] leading-none font-medium text-ink">{chiffre}</p>
-                  <p className="mt-2 text-[14px] leading-snug text-[color:var(--text-meta)]">{texte}</p>
+                  <h3 className="font-display text-[20px] font-medium text-ink">{titre}</h3>
+                  <p className="mt-1.5 text-[15px] leading-[1.5] text-[color:var(--text-secondary)]">{texte}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* FAQ : les questions qui bloquent avant de commencer. */}
+        {/* FAQ */}
         <div id="faq" className="scroll-mt-24">
           <Suspense fallback={<div className="h-96" />}>
             <FaqSection title="Les questions qu’on nous pose souvent" description="" items={FAQ} />
           </Suspense>
         </div>
+
+        {/* FIN — copié de tallerapp.xyz (« Ready to reach your true potential? »). */}
+        <section className="px-6 pb-20 sm:px-8">
+          <div className="mx-auto w-full max-w-2xl rounded-[32px] bg-[color:var(--surface-dark)] px-6 py-14 text-center">
+            <h2 className="font-display text-[clamp(30px,7vw,48px)] leading-[1.05] font-medium tracking-[-0.03em] text-white">
+              Prêt à atteindre ton vrai potentiel ?
+            </h2>
+            <p className="mx-auto mt-4 max-w-md text-[16px] text-white/70">
+              Entre 12 et 20 ans, de petits changements t’aident à aller chercher ta taille maximale.
+            </p>
+            <button
+              type="button"
+              onClick={() => demarrer('cta-final')}
+              className="mt-8 inline-flex min-h-15 w-full max-w-md items-center justify-center rounded-full bg-brand px-8 text-lg font-semibold text-[color:var(--color-on-brand)] transition-colors hover:bg-[#ff7a45]"
+            >
+              Commencer mon analyse →
+            </button>
+          </div>
+        </section>
       </main>
 
       {/* Pied de page court, une ligne : nom, phrase, liens légaux. */}
