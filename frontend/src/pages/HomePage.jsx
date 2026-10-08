@@ -11,7 +11,7 @@ const FAQ = [
   {
     question: 'Est-ce que je peux encore grandir ?',
     answer:
-      'Oui, tant que ton corps grandit : souvent jusqu’à 18-21 ans pour les garçons, 15-17 ans pour les filles. C’est maintenant que ça se joue.',
+      'Oui, même à 21 ans. Chez les garçons, la croissance continue souvent jusqu’à 18-21 ans, beaucoup plus longtemps qu’on le croit. Chez les filles, elle s’arrête plus tôt, souvent vers 15-17 ans. Ton analyse te dit où tu en es.',
   },
   {
     question: 'Qu’est-ce que je reçois ?',
