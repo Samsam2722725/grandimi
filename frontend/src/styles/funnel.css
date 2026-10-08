@@ -3589,3 +3589,22 @@
 }
 
 .ecran-genetique-toise { margin-top: 26px; }
+
+/* ---------- Frise de l'âge (« Bonne nouvelle ») ---------- */
+.frise-age { text-align: center; padding-top: 24px; }
+.frise-age-chiffre {
+  font-family: 'Syne', var(--font-display), sans-serif; font-weight: 800; font-size: 48px; line-height: 1;
+  letter-spacing: -0.03em; color: #ff6a2b; text-shadow: 0 0 22px rgba(255, 90, 31, 0.45);
+}
+.frise-age-label { margin-top: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--funnel-muted); }
+.frise-age-piste { position: relative; height: 10px; margin: 64px 8px 40px; border-radius: 999px; background: var(--funnel-line); }
+.frise-age-passe { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: rgba(244, 239, 233, 0.25); }
+.frise-age-reste {
+  position: absolute; top: 0; bottom: 0; border-radius: 999px; background: linear-gradient(90deg, #ff5a1f, #ff8a2a);
+  box-shadow: 0 0 14px rgba(255, 90, 31, 0.8); transform-origin: left; animation: frise-pousse 1.2s 0.2s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes frise-pousse { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.frise-age-toi { position: absolute; top: 50%; width: 22px; height: 22px; margin-left: -11px; transform: translateY(-50%); border-radius: 999px; background: #f4efe9; box-shadow: 0 0 0 4px rgba(255, 106, 43, 0.35); }
+.frise-age-toi-label { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 13px; font-weight: 700; color: var(--funnel-text); }
+.frise-age-graduation { position: absolute; top: 20px; transform: translateX(-50%); font-family: 'Spline Sans Mono', ui-monospace, monospace; font-size: 11px; color: var(--funnel-muted); }
+@media (prefers-reduced-motion: reduce) { .frise-age-reste { animation: none; } }

@@ -283,7 +283,7 @@ export const TEXTES_ETAPE = {
   },
   'bonne-nouvelle': {
     titre: 'Bonne nouvelle',
-    sousTitre: 'Chez les garçons, la croissance continue souvent jusqu’à 18-21 ans. On va voir où tu en es.',
+    sousTitre: 'Tu grandis sans doute encore.',
   },
   genetique: {
     titre: 'Ton analyse génétique',
@@ -1105,13 +1105,26 @@ export function EcranGenetique({ reponses }) {
   )
 }
 
-export function EcranBonneNouvelle() {
+export function EcranBonneNouvelle({ age }) {
+  const debut = 12
+  const fin = 21
+  const toi = Math.min(fin, Math.max(debut, Math.floor(age)))
+  const pos = (an) => ((an - debut) / (fin - debut)) * 100
+  const reste = Math.max(0, fin - toi)
   return (
-    <div className="ecran-bonne-nouvelle">
-      <p className="ecran-bonne-nouvelle-chiffre">18-21 ans</p>
-      <p className="ecran-bonne-nouvelle-texte">
-        C’est l’âge où les cartilages de croissance des garçons se ferment, souvent. Beaucoup pensent avoir fini de grandir à 16 ou 17 ans, alors qu’il leur reste de la marge.
-      </p>
+    <div className="frise-age" aria-label={`Tu as ${toi} ans : jusqu'à ${reste} ans de croissance encore`}>
+      <p className="frise-age-chiffre">jusqu’à {reste} ans</p>
+      <p className="frise-age-label">de croissance encore</p>
+      <div className="frise-age-piste" aria-hidden="true">
+        <span className="frise-age-passe" style={{ width: pos(toi) + '%' }} />
+        <span className="frise-age-reste" style={{ left: pos(toi) + '%', width: pos(fin) - pos(toi) + '%' }} />
+        <span className="frise-age-toi" style={{ left: pos(toi) + '%' }}>
+          <span className="frise-age-toi-label">Toi · {toi} ans</span>
+        </span>
+        {[12, 15, 18, 21].map((an) => (
+          <span key={an} className="frise-age-graduation" style={{ left: pos(an) + '%' }}>{an}</span>
+        ))}
+      </div>
     </div>
   )
 }

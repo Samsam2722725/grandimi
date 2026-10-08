@@ -841,7 +841,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
       case 'genetique':
         return <EcranGenetique reponses={reponses} />
       case 'bonne-nouvelle':
-        return <EcranBonneNouvelle />
+        return <EcranBonneNouvelle age={reponses.age} />
       case 'profil-croissance':
         return <EcranProfilCroissance reponses={reponses} />
       case 'modele-prediction':
