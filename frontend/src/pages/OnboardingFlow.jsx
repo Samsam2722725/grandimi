@@ -274,6 +274,14 @@ function indexEtapePreview(reponses) {
   return i >= 0 ? i : null
 }
 
+// Écrans où un toucher sur la réponse fait avancer seul (ListeChoixUnique).
+const ETAPES_CHOIX_UNIQUE = new Set([
+  'profil', 'sexe', 'exercice-freq', 'pilosite-aisselles', 'pilosite-visage',
+  'vitesse-croissance', 'epaules', 'odeur', 'acne', 'muscles', 'voix', 'regles',
+  'croissance-lente', 'coucher', 'telephone', 'assis', 'posture', 'proteines',
+  'laitages', 'pourquoi',
+])
+
 function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   // Sexe choisi sur l'accueil : on repart d'un questionnaire neuf, profil
   // « ado » et sexe remplis, directement à la question suivante.
@@ -967,6 +975,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   }
 
   const estAffichage = TYPE_ETAPE[etape] === 'affichage'
+  /* Choix unique : toucher une réponse fait déjà avancer (choisirEtAvancer).
+     Un bouton « Continuer » en plus laissait croire qu'il fallait encore
+     valider. Pour revenir sur un choix, on touche à nouveau la réponse. */
+  const estChoixUnique = ETAPES_CHOIX_UNIQUE.has(etape)
 
   return (
     <FunnelShell
@@ -976,9 +988,11 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
       title={texte.titre}
       subtitle={texte.sousTitre}
       footer={
-        <FunnelButton disabled={!estAffichage && !peutContinuer} onClick={avancer}>
-          Continuer
-        </FunnelButton>
+        estChoixUnique ? null : (
+          <FunnelButton disabled={!estAffichage && !peutContinuer} onClick={avancer}>
+            Continuer
+          </FunnelButton>
+        )
       }
     >
       {contenu()}
