@@ -69,7 +69,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 titre="Grandimi"
               />
             </span>
-            <span className="font-['Syne',sans-serif] text-[15px] max-[379px]:hidden sm:text-xl font-extrabold tracking-[-0.04em]">
+            <span className="font-['Syne',sans-serif] text-[15px] max-[379px]:hidden sm:text-xl font-bold tracking-[-0.04em]">
               Grandimi
             </span>
           </a>
@@ -136,7 +136,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             </p>
 
             <h1
-              className="rise mt-5 font-['Syne',sans-serif] text-[clamp(36px,10vw,84px)] leading-[1] font-extrabold tracking-[-0.04em] text-[#f4efe9]"
+              className="rise mt-5 font-['Syne',sans-serif] text-[clamp(36px,10vw,84px)] leading-[1] font-bold tracking-[-0.04em] text-[#f4efe9]"
               style={{ animationDelay: '60ms' }}
             >
               Plus grand.
@@ -183,7 +183,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                 ['100 %', 'fait pour toi'],
               ].map(([chiffre, texte], i) => (
                 <div key={texte} className={`py-5 ${i > 0 ? 'border-l border-white/10' : ''}`}>
-                  <p className="font-['Syne',sans-serif] text-[20px] leading-none font-extrabold text-[#ff6a2b]">{chiffre}</p>
+                  <p className="font-['Syne',sans-serif] text-[20px] leading-none font-bold text-[#ff6a2b]">{chiffre}</p>
                   <p className="mt-2 font-['Spline_Sans_Mono',monospace] text-[11px] tracking-[0.08em] text-[#8a847e] uppercase">{texte}</p>
                 </div>
               ))}
@@ -196,7 +196,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
         <section id="fonctionnalites" className="px-5 pb-6 sm:px-8 sm:pb-20">
           <div className="mx-auto w-full max-w-2xl">
             <p className="text-center font-['Spline_Sans_Mono',monospace] text-[11px] tracking-[0.2em] text-[#8a847e] uppercase">Ce que tu reçois</p>
-            <h2 className="mt-3 text-center font-['Syne',sans-serif] text-[clamp(32px,8vw,52px)] leading-[1.02] font-extrabold tracking-[-0.035em] text-[#f4efe9]">
+            <h2 className="mt-3 text-center font-['Syne',sans-serif] text-[clamp(32px,8vw,52px)] leading-[1.02] font-bold tracking-[-0.035em] text-[#f4efe9]">
               Deviens le plus <span className="text-[#ff6a2b]">grand possible</span>
             </h2>
             <p className="mx-auto mt-4 max-w-md text-center text-[16px] leading-[1.6] text-[#a39d97]">
@@ -236,7 +236,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
       <footer className="border-t border-[color:var(--color-frost-gray)] px-6 py-8 sm:px-8">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 text-sm text-[color:var(--text-meta)] sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-6">
-            <span className="font-['Syne',sans-serif] text-lg font-extrabold tracking-[-0.04em] text-ink">Grandimi</span>
+            <span className="font-['Syne',sans-serif] text-lg font-bold tracking-[-0.04em] text-ink">Grandimi</span>
             <span>Ton programme pour grandir.</span>
           </div>
           <nav className="flex flex-wrap gap-x-5 [&>a]:inline-flex [&>a]:min-h-11 [&>a]:items-center">

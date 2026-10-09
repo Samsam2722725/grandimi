@@ -16,7 +16,7 @@ const FaqSection = React.forwardRef(
           transition={{ duration: 0.5 }}
           className="mx-auto mb-8 max-w-2xl text-center sm:mb-12"
         >
-          <h2 className="mb-3 font-['Syne',sans-serif] text-[clamp(28px,7vw,44px)] leading-[1.05] font-extrabold tracking-[-0.035em] text-[#f4efe9]">
+          <h2 className="mb-3 font-['Syne',sans-serif] text-[clamp(28px,7vw,44px)] leading-[1.05] font-bold tracking-[-0.035em] text-[#f4efe9]">
             {title}
           </h2>
           {description && <p className="text-base text-muted-foreground">{description}</p>}

@@ -3511,7 +3511,7 @@
 .ecran-genetique, .ecran-bonne-nouvelle { text-align: center; padding-top: 8px; }
 .ecran-genetique-chiffre, .ecran-bonne-nouvelle-chiffre {
   font-family: 'Syne', var(--font-display), sans-serif;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 56px;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -3593,7 +3593,7 @@
 /* ---------- Frise de l'âge (« Bonne nouvelle ») ---------- */
 .frise-age { text-align: center; padding-top: 24px; }
 .frise-age-chiffre {
-  font-family: 'Syne', var(--font-display), sans-serif; font-weight: 800; font-size: 48px; line-height: 1;
+  font-family: 'Syne', var(--font-display), sans-serif; font-weight: 700; font-size: 48px; line-height: 1;
   letter-spacing: -0.03em; color: #ff6a2b; text-shadow: 0 0 22px rgba(255, 90, 31, 0.45);
 }
 .frise-age-label { margin-top: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--funnel-muted); }
