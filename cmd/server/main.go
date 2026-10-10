@@ -153,6 +153,17 @@ func main() {
 		prive.POST("/api/v1/subscription/cancel", api.CancelSubscription)
 	}
 
+	// Lecture seule des chiffres (protégée par STATS_TOKEN) : de quoi
+	// analyser le tunnel et les ventes sans le pouvoir de l'admin.
+	lecture := router.Group("/api/stats")
+	lecture.Use(api.StatsAuthMiddleware())
+	{
+		lecture.GET("/tunnel", api.RapportTunnelJSON)
+		lecture.GET("/jours", api.StatsParJour)
+		lecture.GET("/ventes", api.StatsVentes)
+		lecture.GET("/general", api.AdminStats)
+	}
+
 	// Admin Panel (protected by ADMIN_TOKEN)
 	admin := router.Group("/api/admin")
 	admin.Use(api.AdminAuthMiddleware())

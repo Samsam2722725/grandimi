@@ -120,3 +120,79 @@ func LireTotauxTunnel(jours int) ([]TotalTunnel, error) {
 
 	return totaux, lignes.Err()
 }
+
+/* JourTunnel : pour un jour (heure de Paris) et un evenement, combien
+   de visiteurs distincts. Sert a comparer avant / apres un changement
+   du site, ce que le rapport sur N jours glissants ne sait pas faire. */
+type JourTunnel struct {
+	Jour      string `json:"jour"`
+	Evenement string `json:"evenement"`
+	Visiteurs int    `json:"visiteurs"`
+}
+
+func LireTunnelParJour(jours int) ([]JourTunnel, error) {
+	if DB == nil {
+		return []JourTunnel{}, nil
+	}
+
+	lignes, err := DB.QueryContext(context.Background(),
+		`SELECT to_char(created_at AT TIME ZONE 'Europe/Paris', 'YYYY-MM-DD') AS jour,
+		        evenement,
+		        count(DISTINCT session) AS visiteurs
+		   FROM evenements_tunnel
+		  WHERE created_at >= now() - make_interval(days => $1)
+		  GROUP BY jour, evenement
+		  ORDER BY jour, evenement`, jours)
+	if err != nil {
+		return nil, err
+	}
+	defer lignes.Close()
+
+	resultat := []JourTunnel{}
+	for lignes.Next() {
+		var j JourTunnel
+		if err := lignes.Scan(&j.Jour, &j.Evenement, &j.Visiteurs); err != nil {
+			return nil, err
+		}
+		resultat = append(resultat, j)
+	}
+
+	return resultat, lignes.Err()
+}
+
+/* VenteWhop : un paiement recu par webhook. Aucun e-mail : la table
+   paiements_whop n en contient pas. */
+type VenteWhop struct {
+	Date   string `json:"date"`
+	PlanID string `json:"plan_id"`
+	Statut string `json:"statut"`
+}
+
+func LireVentes(jours int) ([]VenteWhop, error) {
+	if DB == nil {
+		return []VenteWhop{}, nil
+	}
+
+	lignes, err := DB.QueryContext(context.Background(),
+		`SELECT to_char(created_at AT TIME ZONE 'Europe/Paris', 'YYYY-MM-DD HH24:MI'),
+		        COALESCE(plan_id, ''),
+		        COALESCE(statut, '')
+		   FROM paiements_whop
+		  WHERE created_at >= now() - make_interval(days => $1)
+		  ORDER BY created_at DESC`, jours)
+	if err != nil {
+		return nil, err
+	}
+	defer lignes.Close()
+
+	ventes := []VenteWhop{}
+	for lignes.Next() {
+		var v VenteWhop
+		if err := lignes.Scan(&v.Date, &v.PlanID, &v.Statut); err != nil {
+			return nil, err
+		}
+		ventes = append(ventes, v)
+	}
+
+	return ventes, lignes.Err()
+}
