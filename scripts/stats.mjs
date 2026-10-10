@@ -104,5 +104,5 @@ try {
   console.log(`\nComptes : ${general.total_users ?? '?'} au total, ${general.premium_users ?? '?'} premium.`)
 } catch (e) {
   console.error(e.message)
-  process.exit(1)
+  process.exitCode = 1
 }
