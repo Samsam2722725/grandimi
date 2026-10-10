@@ -2,7 +2,10 @@ package api
 
 import (
 	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"net/http"
+	"strings"
 	"os"
 	"strconv"
 
@@ -19,13 +22,31 @@ import (
    n ouvre que des GET. S il fuit, on ne peut que regarder des
    compteurs, et on le remplace sur Render sans toucher a l admin.
 
-   Sans STATS_TOKEN pose sur Render, tout le groupe repond 401 : il
-   n est jamais ouvert par defaut. */
+   Deux facons d ouvrir le groupe :
+   - STATS_TOKEN pose sur Render (comparaison directe) ;
+   - ou un code dont l empreinte SHA-256 est ecrite ci-dessous. Le code
+     lui-meme n est que dans le .env local (scripts/stats.mjs) ; son
+     empreinte ne permet pas de le retrouver (256 bits aleatoires), elle
+     peut donc vivre dans le depot. Pour changer de code : generer un
+     nouveau STATS_TOKEN dans le .env et remplacer l empreinte. */
+const empreinteCodeLecture = "3d6d7dfdc67f756c60ba590f97aa58f29a51fbb043d7d9eb6c23438eb6f514a6"
+
+func codeLectureValide(entete string) bool {
+	if attendu := os.Getenv("STATS_TOKEN"); attendu != "" &&
+		hmac.Equal([]byte(entete), []byte("Bearer "+attendu)) {
+		return true
+	}
+	code, ok := strings.CutPrefix(entete, "Bearer ")
+	if !ok || code == "" {
+		return false
+	}
+	somme := sha256.Sum256([]byte(code))
+	return hmac.Equal([]byte(hex.EncodeToString(somme[:])), []byte(empreinteCodeLecture))
+}
+
 func StatsAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		attendu := os.Getenv("STATS_TOKEN")
-		recu := c.GetHeader("Authorization")
-		if attendu == "" || !hmac.Equal([]byte(recu), []byte("Bearer "+attendu)) {
+		if !codeLectureValide(c.GetHeader("Authorization")) {
 			c.JSON(http.StatusUnauthorized, gin.H{"erreur": "code de lecture absent ou faux"})
 			c.Abort()
 			return
