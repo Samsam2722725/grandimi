@@ -281,6 +281,17 @@ function PaywallPage({ onBackHome }) {
   const repliRef = useRef(null)
   const feuilleOuverteRef = useRef(false)
   feuilleOuverteRef.current = feuilleOuverte
+  /* Carte refusée par la banque : Whop affiche le message de la banque, en
+     anglais, puis plus rien. On ajoute au-dessus une sortie en français. */
+  const [carteRefusee, setCarteRefusee] = useState(false)
+  const carteRefuseeRef = useRef(false)
+  carteRefuseeRef.current = carteRefusee
+  /* Fermer le paiement sans payer : mesuré, pour savoir combien partent
+     avant même d'essayer une carte et combien après un refus. */
+  const fermerPaiement = () => {
+    capture('paiement_ferme_sans_payer', { etape: carteRefuseeRef.current ? 'apres_refus' : 'sans_essai' })
+    setFeuilleOuverte(false)
+  }
   useEffect(() => () => clearTimeout(repliRef.current), [])
   useEffect(() => {
     if (!feuilleOuverte) clearTimeout(repliRef.current)
@@ -326,6 +337,7 @@ function PaywallPage({ onBackHome }) {
     window.grandimiPaiementErreur = (...args) => {
       const code = args.map((a) => (a && typeof a === 'object' ? a.code || a.message || '' : a)).filter(Boolean).join(' ')
       capture('whop_erreur_paiement', { etape: String(code || 'inconnue').slice(0, 80) })
+      setCarteRefusee(true)
     }
     window.grandimiPaiementEtat = (...args) => {
       const etat = args.map((a) => (a && typeof a === 'object' ? a.state || a.step || '' : a)).filter(Boolean).join(' ')
@@ -652,16 +664,37 @@ function PaywallPage({ onBackHome }) {
           className={`pw2-feuille ${feuilleOuverte ? 'is-ouverte' : ''}`}
           aria-hidden={!feuilleOuverte}
           onClick={(e) => {
-            if (e.target === e.currentTarget) setFeuilleOuverte(false)
+            if (e.target === e.currentTarget) fermerPaiement()
           }}
         >
           <div className="pw2-feuille-panneau" role="dialog" aria-label="Paiement">
             <div className="pw2-feuille-tete">
               <span>Paiement sécurisé par Whop</span>
-              <button type="button" onClick={() => setFeuilleOuverte(false)} aria-label="Fermer le paiement">
+              <button type="button" onClick={fermerPaiement} aria-label="Fermer le paiement">
                 <X size={22} aria-hidden="true" />
               </button>
             </div>
+            {carteRefusee && (
+              <div className="pw2-refus" role="alert">
+                <p className="pw2-refus-titre">Paiement refusé par ta banque</p>
+                <p>Essaie une autre carte, ou Apple Pay / Google Pay juste en dessous.</p>
+                {lienParent && proposerLeParent && (
+                  <button
+                    type="button"
+                    className="pw2-refus-parent"
+                    onClick={() => {
+                      capture('refus_vers_parent', { etape: planChoisi })
+                      setFeuilleOuverte(false)
+                      lienParentOuvert()
+                      setLienParentVisible(true)
+                      setTimeout(() => blocParentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)
+                    }}
+                  >
+                    Pas de carte qui passe ? Fais payer un parent →
+                  </button>
+                )}
+              </div>
+            )}
             <div
               key={planWhop}
               className="pw2-feuille-whop"

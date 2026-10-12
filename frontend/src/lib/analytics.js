@@ -109,7 +109,23 @@ function idDeVisite() {
   }
 }
 
+/* Mode test : grandimi.com/?test=1 marque ce navigateur, et ses passages
+   ne sont plus envoyés à notre base (?test=0 pour revenir). Sans ça, les
+   essais du fondateur se mélangeaient aux vrais visiteurs dans les
+   chiffres, et rien ne permettait de les séparer après coup. */
+function estModeTest() {
+  try {
+    const p = new URLSearchParams(window.location.search).get('test');
+    if (p === '1') localStorage.setItem('grandimi:test', '1');
+    if (p === '0') localStorage.removeItem('grandimi:test');
+    return localStorage.getItem('grandimi:test') === '1';
+  } catch {
+    return false;
+  }
+}
+
 function envoyerAuServeur(evenement, proprietes) {
+  if (estModeTest()) return;
   const rang = Number(proprietes && proprietes.rang);
   const corps = JSON.stringify({
     session: idDeVisite(),

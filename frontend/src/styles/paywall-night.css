@@ -1203,3 +1203,16 @@
 .pw3-obtiens li .pw3-obtiens-coche { margin-top: 1px; }
 .pw3-obtiens strong { display: block; }
 .pw3-obtiens-texte { display: block; margin-top: 3px; font-size: 13.5px; line-height: 1.45; color: #a39d97; }
+
+/* Carte refusée : une sortie en français au-dessus du formulaire Whop. */
+.pw2-refus {
+  margin: 0 0 12px; padding: 12px 14px; border-radius: 14px;
+  border: 1px solid rgba(255, 106, 43, 0.5); background: rgba(255, 106, 43, 0.1);
+  color: #f4efe9; font-size: 14px; line-height: 1.45; text-align: left;
+}
+.pw2-refus p { margin: 0; }
+.pw2-refus-titre { font-weight: 800; color: #ff8a52; margin-bottom: 2px !important; }
+.pw2-refus-parent {
+  margin-top: 10px; width: 100%; min-height: 44px; border-radius: 999px; border: 0;
+  background: #ff6a2b; color: #0b0b0c; font-weight: 800; font-size: 14px; cursor: pointer;
+}
