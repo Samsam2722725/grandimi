@@ -1216,15 +1216,3 @@
   margin-top: 10px; width: 100%; min-height: 44px; border-radius: 999px; border: 0;
   background: #ff6a2b; color: #0b0b0c; font-weight: 800; font-size: 14px; cursor: pointer;
 }
-
-/* Envoyer le lien au parent : trois gros boutons au lieu d'un champ à copier. */
-.pw3-parent-envois { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
-.pw3-parent-envoi {
-  display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 8px;
-  border-radius: 14px; border: 1px solid rgba(244, 239, 233, 0.16); background: #121110;
-  color: #f4efe9; font-weight: 700; font-size: 14px; text-decoration: none; cursor: pointer;
-}
-.pw3-parent-ok { color: #4ade80; font-weight: 700; }
-/* Page parent : le champ e-mail, aligné à gauche dans la colonne centrée. */
-.pw3 .pw3-parent-email { margin-top: 18px; text-align: left; }
-.pw3 .pw3-parent-email .parent-champ { font-size: 16px; }

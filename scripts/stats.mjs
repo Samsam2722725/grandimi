@@ -97,7 +97,6 @@ try {
     ['paiement_ferme_sans_payer', 'Ferment le paiement sans payer'],
     ['refus_vers_parent', 'Après un refus, vont vers le parent'],
     ['lien_parent_ouvert', 'Ouvrent « payer par un parent »'],
-    ['lien_parent_envoye', 'Envoient le lien au parent'],
     ['parent_page_vue', 'Parents arrivés sur leur page'],
   ]
   console.log('\nAutour du paiement')

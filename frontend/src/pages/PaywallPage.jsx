@@ -255,28 +255,6 @@ function PaywallPage({ onBackHome }) {
     }
   }
 
-  /* Envoyer le lien au parent en un geste. Copier un long lien à la main
-     puis le coller ailleurs : 34 ados ont ouvert ce bloc en 3 jours, aucun
-     parent n'est arrivé. Sur téléphone, le partage natif ouvre directement
-     WhatsApp, SMS, Snap… avec le message déjà écrit. */
-  const messageParent = `Salut ! J’ai fait mon analyse sur Grandimi : mon plan pour grandir est prêt. Tu peux le payer pour moi ici ? ${lienParent}`
-  const [lienEnvoye, setLienEnvoye] = useState(false)
-  const envoyerAuParent = async () => {
-    lienParentOuvert()
-    setLienParentVisible(true)
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: 'Mon plan Grandimi', text: messageParent })
-        capture('lien_parent_envoye', { etape: 'partage' })
-        lienParentCopie()
-        setLienEnvoye(true)
-      } catch {
-        // Partage annulé : le bloc reste ouvert avec WhatsApp, SMS et copier.
-      }
-    }
-    setTimeout(() => blocParentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200)
-  }
-
   /**
    * Redirige vers la page de paiement hébergée par Whop.
    *
@@ -548,7 +526,14 @@ function PaywallPage({ onBackHome }) {
           <button
             type="button"
             className="paywall-parent-cta"
-            onClick={envoyerAuParent}
+            onClick={() => {
+              lienParentOuvert()
+              setLienParentVisible(true)
+              blocParentRef.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+              })
+            }}
           >
             Je n’ai pas de carte — faire payer par un parent
           </button>
@@ -653,35 +638,21 @@ function PaywallPage({ onBackHome }) {
           <section className="paywall-parent" ref={blocParentRef}>
             {lienParentVisible && (
               <div className="paywall-parent-body">
-                <h2 className="paywall-section-title">Fais payer un parent</h2>
-                {lienEnvoye ? (
-                  <p className="pw3-parent-ok">
-                    ✓ Envoyé ! Dès que ton parent a payé, ton plan s’ouvre ici, sur ce compte.
-                  </p>
-                ) : (
-                  <p>Envoie-lui ton plan : il paie depuis son téléphone, et ton accès s’ouvre ici.</p>
-                )}
-                <div className="pw3-parent-envois">
-                  <a
-                    className="pw3-parent-envoi"
-                    href={`https://wa.me/?text=${encodeURIComponent(messageParent)}`}
-                    target="_blank"
-                    rel="noopener"
-                    onClick={() => { capture('lien_parent_envoye', { etape: 'whatsapp' }); lienParentCopie(); setLienEnvoye(true) }}
-                  >
-                    WhatsApp
-                  </a>
-                  <a
-                    className="pw3-parent-envoi"
-                    href={`sms:?&body=${encodeURIComponent(messageParent)}`}
-                    onClick={() => { capture('lien_parent_envoye', { etape: 'sms' }); lienParentCopie(); setLienEnvoye(true) }}
-                  >
-                    SMS
-                  </a>
-                  <button type="button" className="pw3-parent-envoi" onClick={copierLien}>
-                    {lienCopie ? '✓ Copié' : 'Copier'}
-                  </button>
-                </div>
+                <h2 className="paywall-section-title">Faire payer par un parent</h2>
+                <p>
+                  Envoie ce lien à ton parent. Il pourra régler depuis son e-mail, et ton
+                  accès s’ouvrira ici, sur ce compte.
+                </p>
+                <input
+                  type="text"
+                  readOnly
+                  value={lienParent}
+                  onFocus={(evenement) => evenement.target.select()}
+                  aria-label="Lien à envoyer à un parent"
+                />
+                <button type="button" className="funnel-link" onClick={copierLien}>
+                  {lienCopie ? '✓ Lien copié' : 'Copier le lien'}
+                </button>
               </div>
             )}
           </section>
@@ -714,7 +685,9 @@ function PaywallPage({ onBackHome }) {
                     onClick={() => {
                       capture('refus_vers_parent', { etape: planChoisi })
                       setFeuilleOuverte(false)
-                      envoyerAuParent()
+                      lienParentOuvert()
+                      setLienParentVisible(true)
+                      setTimeout(() => blocParentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)
                     }}
                   >
                     Pas de carte qui passe ? Fais payer un parent →
