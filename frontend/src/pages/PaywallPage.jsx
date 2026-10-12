@@ -440,7 +440,9 @@ function PaywallPage({ onBackHome }) {
      pas de sens. Le lien reste offert à tous les autres, y compris quand
      le profil n'a pas été renseigné (session antérieure au tunnel actuel)
      — c'est le défaut le moins coûteux des deux. */
-  const proposerLeParent = prediction.profil !== 'parent'
+  // Paiement par un parent : en pause (bonus, pas la priorité — 12/10/2026).
+  // Repasser à `prediction.profil !== 'parent'` pour le réafficher.
+  const proposerLeParent = false
 
   const blocOffres = (
     <section className="pw3-offres" role="radiogroup" aria-label="Choisir ton plan">
