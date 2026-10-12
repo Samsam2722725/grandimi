@@ -154,3 +154,33 @@ func RevoquerSiPlusAucunAbonnement(userID, whopSubscriptionID string) (bool, err
 	}
 	return revoque, nil
 }
+
+/* AbonnementsMensuelsActifs : les abonnements 1 mois encore actifs d un
+   compte, sauf celui qu on vient d activer. Sert a la montee en gamme :
+   quand un client 1 mois prend l offre 3 mois ou A vie, son 1 mois est
+   arrete pour qu il ne paie pas les deux. */
+func AbonnementsMensuelsActifs(userID, saufWhopID string) ([]string, error) {
+	lignes, err := DB.QueryContext(context.Background(),
+		`SELECT whop_subscription_id
+		   FROM subscriptions
+		  WHERE user_id = $1
+		    AND status = 'active'
+		    AND plan_type IN ('m1', 'm1_normal')
+		    AND whop_subscription_id <> $2
+		    AND whop_subscription_id <> ''`,
+		userID, saufWhopID)
+	if err != nil {
+		return nil, err
+	}
+	defer lignes.Close()
+
+	ids := []string{}
+	for lignes.Next() {
+		var id string
+		if err := lignes.Scan(&id); err != nil {
+			return nil, err
+		}
+		ids = append(ids, id)
+	}
+	return ids, lignes.Err()
+}

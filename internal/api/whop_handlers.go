@@ -361,6 +361,12 @@ func WhopWebhook(c *gin.Context) {
 			fmt.Printf("[whop] UpdateSubscriptionFromWebhook(%s): %v\n", payload.Data.ID, err)
 		}
 
+		// Montée en gamme : 3 mois ou À vie pris par un client 1 mois,
+		// son 1 mois s'arrête (voir montee_en_gamme.go).
+		if estOffreSuperieure(typePlan) {
+			arreterAnciensMensuels(user.ID, payload.Data.ID)
+		}
+
 		c.JSON(http.StatusOK, gin.H{
 			"status": "success",
 			"user_id": user.ID,

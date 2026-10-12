@@ -26,6 +26,7 @@ import {
   dureeSeanceMin,
   scoreNutrition,
 } from '../components/ui/app-grandir';
+import { MonteeEnGamme } from '../components/ui/montee-en-gamme';
 
 // Date au format YYYY-MM-DD dans le fuseau local (pas toISOString, qui
 // bascule sur UTC et peut donner la veille ou le lendemain selon l'heure).
@@ -56,6 +57,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
     apiClient.getSubscription().then((s) => setPlanKey(s?.plan_key || null)).catch(() => {});
   }, []);
   const tailleVerrouillee = planKey === 'm1' || planKey === 'm1_normal';
+  const [monteeOuverte, setMonteeOuverte] = useState(false);
 
   // Todo-liste quotidienne : quelles tâches sont cochées aujourd'hui, et
   // quel "pourquoi" est actuellement déplié.
@@ -479,7 +481,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
         {activeTab === 'taille' && (
           <section className="tab-content">
             <h1 className="app-titre">Ma taille</h1>
-            <MaTaille predictionData={predictionData} onMiseAJour={onMiseAJourPrediction} verrouille={tailleVerrouillee} />
+            <MaTaille predictionData={predictionData} onMiseAJour={onMiseAJourPrediction} verrouille={tailleVerrouillee} onDebloquer={() => setMonteeOuverte(true)} />
             {!tailleVerrouillee && (
             <div className="card plan-chart-card">
               <h3 className="plan-chart-title">Ta trajectoire de croissance</h3>
@@ -522,6 +524,8 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
           }}
         />
       )}
+
+      {monteeOuverte && <MonteeEnGamme predictionData={predictionData} onFermer={() => setMonteeOuverte(false)} />}
 
       {/* Barre du bas, au pouce, comme une appli. */}
       <nav className="app-nav" aria-label="Navigation">
