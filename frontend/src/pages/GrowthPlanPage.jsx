@@ -27,6 +27,7 @@ import {
   scoreNutrition,
 } from '../components/ui/app-grandir';
 import { MonteeEnGamme } from '../components/ui/montee-en-gamme';
+import { VisiteGuidee, visiteDejaVue } from '../components/ui/visite-guidee';
 
 // Date au format YYYY-MM-DD dans le fuseau local (pas toISOString, qui
 // bascule sur UTC et peut donner la veille ou le lendemain selon l'heure).
@@ -58,6 +59,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   }, []);
   const tailleVerrouillee = planKey === 'm1' || planKey === 'm1_normal';
   const [monteeOuverte, setMonteeOuverte] = useState(false);
+  const [visite, setVisite] = useState(() => !visiteDejaVue() || new URLSearchParams(window.location.search).get('visite') === '1');
 
   // Todo-liste quotidienne : quelles tâches sont cochées aujourd'hui, et
   // quel "pourquoi" est actuellement déplié.
@@ -524,6 +526,8 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
           }}
         />
       )}
+
+      {visite && activeTab === 'accueil' && !seanceOuverte && <VisiteGuidee onFin={() => setVisite(false)} />}
 
       {monteeOuverte && <MonteeEnGamme predictionData={predictionData} onFermer={() => setMonteeOuverte(false)} />}
 
