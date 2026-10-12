@@ -115,6 +115,24 @@ function jetonValidePour(idCompte) {
   return !idCompte || idJeton === idCompte;
 }
 
+/* Un abonné qui revient sur grandimi.com doit retrouver son app, pas la
+   page de vente. On note sur l'appareil qu'il est abonné (confirmé par le
+   serveur) et, à son retour, on ouvre directement son plan pendant que le
+   serveur re-vérifie. S'il ne l'est plus, la garde plus bas le renvoie au
+   paywall ; les données du plan, elles, restent protégées côté serveur. */
+const CLE_ABONNE = 'grandimi:abonne';
+function abonneMemorise() {
+  try {
+    return (
+      localStorage.getItem(CLE_ABONNE) === '1' &&
+      Boolean(localStorage.getItem('token')) &&
+      Boolean(localStorage.getItem('predictionData'))
+    );
+  } catch {
+    return false;
+  }
+}
+
 function App() {
   /* Un client qui revient de Whop voyait la page d'accueil marchande le
      temps que la vérification d'achat réponde — soit jusqu'à une minute
@@ -129,7 +147,8 @@ function App() {
     // `?step=xxx` (dev only, lu par OnboardingFlow) saute direct à un écran
     // de l'onboarding : encore faut-il que l'app affiche l'onboarding.
     if (import.meta.env.DEV && params.has('step')) return 'questionnaire';
-    return retourDePaiementReussi(params) ? 'paiement' : 'home';
+    if (retourDePaiementReussi(params)) return 'paiement';
+    return abonneMemorise() ? 'plan' : 'home';
   });
   const [predictionData, setPredictionData] = useState(() => {
     const preview = pagePreviewDemandee(new URLSearchParams(window.location.search));
@@ -145,8 +164,18 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   // L'aperçu du plan (dev) doit passer la garde `isPaid` du rendu.
   const [isPaid, setIsPaid] = useState(
-    () => pagePreviewDemandee(new URLSearchParams(window.location.search)) === 'plan',
+    () => pagePreviewDemandee(new URLSearchParams(window.location.search)) === 'plan' || abonneMemorise(),
   );
+  // Dès que le serveur confirme l'abonnement (retour de paiement compris),
+  // on le note pour rouvrir l'app directement la prochaine fois.
+  useEffect(() => {
+    if (!isPaid || pagePreviewDemandee(new URLSearchParams(window.location.search))) return;
+    try {
+      localStorage.setItem(CLE_ABONNE, '1');
+    } catch {
+      /* stockage refusé */
+    }
+  }, [isPaid]);
   // Compte enfant à créditer quand un parent arrive par le lien partagé.
   const [parentChildUserId, setParentChildUserId] = useState(null);
   // Paiement parent : l'accès de l'enfant est-il confirmé par le serveur ?
@@ -257,7 +286,20 @@ function App() {
     apiClient
       .checkPremium()
       .then((res) => {
-        if (!annule) setIsPaid(Boolean(res.is_premium));
+        if (annule) return;
+        const premium = Boolean(res.is_premium);
+        setIsPaid(premium);
+        try {
+          if (premium) localStorage.setItem(CLE_ABONNE, '1');
+          else localStorage.removeItem(CLE_ABONNE);
+        } catch {
+          /* stockage refusé : il passera par l'accueil, rien de plus */
+        }
+        // Abonné arrivé sur l'accueil (premier retour depuis ce
+        // changement, ou appareil sans la note) : on ouvre son plan.
+        if (premium && pageRef.current === 'home' && localStorage.getItem('predictionData')) {
+          ouvrirPlanRef.current?.();
+        }
       })
       .catch(() => {
         // En cas d'échec réseau on reste non-premium : mieux vaut
@@ -328,6 +370,7 @@ function App() {
      laisse pas quelqu’un qui vient de payer devant un écran de
      réglage cassé. Il obtient son plan, avec les horaires par
      défaut, et pourra le régler plus tard. */
+  const ouvrirPlanRef = useRef(null);
   const ouvrirPlan = async () => {
     try {
       const prefs = await apiClient.getPreferences();
@@ -336,6 +379,7 @@ function App() {
       setCurrentPage('plan');
     }
   };
+  ouvrirPlanRef.current = ouvrirPlan;
 
   const handleViewPlan = () => {
     if (!isPaid) {
