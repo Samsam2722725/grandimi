@@ -821,7 +821,7 @@ function App() {
 
       {/* Mon compte -> Abonnement : offre en cours, prochain paiement, résiliation. */}
       {currentPage === 'account' && isAuthenticated && (
-        <AccountPage onBackHome={handleBackHome} />
+        <AccountPage onBackHome={isPaid && predictionData ? handleReprendre : handleBackHome} retourVersPlan={Boolean(isPaid && predictionData)} />
       )}
 
       {/* Paiement par un parent, via le lien partagé */}

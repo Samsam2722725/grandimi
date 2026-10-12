@@ -147,3 +147,28 @@
 
 .account-contact { margin-top: var(--spacing-16); }
 .account-contact a { color: #ff7a1a; font-weight: 600; }
+
+/* ---------- Mon compte en noir, comme le reste de l'app (12/10/2026) ---------- */
+.night.account-page { min-height: 100svh; background: #0a0a0a; color: #f4efe9; padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
+.night .account-header { background: rgba(10, 10, 10, 0.92); border-bottom: 1px solid rgba(244, 239, 233, 0.06); padding: 8px 16px; min-height: 56px; }
+.night .account-header h1 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 20px; color: #f4efe9; }
+.night .account-retour { min-height: 44px; color: #ff8a52; font-weight: 700; }
+.night .account-section { padding: 20px 16px; }
+.night .account-section h2 { font-size: 18px; font-weight: 800; color: #f4efe9; }
+.night .account-card { background: #141414; border: 1px solid rgba(244, 239, 233, 0.08); border-radius: 18px; padding: 16px; box-shadow: none; }
+.night .account-row { border-color: rgba(244, 239, 233, 0.08); }
+.night .account-label { color: #a39d97; }
+.night .account-value { color: #f4efe9; }
+.night .account-a-vie { color: #4ade80; }
+.night .account-empty, .night .account-contact p { color: #c9c3bd; }
+.night .account-contact a, .night .account-manage-link a, .night .alert a { color: #ff8a52; text-decoration: underline; }
+.night .account-manage-link a { display: inline-flex; align-items: center; min-height: 44px; }
+.night .account-cancel-btn { width: 100%; min-height: 48px; background: #1d1b1a; color: #f4efe9; border: 1px solid rgba(244, 239, 233, 0.14); }
+.night .account-modal { background: #141414; color: #f4efe9; border: 1px solid rgba(244, 239, 233, 0.1); }
+.night .account-modal p { color: #c9c3bd; }
+@media (max-width: 700px) {
+  .night .account-row { flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; }
+  .night .account-modal { padding: 20px; }
+  .night .account-modal-actions { flex-direction: column-reverse; gap: 8px; }
+  .night .account-modal-actions button { width: 100%; min-height: 48px; }
+}

@@ -21,12 +21,23 @@ function formatPrix(valeur) {
   return Number(valeur || 0).toFixed(2).replace('.', ',');
 }
 
+/* Le rythme de facturation selon l'offre. L'écran disait « /mois » pour
+   tout ce qui n'était pas l'ancien annuel : l'offre 3 mois et l'offre
+   À vie affichaient donc une facturation mensuelle qui n'existe pas. */
+function rythme(planKey) {
+  if (planKey === 'm3' || planKey === 'm3_normal') return ' tous les 3 mois';
+  if (planKey === 'vie' || planKey === 'vie_normal') return ' une seule fois';
+  if (planKey === 'annual') return ' par an';
+  return ' par mois';
+}
+const estAVie = (planKey) => planKey === 'vie' || planKey === 'vie_normal';
+
 /* "Mon compte -> Abonnement" : offre en cours, prochaine date/montant de
    paiement, bouton de résiliation. Le succès n'est affiché qu'après la
    réponse positive du backend (lui-même dépendant de la confirmation de
    Whop) — jamais de façon optimiste, pour ne jamais annoncer une
    résiliation qui n'aurait pas réellement eu lieu côté facturation. */
-function AccountPage({ onBackHome }) {
+function AccountPage({ onBackHome, retourVersPlan = false }) {
   const [loading, setLoading] = useState(true);
   const [erreur, setErreur] = useState(null);
   const [abonnement, setAbonnement] = useState(null);
@@ -85,17 +96,17 @@ function AccountPage({ onBackHome }) {
 
   if (loading) {
     return (
-      <div className="account-page">
+      <div className="night account-page">
         <Spinner size="page" label="Chargement de ton abonnement..." />
       </div>
     );
   }
 
   return (
-    <div className="account-page">
+    <div className="night account-page">
       <header className="account-header">
-        <button className="btn-tertiary" onClick={onBackHome}>
-          ← Accueil
+        <button className="btn-tertiary account-retour" onClick={onBackHome}>
+          {retourVersPlan ? '← Mon plan' : '← Accueil'}
         </button>
         <h1>Mon compte</h1>
       </header>
@@ -120,10 +131,17 @@ function AccountPage({ onBackHome }) {
               <span className="account-label">Offre actuelle</span>
               <span className="account-value">
                 {abonnement.plan_label} — {formatPrix(abonnement.price_eur)} €
-                {abonnement.plan_key === 'annual' ? '/an' : '/mois'}
+                {rythme(abonnement.plan_key)}
               </span>
             </div>
 
+            {estAVie(abonnement.plan_key) ? (
+              <div className="account-row">
+                <span className="account-label">Accès</span>
+                <span className="account-value account-a-vie">À vie ✓ · aucun autre paiement</span>
+              </div>
+            ) : (
+            <>
             <div className="account-row">
               <span className="account-label">
                 {abonnement.cancel_at_period_end ? "Accès jusqu'au" : 'Prochain paiement'}
@@ -154,6 +172,8 @@ function AccountPage({ onBackHome }) {
                 Résilier mon abonnement
               </button>
             )}
+            </>
+            )}
 
             {/* Sortie de secours permanente. Elle ouvre la page Whop de CET
                 abonnement — pas la liste des commandes — et fonctionne que la
@@ -165,7 +185,7 @@ function AccountPage({ onBackHome }) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Gérer ou résilier directement chez Whop
+                  {estAVie(abonnement.plan_key) ? 'Voir mon achat chez Whop' : 'Gérer ou résilier directement chez Whop'}
                 </a>
               </p>
             )}
@@ -218,7 +238,7 @@ function AccountPage({ onBackHome }) {
             <p>
               Offre <strong>{abonnement.plan_label}</strong> —{' '}
               {formatPrix(abonnement.price_eur)} €
-              {abonnement.plan_key === 'annual' ? '/an' : '/mois'}.
+              {rythme(abonnement.plan_key)}.
             </p>
             <p>
               Le renouvellement s'arrêtera, mais ton accès reste actif jusqu'au{' '}
