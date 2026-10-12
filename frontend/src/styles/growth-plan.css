@@ -1220,3 +1220,90 @@
 @media (min-width: 700px) {
   .app-nav { left: 50%; right: auto; width: 520px; transform: translateX(-50%); bottom: 16px; border-radius: 22px; border: 1px solid rgba(244, 239, 233, 0.08); }
 }
+
+/* ---------- Grandir : séance, nutrition, sommeil (étape 2) ---------- */
+.app-sous-titre { margin-top: 22px; }
+.app-cta { width: 100%; min-height: 54px; margin: 0 0 24px; }
+.app-cta--fait { background: #161514; color: #4ade80; box-shadow: none; border: 1px solid rgba(74, 222, 128, 0.35); }
+.app-seance-carte .app-cta { margin: 14px 0 0; }
+.app-seance-tete { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.app-niveau { padding: 4px 10px; border-radius: 999px; background: rgba(255, 106, 43, 0.14); color: #ff8a52; font-weight: 800; font-size: 13px; }
+.app-etat { font-size: 13px; font-weight: 700; color: #8a847e; }
+.app-etat.fait { color: #4ade80; }
+.app-seance-meta { margin: 0; font-size: 14px; color: #a39d97; }
+
+.app-mouvements { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.app-mouvements li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; background: #141414; }
+.app-mouvement-emoji { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; background: #1d1b1a; font-size: 24px; }
+.app-mouvement-textes { display: flex; flex-direction: column; }
+.app-mouvement-nom { font-weight: 700; font-size: 15px; }
+.app-mouvement-duree { font-size: 13px; color: #8a847e; }
+
+.app-score-carte { text-align: center; }
+.app-score-libelle { margin: 0; font-size: 14px; color: #a39d97; }
+.app-score { margin: 4px 0 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 44px; letter-spacing: -0.03em; color: #f4efe9; }
+.app-jauges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: left; margin-top: 6px; }
+.app-jauge { display: flex; flex-direction: column; gap: 4px; padding: 10px; border-radius: 12px; background: #1b1918; }
+.app-jauge-nom { font-size: 12.5px; color: #a39d97; font-weight: 600; }
+.app-jauge-valeur { font-size: 13.5px; font-weight: 800; }
+
+.app-aliments { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.app-aliment {
+  width: 100%; display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 8px 12px; border-radius: 14px;
+  border: 1px solid rgba(244, 239, 233, 0.06); background: #141414; color: #f4efe9; text-align: left; cursor: pointer;
+}
+.app-aliment.pris { border-color: rgba(74, 222, 128, 0.45); background: rgba(74, 222, 128, 0.08); }
+.app-aliment-emoji { font-size: 26px; width: 36px; text-align: center; }
+.app-aliment-textes { flex: 1; display: flex; flex-direction: column; }
+.app-aliment-nom { font-weight: 700; font-size: 15px; }
+.app-aliment-apport { font-size: 12.5px; color: #8a847e; }
+.app-aliment-coche {
+  width: 32px; height: 32px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px; background: #232120; font-weight: 800; color: #f4efe9;
+}
+.app-aliment.pris .app-aliment-coche { background: #4ade80; color: #0b0b0c; }
+
+.app-heures { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.app-heure { min-height: 48px; border-radius: 12px; border: 0; background: #161514; color: #f4efe9; font-weight: 800; font-size: 14px; cursor: pointer; }
+.app-heure.active { background: #8b9cff; color: #0b0b0c; }
+.app-sommeil-verdict { margin: 10px 0 0; font-size: 14px; color: #c9c3bd; }
+.app-nuits { margin-top: 16px; }
+.app-barres { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; height: 120px; margin-top: 12px; align-items: end; }
+.app-barre-col { height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px; }
+.app-barre { width: 100%; max-width: 26px; border-radius: 8px 8px 4px 4px; background: #5b5f8f; }
+.app-barre.ok { background: #8b9cff; }
+.app-barre.vide { background: #2a2725; }
+.app-barre-jour { font-size: 12px; color: #8a847e; font-weight: 600; }
+
+/* Séance guidée, plein écran */
+.seance {
+  position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; background: #0a0a0a; color: #f4efe9;
+  padding: calc(12px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));
+}
+.seance-haut { display: flex; justify-content: space-between; align-items: center; }
+.seance-etape { font-weight: 800; color: #a39d97; }
+.seance-fermer { width: 44px; height: 44px; border-radius: 999px; border: 0; background: #161514; color: #f4efe9; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.seance-barre { height: 5px; border-radius: 999px; background: #2a2725; margin: 10px 0; overflow: hidden; }
+.seance-barre span { display: block; height: 100%; background: #ff6a2b; transition: width 1s linear; }
+.seance-centre { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; }
+.seance-emoji { margin: 0; font-size: 56px; line-height: 1; }
+.seance-nom { margin: 0; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -0.02em; }
+.seance-consigne { margin: 0; max-width: 340px; font-size: 15.5px; line-height: 1.45; color: #c9c3bd; }
+.seance-minuteur { position: relative; width: 180px; height: 180px; margin-top: 12px; }
+.seance-minuteur svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.seance-cercle-fond { fill: none; stroke: #1f1d1c; stroke-width: 10; }
+.seance-cercle { fill: none; stroke: #ff6a2b; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+.seance-cercle.repos { stroke: #8b9cff; }
+.seance-secondes { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 52px; }
+.seance-suivant { margin: 8px 0 0; font-size: 14px; color: #8a847e; }
+.seance-commandes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.seance-bouton { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 56px; border-radius: 16px; border: 0; background: #161514; color: #f4efe9; font-weight: 800; font-size: 15px; cursor: pointer; }
+.seance-fin { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; }
+.seance-fin h2 { margin: 0; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 30px; }
+.seance-fin p { margin: 0; max-width: 320px; color: #c9c3bd; line-height: 1.5; }
+.seance-fin .funnel-cta { width: 100%; max-width: 360px; margin-top: 16px; }
+@media (prefers-reduced-motion: reduce) { .seance-cercle, .seance-barre span { transition: none; } }
+/* Les 4 pilules tiennent sur un écran de 375 px. */
+.app-pilules { display: grid; grid-template-columns: repeat(4, auto); justify-content: start; }
+.app-pilule { padding: 0 12px; font-size: 13.5px; }
+.app-jauge-valeur { font-size: 12.5px; }

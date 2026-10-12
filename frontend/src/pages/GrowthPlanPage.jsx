@@ -17,6 +17,15 @@ import { GrowthProjectionChart } from '../components/ui/growth-projection-chart'
 import { MaTaille } from '../components/ui/ma-taille';
 import { LeconsPlan } from '../components/ui/lecons-plan';
 import { pointsFaibles } from '../lib/offres';
+import {
+  CLE_SEANCE,
+  ExercicesDuJour,
+  NutritionJauges,
+  SeanceGuidee,
+  SommeilSuivi,
+  dureeSeanceMin,
+  scoreNutrition,
+} from '../components/ui/app-grandir';
 
 // Date au format YYYY-MM-DD dans le fuseau local (pas toISOString, qui
 // bascule sur UTC et peut donner la veille ou le lendemain selon l'heure).
@@ -35,7 +44,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('accueil');
   const [sousOnglet, setSousOnglet] = useState('exercices');
-  const [exerciceOuvert, setExerciceOuvert] = useState(null);
+  const [seanceOuverte, setSeanceOuverte] = useState(false);
 
   // Todo-liste quotidienne : quelles tâches sont cochées aujourd'hui, et
   // quel "pourquoi" est actuellement déplié.
@@ -180,7 +189,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   const septDerniersJours = Array.from({ length: 7 }, (_, i) => dateDuJour(i - 6));
   let serieEnCours = 0;
   for (let i = septDerniersJours.length - 1; i >= 0; i--) {
-    if (joursAvecAuMoinsUneTache.has(septDerniersJours[i]) || (i === 6 && nbFaites > 0)) {
+    if (joursAvecAuMoinsUneTache.has(septDerniersJours[i]) || (i === 6 && completedKeys.size > 0)) {
       serieEnCours++;
     } else {
       break;
@@ -199,9 +208,26 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
     return 'exercices';
   };
   const parDomaine = (domaine) => tachesDuJour.filter((t) => domaineDe(t) === domaine);
-  const score = (taches) => (taches.length ? Math.round((taches.filter((t) => completedKeys.has(t.key)).length / taches.length) * 100) : 0);
 
   // Ce qui te freine : les points faibles du questionnaire, et où les corriger.
+  const mois = monthlyPlan?.month || 1;
+  const seanceFaite = completedKeys.has(CLE_SEANCE);
+  const ciblesNutrition = { prot: Number(plan.nutrition.protein_g) || 80, ca: Number(plan.nutrition.calcium_mg) || 1300 };
+  const nutrition = scoreNutrition(completedKeys, ciblesNutrition);
+  const resumeDomaine = (cle) => {
+    if (cle === 'nutrition') {
+      return { pct: nutrition.pct, detail: `${nutrition.prot} g protéines` };
+    }
+    const taches = parDomaine(cle);
+    let faites = taches.filter((t) => completedKeys.has(t.key)).length;
+    let total = taches.length;
+    if (cle === 'exercices') {
+      total += 1;
+      if (seanceFaite) faites += 1;
+    }
+    return { pct: total ? Math.round((faites / total) * 100) : 0, detail: `${faites}/${total} faites` };
+  };
+
   const faibles = pointsFaibles(predictionData);
   const correction = {
     'ton sommeil': ['Dormir 8 h ou plus : ton coucher avance de 15 min par semaine.', 'sommeil'],
@@ -306,7 +332,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
             <div className="app-semaine">
               {septDerniersJours.map((jour, idx) => {
                 const estAujourdhui = idx === 6;
-                const fait = estAujourdhui ? nbFaites > 0 : joursAvecAuMoinsUneTache.has(jour);
+                const fait = estAujourdhui ? completedKeys.size > 0 : joursAvecAuMoinsUneTache.has(jour);
                 const d = new Date(`${jour}T12:00:00`);
                 return (
                   <div key={jour} className={`app-jour ${fait ? 'fait' : ''} ${estAujourdhui ? 'aujourdhui' : ''}`}>
@@ -346,20 +372,22 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
             {/* Trois domaines, chacun avec son score du jour (comme GoTall). */}
             <div className="app-domaines">
               {DOMAINES.map(({ cle, nom, Icone }) => {
-                const taches = parDomaine(cle);
-                const faites = taches.filter((t) => completedKeys.has(t.key)).length;
-                const pct = score(taches);
+                const { pct, detail } = resumeDomaine(cle);
                 return (
                   <button key={cle} type="button" className={`app-domaine app-domaine--${cle}`} onClick={() => allerA('grandir', cle)}>
                     <Icone size={20} aria-hidden="true" />
                     <span className="app-domaine-nom">{nom}</span>
                     <span className="app-domaine-pct">{pct} %</span>
                     <span className="app-domaine-barre"><span style={{ width: `${pct}%` }} /></span>
-                    <span className="app-domaine-detail">{faites}/{taches.length} faites</span>
+                    <span className="app-domaine-detail">{detail}</span>
                   </button>
                 );
               })}
             </div>
+
+            <button type="button" className={`funnel-cta app-cta ${seanceFaite ? 'app-cta--fait' : ''}`} onClick={() => setSeanceOuverte(true)}>
+              {seanceFaite ? 'Séance faite ✓ — la refaire' : `Commencer ma séance — ${dureeSeanceMin(mois)} min`}
+            </button>
 
             <div className="app-liste-tete">
               <h2 className="app-carte-titre">Ta liste du jour</h2>
@@ -398,77 +426,20 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
             </div>
 
             {sousOnglet === 'exercices' && (
-              <div className="card-grid">
-                {plan.posture_exercises.map((exercise, idx) => {
-                  const ouvert = exerciceOuvert === idx;
-                  return (
-                    <div key={idx} className="exercise-card card">
-                      <h3>{exercise.name}</h3>
-                      <div className="exercise-meta">
-                        <span className="badge">{exercise.duration_min} min</span>
-                        <span className="badge">{exercise.frequency}</span>
-                      </div>
-                      <button
-                        type="button"
-                        className="btn-tertiary"
-                        onClick={() => setExerciceOuvert(ouvert ? null : idx)}
-                        aria-expanded={ouvert}
-                      >
-                        {ouvert ? 'Masquer le détail' : 'Comment faire'}
-                      </button>
-                      {ouvert && (
-                        <div className="exercise-detail">
-                          <p>{exercise.description}</p>
-                          <p className="exercise-detail-line"><strong>Quand :</strong> {exercise.routine}</p>
-                          <p className="exercise-detail-line"><strong>Ce que ça change :</strong> {exercise.impact}</p>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+              <ExercicesDuJour
+                mois={mois}
+                faite={seanceFaite}
+                onCommencer={() => setSeanceOuverte(true)}
+                exercicesDuPlan={plan.posture_exercises}
+              />
             )}
 
             {sousOnglet === 'nutrition' && (
-              <>
-                <div className="nutrition-targets">
-                  <div className="target-item"><span className="label">Calories</span><span className="value">{Number(plan.nutrition.daily_calories).toLocaleString('fr-FR')} kcal</span></div>
-                  <div className="target-item"><span className="label">Protéines</span><span className="value">{plan.nutrition.protein_g} g</span></div>
-                  <div className="target-item"><span className="label">Calcium</span><span className="value">{Number(plan.nutrition.calcium_mg).toLocaleString('fr-FR')} mg</span></div>
-                  <div className="target-item"><span className="label">Vitamine D</span><span className="value">{plan.nutrition.vitamin_d_mcg} µg</span></div>
-                </div>
-                <div className="supplements-grid app-nutriments">
-                  {plan.supplements.map((supp, idx) => (
-                    <div key={idx} className="supplement-card card">
-                      <h3>{supp.name}</h3>
-                      <div className="supplement-info">
-                        <span className="dosage">{supp.dosage}</span>
-                        <span className="frequency">{supp.safety || supp.frequency}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
+              <NutritionJauges completedKeys={completedKeys} basculer={basculerTache} cibles={ciblesNutrition} />
             )}
 
             {sousOnglet === 'sommeil' && (
-              <>
-                <div className="sleep-schedule">
-                  <div className="schedule-item"><span className="time">{plan.sleep.bedtime}</span><span className="label">Coucher</span></div>
-                  <div className="schedule-item"><span className="time">{plan.sleep.waketime}</span><span className="label">Réveil</span></div>
-                  <div className="schedule-item"><span className="time">{plan.sleep.hours} h</span><span className="label">Sommeil</span></div>
-                </div>
-                <div className="sleep-tips">
-                  <h3>Pour mieux dormir</h3>
-                  <ul className="tips-list">
-                    <li>Chambre complètement sombre</li>
-                    <li>Température fraîche (18–20 °C)</li>
-                    <li>Silence (bouchons d’oreilles si besoin)</li>
-                    <li>Pas d’écrans 45 min avant le coucher</li>
-                    <li>Pas de caféine après 15 h</li>
-                  </ul>
-                </div>
-              </>
+              <SommeilSuivi completedKeys={completedKeys} basculer={basculerTache} plan={plan} apercu={APERCU_PLAN} />
             )}
 
             {sousOnglet === 'mois' && monthlyPlan && (
@@ -528,6 +499,16 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
           </section>
         )}
       </main>
+
+      {seanceOuverte && (
+        <SeanceGuidee
+          mois={mois}
+          onFermer={() => setSeanceOuverte(false)}
+          onTerminee={() => {
+            if (!completedKeys.has(CLE_SEANCE)) basculerTache(CLE_SEANCE);
+          }}
+        />
+      )}
 
       {/* Barre du bas, au pouce, comme une appli. */}
       <nav className="app-nav" aria-label="Navigation">
