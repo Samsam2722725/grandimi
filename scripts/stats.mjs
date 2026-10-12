@@ -92,6 +92,16 @@ try {
     bloc('Total', parJour, () => true)
   }
 
+  const autour = [
+    ['whop_erreur_paiement', 'Cartes refusées (essais)'],
+    ['paiement_ferme_sans_payer', 'Ferment le paiement sans payer'],
+    ['refus_vers_parent', 'Après un refus, vont vers le parent'],
+    ['lien_parent_ouvert', 'Ouvrent « payer par un parent »'],
+    ['parent_page_vue', 'Parents arrivés sur leur page'],
+  ]
+  console.log('\nAutour du paiement')
+  for (const [ev, libelle] of autour) console.log(`  ${libelle.padEnd(38)} ${String(somme(parJour, ev)).padStart(5)}`)
+
   console.log('\nJour par jour : visites → questionnaire → e-mail → paywall → paiement ouvert → payé')
   for (const jour of [...new Set(parJour.map((l) => l.jour))]) {
     const v = ETAPES.map(([ev]) => String(somme(parJour, ev, (j) => j === jour)).padStart(4))
