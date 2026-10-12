@@ -87,6 +87,9 @@ const PREVIEW_DATA = {
   email: 'preview@grandimi.dev',
   user_id: 'preview-user',
   model_used: 'Khamis-Roche + percentile OMS — preview',
+  // Réponses d'habitudes, pour voir « Ce qui te freine » et le paywall
+  // personnalisés en aperçu.
+  habitudes: { coucher: 'apres-minuit', posture: 'voute', proteines: 'rarement', exercice_freq: '0-2', laitages: '1-2', telephone: 'tous-les-soirs' },
 };
 
 function pagePreviewDemandee(params) {
