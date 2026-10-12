@@ -39,6 +39,42 @@ function dateDuJour(decalageJours = 0) {
   return `${d.getFullYear()}-${mois}-${jour}`;
 }
 
+/* Les 12 thèmes mensuels du plan (internal/planner/monthly_plan.go,
+   themesMensuels), dans l'ordre du serveur : le thème n°k est servi quand
+   on demande month=k. */
+const THEMES = [
+  'Le sommeil', 'La posture', 'Les protéines', 'L’étirement et la suspension',
+  'Le dos et les épaules', 'La régularité du sommeil', 'Le calcium et la vitamine D',
+  'La mobilité des hanches', 'La natation et le cardio', 'Le gainage',
+  'La récupération et le stress', 'Le bilan',
+];
+
+/* Le plan démarre par SON point faible : le paywall promet « on corrige
+   d'abord ce qui te freine ». Ses points faibles (pointsFaibles, dans
+   l'ordre) donnent les premiers thèmes ; viennent ensuite les autres dans
+   l'ordre habituel, le bilan toujours en dernier. Le serveur ne change pas :
+   on lui demande simplement le thème voulu. */
+const THEME_DU_POINT_FAIBLE = {
+  'ta posture': 2,
+  'ton sommeil': 1,
+  'ton téléphone au lit': 1,
+  'ton heure de coucher': 6,
+  'tes protéines': 3,
+  'ton calcium': 7,
+  'ton sport': 9,
+};
+
+function ordreDesThemes(faibles) {
+  const ordre = [];
+  for (const f of faibles) {
+    const n = THEME_DU_POINT_FAIBLE[f];
+    if (n && !ordre.includes(n)) ordre.push(n);
+  }
+  for (let n = 1; n <= 11; n++) if (!ordre.includes(n)) ordre.push(n);
+  ordre.push(12);
+  return ordre;
+}
+
 function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJourPrediction }) {
   const [plan, setPlan] = useState(null);
   const [monthlyPlan, setMonthlyPlan] = useState(null);
@@ -47,6 +83,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   const [activeTab, setActiveTab] = useState('accueil');
   const [sousOnglet, setSousOnglet] = useState('exercices');
   const [seanceOuverte, setSeanceOuverte] = useState(false);
+  const [moisAbonnement, setMoisAbonnement] = useState(1);
   /* L'offre du client : la taille estimée est réservée aux offres 3 mois
      et À vie. Tant qu'on ne sait pas (erreur, ancienne offre), on montre :
      mieux vaut donner trop que bloquer quelqu'un qui a payé. */
@@ -100,9 +137,10 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
           // 30 min par jour » dans un plan dit personnalisé.
           sleep_hours_per_night: predictionData.sleep_hours_per_night || undefined,
           exercise_min_per_day: predictionData.exercise_min_per_day || undefined,
-          month: mois,
+          month: ordreDesThemes(pointsFaibles(predictionData))[(mois - 1) % 12],
         });
 
+        setMoisAbonnement(mois);
         setPlan(data.plan);
         setMonthlyPlan(data.monthly_plan);
         setLoading(false);
@@ -225,7 +263,13 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   const parDomaine = (domaine) => tachesDuJour.filter((t) => domaineDe(t) === domaine);
 
   // Ce qui te freine : les points faibles du questionnaire, et où les corriger.
-  const mois = monthlyPlan?.month || 1;
+  const mois = moisAbonnement;
+  const ordreThemes = ordreDesThemes(pointsFaibles(predictionData));
+  const themeSuivant = THEMES[ordreThemes[mois % 12] - 1];
+  // Le thème du mois vient-il d'un de ses points faibles ?
+  const themeVientDeSesFaibles = pointsFaibles(predictionData).some(
+    (f) => THEME_DU_POINT_FAIBLE[f] === ordreThemes[(mois - 1) % 12],
+  );
   const seanceFaite = completedKeys.has(CLE_SEANCE);
   const ciblesNutrition = { prot: Number(plan.nutrition.protein_g) || 80, ca: Number(plan.nutrition.calcium_mg) || 1300 };
   const nutrition = scoreNutrition(completedKeys, ciblesNutrition);
@@ -334,7 +378,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
             <div className="app-titre-ligne">
               <div>
                 <p className="app-surtitre">
-                  {monthlyPlan ? `Mois ${monthlyPlan.month} · ${monthlyPlan.focus}` : 'Ton plan'}
+                  {monthlyPlan ? `Mois ${mois} · ${monthlyPlan.focus}` : 'Ton plan'}
                 </p>
                 <h1 className="app-titre">Aujourd’hui</h1>
               </div>
@@ -370,7 +414,12 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                       <li key={f}>
                         <button type="button" onClick={() => allerA('grandir', sous)}>
                           <span className="app-freine-textes">
-                            <span className="app-freine-nom">{f.charAt(0).toUpperCase() + f.slice(1)}</span>
+                            <span className="app-freine-nom">
+                              {f.charAt(0).toUpperCase() + f.slice(1)}
+                              {THEME_DU_POINT_FAIBLE[f] === ordreThemes[(mois - 1) % 12] && (
+                                <span className="app-focus-badge">Ton focus ce mois-ci</span>
+                              )}
+                            </span>
                             <span className="app-freine-fix">{texte}</span>
                           </span>
                           <ChevronRight size={18} aria-hidden="true" />
@@ -459,7 +508,10 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
 
             {sousOnglet === 'mois' && monthlyPlan && (
               <>
-                <h2 className="app-carte-titre">Mois {monthlyPlan.month} — {monthlyPlan.focus}</h2>
+                <h2 className="app-carte-titre">Mois {mois} — {monthlyPlan.focus}</h2>
+                {themeVientDeSesFaibles && (
+                  <p className="app-focus-raison">On commence par là : c’est ce qui te freine le plus d’après tes réponses.</p>
+                )}
                 <p className="app-texte">{monthlyPlan.why_this_month}</p>
                 <div className="alert alert-info" style={{ margin: '16px 0' }}>
                   <div><strong>Ton objectif du mois :</strong> {monthlyPlan.month_target}</div>
@@ -472,7 +524,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                   <div>
                     Mesure-toi à la fin du mois : ton prochain plan en dépend.
                     <br />
-                    <strong>{monthlyPlan.next_month_preview}</strong>
+                    <strong>{`Mois ${mois + 1} : ${themeSuivant}`}</strong>
                   </div>
                 </div>
               </>
