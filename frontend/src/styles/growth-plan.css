@@ -1307,3 +1307,7 @@
 .app-pilules { display: grid; grid-template-columns: repeat(4, auto); justify-content: start; }
 .app-pilule { padding: 0 12px; font-size: 13.5px; }
 .app-jauge-valeur { font-size: 12.5px; }
+/* Taille estimée verrouillée (offre 1 mois) */
+.ma-taille-verrou { border-color: rgba(255, 106, 43, 0.35) !important; }
+.ma-taille-floue { filter: blur(7px); user-select: none; }
+.ma-taille-debloquer { width: 100%; margin-top: 14px; min-height: 52px; }

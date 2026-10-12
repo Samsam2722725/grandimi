@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Ruler, TrendingUp } from 'lucide-react'
+import { Ruler, TrendingUp, Lock } from 'lucide-react'
 
 import apiClient from '../../lib/api'
 import { APERCU_PLAN } from '../../lib/plan-apercu'
@@ -26,7 +26,7 @@ function dateLisible(iso) {
   return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
-export function MaTaille({ predictionData, onMiseAJour }) {
+export function MaTaille({ predictionData, onMiseAJour, verrouille = false, onDebloquer }) {
   const [mesures, setMesures] = useState([])
   const [vitesse, setVitesse] = useState(null)
   const [saisie, setSaisie] = useState(String(predictionData.current_height_cm ?? ''))
@@ -102,6 +102,23 @@ export function MaTaille({ predictionData, onMiseAJour }) {
 
   return (
     <section className="ma-taille">
+      {verrouille ? (
+        /* Offre 1 mois : la taille estimée est réservée aux offres 3 mois
+           et À vie (c'est ce que dit le paywall). On montre qu'elle existe,
+           sans la donner. */
+        <div className="ma-taille-estimation ma-taille-verrou">
+          <span className="ma-taille-label">
+            <Lock size={16} aria-hidden="true" /> Ta taille adulte estimée
+          </span>
+          <strong className="ma-taille-valeur ma-taille-floue" aria-hidden="true">1??  cm</strong>
+          <span className="ma-taille-marge">98 % de précision · incluse dans les offres 3 mois et À vie</span>
+          {onDebloquer && (
+            <button type="button" className="funnel-cta ma-taille-debloquer" onClick={onDebloquer}>
+              Passer à 3 mois et la voir
+            </button>
+          )}
+        </div>
+      ) : (
       <div className="ma-taille-estimation">
         <span className="ma-taille-label">
           <TrendingUp size={16} aria-hidden="true" /> Ta taille adulte estimée
@@ -114,6 +131,7 @@ export function MaTaille({ predictionData, onMiseAJour }) {
         )}
         {recalcule && <span className="ma-taille-maj">Estimation recalculée avec ta nouvelle mesure</span>}
       </div>
+      )}
 
       <form className="ma-taille-form" onSubmit={enregistrer}>
         <label htmlFor="ma-taille-saisie">Ta taille aujourd’hui</label>

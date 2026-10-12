@@ -45,6 +45,17 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   const [activeTab, setActiveTab] = useState('accueil');
   const [sousOnglet, setSousOnglet] = useState('exercices');
   const [seanceOuverte, setSeanceOuverte] = useState(false);
+  /* L'offre du client : la taille estimée est réservée aux offres 3 mois
+     et À vie. Tant qu'on ne sait pas (erreur, ancienne offre), on montre :
+     mieux vaut donner trop que bloquer quelqu'un qui a payé. */
+  const [planKey, setPlanKey] = useState(() =>
+    APERCU_PLAN && new URLSearchParams(window.location.search).get('offre') ? new URLSearchParams(window.location.search).get('offre') : null,
+  );
+  useEffect(() => {
+    if (APERCU_PLAN) return;
+    apiClient.getSubscription().then((s) => setPlanKey(s?.plan_key || null)).catch(() => {});
+  }, []);
+  const tailleVerrouillee = planKey === 'm1' || planKey === 'm1_normal';
 
   // Todo-liste quotidienne : quelles tâches sont cochées aujourd'hui, et
   // quel "pourquoi" est actuellement déplié.
@@ -468,7 +479,8 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
         {activeTab === 'taille' && (
           <section className="tab-content">
             <h1 className="app-titre">Ma taille</h1>
-            <MaTaille predictionData={predictionData} onMiseAJour={onMiseAJourPrediction} />
+            <MaTaille predictionData={predictionData} onMiseAJour={onMiseAJourPrediction} verrouille={tailleVerrouillee} />
+            {!tailleVerrouillee && (
             <div className="card plan-chart-card">
               <h3 className="plan-chart-title">Ta trajectoire de croissance</h3>
               <GrowthProjectionChart
@@ -480,7 +492,8 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                 sex={predictionData.sex}
               />
             </div>
-            {predictionData.out_of_domain && predictionData.warning && (
+            )}
+            {!tailleVerrouillee && predictionData.out_of_domain && predictionData.warning && (
               <div className="alert alert-warning" style={{ marginTop: '16px' }} role="status">
                 <div><span aria-hidden="true">⚕️ </span>{predictionData.warning}</div>
               </div>
