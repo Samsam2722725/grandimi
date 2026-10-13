@@ -153,3 +153,38 @@
   border-color: #ff5a1f;
   outline: none;
 }
+
+/* ---------- « Paiement confirmé » au style de l'app (13/10/2026) ---------- */
+.pc-page { min-height: 100svh; background: #0a0a0a; color: #f4efe9; display: flex; justify-content: center; }
+.pc-conteneur { width: 100%; max-width: 420px; padding: calc(28px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom)); text-align: center; }
+.pc-marque { margin: 0 0 28px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -0.03em; }
+.pc-ok {
+  width: 64px; height: 64px; margin: 0 auto 14px; border-radius: 999px; display: flex; align-items: center; justify-content: center;
+  background: #4ade80; color: #0b0b0c; box-shadow: 0 0 40px rgba(74, 222, 128, 0.35);
+}
+.pc-titre { margin: 0; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 30px; letter-spacing: -0.03em; color: #f4efe9; }
+.pc-sous-titre { margin: 8px auto 22px; max-width: 340px; font-size: 15px; line-height: 1.5; color: #c9c3bd; }
+.pc-form { text-align: left; display: flex; flex-direction: column; gap: 14px; }
+.pc-form label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 700; color: #f4efe9; }
+.pc-form input {
+  width: 100%; min-height: 52px; padding: 0 14px; border-radius: 14px; border: 1.5px solid rgba(244, 239, 233, 0.14);
+  background: #141414; color: #f4efe9; font-size: 16px;
+}
+.pc-form input:focus { outline: none; border-color: #ff6a2b; }
+.pc-email { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: 14px; background: #141414; }
+.pc-email-libelle { font-size: 12.5px; color: #8a847e; font-weight: 700; }
+.pc-email-valeur { font-size: 15px; color: #f4efe9; word-break: break-all; }
+.pc-mdp { position: relative; }
+.pc-mdp input { padding-right: 52px; }
+.pc-voir {
+  position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border: 0;
+  background: none; color: #a39d97; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.pc-regle { margin: 6px 0 0; font-size: 13.5px; color: #a39d97; }
+.pc-regle.ok { color: #4ade80; }
+.pc-cta { width: 100%; min-height: 56px; margin-top: 4px; }
+.pc-liste { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; color: #a39d97; font-size: 14px; }
+.pc-liste li { display: inline-flex; align-items: center; gap: 6px; }
+.pc-liste svg { color: #4ade80; }
+.pc-page .pc-marque { color: #f4efe9; }
+.pc-page .pc-cta { background: linear-gradient(90deg, #ff7a2e, #ff4d1a); color: #fff; box-shadow: 0 0 28px rgba(255, 90, 31, 0.4); }

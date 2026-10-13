@@ -102,6 +102,18 @@ try {
   console.log('\nAutour du paiement')
   for (const [ev, libelle] of autour) console.log(`  ${libelle.padEnd(38)} ${String(somme(parJour, ev)).padStart(5)}`)
 
+  const app = [
+    ['app_ouverte', 'Abonnés qui ouvrent l’app'],
+    ['seance_commencee', 'Commencent la séance'],
+    ['seance_terminee', 'Terminent la séance'],
+    ['app_coche', 'Cochent au moins une chose'],
+    ['visite_finie', 'Finissent ou passent la visite'],
+    ['montee_ouverte', 'Ouvrent « Passer à 3 mois »'],
+    ['montee_en_gamme', 'Vont payer la montée en gamme'],
+  ]
+  console.log('\nDans l’app (après paiement) — visiteurs distincts')
+  for (const [ev, libelle] of app) console.log(`  ${libelle.padEnd(38)} ${String(somme(parJour, ev)).padStart(5)}`)
+
   console.log('\nJour par jour : visites → questionnaire → e-mail → paywall → paiement ouvert → payé')
   for (const jour of [...new Set(parJour.map((l) => l.jour))]) {
     const v = ETAPES.map(([ev]) => String(somme(parJour, ev, (j) => j === jour)).padStart(4))

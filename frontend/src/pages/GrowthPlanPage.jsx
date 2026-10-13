@@ -17,6 +17,7 @@ import { GrowthProjectionChart } from '../components/ui/growth-projection-chart'
 import { MaTaille } from '../components/ui/ma-taille';
 import { LeconsPlan } from '../components/ui/lecons-plan';
 import { pointsFaibles } from '../lib/offres';
+import { capture } from '../lib/analytics';
 import {
   CLE_SEANCE,
   ExercicesDuJour,
@@ -42,6 +43,9 @@ function dateDuJour(decalageJours = 0) {
 /* Les 12 thèmes mensuels du plan (internal/planner/monthly_plan.go,
    themesMensuels), dans l'ordre du serveur : le thème n°k est servi quand
    on demande month=k. */
+// Le test du mur, coché chaque jour depuis la carte posture de l'accueil.
+const CLE_TEST_MUR = 'posture-test-mur';
+
 const THEMES = [
   'Le sommeil', 'La posture', 'Les protéines', 'L’étirement et la suspension',
   'Le dos et les épaules', 'La régularité du sommeil', 'Le calcium et la vitamine D',
@@ -84,6 +88,14 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   const [sousOnglet, setSousOnglet] = useState('exercices');
   const [seanceOuverte, setSeanceOuverte] = useState(false);
   const [moisAbonnement, setMoisAbonnement] = useState(1);
+  const [testMurOuvert, setTestMurOuvert] = useState(false);
+
+  /* Mesure de l'usage (après paiement) : savoir qui revient, qui fait sa
+     séance, qui coche, pour comprendre qui résilie. Lu par
+     scripts/stats.mjs, section « Dans l'app ». */
+  useEffect(() => {
+    capture('app_ouverte', { etape: 'accueil' });
+  }, []);
   /* L'offre du client : la taille estimée est réservée aux offres 3 mois
      et À vie. Tant qu'on ne sait pas (erreur, ancienne offre), on montre :
      mieux vaut donner trop que bloquer quelqu'un qui a payé. */
@@ -168,6 +180,10 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   }, [predictionData]);
 
   const basculerTache = (cle) => {
+    if (!completedKeys.has(cle)) {
+      const famille = cle.startsWith('nutri-') ? 'nutrition' : cle.startsWith('sommeil-h-') ? 'sommeil' : cle === 'posture-test-mur' ? 'posture' : cle === 'seance-du-jour' ? 'seance' : 'tache';
+      capture('app_coche', { etape: famille });
+    }
     setCompletedKeys((prev) => {
       const suivant = new Set(prev);
       if (suivant.has(cle)) suivant.delete(cle);
@@ -281,8 +297,9 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
     let faites = taches.filter((t) => completedKeys.has(t.key)).length;
     let total = taches.length;
     if (cle === 'exercices') {
-      total += 1;
+      total += 2;
       if (seanceFaite) faites += 1;
+      if (completedKeys.has(CLE_TEST_MUR)) faites += 1;
     }
     return { pct: total ? Math.round((faites / total) * 100) : 0, detail: `${faites}/${total} faites` };
   };
@@ -299,6 +316,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   };
 
   const allerA = (onglet, sous) => {
+    if (onglet !== activeTab) capture('app_onglet', { etape: onglet });
     setActiveTab(onglet);
     if (sous) setSousOnglet(sous);
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -433,6 +451,41 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
               )}
             </div>
 
+            {/* La posture : le seul résultat visible en quelques semaines.
+                On le met en avant, avec un geste simple et vérifiable. */}
+            <div className="app-carte app-posture">
+              <div className="app-posture-tete">
+                <span className="app-posture-emoji" aria-hidden="true">🧍</span>
+                <div>
+                  <h2 className="app-carte-titre">Paraître plus grand en 3 semaines</h2>
+                  <p className="app-posture-texte">Ta posture, c’est ce que tu verras changer en premier dans le miroir.</p>
+                </div>
+              </div>
+              {(predictionData.habitudes?.posture === 'voute' || predictionData.habitudes?.posture === 'un-peu-voute') && (
+                <p className="app-posture-toi">Tu nous as dit être {predictionData.habitudes.posture === 'voute' ? 'souvent' : 'un peu'} voûté : c’est ton gain le plus rapide.</p>
+              )}
+              <button type="button" className="app-posture-lien" onClick={() => setTestMurOuvert((o) => !o)} aria-expanded={testMurOuvert}>
+                {testMurOuvert ? 'Masquer' : 'Le test du mur (1 min)'}
+              </button>
+              {testMurOuvert && (
+                <ol className="app-posture-etapes">
+                  <li>Dos contre un mur, talons à 5 cm du mur.</li>
+                  <li>Fesses, omoplates et arrière de la tête touchent le mur.</li>
+                  <li>Ta tête ne touche pas sans lever le menton ? Ta posture te fait perdre de la hauteur.</li>
+                  <li>Reste 1 minute comme ça, en te grandissant : c’est l’exercice. Chaque jour.</li>
+                  <li>Prends une photo de profil aujourd’hui, et refais-la dans 3 semaines au même endroit.</li>
+                </ol>
+              )}
+              <button
+                type="button"
+                className={`app-posture-fait ${completedKeys.has(CLE_TEST_MUR) ? 'fait' : ''}`}
+                onClick={() => basculerTache(CLE_TEST_MUR)}
+                aria-pressed={completedKeys.has(CLE_TEST_MUR)}
+              >
+                {completedKeys.has(CLE_TEST_MUR) ? '✓ Test du mur fait aujourd’hui' : 'J’ai fait le test du mur aujourd’hui'}
+              </button>
+            </div>
+
             {/* Trois domaines, chacun avec son score du jour (comme GoTall). */}
             <div className="app-domaines">
               {DOMAINES.map(({ cle, nom, Icone }) => {
@@ -449,7 +502,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
               })}
             </div>
 
-            <button type="button" className={`funnel-cta app-cta ${seanceFaite ? 'app-cta--fait' : ''}`} onClick={() => setSeanceOuverte(true)}>
+            <button type="button" className={`funnel-cta app-cta ${seanceFaite ? 'app-cta--fait' : ''}`} onClick={() => { capture('seance_commencee', { etape: String(mois) }); setSeanceOuverte(true); }}>
               {seanceFaite ? 'Séance faite ✓ — la refaire' : `Commencer ma séance — ${dureeSeanceMin(mois)} min`}
             </button>
 
@@ -493,7 +546,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
               <ExercicesDuJour
                 mois={mois}
                 faite={seanceFaite}
-                onCommencer={() => setSeanceOuverte(true)}
+                onCommencer={() => { capture('seance_commencee', { etape: String(mois) }); setSeanceOuverte(true); }}
                 exercicesDuPlan={plan.posture_exercises}
               />
             )}
@@ -535,7 +588,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
         {activeTab === 'taille' && (
           <section className="tab-content">
             <h1 className="app-titre">Ma taille</h1>
-            <MaTaille predictionData={predictionData} onMiseAJour={onMiseAJourPrediction} verrouille={tailleVerrouillee} onDebloquer={() => setMonteeOuverte(true)} />
+            <MaTaille predictionData={predictionData} onMiseAJour={onMiseAJourPrediction} verrouille={tailleVerrouillee} onDebloquer={() => { capture('montee_ouverte', { etape: planKey || '' }); setMonteeOuverte(true); }} />
             {!tailleVerrouillee && (
             <div className="card plan-chart-card">
               <h3 className="plan-chart-title">Ta trajectoire de croissance</h3>
@@ -574,6 +627,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
           mois={mois}
           onFermer={() => setSeanceOuverte(false)}
           onTerminee={() => {
+            capture('seance_terminee', { etape: String(mois) });
             if (!completedKeys.has(CLE_SEANCE)) basculerTache(CLE_SEANCE);
           }}
         />

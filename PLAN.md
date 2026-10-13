@@ -16,9 +16,9 @@ Détail technique : BACKLOG.md et AUDIT-APRES-PAIEMENT.md.
 
 ## Phase 1 — Finir avant de publier
 1. [x] Le plan démarre par SON point faible (mois 1 sur la posture s'il est voûté, sur l'alimentation s'il mange peu de protéines…). Aujourd'hui tout le monde commence par « Le sommeil ».
-2. [ ] Posture mise en avant dans l'app : carte « Paraître plus grand en 3 semaines » + test du mur.
-3. [ ] Écran « Paiement confirmé » au style de l'app (bouton coupé) + les 5 questions de réglage juste après.
-4. [ ] Mesurer l'usage de l'app (séances faites, jours actifs, qui décroche).
+2. [x] Posture mise en avant dans l'app : carte « Paraître plus grand en 3 semaines » + test du mur.
+3. [x] Écran « Paiement confirmé » au style de l'app (bouton coupé) + les 5 questions de réglage juste après.
+4. [x] Mesurer l'usage de l'app (séances faites, jours actifs, qui décroche).
 
 ## Phase 2 — Publier l'app et la tester
 5. [ ] Publier l'app + le serveur (vérifier que « Vérifier le backend » passe).

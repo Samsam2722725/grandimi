@@ -1352,3 +1352,14 @@
 /* Le thème du mois vient de son point faible */
 .app-focus-badge { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 999px; background: #ff6a2b; color: #0b0b0c; font-size: 11px; font-weight: 800; vertical-align: 2px; }
 .app-focus-raison { margin: -4px 0 8px; font-size: 14px; color: #ff8a52; font-weight: 600; }
+/* Carte posture de l'accueil */
+.app-posture { margin-top: 12px; }
+.app-posture-tete { display: flex; gap: 12px; align-items: flex-start; }
+.app-posture-emoji { width: 48px; height: 48px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; background: #1d1b1a; font-size: 28px; }
+.app-posture .app-carte-titre { margin-bottom: 4px; }
+.app-posture-texte { margin: 0; font-size: 14px; color: #c9c3bd; line-height: 1.4; }
+.app-posture-toi { margin: 10px 0 0; font-size: 14px; color: #ff8a52; font-weight: 700; }
+.app-posture-lien { margin-top: 8px; min-height: 40px; padding: 0; border: 0; background: none; color: #ff8a52; font-weight: 700; font-size: 14px; cursor: pointer; text-decoration: underline; }
+.app-posture-etapes { margin: 4px 0 8px; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; line-height: 1.4; color: #d9d3cd; }
+.app-posture-fait { width: 100%; margin-top: 6px; min-height: 48px; border-radius: 14px; border: 1.5px solid rgba(244, 239, 233, 0.14); background: #1a1817; color: #f4efe9; font-weight: 700; font-size: 14.5px; cursor: pointer; }
+.app-posture-fait.fait { border-color: rgba(74, 222, 128, 0.45); background: rgba(74, 222, 128, 0.1); color: #4ade80; }

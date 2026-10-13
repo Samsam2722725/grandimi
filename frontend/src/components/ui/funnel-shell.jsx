@@ -43,11 +43,15 @@ export function FunnelShell({
   return (
     <div className={cn('funnel', className)}>
       <header className="funnel-header">
+        {/* Sans étape précédente, une flèche qui ne fait rien : on garde
+            sa place dans la grille, invisible. */}
         <button
           type="button"
           className="funnel-back"
           onClick={onBack}
           aria-label="Revenir à l’écran précédent"
+          style={onBack ? undefined : { visibility: 'hidden' }}
+          tabIndex={onBack ? undefined : -1}
         >
           <ArrowLeft size={20} aria-hidden="true" />
         </button>

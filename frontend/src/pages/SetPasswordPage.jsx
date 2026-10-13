@@ -1,23 +1,28 @@
 import { useState, useEffect } from 'react';
+import { Check, Eye, EyeOff } from 'lucide-react';
 import Spinner from '../components/Spinner';
 import apiClient from '../lib/api';
 import { enregistrerPredictionServeur } from '../lib/prediction-serveur';
+import '../styles/funnel.css';
 import '../styles/auth-page.css';
 
+/* « Paiement confirmé » : le premier écran après avoir payé.
+
+   Même habillage que l'app (fond noir, Syne, orange) : c'est la première
+   impression du client qui vient de payer. Un seul champ mot de passe avec
+   « afficher » (plus de champ de confirmation), la règle des 8 caractères
+   visible en permanence, et autoComplete="new-password" pour que le
+   téléphone propose de l'enregistrer. */
 function SetPasswordPage({ onAuthComplete, onSeConnecter }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [voirMotDePasse, setVoirMotDePasse] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  /* Le champ e-mail était verrouillé en toutes circonstances, y compris
-     quand aucune adresse n'avait été retrouvée : le client venait de
-     payer et se retrouvait devant un champ vide, impossible à remplir,
-     sans aucune issue. Ce n'est pas un cas tordu — Whop ne renvoie pas
-     customer_email de lui-même, et le localStorage est vide dès que le
-     paiement s'est fait sur un autre appareil que le questionnaire.
-     Le champ ne se verrouille donc plus que si l'adresse est connue. */
+  /* Le champ e-mail ne se verrouille que si l'adresse est connue : Whop
+     ne renvoie pas toujours customer_email, et le localStorage est vide
+     quand le paiement s'est fait sur un autre appareil. */
   const [emailConnu, setEmailConnu] = useState(false);
 
   useEffect(() => {
@@ -28,26 +33,11 @@ function SetPasswordPage({ onAuthComplete, onSeConnecter }) {
       params.get('customer_email') || sessionStorage.getItem('grandimi:email_whop');
     const savedEmail = localStorage.getItem('userEmail');
 
-    /* L'adresse saisie sur Grandimi passe AVANT celle renvoyée par Whop.
-
-         C'est elle qui identifie le compte crédité : /api/v1/checkout
-         résout le compte depuis cette adresse et transmet son
-         identifiant à Whop (metadata[grandimi_user_id]), que le webhook
-         relit pour accorder le premium.
-
-         customer_email, lui, est l'adresse du COMPTE WHOP du payeur.
-         Elle n'a aucune raison d'être la même — on paie depuis un
-         compte Whop ouvert avec une autre adresse que celle tapée dans
-         le questionnaire. En la préférant, cet écran créait un compte
-         tout neuf, sans abonnement, pendant que le premium venait
-         d'atterrir sur le bon : le client payait puis lisait
-         « abonnement requis ».
-
-         Constaté trois fois en production le 12/09/2026.
-
-         Whop garde le dernier mot uniquement quand on n'a rien en
-         local — paiement fait depuis un autre appareil, où il ne reste
-         que ce que l'URL de retour transporte. */
+    /* L'adresse saisie sur Grandimi passe AVANT celle renvoyée par Whop :
+       c'est elle qui identifie le compte crédité. Préférer customer_email
+       créait un compte neuf sans abonnement (constaté trois fois en
+       production le 12/09/2026). Whop ne garde le dernier mot que quand
+       on n'a rien en local. */
     if (savedEmail) {
       setEmail(savedEmail);
       setEmailConnu(true);
@@ -64,28 +54,14 @@ function SetPasswordPage({ onAuthComplete, onSeConnecter }) {
 
     try {
       if (!email) {
-        throw new Error('Email manquant');
+        throw new Error('Entre l’adresse avec laquelle tu viens de payer.');
       }
-
-      if (!password || !confirmPassword) {
-        throw new Error('Veuillez entrer un mot de passe');
-      }
-
-      if (password !== confirmPassword) {
-        throw new Error('Les mots de passe ne correspondent pas');
-      }
-
       if (password.length < 8) {
-        throw new Error('Le mot de passe doit avoir au moins 8 caractères');
+        throw new Error('Ton mot de passe doit faire au moins 8 caractères.');
       }
 
-      // Créer le compte avec le mot de passe choisi
-      const response = await apiClient.signup({
-        email,
-        password,
-      });
+      const response = await apiClient.signup({ email, password });
 
-      // Connecter l'utilisateur
       localStorage.setItem('user', JSON.stringify(response.user));
       localStorage.setItem('token', response.token);
 
@@ -101,103 +77,107 @@ function SetPasswordPage({ onAuthComplete, onSeConnecter }) {
       setLoading(false);
       onAuthComplete();
     } catch (err) {
-      setError(err.message || 'Erreur lors de la création du compte');
+      setError(err.message || 'La création du compte a échoué. Réessaie dans un instant.');
       setLoading(false);
     }
   };
 
   return (
-    <div className="auth-page auth-night">
-      <div className="auth-container">
-        <div className="auth-logo">
-          <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
-            <circle cx="16" cy="16" r="14" stroke="currentColor" strokeWidth="2" />
-            <path d="M16 8V24M8 16H24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          </svg>
-          <span>Grandimi</span>
+    <div className="night auth-page auth-night pc-page">
+      <div className="pc-conteneur">
+        <p className="pc-marque">Grandimi</p>
+
+        <div className="pc-ok" aria-hidden="true">
+          <Check size={30} strokeWidth={3} />
         </div>
+        <h1 className="pc-titre">Paiement confirmé</h1>
+        <p className="pc-sous-titre">
+          Dernière étape : choisis un mot de passe pour retrouver ton plan sur n’importe quel téléphone.
+        </p>
 
-        <div className="auth-card">
-          <h1>Paiement confirmé</h1>
-          <p className="subtitle">Choisis un mot de passe pour retrouver ton plan à chaque connexion.</p>
-
-          <form onSubmit={handleSubmit} className="auth-form">
-            {error && (
-              <div className="alert alert-error">
-                <span className="alert-icon">✕</span>
-                <div>
-                  {error}
-                  {/* Compte qui a déjà un mot de passe (onglet rechargé,
-                      réabonnement) : l'ancienne page n'offrait aucune issue. */}
-                  {/existe déjà/i.test(error) && onSeConnecter && (
-                    <>
-                      {' '}
-                      <button type="button" className="btn-tertiary" onClick={onSeConnecter}>
-                        Se connecter
-                      </button>
-                    </>
-                  )}
-                </div>
+        <form onSubmit={handleSubmit} className="pc-form">
+          {error && (
+            <div className="alert alert-error" role="alert">
+              <span className="alert-icon">✕</span>
+              <div>
+                {error}
+                {/* Compte qui a déjà un mot de passe (onglet rechargé,
+                    réabonnement) : une issue directe. */}
+                {/existe déjà/i.test(error) && onSeConnecter && (
+                  <>
+                    {' '}
+                    <button type="button" className="btn-tertiary" onClick={onSeConnecter}>
+                      Se connecter
+                    </button>
+                  </>
+                )}
               </div>
-            )}
+            </div>
+          )}
 
+          {emailConnu ? (
+            <div className="pc-email">
+              <span className="pc-email-libelle">Ton compte</span>
+              <span className="pc-email-valeur">{email}</span>
+              {/* Champ caché : le gestionnaire de mots de passe du téléphone
+                  associe ainsi le mot de passe à la bonne adresse. */}
+              <input type="email" name="email" value={email} autoComplete="username" readOnly hidden />
+            </div>
+          ) : (
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">E-mail</label>
               <input
                 id="email"
                 type="email"
+                inputMode="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                disabled={emailConnu}
-                readOnly={emailConnu}
                 required
                 autoComplete="email"
-                placeholder={emailConnu ? undefined : 'celle utilisée pour le paiement'}
-                className={emailConnu ? 'input-disabled' : undefined}
+                placeholder="celle utilisée pour le paiement"
               />
-              <p className="form-helper">
-                {emailConnu
-                  ? 'Email du paiement (non modifiable)'
-                  : 'Saisis l’adresse avec laquelle tu viens de payer.'}
-              </p>
             </div>
+          )}
 
-            <div className="form-group">
-              <label htmlFor="password">Mot de passe</label>
+          <div className="form-group">
+            <label htmlFor="password">Mot de passe</label>
+            <div className="pc-mdp">
               <input
                 id="password"
-                type="password"
+                name="password"
+                type={voirMotDePasse ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Min 8 caractères"
+                autoComplete="new-password"
+                enterKeyHint="go"
                 required
               />
+              <button
+                type="button"
+                className="pc-voir"
+                onClick={() => setVoirMotDePasse((v) => !v)}
+                aria-label={voirMotDePasse ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+              >
+                {voirMotDePasse ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
+              </button>
             </div>
-
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
-              <input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Retape ton mot de passe"
-                required
-              />
-            </div>
-
-            <button type="submit" className="btn-primary btn-full" disabled={loading}>
-              {loading ? <><Spinner />Création du compte…</> : 'Créer mon compte et accéder au plan'}
-            </button>
-          </form>
-
-          <div className="auth-footer">
-            <p style={{ fontSize: '0.9rem', textAlign: 'center', color: '#666' }}>
-              ✓ Paiement confirmé<br/>
-              ✓ Ton plan personnalisé est prêt
+            <p className={`pc-regle ${password.length >= 8 ? 'ok' : ''}`}>
+              {password.length >= 8 ? '✓ ' : ''}8 caractères minimum
             </p>
           </div>
-        </div>
+
+          <button type="submit" className="funnel-cta pc-cta" disabled={loading}>
+            {loading ? <><Spinner />Création…</> : 'Accéder à mon plan'}
+          </button>
+        </form>
+
+        <ul className="pc-liste">
+          <li><Check size={16} aria-hidden="true" /> Paiement confirmé</li>
+          <li><Check size={16} aria-hidden="true" /> Ton plan personnalisé est prêt</li>
+        </ul>
       </div>
     </div>
   );

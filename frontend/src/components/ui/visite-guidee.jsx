@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { capture } from '@/lib/analytics';
+
 /* Visite guidée à la première ouverture de l'app (comme GoTall :
    « 2 sur 7 · Suivant »). Quatre bulles, chacune pointe une zone de
    l'écran « Aujourd'hui » : on la fait défiler au centre et on la
@@ -33,6 +35,7 @@ export function VisiteGuidee({ onFin }) {
   }, [etape]);
 
   const finir = () => {
+    capture('visite_finie', { etape: etape === ETAPES.length - 1 ? 'fin' : `passee-${etape + 1}` });
     try {
       localStorage.setItem(CLE, '1');
     } catch {
