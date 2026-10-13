@@ -878,23 +878,6 @@
   color: var(--funnel-muted);
 }
 
-.email-suggestion {
-  margin-top: 10px;
-  padding: 10px 14px;
-  border: 1.5px solid var(--funnel-accent);
-  border-radius: 12px;
-  background: transparent;
-  color: var(--funnel-text);
-  font: inherit;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-.email-suggestion strong {
-  color: var(--funnel-accent);
-  word-break: break-all;
-}
-
 @keyframes interstitial-in {
   from {
     opacity: 0;
