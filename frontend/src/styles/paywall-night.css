@@ -1222,3 +1222,12 @@
   color: #d9d3cd; font-size: 13.5px; line-height: 1.45; text-align: left;
 }
 .pw2-avertissement strong { color: #f4efe9; }
+/* Retour après rechargement pendant la validation bancaire */
+.pw3-reprise {
+  margin: 0 0 16px; padding: 14px; border-radius: 16px; border: 1px solid rgba(255, 106, 43, 0.5);
+  background: rgba(255, 106, 43, 0.1); color: #f4efe9; text-align: left; font-size: 14px; line-height: 1.45;
+}
+.pw3-reprise p { margin: 0; }
+.pw3-reprise-titre { font-weight: 800; font-size: 16px; color: #ff8a52; margin-bottom: 4px !important; }
+.pw3-reprise-cta { width: 100%; min-height: 50px; margin-top: 12px; }
+.pw3-reprise-fermer { width: 100%; min-height: 44px; margin-top: 6px; border: 0; background: none; color: #c9c3bd; font-weight: 700; text-decoration: underline; cursor: pointer; }

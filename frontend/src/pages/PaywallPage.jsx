@@ -109,6 +109,42 @@ const NAVIGATEUR_INTEGRE = (() => {
   return null
 })()
 
+/* Paiement en cours : noté quand la fenêtre de paiement s'ouvre, effacé
+   quand on la ferme ou que le paiement aboutit. Si le téléphone recharge
+   la page pendant que le client valide dans l'appli de sa banque (cause
+   des « validations expirées » relevées en Belgique et en Suisse), on
+   le retrouve au retour et on lui dit quoi faire. On ne rouvre PAS le
+   paiement tout seul : si la banque avait validé, il paierait deux fois. */
+const CLE_PAIEMENT_EN_COURS = 'grandimi:paiement-en-cours'
+const DUREE_PAIEMENT_EN_COURS_MS = 20 * 60 * 1000
+
+function noterPaiementEnCours(plan) {
+  try {
+    localStorage.setItem(CLE_PAIEMENT_EN_COURS, JSON.stringify({ plan, t: Date.now() }))
+  } catch {
+    /* stockage refusé */
+  }
+}
+
+function oublierPaiementEnCours() {
+  try {
+    localStorage.removeItem(CLE_PAIEMENT_EN_COURS)
+  } catch {
+    /* stockage refusé */
+  }
+}
+
+function lirePaiementEnCours() {
+  try {
+    const brut = JSON.parse(localStorage.getItem(CLE_PAIEMENT_EN_COURS) || 'null')
+    if (brut && Date.now() - brut.t < DUREE_PAIEMENT_EN_COURS_MS) return brut
+    if (brut) localStorage.removeItem(CLE_PAIEMENT_EN_COURS)
+  } catch {
+    /* illisible */
+  }
+  return null
+}
+
 function PaywallPage({ onBackHome }) {
   // Repli sur l'adresse du compte connecté : un ancien abonné qui se
   // reconnecte sur un nouveau téléphone n'a pas d'adresse de questionnaire
@@ -138,7 +174,12 @@ function PaywallPage({ onBackHome }) {
      côté de l'offre qui coûte le moins cher au mois — et du seul format
      qu'un parent accepte volontiers, un paiement par an plutôt qu'un
      prélèvement mensuel sur le compte de son enfant. */
-  const [planChoisi, setPlanChoisi] = useState('m3')
+  const [paiementRepris] = useState(lirePaiementEnCours)
+  const [planChoisi, setPlanChoisi] = useState(() => paiementRepris?.plan || 'm3')
+  const [repriseVisible, setRepriseVisible] = useState(Boolean(paiementRepris))
+  useEffect(() => {
+    if (paiementRepris) capture('paiement_repris_apres_rechargement', { etape: paiementRepris.plan })
+  }, [paiementRepris])
   const [, setPlans] = useState(PLANS_PAR_DEFAUT)
 
   /* Minuteur de la réduction : 15 minutes réelles, fixées au premier
@@ -325,6 +366,7 @@ function PaywallPage({ onBackHome }) {
   /* Fermer le paiement sans payer : mesuré, pour savoir combien partent
      avant même d'essayer une carte et combien après un refus. */
   const fermerPaiement = () => {
+    oublierPaiementEnCours()
     capture('paiement_ferme_sans_payer', { etape: carteRefuseeRef.current ? 'apres_refus' : 'sans_essai' })
     setFeuilleOuverte(false)
   }
@@ -355,6 +397,7 @@ function PaywallPage({ onBackHome }) {
        par l'e-mail tapé chez Whop. On accepte aussi un objet seul, au cas
        où Whop change sa façon d'appeler. */
     window.grandimiPaiementTermine = (premier, idPaiement, details) => {
+      oublierPaiementEnCours()
       const id =
         (details && details.receipt_id) ||
         (typeof idPaiement === 'string' && idPaiement) ||
@@ -393,6 +436,8 @@ function PaywallPage({ onBackHome }) {
     if (planWhop) {
       setErreur(null)
       checkoutOuvert(planChoisi)
+      noterPaiementEnCours(planChoisi)
+      setRepriseVisible(false)
       setFeuilleOuverte(true)
       /* Bloqueur de pub, navigateur intégré, réseau lent : si le formulaire
          Whop n'est toujours pas là après 4 s, on part sur la page de
@@ -604,6 +649,36 @@ function PaywallPage({ onBackHome }) {
             <>Réduction expirée — tarif normal appliqué</>
           )}
         </div>
+
+        {repriseVisible && (
+          <div className="pw3-reprise" role="status">
+            <p className="pw3-reprise-titre">Tu étais en train de payer</p>
+            <p>
+              Si ta banque a validé, ton accès s’ouvre en 1 minute : <strong>regarde l’e-mail de reçu de Whop avant de repayer</strong>.
+              Sinon, rien n’a été prélevé : réessaie ci-dessous.
+            </p>
+            <button
+              type="button"
+              className="funnel-cta pw3-reprise-cta"
+              onClick={() => {
+                capture('paiement_reessaye_apres_rechargement', { etape: planChoisi })
+                lancerPaiement()
+              }}
+            >
+              Réessayer le paiement
+            </button>
+            <button
+              type="button"
+              className="pw3-reprise-fermer"
+              onClick={() => {
+                oublierPaiementEnCours()
+                setRepriseVisible(false)
+              }}
+            >
+              J’ai reçu le reçu, c’est bon
+            </button>
+          </div>
+        )}
 
         <p className="pw3-pret">Ton plan est prêt ✓</p>
         <h1 className="pw3-titre">
