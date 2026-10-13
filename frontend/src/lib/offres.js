@@ -14,7 +14,6 @@ export const OFFRES = [
     reduit: 14.99,
     normal: 19.99,
     facture: 'par mois',
-    renouvele: true,
     avantages: ['Ton diagnostic : ce qui te freine', 'Ton plan personnalisé : exercices, posture, sommeil, alimentation', 'Ton guide pour grandir'],
   },
   {
@@ -23,9 +22,7 @@ export const OFFRES = [
     jours: 91,
     reduit: 29.99,
     normal: 39.99,
-    // Paiement unique depuis le 14/10/2026 : 90 jours d'accès, sans
-    // renouvellement (Whop propose alors Bancontact, virement…).
-    facture: 'pour 3 mois',
+    facture: 'tous les 3 mois',
     avantages: ['Tout le 1 mois', 'Ta taille adulte estimée'],
     populaire: true,
   },

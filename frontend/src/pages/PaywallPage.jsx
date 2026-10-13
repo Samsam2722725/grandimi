@@ -555,7 +555,7 @@ function PaywallPage({ onBackHome }) {
               <span className="pw3-offre-total">
                 {reductionActive && <s>{euros(o.normal)}</s>} {euros(prixOffre(o))} {o.facture}
               </span>
-              {o.jours && <span className="pw3-offre-renouv">{o.renouvele ? 'Se renouvelle automatiquement' : 'Paiement unique, sans renouvellement'}</span>}
+              {o.jours && <span className="pw3-offre-renouv">Se renouvelle automatiquement</span>}
               <span className="pw3-offre-avantages">
                 {o.avantages.map((a) => (
                   <span key={a}>{a}</span>
@@ -740,7 +740,7 @@ function PaywallPage({ onBackHome }) {
             ['En quoi c’est différent des conseils trouvés sur TikTok ?', 'Les vidéos donnent les mêmes conseils à tout le monde. Ton plan part de tes réponses et te dit quoi faire, chaque jour, dans le bon ordre.'],
             ['Combien de temps avant de voir quelque chose ?', 'Ta posture, dès les premières semaines. Ta croissance, tu la suis sur ta courbe chaque semaine.'],
             ['Comment je suis sûr d’avoir des résultats ?', 'Ton plan corrige précisément ce qui te freine. Tu te mesures chaque semaine : tu vois toi-même si ça avance.'],
-            ['Je peux arrêter quand je veux ?', 'Oui. Le 3 mois et l’À vie se paient une seule fois, sans renouvellement. Le 1 mois se résilie en un clic depuis ton compte.'],
+            ['Je peux arrêter quand je veux ?', 'Oui. Tu résilies en un clic depuis ton compte, sans justification.'],
           ].map(([q, r]) => (
             <details key={q} className="pw3-faq-item">
               <summary>{q}</summary>
