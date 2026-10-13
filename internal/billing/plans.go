@@ -41,7 +41,27 @@ type Plan struct {
 	// (plan_xxx) correspondant. Jamais exposé au frontend : ce n'est
 	// qu'un détail de config serveur, pas une donnée tarifaire.
 	WhopPlanIDEnv string `json:"-"`
+	// Id du plan Whop écrit ici, prioritaire sur la variable
+	// d'environnement pour ouvrir le paiement. Sert au 3 mois passé en
+	// paiement unique le 14/10/2026 (Bancontact, virement… ne sont
+	// proposés par Whop que hors abonnement) sans toucher à la config
+	// Render. L'id de la variable reste reconnu par le webhook.
+	WhopPlanIDFixe string `json:"-"`
 }
+
+// IDWhop renvoie le plan Whop à ouvrir au paiement pour cette offre.
+func (p Plan) IDWhop(lireEnv func(string) string) string {
+	if p.WhopPlanIDFixe != "" {
+		return p.WhopPlanIDFixe
+	}
+	return lireEnv(p.WhopPlanIDEnv)
+}
+
+// Le 3 mois en paiement unique : 90 jours d'accès, pas de renouvellement.
+const (
+	PlanM3Unique       = ""
+	PlanM3NormalUnique = ""
+)
 
 var plans = map[PlanKey]Plan{
 	Monthly: {
@@ -59,10 +79,10 @@ var plans = map[PlanKey]Plan{
 		WhopPlanIDEnv: "WHOP_PLAN_ID_ANNUAL",
 	},
 	Mois1:       {Key: Mois1, Label: "1 mois", PriceEUR: 14.99, Interval: "month", WhopPlanIDEnv: "WHOP_PLAN_ID_M1"},
-	Mois3:       {Key: Mois3, Label: "3 mois", PriceEUR: 29.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3"},
+	Mois3:       {Key: Mois3, Label: "3 mois", PriceEUR: 29.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3", WhopPlanIDFixe: PlanM3Unique},
 	AVie:        {Key: AVie, Label: "À vie", PriceEUR: 59.99, Interval: "lifetime", WhopPlanIDEnv: "WHOP_PLAN_ID_VIE"},
 	Mois1Normal: {Key: Mois1Normal, Label: "1 mois", PriceEUR: 19.99, Interval: "month", WhopPlanIDEnv: "WHOP_PLAN_ID_M1_NORMAL"},
-	Mois3Normal: {Key: Mois3Normal, Label: "3 mois", PriceEUR: 39.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3_NORMAL"},
+	Mois3Normal: {Key: Mois3Normal, Label: "3 mois", PriceEUR: 39.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3_NORMAL", WhopPlanIDFixe: PlanM3NormalUnique},
 	AVieNormal:  {Key: AVieNormal, Label: "À vie", PriceEUR: 79.99, Interval: "lifetime", WhopPlanIDEnv: "WHOP_PLAN_ID_VIE_NORMAL"},
 }
 
@@ -73,7 +93,7 @@ func ParIDWhop(whopPlanID string, lireEnv func(string) string) (Plan, bool) {
 		return Plan{}, false
 	}
 	for _, p := range plans {
-		if lireEnv(p.WhopPlanIDEnv) == whopPlanID {
+		if lireEnv(p.WhopPlanIDEnv) == whopPlanID || (p.WhopPlanIDFixe != "" && p.WhopPlanIDFixe == whopPlanID) {
 			return p, true
 		}
 	}

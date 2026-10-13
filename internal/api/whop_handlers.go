@@ -225,7 +225,7 @@ func GetCheckout(c *gin.Context) {
 	// "plan_XXXX", qui est ce que l'API Whop renvoie dans purchase_url.
 	// Y mettre un slug de produit rend une page d'erreur Whop, pas un
 	// paiement — c'est ce qui se passait avec "text-aa".
-	planID := os.Getenv(offre.WhopPlanIDEnv)
+	planID := offre.IDWhop(os.Getenv)
 	if planID == "" {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": fmt.Sprintf("%s is not configured", offre.WhopPlanIDEnv),

@@ -25,12 +25,14 @@ function formatPrix(valeur) {
    tout ce qui n'était pas l'ancien annuel : l'offre 3 mois et l'offre
    À vie affichaient donc une facturation mensuelle qui n'existe pas. */
 function rythme(planKey) {
-  if (planKey === 'm3' || planKey === 'm3_normal') return ' tous les 3 mois';
+  if (planKey === 'm3' || planKey === 'm3_normal') return ' pour 3 mois';
   if (planKey === 'vie' || planKey === 'vie_normal') return ' une seule fois';
   if (planKey === 'annual') return ' par an';
   return ' par mois';
 }
 const estAVie = (planKey) => planKey === 'vie' || planKey === 'vie_normal';
+// Le 3 mois se paie une fois depuis le 14/10/2026 : rien à résilier.
+const estTroisMois = (planKey) => planKey === 'm3' || planKey === 'm3_normal';
 
 /* "Mon compte -> Abonnement" : offre en cours, prochaine date/montant de
    paiement, bouton de résiliation. Le succès n'est affiché qu'après la
@@ -140,6 +142,11 @@ function AccountPage({ onBackHome, retourVersPlan = false }) {
                 <span className="account-label">Accès</span>
                 <span className="account-value account-a-vie">À vie ✓ · aucun autre paiement</span>
               </div>
+            ) : estTroisMois(abonnement.plan_key) ? (
+              <div className="account-row">
+                <span className="account-label">Accès jusqu'au</span>
+                <span className="account-value">{formatDate(abonnement.next_payment_date)} · aucun autre paiement</span>
+              </div>
             ) : (
             <>
             <div className="account-row">
@@ -185,7 +192,7 @@ function AccountPage({ onBackHome, retourVersPlan = false }) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {estAVie(abonnement.plan_key) ? 'Voir mon achat chez Whop' : 'Gérer ou résilier directement chez Whop'}
+                  {estAVie(abonnement.plan_key) || estTroisMois(abonnement.plan_key) ? 'Voir mon achat chez Whop' : 'Gérer ou résilier directement chez Whop'}
                 </a>
               </p>
             )}
