@@ -1216,3 +1216,9 @@
   margin-top: 10px; width: 100%; min-height: 44px; border-radius: 999px; border: 0;
   background: #ff6a2b; color: #0b0b0c; font-weight: 800; font-size: 14px; cursor: pointer;
 }
+/* Avant de payer : prévenir de la validation bancaire (3D Secure). */
+.pw2-avertissement {
+  margin: 0 0 12px; padding: 10px 12px; border-radius: 12px; background: rgba(244, 239, 233, 0.06);
+  color: #d9d3cd; font-size: 13.5px; line-height: 1.45; text-align: left;
+}
+.pw2-avertissement strong { color: #f4efe9; }

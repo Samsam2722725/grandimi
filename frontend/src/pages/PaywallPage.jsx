@@ -73,6 +73,42 @@ function lireLaPrediction() {
   }
 }
 
+/* Refus de carte : le message que Whop transmet (celui de la banque, en
+   anglais) est classé pour dire au client QUOI FAIRE, en français.
+   Relevé dans Whop du 06 au 13/10/2026 : validation bancaire expirée
+   (3D Secure), cartes bloquées pour l'étranger ou le paiement en ligne
+   (surtout Côte d'Ivoire), solde insuffisant, carte expirée. */
+function classerRefus(texte) {
+  const t = String(texte || '').toLowerCase()
+  if (/3d secure|three_d_secure|authenticat|verif/.test(t)) return 'validation'
+  if (/insufficient|fonds|funds/.test(t)) return 'solde'
+  if (/expired|expir/.test(t)) return 'expiree'
+  if (/incorrect|billing details/.test(t)) return 'saisie'
+  if (/restrict|not allow|not_permitted|invalid|issuer|do_not_honor|declined|incorrect/.test(t)) return 'bloquee'
+  return 'autre'
+}
+
+const MESSAGES_REFUS = {
+  validation: ['Ta banque attendait ta validation', 'Réessaie : quand ta banque te le demande, valide dans son appli, puis reviens sur cette page sans la fermer.'],
+  bloquee: ['Ta banque a bloqué ce paiement', 'Elle bloque souvent les paiements en ligne ou à l’étranger. Active-les dans l’appli de ta banque, puis réessaie. Ou utilise une autre carte, Apple Pay ou Google Pay.'],
+  saisie: ['Une information de la carte ne correspond pas', 'Vérifie le numéro, la date d’expiration et le code à 3 chiffres, puis réessaie.'],
+  solde: ['Solde insuffisant sur cette carte', 'Essaie une autre carte, Apple Pay ou Google Pay.'],
+  expiree: ['Cette carte est expirée', 'Essaie une autre carte, Apple Pay ou Google Pay.'],
+  autre: ['Paiement refusé par ta banque', 'Essaie une autre carte, ou Apple Pay / Google Pay juste en dessous.'],
+}
+
+/* Navigateur intégré de TikTok, Instagram, Snapchat ou Facebook : beaucoup
+   de visiteurs arrivent par là, et ces navigateurs perdent parfois la page
+   quand on part valider dans l'appli de sa banque. */
+const NAVIGATEUR_INTEGRE = (() => {
+  const ua = typeof navigator !== 'undefined' ? navigator.userAgent || '' : ''
+  if (/TikTok|musical_ly|Bytedance/i.test(ua)) return 'TikTok'
+  if (/Instagram/i.test(ua)) return 'Instagram'
+  if (/Snapchat/i.test(ua)) return 'Snapchat'
+  if (/FBAN|FBAV/i.test(ua)) return 'Facebook'
+  return null
+})()
+
 function PaywallPage({ onBackHome }) {
   // Repli sur l'adresse du compte connecté : un ancien abonné qui se
   // reconnecte sur un nouveau téléphone n'a pas d'adresse de questionnaire
@@ -337,7 +373,7 @@ function PaywallPage({ onBackHome }) {
     window.grandimiPaiementErreur = (...args) => {
       const code = args.map((a) => (a && typeof a === 'object' ? a.code || a.message || '' : a)).filter(Boolean).join(' ')
       capture('whop_erreur_paiement', { etape: String(code || 'inconnue').slice(0, 80) })
-      setCarteRefusee(true)
+      setCarteRefusee(classerRefus(code))
     }
     window.grandimiPaiementEtat = (...args) => {
       const etat = args.map((a) => (a && typeof a === 'object' ? a.state || a.step || '' : a)).filter(Boolean).join(' ')
@@ -676,10 +712,18 @@ function PaywallPage({ onBackHome }) {
                 <X size={22} aria-hidden="true" />
               </button>
             </div>
+            {!carteRefusee && (
+              <p className="pw2-avertissement">
+                🔒 Ta banque peut te demander de <strong>valider dans son appli</strong> : valide, puis <strong>reviens ici sans fermer cette page</strong>.
+                {NAVIGATEUR_INTEGRE && (
+                  <> Tu es dans {NAVIGATEUR_INTEGRE} : si la page se recharge, ouvre grandimi.com dans Safari ou Chrome.</>
+                )}
+              </p>
+            )}
             {carteRefusee && (
               <div className="pw2-refus" role="alert">
-                <p className="pw2-refus-titre">Paiement refusé par ta banque</p>
-                <p>Essaie une autre carte, ou Apple Pay / Google Pay juste en dessous.</p>
+                <p className="pw2-refus-titre">{(MESSAGES_REFUS[carteRefusee] || MESSAGES_REFUS.autre)[0]}</p>
+                <p>{(MESSAGES_REFUS[carteRefusee] || MESSAGES_REFUS.autre)[1]}</p>
                 {lienParent && proposerLeParent && (
                   <button
                     type="button"
