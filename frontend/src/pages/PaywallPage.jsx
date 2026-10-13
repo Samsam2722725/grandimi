@@ -84,7 +84,8 @@ function classerRefus(texte) {
   if (/insufficient|fonds|funds/.test(t)) return 'solde'
   if (/expired|expir/.test(t)) return 'expiree'
   if (/incorrect|billing details/.test(t)) return 'saisie'
-  if (/restrict|not allow|not_permitted|invalid|issuer|do_not_honor|declined|incorrect/.test(t)) return 'bloquee'
+  if (/restrict|not allow|not_permitted|invalid|issuer/.test(t)) return 'bloquee'
+  if (/declined/.test(t)) return 'refusee'
   return 'autre'
 }
 
@@ -94,6 +95,7 @@ const MESSAGES_REFUS = {
   saisie: ['Une information de la carte ne correspond pas', 'Vérifie le numéro, la date d’expiration et le code à 3 chiffres, puis réessaie.'],
   solde: ['Solde insuffisant sur cette carte', 'Essaie une autre carte, Apple Pay ou Google Pay.'],
   expiree: ['Cette carte est expirée', 'Essaie une autre carte, Apple Pay ou Google Pay.'],
+  refusee: ['Ta banque a refusé ce paiement', 'Vérifie que ta carte a assez d’argent et accepte les paiements en ligne (dans l’appli de ta banque), puis réessaie. Ou utilise une autre carte, ou Apple Pay juste en dessous.'],
   autre: ['Paiement refusé par ta banque', 'Essaie une autre carte, ou Apple Pay / Google Pay juste en dessous.'],
 }
 
