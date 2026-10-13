@@ -162,6 +162,7 @@ func main() {
 		lecture.GET("/jours", api.StatsParJour)
 		lecture.GET("/ventes", api.StatsVentes)
 		lecture.GET("/general", api.AdminStats)
+		lecture.GET("/abonnements", api.StatsAbonnements)
 	}
 
 	// Admin Panel (protected by ADMIN_TOKEN)

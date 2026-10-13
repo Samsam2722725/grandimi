@@ -123,6 +123,16 @@ try {
   console.log(`\nPaiements reçus par Whop (${ventes.length}) — tes tests sont dedans, rien ne les distingue ici :`)
   for (const v of ventes.slice(0, 20)) console.log(`  ${v.date}  ${v.statut.padEnd(8)} ${PLANS[v.plan_id] || v.plan_id}`)
 
+  try {
+    const { abonnements } = await lire(`abonnements?jours=${jours}`)
+    console.log(`\nAbonnements créés (${abonnements.length}) — compte · e-mail (début) · offre · statut :`)
+    for (const a of abonnements.slice(0, 20)) {
+      console.log(`  ${a.date}  ${a.compte}  ${a.email.padEnd(4)} ${a.offre.padEnd(11)} ${a.statut}${a.resiliee ? ' (résilié en fin de période)' : ''}`)
+    }
+  } catch {
+    // Serveur pas encore à jour : cette partie apparaîtra après le déploiement.
+  }
+
   console.log(`\nComptes : ${general.total_users ?? '?'} au total, ${general.premium_users ?? '?'} premium.`)
 } catch (e) {
   console.error(e.message)

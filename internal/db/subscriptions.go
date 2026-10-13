@@ -184,3 +184,43 @@ func AbonnementsMensuelsActifs(userID, saufWhopID string) ([]string, error) {
 	}
 	return ids, lignes.Err()
 }
+
+/* AbonnementRecent : pour vérifier d'un coup d'œil ce qui s'est passé
+   (montée en gamme, résiliations), sans tableau de bord. Pas d'e-mail
+   complet : seulement le début, pour reconnaître ses propres tests. */
+type AbonnementRecent struct {
+	Date     string `json:"date"`
+	Compte   string `json:"compte"`
+	Email    string `json:"email"`
+	Offre    string `json:"offre"`
+	Statut   string `json:"statut"`
+	Resiliee bool   `json:"resiliee"`
+}
+
+func LireAbonnementsRecents(jours int) ([]AbonnementRecent, error) {
+	lignes, err := DB.QueryContext(context.Background(),
+		`SELECT to_char(s.created_at AT TIME ZONE 'Europe/Paris', 'YYYY-MM-DD HH24:MI'),
+		        left(s.user_id::text, 8),
+		        COALESCE(left(u.email, 3), ''),
+		        COALESCE(s.plan_type, ''),
+		        COALESCE(s.status, ''),
+		        COALESCE(s.cancel_at_period_end, false)
+		   FROM subscriptions s
+		   LEFT JOIN users u ON u.id::text = s.user_id::text
+		  WHERE s.created_at >= now() - make_interval(days => $1)
+		  ORDER BY s.created_at DESC`, jours)
+	if err != nil {
+		return nil, err
+	}
+	defer lignes.Close()
+
+	resultat := []AbonnementRecent{}
+	for lignes.Next() {
+		var a AbonnementRecent
+		if err := lignes.Scan(&a.Date, &a.Compte, &a.Email, &a.Offre, &a.Statut, &a.Resiliee); err != nil {
+			return nil, err
+		}
+		resultat = append(resultat, a)
+	}
+	return resultat, lignes.Err()
+}

@@ -85,3 +85,14 @@ func StatsVentes(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"ventes": ventes})
 }
+
+// StatsAbonnements : les abonnements créés ces N derniers jours (offre,
+// statut, résiliation), pour vérifier une montée en gamme ou un test.
+func StatsAbonnements(c *gin.Context) {
+	abonnements, err := db.LireAbonnementsRecents(lireJours(c, 7))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"erreur": "lecture impossible"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"abonnements": abonnements})
+}
