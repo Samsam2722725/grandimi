@@ -99,6 +99,11 @@ const MESSAGES_REFUS = {
   autre: ['Paiement refusé par ta banque', 'Essaie une autre carte, ou Apple Pay / Google Pay juste en dessous.'],
 }
 
+/* Les cartes pour ados bloquent par défaut le paiement en ligne et vers
+   l'étranger (Whop encaisse hors de France) : ce sont les refus où le
+   réglage de l'appli de la carte est la vraie solution. */
+const REFUS_CARTE_ADO = ['bloquee', 'refusee', 'autre']
+
 /* Navigateur intégré de TikTok, Instagram, Snapchat ou Facebook : beaucoup
    de visiteurs arrivent par là, et ces navigateurs perdent parfois la page
    quand on part valider dans l'appli de sa banque. */
@@ -801,6 +806,11 @@ function PaywallPage({ onBackHome }) {
               <div className="pw2-refus" role="alert">
                 <p className="pw2-refus-titre">{(MESSAGES_REFUS[carteRefusee] || MESSAGES_REFUS.autre)[0]}</p>
                 <p>{(MESSAGES_REFUS[carteRefusee] || MESSAGES_REFUS.autre)[1]}</p>
+                {REFUS_CARTE_ADO.includes(carteRefusee) && (
+                  <p className="pw2-refus-ado">
+                    <strong>Carte ado (Pixpay, Kard, Xaalys…) ?</strong> Active « paiements en ligne » et « paiements à l’étranger » dans son appli, ou demande à un parent de les autoriser.
+                  </p>
+                )}
                 {lienParent && proposerLeParent && (
                   <button
                     type="button"

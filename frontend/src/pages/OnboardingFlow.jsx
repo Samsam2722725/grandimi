@@ -159,6 +159,48 @@ function basculerDansListe(liste, valeur, exclusif) {
 
 const EMAIL_VALIDE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+/* Adresse mal tapée (« gmeil.com », « gmail.con », « hotmial.fr ») : le
+   client paie, ne reçoit jamais son reçu et ne retrouve plus son compte.
+   On propose la correction, sans jamais bloquer. Seuls les grands
+   fournisseurs sont corrigés, pour ne pas toucher aux vraies adresses
+   d'école ou de pays (hotmail.be, live.be…). */
+const FOURNISSEURS = ['gmail', 'hotmail', 'outlook', 'icloud', 'yahoo', 'orange', 'laposte', 'wanadoo']
+const TLD_CORRIGES = { con: 'com', cmo: 'com', cm: 'com', comm: 'com', coom: 'com', co: 'com', om: 'com', vom: 'com', xom: 'com', cpm: 'com', fe: 'fr', ft: 'fr', frr: 'fr', rf: 'fr' }
+
+// Distance d'édition où l'inversion de deux lettres (« gmial ») compte pour 1.
+function ecart(a, b) {
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)])
+  for (let j = 1; j <= b.length; j++) d[0][j] = j
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      const cout = a[i - 1] === b[j - 1] ? 0 : 1
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cout)
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1)
+    }
+  }
+  return d[a.length][b.length]
+}
+
+function suggererEmail(brut) {
+  const saisi = brut.trim().toLowerCase()
+  const m = saisi.match(/^([^\s@]+)@([^\s@]+)$/)
+  if (!m) return null
+  const [, local, domaine] = m
+  const point = domaine.lastIndexOf('.')
+  let nom = point > 0 ? domaine.slice(0, point) : domaine
+  let tld = point > 0 ? domaine.slice(point + 1) : ''
+  const fournisseur = FOURNISSEURS.includes(nom)
+    ? nom
+    : nom.length >= 4 && FOURNISSEURS.find((f) => ecart(nom, f) <= (f.length >= 6 ? 2 : 1))
+  if (!fournisseur) return null
+  nom = fournisseur
+  tld = TLD_CORRIGES[tld] || tld
+  if (nom === 'gmail' || nom === 'icloud') tld = 'com'
+  if (!tld) return null
+  const propose = `${local}@${nom}.${tld}`
+  return propose !== saisi ? propose : null
+}
+
 const ETAPES_ANALYSE = [
   { label: 'Ta taille adulte estimée', seuil: 20 },
   { label: 'Ton sommeil', seuil: 40 },
@@ -906,6 +948,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     // retrouver le compte ensuite (même adresse que le checkout Whop, cf.
     // PaywallPage.jsx qui relit `localStorage.userEmail`).
     const emailPlausible = EMAIL_VALIDE.test(email.trim())
+    const emailPropose = suggererEmail(email)
     return (
       <ProgressionAnalyse titre={`On assemble ton plan à partir de tes ${etapes.filter((e) => TYPE_ETAPE[e] === 'question').length} réponses`} pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
         {!animationTerminee ? null : !emailEnvoye ? (
@@ -937,6 +980,11 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+              {emailPropose && (
+                <button type="button" className="email-suggestion" onClick={() => setEmail(emailPropose)}>
+                  Tu voulais dire <strong>{emailPropose}</strong> ?
+                </button>
+              )}
               <p className="funnel-help">C'est ce qui te permet de retrouver ton compte et ton plan.</p>
               {/* Les réponses sur la puberté sont des données de santé de
                   mineurs : on informe au moment où l'adresse est donnée. */}
