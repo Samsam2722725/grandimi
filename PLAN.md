@@ -21,7 +21,7 @@ Détail technique : BACKLOG.md et AUDIT-APRES-PAIEMENT.md.
 4. [x] Mesurer l'usage de l'app (séances faites, jours actifs, qui décroche).
 
 ## Phase 2 — Publier l'app et la tester
-5. [ ] Publier l'app + le serveur (vérifier que « Vérifier le backend » passe).
+5. [x] Publier l'app + le serveur (vérifier que « Vérifier le backend » passe).
 6. [ ] Test A : un compte en offre 1 mois → l'app s'ouvre, la séance et les cases marchent, Ma taille est verrouillée.
 7. [ ] Test B : depuis ce compte, « Passer à 3 mois » → vérifier dans Whop que le 1 mois est arrêté.
 8. [ ] Annuler les abonnements de test.
