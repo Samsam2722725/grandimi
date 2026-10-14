@@ -1,0 +1,542 @@
+{
+  "fps": 30,
+  "totalFrames": 1118,
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Deux erreurs qui freinent ta croissance en hauteur.",
+      "from": 9,
+      "duration": 65,
+      "words": [
+        {
+          "w": "Deux",
+          "f": 9
+        },
+        {
+          "w": "erreurs",
+          "f": 15
+        },
+        {
+          "w": "qui",
+          "f": 26
+        },
+        {
+          "w": "freinent",
+          "f": 31
+        },
+        {
+          "w": "ta",
+          "f": 42
+        },
+        {
+          "w": "croissance",
+          "f": 46
+        },
+        {
+          "w": "en",
+          "f": 60
+        },
+        {
+          "w": "hauteur.",
+          "f": 64
+        }
+      ]
+    },
+    {
+      "id": "cartilage",
+      "text": "Et tant que tes cartilages de croissance ne sont pas fermés, tu peux encore agir.",
+      "from": 82,
+      "duration": 125,
+      "words": [
+        {
+          "w": "Et",
+          "f": 82
+        },
+        {
+          "w": "tant",
+          "f": 86
+        },
+        {
+          "w": "que",
+          "f": 93
+        },
+        {
+          "w": "tes",
+          "f": 99
+        },
+        {
+          "w": "cartilages",
+          "f": 105
+        },
+        {
+          "w": "de",
+          "f": 121
+        },
+        {
+          "w": "croissance",
+          "f": 126
+        },
+        {
+          "w": "ne",
+          "f": 142
+        },
+        {
+          "w": "sont",
+          "f": 146
+        },
+        {
+          "w": "pas",
+          "f": 154
+        },
+        {
+          "w": "fermés,",
+          "f": 160
+        },
+        {
+          "w": "tu",
+          "f": 170
+        },
+        {
+          "w": "peux",
+          "f": 175
+        },
+        {
+          "w": "encore",
+          "f": 184
+        },
+        {
+          "w": "agir.",
+          "f": 197
+        }
+      ]
+    },
+    {
+      "id": "n1",
+      "text": "Numéro un : mal dormir.",
+      "from": 220,
+      "duration": 41,
+      "words": [
+        {
+          "w": "Numéro",
+          "f": 220
+        },
+        {
+          "w": "un:",
+          "f": 233
+        },
+        {
+          "w": "mal",
+          "f": 239
+        },
+        {
+          "w": "dormir.",
+          "f": 247
+        }
+      ]
+    },
+    {
+      "id": "gh",
+      "text": "Ton hormone de croissance est libérée surtout pendant le sommeil profond.",
+      "from": 267,
+      "duration": 108,
+      "words": [
+        {
+          "w": "Ton",
+          "f": 267
+        },
+        {
+          "w": "hormone",
+          "f": 273
+        },
+        {
+          "w": "de",
+          "f": 284
+        },
+        {
+          "w": "croissance",
+          "f": 289
+        },
+        {
+          "w": "est",
+          "f": 305
+        },
+        {
+          "w": "libérée",
+          "f": 311
+        },
+        {
+          "w": "surtout",
+          "f": 323
+        },
+        {
+          "w": "pendant",
+          "f": 334
+        },
+        {
+          "w": "le",
+          "f": 346
+        },
+        {
+          "w": "sommeil",
+          "f": 351
+        },
+        {
+          "w": "profond.",
+          "f": 362
+        }
+      ]
+    },
+    {
+      "id": "nuit",
+      "text": "Coucher à deux heures du matin, téléphone dans le lit, six heures de nuit : tu en perds une partie.",
+      "from": 382,
+      "duration": 131,
+      "words": [
+        {
+          "w": "Coucher",
+          "f": 382
+        },
+        {
+          "w": "à",
+          "f": 393
+        },
+        {
+          "w": "deux",
+          "f": 396
+        },
+        {
+          "w": "heures",
+          "f": 402
+        },
+        {
+          "w": "du",
+          "f": 412
+        },
+        {
+          "w": "matin,",
+          "f": 416
+        },
+        {
+          "w": "téléphone",
+          "f": 424
+        },
+        {
+          "w": "dans",
+          "f": 438
+        },
+        {
+          "w": "le",
+          "f": 445
+        },
+        {
+          "w": "lit,",
+          "f": 449
+        },
+        {
+          "w": "six",
+          "f": 455
+        },
+        {
+          "w": "heures",
+          "f": 460
+        },
+        {
+          "w": "de",
+          "f": 470
+        },
+        {
+          "w": "nuit:",
+          "f": 474
+        },
+        {
+          "w": "tu",
+          "f": 481
+        },
+        {
+          "w": "en",
+          "f": 485
+        },
+        {
+          "w": "perds",
+          "f": 489
+        },
+        {
+          "w": "une",
+          "f": 498
+        },
+        {
+          "w": "partie.",
+          "f": 503
+        }
+      ]
+    },
+    {
+      "id": "n2",
+      "text": "Numéro deux : vouloir impressionner ton crush à la salle.",
+      "from": 526,
+      "duration": 96,
+      "words": [
+        {
+          "w": "Numéro",
+          "f": 526
+        },
+        {
+          "w": "deux:",
+          "f": 540
+        },
+        {
+          "w": "vouloir",
+          "f": 550
+        },
+        {
+          "w": "impressionner",
+          "f": 563
+        },
+        {
+          "w": "ton",
+          "f": 587
+        },
+        {
+          "w": "crush",
+          "f": 594
+        },
+        {
+          "w": "à",
+          "f": 604
+        },
+        {
+          "w": "la",
+          "f": 607
+        },
+        {
+          "w": "salle.",
+          "f": 612
+        }
+      ]
+    },
+    {
+      "id": "sport",
+      "text": "Le sport, c'est top pour ta croissance.",
+      "from": 630,
+      "duration": 55,
+      "words": [
+        {
+          "w": "Le",
+          "f": 630
+        },
+        {
+          "w": "sport,",
+          "f": 634
+        },
+        {
+          "w": "c'est",
+          "f": 643
+        },
+        {
+          "w": "top",
+          "f": 651
+        },
+        {
+          "w": "pour",
+          "f": 657
+        },
+        {
+          "w": "ta",
+          "f": 664
+        },
+        {
+          "w": "croissance.",
+          "f": 668
+        }
+      ]
+    },
+    {
+      "id": "kine",
+      "text": "Mais un soulevé de terre à cent kilos, sans technique et sans coach, c'est surtout un aller simple chez le kiné.",
+      "from": 689,
+      "duration": 179,
+      "words": [
+        {
+          "w": "Mais",
+          "f": 689
+        },
+        {
+          "w": "un",
+          "f": 697
+        },
+        {
+          "w": "soulevé",
+          "f": 701
+        },
+        {
+          "w": "de",
+          "f": 713
+        },
+        {
+          "w": "terre",
+          "f": 717
+        },
+        {
+          "w": "à",
+          "f": 726
+        },
+        {
+          "w": "cent",
+          "f": 729
+        },
+        {
+          "w": "kilos,",
+          "f": 736
+        },
+        {
+          "w": "sans",
+          "f": 745
+        },
+        {
+          "w": "technique",
+          "f": 756
+        },
+        {
+          "w": "et",
+          "f": 778
+        },
+        {
+          "w": "sans",
+          "f": 784
+        },
+        {
+          "w": "coach,",
+          "f": 795
+        },
+        {
+          "w": "c'est",
+          "f": 808
+        },
+        {
+          "w": "surtout",
+          "f": 815
+        },
+        {
+          "w": "un",
+          "f": 826
+        },
+        {
+          "w": "aller",
+          "f": 831
+        },
+        {
+          "w": "simple",
+          "f": 839
+        },
+        {
+          "w": "chez",
+          "f": 849
+        },
+        {
+          "w": "le",
+          "f": 856
+        },
+        {
+          "w": "kiné.",
+          "f": 861
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Télécharge Grandimi.",
+      "from": 881,
+      "duration": 32,
+      "words": [
+        {
+          "w": "Télécharge",
+          "f": 881
+        },
+        {
+          "w": "Grandimi.",
+          "f": 899
+        }
+      ]
+    },
+    {
+      "id": "plan",
+      "text": "Il estime ta taille adulte, et te donne un plan sommeil, nutrition et sport adapté à ton âge.",
+      "from": 918,
+      "duration": 152,
+      "words": [
+        {
+          "w": "Il",
+          "f": 918
+        },
+        {
+          "w": "estime",
+          "f": 923
+        },
+        {
+          "w": "ta",
+          "f": 934
+        },
+        {
+          "w": "taille",
+          "f": 939
+        },
+        {
+          "w": "adulte,",
+          "f": 950
+        },
+        {
+          "w": "et",
+          "f": 961
+        },
+        {
+          "w": "te",
+          "f": 966
+        },
+        {
+          "w": "donne",
+          "f": 971
+        },
+        {
+          "w": "un",
+          "f": 980
+        },
+        {
+          "w": "plan",
+          "f": 985
+        },
+        {
+          "w": "sommeil,",
+          "f": 992
+        },
+        {
+          "w": "nutrition",
+          "f": 1005
+        },
+        {
+          "w": "et",
+          "f": 1023
+        },
+        {
+          "w": "sport",
+          "f": 1028
+        },
+        {
+          "w": "adapté",
+          "f": 1039
+        },
+        {
+          "w": "à",
+          "f": 1052
+        },
+        {
+          "w": "ton",
+          "f": 1055
+        },
+        {
+          "w": "âge.",
+          "f": 1063
+        }
+      ]
+    }
+  ]
+}
