@@ -1236,3 +1236,35 @@
 .pw3-reprise-titre { font-weight: 800; font-size: 16px; color: #ff8a52; margin-bottom: 4px !important; }
 .pw3-reprise-cta { width: 100%; min-height: 50px; margin-top: 12px; }
 .pw3-reprise-fermer { width: 100%; min-height: 44px; margin-top: 6px; border: 0; background: none; color: #c9c3bd; font-weight: 700; text-decoration: underline; cursor: pointer; }
+
+/* Paywall, 14/10/2026 : diagnostic, ce que le plan corrige, frise, garantie. */
+.pw3-freins { margin-top: 28px; text-align: left; }
+.pw3-freins h2, .pw3-frise h2 { margin: 0 0 12px; font-size: 20px; font-weight: 800; color: #f4efe9; }
+.pw3-freins ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.pw3-freins li {
+  display: flex; gap: 12px; align-items: flex-start; padding: 14px;
+  border-radius: 16px; border: 1px solid rgba(255, 106, 43, 0.35); background: rgba(255, 106, 43, 0.07);
+}
+.pw3-freins-icone { flex-shrink: 0; font-size: 22px; line-height: 1.2; }
+.pw3-freins strong { display: block; color: #f4efe9; font-size: 15.5px; line-height: 1.35; }
+.pw3-freins-pourquoi { display: block; margin-top: 4px; font-size: 13.5px; line-height: 1.5; color: #b9b2ab; }
+.pw3-freins > .pw3-freins-pourquoi { margin-top: 0; font-size: 14.5px; }
+
+.pw3-frise { margin-top: 28px; text-align: left; }
+.pw3-frise ol { list-style: none; margin: 0; padding: 0 0 0 26px; position: relative; display: flex; flex-direction: column; gap: 16px; }
+.pw3-frise ol::before { content: ''; position: absolute; left: 5px; top: 8px; bottom: 8px; width: 2px; background: rgba(255, 106, 43, 0.35); }
+.pw3-frise li { position: relative; display: flex; flex-direction: column; gap: 2px; }
+.pw3-frise li::before {
+  content: ''; position: absolute; left: -26px; top: 4px; width: 12px; height: 12px; border-radius: 50%;
+  background: #ff6a2b; box-shadow: 0 0 0 3px #0b0b0c;
+}
+.pw3-frise-quand { font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #ff8a52; }
+.pw3-frise-quoi { font-size: 15px; line-height: 1.45; color: #f4efe9; }
+
+.pw3-garantie {
+  margin: 24px 0 0; display: flex; gap: 12px; align-items: center; padding: 14px 16px; text-align: left;
+  border-radius: 16px; background: rgba(74, 222, 128, 0.08); border: 1px solid rgba(74, 222, 128, 0.3);
+  font-size: 13.5px; line-height: 1.45; color: #b9b2ab;
+}
+.pw3-garantie svg { flex-shrink: 0; color: #4ade80; }
+.pw3-garantie strong { display: block; color: #f4efe9; font-size: 15px; }
