@@ -714,18 +714,19 @@ function PaywallPage({ onBackHome }) {
           </p>
         )}
 
-        {/* Comme Taller et TrendSaaS : ce que tu obtiens, juste après les prix. */}
+        {/* Comme Taller et TrendSaaS : ce que tu obtiens, juste après les prix.
+            Les titres seuls (15/10/2026) : les lignes d'explication en
+            dessous ont été retirées à la demande de l'utilisateur. */}
         <section className="pw3-obtiens">
           <h2>Ton plan contient — fait pour toi</h2>
           <ul>
-            {contenuPlan(prediction).map(({ titre, texte }) => (
+            {contenuPlan(prediction).map(({ titre }) => (
               <li key={titre}>
                 <span className="pw3-obtiens-coche" aria-hidden="true">
                   <Check size={14} strokeWidth={3} />
                 </span>
                 <span>
                   <strong>{titre}</strong>
-                  {texte && <span className="pw3-obtiens-texte">{texte}</span>}
                 </span>
               </li>
             ))}
