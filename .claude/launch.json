@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "grandimi-frontend",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--dir", "frontend", "run", "dev"],
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["frontend/node_modules/vite/bin/vite.js", "frontend", "--port", "5173"],
       "port": 5173
     }
   ]
