@@ -71,88 +71,41 @@ export function pointsFaibles(prediction) {
   return liste.slice(0, 3)
 }
 
-/* Paywall, retour du 14/10/2026 (« le problème gratuit, la solution
-   payante ») : on lui dit précisément CE QUI LE FREINE et POURQUOI c'est
-   grave, tiré de ses réponses. Jamais le comment : ça, c'est le plan. Les
-   explications restent dans ce qui est établi (sommeil et hormone de
-   croissance, protéines et calcium pour les os, écrans et endormissement),
-   et aucune ne promet de centimètres. */
-export function freinsCroissance(prediction) {
+/* « Ton plan contient — fait pour toi » (repris de heightfuel) : un titre
+   qui donne le résultat, une ligne qui dit comment, et une précision tirée
+   des réponses quand elle existe. Chaque action citée est dans le plan
+   (internal/planner). Le plus fort d'abord : paraître plus grand vite. */
+export function contenuPlan(prediction) {
   const h = prediction.habitudes || {}
+  const faibles = pointsFaibles(prediction)
   const sommeil = Number(prediction.sleep_hours_per_night)
-  // 6.5 → « 6 h 30 »
-  const minutes = Math.round((sommeil % 1) * 60)
-  const heures = sommeil ? `${Math.floor(sommeil)} h${minutes ? ` ${String(minutes).padStart(2, '0')}` : ''}` : ''
-  const liste = []
 
-  if (h.coucher === 'apres-minuit' || h.coucher === '23h-minuit') {
-    liste.push({
-      icone: '🌙',
-      titre: h.coucher === 'apres-minuit' ? 'Tu t’endors après minuit.' : 'Tu t’endors entre 23 h et minuit.',
-      pourquoi: 'C’est pendant le sommeil profond, en début de nuit, que ton corps libère le plus d’hormone de croissance. En te couchant tard, tu en rates une partie.',
-    })
-  } else if (sommeil && sommeil < 8) {
-    liste.push({
-      icone: '🌙',
-      titre: `Tu dors seulement ${heures} par nuit.`,
-      pourquoi: 'À ton âge, il en faut 8 à 10. C’est la nuit que ton corps libère le plus d’hormone de croissance.',
-    })
-  }
-  if (h.posture === 'voute' || h.posture === 'un-peu-voute') {
-    liste.push({
-      icone: '🧍',
-      titre: h.posture === 'voute' ? 'Tu es souvent voûté.' : 'Tu es un peu voûté.',
-      pourquoi: 'Tu parais plus petit que tu ne l’es vraiment, et ta colonne reste tassée.',
-    })
-  } else if (h.assis === 'plus-8h') {
-    liste.push({
-      icone: '🧍',
-      titre: 'Tu restes assis plus de 8 h par jour.',
-      pourquoi: 'Ton dos s’arrondit et ta colonne se tasse : tu parais plus petit que tu ne l’es.',
-    })
-  }
-  if (h.proteines === 'rarement' || h.proteines === 'un-repas') {
-    liste.push({
-      icone: '🍗',
-      titre: h.proteines === 'rarement' ? 'Tu manges rarement des protéines.' : 'Tu n’as des protéines qu’à un repas par jour.',
-      pourquoi: 'Ce sont les briques de tes os et de tes muscles : sans elles, ton corps manque de matériel pour grandir.',
-    })
-  }
-  if (h.telephone === 'tous-les-soirs') {
-    liste.push({
-      icone: '📱',
-      titre: 'Tu es sur ton téléphone au lit tous les soirs.',
-      pourquoi: 'La lumière de l’écran retarde ton endormissement et raccourcit les heures où ton corps grandit.',
-    })
-  }
-  if (h.exercice_freq === '0-2') {
-    liste.push({
-      icone: '🏃',
-      titre: 'Tu bouges moins de 3 h par semaine.',
-      pourquoi: 'L’effort stimule l’hormone de croissance et renforce tes os. Sans lui, tu te prives d’un vrai coup de pouce.',
-    })
-  }
-  if (h.laitages === 'aucun' || h.laitages === '1-2') {
-    liste.push({
-      icone: '🥛',
-      titre: h.laitages === 'aucun' ? 'Tu ne prends aucun produit laitier.' : 'Tu prends peu de produits laitiers.',
-      pourquoi: 'Le calcium, c’est le matériau de tes os pendant la croissance. En manquer, c’est construire avec moins de briques.',
-    })
-  }
-  return liste.slice(0, 3)
+  let posture = ''
+  if (h.posture === 'voute') posture = ' (tu es souvent voûté)'
+  else if (h.posture === 'un-peu-voute') posture = ' (tu es un peu voûté)'
+
+  let nuit = ''
+  if (h.coucher === 'apres-minuit') nuit = ' (tu t’endors après minuit)'
+  else if (h.coucher === '23h-minuit') nuit = ' (tu t’endors entre 23 h et minuit)'
+  else if (sommeil && sommeil < 8) nuit = ` (tu dors ${String(sommeil).replace('.', ',')} h par nuit)`
+
+  let repas = ''
+  if (h.proteines === 'rarement') repas = ' (tu manges rarement des protéines)'
+  else if (h.proteines === 'un-repas') repas = ' (tu as des protéines à un seul repas)'
+  else if (h.laitages === 'aucun') repas = ' (tu ne prends aucun produit laitier)'
+
+  return [
+    { titre: 'Parais plus grand dès les premières semaines', texte: `Gainage, épaules ouvertes, dos aligné : ta posture redressée${posture}.` },
+    { titre: 'Dors pour grandir', texte: `Coucher avancé de 15 min par semaine, écrans coupés 45 min avant${nuit}.` },
+    { titre: 'Décompresse ta colonne', texte: 'Suspension à la barre et étirements, 10 min par jour.' },
+    { titre: 'Mange pour grandir', texte: `Protéines à chaque repas, calcium et vitamine D${repas}.` },
+    {
+      titre: 'Ton plan, jour par jour',
+      texte: faibles.length
+        ? `On corrige d’abord ce qui te freine : ${faibles.join(', ')}. Un nouveau thème chaque mois.`
+        : 'On corrige d’abord ce qui te freine. Un nouveau thème chaque mois.',
+    },
+    { titre: 'Ton guide pour grandir', texte: 'Ce qui marche vraiment, les mythes à oublier.' },
+    { titre: 'Ta taille adulte estimée', texte: '98 % de précision.' },
+  ]
 }
-
-/* Ce que le plan lui donne, en bref : des livrables, pas des conseils. */
-export const PLAN_CORRIGE = [
-  'Ta séance du jour, guidée pas à pas',
-  'Ton heure de coucher, calculée pour toi',
-  'Tes besoins en protéines et calcium, selon ton poids',
-  'Ta taille adulte estimée, à 98 % de précision',
-]
-
-/* Ce qui change, dans le temps. Aucun centimètre promis. */
-export const ETAPES_PLAN = [
-  { quand: 'Jour 1', quoi: 'Tu sais exactement quoi faire.' },
-  { quand: 'Semaine 3', quoi: 'Ta posture redressée se voit.' },
-  { quand: 'Mois 3', quoi: 'Tes nouvelles habitudes sont installées, et tu suis ta courbe.' },
-]

@@ -3,7 +3,7 @@ import { Check, CreditCard, ShieldCheck, Wallet, X } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
-import { OFFRES, finReduction, euros, freinsCroissance, PLAN_CORRIGE, ETAPES_PLAN } from '../lib/offres'
+import { OFFRES, finReduction, euros, contenuPlan } from '../lib/offres'
 import '../styles/funnel.css'
 /* Feuille dédiée, et non paywall.css : cette dernière habille encore
    ParentPage (page claire, destinée à un adulte arrivé par lien partagé) et
@@ -166,7 +166,6 @@ function PaywallPage({ onBackHome }) {
     }
   })
   const prediction = useState(lireLaPrediction)[0]
-  const freins = freinsCroissance(prediction)
   const [loading, setLoading] = useState(false)
   /* Passe à vrai quand la redirection dépasse DELAI_AVANT_MESSAGE_MS, pour
      nommer l'attente sous le bouton au lieu de la laisser tourner. */
@@ -715,66 +714,23 @@ function PaywallPage({ onBackHome }) {
           </p>
         )}
 
-        {/* Le problème gratuit, la solution payante (14/10/2026) : son
-            diagnostic et pourquoi c'est grave, puis ce que le plan lui
-            donne, ce qui change dans le temps, et la garantie. */}
-        <section className="pw3-freins">
-          {freins.length > 0 ? (
-            <>
-              <h2>{freins.length > 1 ? `${freins.length} choses freinent ta croissance` : 'Une chose freine ta croissance'}</h2>
-              <ul>
-                {freins.map(({ icone, titre, pourquoi }) => (
-                  <li key={titre}>
-                    <span className="pw3-freins-icone" aria-hidden="true">{icone}</span>
-                    <span>
-                      <strong>{titre}</strong>
-                      <span className="pw3-freins-pourquoi">{pourquoi}</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : (
-            <>
-              <h2>Tes habitudes sont déjà bonnes</h2>
-              <p className="pw3-freins-pourquoi">Ton plan les pousse au maximum, dans le bon ordre, pour ne rien laisser sur la table.</p>
-            </>
-          )}
-        </section>
-
+        {/* Comme Taller et TrendSaaS : ce que tu obtiens, juste après les prix. */}
         <section className="pw3-obtiens">
-          <h2>{freins.length > 0 ? 'Ton plan corrige ça, dans le bon ordre' : 'Ton plan, fait pour toi'}</h2>
+          <h2>Ton plan contient — fait pour toi</h2>
           <ul>
-            {PLAN_CORRIGE.map((ligne) => (
-              <li key={ligne}>
+            {contenuPlan(prediction).map(({ titre, texte }) => (
+              <li key={titre}>
                 <span className="pw3-obtiens-coche" aria-hidden="true">
                   <Check size={14} strokeWidth={3} />
                 </span>
-                <span><strong>{ligne}</strong></span>
+                <span>
+                  <strong>{titre}</strong>
+                  {texte && <span className="pw3-obtiens-texte">{texte}</span>}
+                </span>
               </li>
             ))}
           </ul>
         </section>
-
-        <section className="pw3-frise">
-          <h2>Ce qui change</h2>
-          <ol>
-            {ETAPES_PLAN.map(({ quand, quoi }) => (
-              <li key={quand}>
-                <span className="pw3-frise-quand">{quand}</span>
-                <span className="pw3-frise-quoi">{quoi}</span>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <p className="pw3-garantie">
-          <ShieldCheck size={20} aria-hidden="true" />
-          <span>
-            <strong>Pas convaincu ? Remboursé sous 14 jours.</strong>
-            Sans justification, un e-mail suffit.
-          </span>
-        </p>
 
         {/* FAQ dans le style TrendSaaS : les objections, avec ses mots à lui. */}
         <section className="pw3-faq">
