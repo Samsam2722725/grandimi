@@ -72,8 +72,9 @@ export function pointsFaibles(prediction) {
 }
 
 /* « Ton plan contient — fait pour toi » (repris de heightfuel) : un titre
-   qui donne le résultat, une ligne qui dit comment, et une précision tirée
-   des réponses quand elle existe. Chaque action citée est dans le plan
+   qui donne le résultat, une ligne qui dit CE QU'IL REÇOIT (jamais la
+   solution elle-même, sinon il l'applique sans payer — retour du 14/10/2026),
+   et une précision tirée des réponses quand elle existe. Chaque action citée est dans le plan
    (internal/planner). Le plus fort d'abord : paraître plus grand vite. */
 export function contenuPlan(prediction) {
   const h = prediction.habitudes || {}
@@ -95,17 +96,17 @@ export function contenuPlan(prediction) {
   else if (h.laitages === 'aucun') repas = ' (tu ne prends aucun produit laitier)'
 
   return [
-    { titre: 'Parais plus grand dès les premières semaines', texte: `Gainage, épaules ouvertes, dos aligné : ta posture redressée${posture}.` },
-    { titre: 'Dors pour grandir', texte: `Coucher avancé de 15 min par semaine, écrans coupés 45 min avant${nuit}.` },
-    { titre: 'Décompresse ta colonne', texte: 'Suspension à la barre et étirements, 10 min par jour.' },
-    { titre: 'Mange pour grandir', texte: `Protéines à chaque repas, calcium et vitamine D${repas}.` },
+    { titre: 'Parais plus grand dès les premières semaines', texte: `Ta séance posture guidée, minuteur compris : quoi faire, combien de temps, dans quel ordre${posture}.` },
+    { titre: 'Dors pour grandir', texte: `Ton heure de coucher idéale, calculée pour toi, et comment t’y tenir${nuit}.` },
+    { titre: 'Décompresse ta colonne', texte: 'Les exercices qui étirent ta colonne, avec le bon temps pour chacun.' },
+    { titre: 'Mange pour grandir', texte: `Tes besoins en protéines et en calcium, calculés pour ton poids, et quoi manger pour les atteindre${repas}.` },
     {
       titre: 'Ton plan, jour par jour',
       texte: faibles.length
         ? `On corrige d’abord ce qui te freine : ${faibles.join(', ')}. Un nouveau thème chaque mois.`
         : 'On corrige d’abord ce qui te freine. Un nouveau thème chaque mois.',
     },
-    { titre: 'Ton guide pour grandir', texte: 'Ce qui marche vraiment, les mythes à oublier.' },
+    { titre: 'Ton guide pour grandir', texte: 'Ce qui marche vraiment, et les mythes qui te font perdre ton temps.' },
     { titre: 'Ta taille adulte estimée', texte: '98 % de précision.' },
   ]
 }
