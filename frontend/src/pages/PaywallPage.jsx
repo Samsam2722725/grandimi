@@ -3,7 +3,7 @@ import { Check, CreditCard, ShieldCheck, Wallet, X } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
-import { OFFRES, finReduction, euros } from '../lib/offres'
+import { OFFRES, finReduction, euros, contenuPlan } from '../lib/offres'
 import '../styles/funnel.css'
 /* Feuille dédiée, et non paywall.css : cette dernière habille encore
    ParentPage (page claire, destinée à un adulte arrivé par lien partagé) et
@@ -713,6 +713,24 @@ function PaywallPage({ onBackHome }) {
             {erreur}
           </p>
         )}
+
+        {/* Comme Taller et TrendSaaS : ce que tu obtiens, juste après les prix. */}
+        <section className="pw3-obtiens">
+          <h2>Ton plan contient — fait pour toi</h2>
+          <ul>
+            {contenuPlan(prediction).map(({ titre, texte }) => (
+              <li key={titre}>
+                <span className="pw3-obtiens-coche" aria-hidden="true">
+                  <Check size={14} strokeWidth={3} />
+                </span>
+                <span>
+                  <strong>{titre}</strong>
+                  {texte && <span className="pw3-obtiens-texte">{texte}</span>}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         {/* FAQ dans le style TrendSaaS : les objections, avec ses mots à lui. */}
         <section className="pw3-faq">
