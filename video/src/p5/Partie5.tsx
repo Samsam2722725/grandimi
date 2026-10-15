@@ -1,7 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Audio, Img, interpolate, Sequence, staticFile, useCurrentFrame} from 'remotion';
 import {ease, pop} from '../anim';
-import {Sfx} from '../components/Sfx';
+import {Sfx, SfxOn} from '../components/Sfx';
 import {makeTiming, Timeline} from '../timing';
 import {Paper, Typed} from './Paper';
 import {Cam, Shot} from './Shot';
@@ -370,30 +370,37 @@ const PLANS: {from: number; C: React.FC}[] = [
 
 export const PARTIE5_FRAMES = END;
 
-export const Partie5: React.FC = () => (
-	<AbsoluteFill style={{background: '#000'}}>
-		<Audio
-			src={staticFile('sfx/music.wav')}
-			volume={(f) => interpolate(f, [0, 8, END - 25, END], [0, 0.08, 0.08, 0], {extrapolateRight: 'clamp'})}
-		/>
-		{T.lines.map((l) => (
-			<Sequence key={l.id} from={l.from} durationInFrames={l.duration + 10} layout="none">
-				<Audio src={staticFile(`p5/voice/${l.id}.wav`)} />
-			</Sequence>
-		))}
-		{PLANS.map((p, i) => {
-			const to = i + 1 < PLANS.length ? PLANS[i + 1].from : END;
-			return (
-				<Sequence key={i} from={p.from} durationInFrames={to - p.from}>
-					<p.C />
+/** Chaque élément peut être coupé pour exporter les pistes séparément (kit de montage). */
+export type Partie5Props = {sousTitres?: boolean; voix?: boolean; musique?: boolean; bruitages?: boolean};
+
+export const Partie5: React.FC<Partie5Props> = ({sousTitres = true, voix = true, musique = true, bruitages = true}) => (
+	<SfxOn.Provider value={bruitages}>
+		<AbsoluteFill style={{background: '#000'}}>
+			{musique ? <Audio
+				src={staticFile('sfx/music.wav')}
+				volume={(f) => interpolate(f, [0, 8, END - 25, END], [0, 0.08, 0.08, 0], {extrapolateRight: 'clamp'})}
+			/> : null}
+			{voix && T.lines.map((l) => (
+				<Sequence key={l.id} from={l.from} durationInFrames={l.duration + 10} layout="none">
+					<Audio src={staticFile(`p5/voice/${l.id}.wav`)} />
 				</Sequence>
-			);
-		})}
-		<Captions
-			windows={[
-				{from: S.sourire, to: w('foutu', 'loin'), y: 1080, size: 92, upper: true},
-				{from: S.cta, to: END, y: 860, size: 100, upper: true},
-			]}
-		/>
-	</AbsoluteFill>
+			))}
+			{PLANS.map((p, i) => {
+				const to = i + 1 < PLANS.length ? PLANS[i + 1].from : END;
+				return (
+					<Sequence key={i} from={p.from} durationInFrames={to - p.from}>
+						<p.C />
+					</Sequence>
+				);
+			})}
+			{sousTitres ? (
+				<Captions
+					windows={[
+						{from: S.sourire, to: w('foutu', 'loin'), y: 1080, size: 92, upper: true},
+						{from: S.cta, to: END, y: 860, size: 100, upper: true},
+					]}
+				/>
+			) : null}
+		</AbsoluteFill>
+	</SfxOn.Provider>
 );
