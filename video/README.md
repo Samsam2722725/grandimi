@@ -3,18 +3,34 @@
 | Vidéo | Composition | Rendu |
 |---|---|---|
 | « 2 erreurs qui freinent ta croissance » | `Croissance` | `rendu/grandimi-croissance.mp4` (37 s) |
-| « Prédiction à partir de nos commentaires, partie 5 » | `Partie5` | `rendu/grandimi-partie5.mp4` (39 s) |
+| « Prédiction à partir de nos commentaires », partie 5 | `Episode` (`{"episode":"partie-5"}`) | `rendu/grandimi-partie5.mp4` (39 s) |
 
 Format 1080×1920, 30 i/s, son normalisé à −14 LUFS.
 
-## Partie 5
+## Format « prédiction à partir de vos commentaires »
 
-- Texte : `script-partie5.json` ; `{affiché|prononcé}` sépare l'écrit de ce que dit la voix.
-- Images : `scripts/prep_partie5.py DOSSIER` recadre les captures de l'éditeur (barre d'état et
-  interface retirées) et extrait le ballon « 15 » et la flèche rouge pour les animer.
-- Voix : `KOKORO_DIR=… python scripts/voice.py script-partie5.json public/p5/voice src/p5/timeline.json`
-- Montage : `src/p5/Partie5.tsx` (plans, caméra virtuelle `Shot.tsx`, papier froissé `Paper.tsx`).
-- Rendu : `npx remotion render Partie5 out/partie5.mp4`
+Un épisode = un dossier `public/episodes/<id>/` :
+
+| Fichier | Rôle |
+|---|---|
+| `episode.json` | tout ce qui change d'un épisode à l'autre : texte de la voix, images, zones de l'écran, plans |
+| `timeline.json` | généré : début de chaque phrase et de chaque mot |
+| `images/`, `voice/` | captures nettoyées, voix découpée par phrase |
+
+Le moteur (`src/episode/Episode.tsx`) lit ce dossier : aucun code à toucher pour un nouvel épisode.
+Le format de `episode.json` est décrit dans `src/episode/types.ts`. Les plans s'accrochent à la voix par
+des ancres : `"age:1m73-2"` = deux frames avant le mot « 1m73 » de la phrase `age`.
+
+```bash
+python scripts/nouvel_episode.py partie-6            # copie la structure de la partie 5
+python scripts/prep_partie5.py CAPTURES public/episodes/partie-6/images
+KOKORO_DIR=… python scripts/voice.py public/episodes/partie-6/episode.json public/episodes/partie-6/voice public/episodes/partie-6/timeline.json
+npm run studio                                       # aperçu, composition « Episode »
+npx remotion render Episode out/partie-6.mp4 --props='{"episode":"partie-6"}'
+python scripts/kit.py partie-6                       # kit CapCut (clips, pistes, .srt)
+```
+
+Dans `{affiché|prononcé}`, la voix dit la seconde partie et l'écran montre la première : `{1m73|un mètre soixante-treize}`.
 
 ## « 2 erreurs » : comment c'est fait
 

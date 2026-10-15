@@ -5,7 +5,7 @@ l'interface de l'éditeur vidéo en bas : on recadre, puis on isole les
 éléments ajoutés par-dessus l'interface (ballon « 15 », flèche rouge) en
 comparant chaque capture à la capture de l'interface seule.
 
-Usage : python scripts/prep_partie5.py DOSSIER_DES_CAPTURES
+Usage : python scripts/prep_partie5.py DOSSIER_DES_CAPTURES [DOSSIER_DE_SORTIE]
 """
 import sys
 from pathlib import Path
@@ -14,7 +14,7 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 SRC = Path(sys.argv[1])
-OUT = Path(__file__).resolve().parent.parent / "public" / "p5"
+OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else Path(__file__).resolve().parent.parent / "public" / "episodes" / "partie-5" / "images"
 OUT.mkdir(parents=True, exist_ok=True)
 
 FILES = {
