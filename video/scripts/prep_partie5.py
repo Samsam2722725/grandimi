@@ -70,3 +70,24 @@ def overlay(name, base, layered, thresh=38, keep=None):
 
 overlay("ballon_15", "ui", "ui_15")
 overlay("fleche_rouge", "ui", "ui_fleche", keep=lambda a: (a[..., 0] > 150) & (a[..., 1] < 110) & (a[..., 2] < 110))
+
+
+def carte_commentaire(name="commentaire", rayon=26):
+    """Découpe la carte blanche « Réponse au commentaire » de l'accroche, coins arrondis,
+    pour la garder à l'écran pendant le plan « PARTIE N » comme dans l'original."""
+    a = img["hook"][STATUS:BOTTOM]
+    white = a.min(axis=2) > 245
+    rows = np.where(white[1100:1700].sum(axis=1) > 400)[0] + 1100
+    y0, y1 = rows.min(), rows.max() + 1
+    cols = np.where(white[y0:y1].sum(axis=0) > 150)[0]
+    x0, x1 = cols.min(), cols.max() + 1
+    mask = Image.new("L", (x1 - x0, y1 - y0), 0)
+    from PIL import ImageDraw
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, x1 - x0 - 1, y1 - y0 - 1], radius=rayon, fill=255)
+    card = Image.fromarray(a[y0:y1, x0:x1].astype(np.uint8)).convert("RGBA")
+    card.putalpha(mask)
+    card.save(OUT / f"{name}.png", optimize=True)
+    print(name, "boîte dans l'accroche", (int(x0), int(y0), int(x1), int(y1)))
+
+
+carte_commentaire()

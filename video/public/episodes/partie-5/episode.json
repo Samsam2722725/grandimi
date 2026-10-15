@@ -154,9 +154,19 @@
           "type": "tape",
           "texte": "PARTIE {partie}",
           "a": 2,
-          "y": 830,
+          "y": 640,
           "taille": 210,
           "son": "tick"
+        },
+        {
+          "type": "image",
+          "fichier": "commentaire.png",
+          "a": 0,
+          "ecran": true,
+          "x": 130,
+          "y": 1230,
+          "w": 819,
+          "h": 293
         }
       ],
       "sons": [
@@ -274,13 +284,19 @@
       ],
       "elements": [
         {
-          "type": "texte",
+          "type": "tape",
           "texte": "1m85",
           "a": "habitudes:1m85",
           "y": 250,
           "taille": 230,
           "couleur": "#ff1a78",
           "contour": 12,
+          "parLettre": 3
+        }
+      ],
+      "sons": [
+        {
+          "a": "habitudes:1m85",
           "son": "slam",
           "volume": 0.6
         }
@@ -330,7 +346,8 @@
           "h": 355,
           "effet": "revele-bas",
           "son": "ding",
-          "volume": 0.5
+          "volume": 0.5,
+          "rebond": true
         }
       ],
       "sons": [

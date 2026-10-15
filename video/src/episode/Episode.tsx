@@ -91,6 +91,8 @@ const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?
 	let clipPath: string | undefined;
 	if (el.effet === 'revele-bas') {
 		clipPath = `inset(${(1 - ease(f, at, 8)) * 100}% 0 0 0)`;
+		// Rebond vertical une fois la flèche apparue, comme un sticker animé.
+		if (el.rebond && f > at + 8) transform = `translateY(${-Math.abs(Math.sin((f - at - 8) / 4)) * 22}px)`;
 	} else if (el.effet) {
 		const s = pop(f, at, 9) * (fin !== undefined ? 1 - ease(f, fin, 6) : 1);
 		if (s <= 0.01) return null;
@@ -182,15 +184,28 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 	];
 
 	const inImage = (plan.elements ?? []).map((el, i) => {
-		if (el.type === 'image')
+		if (el.type === 'image' && !el.ecran)
 			return <ImageEl key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} src={file(el.fichier)} />;
 		if (el.type === 'trait' && img) return <Trait key={i} el={el} at={loc(el.a)} w={img.w} h={img.h} />;
 		return null;
 	});
 	const onScreen = (plan.elements ?? []).map((el, i) => {
+		if (el.type === 'image' && el.ecran)
+			return <ImageEl key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} src={file(el.fichier)} />;
 		if (el.type === 'texte') return <TexteEl key={i} el={el} at={loc(el.a)} partie={ep.partie} />;
 		if (el.type === 'tape')
-			return <Typed key={i} text={el.texte.replace('{partie}', String(ep.partie))} at={loc(el.a)} perLetter={el.parLettre ?? 2} y={el.y} size={el.taille} />;
+			return (
+				<Typed
+					key={i}
+					text={el.texte.replace('{partie}', String(ep.partie))}
+					at={loc(el.a)}
+					perLetter={el.parLettre ?? 2}
+					y={el.y}
+					size={el.taille}
+					color={el.couleur}
+					stroke={el.contour}
+				/>
+			);
 		return null;
 	});
 

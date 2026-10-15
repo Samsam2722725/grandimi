@@ -18,10 +18,10 @@ export type Camera = {a?: Ancre; zone?: string; x?: number; y?: number; z?: numb
 
 type Base = {a: Ancre; son?: string; volume?: number};
 export type Element =
-	| (Base & {type: 'image'; fichier: string; x: number; y: number; w: number; h: number; fin?: Ancre; effet?: 'pop' | 'pop-balance' | 'revele-bas'})
+	| (Base & {type: 'image'; fichier: string; x: number; y: number; w: number; h: number; fin?: Ancre; effet?: 'pop' | 'pop-balance' | 'revele-bas'; rebond?: boolean; ecran?: boolean})
 	| (Base & {type: 'trait'; d: string; tete?: string; couleur?: string; epaisseur?: number; duree?: number})
 	| (Base & {type: 'texte'; texte: string; y: number; taille: number; couleur?: string; contour?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance'})
-	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number});
+	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number});
 
 export type Plan = {
 	nom: string;
