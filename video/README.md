@@ -1,8 +1,22 @@
-# Vidéo TikTok « 2 erreurs qui freinent ta croissance »
+# Vidéos TikTok Grandimi
 
-Rendu final : `rendu/grandimi-croissance.mp4` (1080×1920, 30 i/s, 37 s, son normalisé à −14 LUFS).
+| Vidéo | Composition | Rendu |
+|---|---|---|
+| « 2 erreurs qui freinent ta croissance » | `Croissance` | `rendu/grandimi-croissance.mp4` (37 s) |
+| « Prédiction à partir de nos commentaires, partie 5 » | `Partie5` | `rendu/grandimi-partie5.mp4` (39 s) |
 
-## Comment c'est fait
+Format 1080×1920, 30 i/s, son normalisé à −14 LUFS.
+
+## Partie 5
+
+- Texte : `script-partie5.json` ; `{affiché|prononcé}` sépare l'écrit de ce que dit la voix.
+- Images : `scripts/prep_partie5.py DOSSIER` recadre les captures de l'éditeur (barre d'état et
+  interface retirées) et extrait le ballon « 15 » et la flèche rouge pour les animer.
+- Voix : `KOKORO_DIR=… python scripts/voice.py script-partie5.json public/p5/voice src/p5/timeline.json`
+- Montage : `src/p5/Partie5.tsx` (plans, caméra virtuelle `Shot.tsx`, papier froissé `Paper.tsx`).
+- Rendu : `npx remotion render Partie5 out/partie5.mp4`
+
+## « 2 erreurs » : comment c'est fait
 
 | Élément | Source |
 |---|---|

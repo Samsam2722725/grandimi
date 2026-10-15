@@ -1,0 +1,17 @@
+{
+  "voice": "ff_siwis",
+  "speed": 1.2,
+  "lines": [
+    {"id": "hook",      "pause": 0.12, "text": "Prédiction taille adulte potentiel à partir de nos commentaires,"},
+    {"id": "partie",    "pause": 0.3,  "text": "partie {5|cinq} ?"},
+    {"id": "dan",       "pause": 0.2,  "text": "Aujourd'hui, on vérifie les stats de Dan."},
+    {"id": "age",       "pause": 0.25, "text": "Il a {15|quinze} ans, mesure déjà {1m73|un mètre soixante-treize}, au-dessus de la moyenne."},
+    {"id": "grandimi",  "pause": 0.3,  "text": "Selon {Grandimi.com|Grandimi point com}, sa taille adulte estimée est de {1m81|un mètre quatre-vingt-un}."},
+    {"id": "habitudes", "pause": 0.1,  "text": "Et avec de bonnes habitudes, il pourrait même approcher {1m85|un mètre quatre-vingt-cinq},"},
+    {"id": "optim",     "pause": 0.3,  "text": "soit {4 cm|quatre centimètres} de plus grâce à une croissance bien optimisée."},
+    {"id": "pct",       "pause": 0.1,  "text": "Là, il dépasse déjà {67,1 %|soixante-sept virgule un pour cent} des jeunes de son âge,"},
+    {"id": "fini",      "pause": 0.3,  "text": "et il a terminé {95,4 %|quatre-vingt-quinze virgule quatre pour cent} de sa croissance."},
+    {"id": "foutu",     "pause": 0.3,  "text": "Franchement, t'es loin d'être foutu !"},
+    {"id": "cta",       "pause": 1.2,  "text": "Si toi aussi tu veux qu'on regarde ton potentiel, lâche en commentaire ton âge, ta taille actuelle et la taille de tes parents."}
+  ]
+}
