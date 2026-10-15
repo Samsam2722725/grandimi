@@ -1,7 +1,7 @@
 # Style « prédiction à partir de vos commentaires » — référence figée
 
 Validé le 15/10/2026 sur la partie 5. Rendu de référence : `rendu/grandimi-partie5.mp4`.
-Point de sauvegarde git : tag `style-v1`. Ne pas modifier ce style sans accord explicite :
+Point de sauvegarde git : commit `14398f8` (branche `claude/nifty-johnson-y0b55m`) ; pour revenir à ce style : `git checkout 14398f8 -- video/src video/public/episodes/partie-5`. Ne pas modifier ce style sans accord explicite :
 les épisodes suivants changent **les personnes et les chiffres**, pas le style.
 
 Le style recopie la vidéo virale de référence (mesures dans

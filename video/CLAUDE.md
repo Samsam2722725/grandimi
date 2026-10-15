@@ -1,7 +1,7 @@
 # Dossier video/ — consignes pour Claude
 
 - Les vidéos TikTok de Grandimi se font ici avec Remotion. Le format principal est décrit dans
-  `STYLE.md` : **ce style est figé** (tag git `style-v1`). Ne le modifie pas sans accord explicite de
+  `STYLE.md` : **ce style est figé** (commit `14398f8`). Ne le modifie pas sans accord explicite de
   l'utilisateur ; un nouvel épisode change les personnes, les chiffres et le texte, pas le style.
 - Un épisode = `public/episodes/<id>/` (voir `README.md`). Créer avec `python scripts/nouvel_episode.py`,
   jamais en modifiant `partie-5`, qui sert de référence.
