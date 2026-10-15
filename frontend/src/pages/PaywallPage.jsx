@@ -835,6 +835,13 @@ function PaywallPage({ onBackHome }) {
               data-whop-checkout-plan-id={planWhop}
               data-whop-checkout-prefill-email={email}
               data-whop-checkout-theme="dark"
+              // Le formulaire Whop aux couleurs et dans la langue du site
+              // (16/10/2026) : sans ça, bouton violet « Rejoindre » et pays
+              // en anglais au moment de payer. Options lues par
+              // js.whop.com/static/checkout/index.js.
+              data-whop-checkout-theme-accent-color="orange"
+              data-whop-checkout-theme-button-text="Payer"
+              data-whop-checkout-locale="fr"
               data-whop-checkout-on-complete="grandimiPaiementTermine"
               data-whop-checkout-on-payment-error="grandimiPaiementErreur"
               data-whop-checkout-on-state-change="grandimiPaiementEtat"
