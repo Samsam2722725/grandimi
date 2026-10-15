@@ -66,10 +66,10 @@ const Flash: React.FC<{color: string}> = ({color}) => {
 };
 
 /* ───────── Éléments ───────── */
-const Trait: React.FC<{el: Extract<Element, {type: 'trait'}>; at: number; w: number; h: number}> = ({el, at, w, h}) => {
+const Trait: React.FC<{el: Extract<Element, {type: 'trait'}>; at: number; fin?: number; w: number; h: number}> = ({el, at, fin, w, h}) => {
 	const f = useCurrentFrame();
 	const t = ease(f, at, el.duree ?? 10);
-	if (f < at) return null;
+	if (f < at || (fin !== undefined && f >= fin)) return null;
 	const color = el.couleur ?? P5.yellow;
 	const width = el.epaisseur ?? 14;
 	return (
@@ -107,10 +107,11 @@ const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?
 	);
 };
 
-const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; partie: number}> = ({el, at, partie}) => {
+const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; fin?: number; partie: number}> = ({el, at, fin, partie}) => {
 	const f = useCurrentFrame();
 	if (f < at) return null;
-	const s = pop(f, at, el.amorti ?? 9);
+	const s = pop(f, at, el.amorti ?? 9) * (fin !== undefined ? 1 - ease(f, fin, 5) : 1);
+	if (s <= 0.01) return null;
 	const texte = el.texte.replace('{partie}', String(partie));
 	const rot = el.effet === 'pop-balance' ? Math.sin(f / 8) * 6 : 0;
 	if (el.fond) {
@@ -143,6 +144,13 @@ const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; part
 			{texte}
 		</div>
 	);
+};
+
+/** Photos de papier froissé qui alternent toutes les `saccade` frames. */
+const PhotoPapier: React.FC<{files: string[]; saccade?: number}> = ({files, saccade = 7}) => {
+	const f = useCurrentFrame();
+	const src = files[Math.floor(Math.max(0, f) / saccade) % files.length];
+	return <Img src={src} style={{position: 'absolute', inset: 0, width: 1080, height: 1920, objectFit: 'cover'}} />;
 };
 
 /* ───────── Plan ───────── */
@@ -186,13 +194,15 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 	const inImage = (plan.elements ?? []).map((el, i) => {
 		if (el.type === 'image' && !el.ecran)
 			return <ImageEl key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} src={file(el.fichier)} />;
-		if (el.type === 'trait' && img) return <Trait key={i} el={el} at={loc(el.a)} w={img.w} h={img.h} />;
+		if (el.type === 'trait' && img)
+			return <Trait key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} w={img.w} h={img.h} />;
 		return null;
 	});
 	const onScreen = (plan.elements ?? []).map((el, i) => {
 		if (el.type === 'image' && el.ecran)
 			return <ImageEl key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} src={file(el.fichier)} />;
-		if (el.type === 'texte') return <TexteEl key={i} el={el} at={loc(el.a)} partie={ep.partie} />;
+		if (el.type === 'texte')
+			return <TexteEl key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} partie={ep.partie} />;
 		if (el.type === 'tape')
 			return (
 				<Typed
@@ -211,7 +221,8 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 
 	const content = (
 		<AbsoluteFill>
-			{plan.fond === 'papier' ? <Paper /> : null}
+			{plan.fond === 'papier' && plan.papiers?.length ? <PhotoPapier files={plan.papiers.map(file)} /> : null}
+			{plan.fond === 'papier' && !plan.papiers?.length ? <Paper /> : null}
 			{img ? (
 				<Shot src={`episodes/${id}/images/${img.fichier}`} w={img.w} h={img.h} cams={cams.length ? cams : [{f: 0, x: img.w / 2, y: img.h / 2, z: 1}]} bg={plan.fondCouleur}>
 					{inImage}
@@ -231,14 +242,14 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 /* ───────── Sous-titres jaunes, un ou deux mots à la fois ───────── */
 const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '');
 
-const chunkWords = (tl: Timeline, keywords: string[]) =>
+const chunkWords = (tl: Timeline, keywords: string[], maxWords = 2, maxChars = 14) =>
 	tl.lines.flatMap((l) => {
 		const out: {from: number; words: string[]}[] = [];
 		let cur: {f: number; w: string}[] = [];
 		const push = () => cur.length && out.push({from: cur[0].f, words: cur.map((x) => x.w)});
 		for (const wd of l.words) {
 			const len = cur.map((x) => x.w).join(' ').length + wd.w.length;
-			if (cur.length && (cur.length >= 2 || len > 14 || keywords.includes(norm(wd.w)))) {
+			if (cur.length && (cur.length >= maxWords || len > maxChars || keywords.includes(norm(wd.w)))) {
 				push();
 				cur = [];
 			}
@@ -252,14 +263,23 @@ const chunkWords = (tl: Timeline, keywords: string[]) =>
 		return out;
 	});
 
-const Captions: React.FC<{
+type Fenetre = {
+	from: number;
+	to: number;
+	upper?: boolean;
+	y: number;
+	size: number;
 	chunks: {from: number; words: string[]}[];
 	keywords: string[];
-	windows: {from: number; to: number; upper?: boolean; y: number; size: number}[];
-}> = ({chunks, keywords, windows}) => {
+	weight: number;
+	stroke: number;
+};
+
+const Captions: React.FC<{windows: Fenetre[]}> = ({windows}) => {
 	const f = useCurrentFrame();
 	const win = windows.find((x) => f >= x.from && f < x.to);
 	if (!win) return null;
+	const {chunks, keywords} = win;
 	const idx = chunks.findIndex((c, i) => f >= c.from && (i + 1 >= chunks.length || f < chunks[i + 1].from));
 	const c = chunks[idx];
 	if (!c || c.from < win.from - 2) return null;
@@ -274,6 +294,8 @@ const Captions: React.FC<{
 						style={{
 							...P5.caption,
 							fontSize: win.size,
+							fontWeight: win.weight,
+							WebkitTextStroke: `${win.stroke}px #000`,
 							textTransform: win.upper ? 'uppercase' : 'none',
 							display: 'inline-block',
 							margin: '0 12px',
@@ -297,8 +319,17 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 	const END = timeline.totalFrames;
 	const starts = data.plans.map((p) => resolve(p.debut));
 	const keywords = data.sousTitres.motsCles.map(norm);
-	const chunks = chunkWords(timeline, keywords);
-	const windows = data.sousTitres.fenetres.map((w) => ({from: resolve(w.de), to: resolve(w.a), y: w.y, size: w.taille, upper: w.majuscules}));
+	const windows: Fenetre[] = data.sousTitres.fenetres.map((w) => ({
+		from: resolve(w.de),
+		to: resolve(w.a),
+		y: w.y,
+		size: w.taille,
+		upper: w.majuscules,
+		weight: w.poids ?? 800,
+		stroke: w.contour ?? 6,
+		keywords: w.motsCles === false ? [] : keywords,
+		chunks: chunkWords(timeline, w.motsCles === false ? [] : keywords, w.motsMax, w.carMax),
+	}));
 	const vol = data.musique?.volume ?? 0.08;
 	return (
 		<SfxOn.Provider value={bruitages}>
@@ -323,7 +354,7 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 						</Sequence>
 					);
 				})}
-				{sousTitres ? <Captions chunks={chunks} keywords={keywords} windows={windows} /> : null}
+				{sousTitres ? <Captions windows={windows} /> : null}
 			</AbsoluteFill>
 		</SfxOn.Provider>
 	);

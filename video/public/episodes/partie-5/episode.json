@@ -65,9 +65,9 @@
   },
   "images": {
     "accroche": {
-      "fichier": "hook.png",
-      "w": 1170,
-      "h": 1954
+      "fichier": "accroche.jpg",
+      "w": 925,
+      "h": 1560
     },
     "ecran": {
       "fichier": "ui.png",
@@ -102,34 +102,19 @@
       "z": 1
     },
     "taille_actuelle": {
-      "x": 330,
-      "y": 245,
-      "z": 2.1
-    },
-    "url": {
-      "x": 585,
-      "y": 2000,
-      "z": 2.0
+      "x": 416,
+      "y": 381,
+      "z": 1.45
     },
     "taille_predite": {
-      "x": 690,
-      "y": 270,
-      "z": 1.55
+      "x": 815,
+      "y": 568,
+      "z": 1.7
     },
-    "optimiser": {
-      "x": 540,
-      "y": 449,
-      "z": 2.2
-    },
-    "plus_grand_que": {
-      "x": 585,
-      "y": 1300,
-      "z": 1.9
-    },
-    "croissance_terminee": {
-      "x": 640,
-      "y": 1640,
-      "z": 1.45
+    "stats_bas": {
+      "x": 764,
+      "y": 1138,
+      "z": 1.57
     }
   },
   "plans": [
@@ -139,8 +124,8 @@
       "image": "accroche",
       "camera": [
         {
-          "x": 585,
-          "y": 977,
+          "x": 462,
+          "y": 780,
           "z": 1
         }
       ]
@@ -154,19 +139,9 @@
           "type": "tape",
           "texte": "PARTIE {partie}",
           "a": 2,
-          "y": 640,
+          "y": 830,
           "taille": 210,
           "son": "tick"
-        },
-        {
-          "type": "image",
-          "fichier": "commentaire.png",
-          "a": 0,
-          "ecran": true,
-          "x": 130,
-          "y": 1230,
-          "w": 819,
-          "h": 293
         }
       ],
       "sons": [
@@ -175,36 +150,45 @@
           "son": "whoosh",
           "volume": 0.4
         }
+      ],
+      "papiers": [
+        "papier1.jpg",
+        "papier2.jpg",
+        "papier3.jpg",
+        "papier4.jpg"
       ]
     },
     {
       "nom": "ecran-taille",
       "debut": "dan-3",
-      "transition": "whip",
+      "transition": "flash",
       "image": "ecran",
       "camera": [
         {
           "zone": "tout"
         },
         {
-          "a": "age:1m73-2",
-          "zone": "taille_actuelle"
+          "a": "age:1m73",
+          "zone": "taille_actuelle",
+          "duree": 15
         },
         {
-          "a": "grandimi:grandimi-2",
-          "zone": "url"
+          "a": "grandimi:grandimi-6",
+          "zone": "tout",
+          "duree": 24
         },
         {
-          "a": "grandimi:1m81-3",
-          "zone": "taille_predite"
+          "a": "grandimi:1m81+6",
+          "zone": "taille_predite",
+          "duree": 15
         }
       ],
       "elements": [
         {
           "type": "image",
           "fichier": "ballon_15.png",
-          "a": "age:15",
-          "fin": "age:1m73-6",
+          "a": "age:15+9",
+          "fin": "age:15+27",
           "x": 238,
           "y": 851,
           "w": 641,
@@ -214,22 +198,20 @@
           "volume": 0.6
         },
         {
-          "type": "trait",
-          "a": "grandimi:1m81+2",
-          "d": "M 400 190 C 480 60, 640 70, 700 205",
-          "tete": "M 650 190 L 702 210 L 712 150",
-          "duree": 9,
-          "son": "sparkle",
-          "volume": 0.4
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": "grandimi:grandimi",
+          "fin": "grandimi:1m81+4",
+          "y": 1330,
+          "taille": 92,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 10,
+          "son": "pop",
+          "volume": 0.5
         }
       ],
-      "sons": [
-        {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.4
-        }
-      ]
+      "sons": []
     },
     {
       "nom": "routine",
@@ -239,17 +221,9 @@
       "camera": [
         {
           "x": 585,
-          "y": 640,
-          "z": 1.3,
+          "y": 1036,
+          "z": 1,
           "duree": 1
-        },
-        {
-          "a": 6,
-          "x": 585,
-          "y": 1350,
-          "z": 1.3,
-          "duree": "fin",
-          "son": null
         }
       ],
       "sons": [
@@ -304,50 +278,43 @@
     },
     {
       "nom": "ecran-stats",
-      "debut": "optim:4-4",
+      "debut": "optim:de-3",
       "transition": "whip",
       "image": "ecran",
       "camera": [
         {
-          "zone": "optimiser",
+          "zone": "tout",
           "duree": 1
         },
         {
-          "a": "pct:67-4",
-          "zone": "plus_grand_que"
-        },
-        {
-          "a": "fini:95-4",
-          "zone": "croissance_terminee"
+          "a": "fini:95",
+          "zone": "stats_bas",
+          "duree": 21
         }
       ],
       "elements": [
         {
           "type": "trait",
-          "a": 4,
-          "d": "M 470 412 C 560 380, 680 400, 690 450 C 700 510, 520 520, 462 480 C 420 450, 470 405, 560 402",
-          "epaisseur": 10
+          "a": "optim:de+12",
+          "fin": "optim:de+40",
+          "duree": 8,
+          "d": "M 330 150 C 470 90, 600 120, 650 300",
+          "tete": "M 612 268 L 650 302 L 664 252",
+          "epaisseur": 16,
+          "son": "whoosh",
+          "volume": 0.3
         },
         {
           "type": "trait",
-          "a": "pct:67+2",
-          "d": "M 520 1252 C 640 1225, 780 1250, 760 1305 C 740 1355, 560 1350, 530 1310 C 505 1275, 560 1240, 650 1240",
-          "epaisseur": 10,
+          "a": "pct:67+9",
+          "fin": "pct:fin",
+          "duree": 7,
+          "couleur": "#e8202a",
+          "d": "M 585 1615 L 585 1392",
+          "tete": "M 540 1440 L 585 1392 L 630 1440",
+          "epaisseur": 20,
           "son": "pop",
           "volume": 0.5
-        },
-        {
-          "type": "image",
-          "fichier": "fleche_rouge.png",
-          "a": "fini:95+2",
-          "x": 481,
-          "y": 1570,
-          "w": 208,
-          "h": 355,
-          "effet": "revele-bas",
-          "son": "ding",
-          "volume": 0.5,
-          "rebond": true
         }
       ],
       "sons": [
@@ -434,6 +401,16 @@
           "effet": "pop-balance",
           "son": "pop",
           "volume": 0.5
+        },
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": 4,
+          "y": 330,
+          "taille": 84,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 10
         }
       ],
       "sons": [
@@ -452,6 +429,17 @@
       "parents"
     ],
     "fenetres": [
+      {
+        "de": 0,
+        "a": "partie-3",
+        "y": 940,
+        "taille": 88,
+        "motsMax": 2,
+        "carMax": 20,
+        "poids": 600,
+        "contour": 4,
+        "motsCles": false
+      },
       {
         "de": "foutu-3",
         "a": "foutu:loin",

@@ -427,5 +427,111 @@
    "w": "height.",
    "t": 30.4
   }
- ]
+ ],
+ "camera": {
+  "note": "Mesuré avec scripts/analyse_reference.py (écran de référence 576×1024). Report sur l'écran Grandimi : x' = (x-173)×2,339+317, y' par morceaux, z' = 0,87×z.",
+  "evenements": [
+   {
+    "t": [
+     3.0,
+     3.1
+    ],
+    "quoi": "flash jaune papier → écran"
+   },
+   {
+    "t": [
+     4.8,
+     5.4
+    ],
+    "quoi": "ballon « 15th » sur l'écran entier",
+    "mot": "15"
+   },
+   {
+    "t": [
+     5.8,
+     6.3
+    ],
+    "quoi": "zoom taille actuelle",
+    "centre": [
+     216,
+     265
+    ],
+    "zoom": 1.63,
+    "mot": "5'8"
+   },
+   {
+    "t": [
+     7.9,
+     8.7
+    ],
+    "quoi": "retour écran entier",
+    "mot": "taller apps"
+   },
+   {
+    "t": [
+     10.0,
+     10.5
+    ],
+    "quoi": "zoom taille prédite",
+    "centre": [
+     384,
+     370
+    ],
+    "zoom": 1.92,
+    "mot": "5'11.3"
+   },
+   {
+    "t": [
+     11.67,
+     13.63
+    ],
+    "quoi": "écran routine entier, fixe",
+    "mot": "habits"
+   },
+   {
+    "t": [
+     13.63,
+     15.47
+    ],
+    "quoi": "écorché + chiffre",
+    "mot": "6'1"
+   },
+   {
+    "t": [
+     16.0,
+     16.9
+    ],
+    "quoi": "flèche jaune taille actuelle → prédite",
+    "mot": "inches"
+   },
+   {
+    "t": [
+     19.7,
+     21.3
+    ],
+    "quoi": "flèche rouge verticale sous « Taller than »",
+    "mot": "67.1%"
+   },
+   {
+    "t": [
+     22.4,
+     23.1
+    ],
+    "quoi": "zoom bas (stats)",
+    "centre": [
+     364,
+     611
+    ],
+    "zoom": 1.81,
+    "mot": "95.4%"
+   },
+   {
+    "t": [
+     24.27,
+     24.57
+    ],
+    "quoi": "flash jaune → verdict"
+   }
+  ]
+ }
 }
