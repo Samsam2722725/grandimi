@@ -142,7 +142,7 @@
         {
           "a": 1,
           "x": 469,
-          "y": 800,
+          "y": 1000,
           "z": 1.3,
           "duree": "fin",
           "lineaire": true,
@@ -520,7 +520,7 @@
       }
     ]
   },
-  "voix": "Enregistrement ElevenLabs de l'utilisateur, blancs retirés, accéléré ×1,08 (32,9 s comme l'original).",
+  "voix": "Enregistrement ElevenLabs de l'utilisateur (1m90 / 4 cm), blancs retirés, accéléré ×1,105 (32,9 s comme l'original).",
   "reference": "references/7436214342510513439",
   "deriveCamera": false
 }

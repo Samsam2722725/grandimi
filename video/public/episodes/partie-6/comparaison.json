@@ -1,6 +1,6 @@
 [["sous-titres accroche", 0.4, "hook:taille"], ["zoom accroche", 1.8, "hook:commentaires+6"], ["papier", 2.6, "partie+15"],
  ["lumière jaune", 3.05, "dan-4"], ["ballon", 5.0, "age:14+15"], ["zoom taille actuelle", 7.0, "age:1m75+25"],
  ["dézoom", 8.4, "age:très+25"], ["secousse « app »", 8.7, "grandimi:grandimi+3"], ["zoom taille prédite", 11.0, "grandimi:1m86"],
- ["routine", 13.5, "habitudes:bonnes+20"], ["chiffre", 15.5, "habitudes:1m87+22"], ["flèche 1", 18.3, "optim:grâce+15"],
+ ["routine", 13.5, "habitudes:bonnes+20"], ["chiffre", 15.5, "habitudes:1m90+22"], ["flèche 1", 18.3, "optim:grâce+15"],
  ["flèche 2", 21.5, "pct:plus+25"], ["zoom croissance", 24.5, "fini:terminé+20"], ["verdict", 27.0, "foutu:pas+5"],
  ["NBA", 28.8, "nba:la+12"], ["appel", 31.5, "cta:indique"]]
