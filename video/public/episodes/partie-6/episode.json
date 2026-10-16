@@ -31,12 +31,12 @@
     {
       "id": "habitudes",
       "pause": 0,
-      "text": "Avec les bonnes habitudes, Simple pourrait atteindre 1m87,"
+      "text": "Avec les bonnes habitudes, Simple pourrait atteindre 1m90,"
     },
     {
       "id": "optim",
       "pause": 0,
-      "text": "soit 1 cm supplémentaires grâce à l’optimisation de sa croissance."
+      "text": "soit 4 cm supplémentaires grâce à l’optimisation de sa croissance."
     },
     {
       "id": "pct",
@@ -140,12 +140,12 @@
           "duree": 1
         },
         {
-          "a": "hook:commentaires+3",
+          "a": "hook:nos",
           "x": 469,
           "y": 950,
           "z": 1.154,
           "duree": 2,
-          "volume": 0.18
+          "volume": 0.4
         }
       ]
     },
@@ -269,7 +269,7 @@
     },
     {
       "nom": "chiffre",
-      "debut": "habitudes:1m87-2",
+      "debut": "habitudes:1m90-2",
       "transition": "rebond",
       "image": "anatomie",
       "fondCouleur": "#1a1a1a",
@@ -292,8 +292,8 @@
       "elements": [
         {
           "type": "texte",
-          "texte": "1m87",
-          "a": "habitudes:1m87+12",
+          "texte": "1m90",
+          "a": "habitudes:1m90+12",
           "y": 150,
           "taille": 220,
           "couleur": "#e8202a",
@@ -478,12 +478,13 @@
         "de": 0,
         "a": "partie-3",
         "y": 930,
-        "taille": 84,
-        "motsMax": 3,
-        "carMax": 26,
+        "taille": 64,
+        "motsMax": 5,
+        "carMax": 34,
         "poids": 600,
         "contour": 4,
-        "motsCles": false
+        "motsCles": false,
+        "pop": false
       },
       {
         "de": "foutu",
@@ -494,7 +495,8 @@
         "carMax": 26,
         "poids": 600,
         "contour": 4,
-        "motsCles": false
+        "motsCles": false,
+        "pop": false
       },
       {
         "de": "nba",
@@ -505,10 +507,12 @@
         "carMax": 24,
         "poids": 600,
         "contour": 4,
-        "motsCles": false
+        "motsCles": false,
+        "pop": false
       }
     ]
   },
   "voix": "Enregistrement ElevenLabs de l'utilisateur, blancs retirés, accéléré ×1,08 (32,9 s comme l'original).",
-  "reference": "references/7436214342510513439"
+  "reference": "references/7436214342510513439",
+  "deriveCamera": false
 }

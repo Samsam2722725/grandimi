@@ -286,6 +286,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					cams={cams.length ? cams : [{f: 0, x: img.w / 2, y: img.h / 2, z: 1}]}
 					bg={plan.fondCouleur}
 					libre={plan.libre}
+					derive={ep.deriveCamera !== false}
 				>
 					{inImage}
 				</Shot>
@@ -342,6 +343,7 @@ type Fenetre = {
 	keywords: string[];
 	weight: number;
 	stroke: number;
+	pop: boolean;
 };
 
 const Captions: React.FC<{windows: Fenetre[]}> = ({windows}) => {
@@ -352,7 +354,7 @@ const Captions: React.FC<{windows: Fenetre[]}> = ({windows}) => {
 	const idx = chunks.findIndex((c, i) => f >= c.from && (i + 1 >= chunks.length || f < chunks[i + 1].from));
 	const c = chunks[idx];
 	if (!c || c.from < win.from - 2) return null;
-	const s = 0.82 + 0.18 * pop(f, c.from, 10);
+	const s = win.pop ? 0.82 + 0.18 * pop(f, c.from, 10) : 1;
 	return (
 		<div style={{position: 'absolute', left: 40, right: 40, top: win.y, textAlign: 'center', transform: `scale(${s})`}}>
 			{c.words.map((word, i) => {
@@ -397,6 +399,7 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 		weight: w.poids ?? 800,
 		stroke: w.contour ?? 6,
 		keywords: w.motsCles === false ? [] : keywords,
+		pop: w.pop !== false,
 		chunks: chunkWords(timeline, w.motsCles === false ? [] : keywords, w.motsMax, w.carMax),
 	}));
 	const vol = data.musique?.volume ?? 0.08;

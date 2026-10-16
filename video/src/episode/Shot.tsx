@@ -7,7 +7,7 @@ export type Cam = {f: number; x: number; y: number; z: number; dur?: number};
 const W = 1080;
 const H = 1920;
 
-const camAt = (keys: Cam[], f: number) => {
+const camAt = (keys: Cam[], f: number, derive: boolean) => {
 	let i = 0;
 	while (i + 1 < keys.length && keys[i + 1].f <= f) i++;
 	const k = keys[i];
@@ -19,7 +19,7 @@ const camAt = (keys: Cam[], f: number) => {
 	});
 	const from = i === 0 ? k : prev;
 	// Légère poussée continue après chaque mouvement, pour que l'image ne soit jamais figée.
-	const drift = 1 + Math.min(0.05, Math.max(0, f - k.f) * 0.0012);
+	const drift = derive ? 1 + Math.min(0.05, Math.max(0, f - k.f) * 0.0012) : 1;
 	return {
 		x: from.x + (k.x - from.x) * t,
 		y: from.y + (k.y - from.y) * t,
@@ -40,9 +40,11 @@ export const Shot: React.FC<{
 	children?: React.ReactNode;
 	rotate?: number;
 	libre?: boolean;
-}> = ({src, w, h, cams, bg = '#000', children, rotate = 0, libre = false}) => {
+	/** false : caméra parfaitement fixe entre deux mouvements (comme la référence 7436214342510513439). */
+	derive?: boolean;
+}> = ({src, w, h, cams, bg = '#000', children, rotate = 0, libre = false, derive = true}) => {
 	const f = useCurrentFrame();
-	const c = camAt(cams, f);
+	const c = camAt(cams, f, derive);
 	const s = Math.max(W / w, H / h) * c.z;
 	let tx = W / 2 - c.x * s;
 	let ty = H / 2 - c.y * s;

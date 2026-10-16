@@ -46,6 +46,8 @@ export type Plan = {
 
 export type Episode = {
 	partie: number;
+	/** false : pas de légère poussée de caméra entre les mouvements (défaut : true). */
+	deriveCamera?: boolean;
 	voice: string;
 	speed: number;
 	lines: {id: string; pause: number; text: string}[];
@@ -57,6 +59,6 @@ export type Episode = {
 		motsCles: string[];
 		/** motsMax / carMax : taille des groupes de mots ; poids : graisse de la police (800 par défaut) ;
 		    motsCles: false : pas de pastille orange dans cette fenêtre. */
-		fenetres: {de: Ancre; a: Ancre; y: number; taille: number; majuscules?: boolean; motsMax?: number; carMax?: number; poids?: number; contour?: number; motsCles?: boolean}[];
+		fenetres: {de: Ancre; a: Ancre; y: number; taille: number; majuscules?: boolean; motsMax?: number; carMax?: number; poids?: number; contour?: number; motsCles?: boolean; pop?: boolean}[];
 	};
 };

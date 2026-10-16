@@ -205,7 +205,7 @@
     },
     {
       "id": "habitudes",
-      "text": "Avec les bonnes habitudes, Simple pourrait atteindre 1m87,",
+      "text": "Avec les bonnes habitudes, Simple pourrait atteindre 1m90,",
       "from": 398,
       "duration": 97,
       "words": [
@@ -238,14 +238,14 @@
           "f": 454
         },
         {
-          "w": "1m87,",
+          "w": "1m90,",
           "f": 463
         }
       ]
     },
     {
       "id": "optim",
-      "text": "soit 1 cm supplémentaires grâce à l’optimisation de sa croissance.",
+      "text": "soit 4 cm supplémentaires grâce à l’optimisation de sa croissance.",
       "from": 497,
       "duration": 97,
       "words": [
@@ -254,7 +254,7 @@
           "f": 497
         },
         {
-          "w": "1",
+          "w": "4",
           "f": 506
         },
         {
