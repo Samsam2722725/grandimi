@@ -4,6 +4,7 @@
 |---|---|---|
 | « 2 erreurs qui freinent ta croissance » | `Croissance` | `rendu/grandimi-croissance.mp4` (37 s) |
 | « Prédiction à partir de nos commentaires », partie 5 | `Episode` (`{"episode":"partie-5"}`) | `rendu/grandimi-partie5.mp4` (39 s) |
+| « Prédiction à partir de nos commentaires », partie 6 | `Episode` (`{"episode":"partie-6"}`) | `rendu/grandimi-partie6.mp4` (33 s) |
 
 Format 1080×1920, 30 i/s, son normalisé à −14 LUFS.
 
@@ -28,6 +29,15 @@ KOKORO_DIR=… python scripts/voice.py public/episodes/partie-6/episode.json pub
 npm run studio                                       # aperçu, composition « Episode »
 npx remotion render Episode out/partie-6.mp4 --props='{"episode":"partie-6"}'
 python scripts/kit.py partie-6                       # kit CapCut (clips, pistes, .srt)
+python scripts/comparer.py partie-6 REF.mp4 out/comparaison.jpg   # planche référence / épisode
+```
+
+Voix enregistrée (au lieu de la synthèse) : un seul fichier `voice/voix.wav`, puis
+`python scripts/voix_fichier.py partie-6 DOSSIER_PARAKEET` (transcription + alignement sur le texte).
+Capture Grandimi avec d'autres chiffres : `python scripts/modifier_capture.py SOURCE.png SORTIE.png capture.json`.
+Ballon de l'âge : `python scripts/ballon.py 14 SORTIE.png`.
+
+```bash
 ```
 
 Dans `{affiché|prononcé}`, la voix dit la seconde partie et l'écran montre la première : `{1m73|un mètre soixante-treize}`.

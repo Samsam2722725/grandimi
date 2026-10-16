@@ -3,6 +3,8 @@ import timeline from './timeline.json';
 export type Timeline = {
 	fps: number;
 	totalFrames: number;
+	/** Voix enregistrée en un seul fichier (sinon un fichier par ligne). */
+	audio?: string;
 	lines: {id: string; text: string; from: number; duration: number; words: {w: string; f: number}[]}[];
 };
 export type Line = Timeline['lines'][number];

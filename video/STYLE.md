@@ -42,6 +42,15 @@ pop sur les apparitions, tic par lettre tapée, slam sur le chiffre et le verdic
 Mix final normalisé à −14 LUFS. Viser **30-31 s** au total, comme l'original : voix rapide,
 presque sans pause, coupée net sur le dernier mot (la vidéo reboucle).
 
+## Ce qui suit chaque vidéo de référence
+
+Chaque épisode recopie **sa** vidéo de référence (fiche dans `references/<id>/fiche.md`) pour ce qui
+varie d'un original à l'autre : flèches (forme, couleur, cible), transitions (flash, lumière jaune,
+glissé, rebond de dézoom, secousse), plan supplémentaire (ex. NBA), casse des sous-titres, style du
+chiffre de l'écorché. Les zooms sont recalculés pour que chaque carte Grandimi tombe à la même place
+et à la même taille à l'écran que dans la référence. Le reste de ce document (déroulé, typographie de
+base, sons, durée) reste la règle.
+
 ## Ce qui change d'un épisode à l'autre
 
 - le texte (même structure de phrases, autre personne et autres chiffres) ;

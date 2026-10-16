@@ -82,6 +82,18 @@ for k, freq in enumerate([1046, 1318, 1568, 2093]):
     parts.append(np.sin(2 * np.pi * freq * tt) * np.exp(-tt * (25 if k < 3 else 6)))
 save("sparkle", norm(np.concatenate(parts), 0.5))
 
+# Papier froissé : rafale de craquements filtrés (générateur séparé : la musique ne change pas).
+rp = np.random.default_rng(11)
+tt = t(0.45)
+paper = np.zeros(len(tt))
+for k in range(38):
+    at = int(rp.uniform(0, 0.38) * SR)
+    ln = int(rp.uniform(0.004, 0.03) * SR)
+    burst = rp.standard_normal(ln) * np.exp(-np.linspace(0, 6, ln))
+    paper[at:at + ln] += burst[: len(paper) - at] * rp.uniform(0.3, 1)
+paper = paper - lowpass(paper, 900)
+save("papier", norm(paper * np.minimum(1, (tt[-1] - tt) * 8), 0.7))
+
 # Musique : boucle légère à 100 BPM (kick, charleston, accords en pizzicato, basse).
 BPM, BARS = 100, 18
 beat = 60 / BPM

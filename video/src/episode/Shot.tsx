@@ -39,16 +39,19 @@ export const Shot: React.FC<{
 	bg?: string;
 	children?: React.ReactNode;
 	rotate?: number;
-}> = ({src, w, h, cams, bg = '#000', children, rotate = 0}) => {
+	libre?: boolean;
+}> = ({src, w, h, cams, bg = '#000', children, rotate = 0, libre = false}) => {
 	const f = useCurrentFrame();
 	const c = camAt(cams, f);
 	const s = Math.max(W / w, H / h) * c.z;
 	let tx = W / 2 - c.x * s;
 	let ty = H / 2 - c.y * s;
-	if (w * s >= W) tx = Math.min(0, Math.max(W - w * s, tx));
-	else tx = (W - w * s) / 2;
-	if (h * s >= H) ty = Math.min(0, Math.max(H - h * s, ty));
-	else ty = (H - h * s) / 2;
+	if (!libre) {
+		if (w * s >= W) tx = Math.min(0, Math.max(W - w * s, tx));
+		else tx = (W - w * s) / 2;
+		if (h * s >= H) ty = Math.min(0, Math.max(H - h * s, ty));
+		else ty = (H - h * s) / 2;
+	}
 	return (
 		<div style={{position: 'absolute', inset: 0, overflow: 'hidden', background: bg}}>
 			<div

@@ -1,0 +1,535 @@
+{
+  "fps": 30,
+  "totalFrames": 989,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Prédiction taille adulte potentiel à partir de nos commentaires,",
+      "from": 0,
+      "duration": 78,
+      "words": [
+        {
+          "w": "Prédiction",
+          "f": 0
+        },
+        {
+          "w": "taille",
+          "f": 14
+        },
+        {
+          "w": "adulte",
+          "f": 22
+        },
+        {
+          "w": "potentiel",
+          "f": 34
+        },
+        {
+          "w": "à",
+          "f": 48
+        },
+        {
+          "w": "partir",
+          "f": 50
+        },
+        {
+          "w": "de",
+          "f": 58
+        },
+        {
+          "w": "nos",
+          "f": 60
+        },
+        {
+          "w": "commentaires,",
+          "f": 67
+        }
+      ]
+    },
+    {
+      "id": "partie",
+      "text": "partie 6?",
+      "from": 79,
+      "duration": 21,
+      "words": [
+        {
+          "w": "partie",
+          "f": 79
+        },
+        {
+          "w": "6?",
+          "f": 91
+        }
+      ]
+    },
+    {
+      "id": "dan",
+      "text": "Aujourd’hui, on vérifie les statistiques de Simple.",
+      "from": 101,
+      "duration": 64,
+      "words": [
+        {
+          "w": "Aujourd’hui,",
+          "f": 101
+        },
+        {
+          "w": "on",
+          "f": 113
+        },
+        {
+          "w": "vérifie",
+          "f": 118
+        },
+        {
+          "w": "les",
+          "f": 132
+        },
+        {
+          "w": "statistiques",
+          "f": 134
+        },
+        {
+          "w": "de",
+          "f": 144
+        },
+        {
+          "w": "Simple.",
+          "f": 149
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 14 ans, et mesurant déjà 1m75, Simple a une très bonne taille.",
+      "from": 166,
+      "duration": 114,
+      "words": [
+        {
+          "w": "À",
+          "f": 166
+        },
+        {
+          "w": "14",
+          "f": 170
+        },
+        {
+          "w": "ans,",
+          "f": 178
+        },
+        {
+          "w": "et",
+          "f": 185
+        },
+        {
+          "w": "mesurant",
+          "f": 190
+        },
+        {
+          "w": "déjà",
+          "f": 202
+        },
+        {
+          "w": "1m75,",
+          "f": 206
+        },
+        {
+          "w": "Simple",
+          "f": 238
+        },
+        {
+          "w": "a",
+          "f": 254
+        },
+        {
+          "w": "une",
+          "f": 259
+        },
+        {
+          "w": "très",
+          "f": 262
+        },
+        {
+          "w": "bonne",
+          "f": 266
+        },
+        {
+          "w": "taille.",
+          "f": 271
+        }
+      ]
+    },
+    {
+      "id": "grandimi",
+      "text": "Selon Grandimi.com, sa taille adulte estimée est de 1m86.",
+      "from": 281,
+      "duration": 117,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 281
+        },
+        {
+          "w": "Grandimi.com,",
+          "f": 290
+        },
+        {
+          "w": "sa",
+          "f": 322
+        },
+        {
+          "w": "taille",
+          "f": 326
+        },
+        {
+          "w": "adulte",
+          "f": 331
+        },
+        {
+          "w": "estimée",
+          "f": 343
+        },
+        {
+          "w": "est",
+          "f": 353
+        },
+        {
+          "w": "de",
+          "f": 358
+        },
+        {
+          "w": "1m86.",
+          "f": 360
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Avec les bonnes habitudes, Simple pourrait atteindre 1m87,",
+      "from": 398,
+      "duration": 97,
+      "words": [
+        {
+          "w": "Avec",
+          "f": 398
+        },
+        {
+          "w": "les",
+          "f": 406
+        },
+        {
+          "w": "bonnes",
+          "f": 408
+        },
+        {
+          "w": "habitudes,",
+          "f": 415
+        },
+        {
+          "w": "Simple",
+          "f": 430
+        },
+        {
+          "w": "pourrait",
+          "f": 446
+        },
+        {
+          "w": "atteindre",
+          "f": 454
+        },
+        {
+          "w": "1m87,",
+          "f": 463
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "soit 1 cm supplémentaires grâce à l’optimisation de sa croissance.",
+      "from": 497,
+      "duration": 97,
+      "words": [
+        {
+          "w": "soit",
+          "f": 497
+        },
+        {
+          "w": "1",
+          "f": 506
+        },
+        {
+          "w": "cm",
+          "f": 511
+        },
+        {
+          "w": "supplémentaires",
+          "f": 528
+        },
+        {
+          "w": "grâce",
+          "f": 545
+        },
+        {
+          "w": "à",
+          "f": 552
+        },
+        {
+          "w": "l’optimisation",
+          "f": 554
+        },
+        {
+          "w": "de",
+          "f": 574
+        },
+        {
+          "w": "sa",
+          "f": 576
+        },
+        {
+          "w": "croissance.",
+          "f": 581
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Simple est déjà plus grand que 94% des jeunes de son âge,",
+      "from": 595,
+      "duration": 112,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 595
+        },
+        {
+          "w": "Simple",
+          "f": 612
+        },
+        {
+          "w": "est",
+          "f": 629
+        },
+        {
+          "w": "déjà",
+          "f": 631
+        },
+        {
+          "w": "plus",
+          "f": 638
+        },
+        {
+          "w": "grand",
+          "f": 641
+        },
+        {
+          "w": "que",
+          "f": 648
+        },
+        {
+          "w": "94%",
+          "f": 655
+        },
+        {
+          "w": "des",
+          "f": 679
+        },
+        {
+          "w": "jeunes",
+          "f": 684
+        },
+        {
+          "w": "de",
+          "f": 694
+        },
+        {
+          "w": "son",
+          "f": 696
+        },
+        {
+          "w": "âge,",
+          "f": 701
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a terminé 94% de sa croissance.",
+      "from": 708,
+      "duration": 73,
+      "words": [
+        {
+          "w": "et",
+          "f": 708
+        },
+        {
+          "w": "il",
+          "f": 713
+        },
+        {
+          "w": "a",
+          "f": 718
+        },
+        {
+          "w": "terminé",
+          "f": 720
+        },
+        {
+          "w": "94%",
+          "f": 734
+        },
+        {
+          "w": "de",
+          "f": 763
+        },
+        {
+          "w": "sa",
+          "f": 766
+        },
+        {
+          "w": "croissance.",
+          "f": 768
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T’es clairement pas foutu!",
+      "from": 782,
+      "duration": 35,
+      "words": [
+        {
+          "w": "T’es",
+          "f": 782
+        },
+        {
+          "w": "clairement",
+          "f": 790
+        },
+        {
+          "w": "pas",
+          "f": 799
+        },
+        {
+          "w": "foutu!",
+          "f": 802
+        }
+      ]
+    },
+    {
+      "id": "nba",
+      "text": "Tu devrais rejoindre la NBA!",
+      "from": 818,
+      "duration": 35,
+      "words": [
+        {
+          "w": "Tu",
+          "f": 818
+        },
+        {
+          "w": "devrais",
+          "f": 821
+        },
+        {
+          "w": "rejoindre",
+          "f": 828
+        },
+        {
+          "w": "la",
+          "f": 838
+        },
+        {
+          "w": "NBA!",
+          "f": 842
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si toi aussi tu veux qu’on analyse ton potentiel de croissance, indique en commentaire ton âge et ta taille actuelle.",
+      "from": 854,
+      "duration": 132,
+      "words": [
+        {
+          "w": "Si",
+          "f": 854
+        },
+        {
+          "w": "toi",
+          "f": 859
+        },
+        {
+          "w": "aussi",
+          "f": 864
+        },
+        {
+          "w": "tu",
+          "f": 869
+        },
+        {
+          "w": "veux",
+          "f": 871
+        },
+        {
+          "w": "qu’on",
+          "f": 874
+        },
+        {
+          "w": "analyse",
+          "f": 881
+        },
+        {
+          "w": "ton",
+          "f": 890
+        },
+        {
+          "w": "potentiel",
+          "f": 895
+        },
+        {
+          "w": "de",
+          "f": 907
+        },
+        {
+          "w": "croissance,",
+          "f": 910
+        },
+        {
+          "w": "indique",
+          "f": 924
+        },
+        {
+          "w": "en",
+          "f": 936
+        },
+        {
+          "w": "commentaire",
+          "f": 938
+        },
+        {
+          "w": "ton",
+          "f": 950
+        },
+        {
+          "w": "âge",
+          "f": 955
+        },
+        {
+          "w": "et",
+          "f": 960
+        },
+        {
+          "w": "ta",
+          "f": 965
+        },
+        {
+          "w": "taille",
+          "f": 970
+        },
+        {
+          "w": "actuelle.",
+          "f": 977
+        }
+      ]
+    }
+  ]
+}

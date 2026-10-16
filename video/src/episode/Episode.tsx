@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Audio, CalculateMetadataFunction, Img, interpolate, Sequence, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Audio, CalculateMetadataFunction, Easing, Img, interpolate, Sequence, staticFile, useCurrentFrame} from 'remotion';
 import {ease, pop} from '../anim';
 import {Sfx, SfxOn} from '../components/Sfx';
 import {makeTiming, Timeline} from '../timing';
@@ -56,6 +56,53 @@ const Whip: React.FC<{children: React.ReactNode}> = ({children}) => {
 		>
 			{children}
 		</AbsoluteFill>
+	);
+};
+
+/** Interpolation par paliers (frames du plan → valeurs), bornée. */
+const kf = (f: number, frames: number[], values: number[]) =>
+	interpolate(f, frames, values, {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.quad)});
+
+/*
+ * Mouvements mesurés sur la référence 7436214342510513439 (10 images/s), convertis en pixels d'écran :
+ *   glisse   : entrée par la droite après la lumière jaune (décalage −84 → +25 → 0)
+ *   rebond   : dézoom de transition (×1,135 → ×0,914 → ×1,019 → ×0,967 → ×1), léger décalage
+ *   secousse : tremblement gauche-droite sur le nom de l'app (−90 → +24 → −6 → 0, ×0,92 → ×1)
+ */
+const MOUVEMENTS = {
+	glisse: {f: [0, 3, 6, 9], x: [-84, 25, -1, 0], s: [0.975, 0.986, 1, 1], flou: 12},
+	rebond: {f: [0, 3, 6, 9, 12], x: [59, 16, -8, 1, 0], s: [1.135, 0.914, 1.019, 0.967, 1], flou: 14},
+	secousse: {f: [0, 3, 6, 9, 12], x: [-90, 24, -6, 1, 0], s: [0.92, 0.979, 0.995, 0.998, 1], flou: 10},
+};
+
+const Mouvement: React.FC<{type: keyof typeof MOUVEMENTS; at: number; children: React.ReactNode}> = ({type, at, children}) => {
+	const f = useCurrentFrame() - at;
+	const m = MOUVEMENTS[type];
+	const active = f >= 0 && f <= m.f[m.f.length - 1];
+	const x = active ? kf(f, m.f, m.x) : 0;
+	const sc = active ? kf(f, m.f, m.s) : 1;
+	const blur = active ? interpolate(f, [0, 6], [m.flou, 0], {extrapolateRight: 'clamp'}) : 0;
+	return (
+		<AbsoluteFill style={{transform: `translateX(${x}px) scale(${sc})`, filter: blur > 0.3 ? `blur(${blur}px)` : undefined}}>
+			{children}
+		</AbsoluteFill>
+	);
+};
+
+/** Lumière jaune : envahit l'image (sortie) ou s'efface (entrée). */
+const Lumiere: React.FC<{from: number; to: number; entree?: boolean}> = ({from, to, entree}) => {
+	const f = useCurrentFrame();
+	const o = entree ? interpolate(f, [from, to], [0.9, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
+		: interpolate(f, [from, to], [0, 0.9], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	if (o <= 0.01) return null;
+	return (
+		<AbsoluteFill
+			style={{
+				background: 'radial-gradient(circle at 55% 45%, rgba(255,246,170,1) 0%, rgba(255,226,60,0.95) 45%, rgba(255,208,20,0.85) 100%)',
+				opacity: o,
+				mixBlendMode: 'screen',
+			}}
+		/>
 	);
 };
 
@@ -138,7 +185,14 @@ const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; fin?
 	const style: React.CSSProperties =
 		el.contour === 0
 			? {fontSize: el.taille}
-			: {...P5.caption, color: el.couleur ?? P5.yellow, fontSize: el.taille, WebkitTextStroke: `${el.contour ?? 6}px #000`};
+			: {
+					...P5.caption,
+					color: el.couleur ?? P5.yellow,
+					fontSize: el.taille,
+					fontWeight: el.poids ?? 800,
+					WebkitTextStroke: `${el.contour ?? 6}px ${el.contourCouleur ?? '#000'}`,
+					textShadow: el.contourCouleur ? '0 8px 14px rgba(0,0,0,0.55)' : P5.caption.textShadow,
+				};
 	return (
 		<div style={{position: 'absolute', left: 0, right: 0, top: el.y, textAlign: 'center', ...style, transform: `scale(${s}) rotate(${rot}deg)`}}>
 			{texte}
@@ -180,6 +234,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 		...(plan.camera ?? []).slice(1).flatMap((c, i) =>
 			c.son === null ? [] : [{at: cams[i + 1].f, son: c.son ?? 'whoosh', volume: c.volume ?? 0.22}],
 		),
+		...(plan.effets ?? []).map((e) => ({at: loc(e.a), son: 'whoosh', volume: 0.3})),
 		...(plan.elements ?? []).flatMap((el) => {
 			if (!el.son) return [];
 			if (el.type === 'tape') {
@@ -224,19 +279,33 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			{plan.fond === 'papier' && plan.papiers?.length ? <PhotoPapier files={plan.papiers.map(file)} /> : null}
 			{plan.fond === 'papier' && !plan.papiers?.length ? <Paper /> : null}
 			{img ? (
-				<Shot src={`episodes/${id}/images/${img.fichier}`} w={img.w} h={img.h} cams={cams.length ? cams : [{f: 0, x: img.w / 2, y: img.h / 2, z: 1}]} bg={plan.fondCouleur}>
+				<Shot
+					src={`episodes/${id}/images/${img.fichier}`}
+					w={img.w}
+					h={img.h}
+					cams={cams.length ? cams : [{f: 0, x: img.w / 2, y: img.h / 2, z: 1}]}
+					bg={plan.fondCouleur}
+					libre={plan.libre}
+				>
 					{inImage}
 				</Shot>
 			) : null}
 			{onScreen}
 			{plan.transition === 'flash' ? <Flash color={P5.yellow} /> : null}
 			{plan.transition === 'flash-blanc' ? <Flash color="#fff" /> : null}
+			{plan.transition === 'lumiere' ? <Lumiere from={0} to={6} entree /> : null}
+			{plan.sortie === 'lumiere' ? <Lumiere from={dur - 8} to={dur} /> : null}
 			{sons.map((s, i) => (
 				<Sfx key={i} at={s.at} name={s.son as never} volume={s.volume} />
 			))}
 		</AbsoluteFill>
 	);
-	return plan.transition === 'whip' ? <Whip>{content}</Whip> : content;
+	let out = content;
+	for (const e of plan.effets ?? []) out = <Mouvement type={e.type} at={loc(e.a)}>{out}</Mouvement>;
+	if (plan.transition === 'whip') return <Whip>{out}</Whip>;
+	if (plan.transition === 'glisse' || plan.transition === 'lumiere') return <Mouvement type="glisse" at={0}>{out}</Mouvement>;
+	if (plan.transition === 'rebond') return <Mouvement type="rebond" at={0}>{out}</Mouvement>;
+	return out;
 };
 
 /* ───────── Sous-titres jaunes, un ou deux mots à la fois ───────── */
@@ -340,7 +409,9 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 						volume={(f) => interpolate(f, [0, 8, END - 25, END], [0, vol, vol, 0], {extrapolateRight: 'clamp'})}
 					/>
 				) : null}
+				{voix && timeline.audio ? <Audio src={staticFile(`episodes/${episode}/${timeline.audio}`)} /> : null}
 				{voix &&
+					!timeline.audio &&
 					timeline.lines.map((l) => (
 						<Sequence key={l.id} from={l.from} durationInFrames={l.duration + 10} layout="none">
 							<Audio src={staticFile(`episodes/${episode}/voice/${l.id}.wav`)} />
