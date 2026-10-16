@@ -28,3 +28,17 @@ Personne : « shayxn.7 », 13 ans, 6'1. Commentaire : « 6'1 at 13, how tall am 
 | 8 | « Projected height » : zoom taille prédite, tenu | mesuré 9,5 s, tenu jusqu'à 12,6 s |
 | 9 | Passage à la routine : tremblement gauche-droite + whoosh sur « with the right habits » | mesuré : rebond de zoom à 12,6-13,1 s |
 | 10 | Arrivée de l'écorché : whoosh | à l'oreille |
+
+## Compléments 2 (16/10)
+
+- Whoosh quand une flèche apparaît ou repart, à chaque zoom, et à l'arrivée sur la photo du verdict.
+- Transitions en **rebond de dézoom** : l'image recule (dézoom + flou de mouvement) puis revient à la normale.
+  Vu à l'arrivée de la routine (mesuré 12,6-13,1 s : zoom 1,13 → 0,91 → 1,02 → 1,0), sur l'écorché
+  (fond topographique flou en mouvement à 0:16) et à la fin.
+- Chiffre de l'écorché : rouge, **contour blanc épais** et ombre sombre (« 6.8.7 »).
+- Cadrage du zoom « croissance terminée » (0:24) : bas de la courbe, « …% of your age », carte « Growth complete » centrée à droite.
+
+## Épisode tiré de cette fiche : partie 6 (« Simple »)
+
+Texte fourni par l'utilisateur ; chiffres propres à l'épisode : 14 ans, 1m75, estimée 1m86 (+11 cm),
+optimisée 1m87 (+1 cm), plus grand que 94 %, croissance terminée 94 %.
