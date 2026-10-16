@@ -5,7 +5,7 @@
   l'utilisateur ; un nouvel épisode change les personnes, les chiffres et le texte, pas le style.
 - Un épisode = `public/episodes/<id>/` (voir `README.md`). Créer avec `python scripts/nouvel_episode.py`,
   jamais en modifiant `partie-5`, qui sert de référence.
-- Ordre de travail : texte → voix → images → montage → rendu → planche de comparaison avec
+- Suivre `PROCESSUS.md` étape par étape (fiche de l'original validée avant de construire). Ordre de travail : texte → voix → images → montage → rendu → planche de comparaison avec
   l'original → retours de l'utilisateur. La voix vient toujours avant le montage ; tant qu'elle
   manque, une voix de synthèse provisoire (Kokoro) sert à monter.
 - Avant de livrer, compare toujours à la vidéo de référence image par image (zones et moments),
