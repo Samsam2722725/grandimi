@@ -226,7 +226,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 		if (c.zone && !z) throw new Error(`Zone inconnue : ${c.zone}`);
 		const f = c.a === undefined ? 0 : loc(c.a);
 		const d = c.duree === 'fin' ? Math.max(8, dur - f) : c.duree;
-		return {f, x: z?.x ?? c.x ?? 0, y: z?.y ?? c.y ?? 0, z: z?.z ?? c.z ?? 1, dur: d};
+		return {f, x: z?.x ?? c.x ?? 0, y: z?.y ?? c.y ?? 0, z: z?.z ?? c.z ?? 1, dur: d, lineaire: c.lineaire};
 	});
 	const sons: {at: number; son: string; volume: number}[] = [
 		...(plan.sons ?? []).map((s) => ({at: loc(s.a), son: s.son, volume: s.volume ?? 0.5})),

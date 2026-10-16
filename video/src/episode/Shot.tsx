@@ -2,7 +2,7 @@ import React from 'react';
 import {Easing, Img, interpolate, staticFile, useCurrentFrame} from 'remotion';
 
 /** Position de caméra : centre (x, y) en pixels de l'image, et zoom (1 = l'image couvre l'écran). */
-export type Cam = {f: number; x: number; y: number; z: number; dur?: number};
+export type Cam = {f: number; x: number; y: number; z: number; dur?: number; lineaire?: boolean};
 
 const W = 1080;
 const H = 1920;
@@ -15,7 +15,7 @@ const camAt = (keys: Cam[], f: number, derive: boolean) => {
 	const t = interpolate(f, [k.f, k.f + (k.dur ?? 12)], [0, 1], {
 		extrapolateLeft: 'clamp',
 		extrapolateRight: 'clamp',
-		easing: Easing.inOut(Easing.cubic),
+		easing: k.lineaire ? Easing.linear : Easing.inOut(Easing.cubic),
 	});
 	const from = i === 0 ? k : prev;
 	// Légère poussée continue après chaque mouvement, pour que l'image ne soit jamais figée.

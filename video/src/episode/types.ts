@@ -14,7 +14,7 @@ export type Ancre = string | number;
 export type ImageRef = {fichier: string; w: number; h: number};
 export type Zone = {x: number; y: number; z: number};
 
-export type Camera = {a?: Ancre; zone?: string; x?: number; y?: number; z?: number; duree?: number | 'fin'; son?: string | null; volume?: number};
+export type Camera = {a?: Ancre; zone?: string; x?: number; y?: number; z?: number; duree?: number | 'fin'; son?: string | null; volume?: number; lineaire?: boolean};
 
 type Base = {a: Ancre; son?: string; volume?: number};
 export type Element =
