@@ -13,3 +13,18 @@ Personne : « shayxn.7 », 13 ans, 6'1. Commentaire : « 6'1 at 13, how tall am 
 | Verdict | 26,37-28,27 | Garçon souriant, pouces levés. Sous-titres jaunes minuscules « you are definitively », puis « Not cooked » **vert à contour, sans pastille**, puis « You should join » | « You are » |
 | NBA | 28,27-29,77 | **Plan en plus** : photo de Michael Jordan qui dunke + logo NBA, sous-titre « the NBA » | « the NBA » |
 | Appel | 29,77-32,9 | Fond topographique, sous-titres jaunes minuscules, sans pastille ni 📏 : « height potential » / « analyzed » / « comment your age » / « and current height » | « If anyone » |
+
+## Compléments de l'utilisateur (16/10), vérifiés sur la vidéo quand c'est mesurable
+
+| # | Détail | Vérification |
+|---|---|---|
+| 1 | Accroche : zoom vers le bas sur « comments », avec un whoosh léger | mesuré : rien jusqu'à 1,6 s, puis zoom ×1,15 décalé vers le bas (centre y 512 → 585) à 1,7 s |
+| 2 | Papier : un bruit à un moment pendant les changements de feuille | à l'oreille (bruit de papier) |
+| 3 | Sortie du papier : une lumière jaune qui apparaît (pas un aplat) | vu sur la capture à 0:03 : papier teinté de jaune lumineux |
+| 4 | Taille d'affichage de l'écran : les cartes occupent ~77 % de la largeur | mesuré sur l'image de référence (cartes x 67-510 / 576) |
+| 5 | « 6 feet » : whoosh + zoom, au même cadrage exact (on voit « Last report » + taille actuelle + début de la courbe) | mesuré : 216,7 / 265 ×1,63 |
+| 6 | Dézoom de « Shayan » à « solid » | mesuré 7,5-8,2 s |
+| 7 | « According to » : tremblement gauche-droite de l'écran | mesuré 8,6-8,9 s |
+| 8 | « Projected height » : zoom taille prédite, tenu | mesuré 9,5 s, tenu jusqu'à 12,6 s |
+| 9 | Passage à la routine : tremblement gauche-droite + whoosh sur « with the right habits » | mesuré : rebond de zoom à 12,6-13,1 s |
+| 10 | Arrivée de l'écorché : whoosh | à l'oreille |
