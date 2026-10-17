@@ -4,7 +4,7 @@ import {Audio, Sequence, staticFile} from 'remotion';
 /** Permet de couper tous les bruitages (export des pistes séparées). */
 export const SfxOn = createContext(true);
 
-export type SfxName = 'pop' | 'whoosh' | 'slam' | 'ding' | 'wrong' | 'crack' | 'tick' | 'sparkle' | 'papier';
+export type SfxName = 'pop' | 'whoosh' | 'slam' | 'ding' | 'wrong' | 'crack' | 'tick' | 'sparkle' | 'papier' | 'roulement';
 
 export const Sfx: React.FC<{at: number; name: SfxName; volume?: number}> = ({at, name, volume = 0.5}) =>
 	useContext(SfxOn) ? (

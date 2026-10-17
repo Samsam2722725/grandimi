@@ -5,8 +5,9 @@ import {Sfx, SfxOn} from '../components/Sfx';
 import {makeTiming, Timeline} from '../timing';
 import {Paper, Typed} from './Paper';
 import {Cam, Shot} from './Shot';
+import {FONT} from '../theme';
 import {P5} from './style';
-import type {Ancre, Element, Episode as EpisodeData, Plan} from './types';
+import type {Ancre, Element, Episode as EpisodeData, Famille, Plan} from './types';
 
 export type EpisodeProps = {
 	episode: string;
@@ -211,6 +212,192 @@ const PhotoPapier: React.FC<{files: string[]; saccade?: number}> = ({files, sacc
 	return <Img src={src} style={{position: 'absolute', inset: 0, width: 1080, height: 1920, objectFit: 'cover'}} />;
 };
 
+/* ───────── Révélation : compteur ───────── */
+const Compteur: React.FC<{el: Extract<Element, {type: 'compteur'}>; at: number; arrivee: number; fin?: number}> = ({el, at, arrivee, fin}) => {
+	const f = useCurrentFrame();
+	if (f < at || (fin !== undefined && f >= fin + 8)) return null;
+	// Défilement qui ralentit à l'approche du chiffre final.
+	const t = interpolate(f, [at, arrivee], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+	const v = Math.round(el.de + (el.vers - el.de) * t);
+	const landed = f >= arrivee;
+	const s = landed ? 1 + 0.25 * Math.max(0, 1 - (f - arrivee) / 8) : 0.9 + 0.04 * Math.sin(f * 1.7);
+	const out = fin !== undefined ? 1 - ease(f, fin, 8) : 1;
+	return (
+		<AbsoluteFill style={{opacity: out}}>
+			{el.voile !== false ? <AbsoluteFill style={{background: 'rgba(0,0,0,0.62)'}} /> : null}
+			<div
+				style={{
+					position: 'absolute',
+					left: 0,
+					right: 0,
+					top: el.y,
+					textAlign: 'center',
+					...P5.caption,
+					fontSize: el.taille,
+					fontWeight: 900,
+					color: landed ? (el.couleur ?? P5.orange) : '#fff',
+					WebkitTextStroke: '0px',
+					textShadow: landed ? `0 0 40px ${el.couleur ?? P5.orange}` : '0 6px 0 rgba(0,0,0,0.4)',
+					transform: `scale(${s})`,
+					fontVariantNumeric: 'tabular-nums',
+				}}
+			>
+				{v}
+				<span style={{fontSize: el.taille * 0.45, marginLeft: 12}}>{el.suffixe ?? ' cm'}</span>
+			</div>
+		</AbsoluteFill>
+	);
+};
+
+/* ───────── Zone de commentaire qui s'écrit seule ───────── */
+const Commentaire: React.FC<{el: Extract<Element, {type: 'commentaire'}>; at: number; envoi?: number}> = ({el, at, envoi}) => {
+	const f = useCurrentFrame();
+	if (f < at) return null;
+	const enter = pop(f, at, 14);
+	const per = el.parLettre ?? 2;
+	const n = Math.min(el.texte.length, Math.max(0, Math.floor((f - at - 6) / per)));
+	const done = n >= el.texte.length;
+	const cursor = Math.floor(f / 8) % 2 === 0;
+	const sent = envoi !== undefined && f >= envoi ? pop(f, envoi, 10) : 0;
+	return (
+		<div
+			style={{
+				position: 'absolute',
+				left: 40,
+				right: 40,
+				top: el.y,
+				transform: `translateY(${(1 - enter) * 80}px)`,
+				opacity: Math.min(1, enter * 1.4),
+				fontFamily: FONT,
+			}}
+		>
+			<div style={{color: '#fff', fontSize: 34, fontWeight: 700, marginBottom: 14, opacity: 0.85, textAlign: 'center'}}>
+				💬 Écris en commentaire :
+			</div>
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					gap: 22,
+					background: '#fff',
+					borderRadius: 60,
+					padding: '22px 22px 22px 30px',
+					boxShadow: '0 18px 50px rgba(0,0,0,0.45)',
+				}}
+			>
+				<div style={{width: 74, height: 74, borderRadius: 37, background: 'linear-gradient(135deg,#ff8a52,#ff5a1f)', flexShrink: 0}} />
+				<div style={{flex: 1, fontSize: 38, fontWeight: 700, color: n ? '#141414' : '#9a9a9a', lineHeight: 1.2}}>
+					{n ? el.texte.slice(0, n) : 'Ajouter un commentaire…'}
+					{!done && n > 0 && cursor ? <span style={{color: P5.orange}}>|</span> : null}
+				</div>
+				<div
+					style={{
+						width: 80,
+						height: 80,
+						borderRadius: 40,
+						background: done ? P5.orange : '#e5e5e5',
+						color: '#fff',
+						fontSize: 44,
+						fontWeight: 900,
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						flexShrink: 0,
+						transform: `scale(${1 + 0.25 * sent * Math.max(0, 1 - (f - (envoi ?? 0)) / 10)})`,
+					}}
+				>
+					↑
+				</div>
+			</div>
+		</div>
+	);
+};
+
+/* ───────── Silhouettes de la famille ───────── */
+const K = 5.4; // pixels par cm : silhouettes à l'échelle réelle
+const SOL = 1700;
+const Silhouette: React.FC<{x: number; cm: number; couleur: string; opacite?: number}> = ({x, cm, couleur, opacite = 1}) => {
+	const h = cm * K;
+	const top = SOL - h;
+	const head = h * 0.065;
+	const sh = h * 0.165; // largeur aux épaules
+	return (
+		<g opacity={opacite} fill={couleur}>
+			<circle cx={x} cy={top + head} r={head} />
+			<path
+				d={`M ${x - sh / 2} ${top + h * 0.17} Q ${x} ${top + h * 0.145} ${x + sh / 2} ${top + h * 0.17}
+				   L ${x + sh * 0.42} ${top + h * 0.53} L ${x - sh * 0.42} ${top + h * 0.53} Z`}
+			/>
+			<rect x={x - sh / 2 - h * 0.038} y={top + h * 0.17} width={h * 0.036} height={h * 0.33} rx={h * 0.018} />
+			<rect x={x + sh / 2 + h * 0.002} y={top + h * 0.17} width={h * 0.036} height={h * 0.33} rx={h * 0.018} />
+			<rect x={x - sh * 0.4} y={top + h * 0.5} width={sh * 0.37} height={h * 0.5} rx={h * 0.02} />
+			<rect x={x + sh * 0.03} y={top + h * 0.5} width={sh * 0.37} height={h * 0.5} rx={h * 0.02} />
+		</g>
+	);
+};
+
+const fmt = (cm: number) => `${Math.floor(cm / 100)}m${String(Math.round(cm % 100)).padStart(2, '0')}`;
+
+const FamillePlan: React.FC<{fam: Famille; aOpt: number; aGain: number}> = ({fam, aOpt, aGain}) => {
+	const f = useCurrentFrame();
+	const all = [...fam.personnes, {nom: fam.futur.nom, taille: fam.futur.estimee, couleur: P5.orange}];
+	const xs = all.map((_, i) => 150 + i * ((1080 - 300) / (all.length - 1)));
+	const xPill = xs[xs.length - 1];
+	const grow = interpolate(f, [4 * all.length, 4 * all.length + 12], [fam.futur.depart, fam.futur.estimee], {
+		extrapolateLeft: 'clamp',
+		extrapolateRight: 'clamp',
+		easing: Easing.out(Easing.cubic),
+	});
+	const opt = interpolate(f, [aOpt, aOpt + 14], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.back(1.6))});
+	const futurCm = grow + (fam.futur.optimisee - fam.futur.estimee) * opt;
+	const yOf = (cm: number) => SOL - cm * K;
+	const gain = pop(f, aGain, 10);
+	const lignes = [150, 160, 170, 180, 190];
+	return (
+		<AbsoluteFill style={{background: 'radial-gradient(circle at 50% 35%, #2a1a12 0%, #111 60%)'}}>
+			<svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
+				{lignes.map((c) => (
+					<g key={c}>
+						<line x1={60} x2={1040} y1={yOf(c)} y2={yOf(c)} stroke="#fff" strokeOpacity={0.09} strokeWidth={2} />
+					</g>
+				))}
+				{all.map((p, i) => {
+					const s = pop(f, i * 4, 12);
+					const isF = i === all.length - 1;
+					const cm = isF ? futurCm : p.taille;
+					return (
+						<g key={i} transform={`translate(${xs[i]} ${SOL}) scale(${s}) translate(${-xs[i]} ${-SOL})`}>
+							<Silhouette x={xs[i]} cm={cm} couleur={isF ? P5.orange : (p.couleur ?? '#cfcfcf')} />
+							<text x={xs[i]} y={yOf(cm) - 64} textAnchor="middle" fill={isF ? P5.orange : '#fff'} fontSize={36} fontWeight={800} fontFamily={FONT}>
+								{p.nom}
+							</text>
+							<text x={xs[i]} y={yOf(cm) - 22} textAnchor="middle" fill="#fff" fontSize={40} fontWeight={900} fontFamily={FONT}>
+								{fmt(cm)}
+							</text>
+						</g>
+					);
+				})}
+				{f >= aOpt ? (
+					<line x1={60} x2={1040} y1={yOf(fam.futur.estimee)} y2={yOf(fam.futur.estimee)} stroke={P5.orange} strokeWidth={4} strokeDasharray="14 12" opacity={0.7} />
+				) : null}
+				{gain > 0.01 ? (
+					<g transform={`translate(${xPill} ${yOf(fam.futur.optimisee) - 150}) scale(${gain})`}>
+						<rect x={-80} y={-34} width={160} height={68} rx={34} fill={P5.green} />
+						<text x={0} y={13} textAnchor="middle" fill="#0b2a12" fontSize={36} fontWeight={900} fontFamily={FONT}>
+							{fam.futur.gain}
+						</text>
+					</g>
+				) : null}
+			</svg>
+			{fam.titre ? (
+				<div style={{position: 'absolute', top: 150, left: 0, right: 0, textAlign: 'center', ...P5.caption, fontSize: 70, transform: `scale(${pop(f, 0, 12)})`}}>
+					{fam.titre}
+				</div>
+			) : null}
+		</AbsoluteFill>
+	);
+};
+
 /* ───────── Plan ───────── */
 const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeData; id: string; resolve: (a: Ancre, s?: number) => number}> = ({
 	plan,
@@ -262,6 +449,10 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			return <ImageEl key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} src={file(el.fichier)} />;
 		if (el.type === 'texte')
 			return <TexteEl key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} partie={ep.partie} />;
+		if (el.type === 'compteur')
+			return <Compteur key={i} el={el} at={loc(el.a)} arrivee={loc(el.arrivee)} fin={el.fin !== undefined ? loc(el.fin) : undefined} />;
+		if (el.type === 'commentaire')
+			return <Commentaire key={i} el={el} at={loc(el.a)} envoi={el.envoi !== undefined ? loc(el.envoi) : undefined} />;
 		if (el.type === 'tape')
 			return (
 				<Typed
@@ -280,6 +471,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 
 	const content = (
 		<AbsoluteFill>
+			{plan.famille ? <FamillePlan fam={plan.famille} aOpt={loc(plan.famille.futur.aOptimisee)} aGain={loc(plan.famille.futur.aGain)} /> : null}
 			{plan.fond === 'papier' && plan.papiers?.length ? <PhotoPapier files={plan.papiers.map(file)} /> : null}
 			{plan.fond === 'papier' && !plan.papiers?.length ? <Paper /> : null}
 			{img ? (

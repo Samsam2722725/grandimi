@@ -94,6 +94,21 @@ for k in range(38):
 paper = paper - lowpass(paper, 900)
 save("papier", norm(paper * np.minimum(1, (tt[-1] - tt) * 8), 0.7))
 
+# Roulement : coups de caisse claire qui accélèrent (0,6 s), pour la révélation.
+rr = np.random.default_rng(5)
+tt = t(0.62)
+roll = np.zeros(len(tt))
+pos, gap = 0.0, 0.07
+while pos < 0.6:
+    i = int(pos * SR)
+    ln = int(0.05 * SR)
+    hit = rr.standard_normal(ln) * np.exp(-np.linspace(0, 7, ln))
+    roll[i:i + ln] += hit[: len(roll) - i] * (0.5 + pos)
+    pos += gap
+    gap = max(0.022, gap * 0.9)
+roll = roll - lowpass(roll, 700)
+save("roulement", norm(roll * np.minimum(1, (tt[-1] - tt) * 30), 0.6))
+
 # Musique : boucle légère à 100 BPM (kick, charleston, accords en pizzicato, basse).
 BPM, BARS = 100, 18
 beat = 60 / BPM

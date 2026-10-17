@@ -21,7 +21,18 @@ export type Element =
 	| (Base & {type: 'image'; fichier: string; x: number; y: number; w: number; h: number; fin?: Ancre; effet?: 'pop' | 'pop-balance' | 'revele-bas'; rebond?: boolean; ecran?: boolean})
 	| (Base & {type: 'trait'; d: string; tete?: string; couleur?: string; epaisseur?: number; duree?: number; fin?: Ancre})
 	| (Base & {type: 'texte'; texte: string; y: number; taille: number; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance'; fin?: Ancre; lueur?: string})
-	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number});
+	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number})
+	/** Compteur qui défile de `de` à `vers` et se pose sur `arrivee` (révélation avec suspense). */
+	| (Base & {type: 'compteur'; de: number; vers: number; arrivee: Ancre; fin?: Ancre; suffixe?: string; y: number; taille: number; couleur?: string; voile?: boolean})
+	/** Fausse zone de commentaire TikTok qui s'écrit toute seule. */
+	| (Base & {type: 'commentaire'; texte: string; y: number; parLettre?: number; envoi?: Ancre});
+
+/** Silhouettes à l'échelle : parents, personne aujourd'hui, personne adulte qui grandit. */
+export type Famille = {
+	titre?: string;
+	personnes: {nom: string; taille: number; couleur?: string}[];
+	futur: {nom: string; depart: number; estimee: number; optimisee: number; aOptimisee: Ancre; gain: string; aGain: Ancre};
+};
 
 export type Plan = {
 	nom: string;
@@ -32,6 +43,7 @@ export type Plan = {
 	sortie?: 'lumiere';
 	/** Effets ponctuels sur tout le plan (secousse gauche-droite). */
 	effets?: {type: 'secousse'; a: Ancre}[];
+	famille?: Famille;
 	/** true : la caméra peut sortir de l'image (cadrer une carte au même endroit que la référence). */
 	libre?: boolean;
 	fond?: 'papier';

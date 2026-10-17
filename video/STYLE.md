@@ -64,3 +64,14 @@ base, sons, durée) reste la règle.
 
 Si une capture Grandimi garde la même disposition, les zones de caméra et la position des flèches
 (`zones`, éléments `trait` dans `episode.json`) restent valables telles quelles.
+
+## Variante en test : V2 (partie 7, 17/10)
+
+Trois changements, à comparer avec la V1 sur 3 à 5 épisodes (rétention à 3 s, durée moyenne,
+commentaires pour 1 000 vues) avant de les adopter dans ce style :
+1. **Révélation** : pause de 0,6 s insérée dans la voix avant la taille prédite, voile sombre,
+   compteur qui défile (170 → 184) avec roulement, puis le chiffre se pose en orange avec un ding.
+2. **Silhouettes de la famille** à l'échelle réelle (père, mère, la personne aujourd'hui, la personne
+   adulte qui grandit jusqu'à la taille optimisée, pastille verte du gain), à la place de l'écorché.
+3. **Zone de commentaire** qui s'écrit toute seule à la fin (âge, taille, père, mère), à la place des émojis.
+Éléments : `compteur`, `commentaire`, plan `famille` (voir `src/episode/types.ts`).
