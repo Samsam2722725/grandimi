@@ -2,3 +2,6 @@ frontend
 *.md
 test_interactive.html
 .env.example
+
+# Vidéos TikTok (Remotion) : inutiles au déploiement
+video
