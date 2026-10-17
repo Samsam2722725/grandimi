@@ -7,17 +7,22 @@
 | « Prédiction à partir de nos commentaires », partie 6 | `Episode` (`{"episode":"partie-6"}`) | `rendu/grandimi-partie6.mp4` (33 s) |
 | « Prédiction à partir de nos commentaires », partie 7 | `Episode` (`{"episode":"partie-7"}`) | `rendu/grandimi-partie7.mp4` (32 s) |
 
-| « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `DeuxRaisons` | `rendu/grandimi-deux-raisons.mp4` (46 s) |
+| « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
 
 Format 1080×1920, 30 i/s, son normalisé à −14 LUFS.
 
-## Format « 2 raisons » (texte animé mot par mot)
+## Texte animé mot par mot (« 2 raisons », « signes »…)
 
-- `public/deux-raisons/ecrans.json` : les écrans (lignes de texte, couleurs `*violet*` `!rouge!` `+vert+` `~gris~`, illustrations et leur mot d'apparition).
-- `mots.json` : transcription datée de la voix (`voice/voix.wav`), par morceaux de ~9 s (la transcription d'un seul bloc saute des phrases).
-- `python scripts/deux_raisons.py` → `timeline.json` (chaque mot affiché reçoit son instant ; tailles agrandies ×1,3 et plafonnées à la largeur de l'écran).
-- Illustrations : `scripts/extraire_illustrations.py REF.mp4 public/deux-raisons/images`.
-- Rendu : `npx remotion render DeuxRaisons out/deux-raisons.mp4`.
+Une vidéo = un dossier `public/textes/<id>/` :
+- `ecrans.json` : les écrans (lignes de texte, couleurs `*violet*` `!rouge!` `+vert+` `~gris~`, illustrations et leur mot d'apparition) ;
+- `voice/voix.wav` et `mots.json` : voix et transcription datée, par morceaux de ~9 s (un bloc unique saute des phrases) ;
+- `illustrations.json` + `images/` : illustrations extraites de la référence.
+
+```bash
+python scripts/extraire_illustrations.py REF.mp4 public/textes/<id>/illustrations.json public/textes/<id>/images
+python scripts/texte_anime.py <id>      # → timeline.json (tailles ×1,3 plafonnées à la largeur de l'écran)
+npx remotion render TexteAnime out/<id>.mp4 --props='{"video":"<id>"}'
+```
 
 ## Format « prédiction à partir de vos commentaires »
 

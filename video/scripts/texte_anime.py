@@ -1,8 +1,8 @@
-"""Construit la timeline du format « 2 raisons » : chaque mot affiché reçoit l'instant où il est prononcé.
+"""Construit la timeline d'une vidéo en texte animé : chaque mot affiché reçoit l'instant où il est prononcé.
 
-Entrées : public/deux-raisons/ecrans.json (écrans, lignes, images) et mots.json (transcription datée).
-Sortie : public/deux-raisons/timeline.json, lue par src/deux-raisons/DeuxRaisons.tsx.
-Usage : python scripts/deux_raisons.py
+Dossier public/textes/<id>/ : ecrans.json (écrans, lignes, images), mots.json (transcription datée),
+voice/voix.wav, images/. Sortie : timeline.json, lue par la composition TexteAnime.
+Usage : python scripts/texte_anime.py <id>        (ex. deux-raisons)
 """
 import difflib
 import json
@@ -12,7 +12,9 @@ from pathlib import Path
 
 import soundfile
 
-ROOT = Path(__file__).resolve().parent.parent / "public" / "deux-raisons"
+import sys
+
+ROOT = Path(__file__).resolve().parent.parent / "public" / "textes" / sys.argv[1]
 FPS = 30
 spec = json.loads((ROOT / "ecrans.json").read_text())
 heard = json.loads((ROOT / "mots.json").read_text())

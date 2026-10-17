@@ -1,0 +1,127 @@
+{
+ "reference": "references/7508794377276296491/original.mp4",
+ "illustrations": [
+  {
+   "nom": "garcon",
+   "t": 1.6,
+   "zone": [
+    196,
+    423,
+    223,
+    490
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "garcon_toise",
+   "t": 2.1,
+   "zone": [
+    165,
+    422,
+    254,
+    488
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "carte_crevette",
+   "t": 11.6,
+   "zone": [
+    40,
+    250,
+    496,
+    500
+   ],
+   "methode": "carte"
+  },
+  {
+   "nom": "colonne",
+   "t": 13.4,
+   "zone": [
+    225,
+    375,
+    120,
+    260
+   ],
+   "methode": "couleur"
+  },
+  {
+   "nom": "carte_sommeil",
+   "t": 14.8,
+   "zone": [
+    40,
+    250,
+    496,
+    500
+   ],
+   "methode": "carte"
+  },
+  {
+   "nom": "petit_garcon",
+   "t": 17.6,
+   "zone": [
+    408,
+    572,
+    78,
+    190
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "halterophile",
+   "t": 25.6,
+   "zone": [
+    190,
+    825,
+    190,
+    165
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "genou",
+   "t": 28.1,
+   "zone": [
+    199,
+    392,
+    154,
+    230
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "os_poids",
+   "t": 29.0,
+   "zone": [
+    243,
+    389,
+    91,
+    225
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "colonne_poids",
+   "t": 30.6,
+   "zone": [
+    225,
+    370,
+    140,
+    262
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "carte_salle",
+   "t": 34.3,
+   "zone": [
+    40,
+    250,
+    496,
+    500
+   ],
+   "methode": "carte"
+  }
+ ],
+ "note": "colonne.png a été refaite à la main à partir de colonne_poids.png (partie sous le poids) : l'extraction « couleur » perd les contours."
+}

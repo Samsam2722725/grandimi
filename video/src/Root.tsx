@@ -1,5 +1,5 @@
 import {Composition} from 'remotion';
-import {DEUX_RAISONS_FRAMES, DeuxRaisons} from './deux-raisons/DeuxRaisons';
+import {calculateTexteAnimeMetadata, TexteAnime, TexteAnimeProps} from './texte-anime/TexteAnime';
 import {calculateEpisodeMetadata, Episode, EpisodeProps} from './episode/Episode';
 import {Video} from './Video';
 import timeline from './timeline.json';
@@ -26,7 +26,17 @@ export const Root: React.FC = () => (
 			width={1080}
 			height={1920}
 		/>
-		{/* Format « 2 raisons » (texte animé mot par mot) : public/deux-raisons/. */}
-		<Composition id="DeuxRaisons" component={DeuxRaisons} durationInFrames={DEUX_RAISONS_FRAMES} fps={30} width={1080} height={1920} />
+		{/* Texte animé mot par mot (« 2 raisons », « signes »…) : public/textes/<video>/.
+		    npx remotion render TexteAnime out/x.mp4 --props='{"video":"deux-raisons"}' */}
+		<Composition
+			id="TexteAnime"
+			component={TexteAnime}
+			calculateMetadata={calculateTexteAnimeMetadata}
+			defaultProps={{video: 'deux-raisons'} as TexteAnimeProps}
+			durationInFrames={1}
+			fps={30}
+			width={1080}
+			height={1920}
+		/>
 	</>
 );

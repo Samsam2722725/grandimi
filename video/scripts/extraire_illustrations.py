@@ -6,8 +6,11 @@ Chaque entrée : instant, zone (x, y, l, h en pixels de la vidéo 576×1024) et 
   couleur: seuls les pixels beiges (et leur contour) sont gardés — illustration posée sur du texte
 Les images sont agrandies ×1,875 (576 → 1080 px de large).
 
-Usage : python scripts/extraire_illustrations.py VIDEO.mp4 DOSSIER_SORTIE
+La liste (nom, instant, zone, méthode) est dans un fichier JSON, ex. public/textes/<id>/illustrations.json.
+
+Usage : python scripts/extraire_illustrations.py VIDEO.mp4 ILLUSTRATIONS.json DOSSIER_SORTIE
 """
+import json
 import subprocess
 import sys
 import tempfile
@@ -17,22 +20,11 @@ import cv2
 import numpy as np
 from PIL import Image, ImageFilter
 
-video, out = sys.argv[1], Path(sys.argv[2])
+video, out = sys.argv[1], Path(sys.argv[3])
 out.mkdir(parents=True, exist_ok=True)
 SCALE = 1080 / 576
-ITEMS = [
-    ("garcon", 1.6, (196, 423, 223, 490), "fond"),
-    ("garcon_toise", 2.1, (165, 422, 254, 488), "fond"),
-    ("carte_crevette", 11.6, (40, 250, 496, 500), "carte"),
-    ("colonne", 13.4, (225, 375, 120, 260), "couleur"),
-    ("carte_sommeil", 14.8, (40, 250, 496, 500), "carte"),
-    ("petit_garcon", 17.6, (408, 572, 78, 190), "fond"),
-    ("halterophile", 25.6, (190, 825, 190, 165), "fond"),
-    ("genou", 28.1, (199, 392, 154, 230), "fond"),
-    ("os_poids", 29.0, (243, 389, 91, 225), "fond"),
-    ("colonne_poids", 30.6, (225, 370, 140, 262), "fond"),
-    ("carte_salle", 34.3, (40, 250, 496, 500), "carte"),
-]
+cfg = json.loads(Path(sys.argv[2]).read_text())
+ITEMS = [(i["nom"], i["t"], tuple(i["zone"]), i["methode"]) for i in cfg["illustrations"]]
 tmp = Path(tempfile.mkdtemp())
 for name, t, (x, y, w, h), mode in ITEMS:
     f = tmp / f"{name}.png"

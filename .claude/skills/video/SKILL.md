@@ -27,10 +27,17 @@ Transcrire par morceaux de ~9 s (un bloc unique saute des phrases).
    transcription anglaise, chiffres convertis, liste exacte des images à fournir. Ne rien construire.
 2. **Texte français + voix ElevenLabs** de l'utilisateur → retirer les blancs, caler la durée sur
    l'original (accélération ≤ ~12-14 %, au-delà le dire), transcrire, aligner sur le texte.
-3. **Images** → nettoyer (barre d'état, interface d'éditeur), fabriquer ce qui manque
-   (`modifier_capture.py`, `ballon.py`, `emoji.py`, `extraire_illustrations.py`).
-4. **Montage** : série « prédiction » → `public/episodes/<id>/` + composition `Episode` ;
-   format « 2 raisons » → `public/deux-raisons/` + composition `DeuxRaisons`.
+3. **Images** → nettoyer (barre d'état, interface d'éditeur), fabriquer ce qui manque :
+   capture Grandimi « résultat » aux chiffres de la personne (`modifier_capture.py` + `capture.json` :
+   tailles, gain, pourcentages, courbe), ballon de l'âge (`ballon.py`, `dore` possible), émojis et flèche 3D
+   (`emoji.py`), illustrations d'une référence (`extraire_illustrations.py`). L'utilisateur n'a pas à
+   fabriquer ces images lui-même.
+4. **Montage** — choisir le moteur d'après l'analyse :
+   - captures d'écran filmées (zooms, flèches, photos ; série « prédiction ») → `public/episodes/<id>/`
+     + composition `Episode` (`scripts/nouvel_episode.py`) ;
+   - texte animé mot par mot + illustrations (« 2 raisons », « signes »…) → `public/textes/<id>/`
+     + composition `TexteAnime` (`scripts/texte_anime.py <id>`) ;
+   - autre chose (personne filmée, 3D…) → le dire à l'utilisateur avant de construire un nouveau moteur.
 5. **Contrôle chiffré** original / épisode (moments ±2 images, positions ±3 %, tailles ±5 %), corriger
    jusqu'à zéro écart, puis livrer : vidéo, comparaison côte à côte, kit CapCut (`scripts/kit.py`).
 6. **Enregistrer et pousser** après chaque étape (commit en français, branche de travail de la session).

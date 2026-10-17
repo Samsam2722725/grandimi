@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {AbsoluteFill, Audio, cancelRender, continueRender, delayRender, Easing, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame} from 'remotion';
-import tl from '../../public/deux-raisons/timeline.json';
+import {AbsoluteFill, Audio, CalculateMetadataFunction, cancelRender, continueRender, delayRender, Easing, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame} from 'remotion';
 
 /*
- * Format « 2 raisons » : texte animé mot par mot sur fond blanc, illustrations cartoon,
- * calqué sur la référence 7508794377276296491 (voir references/…/fiche.md).
- * Données : public/deux-raisons/ecrans.json → scripts/deux_raisons.py → timeline.json.
+ * Texte animé mot par mot sur fond blanc + illustrations (format « 2 raisons », « signes »…),
+ * mouvements recopiés de la référence 7508794377276296491 (voir references/…/fiche.md).
+ * Une vidéo = public/textes/<id>/ : ecrans.json → scripts/texte_anime.py <id> → timeline.json.
  */
 
 const FPS = 30;
@@ -16,8 +15,14 @@ type Mot = {w: string; style: string | null; f: number};
 type Ligne = {t: string; y: number; taille: number; x?: number; align?: 'left' | 'center'; mots: Mot[]; monte?: {a: number; y: number}; chute?: boolean};
 type Image = {f: string; a: number; fin?: number; cx: number; top: number; w: number; anim: 'monte' | 'pop' | 'aucune'; vers?: {a: number; top: number}};
 type Ecran = {debut: number; fin: number; lignes: Ligne[]; images?: Image[]; icone?: {a: number; cx: number; cy: number; taille: number}};
-const T = tl as unknown as {ecrans: Ecran[]; totalFrames: number};
-export const DEUX_RAISONS_FRAMES = T.totalFrames;
+type Timeline = {ecrans: Ecran[]; totalFrames: number};
+
+export type TexteAnimeProps = {video: string; musique?: boolean; voix?: boolean; bruitages?: boolean; timeline?: Timeline};
+
+export const calculateTexteAnimeMetadata: CalculateMetadataFunction<TexteAnimeProps> = async ({props}) => {
+	const timeline: Timeline = await fetch(staticFile(`textes/${props.video}/timeline.json`)).then((r) => r.json());
+	return {durationInFrames: timeline.totalFrames, fps: FPS, props: {...props, timeline}};
+};
 
 const usePoppins = () => {
 	const [handle] = useState(() => delayRender('Police Poppins'));
@@ -90,7 +95,7 @@ const LigneView: React.FC<{l: Ligne; f: number}> = ({l, f}) => {
 	);
 };
 
-const ImageView: React.FC<{im: Image; f: number}> = ({im, f}) => {
+const ImageView: React.FC<{im: Image; f: number; dir: string}> = ({im, f, dir}) => {
 	if (f < im.a || (im.fin !== undefined && f >= im.fin)) return null;
 	const s = entree(f, im.a);
 	let top = im.top;
@@ -106,7 +111,7 @@ const ImageView: React.FC<{im: Image; f: number}> = ({im, f}) => {
 	if (im.vers) top = interpolate(f, [im.vers.a, im.vers.a + 10], [top, im.vers.top], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)});
 	return (
 		<Img
-			src={staticFile(`deux-raisons/images/${im.f}`)}
+			src={staticFile(`${dir}/images/${im.f}`)}
 			style={{position: 'absolute', left: im.cx - im.w / 2, top, width: im.w, transform: `scale(${scale})`, transformOrigin: '50% 50%', opacity}}
 		/>
 	);
@@ -148,13 +153,13 @@ const Icone: React.FC<{ic: NonNullable<Ecran['icone']>; f: number}> = ({ic, f}) 
 };
 
 const SORTIE = 6; // images de chevauchement entre deux écrans
-const EcranView: React.FC<{e: Ecran}> = ({e}) => {
+const EcranView: React.FC<{e: Ecran; dir: string}> = ({e, dir}) => {
 	const f = useCurrentFrame() + e.debut; // frames absolues
 	const t = interpolate(f, [e.fin, e.fin + SORTIE], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.in(Easing.quad)});
 	return (
 		<AbsoluteFill style={{opacity: 1 - t, filter: t > 0.05 ? `blur(${t * 8}px)` : undefined}}>
 			{(e.images ?? []).map((im, i) => (
-				<ImageView key={i} im={im} f={f} />
+				<ImageView key={i} im={im} f={f} dir={dir} />
 			))}
 			{e.icone ? <Icone ic={e.icone} f={f} /> : null}
 			{e.lignes.map((l, i) => (
@@ -164,12 +169,15 @@ const EcranView: React.FC<{e: Ecran}> = ({e}) => {
 	);
 };
 
-export const DeuxRaisons: React.FC<{musique?: boolean; voix?: boolean; bruitages?: boolean}> = ({musique = true, voix = true, bruitages = true}) => {
+export const TexteAnime: React.FC<TexteAnimeProps> = ({video, timeline, musique = true, voix = true, bruitages = true}) => {
 	usePoppins();
+	if (!timeline) return null;
+	const T = timeline;
+	const dir = `textes/${video}`;
 	const END = T.totalFrames;
 	return (
 		<AbsoluteFill style={{background: '#fff'}}>
-			{voix ? <Audio src={staticFile('deux-raisons/voice/voix.wav')} /> : null}
+			{voix ? <Audio src={staticFile(`${dir}/voice/voix.wav`)} /> : null}
 			{musique ? (
 				<Audio
 					src={staticFile('sfx/music.wav')}
@@ -188,7 +196,7 @@ export const DeuxRaisons: React.FC<{musique?: boolean; voix?: boolean; bruitages
 				: null}
 			{T.ecrans.map((e, i) => (
 				<Sequence key={i} from={e.debut} durationInFrames={Math.max(1, e.fin - e.debut + SORTIE)}>
-					<EcranView e={e} />
+					<EcranView e={e} dir={dir} />
 				</Sequence>
 			))}
 		</AbsoluteFill>
