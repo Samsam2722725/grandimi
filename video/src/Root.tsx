@@ -1,4 +1,5 @@
 import {Composition} from 'remotion';
+import {DEUX_RAISONS_FRAMES, DeuxRaisons} from './deux-raisons/DeuxRaisons';
 import {calculateEpisodeMetadata, Episode, EpisodeProps} from './episode/Episode';
 import {Video} from './Video';
 import timeline from './timeline.json';
@@ -25,5 +26,7 @@ export const Root: React.FC = () => (
 			width={1080}
 			height={1920}
 		/>
+		{/* Format « 2 raisons » (texte animé mot par mot) : public/deux-raisons/. */}
+		<Composition id="DeuxRaisons" component={DeuxRaisons} durationInFrames={DEUX_RAISONS_FRAMES} fps={30} width={1080} height={1920} />
 	</>
 );

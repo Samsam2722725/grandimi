@@ -7,7 +7,17 @@
 | « Prédiction à partir de nos commentaires », partie 6 | `Episode` (`{"episode":"partie-6"}`) | `rendu/grandimi-partie6.mp4` (33 s) |
 | « Prédiction à partir de nos commentaires », partie 7 | `Episode` (`{"episode":"partie-7"}`) | `rendu/grandimi-partie7.mp4` (32 s) |
 
+| « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `DeuxRaisons` | `rendu/grandimi-deux-raisons.mp4` (46 s) |
+
 Format 1080×1920, 30 i/s, son normalisé à −14 LUFS.
+
+## Format « 2 raisons » (texte animé mot par mot)
+
+- `public/deux-raisons/ecrans.json` : les écrans (lignes de texte, couleurs `*violet*` `!rouge!` `+vert+` `~gris~`, illustrations et leur mot d'apparition).
+- `mots.json` : transcription datée de la voix (`voice/voix.wav`), par morceaux de ~9 s (la transcription d'un seul bloc saute des phrases).
+- `python scripts/deux_raisons.py` → `timeline.json` (chaque mot affiché reçoit son instant ; tailles agrandies ×1,3 et plafonnées à la largeur de l'écran).
+- Illustrations : `scripts/extraire_illustrations.py REF.mp4 public/deux-raisons/images`.
+- Rendu : `npx remotion render DeuxRaisons out/deux-raisons.mp4`.
 
 ## Format « prédiction à partir de vos commentaires »
 

@@ -7,6 +7,7 @@
     "render": "remotion render Croissance out/croissance.mp4"
   },
   "dependencies": {
+    "@fontsource/poppins": "^5.2.7",
     "@remotion/cli": "4.0.535",
     "react": "18.3.1",
     "react-dom": "18.3.1",

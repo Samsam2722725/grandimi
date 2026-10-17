@@ -1,0 +1,72 @@
+{
+  "note": "Calqué sur la référence 7508794377276296491. Balises : *violet* !rouge! +vert+ ~gris~. y = centre de la ligne (px sur 1920). Ancres d'images : mot de l'écran (« qui », « grandis#2 », « grandis+6 »).",
+  "ecrans": [
+    {"lignes": [
+       {"t": "*2 raisons*", "y": 330, "taille": 100, "fixe": true, "monte": {"a": "qui", "y": 115}},
+       {"t": "qui expliquent pourquoi tu ne grandis !plus.!", "y": 200, "taille": 46}],
+     "images": [
+       {"f": "garcon.png", "a": "qui", "fin": "grandis", "cx": 540, "top": 800, "w": 381, "anim": "monte"},
+       {"f": "garcon_toise.png", "a": "grandis", "cx": 520, "top": 795, "w": 439, "anim": "aucune"}]},
+    {"lignes": [{"t": "Et si tu as moins de !23 ans,!", "y": 960, "taille": 50}]},
+    {"lignes": [{"t": "tu peux encore agir", "y": 940, "taille": 50}]},
+    {"lignes": [
+       {"t": "pour atteindre", "y": 930, "taille": 56, "x": 560, "align": "left"},
+       {"t": "ton *potentiel*", "y": 990, "taille": 56, "x": 560, "align": "left"},
+       {"t": "*de taille*", "y": 1050, "taille": 56, "x": 560, "align": "left"},
+       {"t": "maximale.", "y": 1110, "taille": 56, "x": 560, "align": "left"}],
+     "images": [{"f": "garcon.png", "a": "pour", "cx": 470, "top": 900, "w": 190, "anim": "pop"}]},
+    {"lignes": [{"t": "1. *mal dormir.*", "y": 990, "taille": 54, "x": 150, "align": "left"}]},
+    {"lignes": [
+       {"t": "Si tu dors", "y": 960, "taille": 56, "x": 150, "align": "left"},
+       {"t": "sur un mauvais matelas, 🛏️", "y": 1030, "taille": 56, "x": 150, "align": "left"}]},
+    {"lignes": [
+       {"t": "ou que ton cou est toujours plié", "y": 545, "taille": 42},
+       {"t": "comme une crevette,", "y": 1420, "taille": 42}],
+     "images": [{"f": "carte_crevette.png", "a": "cou", "cx": 540, "top": 585, "w": 862, "anim": "pop"}]},
+    {"lignes": [
+       {"t": "et que ta colonne vertébrale", "y": 900, "taille": 46},
+       {"t": "n'est pas bien alignée,", "y": 975, "taille": 46}],
+     "images": [{"f": "colonne.png", "a": "colonne", "cx": 540, "top": 700, "w": 140, "anim": "monte"}]},
+    {"lignes": [
+       {"t": "cela perturbe la production", "y": 545, "taille": 42},
+       {"t": "*d'hormones de croissance* pendant ton sommeil.", "y": 1420, "taille": 40}],
+     "images": [{"f": "carte_sommeil.png", "a": "cela", "cx": 540, "top": 585, "w": 862, "anim": "pop"}]},
+    {"lignes": [
+       {"t": "Cela peut empêcher ton corps", "y": 450, "taille": 46, "x": 170, "align": "left"},
+       {"t": "d'atteindre son plein", "y": 510, "taille": 46, "x": 170, "align": "left"},
+       {"t": "potentiel de *croissance.*", "y": 570, "taille": 46, "x": 170, "align": "left"}],
+     "images": [{"f": "petit_garcon.png", "a": "corps", "cx": 900, "top": 360, "w": 116, "anim": "pop"}]},
+    {"lignes": [
+       {"t": "2. *Essayer d'impressionner*", "y": 960, "taille": 50, "x": 110, "align": "left"},
+       {"t": "*ton crush à la salle de sport.*", "y": 1025, "taille": 50, "x": 160, "align": "left"}]},
+    {"lignes": [
+       {"t": "Faire du sport est une +très bonne chose+", "y": 960, "taille": 44},
+       {"t": "pour *favoriser ta croissance.*", "y": 1020, "taille": 44}]},
+    {"lignes": [
+       {"t": "~mais soulever~", "y": 840, "taille": 70},
+       {"t": "!des poids très lourds!", "y": 930, "taille": 84},
+       {"t": "alors que tu n'as même pas !17 ans!", "y": 1030, "taille": 40}],
+     "images": [{"f": "halterophile.png", "a": "poids", "cx": 540, "top": 1350, "w": 328, "anim": "pop", "vers": {"a": "alors", "top": 820}}]},
+    {"lignes": [{"t": "peut abîmer tes articulations,", "y": 1240, "taille": 46}],
+     "images": [{"f": "genou.png", "a": "abîmer", "cx": 540, "top": 760, "w": 259, "anim": "pop"}]},
+    {"lignes": [{"t": "endommager tes cartilages de croissance,", "y": 1240, "taille": 42}],
+     "images": [{"f": "os_poids.png", "a": "endommager", "cx": 540, "top": 760, "w": 142, "anim": "pop"}]},
+    {"lignes": [
+       {"t": "et exercer une forte pression", "y": 1250, "taille": 46},
+       {"t": "sur ta colonne vertébrale,", "y": 1320, "taille": 46}],
+     "images": [{"f": "colonne_poids.png", "a": "exercer", "cx": 540, "top": 700, "w": 158, "anim": "pop"}]},
+    {"lignes": [{"t": "!en la comprimant.!", "y": 960, "taille": 64}]},
+    {"lignes": [
+       {"t": "Impressionner ton crush à la salle", "y": 470, "taille": 40},
+       {"t": "avec ton soulevé de terre", "y": 530, "taille": 40},
+       {"t": "ne t'aidera pas à grandir,", "y": 1420, "taille": 42}],
+     "images": [{"f": "carte_salle.png", "a": "Impressionner", "cx": 540, "top": 585, "w": 862, "anim": "pop"}]},
+    {"lignes": [{"t": "!crois-moi.!", "y": 960, "taille": 56}]},
+    {"lignes": [
+       {"t": "Va simplement sur", "y": 640, "taille": 46},
+       {"t": "grandimi.com", "y": 1260, "taille": 48},
+       {"t": "et suis son programme d'exercice", "y": 1340, "taille": 40}],
+     "icone": {"a": "Va", "cx": 540, "cy": 960, "taille": 300}},
+    {"lignes": [{"t": "conçu pour *favoriser ta croissance.*", "y": 960, "taille": 50}]}
+  ]
+}

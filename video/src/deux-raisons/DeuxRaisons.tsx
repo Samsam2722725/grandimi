@@ -1,0 +1,187 @@
+import React, {useEffect, useState} from 'react';
+import {AbsoluteFill, Audio, cancelRender, continueRender, delayRender, Easing, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame} from 'remotion';
+import tl from '../../public/deux-raisons/timeline.json';
+
+/*
+ * Format « 2 raisons » : texte animé mot par mot sur fond blanc, illustrations cartoon,
+ * calqué sur la référence 7508794377276296491 (voir references/…/fiche.md).
+ * Données : public/deux-raisons/ecrans.json → scripts/deux_raisons.py → timeline.json.
+ */
+
+const FPS = 30;
+const COULEURS: Record<string, string> = {violet: '#5b16d6', rouge: '#e3262f', vert: '#22c55e', gris: '#3b3b3b'};
+const FONT = "'Poppins', 'Inter', sans-serif";
+
+type Mot = {w: string; style: string | null; f: number};
+type Ligne = {t: string; y: number; taille: number; x?: number; align?: 'left' | 'center'; mots: Mot[]; monte?: {a: number; y: number}};
+type Image = {f: string; a: number; fin?: number; cx: number; top: number; w: number; anim: 'monte' | 'pop' | 'aucune'; vers?: {a: number; top: number}};
+type Ecran = {debut: number; fin: number; lignes: Ligne[]; images?: Image[]; icone?: {a: number; cx: number; cy: number; taille: number}};
+const T = tl as unknown as {ecrans: Ecran[]; totalFrames: number};
+export const DEUX_RAISONS_FRAMES = T.totalFrames;
+
+const usePoppins = () => {
+	const [handle] = useState(() => delayRender('Police Poppins'));
+	useEffect(() => {
+		const fonts = [
+			new FontFace('Poppins', `url(${staticFile('fonts/poppins-latin-700-normal.woff2')})`, {weight: '700'}),
+			new FontFace('Poppins', `url(${staticFile('fonts/poppins-latin-800-normal.woff2')})`, {weight: '800'}),
+		];
+		Promise.all(fonts.map((f) => f.load()))
+			.then((loaded) => {
+				loaded.forEach((f) => document.fonts.add(f));
+				continueRender(handle);
+			})
+			.catch((e) => cancelRender(e));
+	}, [handle]);
+};
+
+const entree = (f: number, at: number) => spring({frame: f - at, fps: FPS, config: {damping: 14, stiffness: 220, mass: 0.5}});
+
+const LigneView: React.FC<{l: Ligne; f: number}> = ({l, f}) => {
+	const y = l.monte ? interpolate(f, [l.monte.a, l.monte.a + 8], [l.y, l.monte.y], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)}) : l.y;
+	const left = l.align === 'left';
+	return (
+		<div
+			style={{
+				position: 'absolute',
+				top: y,
+				left: left ? l.x ?? 120 : 40,
+				right: left ? undefined : 40,
+				transform: 'translateY(-50%)',
+				display: 'flex',
+				flexWrap: 'nowrap',
+				justifyContent: left ? 'flex-start' : 'center',
+				gap: `0 ${l.taille * 0.26}px`,
+				fontFamily: FONT,
+				fontWeight: 800,
+				fontSize: l.taille,
+				lineHeight: 1.1,
+				letterSpacing: -0.5,
+				whiteSpace: 'nowrap',
+			}}
+		>
+			{l.mots.map((m, i) => {
+				const s = entree(f, m.f);
+				const vis = f >= m.f;
+				return (
+					<span
+						key={i}
+						style={{
+							display: 'inline-block',
+							color: m.style ? COULEURS[m.style] : '#111',
+							opacity: vis ? Math.min(1, s * 1.6) : 0,
+							transform: `translateY(${(1 - s) * 22}px) scale(${0.7 + 0.3 * s})`,
+							filter: vis && s < 0.6 ? `blur(${(0.6 - s) * 8}px)` : undefined,
+							textShadow: '0 4px 10px rgba(0,0,0,0.18)',
+						}}
+					>
+						{m.w}
+					</span>
+				);
+			})}
+		</div>
+	);
+};
+
+const ImageView: React.FC<{im: Image; f: number}> = ({im, f}) => {
+	if (f < im.a || (im.fin !== undefined && f >= im.fin)) return null;
+	const s = entree(f, im.a);
+	let top = im.top;
+	let scale = 1;
+	let opacity = 1;
+	if (im.anim === 'monte') {
+		top = interpolate(f, [im.a, im.a + 12], [1950, im.top], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+	} else if (im.anim === 'pop') {
+		scale = 0.6 + 0.4 * s;
+		opacity = Math.min(1, s * 1.8);
+	}
+	if (im.vers) top = interpolate(f, [im.vers.a, im.vers.a + 10], [top, im.vers.top], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)});
+	return (
+		<Img
+			src={staticFile(`deux-raisons/images/${im.f}`)}
+			style={{position: 'absolute', left: im.cx - im.w / 2, top, width: im.w, transform: `scale(${scale})`, transformOrigin: '50% 50%', opacity}}
+		/>
+	);
+};
+
+/** Icône Grandimi : tombe en tournant puis rebondit (comme l'icône de l'app dans l'original). */
+const Icone: React.FC<{ic: NonNullable<Ecran['icone']>; f: number}> = ({ic, f}) => {
+	if (f < ic.a) return null;
+	const t = interpolate(f, [ic.a, ic.a + 12], [0, 1], {extrapolateRight: 'clamp', easing: Easing.in(Easing.quad)});
+	const bounce = spring({frame: f - ic.a - 12, fps: FPS, config: {damping: 8, stiffness: 180, mass: 0.6}});
+	const y = interpolate(t, [0, 1], [-300, ic.cy]);
+	const rot = interpolate(t, [0, 1], [-200, 0]);
+	const sc = f < ic.a + 12 ? 0.55 + 0.45 * t : 0.92 + 0.08 * bounce;
+	const z = ic.taille;
+	return (
+		<div
+			style={{
+				position: 'absolute',
+				left: ic.cx - z / 2,
+				top: y - z / 2,
+				width: z,
+				height: z,
+				borderRadius: z * 0.24,
+				background: 'linear-gradient(145deg, #ff8a52 0%, #ff5a1f 55%, #e8430e 100%)',
+				boxShadow: '0 24px 40px rgba(255,90,31,0.35), inset 0 -10px 24px rgba(0,0,0,0.12)',
+				transform: `rotate(${rot}deg) scale(${sc})`,
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+			}}
+		>
+			<svg width={z * 0.5} height={z * 0.62} viewBox="0 0 50 62">
+				<circle cx="25" cy="8" r="7" fill="#fff" />
+				<path d="M14 19 h22 a4 4 0 0 1 4 4 v14 a3 3 0 0 1 -6 0 v-9 h-1 v30 a4 4 0 0 1 -8 0 v-17 h-0 v17 a4 4 0 0 1 -8 0 v-30 h-1 v9 a3 3 0 0 1 -6 0 v-14 a4 4 0 0 1 4 -4 z" fill="#fff" />
+				<path d="M44 40 L44 6 M40 10 L44 5 L48 10" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" fill="none" opacity="0.85" />
+			</svg>
+		</div>
+	);
+};
+
+const EcranView: React.FC<{e: Ecran}> = ({e}) => {
+	const f = useCurrentFrame() + e.debut; // frames absolues
+	const sortie = interpolate(f, [e.fin - 4, e.fin], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	return (
+		<AbsoluteFill style={{opacity: sortie, transform: `scale(${0.97 + 0.03 * sortie})`}}>
+			{(e.images ?? []).map((im, i) => (
+				<ImageView key={i} im={im} f={f} />
+			))}
+			{e.icone ? <Icone ic={e.icone} f={f} /> : null}
+			{e.lignes.map((l, i) => (
+				<LigneView key={i} l={l} f={f} />
+			))}
+		</AbsoluteFill>
+	);
+};
+
+export const DeuxRaisons: React.FC<{musique?: boolean; voix?: boolean; bruitages?: boolean}> = ({musique = true, voix = true, bruitages = true}) => {
+	usePoppins();
+	const END = T.totalFrames;
+	return (
+		<AbsoluteFill style={{background: '#fff'}}>
+			{voix ? <Audio src={staticFile('deux-raisons/voice/voix.wav')} /> : null}
+			{musique ? (
+				<Audio
+					src={staticFile('sfx/music.wav')}
+					loop
+					volume={(fr) => interpolate(fr, [0, 10, END - 20, END], [0, 0.13, 0.13, 0], {extrapolateRight: 'clamp'})}
+				/>
+			) : null}
+			{bruitages
+				? T.ecrans.flatMap((e, i) =>
+						(e.images ?? []).map((im, j) => (
+							<Sequence key={`${i}-${j}`} from={im.a} durationInFrames={20} layout="none">
+								<Audio src={staticFile('sfx/pop.wav')} volume={0.18} />
+							</Sequence>
+						)),
+					)
+				: null}
+			{T.ecrans.map((e, i) => (
+				<Sequence key={i} from={e.debut} durationInFrames={Math.max(1, e.fin - e.debut)}>
+					<EcranView e={e} />
+				</Sequence>
+			))}
+		</AbsoluteFill>
+	);
+};

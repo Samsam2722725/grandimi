@@ -1,0 +1,1406 @@
+{
+ "note": "Calqué sur la référence 7508794377276296491. Balises : *violet* !rouge! +vert+ ~gris~. y = centre de la ligne (px sur 1920). Ancres d'images : mot de l'écran (« qui », « grandis#2 », « grandis+6 »).",
+ "ecrans": [
+  {
+   "lignes": [
+    {
+     "t": "*2 raisons*",
+     "y": 330,
+     "taille": 100,
+     "fixe": true,
+     "monte": {
+      "a": 19,
+      "y": 115
+     },
+     "mots": [
+      {
+       "w": "2",
+       "style": "violet",
+       "f": 0
+      },
+      {
+       "w": "raisons",
+       "style": "violet",
+       "f": 10
+      }
+     ]
+    },
+    {
+     "t": "qui expliquent pourquoi tu ne grandis !plus.!",
+     "y": 200,
+     "taille": 42,
+     "mots": [
+      {
+       "w": "qui",
+       "style": null,
+       "f": 19
+      },
+      {
+       "w": "expliquent",
+       "style": null,
+       "f": 24
+      },
+      {
+       "w": "pourquoi",
+       "style": null,
+       "f": 36
+      },
+      {
+       "w": "tu",
+       "style": null,
+       "f": 46
+      },
+      {
+       "w": "ne",
+       "style": null,
+       "f": 50
+      },
+      {
+       "w": "grandis",
+       "style": null,
+       "f": 53
+      },
+      {
+       "w": "plus.",
+       "style": "rouge",
+       "f": 62
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "garcon.png",
+     "a": 19,
+     "fin": 53,
+     "cx": 540,
+     "top": 800,
+     "w": 381,
+     "anim": "monte"
+    },
+    {
+     "f": "garcon_toise.png",
+     "a": 53,
+     "cx": 520,
+     "top": 795,
+     "w": 439,
+     "anim": "aucune"
+    }
+   ],
+   "debut": 0,
+   "fin": 69
+  },
+  {
+   "lignes": [
+    {
+     "t": "Et si tu as moins de !23 ans,!",
+     "y": 960,
+     "taille": 64,
+     "mots": [
+      {
+       "w": "Et",
+       "style": null,
+       "f": 72
+      },
+      {
+       "w": "si",
+       "style": null,
+       "f": 77
+      },
+      {
+       "w": "tu",
+       "style": null,
+       "f": 79
+      },
+      {
+       "w": "as",
+       "style": null,
+       "f": 84
+      },
+      {
+       "w": "moins",
+       "style": null,
+       "f": 86
+      },
+      {
+       "w": "de",
+       "style": null,
+       "f": 94
+      },
+      {
+       "w": "23",
+       "style": "rouge",
+       "f": 96
+      },
+      {
+       "w": "ans,",
+       "style": "rouge",
+       "f": 108
+      }
+     ]
+    }
+   ],
+   "debut": 69,
+   "fin": 112
+  },
+  {
+   "lignes": [
+    {
+     "t": "tu peux encore agir",
+     "y": 940,
+     "taille": 65,
+     "mots": [
+      {
+       "w": "tu",
+       "style": null,
+       "f": 115
+      },
+      {
+       "w": "peux",
+       "style": null,
+       "f": 120
+      },
+      {
+       "w": "encore",
+       "style": null,
+       "f": 127
+      },
+      {
+       "w": "agir",
+       "style": null,
+       "f": 134
+      }
+     ]
+    }
+   ],
+   "debut": 112,
+   "fin": 141
+  },
+  {
+   "lignes": [
+    {
+     "t": "pour atteindre",
+     "y": 930,
+     "taille": 60,
+     "x": 560,
+     "align": "left",
+     "mots": [
+      {
+       "w": "pour",
+       "style": null,
+       "f": 144
+      },
+      {
+       "w": "atteindre",
+       "style": null,
+       "f": 149
+      }
+     ]
+    },
+    {
+     "t": "ton *potentiel*",
+     "y": 1000,
+     "taille": 60,
+     "x": 560,
+     "align": "left",
+     "mots": [
+      {
+       "w": "ton",
+       "style": null,
+       "f": 163
+      },
+      {
+       "w": "potentiel",
+       "style": "violet",
+       "f": 168
+      }
+     ]
+    },
+    {
+     "t": "*de taille*",
+     "y": 1070,
+     "taille": 60,
+     "x": 560,
+     "align": "left",
+     "mots": [
+      {
+       "w": "de",
+       "style": "violet",
+       "f": 180
+      },
+      {
+       "w": "taille",
+       "style": "violet",
+       "f": 182
+      }
+     ]
+    },
+    {
+     "t": "maximale.",
+     "y": 1140,
+     "taille": 60,
+     "x": 560,
+     "align": "left",
+     "mots": [
+      {
+       "w": "maximale.",
+       "style": null,
+       "f": 192
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "garcon.png",
+     "a": 144,
+     "cx": 470,
+     "top": 900,
+     "w": 190,
+     "anim": "pop"
+    }
+   ],
+   "debut": 141,
+   "fin": 213
+  },
+  {
+   "lignes": [
+    {
+     "t": "1. *mal dormir.*",
+     "y": 990,
+     "taille": 70,
+     "x": 150,
+     "align": "left",
+     "mots": [
+      {
+       "w": "1.",
+       "style": null,
+       "f": 216
+      },
+      {
+       "w": "mal",
+       "style": "violet",
+       "f": 228
+      },
+      {
+       "w": "dormir.",
+       "style": "violet",
+       "f": 235
+      }
+     ]
+    }
+   ],
+   "debut": 213,
+   "fin": 244
+  },
+  {
+   "lignes": [
+    {
+     "t": "Si tu dors",
+     "y": 960,
+     "taille": 60,
+     "x": 150,
+     "align": "left",
+     "mots": [
+      {
+       "w": "Si",
+       "style": null,
+       "f": 247
+      },
+      {
+       "w": "tu",
+       "style": null,
+       "f": 252
+      },
+      {
+       "w": "dors",
+       "style": null,
+       "f": 254
+      }
+     ]
+    },
+    {
+     "t": "sur un mauvais matelas, 🛏️",
+     "y": 1030,
+     "taille": 60,
+     "x": 150,
+     "align": "left",
+     "mots": [
+      {
+       "w": "sur",
+       "style": null,
+       "f": 264
+      },
+      {
+       "w": "un",
+       "style": null,
+       "f": 266
+      },
+      {
+       "w": "mauvais",
+       "style": null,
+       "f": 269
+      },
+      {
+       "w": "matelas,",
+       "style": null,
+       "f": 276
+      },
+      {
+       "w": "🛏️",
+       "style": null,
+       "f": 276
+      }
+     ]
+    }
+   ],
+   "debut": 244,
+   "fin": 290
+  },
+  {
+   "lignes": [
+    {
+     "t": "ou que ton cou est toujours plié",
+     "y": 545,
+     "taille": 55,
+     "mots": [
+      {
+       "w": "ou",
+       "style": null,
+       "f": 293
+      },
+      {
+       "w": "que",
+       "style": null,
+       "f": 298
+      },
+      {
+       "w": "ton",
+       "style": null,
+       "f": 302
+      },
+      {
+       "w": "cou",
+       "style": null,
+       "f": 307
+      },
+      {
+       "w": "est",
+       "style": null,
+       "f": 314
+      },
+      {
+       "w": "toujours",
+       "style": null,
+       "f": 317
+      },
+      {
+       "w": "plié",
+       "style": null,
+       "f": 324
+      }
+     ]
+    },
+    {
+     "t": "comme une crevette,",
+     "y": 1420,
+     "taille": 55,
+     "mots": [
+      {
+       "w": "comme",
+       "style": null,
+       "f": 338
+      },
+      {
+       "w": "une",
+       "style": null,
+       "f": 341
+      },
+      {
+       "w": "crevette,",
+       "style": null,
+       "f": 346
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_crevette.png",
+     "a": 307,
+     "cx": 540,
+     "top": 585,
+     "w": 862,
+     "anim": "pop"
+    }
+   ],
+   "debut": 290,
+   "fin": 357
+  },
+  {
+   "lignes": [
+    {
+     "t": "et que ta colonne vertébrale",
+     "y": 900,
+     "taille": 60,
+     "mots": [
+      {
+       "w": "et",
+       "style": null,
+       "f": 360
+      },
+      {
+       "w": "que",
+       "style": null,
+       "f": 362
+      },
+      {
+       "w": "ta",
+       "style": null,
+       "f": 367
+      },
+      {
+       "w": "colonne",
+       "style": null,
+       "f": 372
+      },
+      {
+       "w": "vertébrale",
+       "style": null,
+       "f": 379
+      }
+     ]
+    },
+    {
+     "t": "n'est pas bien alignée,",
+     "y": 975,
+     "taille": 60,
+     "mots": [
+      {
+       "w": "n'est",
+       "style": null,
+       "f": 396
+      },
+      {
+       "w": "pas",
+       "style": null,
+       "f": 401
+      },
+      {
+       "w": "bien",
+       "style": null,
+       "f": 403
+      },
+      {
+       "w": "alignée,",
+       "style": null,
+       "f": 408
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "colonne.png",
+     "a": 372,
+     "cx": 540,
+     "top": 700,
+     "w": 140,
+     "anim": "monte"
+    }
+   ],
+   "debut": 357,
+   "fin": 424
+  },
+  {
+   "lignes": [
+    {
+     "t": "cela perturbe la production",
+     "y": 545,
+     "taille": 55,
+     "mots": [
+      {
+       "w": "cela",
+       "style": null,
+       "f": 427
+      },
+      {
+       "w": "perturbe",
+       "style": null,
+       "f": 434
+      },
+      {
+       "w": "la",
+       "style": null,
+       "f": 449
+      },
+      {
+       "w": "production",
+       "style": null,
+       "f": 451
+      }
+     ]
+    },
+    {
+     "t": "*d'hormones de croissance* pendant ton sommeil.",
+     "y": 1420,
+     "taille": 40,
+     "mots": [
+      {
+       "w": "d'hormones",
+       "style": "violet",
+       "f": 458
+      },
+      {
+       "w": "de",
+       "style": "violet",
+       "f": 475
+      },
+      {
+       "w": "croissance",
+       "style": "violet",
+       "f": 478
+      },
+      {
+       "w": "pendant",
+       "style": null,
+       "f": 487
+      },
+      {
+       "w": "ton",
+       "style": null,
+       "f": 494
+      },
+      {
+       "w": "sommeil.",
+       "style": null,
+       "f": 499
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_sommeil.png",
+     "a": 427,
+     "cx": 540,
+     "top": 585,
+     "w": 862,
+     "anim": "pop"
+    }
+   ],
+   "debut": 424,
+   "fin": 506
+  },
+  {
+   "lignes": [
+    {
+     "t": "Cela peut empêcher ton corps",
+     "y": 450,
+     "taille": 55,
+     "x": 170,
+     "align": "left",
+     "mots": [
+      {
+       "w": "Cela",
+       "style": null,
+       "f": 509
+      },
+      {
+       "w": "peut",
+       "style": null,
+       "f": 516
+      },
+      {
+       "w": "empêcher",
+       "style": null,
+       "f": 527
+      },
+      {
+       "w": "ton",
+       "style": null,
+       "f": 542
+      },
+      {
+       "w": "corps",
+       "style": null,
+       "f": 547
+      }
+     ]
+    },
+    {
+     "t": "d'atteindre son plein",
+     "y": 514,
+     "taille": 55,
+     "x": 170,
+     "align": "left",
+     "mots": [
+      {
+       "w": "d'atteindre",
+       "style": null,
+       "f": 551
+      },
+      {
+       "w": "son",
+       "style": null,
+       "f": 566
+      },
+      {
+       "w": "plein",
+       "style": null,
+       "f": 571
+      }
+     ]
+    },
+    {
+     "t": "potentiel de *croissance.*",
+     "y": 578,
+     "taille": 55,
+     "x": 170,
+     "align": "left",
+     "mots": [
+      {
+       "w": "potentiel",
+       "style": null,
+       "f": 580
+      },
+      {
+       "w": "de",
+       "style": null,
+       "f": 592
+      },
+      {
+       "w": "croissance.",
+       "style": "violet",
+       "f": 595
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "petit_garcon.png",
+     "a": 547,
+     "cx": 900,
+     "top": 360,
+     "w": 116,
+     "anim": "pop"
+    }
+   ],
+   "debut": 506,
+   "fin": 618
+  },
+  {
+   "lignes": [
+    {
+     "t": "2. *Essayer d'impressionner*",
+     "y": 960,
+     "taille": 52,
+     "x": 110,
+     "align": "left",
+     "mots": [
+      {
+       "w": "2.",
+       "style": null,
+       "f": 621
+      },
+      {
+       "w": "Essayer",
+       "style": "violet",
+       "f": 631
+      },
+      {
+       "w": "d'impressionner",
+       "style": "violet",
+       "f": 643
+      }
+     ]
+    },
+    {
+     "t": "*ton crush à la salle de sport.*",
+     "y": 1025,
+     "taille": 52,
+     "x": 160,
+     "align": "left",
+     "mots": [
+      {
+       "w": "ton",
+       "style": "violet",
+       "f": 659
+      },
+      {
+       "w": "crush",
+       "style": "violet",
+       "f": 664
+      },
+      {
+       "w": "à",
+       "style": "violet",
+       "f": 676
+      },
+      {
+       "w": "la",
+       "style": "violet",
+       "f": 679
+      },
+      {
+       "w": "salle",
+       "style": "violet",
+       "f": 681
+      },
+      {
+       "w": "de",
+       "style": "violet",
+       "f": 688
+      },
+      {
+       "w": "sport.",
+       "style": "violet",
+       "f": 691
+      }
+     ]
+    }
+   ],
+   "debut": 618,
+   "fin": 700
+  },
+  {
+   "lignes": [
+    {
+     "t": "Faire du sport est une +très bonne chose+",
+     "y": 960,
+     "taille": 46,
+     "mots": [
+      {
+       "w": "Faire",
+       "style": null,
+       "f": 703
+      },
+      {
+       "w": "du",
+       "style": null,
+       "f": 710
+      },
+      {
+       "w": "sport",
+       "style": null,
+       "f": 712
+      },
+      {
+       "w": "est",
+       "style": null,
+       "f": 724
+      },
+      {
+       "w": "une",
+       "style": null,
+       "f": 729
+      },
+      {
+       "w": "très",
+       "style": "vert",
+       "f": 734
+      },
+      {
+       "w": "bonne",
+       "style": "vert",
+       "f": 739
+      },
+      {
+       "w": "chose",
+       "style": "vert",
+       "f": 743
+      }
+     ]
+    },
+    {
+     "t": "pour *favoriser ta croissance.*",
+     "y": 1020,
+     "taille": 57,
+     "mots": [
+      {
+       "w": "pour",
+       "style": null,
+       "f": 751
+      },
+      {
+       "w": "favoriser",
+       "style": "violet",
+       "f": 755
+      },
+      {
+       "w": "ta",
+       "style": "violet",
+       "f": 772
+      },
+      {
+       "w": "croissance.",
+       "style": "violet",
+       "f": 777
+      }
+     ]
+    }
+   ],
+   "debut": 700,
+   "fin": 789
+  },
+  {
+   "lignes": [
+    {
+     "t": "~mais soulever~",
+     "y": 840,
+     "taille": 91,
+     "mots": [
+      {
+       "w": "mais",
+       "style": "gris",
+       "f": 792
+      },
+      {
+       "w": "soulever",
+       "style": "gris",
+       "f": 799
+      }
+     ]
+    },
+    {
+     "t": "!des poids très lourds!",
+     "y": 942,
+     "taille": 85,
+     "mots": [
+      {
+       "w": "des",
+       "style": "rouge",
+       "f": 814
+      },
+      {
+       "w": "poids",
+       "style": "rouge",
+       "f": 816
+      },
+      {
+       "w": "très",
+       "style": "rouge",
+       "f": 826
+      },
+      {
+       "w": "lourds",
+       "style": "rouge",
+       "f": 830
+      }
+     ]
+    },
+    {
+     "t": "alors que tu n'as même pas !17 ans!",
+     "y": 1030,
+     "taille": 52,
+     "mots": [
+      {
+       "w": "alors",
+       "style": null,
+       "f": 840
+      },
+      {
+       "w": "que",
+       "style": null,
+       "f": 847
+      },
+      {
+       "w": "tu",
+       "style": null,
+       "f": 850
+      },
+      {
+       "w": "n'as",
+       "style": null,
+       "f": 854
+      },
+      {
+       "w": "même",
+       "style": null,
+       "f": 859
+      },
+      {
+       "w": "pas",
+       "style": null,
+       "f": 864
+      },
+      {
+       "w": "17",
+       "style": "rouge",
+       "f": 869
+      },
+      {
+       "w": "ans",
+       "style": "rouge",
+       "f": 881
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "halterophile.png",
+     "a": 816,
+     "cx": 540,
+     "top": 1350,
+     "w": 328,
+     "anim": "pop",
+     "vers": {
+      "a": 840,
+      "top": 820
+     }
+    }
+   ],
+   "debut": 789,
+   "fin": 885
+  },
+  {
+   "lignes": [
+    {
+     "t": "peut abîmer tes articulations,",
+     "y": 1240,
+     "taille": 60,
+     "mots": [
+      {
+       "w": "peut",
+       "style": null,
+       "f": 888
+      },
+      {
+       "w": "abîmer",
+       "style": null,
+       "f": 893
+      },
+      {
+       "w": "tes",
+       "style": null,
+       "f": 907
+      },
+      {
+       "w": "articulations,",
+       "style": null,
+       "f": 912
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "genou.png",
+     "a": 893,
+     "cx": 540,
+     "top": 760,
+     "w": 259,
+     "anim": "pop"
+    }
+   ],
+   "debut": 885,
+   "fin": 931
+  },
+  {
+   "lignes": [
+    {
+     "t": "endommager tes cartilages de croissance,",
+     "y": 1240,
+     "taille": 45,
+     "mots": [
+      {
+       "w": "endommager",
+       "style": null,
+       "f": 934
+      },
+      {
+       "w": "tes",
+       "style": null,
+       "f": 948
+      },
+      {
+       "w": "cartilages",
+       "style": null,
+       "f": 953
+      },
+      {
+       "w": "de",
+       "style": null,
+       "f": 972
+      },
+      {
+       "w": "croissance,",
+       "style": null,
+       "f": 974
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "os_poids.png",
+     "a": 934,
+     "cx": 540,
+     "top": 760,
+     "w": 142,
+     "anim": "pop"
+    }
+   ],
+   "debut": 931,
+   "fin": 986
+  },
+  {
+   "lignes": [
+    {
+     "t": "et exercer une forte pression",
+     "y": 1250,
+     "taille": 60,
+     "mots": [
+      {
+       "w": "et",
+       "style": null,
+       "f": 989
+      },
+      {
+       "w": "exercer",
+       "style": null,
+       "f": 994
+      },
+      {
+       "w": "une",
+       "style": null,
+       "f": 1008
+      },
+      {
+       "w": "forte",
+       "style": null,
+       "f": 1013
+      },
+      {
+       "w": "pression",
+       "style": null,
+       "f": 1020
+      }
+     ]
+    },
+    {
+     "t": "sur ta colonne vertébrale,",
+     "y": 1320,
+     "taille": 60,
+     "mots": [
+      {
+       "w": "sur",
+       "style": null,
+       "f": 1030
+      },
+      {
+       "w": "ta",
+       "style": null,
+       "f": 1032
+      },
+      {
+       "w": "colonne",
+       "style": null,
+       "f": 1037
+      },
+      {
+       "w": "vertébrale,",
+       "style": null,
+       "f": 1049
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "colonne_poids.png",
+     "a": 994,
+     "cx": 540,
+     "top": 700,
+     "w": 158,
+     "anim": "pop"
+    }
+   ],
+   "debut": 986,
+   "fin": 1060
+  },
+  {
+   "lignes": [
+    {
+     "t": "!en la comprimant.!",
+     "y": 960,
+     "taille": 83,
+     "mots": [
+      {
+       "w": "en",
+       "style": "rouge",
+       "f": 1063
+      },
+      {
+       "w": "la",
+       "style": "rouge",
+       "f": 1067
+      },
+      {
+       "w": "comprimant.",
+       "style": "rouge",
+       "f": 1070
+      }
+     ]
+    }
+   ],
+   "debut": 1060,
+   "fin": 1087
+  },
+  {
+   "lignes": [
+    {
+     "t": "Impressionner ton crush à la salle",
+     "y": 470,
+     "taille": 52,
+     "mots": [
+      {
+       "w": "Impressionner",
+       "style": null,
+       "f": 1090
+      },
+      {
+       "w": "ton",
+       "style": null,
+       "f": 1105
+      },
+      {
+       "w": "crush",
+       "style": null,
+       "f": 1109
+      },
+      {
+       "w": "à",
+       "style": null,
+       "f": 1119
+      },
+      {
+       "w": "la",
+       "style": null,
+       "f": 1121
+      },
+      {
+       "w": "salle",
+       "style": null,
+       "f": 1124
+      }
+     ]
+    },
+    {
+     "t": "avec ton soulevé de terre",
+     "y": 530,
+     "taille": 52,
+     "mots": [
+      {
+       "w": "avec",
+       "style": null,
+       "f": 1131
+      },
+      {
+       "w": "ton",
+       "style": null,
+       "f": 1133
+      },
+      {
+       "w": "soulevé",
+       "style": null,
+       "f": 1138
+      },
+      {
+       "w": "de",
+       "style": null,
+       "f": 1150
+      },
+      {
+       "w": "terre",
+       "style": null,
+       "f": 1153
+      }
+     ]
+    },
+    {
+     "t": "ne t'aidera pas à grandir,",
+     "y": 1420,
+     "taille": 55,
+     "mots": [
+      {
+       "w": "ne",
+       "style": null,
+       "f": 1162
+      },
+      {
+       "w": "t'aidera",
+       "style": null,
+       "f": 1165
+      },
+      {
+       "w": "pas",
+       "style": null,
+       "f": 1179
+      },
+      {
+       "w": "à",
+       "style": null,
+       "f": 1184
+      },
+      {
+       "w": "grandir,",
+       "style": null,
+       "f": 1186
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_salle.png",
+     "a": 1090,
+     "cx": 540,
+     "top": 585,
+     "w": 862,
+     "anim": "pop"
+    }
+   ],
+   "debut": 1087,
+   "fin": 1195
+  },
+  {
+   "lignes": [
+    {
+     "t": "!crois-moi.!",
+     "y": 960,
+     "taille": 73,
+     "mots": [
+      {
+       "w": "crois-moi.",
+       "style": "rouge",
+       "f": 1198
+      }
+     ]
+    }
+   ],
+   "debut": 1195,
+   "fin": 1212
+  },
+  {
+   "lignes": [
+    {
+     "t": "Va simplement sur",
+     "y": 640,
+     "taille": 60,
+     "mots": [
+      {
+       "w": "Va",
+       "style": null,
+       "f": 1215
+      },
+      {
+       "w": "simplement",
+       "style": null,
+       "f": 1222
+      },
+      {
+       "w": "sur",
+       "style": null,
+       "f": 1232
+      }
+     ]
+    },
+    {
+     "t": "grandimi.com",
+     "y": 1260,
+     "taille": 62,
+     "mots": [
+      {
+       "w": "grandimi.com",
+       "style": null,
+       "f": 1237
+      }
+     ]
+    },
+    {
+     "t": "et suis son programme d'exercice",
+     "y": 1340,
+     "taille": 52,
+     "mots": [
+      {
+       "w": "et",
+       "style": null,
+       "f": 1270
+      },
+      {
+       "w": "suis",
+       "style": null,
+       "f": 1275
+      },
+      {
+       "w": "son",
+       "style": null,
+       "f": 1282
+      },
+      {
+       "w": "programme",
+       "style": null,
+       "f": 1287
+      },
+      {
+       "w": "d'exercice",
+       "style": null,
+       "f": 1294
+      }
+     ]
+    }
+   ],
+   "icone": {
+    "a": 1215,
+    "cx": 540,
+    "cy": 960,
+    "taille": 300
+   },
+   "debut": 1212,
+   "fin": 1310
+  },
+  {
+   "lignes": [
+    {
+     "t": "conçu pour *favoriser ta croissance.*",
+     "y": 960,
+     "taille": 51,
+     "mots": [
+      {
+       "w": "conçu",
+       "style": null,
+       "f": 1313
+      },
+      {
+       "w": "pour",
+       "style": null,
+       "f": 1325
+      },
+      {
+       "w": "favoriser",
+       "style": "violet",
+       "f": 1330
+      },
+      {
+       "w": "ta",
+       "style": "violet",
+       "f": 1347
+      },
+      {
+       "w": "croissance.",
+       "style": "violet",
+       "f": 1352
+      }
+     ]
+    }
+   ],
+   "debut": 1310,
+   "fin": 1371
+  }
+ ],
+ "totalFrames": 1371,
+ "fps": 30
+}
