@@ -1,0 +1,527 @@
+{
+  "fps": 30,
+  "totalFrames": 959,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Prédiction de votre potentiel de taille adulte,",
+      "from": 0,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Prédiction",
+          "f": 0
+        },
+        {
+          "w": "de",
+          "f": 14
+        },
+        {
+          "w": "votre",
+          "f": 17
+        },
+        {
+          "w": "potentiel",
+          "f": 24
+        },
+        {
+          "w": "de",
+          "f": 34
+        },
+        {
+          "w": "taille",
+          "f": 36
+        },
+        {
+          "w": "adulte,",
+          "f": 46
+        }
+      ]
+    },
+    {
+      "id": "partie",
+      "text": "partie 7.",
+      "from": 58,
+      "duration": 21,
+      "words": [
+        {
+          "w": "partie",
+          "f": 58
+        },
+        {
+          "w": "7.",
+          "f": 67
+        }
+      ]
+    },
+    {
+      "id": "dan",
+      "text": "Aujourd’hui, on vérifie les statistiques d’Hugo.",
+      "from": 79,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Aujourd’hui,",
+          "f": 79
+        },
+        {
+          "w": "on",
+          "f": 91
+        },
+        {
+          "w": "vérifie",
+          "f": 96
+        },
+        {
+          "w": "les",
+          "f": 108
+        },
+        {
+          "w": "statistiques",
+          "f": 110
+        },
+        {
+          "w": "d’Hugo.",
+          "f": 120
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 17 ans, Hugo mesure actuellement 1m80, ce qui est au-dessus de la moyenne.",
+      "from": 137,
+      "duration": 105,
+      "words": [
+        {
+          "w": "À",
+          "f": 137
+        },
+        {
+          "w": "17",
+          "f": 139
+        },
+        {
+          "w": "ans,",
+          "f": 149
+        },
+        {
+          "w": "Hugo",
+          "f": 156
+        },
+        {
+          "w": "mesure",
+          "f": 166
+        },
+        {
+          "w": "actuellement",
+          "f": 175
+        },
+        {
+          "w": "1m80,",
+          "f": 185
+        },
+        {
+          "w": "ce",
+          "f": 209
+        },
+        {
+          "w": "qui",
+          "f": 214
+        },
+        {
+          "w": "est",
+          "f": 216
+        },
+        {
+          "w": "au-dessus",
+          "f": 221
+        },
+        {
+          "w": "de",
+          "f": 228
+        },
+        {
+          "w": "la",
+          "f": 230
+        },
+        {
+          "w": "moyenne.",
+          "f": 233
+        }
+      ]
+    },
+    {
+      "id": "grandimi",
+      "text": "Selon Grandimi.com, sa taille adulte estimée est de 1m84.",
+      "from": 242,
+      "duration": 102,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 242
+        },
+        {
+          "w": "Grandimi.com,",
+          "f": 250
+        },
+        {
+          "w": "sa",
+          "f": 278
+        },
+        {
+          "w": "taille",
+          "f": 283
+        },
+        {
+          "w": "adulte",
+          "f": 288
+        },
+        {
+          "w": "estimée",
+          "f": 300
+        },
+        {
+          "w": "est",
+          "f": 310
+        },
+        {
+          "w": "de",
+          "f": 312
+        },
+        {
+          "w": "1m84.",
+          "f": 317
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Hugo pourrait atteindre presque 1m87,",
+      "from": 346,
+      "duration": 107,
+      "words": [
+        {
+          "w": "Et",
+          "f": 346
+        },
+        {
+          "w": "avec",
+          "f": 350
+        },
+        {
+          "w": "les",
+          "f": 355
+        },
+        {
+          "w": "bonnes",
+          "f": 358
+        },
+        {
+          "w": "habitudes,",
+          "f": 365
+        },
+        {
+          "w": "Hugo",
+          "f": 379
+        },
+        {
+          "w": "pourrait",
+          "f": 391
+        },
+        {
+          "w": "atteindre",
+          "f": 398
+        },
+        {
+          "w": "presque",
+          "f": 410
+        },
+        {
+          "w": "1m87,",
+          "f": 418
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "soit 2,5 cm supplémentaires grâce à l’optimisation de sa croissance.",
+      "from": 454,
+      "duration": 117,
+      "words": [
+        {
+          "w": "soit",
+          "f": 454
+        },
+        {
+          "w": "2,5",
+          "f": 463
+        },
+        {
+          "w": "cm",
+          "f": 487
+        },
+        {
+          "w": "supplémentaires",
+          "f": 502
+        },
+        {
+          "w": "grâce",
+          "f": 521
+        },
+        {
+          "w": "à",
+          "f": 528
+        },
+        {
+          "w": "l’optimisation",
+          "f": 530
+        },
+        {
+          "w": "de",
+          "f": 550
+        },
+        {
+          "w": "sa",
+          "f": 552
+        },
+        {
+          "w": "croissance.",
+          "f": 557
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Hugo est déjà plus grand que 78,1% des jeunes de son âge,",
+      "from": 571,
+      "duration": 119,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 571
+        },
+        {
+          "w": "Hugo",
+          "f": 586
+        },
+        {
+          "w": "est",
+          "f": 598
+        },
+        {
+          "w": "déjà",
+          "f": 602
+        },
+        {
+          "w": "plus",
+          "f": 607
+        },
+        {
+          "w": "grand",
+          "f": 612
+        },
+        {
+          "w": "que",
+          "f": 619
+        },
+        {
+          "w": "78,1%",
+          "f": 624
+        },
+        {
+          "w": "des",
+          "f": 665
+        },
+        {
+          "w": "jeunes",
+          "f": 670
+        },
+        {
+          "w": "de",
+          "f": 677
+        },
+        {
+          "w": "son",
+          "f": 679
+        },
+        {
+          "w": "âge,",
+          "f": 684
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a terminé 98% de sa croissance.",
+      "from": 691,
+      "duration": 73,
+      "words": [
+        {
+          "w": "et",
+          "f": 691
+        },
+        {
+          "w": "il",
+          "f": 696
+        },
+        {
+          "w": "a",
+          "f": 701
+        },
+        {
+          "w": "terminé",
+          "f": 703
+        },
+        {
+          "w": "98%",
+          "f": 718
+        },
+        {
+          "w": "de",
+          "f": 744
+        },
+        {
+          "w": "sa",
+          "f": 749
+        },
+        {
+          "w": "croissance.",
+          "f": 751
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T’es clairement pas foutu!",
+      "from": 766,
+      "duration": 35,
+      "words": [
+        {
+          "w": "T’es",
+          "f": 766
+        },
+        {
+          "w": "clairement",
+          "f": 773
+        },
+        {
+          "w": "pas",
+          "f": 782
+        },
+        {
+          "w": "foutu!",
+          "f": 787
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si toi aussi tu veux qu’on analyse ton potentiel de croissance, indique en commentaire ton âge, ta taille actuelle et la taille de tes parents.",
+      "from": 802,
+      "duration": 155,
+      "words": [
+        {
+          "w": "Si",
+          "f": 802
+        },
+        {
+          "w": "toi",
+          "f": 804
+        },
+        {
+          "w": "aussi",
+          "f": 809
+        },
+        {
+          "w": "tu",
+          "f": 816
+        },
+        {
+          "w": "veux",
+          "f": 818
+        },
+        {
+          "w": "qu’on",
+          "f": 821
+        },
+        {
+          "w": "analyse",
+          "f": 828
+        },
+        {
+          "w": "ton",
+          "f": 838
+        },
+        {
+          "w": "potentiel",
+          "f": 842
+        },
+        {
+          "w": "de",
+          "f": 854
+        },
+        {
+          "w": "croissance,",
+          "f": 857
+        },
+        {
+          "w": "indique",
+          "f": 871
+        },
+        {
+          "w": "en",
+          "f": 883
+        },
+        {
+          "w": "commentaire",
+          "f": 886
+        },
+        {
+          "w": "ton",
+          "f": 895
+        },
+        {
+          "w": "âge,",
+          "f": 900
+        },
+        {
+          "w": "ta",
+          "f": 910
+        },
+        {
+          "w": "taille",
+          "f": 914
+        },
+        {
+          "w": "actuelle",
+          "f": 922
+        },
+        {
+          "w": "et",
+          "f": 931
+        },
+        {
+          "w": "la",
+          "f": 934
+        },
+        {
+          "w": "taille",
+          "f": 936
+        },
+        {
+          "w": "de",
+          "f": 941
+        },
+        {
+          "w": "tes",
+          "f": 943
+        },
+        {
+          "w": "parents.",
+          "f": 948
+        }
+      ]
+    }
+  ]
+}

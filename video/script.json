@@ -1,0 +1,16 @@
+{
+  "voice": "ff_siwis",
+  "speed": 1.1,
+  "lines": [
+    {"id": "hook",      "pause": 0.25, "text": "Deux erreurs qui freinent ta croissance en hauteur."},
+    {"id": "cartilage", "pause": 0.45, "text": "Et tant que tes cartilages de croissance ne sont pas fermés, tu peux encore agir."},
+    {"id": "n1",        "pause": 0.2,  "text": "Numéro un : mal dormir."},
+    {"id": "gh",        "pause": 0.25, "text": "Ton hormone de croissance est libérée surtout pendant le sommeil profond."},
+    {"id": "nuit",      "pause": 0.45, "text": "Coucher à deux heures du matin, téléphone dans le lit, six heures de nuit : tu en perds une partie."},
+    {"id": "n2",        "pause": 0.25, "text": "Numéro deux : vouloir impressionner ton crush à la salle."},
+    {"id": "sport",     "pause": 0.15, "text": "Le sport, c'est top pour ta croissance."},
+    {"id": "kine",      "pause": 0.45, "text": "Mais un soulevé de terre à cent kilos, sans technique et sans coach, c'est surtout un aller simple chez le kiné."},
+    {"id": "cta",       "pause": 0.15, "text": "Télécharge Grandimi."},
+    {"id": "plan",      "pause": 1.6,  "text": "Il estime ta taille adulte, et te donne un plan sommeil, nutrition et sport adapté à ton âge."}
+  ]
+}
