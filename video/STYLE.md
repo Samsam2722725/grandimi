@@ -37,6 +37,9 @@ n'est **pas** dans la vidéo : elle est ajoutée sur TikTok au moment de publier
 
 ## Son
 
+**Préférence de l'utilisateur (17/10) : whooshs moins forts et moins fréquents.** Un whoosh seulement
+aux changements de plan (pas à chaque zoom, flèche ou secousse), volume ≤ 0,25.
+
 Voix au premier plan ; musique à 8 % ; whoosh à chaque whip et mouvement de caméra (22 %),
 pop sur les apparitions, tic par lettre tapée, slam sur le chiffre et le verdict, ding/pop sur les flèches.
 Mix final normalisé à −14 LUFS. Viser **30-31 s** au total, comme l'original : voix rapide,
