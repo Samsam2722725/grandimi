@@ -11,3 +11,24 @@
 | 7 | Claude | Audit : planche côte à côte original / épisode sur chaque moment clé, durée, chiffres affichés, voix complète et bien prononcée | Planche + liste d'écarts |
 | 8 | Utilisateur | Regarde vidéo + planche, envoie ses remarques avec timecode ou numéro d'image | — |
 | 9 | Claude | Corrige ; toute correction de style est reportée dans `STYLE.md` | Version finale |
+
+## Recopier une vidéo à l'identique (méthode obligatoire, validée le 17/10)
+
+Les vidéos originales sont dans `references/<id>/original.mp4` (à ajouter à chaque nouvel épisode).
+
+1. **Inventaire image par image** de l'original (30 i/s, toutes les images, pas d'échantillonnage) :
+   pour chaque élément (mot, illustration, carte, icône) : image d'apparition et de disparition,
+   position, taille, rotation, flou, image par image. Outils : `scripts/analyse_reference.py`
+   (suivi des écrans), suivi d'objets OpenCV, OCR pour les mots.
+2. **Courbes recopiées, pas des règles générales** : chaque élément français reprend la courbe
+   mesurée de l'élément anglais correspondant.
+3. **Calage segment par segment** : chaque écran français est associé à sa phrase anglaise ; les
+   mouvements sont étirés ou resserrés dans le segment pour suivre la voix.
+4. **Contrôle chiffré avant livraison** : comparaison automatique original / épisode, liste des écarts
+   au-delà d'un seuil (moment ±2 images, position ±3 % de l'écran, taille ±5 %). On corrige jusqu'à ce
+   que la liste soit vide, puis seulement on livre (vidéo + comparaison côte à côte).
+5. **Sons** : l'utilisateur fournit la liste des sons entendus avec leur timecode (impossible à mesurer
+   sous la voix et la musique).
+
+Limites connues : pas de copie au pixel près (les mots français n'ont pas la même longueur) ;
+bruitages exacts impossibles sans la liste de l'utilisateur.

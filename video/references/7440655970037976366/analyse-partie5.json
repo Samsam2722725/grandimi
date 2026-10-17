@@ -1,0 +1,537 @@
+{
+ "source": "vidéo de référence (snaptik_7440655970037976366_v3.mp4), 30,72 s",
+ "note": "Transcription Parakeet ; 'not hooked' = 'not cooked', 'Jonathan' = erreur de la voix ou de la transcription.",
+ "coupes_s": [
+  2.03,
+  2.27,
+  2.5,
+  2.77,
+  2.93,
+  3.2,
+  11.67,
+  13.63,
+  15.47,
+  24.27,
+  24.53,
+  24.57,
+  26.17
+ ],
+ "plans_s": {
+  "accroche": [
+   0,
+   2.03
+  ],
+  "partie": [
+   2.03,
+   3.2
+  ],
+  "ecran-taille": [
+   3.2,
+   11.67
+  ],
+  "routine": [
+   11.67,
+   13.63
+  ],
+  "chiffre": [
+   13.63,
+   15.47
+  ],
+  "ecran-stats": [
+   15.47,
+   24.27
+  ],
+  "verdict": [
+   24.27,
+   26.17
+  ],
+  "appel": [
+   26.17,
+   30.72
+  ]
+ },
+ "mots": [
+  {
+   "w": "Predicting",
+   "t": 0.16
+  },
+  {
+   "w": "height",
+   "t": 0.48
+  },
+  {
+   "w": "potential",
+   "t": 0.72
+  },
+  {
+   "w": "from",
+   "t": 1.12
+  },
+  {
+   "w": "our",
+   "t": 1.28
+  },
+  {
+   "w": "comments",
+   "t": 1.44
+  },
+  {
+   "w": "part",
+   "t": 1.84
+  },
+  {
+   "w": "five.",
+   "t": 2.16
+  },
+  {
+   "w": "Today",
+   "t": 2.48
+  },
+  {
+   "w": "we're",
+   "t": 2.72
+  },
+  {
+   "w": "checking",
+   "t": 2.96
+  },
+  {
+   "w": "out",
+   "t": 3.2
+  },
+  {
+   "w": "Dan's",
+   "t": 3.36
+  },
+  {
+   "w": "stats.",
+   "t": 3.84
+  },
+  {
+   "w": "At",
+   "t": 4.32
+  },
+  {
+   "w": "15",
+   "t": 4.48
+  },
+  {
+   "w": "years",
+   "t": 4.8
+  },
+  {
+   "w": "old",
+   "t": 4.96
+  },
+  {
+   "w": "and",
+   "t": 5.2
+  },
+  {
+   "w": "currently",
+   "t": 5.36
+  },
+  {
+   "w": "5'8,",
+   "t": 5.76
+  },
+  {
+   "w": "Dan",
+   "t": 6.4
+  },
+  {
+   "w": "is",
+   "t": 6.64
+  },
+  {
+   "w": "above",
+   "t": 6.8
+  },
+  {
+   "w": "the",
+   "t": 7.04
+  },
+  {
+   "w": "average.",
+   "t": 7.12
+  },
+  {
+   "w": "According",
+   "t": 7.6
+  },
+  {
+   "w": "to",
+   "t": 7.84
+  },
+  {
+   "w": "taller",
+   "t": 8.0
+  },
+  {
+   "w": "apps,",
+   "t": 8.4
+  },
+  {
+   "w": "projected",
+   "t": 8.96
+  },
+  {
+   "w": "height",
+   "t": 9.36
+  },
+  {
+   "w": "is",
+   "t": 9.68
+  },
+  {
+   "w": "511.3.",
+   "t": 9.84
+  },
+  {
+   "w": "And",
+   "t": 11.28
+  },
+  {
+   "w": "with",
+   "t": 11.44
+  },
+  {
+   "w": "the",
+   "t": 11.6
+  },
+  {
+   "w": "right",
+   "t": 11.68
+  },
+  {
+   "w": "habits,",
+   "t": 11.84
+  },
+  {
+   "w": "Jonathan",
+   "t": 12.32
+  },
+  {
+   "w": "could",
+   "t": 12.8
+  },
+  {
+   "w": "push",
+   "t": 12.96
+  },
+  {
+   "w": "that",
+   "t": 13.2
+  },
+  {
+   "w": "to",
+   "t": 13.36
+  },
+  {
+   "w": "almost",
+   "t": 13.44
+  },
+  {
+   "w": "6'1",
+   "t": 13.76
+  },
+  {
+   "w": "with",
+   "t": 14.4
+  },
+  {
+   "w": "an",
+   "t": 14.56
+  },
+  {
+   "w": "extra",
+   "t": 14.72
+  },
+  {
+   "w": "1.6",
+   "t": 15.04
+  },
+  {
+   "w": "inches",
+   "t": 15.84
+  },
+  {
+   "w": "of",
+   "t": 16.16
+  },
+  {
+   "w": "growth",
+   "t": 16.32
+  },
+  {
+   "w": "optimization.",
+   "t": 16.8
+  },
+  {
+   "w": "Right",
+   "t": 17.52
+  },
+  {
+   "w": "now,",
+   "t": 17.76
+  },
+  {
+   "w": "Dan",
+   "t": 18.0
+  },
+  {
+   "w": "is",
+   "t": 18.32
+  },
+  {
+   "w": "already",
+   "t": 18.48
+  },
+  {
+   "w": "taller",
+   "t": 18.8
+  },
+  {
+   "w": "than",
+   "t": 19.2
+  },
+  {
+   "w": "67.1%",
+   "t": 19.44
+  },
+  {
+   "w": "of",
+   "t": 20.72
+  },
+  {
+   "w": "people",
+   "t": 20.88
+  },
+  {
+   "w": "his",
+   "t": 21.12
+  },
+  {
+   "w": "age,",
+   "t": 21.28
+  },
+  {
+   "w": "and",
+   "t": 21.6
+  },
+  {
+   "w": "he's",
+   "t": 21.68
+  },
+  {
+   "w": "completed",
+   "t": 21.92
+  },
+  {
+   "w": "95.4%",
+   "t": 22.4
+  },
+  {
+   "w": "of",
+   "t": 23.68
+  },
+  {
+   "w": "his",
+   "t": 23.76
+  },
+  {
+   "w": "growth.",
+   "t": 23.92
+  },
+  {
+   "w": "You",
+   "t": 24.4
+  },
+  {
+   "w": "are",
+   "t": 24.56
+  },
+  {
+   "w": "definitely",
+   "t": 24.72
+  },
+  {
+   "w": "not",
+   "t": 25.2
+  },
+  {
+   "w": "hooked.",
+   "t": 25.6
+  },
+  {
+   "w": "If",
+   "t": 26.08
+  },
+  {
+   "w": "anyone",
+   "t": 26.24
+  },
+  {
+   "w": "else",
+   "t": 26.56
+  },
+  {
+   "w": "wants",
+   "t": 26.72
+  },
+  {
+   "w": "their",
+   "t": 26.88
+  },
+  {
+   "w": "height",
+   "t": 27.04
+  },
+  {
+   "w": "potential",
+   "t": 27.36
+  },
+  {
+   "w": "analyzed,",
+   "t": 27.84
+  },
+  {
+   "w": "comment",
+   "t": 28.4
+  },
+  {
+   "w": "your",
+   "t": 28.8
+  },
+  {
+   "w": "age,",
+   "t": 28.96
+  },
+  {
+   "w": "current",
+   "t": 29.36
+  },
+  {
+   "w": "height,",
+   "t": 29.6
+  },
+  {
+   "w": "and",
+   "t": 29.84
+  },
+  {
+   "w": "parents'",
+   "t": 30.0
+  },
+  {
+   "w": "height.",
+   "t": 30.4
+  }
+ ],
+ "camera": {
+  "note": "Mesuré avec scripts/analyse_reference.py (écran de référence 576×1024). Report sur l'écran Grandimi : x' = (x-173)×2,339+317, y' par morceaux, z' = 0,87×z.",
+  "evenements": [
+   {
+    "t": [
+     3.0,
+     3.1
+    ],
+    "quoi": "flash jaune papier → écran"
+   },
+   {
+    "t": [
+     4.8,
+     5.4
+    ],
+    "quoi": "ballon « 15th » sur l'écran entier",
+    "mot": "15"
+   },
+   {
+    "t": [
+     5.8,
+     6.3
+    ],
+    "quoi": "zoom taille actuelle",
+    "centre": [
+     216,
+     265
+    ],
+    "zoom": 1.63,
+    "mot": "5'8"
+   },
+   {
+    "t": [
+     7.9,
+     8.7
+    ],
+    "quoi": "retour écran entier",
+    "mot": "taller apps"
+   },
+   {
+    "t": [
+     10.0,
+     10.5
+    ],
+    "quoi": "zoom taille prédite",
+    "centre": [
+     384,
+     370
+    ],
+    "zoom": 1.92,
+    "mot": "5'11.3"
+   },
+   {
+    "t": [
+     11.67,
+     13.63
+    ],
+    "quoi": "écran routine entier, fixe",
+    "mot": "habits"
+   },
+   {
+    "t": [
+     13.63,
+     15.47
+    ],
+    "quoi": "écorché + chiffre",
+    "mot": "6'1"
+   },
+   {
+    "t": [
+     16.0,
+     16.9
+    ],
+    "quoi": "flèche jaune taille actuelle → prédite",
+    "mot": "inches"
+   },
+   {
+    "t": [
+     19.7,
+     21.3
+    ],
+    "quoi": "flèche rouge verticale sous « Taller than »",
+    "mot": "67.1%"
+   },
+   {
+    "t": [
+     22.4,
+     23.1
+    ],
+    "quoi": "zoom bas (stats)",
+    "centre": [
+     364,
+     611
+    ],
+    "zoom": 1.81,
+    "mot": "95.4%"
+   },
+   {
+    "t": [
+     24.27,
+     24.57
+    ],
+    "quoi": "flash jaune → verdict"
+   }
+  ]
+ }
+}
