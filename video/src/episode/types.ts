@@ -20,7 +20,7 @@ type Base = {a: Ancre; son?: string; volume?: number};
 export type Element =
 	| (Base & {type: 'image'; fichier: string; x: number; y: number; w: number; h: number; fin?: Ancre; effet?: 'pop' | 'pop-balance' | 'revele-bas'; rebond?: boolean; ecran?: boolean})
 	| (Base & {type: 'trait'; d: string; tete?: string; couleur?: string; epaisseur?: number; duree?: number; fin?: Ancre})
-	| (Base & {type: 'texte'; texte: string; y: number; taille: number; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance'; fin?: Ancre})
+	| (Base & {type: 'texte'; texte: string; y: number; taille: number; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance'; fin?: Ancre; lueur?: string})
 	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number});
 
 export type Plan = {
@@ -48,6 +48,8 @@ export type Episode = {
 	partie: number;
 	/** false : pas de légère poussée de caméra entre les mouvements (défaut : true). */
 	deriveCamera?: boolean;
+	/** false : pas de whoosh automatique sur les mouvements de caméra et les secousses (préférence 17/10). */
+	sonsMouvements?: boolean;
 	voice: string;
 	speed: number;
 	lines: {id: string; pause: number; text: string}[];

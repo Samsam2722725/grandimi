@@ -191,7 +191,11 @@ const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; fin?
 					fontSize: el.taille,
 					fontWeight: el.poids ?? 800,
 					WebkitTextStroke: `${el.contour ?? 6}px ${el.contourCouleur ?? '#000'}`,
-					textShadow: el.contourCouleur ? '0 8px 14px rgba(0,0,0,0.55)' : P5.caption.textShadow,
+					textShadow: el.lueur
+						? `0 0 18px ${el.lueur}, 0 0 36px ${el.lueur}`
+						: el.contourCouleur
+							? '0 8px 14px rgba(0,0,0,0.55)'
+							: P5.caption.textShadow,
 				};
 	return (
 		<div style={{position: 'absolute', left: 0, right: 0, top: el.y, textAlign: 'center', ...style, transform: `scale(${s}) rotate(${rot}deg)`}}>
@@ -232,9 +236,9 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 		...(plan.sons ?? []).map((s) => ({at: loc(s.a), son: s.son, volume: s.volume ?? 0.5})),
 		// Chaque mouvement de caméra (sauf le premier) a son petit whoosh, sauf si son: null.
 		...(plan.camera ?? []).slice(1).flatMap((c, i) =>
-			c.son === null ? [] : [{at: cams[i + 1].f, son: c.son ?? 'whoosh', volume: c.volume ?? 0.22}],
+			c.son === null || (ep.sonsMouvements === false && !c.son) ? [] : [{at: cams[i + 1].f, son: c.son ?? 'whoosh', volume: c.volume ?? 0.22}],
 		),
-		...(plan.effets ?? []).map((e) => ({at: loc(e.a), son: 'whoosh', volume: 0.3})),
+		...(ep.sonsMouvements === false ? [] : (plan.effets ?? []).map((e) => ({at: loc(e.a), son: 'whoosh', volume: 0.3}))),
 		...(plan.elements ?? []).flatMap((el) => {
 			if (!el.son) return [];
 			if (el.type === 'tape') {

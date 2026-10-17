@@ -92,7 +92,7 @@ for i, t in enumerate(ticks):
     d.text((168, y), str(t), font=f, fill=(170, 170, 170), anchor="rm")
 for x in X:
     d.line([(x, Y0 - 4 * 5 * PX), (x, Y0)], fill=(255, 255, 255, 14), width=2)
-ages = [cfg["age"] + i for i in range(7)]
+ages = cfg.get("ages") or [cfg["age"] + i for i in range(7)]
 for x, a in zip(X, ages):
     d.text((x, 540 + 578), str(a), font=ImageFont.truetype(REG, 30), fill=(190, 190, 190), anchor="mm")
 pts = [(x, Y0 - (v - lo) * PX) for x, v in zip(X, cfg["courbe"])]
@@ -122,5 +122,5 @@ d.rounded_rectangle([px - tw / 2 - 22, py - 128, px + tw / 2 + 22, py - 64], rad
 d.polygon([(px - 12, py - 65), (px + 12, py - 65), (px, py - 50)], fill=(255, 106, 43))
 d.text((px, py - 96), tag, font=tf, fill=(20, 12, 8), anchor="mm")
 img = np.asarray(pil.convert("RGB")).copy()
-replace((215, 540 + 105, 640, 540 + 148), "Projection jusqu'à 21 ans", f"Projection jusqu'à {ages[-1]} ans", font=REG, thresh=50)
+replace((215, 540 + 105, 640, 540 + 148), "Projection jusqu'à 21 ans", f"Projection jusqu'à {int(float(str(ages[-1]).replace(',', '.')))} ans", font=REG, thresh=50)
 Image.fromarray(img).save(dst, optimize=True)

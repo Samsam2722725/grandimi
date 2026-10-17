@@ -1,6 +1,6 @@
 """Fabrique un chiffre « ballon » gonflé (style du ballon 15), PNG transparent.
 
-Usage : python scripts/ballon.py 14 SORTIE.png [HAUTEUR=569]
+Usage : python scripts/ballon.py 14 SORTIE.png [HAUTEUR=569] [dore]
 Le relief vient de la distance au bord du glyphe ; l'éclairage ajoute ombrage et reflets.
 """
 import sys
@@ -10,7 +10,8 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 text, out = sys.argv[1], sys.argv[2]
-H = int(sys.argv[3]) if len(sys.argv) > 3 else 569
+H = int(sys.argv[3]) if len(sys.argv) > 3 and sys.argv[3].isdigit() else 569
+DORE = "dore" in sys.argv  # ballon doré (référence 7442915100442332458) au lieu d'orange → rose
 S = 2  # suréchantillonnage
 font = ImageFont.truetype("/usr/share/fonts/opentype/inter/Inter-SemiBold.otf", int(H * 1.02 * S))
 bb = font.getbbox(text)
@@ -39,6 +40,8 @@ xs = np.linspace(0, 1, w)[None, :] * np.ones((h, 1))
 ys = np.linspace(0, 1, h)[:, None] * np.ones((1, w))
 t = np.clip(1.15 * xs - 0.1 + 0.15 * (1 - ys), 0, 1)[..., None]
 c1, c2, c3 = np.array([245, 140, 45]), np.array([238, 112, 160]), np.array([185, 140, 225])
+if DORE:
+    c1, c2, c3 = np.array([150, 95, 20]), np.array([225, 165, 45]), np.array([250, 215, 120])
 base = np.where(t < 0.55, c1 + (c2 - c1) * (t / 0.55), c2 + (c3 - c2) * ((t - 0.55) / 0.45))
 # Aspect métallisé : bandes de reflet de l'environnement selon l'orientation de la surface.
 k = n[..., 0] * 0.7 + n[..., 1] * 0.7

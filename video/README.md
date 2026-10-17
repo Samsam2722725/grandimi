@@ -5,6 +5,7 @@
 | « 2 erreurs qui freinent ta croissance » | `Croissance` | `rendu/grandimi-croissance.mp4` (37 s) |
 | « Prédiction à partir de nos commentaires », partie 5 | `Episode` (`{"episode":"partie-5"}`) | `rendu/grandimi-partie5.mp4` (39 s) |
 | « Prédiction à partir de nos commentaires », partie 6 | `Episode` (`{"episode":"partie-6"}`) | `rendu/grandimi-partie6.mp4` (33 s) |
+| « Prédiction à partir de nos commentaires », partie 7 | `Episode` (`{"episode":"partie-7"}`) | `rendu/grandimi-partie7.mp4` (32 s) |
 
 Format 1080×1920, 30 i/s, son normalisé à −14 LUFS.
 
@@ -35,7 +36,8 @@ python scripts/comparer.py partie-6 REF.mp4 out/comparaison.jpg   # planche réf
 Voix enregistrée (au lieu de la synthèse) : un seul fichier `voice/voix.wav`, puis
 `python scripts/voix_fichier.py partie-6 DOSSIER_PARAKEET` (transcription + alignement sur le texte).
 Capture Grandimi avec d'autres chiffres : `python scripts/modifier_capture.py SOURCE.png SORTIE.png capture.json`.
-Ballon de l'âge : `python scripts/ballon.py 14 SORTIE.png`.
+Ballon de l'âge : `python scripts/ballon.py 14 SORTIE.png [dore]`. Émojis et flèche 3D : `python scripts/emoji.py DOSSIER main=👆 fleche_doree=dore`.
+Un nouvel épisode reprend `episode.json` mais pas les images : copier papiers, routine, anatomie et topo depuis l'épisode précédent.
 
 ```bash
 ```
