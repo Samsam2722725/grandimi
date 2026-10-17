@@ -13,7 +13,7 @@ const COULEURS: Record<string, string> = {violet: '#5b16d6', rouge: '#e3262f', v
 const FONT = "'Poppins', 'Inter', sans-serif";
 
 type Mot = {w: string; style: string | null; f: number};
-type Ligne = {t: string; y: number; taille: number; x?: number; align?: 'left' | 'center'; mots: Mot[]; monte?: {a: number; y: number}};
+type Ligne = {t: string; y: number; taille: number; x?: number; align?: 'left' | 'center'; mots: Mot[]; monte?: {a: number; y: number}; chute?: boolean};
 type Image = {f: string; a: number; fin?: number; cx: number; top: number; w: number; anim: 'monte' | 'pop' | 'aucune'; vers?: {a: number; top: number}};
 type Ecran = {debut: number; fin: number; lignes: Ligne[]; images?: Image[]; icone?: {a: number; cx: number; cy: number; taille: number}};
 const T = tl as unknown as {ecrans: Ecran[]; totalFrames: number};
@@ -38,7 +38,7 @@ const usePoppins = () => {
 const entree = (f: number, at: number) => spring({frame: f - at, fps: FPS, config: {damping: 14, stiffness: 220, mass: 0.5}});
 
 const LigneView: React.FC<{l: Ligne; f: number}> = ({l, f}) => {
-	const y = l.monte ? interpolate(f, [l.monte.a, l.monte.a + 8], [l.y, l.monte.y], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)}) : l.y;
+	const y = l.monte ? interpolate(f, [l.monte.a, l.monte.a + 10], [l.y, l.monte.y], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)}) : l.y;
 	const left = l.align === 'left';
 	return (
 		<div
@@ -60,18 +60,25 @@ const LigneView: React.FC<{l: Ligne; f: number}> = ({l, f}) => {
 				whiteSpace: 'nowrap',
 			}}
 		>
-			{l.mots.map((m, i) => {
-				const s = entree(f, m.f);
+			{l.mots.map((mot, i) => {
+				// Le titre tombe d'un bloc (tous ses mots en même temps), comme dans l'original.
+				const m = l.chute ? {...mot, f: l.mots[0].f} : mot;
 				const vis = f >= m.f;
+				// Le titre tombe d'en haut avec un rebond ; les autres mots glissent depuis le bas.
+				const t = l.chute
+					? spring({frame: f - m.f, fps: FPS, config: {damping: 10, stiffness: 260, mass: 0.5}})
+					: interpolate(f, [m.f, m.f + 4], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+				const dy = (l.chute ? -1.4 : 0.55) * l.taille * (1 - t);
+				const flou = Math.abs(1 - t) * (l.chute ? 10 : 7);
 				return (
 					<span
 						key={i}
 						style={{
 							display: 'inline-block',
 							color: m.style ? COULEURS[m.style] : '#111',
-							opacity: vis ? Math.min(1, s * 1.6) : 0,
-							transform: `translateY(${(1 - s) * 22}px) scale(${0.7 + 0.3 * s})`,
-							filter: vis && s < 0.6 ? `blur(${(0.6 - s) * 8}px)` : undefined,
+							opacity: vis ? Math.min(1, 0.25 + t) : 0,
+							transform: `translateY(${dy}px)`,
+							filter: vis && flou > 0.4 ? `blur(${flou}px)` : undefined,
 							textShadow: '0 4px 10px rgba(0,0,0,0.18)',
 						}}
 					>
@@ -90,7 +97,8 @@ const ImageView: React.FC<{im: Image; f: number}> = ({im, f}) => {
 	let scale = 1;
 	let opacity = 1;
 	if (im.anim === 'monte') {
-		top = interpolate(f, [im.a, im.a + 12], [1950, im.top], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+		const k = spring({frame: f - im.a, fps: FPS, config: {damping: 13, stiffness: 300, mass: 0.6}});
+		top = im.top + (1 - k) * 900;
 	} else if (im.anim === 'pop') {
 		scale = 0.6 + 0.4 * s;
 		opacity = Math.min(1, s * 1.8);
@@ -107,11 +115,10 @@ const ImageView: React.FC<{im: Image; f: number}> = ({im, f}) => {
 /** Icône Grandimi : tombe en tournant puis rebondit (comme l'icône de l'app dans l'original). */
 const Icone: React.FC<{ic: NonNullable<Ecran['icone']>; f: number}> = ({ic, f}) => {
 	if (f < ic.a) return null;
-	const t = interpolate(f, [ic.a, ic.a + 12], [0, 1], {extrapolateRight: 'clamp', easing: Easing.in(Easing.quad)});
-	const bounce = spring({frame: f - ic.a - 12, fps: FPS, config: {damping: 8, stiffness: 180, mass: 0.6}});
-	const y = interpolate(t, [0, 1], [-300, ic.cy]);
-	const rot = interpolate(t, [0, 1], [-200, 0]);
-	const sc = f < ic.a + 12 ? 0.55 + 0.45 * t : 0.92 + 0.08 * bounce;
+	const g = spring({frame: f - ic.a, fps: FPS, config: {damping: 13, stiffness: 55, mass: 0.8}});
+	const y = ic.cy;
+	const rot = -35 * (1 - g);
+	const sc = Math.max(0.02, g);
 	const z = ic.taille;
 	return (
 		<div
@@ -130,7 +137,8 @@ const Icone: React.FC<{ic: NonNullable<Ecran['icone']>; f: number}> = ({ic, f}) 
 				justifyContent: 'center',
 			}}
 		>
-			<svg width={z * 0.5} height={z * 0.62} viewBox="0 0 50 62">
+			<div style={{position: 'absolute', inset: '18%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 70%)'}} />
+			<svg width={z * 0.5} height={z * 0.62} viewBox="0 0 50 62" style={{position: 'relative'}}>
 				<circle cx="25" cy="8" r="7" fill="#fff" />
 				<path d="M14 19 h22 a4 4 0 0 1 4 4 v14 a3 3 0 0 1 -6 0 v-9 h-1 v30 a4 4 0 0 1 -8 0 v-17 h-0 v17 a4 4 0 0 1 -8 0 v-30 h-1 v9 a3 3 0 0 1 -6 0 v-14 a4 4 0 0 1 4 -4 z" fill="#fff" />
 				<path d="M44 40 L44 6 M40 10 L44 5 L48 10" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" fill="none" opacity="0.85" />
@@ -139,11 +147,12 @@ const Icone: React.FC<{ic: NonNullable<Ecran['icone']>; f: number}> = ({ic, f}) 
 	);
 };
 
+const SORTIE = 6; // images de chevauchement entre deux écrans
 const EcranView: React.FC<{e: Ecran}> = ({e}) => {
 	const f = useCurrentFrame() + e.debut; // frames absolues
-	const sortie = interpolate(f, [e.fin - 4, e.fin], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	const t = interpolate(f, [e.fin, e.fin + SORTIE], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.in(Easing.quad)});
 	return (
-		<AbsoluteFill style={{opacity: sortie, transform: `scale(${0.97 + 0.03 * sortie})`}}>
+		<AbsoluteFill style={{opacity: 1 - t, filter: t > 0.05 ? `blur(${t * 8}px)` : undefined}}>
 			{(e.images ?? []).map((im, i) => (
 				<ImageView key={i} im={im} f={f} />
 			))}
@@ -178,7 +187,7 @@ export const DeuxRaisons: React.FC<{musique?: boolean; voix?: boolean; bruitages
 					)
 				: null}
 			{T.ecrans.map((e, i) => (
-				<Sequence key={i} from={e.debut} durationInFrames={Math.max(1, e.fin - e.debut)}>
+				<Sequence key={i} from={e.debut} durationInFrames={Math.max(1, e.fin - e.debut + SORTIE)}>
 					<EcranView e={e} />
 				</Sequence>
 			))}

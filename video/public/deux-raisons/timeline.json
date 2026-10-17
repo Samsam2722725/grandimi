@@ -5,13 +5,14 @@
    "lignes": [
     {
      "t": "*2 raisons*",
-     "y": 330,
+     "y": 960,
      "taille": 100,
      "fixe": true,
      "monte": {
-      "a": 19,
-      "y": 115
+      "a": 10,
+      "y": 310
      },
+     "chute": true,
      "mots": [
       {
        "w": "2",
@@ -27,7 +28,7 @@
     },
     {
      "t": "qui expliquent pourquoi tu ne grandis !plus.!",
-     "y": 200,
+     "y": 420,
      "taille": 42,
      "mots": [
       {
@@ -431,7 +432,7 @@
      "cx": 540,
      "top": 585,
      "w": 862,
-     "anim": "pop"
+     "anim": "monte"
     }
    ],
    "debut": 290,
@@ -586,7 +587,7 @@
      "cx": 540,
      "top": 585,
      "w": 862,
-     "anim": "pop"
+     "anim": "monte"
     }
    ],
    "debut": 424,
@@ -1260,7 +1261,7 @@
      "cx": 540,
      "top": 585,
      "w": 862,
-     "anim": "pop"
+     "anim": "monte"
     }
    ],
    "debut": 1087,
@@ -1288,7 +1289,7 @@
    "lignes": [
     {
      "t": "Va simplement sur",
-     "y": 640,
+     "y": 560,
      "taille": 60,
      "mots": [
       {
@@ -1310,7 +1311,7 @@
     },
     {
      "t": "grandimi.com",
-     "y": 1260,
+     "y": 1300,
      "taille": 62,
      "mots": [
       {
@@ -1322,7 +1323,7 @@
     },
     {
      "t": "et suis son programme d'exercice",
-     "y": 1340,
+     "y": 1390,
      "taille": 52,
      "mots": [
       {
@@ -1357,7 +1358,7 @@
     "a": 1215,
     "cx": 540,
     "cy": 960,
-    "taille": 300
+    "taille": 480
    },
    "debut": 1212,
    "fin": 1310
