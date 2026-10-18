@@ -6,6 +6,7 @@
 | « Prédiction à partir de nos commentaires », partie 5 | `Episode` (`{"episode":"partie-5"}`) | `rendu/grandimi-partie5.mp4` (39 s) |
 | « Prédiction à partir de nos commentaires », partie 6 | `Episode` (`{"episode":"partie-6"}`) | `rendu/grandimi-partie6.mp4` (33 s) |
 | « Prédiction à partir de nos commentaires », partie 7 | `Episode` (`{"episode":"partie-7"}`) | `rendu/grandimi-partie7.mp4` (32 s) |
+| « Prédiction à partir de nos commentaires », partie 8 | `Episode` (`{"episode":"partie-8"}`) | `rendu/grandimi-partie8.mp4` (34 s) |
 
 | « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
 
@@ -51,7 +52,9 @@ python scripts/comparer.py partie-6 REF.mp4 out/comparaison.jpg   # planche réf
 Voix enregistrée (au lieu de la synthèse) : un seul fichier `voice/voix.wav`, puis
 `python scripts/voix_fichier.py partie-6 DOSSIER_PARAKEET` (transcription + alignement sur le texte).
 Capture Grandimi avec d'autres chiffres : `python scripts/modifier_capture.py SOURCE.png SORTIE.png capture.json`.
-Ballon de l'âge : `python scripts/ballon.py 14 SORTIE.png [dore]`. Émojis et flèche 3D : `python scripts/emoji.py DOSSIER main=👆 fleche_doree=dore`.
+Ballon de l'âge : `python scripts/ballon.py 14 SORTIE.png [dore|argent]`. Émojis et flèche 3D : `python scripts/emoji.py DOSSIER main=👆 fleche_doree=dore`.
+Plan filmé recopié de l'original (ex. figurine alien) : `sequence` dans le plan (une image par frame, la dernière reste).
+Entrée inclinée qui se redresse : `"transition": "bascule"`. Élément qui glisse en entrant : `depuis` ; qui alterne deux images : `alterne`.
 Un nouvel épisode reprend `episode.json` mais pas les images : copier papiers, routine, anatomie et topo depuis l'épisode précédent.
 
 ```bash

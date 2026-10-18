@@ -69,22 +69,25 @@ const kf = (f: number, frames: number[], values: number[]) =>
  *   glisse   : entrée par la droite après la lumière jaune (décalage −84 → +25 → 0)
  *   rebond   : dézoom de transition (×1,135 → ×0,914 → ×1,019 → ×0,967 → ×1), léger décalage
  *   secousse : tremblement gauche-droite sur le nom de l'app (−90 → +24 → −6 → 0, ×0,92 → ×1)
+ *   bascule  : entrée inclinée qui se redresse (−24° → +3° → 0°, ×1,4 → ×0,95 → ×1), référence 7444371749753408810
  */
-const MOUVEMENTS = {
+const MOUVEMENTS: Record<string, {f: number[]; x: number[]; s: number[]; r?: number[]; flou: number}> = {
 	glisse: {f: [0, 3, 6, 9], x: [-84, 25, -1, 0], s: [0.975, 0.986, 1, 1], flou: 12},
 	rebond: {f: [0, 3, 6, 9, 12], x: [59, 16, -8, 1, 0], s: [1.135, 0.914, 1.019, 0.967, 1], flou: 14},
 	secousse: {f: [0, 3, 6, 9, 12], x: [-90, 24, -6, 1, 0], s: [0.92, 0.979, 0.995, 0.998, 1], flou: 10},
+	bascule: {f: [0, 1, 2, 3, 4, 5, 7, 9], x: [0, 0, 0, 0, 0, 0, 0, 0], s: [1.4, 1.15, 1.04, 0.98, 0.95, 0.97, 1, 1], r: [-24, -14, -6, -1, 3, 2, 0.5, 0], flou: 14},
 };
 
-const Mouvement: React.FC<{type: keyof typeof MOUVEMENTS; at: number; children: React.ReactNode}> = ({type, at, children}) => {
+const Mouvement: React.FC<{type: string; at: number; children: React.ReactNode}> = ({type, at, children}) => {
 	const f = useCurrentFrame() - at;
 	const m = MOUVEMENTS[type];
 	const active = f >= 0 && f <= m.f[m.f.length - 1];
 	const x = active ? kf(f, m.f, m.x) : 0;
 	const sc = active ? kf(f, m.f, m.s) : 1;
+	const r = active && m.r ? kf(f, m.f, m.r) : 0;
 	const blur = active ? interpolate(f, [0, 6], [m.flou, 0], {extrapolateRight: 'clamp'}) : 0;
 	return (
-		<AbsoluteFill style={{transform: `translateX(${x}px) scale(${sc})`, filter: blur > 0.3 ? `blur(${blur}px)` : undefined}}>
+		<AbsoluteFill style={{transform: `translateX(${x}px) scale(${sc})${r ? ` rotate(${r}deg)` : ''}`, filter: blur > 0.3 ? `blur(${blur}px)` : undefined}}>
 			{children}
 		</AbsoluteFill>
 	);
@@ -132,12 +135,21 @@ const Trait: React.FC<{el: Extract<Element, {type: 'trait'}>; at: number; fin?: 
 	);
 };
 
-const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?: number; src: string}> = ({el, at, fin, src}) => {
+const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?: number; src: string; src2?: string}> = ({el, at, fin, src, src2}) => {
 	const f = useCurrentFrame();
 	if (f < at) return null;
 	let transform: string | undefined;
 	let clipPath: string | undefined;
-	if (el.effet === 'revele-bas') {
+	let opacity: number | undefined;
+	if (el.depuis) {
+		const d = el.depuis.d ?? 8;
+		const t = ease(f, at, d);
+		const out = fin !== undefined ? 1 - ease(f, fin, 5) : 1;
+		if (out <= 0.01) return null;
+		const bob = el.rebond && f > at + d ? -Math.abs(Math.sin((f - at - d) / 4)) * 16 : 0;
+		transform = `translate(${(1 - t) * (el.depuis.x ?? 0)}px, ${(1 - t) * (el.depuis.y ?? 0) + bob}px)`;
+		opacity = Math.min(1, t * 1.6) * out;
+	} else if (el.effet === 'revele-bas') {
 		clipPath = `inset(${(1 - ease(f, at, 8)) * 100}% 0 0 0)`;
 		// Rebond vertical une fois la flèche apparue, comme un sticker animé.
 		if (el.rebond && f > at + 8) transform = `translateY(${-Math.abs(Math.sin((f - at - 8) / 4)) * 22}px)`;
@@ -149,8 +161,8 @@ const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?
 	}
 	return (
 		<Img
-			src={src}
-			style={{position: 'absolute', left: el.x, top: el.y, width: el.w, height: el.h, transform, clipPath}}
+			src={src2 && Math.floor((f - at) / (el.periode ?? 4)) % 2 === 1 ? src2 : src}
+			style={{position: 'absolute', left: el.x, top: el.y, width: el.w, height: el.h, transform, clipPath, opacity}}
 		/>
 	);
 };
@@ -209,6 +221,13 @@ const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; fin?
 const PhotoPapier: React.FC<{files: string[]; saccade?: number}> = ({files, saccade = 7}) => {
 	const f = useCurrentFrame();
 	const src = files[Math.floor(Math.max(0, f) / saccade) % files.length];
+	return <Img src={src} style={{position: 'absolute', inset: 0, width: 1080, height: 1920, objectFit: 'cover'}} />;
+};
+
+/** Suite d'images plein écran, une par frame ; la dernière reste affichée. */
+const Sequence_: React.FC<{files: string[]}> = ({files}) => {
+	const f = useCurrentFrame();
+	const src = files[Math.min(files.length - 1, Math.max(0, f))];
 	return <Img src={src} style={{position: 'absolute', inset: 0, width: 1080, height: 1920, objectFit: 'cover'}} />;
 };
 
@@ -474,6 +493,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			{plan.famille ? <FamillePlan fam={plan.famille} aOpt={loc(plan.famille.futur.aOptimisee)} aGain={loc(plan.famille.futur.aGain)} /> : null}
 			{plan.fond === 'papier' && plan.papiers?.length ? <PhotoPapier files={plan.papiers.map(file)} /> : null}
 			{plan.fond === 'papier' && !plan.papiers?.length ? <Paper /> : null}
+			{plan.sequence?.length ? <Sequence_ files={plan.sequence.map(file)} /> : null}
 			{img ? (
 				<Shot
 					src={`episodes/${id}/images/${img.fichier}`}
@@ -502,6 +522,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 	if (plan.transition === 'whip') return <Whip>{out}</Whip>;
 	if (plan.transition === 'glisse' || plan.transition === 'lumiere') return <Mouvement type="glisse" at={0}>{out}</Mouvement>;
 	if (plan.transition === 'rebond') return <Mouvement type="rebond" at={0}>{out}</Mouvement>;
+	if (plan.transition === 'bascule') return <Mouvement type="bascule" at={0}>{out}</Mouvement>;
 	return out;
 };
 

@@ -18,7 +18,11 @@ export type Camera = {a?: Ancre; zone?: string; x?: number; y?: number; z?: numb
 
 type Base = {a: Ancre; son?: string; volume?: number};
 export type Element =
-	| (Base & {type: 'image'; fichier: string; x: number; y: number; w: number; h: number; fin?: Ancre; effet?: 'pop' | 'pop-balance' | 'revele-bas'; rebond?: boolean; ecran?: boolean})
+	| (Base & {type: 'image'; fichier: string; x: number; y: number; w: number; h: number; fin?: Ancre; effet?: 'pop' | 'pop-balance' | 'revele-bas'; rebond?: boolean; ecran?: boolean;
+		/** Entrée glissée : part de (x, y) pixels de décalage et rejoint sa place en d frames, en fondu. */
+		depuis?: {x?: number; y?: number; d?: number};
+		/** Deuxième image qui alterne avec la première toutes les `periode` frames (flèche dorée / bleue). */
+		alterne?: string; periode?: number})
 	| (Base & {type: 'trait'; d: string; tete?: string; couleur?: string; epaisseur?: number; duree?: number; fin?: Ancre})
 	| (Base & {type: 'texte'; texte: string; y: number; taille: number; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance'; fin?: Ancre; lueur?: string})
 	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number})
@@ -37,8 +41,9 @@ export type Famille = {
 export type Plan = {
 	nom: string;
 	debut: Ancre;
-	/** Entrée du plan. glisse / rebond / secousse : mouvements mesurés sur la référence 7436214342510513439. */
-	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere';
+	/** Entrée du plan. glisse / rebond / secousse : mouvements mesurés sur la référence 7436214342510513439 ;
+	    bascule : entrée inclinée qui se redresse (référence 7444371749753408810). */
+	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule';
 	/** Sortie du plan : lumiere = lumière jaune qui envahit l'image sur les dernières frames. */
 	sortie?: 'lumiere';
 	/** Effets ponctuels sur tout le plan (secousse gauche-droite). */
@@ -50,6 +55,8 @@ export type Plan = {
 	/** Photos de papier qui alternent (sinon papier généré). */
 	papiers?: string[];
 	image?: string;
+	/** Suite d'images plein écran (une par frame, la dernière reste affichée), à la place de `image`. */
+	sequence?: string[];
 	fondCouleur?: string;
 	camera?: Camera[];
 	elements?: Element[];

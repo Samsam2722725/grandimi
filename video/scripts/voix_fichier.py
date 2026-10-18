@@ -13,6 +13,7 @@ import sys
 import unicodedata
 from pathlib import Path
 
+import numpy as np
 import sherpa_onnx
 import soundfile as sf
 
@@ -30,21 +31,33 @@ duration = len(audio) / sr
 rec = sherpa_onnx.OfflineRecognizer.from_transducer(
     encoder=str(MODEL / "encoder.int8.onnx"), decoder=str(MODEL / "decoder.int8.onnx"),
     joiner=str(MODEL / "joiner.int8.onnx"), tokens=str(MODEL / "tokens.txt"), model_type="nemo_transducer")
-stream = rec.create_stream()
-stream.accept_waveform(sr, audio)
-rec.decode_stream(stream)
-res = stream.result
+# Transcription par morceaux de ~9 s coupés dans les silences : en un seul bloc, Parakeet saute des phrases.
+hop = int(0.02 * sr)
+energy = np.array([np.sqrt(np.mean(audio[i:i + hop] ** 2)) for i in range(0, len(audio), hop)])
+cuts, start = [0], 0
+while start + 9 * sr < len(audio):
+    lo, hi = (start + 7 * sr) // hop, min(len(energy), (start + 10 * sr) // hop)
+    start = (lo + int(np.argmin(energy[lo:hi]))) * hop
+    cuts.append(start)
+cuts.append(len(audio))
 
-heard, cur, t0 = [], "", None
-for tok, ts in zip(res.tokens, res.timestamps):
-    if tok.startswith(" ") and cur:
-        heard.append((cur, t0))
-        cur, t0 = "", None
-    if t0 is None:
-        t0 = ts
-    cur += tok.strip() if not cur else tok
-if cur:
-    heard.append((cur, t0))
+heard, texts = [], []
+for s, e in zip(cuts, cuts[1:]):
+    stream = rec.create_stream()
+    stream.accept_waveform(sr, audio[s:e])
+    rec.decode_stream(stream)
+    res = stream.result
+    texts.append(res.text)
+    cur, t0 = "", None
+    for tok, ts in zip(res.tokens, res.timestamps):
+        if tok.startswith(" ") and cur:
+            heard.append((cur, s / sr + t0))
+            cur, t0 = "", None
+        if t0 is None:
+            t0 = ts
+        cur += tok.strip() if not cur else tok
+    if cur:
+        heard.append((cur, s / sr + t0))
 
 
 def norm(w):
@@ -89,4 +102,4 @@ for i, l in enumerate(ep["lines"]):
 tl = {"fps": FPS, "totalFrames": round(duration * FPS) + 2, "audio": "voice/voix.wav", "lines": lines}
 (EP / "timeline.json").write_text(json.dumps(tl, ensure_ascii=False, indent=2))
 print(f"{len(script)} mots, {missing} non entendus (interpolés), {duration:.2f} s")
-print("Entendu :", res.text)
+print("Entendu :", " ".join(texts))

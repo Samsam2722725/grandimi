@@ -1,0 +1,519 @@
+{
+  "fps": 30,
+  "totalFrames": 1023,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Jusqu’à quelle taille peux-tu grandir?",
+      "from": 0,
+      "duration": 47,
+      "words": [
+        {
+          "w": "Jusqu’à",
+          "f": 0
+        },
+        {
+          "w": "quelle",
+          "f": 12
+        },
+        {
+          "w": "taille",
+          "f": 17
+        },
+        {
+          "w": "peux-tu",
+          "f": 26
+        },
+        {
+          "w": "grandir?",
+          "f": 36
+        }
+      ]
+    },
+    {
+      "id": "partie",
+      "text": "Partie 8.",
+      "from": 48,
+      "duration": 18,
+      "words": [
+        {
+          "w": "Partie",
+          "f": 48
+        },
+        {
+          "w": "8.",
+          "f": 58
+        }
+      ]
+    },
+    {
+      "id": "dan",
+      "text": "Aujourd’hui, on vérifie les statistiques de Luca.",
+      "from": 67,
+      "duration": 64,
+      "words": [
+        {
+          "w": "Aujourd’hui,",
+          "f": 67
+        },
+        {
+          "w": "on",
+          "f": 82
+        },
+        {
+          "w": "vérifie",
+          "f": 86
+        },
+        {
+          "w": "les",
+          "f": 98
+        },
+        {
+          "w": "statistiques",
+          "f": 101
+        },
+        {
+          "w": "de",
+          "f": 113
+        },
+        {
+          "w": "Luca.",
+          "f": 115
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 13 ans, Luca mesure actuellement 1m85, ce qui est au-dessus de la moyenne.",
+      "from": 132,
+      "duration": 121,
+      "words": [
+        {
+          "w": "À",
+          "f": 132
+        },
+        {
+          "w": "13",
+          "f": 137
+        },
+        {
+          "w": "ans,",
+          "f": 142
+        },
+        {
+          "w": "Luca",
+          "f": 149
+        },
+        {
+          "w": "mesure",
+          "f": 163
+        },
+        {
+          "w": "actuellement",
+          "f": 173
+        },
+        {
+          "w": "1m85,",
+          "f": 182
+        },
+        {
+          "w": "ce",
+          "f": 218
+        },
+        {
+          "w": "qui",
+          "f": 221
+        },
+        {
+          "w": "est",
+          "f": 226
+        },
+        {
+          "w": "au-dessus",
+          "f": 228
+        },
+        {
+          "w": "de",
+          "f": 238
+        },
+        {
+          "w": "la",
+          "f": 240
+        },
+        {
+          "w": "moyenne.",
+          "f": 242
+        }
+      ]
+    },
+    {
+      "id": "grandimi",
+      "text": "Selon Grandimi.com, sa taille adulte estimée est de 2m03.",
+      "from": 254,
+      "duration": 104,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 254
+        },
+        {
+          "w": "Grandimi.com,",
+          "f": 261
+        },
+        {
+          "w": "sa",
+          "f": 292
+        },
+        {
+          "w": "taille",
+          "f": 297
+        },
+        {
+          "w": "adulte",
+          "f": 304
+        },
+        {
+          "w": "estimée",
+          "f": 316
+        },
+        {
+          "w": "est",
+          "f": 328
+        },
+        {
+          "w": "de",
+          "f": 333
+        },
+        {
+          "w": "2m03.",
+          "f": 335
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Luca pourrait atteindre presque 2m13,",
+      "from": 359,
+      "duration": 108,
+      "words": [
+        {
+          "w": "Et",
+          "f": 359
+        },
+        {
+          "w": "avec",
+          "f": 364
+        },
+        {
+          "w": "les",
+          "f": 369
+        },
+        {
+          "w": "bonnes",
+          "f": 371
+        },
+        {
+          "w": "habitudes,",
+          "f": 379
+        },
+        {
+          "w": "Luca",
+          "f": 393
+        },
+        {
+          "w": "pourrait",
+          "f": 407
+        },
+        {
+          "w": "atteindre",
+          "f": 415
+        },
+        {
+          "w": "presque",
+          "f": 429
+        },
+        {
+          "w": "2m13,",
+          "f": 436
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "soit 5 cm supplémentaires grâce à l’optimisation de sa croissance.",
+      "from": 468,
+      "duration": 112,
+      "words": [
+        {
+          "w": "soit",
+          "f": 468
+        },
+        {
+          "w": "5",
+          "f": 481
+        },
+        {
+          "w": "cm",
+          "f": 488
+        },
+        {
+          "w": "supplémentaires",
+          "f": 505
+        },
+        {
+          "w": "grâce",
+          "f": 526
+        },
+        {
+          "w": "à",
+          "f": 533
+        },
+        {
+          "w": "l’optimisation",
+          "f": 536
+        },
+        {
+          "w": "de",
+          "f": 557
+        },
+        {
+          "w": "sa",
+          "f": 560
+        },
+        {
+          "w": "croissance.",
+          "f": 565
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Luca est déjà plus grand que 99,6% des jeunes de son âge,",
+      "from": 581,
+      "duration": 127,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 581
+        },
+        {
+          "w": "Luca",
+          "f": 596
+        },
+        {
+          "w": "est",
+          "f": 613
+        },
+        {
+          "w": "déjà",
+          "f": 615
+        },
+        {
+          "w": "plus",
+          "f": 622
+        },
+        {
+          "w": "grand",
+          "f": 625
+        },
+        {
+          "w": "que",
+          "f": 632
+        },
+        {
+          "w": "99,6%",
+          "f": 639
+        },
+        {
+          "w": "des",
+          "f": 682
+        },
+        {
+          "w": "jeunes",
+          "f": 687
+        },
+        {
+          "w": "de",
+          "f": 694
+        },
+        {
+          "w": "son",
+          "f": 697
+        },
+        {
+          "w": "âge,",
+          "f": 701
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a terminé 91,3% de sa croissance.",
+      "from": 709,
+      "duration": 93,
+      "words": [
+        {
+          "w": "et",
+          "f": 709
+        },
+        {
+          "w": "il",
+          "f": 713
+        },
+        {
+          "w": "a",
+          "f": 718
+        },
+        {
+          "w": "terminé",
+          "f": 721
+        },
+        {
+          "w": "91,3%",
+          "f": 740
+        },
+        {
+          "w": "de",
+          "f": 781
+        },
+        {
+          "w": "sa",
+          "f": 784
+        },
+        {
+          "w": "croissance.",
+          "f": 788
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T’es clairement pas foutu!",
+      "from": 803,
+      "duration": 42,
+      "words": [
+        {
+          "w": "T’es",
+          "f": 803
+        },
+        {
+          "w": "clairement",
+          "f": 812
+        },
+        {
+          "w": "pas",
+          "f": 822
+        },
+        {
+          "w": "foutu!",
+          "f": 827
+        }
+      ]
+    },
+    {
+      "id": "geant",
+      "text": "Tu vas devenir un véritable géant!",
+      "from": 846,
+      "duration": 52,
+      "words": [
+        {
+          "w": "Tu",
+          "f": 846
+        },
+        {
+          "w": "vas",
+          "f": 848
+        },
+        {
+          "w": "devenir",
+          "f": 853
+        },
+        {
+          "w": "un",
+          "f": 865
+        },
+        {
+          "w": "véritable",
+          "f": 868
+        },
+        {
+          "w": "géant!",
+          "f": 884
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si toi aussi tu veux qu’on analyse ton potentiel de croissance, commente TAILLE sous cette vidéo.",
+      "from": 899,
+      "duration": 123,
+      "words": [
+        {
+          "w": "Si",
+          "f": 899
+        },
+        {
+          "w": "toi",
+          "f": 904
+        },
+        {
+          "w": "aussi",
+          "f": 908
+        },
+        {
+          "w": "tu",
+          "f": 915
+        },
+        {
+          "w": "veux",
+          "f": 918
+        },
+        {
+          "w": "qu’on",
+          "f": 922
+        },
+        {
+          "w": "analyse",
+          "f": 928
+        },
+        {
+          "w": "ton",
+          "f": 940
+        },
+        {
+          "w": "potentiel",
+          "f": 944
+        },
+        {
+          "w": "de",
+          "f": 956
+        },
+        {
+          "w": "croissance,",
+          "f": 959
+        },
+        {
+          "w": "commente",
+          "f": 975
+        },
+        {
+          "w": "TAILLE",
+          "f": 989
+        },
+        {
+          "w": "sous",
+          "f": 1001
+        },
+        {
+          "w": "cette",
+          "f": 1006
+        },
+        {
+          "w": "vidéo.",
+          "f": 1011
+        }
+      ]
+    }
+  ]
+}

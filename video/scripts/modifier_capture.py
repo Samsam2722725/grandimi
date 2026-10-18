@@ -121,6 +121,26 @@ tw = tf.getbbox(tag)[2]
 d.rounded_rectangle([px - tw / 2 - 22, py - 128, px + tw / 2 + 22, py - 64], radius=14, fill=(255, 106, 43))
 d.polygon([(px - 12, py - 65), (px + 12, py - 65), (px, py - 50)], fill=(255, 106, 43))
 d.text((px, py - 96), tag, font=tf, fill=(20, 12, 8), anchor="mm")
+
+# Jauges des cartes du bas (chances, croissance) : remplies au pourcentage affiché.
+def jauge(x0, x1, texte):
+    pct = float(str(texte).replace("%", "").replace(",", ".")) / 100
+    y0, y1 = 1658, 1694
+    d.rectangle([x0 - 4, y0 - 5, x1 + 4, y1 + 5], fill=tuple(int(c) for c in img[y0 - 12, x0 + 20]))  # efface l'ancienne jauge
+    d.rounded_rectangle([x0, y0, x1, y1], radius=18, fill=(28, 28, 28))
+    xf = x0 + max(y1 - y0, pct * (x1 - x0))
+    g = np.zeros((y1 - y0 + 1, int(xf - x0) + 1, 4), np.uint8)
+    t = np.linspace(0, 1, g.shape[1])[None, :, None]
+    g[..., :3] = (np.array([234, 102, 43]) + (np.array([239, 145, 59]) - np.array([234, 102, 43])) * t).astype(np.uint8)
+    m = Image.new("L", (g.shape[1], g.shape[0]), 0)
+    ImageDraw.Draw(m).rounded_rectangle([0, 0, g.shape[1] - 1, g.shape[0] - 1], radius=18, fill=255)
+    g[..., 3] = np.asarray(m)
+    pil.alpha_composite(Image.fromarray(g, "RGBA"), (x0, y0))
+
+
+if cfg.get("chances"):
+    jauge(118, 527, cfg["chances"])
+jauge(653, 1062, cfg["croissance"])
 img = np.asarray(pil.convert("RGB")).copy()
 replace((215, 540 + 105, 640, 540 + 148), "Projection jusqu'à 21 ans", f"Projection jusqu'à {int(float(str(ages[-1]).replace(',', '.')))} ans", font=REG, thresh=50)
 Image.fromarray(img).save(dst, optimize=True)

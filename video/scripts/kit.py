@@ -116,7 +116,10 @@ for l in tl["lines"]:
 (OUT / "sous-titres" / "sous-titres-mot-a-mot.srt").write_text("\n".join(mots), encoding="utf-8")
 (OUT / "sous-titres" / "texte-voix-off.txt").write_text("\n".join(l["text"] for l in tl["lines"]) + "\n", encoding="utf-8")
 for f in (SRC / "images").iterdir():
-    shutil.copy(f, OUT / "images" / f.name)
+    if f.is_dir():  # suite d'images (ex. alien/) : copiée telle quelle
+        shutil.copytree(f, OUT / "images" / f.name, dirs_exist_ok=True)
+    else:
+        shutil.copy(f, OUT / "images" / f.name)
 
 (OUT / "LISEZ-MOI.txt").write_text(f"""KIT DE MONTAGE — partie {ep['partie']}
 Format 1080×1920 (9:16), {FPS} images/s, durée {dur:.1f} s.
