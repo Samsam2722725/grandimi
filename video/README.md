@@ -8,6 +8,7 @@
 | « Prédiction à partir de nos commentaires », partie 7 | `Episode` (`{"episode":"partie-7"}`) | `rendu/grandimi-partie7.mp4` (32 s) |
 
 | « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
+| « Si tu dors sur le dos… » (dessin animé + sous-titres karaoké) | `Dormir` | `rendu/grandimi-dormir.mp4` (21 s) |
 
 Format 1080×1920, 30 i/s, son normalisé à −14 LUFS.
 
@@ -22,6 +23,17 @@ Une vidéo = un dossier `public/textes/<id>/` :
 python scripts/extraire_illustrations.py REF.mp4 public/textes/<id>/illustrations.json public/textes/<id>/images
 python scripts/texte_anime.py <id>      # → timeline.json (tailles ×1,3 plafonnées à la largeur de l'écran)
 npx remotion render TexteAnime out/<id>.mp4 --props='{"video":"<id>"}'
+```
+
+## Dessin animé + sous-titres karaoké (« Si tu dors sur le dos… »)
+
+Tout est dessiné en vectoriel (`src/dessin/dessin.tsx` : bonhomme, toise, cadenas, vertèbres ; `src/dessin/Dormir.tsx` : les 10 plans).
+Données dans `public/dessins/dormir/` : `voice/voix.wav`, `mots.json` (transcription datée), `dessin.json` (groupes de sous-titres).
+Chaque plan et chaque coupe s'accroche à un mot de la voix (`A('dormir') - 5`). Fiche : `references/7583024024171646230/fiche.md`.
+
+```bash
+npx remotion render Dormir out/dormir.mp4
+ffmpeg -i out/dormir.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=7 -c:a aac -b:a 192k rendu/grandimi-dormir.mp4
 ```
 
 ## Format « prédiction à partir de vos commentaires »

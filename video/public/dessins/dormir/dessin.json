@@ -1,0 +1,12 @@
+{
+ "note": "Calqué sur la référence 7583024024171646230. Sous-titres : un groupe = ce qui s'affiche d'un coup ; « mot@n » = un mot affiché pour n mots entendus (1m85 = « 1 mètre 85 »). Les plans s'accrochent aux mots dans src/dessin/Dormir.tsx.",
+ "groupes": [
+  "Si tu dors", "sur le dos,", "tu ne dépasseras", "jamais 1m70.",
+  "Je vais te", "filer la méthode", "ultime pour dormir", "et donc", "maximiser ta taille",
+  "pour atteindre", "au moins 1m85.@3",
+  "En effet, quand", "tu dors,", "ta colonne se déploie,",
+  "et si tu", "dors mal,", "elle reste bloquée", "et tu restes", "un nain.",
+  "Mais avant de", "te donner la", "méthode, dépose ta", "taille en commentaire.",
+  "La méthode se", "trouve sur Grandimi."
+ ]
+}

@@ -1,5 +1,6 @@
 import {Composition} from 'remotion';
 import {calculateTexteAnimeMetadata, TexteAnime, TexteAnimeProps} from './texte-anime/TexteAnime';
+import {calculateDormirMetadata, Dormir, DormirProps} from './dessin/Dormir';
 import {calculateEpisodeMetadata, Episode, EpisodeProps} from './episode/Episode';
 import {Video} from './Video';
 import timeline from './timeline.json';
@@ -33,6 +34,18 @@ export const Root: React.FC = () => (
 			component={TexteAnime}
 			calculateMetadata={calculateTexteAnimeMetadata}
 			defaultProps={{video: 'deux-raisons'} as TexteAnimeProps}
+			durationInFrames={1}
+			fps={30}
+			width={1080}
+			height={1920}
+		/>
+		{/* Dessin animé + sous-titres karaoké (« Si tu dors sur le dos… ») : public/dessins/dormir/.
+		    npx remotion render Dormir out/dormir.mp4 */}
+		<Composition
+			id="Dormir"
+			component={Dormir}
+			calculateMetadata={calculateDormirMetadata}
+			defaultProps={{} as DormirProps}
 			durationInFrames={1}
 			fps={30}
 			width={1080}
