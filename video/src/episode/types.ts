@@ -56,8 +56,8 @@ export type Plan = {
 	papiers?: string[];
 	image?: string;
 	/** Accroche dessinée « taille moyenne » : barre qui monte jusqu'à `cm`, puis carte de France à `carte`,
-	    silhouette en pointillés à `moyenne` (src/episode/HookTaille.tsx). */
-	hookTaille?: {cm: number; carte: Ancre; moyenne: Ancre};
+	    silhouette en pointillés à `moyenne`, la carte bat à `france`, « ? » à `question` (src/episode/HookTaille.tsx). */
+	hookTaille?: {cm: number; carte: Ancre; moyenne: Ancre; france?: Ancre; question?: Ancre};
 	/** Suite d'images plein écran (une par frame, la dernière reste affichée), à la place de `image`. */
 	sequence?: string[];
 	fondCouleur?: string;

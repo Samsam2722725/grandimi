@@ -114,7 +114,9 @@
       "hookTaille": {
         "cm": 178,
         "carte": "hook:c-2",
-        "moyenne": "hook:moyenne+3"
+        "moyenne": "hook:moyenne+3",
+        "france": "hook:france",
+        "question": "hook2:comment"
       },
       "sons": [
         {
@@ -123,14 +125,49 @@
           "volume": 0.2
         },
         {
-          "a": 10,
-          "son": "pop",
-          "volume": 0.3
+          "a": 5,
+          "son": "tick",
+          "volume": 0.12
+        },
+        {
+          "a": 8,
+          "son": "tick",
+          "volume": 0.12
+        },
+        {
+          "a": 11,
+          "son": "tick",
+          "volume": 0.12
+        },
+        {
+          "a": 14,
+          "son": "tick",
+          "volume": 0.12
+        },
+        {
+          "a": 16,
+          "son": "ding",
+          "volume": 0.22
         },
         {
           "a": "hook:c-2",
           "son": "whoosh",
           "volume": 0.2
+        },
+        {
+          "a": "hook:c+5",
+          "son": "pop",
+          "volume": 0.25
+        },
+        {
+          "a": "hook:moyenne+12",
+          "son": "pop",
+          "volume": 0.2
+        },
+        {
+          "a": "hook2:comment",
+          "son": "pop",
+          "volume": 0.22
         }
       ]
     },

@@ -495,7 +495,15 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			{plan.fond === 'papier' && plan.papiers?.length ? <PhotoPapier files={plan.papiers.map(file)} /> : null}
 			{plan.fond === 'papier' && !plan.papiers?.length ? <Paper /> : null}
 			{plan.sequence?.length ? <Sequence_ files={plan.sequence.map(file)} /> : null}
-			{plan.hookTaille ? <HookTaille cm={plan.hookTaille.cm} carte={loc(plan.hookTaille.carte)} moyenne={loc(plan.hookTaille.moyenne)} /> : null}
+			{plan.hookTaille ? (
+				<HookTaille
+					cm={plan.hookTaille.cm}
+					carte={loc(plan.hookTaille.carte)}
+					moyenne={loc(plan.hookTaille.moyenne)}
+					france={plan.hookTaille.france !== undefined ? loc(plan.hookTaille.france) : undefined}
+					question={plan.hookTaille.question !== undefined ? loc(plan.hookTaille.question) : undefined}
+				/>
+			) : null}
 			{img ? (
 				<Shot
 					src={`episodes/${id}/images/${img.fichier}`}
@@ -578,8 +586,9 @@ const Captions: React.FC<{windows: Fenetre[]}> = ({windows}) => {
 	if (win.condense) {
 		// Mot en cours de prononciation surligné (modèle de l'accroche a56d6d55).
 		const cur = c.times.reduce((k, t, i) => (f >= t ? i : k), 0);
+		const entree = 0.86 + 0.14 * pop(f, c.from, 12); // chaque groupe de mots arrive avec un petit rebond
 		return (
-			<div style={{position: 'absolute', left: 40, right: 40, top: win.y, textAlign: 'center'}}>
+			<div style={{position: 'absolute', left: 40, right: 40, top: win.y, textAlign: 'center', transform: `scale(${entree})`}}>
 				{c.words.map((word, i) => (
 					<span
 						key={i}
