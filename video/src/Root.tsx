@@ -1,6 +1,7 @@
 import {Composition} from 'remotion';
 import {calculateTexteAnimeMetadata, TexteAnime, TexteAnimeProps} from './texte-anime/TexteAnime';
 import {calculateDormirMetadata, Dormir, DormirProps} from './dessin/Dormir';
+import {calculateRoutineMetadata, Routine, RoutineProps} from './routine/Routine';
 import {calculateEpisodeMetadata, Episode, EpisodeProps} from './episode/Episode';
 import {Video} from './Video';
 import timeline from './timeline.json';
@@ -46,6 +47,18 @@ export const Root: React.FC = () => (
 			component={Dormir}
 			calculateMetadata={calculateDormirMetadata}
 			defaultProps={{} as DormirProps}
+			durationInFrames={1}
+			fps={30}
+			width={1080}
+			height={1920}
+		/>
+		{/* Routine en 3 étapes sans voix off : public/routines/<routine>/.
+		    npx remotion render Routine out/routine-1.mp4 --props='{"routine":"routine-1"}' */}
+		<Composition
+			id="Routine"
+			component={Routine}
+			calculateMetadata={calculateRoutineMetadata}
+			defaultProps={{routine: 'routine-1'} as RoutineProps}
 			durationInFrames={1}
 			fps={30}
 			width={1080}

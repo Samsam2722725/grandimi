@@ -9,6 +9,7 @@
 
 | « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
 | « Si tu dors sur le dos… » (dessin animé + sous-titres karaoké) | `Dormir` | `rendu/grandimi-dormir.mp4` (21 s) |
+| « Combo d'exercices pour grandir (Routine 1) », sans voix off | `Routine` (`{"routine":"routine-1"}`) | `rendu/grandimi-routine-1.mp4` (16 s) |
 
 Format 1080×1920, 30 i/s, son normalisé à −14 LUFS.
 
@@ -34,6 +35,17 @@ Chaque plan et chaque coupe s'accroche à un mot de la voix (`A('dormir') - 5`).
 ```bash
 npx remotion render Dormir out/dormir.mp4
 ffmpeg -i out/dormir.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=7 -c:a aac -b:a 192k rendu/grandimi-dormir.mp4
+```
+
+## Routine en 3 étapes sans voix off (« Combo d'exercices pour grandir »)
+
+Une routine = `public/routines/<id>/routine.json` (plans, textes, temps en images) + `images/` (capture Grandimi
+`rapport.png`, faite avec `modifier_capture.py` et `capture.json`). Les illustrations (saut, cobra, genoux,
+fente, salle de néons) sont dessinées dans `src/routine/Routine.tsx`. Format d'origine 3:4 : bande centrée, noir autour.
+Musique de la banque `sfx/music.wav` : à remplacer par un son tendance au moment de publier sur TikTok.
+
+```bash
+npx remotion render Routine out/routine-1.mp4 --props='{"routine":"routine-1"}'
 ```
 
 ## Format « prédiction à partir de vos commentaires »
