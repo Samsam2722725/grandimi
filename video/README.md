@@ -8,6 +8,7 @@
 | « Prédiction à partir de nos commentaires », partie 7 | `Episode` (`{"episode":"partie-7"}`) | `rendu/grandimi-partie7.mp4` (32 s) |
 | « Prédiction à partir de nos commentaires », partie 8 | `Episode` (`{"episode":"partie-8"}`) | `rendu/grandimi-partie8.mp4` (34 s) |
 | « Prédiction à partir de nos commentaires », partie 9 | `Episode` (`{"episode":"partie-9"}`) | `rendu/grandimi-partie9.mp4` (34 s) |
+| « Prédiction à partir de nos commentaires », partie 10 | `Episode` (`{"episode":"partie-10"}`) | `rendu/grandimi-partie10.mp4` (35 s) |
 
 | « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
 
@@ -57,6 +58,8 @@ Ballon de l'âge : `python scripts/ballon.py 14 SORTIE.png [dore|argent]`. Émoj
 Plan filmé recopié de l'original (ex. figurine alien) : `sequence` dans le plan (une image par frame, la dernière reste).
 Accroche dessinée « 1m78, c'est la taille moyenne en France » (bonhomme + barre, puis carte) : `"hookTaille": {"cm", "carte", "moyenne"}`
 dans le plan, sous-titres `"style": "condense"` (Barlow Condensed, mot prononcé surligné) ; carte : `scripts/carte_france.py` (Natural Earth, domaine public).
+Accroche « on prédit votre potentiel… à partir de vos commentaires » : `"hookCommentaires"` (barre jusqu'à la taille actuelle, potentiel « 1?? », bulles de commentaires).
+Fond topographique animé comme les références (lignes qui ondulent) : `"fond": "topo"` (+ `"topo": {"zoomDe", "d", "coup"}`). Fin qui reboucle sur l'accroche : `"sortie": "blanc"`.
 Entrée inclinée qui se redresse : `"transition": "bascule"`. Élément qui glisse en entrant : `depuis` ; qui alterne deux images : `alterne`.
 Un nouvel épisode reprend `episode.json` mais pas les images : copier papiers, routine, anatomie et topo depuis l'épisode précédent.
 

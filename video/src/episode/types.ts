@@ -22,7 +22,9 @@ export type Element =
 		/** Entrée glissée : part de (x, y) pixels de décalage et rejoint sa place en d frames, en fondu. */
 		depuis?: {x?: number; y?: number; d?: number};
 		/** Deuxième image qui alterne avec la première toutes les `periode` frames (flèche dorée / bleue). */
-		alterne?: string; periode?: number})
+		alterne?: string; periode?: number;
+		/** Grandit depuis le bas (échelle `de` → 1 en `d` frames), puis continue très lentement. */
+		grandit?: {de: number; d: number}})
 	| (Base & {type: 'trait'; d: string; tete?: string; couleur?: string; epaisseur?: number; duree?: number; fin?: Ancre})
 	| (Base & {type: 'texte'; texte: string; y: number; taille: number; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance'; fin?: Ancre; lueur?: string})
 	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number})
@@ -44,20 +46,26 @@ export type Plan = {
 	/** Entrée du plan. glisse / rebond / secousse : mouvements mesurés sur la référence 7436214342510513439 ;
 	    bascule : entrée inclinée qui se redresse (référence 7444371749753408810). */
 	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule';
-	/** Sortie du plan : lumiere = lumière jaune qui envahit l'image sur les dernières frames. */
-	sortie?: 'lumiere';
+	/** Sortie du plan : lumiere = lumière jaune qui envahit l'image sur les dernières frames ;
+	    blanc = fondu au blanc sur les 4 dernières frames (la fin s'enchaîne avec l'accroche dessinée quand la vidéo reboucle). */
+	sortie?: 'lumiere' | 'blanc';
 	/** Effets ponctuels sur tout le plan (secousse gauche-droite). */
 	effets?: {type: 'secousse'; a: Ancre}[];
 	famille?: Famille;
 	/** true : la caméra peut sortir de l'image (cadrer une carte au même endroit que la référence). */
 	libre?: boolean;
-	fond?: 'papier';
+	/** papier : photos de papier froissé ; topo : courbes de niveau animées (src/episode/TopoAnime.tsx). */
+	fond?: 'papier' | 'topo';
+	/** Fond topo : zoom de départ (la caméra arrive à 1 en `d` frames) et coup de zoom flou à `coup`. */
+	topo?: {zoomDe?: number; d?: number; coup?: Ancre};
 	/** Photos de papier qui alternent (sinon papier généré). */
 	papiers?: string[];
 	image?: string;
 	/** Accroche dessinée « taille moyenne » : barre qui monte jusqu'à `cm`, puis carte de France à `carte`,
 	    silhouette en pointillés à `moyenne`, la carte bat à `france`, « ? » à `question` (src/episode/HookTaille.tsx). */
 	hookTaille?: {cm: number; carte: Ancre; moyenne: Ancre; france?: Ancre; question?: Ancre};
+	/** Accroche dessinée « on prédit votre potentiel… à partir de vos commentaires » (src/episode/HookCommentaires.tsx). */
+	hookCommentaires?: {actuelle: number; cible: number; potentiel: Ancre; commentaires: Ancre; bulles: {nom: string; texte: string; couleur: string}[]};
 	/** Suite d'images plein écran (une par frame, la dernière reste affichée), à la place de `image`. */
 	sequence?: string[];
 	fondCouleur?: string;

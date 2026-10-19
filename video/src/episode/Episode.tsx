@@ -4,7 +4,9 @@ import {ease, pop} from '../anim';
 import {Sfx, SfxOn} from '../components/Sfx';
 import {makeTiming, Timeline} from '../timing';
 import {Paper, Typed} from './Paper';
+import {HookCommentaires} from './HookCommentaires';
 import {HookTaille} from './HookTaille';
+import {TopoAnime} from './TopoAnime';
 import {Cam, Shot} from './Shot';
 import {FONT} from '../theme';
 import {P5} from './style';
@@ -111,6 +113,12 @@ const Lumiere: React.FC<{from: number; to: number; entree?: boolean}> = ({from, 
 	);
 };
 
+/** Fondu au blanc (fin de vidéo qui reboucle sur l'accroche dessinée, fond blanc). */
+const FonduBlanc: React.FC<{from: number; to: number}> = ({from, to}) => {
+	const o = interpolate(useCurrentFrame(), [from, to], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	return o > 0 ? <AbsoluteFill style={{background: '#fff', opacity: o}} /> : null;
+};
+
 const Flash: React.FC<{color: string}> = ({color}) => {
 	const f = useCurrentFrame();
 	const o = interpolate(f, [0, 2, 9], [0, 0.95, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -142,7 +150,13 @@ const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?
 	let transform: string | undefined;
 	let clipPath: string | undefined;
 	let opacity: number | undefined;
-	if (el.depuis) {
+	if (el.grandit) {
+		const g = interpolate(f, [at, at + el.grandit.d], [el.grandit.de, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+		const out = fin !== undefined ? 1 - ease(f, fin, 5) : 1;
+		if (out <= 0.01) return null;
+		transform = `scale(${g * (1 + Math.max(0, f - at - el.grandit.d) * 0.0008)})`;
+		opacity = out;
+	} else if (el.depuis) {
 		const d = el.depuis.d ?? 8;
 		const t = ease(f, at, d);
 		const out = fin !== undefined ? 1 - ease(f, fin, 5) : 1;
@@ -163,7 +177,7 @@ const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?
 	return (
 		<Img
 			src={src2 && Math.floor((f - at) / (el.periode ?? 4)) % 2 === 1 ? src2 : src}
-			style={{position: 'absolute', left: el.x, top: el.y, width: el.w, height: el.h, transform, clipPath, opacity}}
+			style={{position: 'absolute', left: el.x, top: el.y, width: el.w, height: el.h, transform, clipPath, opacity, transformOrigin: el.grandit ? '50% 100%' : undefined}}
 		/>
 	);
 };
@@ -223,6 +237,15 @@ const PhotoPapier: React.FC<{files: string[]; saccade?: number}> = ({files, sacc
 	const f = useCurrentFrame();
 	const src = files[Math.floor(Math.max(0, f) / saccade) % files.length];
 	return <Img src={src} style={{position: 'absolute', inset: 0, width: 1080, height: 1920, objectFit: 'cover'}} />;
+};
+
+/** Coup de zoom flou (mesuré sur l'appel de la référence v12044 : flou radial pendant ~4 frames, zoom ×1,16). */
+const CoupFlou: React.FC<{at?: number; children: React.ReactNode}> = ({at, children}) => {
+	const f = useCurrentFrame();
+	if (at === undefined || f < at) return <>{children}</>;
+	const z = 1 + 0.16 * ease(f, at, 8);
+	const b = interpolate(f, [at, at + 2, at + 7], [0, 14, 0], {extrapolateRight: 'clamp'});
+	return <AbsoluteFill style={{transform: `scale(${z})`, filter: b > 0.3 ? `blur(${b}px)` : undefined}}>{children}</AbsoluteFill>;
 };
 
 /** Suite d'images plein écran, une par frame ; la dernière reste affichée. */
@@ -494,6 +517,20 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			{plan.famille ? <FamillePlan fam={plan.famille} aOpt={loc(plan.famille.futur.aOptimisee)} aGain={loc(plan.famille.futur.aGain)} /> : null}
 			{plan.fond === 'papier' && plan.papiers?.length ? <PhotoPapier files={plan.papiers.map(file)} /> : null}
 			{plan.fond === 'papier' && !plan.papiers?.length ? <Paper /> : null}
+			{plan.hookCommentaires ? (
+				<HookCommentaires
+					actuelle={plan.hookCommentaires.actuelle}
+					cible={plan.hookCommentaires.cible}
+					potentiel={loc(plan.hookCommentaires.potentiel)}
+					commentaires={loc(plan.hookCommentaires.commentaires)}
+					bulles={plan.hookCommentaires.bulles}
+				/>
+			) : null}
+			{plan.fond === 'topo' ? (
+				<CoupFlou at={plan.topo?.coup !== undefined ? loc(plan.topo.coup) : undefined}>
+					<TopoAnime zoomDe={plan.topo?.zoomDe} d={plan.topo?.d} />
+				</CoupFlou>
+			) : null}
 			{plan.sequence?.length ? <Sequence_ files={plan.sequence.map(file)} /> : null}
 			{plan.hookTaille ? (
 				<HookTaille
@@ -522,6 +559,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			{plan.transition === 'flash-blanc' ? <Flash color="#fff" /> : null}
 			{plan.transition === 'lumiere' ? <Lumiere from={0} to={6} entree /> : null}
 			{plan.sortie === 'lumiere' ? <Lumiere from={dur - 8} to={dur} /> : null}
+			{plan.sortie === 'blanc' ? <FonduBlanc from={dur - 4} to={dur - 1} /> : null}
 			{sons.map((s, i) => (
 				<Sfx key={i} at={s.at} name={s.son as never} volume={s.volume} />
 			))}

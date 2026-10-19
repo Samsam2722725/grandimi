@@ -1,0 +1,531 @@
+{
+  "fps": 30,
+  "totalFrames": 1062,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "On prédit votre potentiel de taille à partir de vos commentaires,",
+      "from": 0,
+      "duration": 88,
+      "words": [
+        {
+          "w": "On",
+          "f": 0
+        },
+        {
+          "w": "prédit",
+          "f": 5
+        },
+        {
+          "w": "votre",
+          "f": 17
+        },
+        {
+          "w": "potentiel",
+          "f": 24
+        },
+        {
+          "w": "de",
+          "f": 36
+        },
+        {
+          "w": "taille",
+          "f": 38
+        },
+        {
+          "w": "à",
+          "f": 50
+        },
+        {
+          "w": "partir",
+          "f": 53
+        },
+        {
+          "w": "de",
+          "f": 60
+        },
+        {
+          "w": "vos",
+          "f": 65
+        },
+        {
+          "w": "commentaires,",
+          "f": 72
+        }
+      ]
+    },
+    {
+      "id": "partie",
+      "text": "Partie 10.",
+      "from": 89,
+      "duration": 21,
+      "words": [
+        {
+          "w": "Partie",
+          "f": 89
+        },
+        {
+          "w": "10.",
+          "f": 98
+        }
+      ]
+    },
+    {
+      "id": "dan",
+      "text": "Aujourd’hui, on regarde les stats de Johnson.",
+      "from": 110,
+      "duration": 66,
+      "words": [
+        {
+          "w": "Aujourd’hui,",
+          "f": 110
+        },
+        {
+          "w": "on",
+          "f": 125
+        },
+        {
+          "w": "regarde",
+          "f": 130
+        },
+        {
+          "w": "les",
+          "f": 139
+        },
+        {
+          "w": "stats",
+          "f": 144
+        },
+        {
+          "w": "de",
+          "f": 154
+        },
+        {
+          "w": "Johnson.",
+          "f": 158
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 13 ans et avec une taille actuelle de 170 cm, Johnson est bien au-dessus de la moyenne.",
+      "from": 178,
+      "duration": 146,
+      "words": [
+        {
+          "w": "À",
+          "f": 178
+        },
+        {
+          "w": "13",
+          "f": 182
+        },
+        {
+          "w": "ans",
+          "f": 190
+        },
+        {
+          "w": "et",
+          "f": 197
+        },
+        {
+          "w": "avec",
+          "f": 199
+        },
+        {
+          "w": "une",
+          "f": 204
+        },
+        {
+          "w": "taille",
+          "f": 209
+        },
+        {
+          "w": "actuelle",
+          "f": 218
+        },
+        {
+          "w": "de",
+          "f": 228
+        },
+        {
+          "w": "170",
+          "f": 230
+        },
+        {
+          "w": "cm,",
+          "f": 252
+        },
+        {
+          "w": "Johnson",
+          "f": 269
+        },
+        {
+          "w": "est",
+          "f": 289
+        },
+        {
+          "w": "bien",
+          "f": 293
+        },
+        {
+          "w": "au-dessus",
+          "f": 298
+        },
+        {
+          "w": "de",
+          "f": 308
+        },
+        {
+          "w": "la",
+          "f": 310
+        },
+        {
+          "w": "moyenne.",
+          "f": 313
+        }
+      ]
+    },
+    {
+      "id": "grandimi",
+      "text": "Selon Grandimi, sa taille finale estimée est de 190 cm.",
+      "from": 325,
+      "duration": 117,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 325
+        },
+        {
+          "w": "Grandimi,",
+          "f": 334
+        },
+        {
+          "w": "sa",
+          "f": 358
+        },
+        {
+          "w": "taille",
+          "f": 363
+        },
+        {
+          "w": "finale",
+          "f": 370
+        },
+        {
+          "w": "estimée",
+          "f": 380
+        },
+        {
+          "w": "est",
+          "f": 394
+        },
+        {
+          "w": "de",
+          "f": 397
+        },
+        {
+          "w": "190",
+          "f": 401
+        },
+        {
+          "w": "cm.",
+          "f": 425
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Avec les bonnes habitudes, Johnson pourrait atteindre 195 cm,",
+      "from": 442,
+      "duration": 116,
+      "words": [
+        {
+          "w": "Avec",
+          "f": 442
+        },
+        {
+          "w": "les",
+          "f": 447
+        },
+        {
+          "w": "bonnes",
+          "f": 452
+        },
+        {
+          "w": "habitudes,",
+          "f": 459
+        },
+        {
+          "w": "Johnson",
+          "f": 473
+        },
+        {
+          "w": "pourrait",
+          "f": 490
+        },
+        {
+          "w": "atteindre",
+          "f": 500
+        },
+        {
+          "w": "195",
+          "f": 514
+        },
+        {
+          "w": "cm,",
+          "f": 541
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "soit 5 cm de croissance supplémentaires.",
+      "from": 559,
+      "duration": 71,
+      "words": [
+        {
+          "w": "soit",
+          "f": 559
+        },
+        {
+          "w": "5",
+          "f": 569
+        },
+        {
+          "w": "cm",
+          "f": 576
+        },
+        {
+          "w": "de",
+          "f": 593
+        },
+        {
+          "w": "croissance",
+          "f": 595
+        },
+        {
+          "w": "supplémentaires.",
+          "f": 610
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Johnson est déjà plus grand que 97,6% des personnes de son âge",
+      "from": 631,
+      "duration": 141,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 631
+        },
+        {
+          "w": "Johnson",
+          "f": 646
+        },
+        {
+          "w": "est",
+          "f": 665
+        },
+        {
+          "w": "déjà",
+          "f": 667
+        },
+        {
+          "w": "plus",
+          "f": 674
+        },
+        {
+          "w": "grand",
+          "f": 679
+        },
+        {
+          "w": "que",
+          "f": 686
+        },
+        {
+          "w": "97,6%",
+          "f": 691
+        },
+        {
+          "w": "des",
+          "f": 739
+        },
+        {
+          "w": "personnes",
+          "f": 744
+        },
+        {
+          "w": "de",
+          "f": 751
+        },
+        {
+          "w": "son",
+          "f": 756
+        },
+        {
+          "w": "âge",
+          "f": 761
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et a déjà atteint 89,5% de sa croissance.",
+      "from": 773,
+      "duration": 95,
+      "words": [
+        {
+          "w": "et",
+          "f": 773
+        },
+        {
+          "w": "a",
+          "f": 778
+        },
+        {
+          "w": "déjà",
+          "f": 782
+        },
+        {
+          "w": "atteint",
+          "f": 790
+        },
+        {
+          "w": "89,5%",
+          "f": 802
+        },
+        {
+          "w": "de",
+          "f": 845
+        },
+        {
+          "w": "sa",
+          "f": 847
+        },
+        {
+          "w": "croissance.",
+          "f": 852
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T’es clairement pas foutu.",
+      "from": 869,
+      "duration": 37,
+      "words": [
+        {
+          "w": "T’es",
+          "f": 869
+        },
+        {
+          "w": "clairement",
+          "f": 876
+        },
+        {
+          "w": "pas",
+          "f": 888
+        },
+        {
+          "w": "foutu.",
+          "f": 893
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si toi aussi tu veux faire analyser ton potentiel de taille, commente ton âge et ta taille actuelle sous cette vidéo.",
+      "from": 907,
+      "duration": 152,
+      "words": [
+        {
+          "w": "Si",
+          "f": 907
+        },
+        {
+          "w": "toi",
+          "f": 912
+        },
+        {
+          "w": "aussi",
+          "f": 917
+        },
+        {
+          "w": "tu",
+          "f": 926
+        },
+        {
+          "w": "veux",
+          "f": 929
+        },
+        {
+          "w": "faire",
+          "f": 934
+        },
+        {
+          "w": "analyser",
+          "f": 938
+        },
+        {
+          "w": "ton",
+          "f": 953
+        },
+        {
+          "w": "potentiel",
+          "f": 958
+        },
+        {
+          "w": "de",
+          "f": 967
+        },
+        {
+          "w": "taille,",
+          "f": 970
+        },
+        {
+          "w": "commente",
+          "f": 983
+        },
+        {
+          "w": "ton",
+          "f": 995
+        },
+        {
+          "w": "âge",
+          "f": 1000
+        },
+        {
+          "w": "et",
+          "f": 1006
+        },
+        {
+          "w": "ta",
+          "f": 1012
+        },
+        {
+          "w": "taille",
+          "f": 1016
+        },
+        {
+          "w": "actuelle",
+          "f": 1026
+        },
+        {
+          "w": "sous",
+          "f": 1038
+        },
+        {
+          "w": "cette",
+          "f": 1045
+        },
+        {
+          "w": "vidéo.",
+          "f": 1050
+        }
+      ]
+    }
+  ]
+}

@@ -14,29 +14,29 @@ import {FONT} from '../theme';
  * anticipation / dépassement / retour. Positions mesurées sur le modèle (1080×1920).
  */
 
-const BLEU = '#1593ee';
-const BLEU_CLAIR = '#5ab8ff';
-const ORANGE = '#ff7a00';
-const ENCRE = '#151515';
-const ROUGE = '#e8202a';
+export const BLEU = '#1593ee';
+export const BLEU_CLAIR = '#5ab8ff';
+export const ORANGE = '#ff7a00';
+export const ENCRE = '#151515';
+export const ROUGE = '#e8202a';
 const FPS = 30;
 
-const ressort = (f: number, at: number, damping = 13, stiffness = 170, mass = 0.7) =>
+export const ressort = (f: number, at: number, damping = 13, stiffness = 170, mass = 0.7) =>
 	f < at ? 0 : spring({frame: f - at, fps: FPS, config: {damping, stiffness, mass}});
 
 /** Bosse 0 → 1 → 0 sur `dur` frames à partir de `at` (coups, pulsations). */
-const bosse = (f: number, at: number, dur: number) => (f < at || f > at + dur ? 0 : Math.sin(((f - at) / dur) * Math.PI));
+export const bosse = (f: number, at: number, dur: number) => (f < at || f > at + dur ? 0 : Math.sin(((f - at) / dur) * Math.PI));
 
 /** Petite secousse amortie après `at`. */
-const secousse = (f: number, at: number, amp: number) => (f < at || f > at + 8 ? 0 : amp * Math.sin((f - at) * 2.6) * (1 - (f - at) / 8));
+export const secousse = (f: number, at: number, amp: number) => (f < at || f > at + 8 ? 0 : amp * Math.sin((f - at) * 2.6) * (1 - (f - at) / 8));
 
-const Fond: React.FC = () => (
+export const Fond: React.FC = () => (
 	<AbsoluteFill style={{background: 'radial-gradient(ellipse 75% 60% at 50% 48%, #ffffff 0%, #f7f7f7 45%, #c9c9c9 100%)'}} />
 );
 
 /** Bonhomme dessiné. `bras` : 0 = le long du corps, 1 = main sur la barre ; `regard` : 0 = devant, 1 = vers le haut ;
  *  `surpris` (0 → 1) : sourcils levés, bouche en « o ». */
-const Bonhomme: React.FC<{
+export const Bonhomme: React.FC<{
 	x: number;
 	sol: number;
 	h: number;
@@ -168,7 +168,7 @@ const Fantome: React.FC<{x: number; sol: number; h: number; f: number}> = ({x, s
 };
 
 /** Éclats qui partent d'un point (pose du chiffre). */
-const Eclats: React.FC<{cx: number; cy: number; f: number; at: number}> = ({cx, cy, f, at}) => {
+export const Eclats: React.FC<{cx: number; cy: number; f: number; at: number}> = ({cx, cy, f, at}) => {
 	const t = (f - at) / 14;
 	if (t < 0 || t > 1) return null;
 	const d = Easing.out(Easing.cubic)(t);
