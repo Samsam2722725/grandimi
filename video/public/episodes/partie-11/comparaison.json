@@ -1,0 +1,7 @@
+[["accroche", 0.6, "hook2:potentiel"], ["papier", 2.6, "partie+20"], ["lumière", 3.05, "dan+8"], ["ballon", 5.4, "age:13+16"],
+ ["zoom taille actuelle", 6.5, "age:178+12"], ["dézoom", 8.6, "age:moyenne+16"], ["zoom taille prédite", 11.6, "grandimi:195+25"],
+ ["routine entrée", 12.75, "habitudes:habitudes-7"], ["routine", 13.5, "habitudes:habitudes+15"], ["alien", 14.7, "habitudes:200+5"],
+ ["chiffre tapé", 15.8, "habitudes:200+22"], ["stats entrée", 16.4, "optim:soit+1"], ["flèche rouge", 18.3, "optim:croissance+15"],
+ ["main", 21.0, "pct:99+20"], ["zoom croissance", 23.5, "fini:atteint+20"], ["lumière jaune", 25.2, "foutu-2"],
+ ["verdict", 26.3, "foutu:pas+5"], ["ANALYZED", 28.7, "cta:potentiel+12"], ["émoji âge", 30.0, "cta:âge+3"],
+ ["règle", 31.3, "cta:actuelle+10"], ["sous cette vidéo", 31.6, "cta:cette+3"]]

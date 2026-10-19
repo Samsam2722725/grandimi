@@ -28,15 +28,19 @@ export const Paper: React.FC<{saccade?: number}> = ({saccade = 7}) => {
 };
 
 /** Texte tapé lettre par lettre, style sous-titres jaunes à contour noir. */
-export const Typed: React.FC<{text: string; at: number; perLetter?: number; y: number; size: number; color?: string; stroke?: number}> = ({
-	text,
-	at,
-	perLetter = 2,
-	y,
-	size,
-	color,
-	stroke,
-}) => {
+export const Typed: React.FC<{
+	text: string;
+	at: number;
+	perLetter?: number;
+	y: number;
+	size: number;
+	color?: string;
+	stroke?: number;
+	/** Curseur « | » qui clignote pendant la frappe (référence partie 11). */
+	curseur?: boolean;
+	/** Pastille derrière le texte (ex. violet #8100fe, texte blanc sans contour). */
+	fond?: string;
+}> = ({text, at, perLetter = 2, y, size, color, stroke, curseur, fond}) => {
 	const f = useCurrentFrame();
 	const n = Math.max(0, Math.min(text.length, Math.floor((f - at) / perLetter) + 1));
 	const s = 0.9 + 0.1 * pop(f, at);
@@ -53,10 +57,22 @@ export const Typed: React.FC<{text: string; at: number; perLetter?: number; y: n
 				fontSize: size,
 				color: color ?? P5.yellow,
 				WebkitTextStroke: `${stroke ?? size * 0.07}px #000`,
+				...(fond ? {textShadow: 'none'} : {}),
 			}}
 		>
-			{text.slice(0, n)}
-			<span style={{opacity: 0}}>{text.slice(n)}</span>
+			{fond ? (
+				<span style={{background: fond, borderRadius: size * 0.28, padding: `${size * 0.12}px ${size * 0.3}px ${size * 0.16}px`, display: 'inline-block'}}>
+					{text.slice(0, n)}
+					{curseur && n < text.length && Math.floor((f - at) / 4) % 2 === 0 ? <span style={{fontWeight: 300}}>|</span> : null}
+					<span style={{opacity: 0}}>{text.slice(n)}</span>
+				</span>
+			) : (
+				<>
+					{text.slice(0, n)}
+					{curseur && n < text.length && Math.floor((f - at) / 4) % 2 === 0 ? <span style={{fontWeight: 300}}>|</span> : null}
+					<span style={{opacity: 0}}>{text.slice(n)}</span>
+				</>
+			)}
 		</div>
 	);
 };

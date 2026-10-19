@@ -26,8 +26,8 @@ export type Element =
 		/** Grandit depuis le bas (échelle `de` → 1 en `d` frames), puis continue très lentement. */
 		grandit?: {de: number; d: number}})
 	| (Base & {type: 'trait'; d: string; tete?: string; couleur?: string; epaisseur?: number; duree?: number; fin?: Ancre})
-	| (Base & {type: 'texte'; texte: string; y: number; taille: number; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance'; fin?: Ancre; lueur?: string})
-	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number})
+	| (Base & {type: 'texte'; texte: string; y: number; taille: number; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance' | 'glitch' | 'fondu'; fin?: Ancre; lueur?: string})
+	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number; curseur?: boolean; fond?: string})
 	/** Compteur qui défile de `de` à `vers` et se pose sur `arrivee` (révélation avec suspense). */
 	| (Base & {type: 'compteur'; de: number; vers: number; arrivee: Ancre; fin?: Ancre; suffixe?: string; y: number; taille: number; couleur?: string; voile?: boolean})
 	/** Fausse zone de commentaire TikTok qui s'écrit toute seule. */
@@ -45,10 +45,10 @@ export type Plan = {
 	debut: Ancre;
 	/** Entrée du plan. glisse / rebond / secousse : mouvements mesurés sur la référence 7436214342510513439 ;
 	    bascule : entrée inclinée qui se redresse (référence 7444371749753408810). */
-	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule';
+	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule' | 'etire' | 'radial' | 'lumiere-rouge';
 	/** Sortie du plan : lumiere = lumière jaune qui envahit l'image sur les dernières frames ;
 	    blanc = fondu au blanc sur les 4 dernières frames (la fin s'enchaîne avec l'accroche dessinée quand la vidéo reboucle). */
-	sortie?: 'lumiere' | 'blanc';
+	sortie?: 'lumiere' | 'lumiere-forte' | 'blanc' | 'noir';
 	/** Effets ponctuels sur tout le plan (secousse gauche-droite). */
 	effets?: {type: 'secousse'; a: Ancre}[];
 	famille?: Famille;

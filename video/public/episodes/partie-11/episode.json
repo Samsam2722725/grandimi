@@ -1,0 +1,622 @@
+{
+  "partie": 11,
+  "voice": "ff_siwis",
+  "speed": 1.2,
+  "lines": [
+    {
+      "id": "hook",
+      "pause": 0,
+      "text": "1m83, c’est la taille moyenne en France."
+    },
+    {
+      "id": "hook2",
+      "pause": 0,
+      "text": "On prédit ton potentiel de taille à partir de des commentaires,"
+    },
+    {
+      "id": "partie",
+      "pause": 0,
+      "text": "partie 11."
+    },
+    {
+      "id": "dan",
+      "pause": 0,
+      "text": "On regarde les stats de Corey."
+    },
+    {
+      "id": "age",
+      "pause": 0,
+      "text": "À 13 ans et avec une taille actuelle de 178 cm, Corey est bien au-dessus de la moyenne."
+    },
+    {
+      "id": "grandimi",
+      "pause": 0,
+      "text": "Selon Grandimi, sa taille finale estimée est de 195 cm."
+    },
+    {
+      "id": "habitudes",
+      "pause": 0,
+      "text": "Avec les bonnes habitudes, Corey pourrait atteindre 200 cm,"
+    },
+    {
+      "id": "optim",
+      "pause": 0,
+      "text": "soit 5 cm de croissance supplémentaires."
+    },
+    {
+      "id": "pct",
+      "pause": 0,
+      "text": "Actuellement, Corey est déjà plus grand que 99,6 % des personnes de son âge"
+    },
+    {
+      "id": "fini",
+      "pause": 0,
+      "text": "et a déjà atteint 91,2 % de sa croissance."
+    },
+    {
+      "id": "foutu",
+      "pause": 0,
+      "text": "T’es clairement pas foutu."
+    },
+    {
+      "id": "cta",
+      "pause": 0,
+      "text": "Si toi aussi tu veux faire analyser ton potentiel de taille, commente ton âge et ta taille actuelle sous cette vidéo."
+    }
+  ],
+  "musique": {
+    "fichier": "sfx/music.wav",
+    "volume": 0.08
+  },
+  "images": {
+    "accroche": {
+      "fichier": "accroche.jpg",
+      "w": 955,
+      "h": 1630
+    },
+    "ecran": {
+      "fichier": "ui.png",
+      "w": 1170,
+      "h": 2072
+    },
+    "routine": {
+      "fichier": "routine.png",
+      "w": 1170,
+      "h": 2072
+    },
+    "verdict": {
+      "fichier": "verdict.jpg",
+      "w": 1080,
+      "h": 1920
+    }
+  },
+  "zones": {
+    "tout": {
+      "x": 585,
+      "y": 1036,
+      "z": 0.86
+    },
+    "taille_actuelle": {
+      "x": 422,
+      "y": 447,
+      "z": 1.53
+    },
+    "taille_predite": {
+      "x": 842,
+      "y": 625,
+      "z": 1.556
+    },
+    "croissance": {
+      "x": 812,
+      "y": 1154,
+      "z": 1.5
+    }
+  },
+  "plans": [
+    {
+      "nom": "hook",
+      "debut": 0,
+      "hookTaille": {
+        "cm": 183,
+        "carte": "hook:c-2",
+        "moyenne": "hook:moyenne+3",
+        "france": "hook:france"
+      },
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": 5,
+          "son": "tick",
+          "volume": 0.12
+        },
+        {
+          "a": 8,
+          "son": "tick",
+          "volume": 0.12
+        },
+        {
+          "a": 11,
+          "son": "tick",
+          "volume": 0.12
+        },
+        {
+          "a": 14,
+          "son": "tick",
+          "volume": 0.12
+        },
+        {
+          "a": 16,
+          "son": "ding",
+          "volume": 0.22
+        },
+        {
+          "a": "hook:c-2",
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": "hook:c+5",
+          "son": "pop",
+          "volume": 0.25
+        },
+        {
+          "a": "hook:moyenne+12",
+          "son": "pop",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "accroche",
+      "debut": "hook2-1",
+      "transition": "radial",
+      "image": "accroche",
+      "camera": [
+        {
+          "x": 477,
+          "y": 815,
+          "z": 1,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 477,
+          "y": 815,
+          "z": 1.066,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "partie",
+      "debut": "partie+6",
+      "fond": "papier",
+      "sortie": "lumiere-forte",
+      "papiers": [
+        "papier1.jpg",
+        "papier2.jpg",
+        "papier3.jpg",
+        "papier4.jpg"
+      ],
+      "elements": [
+        {
+          "type": "tape",
+          "texte": "PARTIE {partie}",
+          "a": 3,
+          "y": 830,
+          "taille": 200,
+          "curseur": true,
+          "son": "tick",
+          "volume": 0.3
+        }
+      ],
+      "sons": [
+        {
+          "a": 7,
+          "son": "papier",
+          "volume": 0.4
+        }
+      ]
+    },
+    {
+      "nom": "ecran-taille",
+      "debut": "dan+10",
+      "transition": "lumiere",
+      "image": "ecran",
+      "libre": true,
+      "camera": [
+        {
+          "a": 0,
+          "zone": "tout",
+          "duree": 1
+        },
+        {
+          "a": "age:178-8",
+          "zone": "taille_actuelle",
+          "duree": 12
+        },
+        {
+          "a": "age:moyenne-1",
+          "zone": "tout",
+          "duree": 15
+        },
+        {
+          "a": "grandimi:195+10",
+          "zone": "taille_predite",
+          "duree": 12
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "fichier": "ballon_13.png",
+          "a": "age:13+7",
+          "fin": "age:13+25",
+          "x": 87,
+          "y": 678,
+          "w": 860,
+          "h": 668,
+          "effet": "pop-balance",
+          "son": "pop",
+          "volume": 0.35
+        },
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": "grandimi:grandimi",
+          "fin": "grandimi:195",
+          "y": 1330,
+          "taille": 92,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 10
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "routine",
+      "debut": "habitudes:habitudes-9",
+      "transition": "bascule",
+      "image": "routine",
+      "camera": [
+        {
+          "x": 585,
+          "y": 1036,
+          "z": 0.86,
+          "duree": 1
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "chiffre",
+      "debut": "habitudes:200-4",
+      "transition": "radial",
+      "fond": "topo",
+      "topo": {
+        "zoomDe": 0.55,
+        "d": 18
+      },
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "alien.png",
+          "a": 0,
+          "x": 368,
+          "y": 729,
+          "w": 344,
+          "h": 1037,
+          "grandit": {
+            "de": 0.4,
+            "d": 45
+          }
+        },
+        {
+          "type": "tape",
+          "texte": "200 cm",
+          "a": "habitudes:200+4",
+          "y": 95,
+          "taille": 150,
+          "couleur": "#fff",
+          "contour": 0,
+          "curseur": true,
+          "fond": "#8100fe",
+          "parLettre": 2,
+          "son": "tick",
+          "volume": 0.25
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "ecran-stats",
+      "debut": "optim:soit-2",
+      "transition": "etire",
+      "sortie": "lumiere-forte",
+      "image": "ecran",
+      "libre": true,
+      "camera": [
+        {
+          "a": 0,
+          "zone": "tout",
+          "duree": 1
+        },
+        {
+          "a": "fini:atteint+6",
+          "zone": "croissance",
+          "duree": 15
+        }
+      ],
+      "elements": [
+        {
+          "type": "trait",
+          "a": "optim:croissance",
+          "fin": "pct:est",
+          "d": "M 585 250 L 585 410",
+          "tete": "M 560 382 L 585 412 L 610 382",
+          "couleur": "#e8202a",
+          "epaisseur": 8,
+          "duree": 5
+        },
+        {
+          "type": "image",
+          "fichier": "main.png",
+          "a": "pct:99+2",
+          "fin": "pct:âge-5",
+          "x": 690,
+          "y": 1540,
+          "w": 230,
+          "h": 230,
+          "depuis": {
+            "x": 120,
+            "y": 160,
+            "d": 6
+          },
+          "son": "pop",
+          "volume": 0.25
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "verdict",
+      "debut": "foutu+3",
+      "transition": "lumiere-rouge",
+      "image": "verdict",
+      "camera": [
+        {
+          "x": 540,
+          "y": 960,
+          "z": 1.0,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 540,
+          "y": 945,
+          "z": 1.03,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "Pas foutu",
+          "a": "foutu:pas-7",
+          "y": 860,
+          "taille": 112,
+          "couleur": "#e6ffe0",
+          "contour": 2,
+          "contourCouleur": "#1a8a2a",
+          "poids": 600,
+          "effet": "fondu",
+          "lueur": "rgba(40,255,60,0.95)",
+          "son": "ding",
+          "volume": 0.2
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "appel",
+      "debut": "cta-1",
+      "transition": "radial",
+      "fond": "topo",
+      "topo": {
+        "coup": "cta:actuelle"
+      },
+      "sortie": "noir",
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": 4,
+          "y": 150,
+          "taille": 80,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 10
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "carte_graphe.png",
+          "a": "cta:potentiel-3",
+          "fin": "cta:commente-2",
+          "x": 130,
+          "y": 650,
+          "w": 820,
+          "h": 620,
+          "depuis": {
+            "y": 80,
+            "d": 6
+          }
+        },
+        {
+          "type": "texte",
+          "texte": "ANALYSE",
+          "a": "cta:potentiel+3",
+          "fin": "cta:commente-2",
+          "y": 330,
+          "taille": 130,
+          "couleur": "#fff200",
+          "poids": 600,
+          "contour": 3,
+          "effet": "glitch",
+          "son": "pop",
+          "volume": 0.2
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "vieille.png",
+          "a": "cta:commente-2",
+          "fin": "cta:taille#2-6",
+          "x": 405,
+          "y": 1490,
+          "w": 270,
+          "h": 270,
+          "depuis": {
+            "y": 260,
+            "d": 10
+          }
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "regle.png",
+          "a": "cta:actuelle+3",
+          "x": 508,
+          "y": 1344,
+          "w": 165,
+          "h": 622,
+          "depuis": {
+            "x": 500,
+            "y": 200,
+            "d": 8
+          }
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": "cta:actuelle",
+          "son": "whoosh",
+          "volume": 0.15
+        }
+      ]
+    }
+  ],
+  "sousTitres": {
+    "motsCles": [],
+    "fenetres": [
+      {
+        "de": 0,
+        "a": "hook2-1",
+        "y": 1110,
+        "taille": 115,
+        "motsMax": 2,
+        "carMax": 16,
+        "style": "condense",
+        "contour": 5,
+        "poids": 600,
+        "motsCles": false,
+        "pop": false
+      },
+      {
+        "de": "hook2-1",
+        "a": "partie",
+        "y": 900,
+        "taille": 88,
+        "motsMax": 3,
+        "carMax": 15,
+        "poids": 600,
+        "contour": 3,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true
+      },
+      {
+        "de": "cta-1",
+        "a": "cta:potentiel+3",
+        "y": 900,
+        "taille": 88,
+        "motsMax": 3,
+        "carMax": 15,
+        "poids": 600,
+        "contour": 3,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true
+      },
+      {
+        "de": "cta:commente-2",
+        "a": "fin",
+        "y": 900,
+        "taille": 88,
+        "motsMax": 3,
+        "carMax": 15,
+        "poids": 600,
+        "contour": 3,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true
+      }
+    ]
+  },
+  "voix": "Enregistrement ElevenLabs de l'utilisateur, blancs ramenés à 0,08 s, accéléré ×1,14 (34,6 s ; original 32,1 s).",
+  "reference": "references/p11-your-own-height-potential",
+  "deriveCamera": false,
+  "sonsMouvements": false
+}

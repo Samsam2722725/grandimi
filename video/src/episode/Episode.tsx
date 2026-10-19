@@ -74,10 +74,15 @@ const kf = (f: number, frames: number[], values: number[]) =>
  *   secousse : tremblement gauche-droite sur le nom de l'app (−90 → +24 → −6 → 0, ×0,92 → ×1)
  *   bascule  : entrée inclinée qui se redresse (−24° → +3° → 0°, ×1,4 → ×0,95 → ×1), référence 7444371749753408810
  */
-const MOUVEMENTS: Record<string, {f: number[]; x: number[]; s: number[]; r?: number[]; flou: number}> = {
+/*   etire    : arrivée de l'écran stats, étirement vertical + dézoom ×1,17 → ×1,03 → ×0,986 → ×1 (référence partie 11, 16,3-16,6 s)
+ *   radial   : arrivée en flou radial (zoom ×1,3 → ×1), plans topo de la référence partie 11
+ */
+const MOUVEMENTS: Record<string, {f: number[]; x: number[]; s: number[]; r?: number[]; sy?: number[]; flou: number}> = {
 	glisse: {f: [0, 3, 6, 9], x: [-84, 25, -1, 0], s: [0.975, 0.986, 1, 1], flou: 12},
 	rebond: {f: [0, 3, 6, 9, 12], x: [59, 16, -8, 1, 0], s: [1.135, 0.914, 1.019, 0.967, 1], flou: 14},
 	secousse: {f: [0, 3, 6, 9, 12], x: [-90, 24, -6, 1, 0], s: [0.92, 0.979, 0.995, 0.998, 1], flou: 10},
+	etire: {f: [0, 3, 6, 9], x: [0, 0, 0, 0], s: [1.17, 1.03, 0.986, 1], sy: [2.4, 1.15, 1, 1], flou: 16},
+	radial: {f: [0, 3, 6], x: [0, 0, 0], s: [1.3, 1.05, 1], flou: 18},
 	bascule: {f: [0, 1, 2, 3, 4, 5, 7, 9], x: [0, 0, 0, 0, 0, 0, 0, 0], s: [1.4, 1.15, 1.04, 0.98, 0.95, 0.97, 1, 1], r: [-24, -14, -6, -1, 3, 2, 0.5, 0], flou: 14},
 };
 
@@ -88,16 +93,18 @@ const Mouvement: React.FC<{type: string; at: number; children: React.ReactNode}>
 	const x = active ? kf(f, m.f, m.x) : 0;
 	const sc = active ? kf(f, m.f, m.s) : 1;
 	const r = active && m.r ? kf(f, m.f, m.r) : 0;
+	const sy = active && m.sy ? kf(f, m.f, m.sy) : 1;
 	const blur = active ? interpolate(f, [0, 6], [m.flou, 0], {extrapolateRight: 'clamp'}) : 0;
 	return (
-		<AbsoluteFill style={{transform: `translateX(${x}px) scale(${sc})${r ? ` rotate(${r}deg)` : ''}`, filter: blur > 0.3 ? `blur(${blur}px)` : undefined}}>
+		<AbsoluteFill style={{transform: `translateX(${x}px) scale(${sc})${sy !== 1 ? ` scaleY(${sy})` : ''}${r ? ` rotate(${r}deg)` : ''}`, filter: blur > 0.3 ? `blur(${blur}px)` : undefined}}>
 			{children}
 		</AbsoluteFill>
 	);
 };
 
 /** Lumière jaune : envahit l'image (sortie) ou s'efface (entrée). */
-const Lumiere: React.FC<{from: number; to: number; entree?: boolean}> = ({from, to, entree}) => {
+/** fort : lumière couvrante jaune-orangé (sans mode « screen »), comme la référence partie 11. */
+const Lumiere: React.FC<{from: number; to: number; entree?: boolean; fort?: boolean}> = ({from, to, entree, fort}) => {
 	const f = useCurrentFrame();
 	const o = entree ? interpolate(f, [from, to], [0.9, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
 		: interpolate(f, [from, to], [0, 0.9], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -105,12 +112,20 @@ const Lumiere: React.FC<{from: number; to: number; entree?: boolean}> = ({from, 
 	return (
 		<AbsoluteFill
 			style={{
-				background: 'radial-gradient(circle at 55% 45%, rgba(255,246,170,1) 0%, rgba(255,226,60,0.95) 45%, rgba(255,208,20,0.85) 100%)',
+				background: fort
+					? 'radial-gradient(circle at 55% 45%, rgba(255,240,120,1) 0%, rgba(255,200,30,0.95) 50%, rgba(255,150,20,0.9) 100%)'
+					: 'radial-gradient(circle at 55% 45%, rgba(255,246,170,1) 0%, rgba(255,226,60,0.95) 45%, rgba(255,208,20,0.85) 100%)',
 				opacity: o,
-				mixBlendMode: 'screen',
+				mixBlendMode: fort ? 'normal' : 'screen',
 			}}
 		/>
 	);
+};
+
+/** Fond qui passe au noir à la fin (les éléments restent par-dessus, référence partie 11). */
+const FonduNoir: React.FC<{from: number; to: number}> = ({from, to}) => {
+	const o = interpolate(useCurrentFrame(), [from, to], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	return o > 0 ? <AbsoluteFill style={{background: '#000', opacity: o}} /> : null;
 };
 
 /** Fondu au blanc (fin de vidéo qui reboucle sur l'accroche dessinée, fond blanc). */
@@ -185,9 +200,44 @@ const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?
 const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; fin?: number; partie: number}> = ({el, at, fin, partie}) => {
 	const f = useCurrentFrame();
 	if (f < at) return null;
-	const s = pop(f, at, el.amorti ?? 9) * (fin !== undefined ? 1 - ease(f, fin, 5) : 1);
+	const sortie = fin !== undefined ? 1 - ease(f, fin, 5) : 1;
+	const s = el.effet === 'glitch' || el.effet === 'fondu' ? sortie : pop(f, at, el.amorti ?? 9) * sortie;
 	if (s <= 0.01) return null;
 	const texte = el.texte.replace('{partie}', String(partie));
+	if (el.effet === 'glitch' || el.effet === 'fondu') {
+		// glitch : décalages rouge / vert et tranches décalées pendant 6 frames (« ANALYZED », référence partie 11) ;
+		// fondu : apparition en fondu avec lueur qui s'intensifie (« Not cooked »).
+		const g = f - at;
+		const actif = el.effet === 'glitch' && g < 6;
+		const dx = actif ? (6 - g) * 4 * (g % 2 ? 1 : -1) : 0;
+		const o = el.effet === 'fondu' ? ease(f, at, 6) : 1;
+		return (
+			<div
+				style={{
+					position: 'absolute',
+					left: 0,
+					right: 0,
+					top: el.y,
+					textAlign: 'center',
+					...P5.caption,
+					color: el.couleur ?? P5.yellow,
+					fontSize: el.taille,
+					fontWeight: el.poids ?? 800,
+					WebkitTextStroke: `${el.contour ?? 3}px ${el.contourCouleur ?? '#000'}`,
+					textShadow: actif
+						? `${dx}px 0 0 rgba(255,0,60,0.9), ${-dx}px 0 0 rgba(0,255,120,0.9)`
+						: el.lueur
+							? `0 0 18px ${el.lueur}, 0 0 36px ${el.lueur}`
+							: P5.caption.textShadow,
+					transform: actif ? `translateX(${dx * 0.6}px) skewX(${dx * 0.8}deg)` : undefined,
+					clipPath: actif && g % 3 === 1 ? 'inset(0 0 45% 0)' : undefined,
+					opacity: o * sortie,
+				}}
+			>
+				{texte}
+			</div>
+		);
+	}
 	const rot = el.effet === 'pop-balance' ? Math.sin(f / 8) * 6 : 0;
 	if (el.fond) {
 		return (
@@ -507,6 +557,8 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					size={el.taille}
 					color={el.couleur}
 					stroke={el.contour}
+					curseur={el.curseur}
+					fond={el.fond}
 				/>
 			);
 		return null;
@@ -531,6 +583,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					<TopoAnime zoomDe={plan.topo?.zoomDe} d={plan.topo?.d} />
 				</CoupFlou>
 			) : null}
+			{plan.sortie === 'noir' ? <FonduNoir from={dur - 4} to={dur - 2} /> : null}
 			{plan.sequence?.length ? <Sequence_ files={plan.sequence.map(file)} /> : null}
 			{plan.hookTaille ? (
 				<HookTaille
@@ -557,8 +610,9 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			{onScreen}
 			{plan.transition === 'flash' ? <Flash color={P5.yellow} /> : null}
 			{plan.transition === 'flash-blanc' ? <Flash color="#fff" /> : null}
-			{plan.transition === 'lumiere' ? <Lumiere from={0} to={6} entree /> : null}
-			{plan.sortie === 'lumiere' ? <Lumiere from={dur - 8} to={dur} /> : null}
+			{plan.transition === 'lumiere' || plan.transition === 'lumiere-rouge' ? <Lumiere from={0} to={6} entree /> : null}
+			{plan.transition === 'lumiere-rouge' ? <Flash color="#ff1a1a" /> : null}
+			{plan.sortie === 'lumiere' || plan.sortie === 'lumiere-forte' ? <Lumiere from={dur - 8} to={dur} fort={plan.sortie === 'lumiere-forte'} /> : null}
 			{plan.sortie === 'blanc' ? <FonduBlanc from={dur - 4} to={dur - 1} /> : null}
 			{sons.map((s, i) => (
 				<Sfx key={i} at={s.at} name={s.son as never} volume={s.volume} />
@@ -571,6 +625,8 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 	if (plan.transition === 'glisse' || plan.transition === 'lumiere') return <Mouvement type="glisse" at={0}>{out}</Mouvement>;
 	if (plan.transition === 'rebond') return <Mouvement type="rebond" at={0}>{out}</Mouvement>;
 	if (plan.transition === 'bascule') return <Mouvement type="bascule" at={0}>{out}</Mouvement>;
+	if (plan.transition === 'etire') return <Mouvement type="etire" at={0}>{out}</Mouvement>;
+	if (plan.transition === 'radial') return <Mouvement type="radial" at={0}>{out}</Mouvement>;
 	return out;
 };
 
