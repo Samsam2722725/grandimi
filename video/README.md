@@ -55,6 +55,8 @@ Voix enregistrée (au lieu de la synthèse) : un seul fichier `voice/voix.wav`, 
 Capture Grandimi avec d'autres chiffres : `python scripts/modifier_capture.py SOURCE.png SORTIE.png capture.json`.
 Ballon de l'âge : `python scripts/ballon.py 14 SORTIE.png [dore|argent]`. Émojis et flèche 3D : `python scripts/emoji.py DOSSIER main=👆 fleche_doree=dore`.
 Plan filmé recopié de l'original (ex. figurine alien) : `sequence` dans le plan (une image par frame, la dernière reste).
+Accroche dessinée « 1m78, c'est la taille moyenne en France » (bonhomme + barre, puis carte) : `"hookTaille": {"cm", "carte", "moyenne"}`
+dans le plan, sous-titres `"style": "condense"` (Barlow Condensed, mot prononcé surligné) ; carte : `scripts/carte_france.py` (Natural Earth, domaine public).
 Entrée inclinée qui se redresse : `"transition": "bascule"`. Élément qui glisse en entrant : `depuis` ; qui alterne deux images : `alterne`.
 Un nouvel épisode reprend `episode.json` mais pas les images : copier papiers, routine, anatomie et topo depuis l'épisode précédent.
 

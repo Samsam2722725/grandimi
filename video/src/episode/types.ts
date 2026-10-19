@@ -55,6 +55,9 @@ export type Plan = {
 	/** Photos de papier qui alternent (sinon papier généré). */
 	papiers?: string[];
 	image?: string;
+	/** Accroche dessinée « taille moyenne » : barre qui monte jusqu'à `cm`, puis carte de France à `carte`,
+	    silhouette en pointillés à `moyenne` (src/episode/HookTaille.tsx). */
+	hookTaille?: {cm: number; carte: Ancre; moyenne: Ancre};
 	/** Suite d'images plein écran (une par frame, la dernière reste affichée), à la place de `image`. */
 	sequence?: string[];
 	fondCouleur?: string;
@@ -80,6 +83,7 @@ export type Episode = {
 		motsCles: string[];
 		/** motsMax / carMax : taille des groupes de mots ; poids : graisse de la police (800 par défaut) ;
 		    motsCles: false : pas de pastille orange dans cette fenêtre. */
-		fenetres: {de: Ancre; a: Ancre; y: number; taille: number; majuscules?: boolean; motsMax?: number; carMax?: number; poids?: number; contour?: number; motsCles?: boolean; pop?: boolean}[];
+		/** style « condense » : Barlow Condensed blanche en majuscules, mot prononcé surligné dans une pastille rouge. */
+		fenetres: {de: Ancre; a: Ancre; y: number; taille: number; majuscules?: boolean; style?: 'condense'; motsMax?: number; carMax?: number; poids?: number; contour?: number; motsCles?: boolean; pop?: boolean}[];
 	};
 };

@@ -64,11 +64,6 @@
     "volume": 0.08
   },
   "images": {
-    "accroche": {
-      "fichier": "accroche.jpg",
-      "w": 1080,
-      "h": 1920
-    },
     "ecran": {
       "fichier": "ui.png",
       "w": 1170,
@@ -116,22 +111,26 @@
     {
       "nom": "accroche",
       "debut": 0,
-      "image": "accroche",
-      "camera": [
+      "hookTaille": {
+        "cm": 178,
+        "carte": "hook:c-2",
+        "moyenne": "hook:moyenne+3"
+      },
+      "sons": [
         {
-          "x": 540,
-          "y": 960,
-          "z": 1,
-          "duree": 1
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
         },
         {
-          "a": 1,
-          "x": 540,
-          "y": 960,
-          "z": 1.066,
-          "duree": "fin",
-          "lineaire": true,
-          "son": null
+          "a": 10,
+          "son": "pop",
+          "volume": 0.3
+        },
+        {
+          "a": "hook:c-2",
+          "son": "whoosh",
+          "volume": 0.2
         }
       ]
     },
@@ -483,12 +482,12 @@
       {
         "de": 0,
         "a": "hook2:ton-1",
-        "y": 900,
-        "taille": 92,
+        "y": 1110,
+        "taille": 115,
         "motsMax": 2,
-        "carMax": 18,
-        "poids": 600,
-        "contour": 4,
+        "carMax": 16,
+        "style": "condense",
+        "contour": 5,
         "motsCles": false,
         "pop": false
       },

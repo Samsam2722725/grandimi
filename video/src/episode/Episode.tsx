@@ -1,9 +1,10 @@
-import React from 'react';
-import {AbsoluteFill, Audio, CalculateMetadataFunction, Easing, Img, interpolate, Sequence, staticFile, useCurrentFrame} from 'remotion';
+import React, {useEffect, useState} from 'react';
+import {AbsoluteFill, Audio, CalculateMetadataFunction, cancelRender, continueRender, delayRender, Easing, Img, interpolate, Sequence, staticFile, useCurrentFrame} from 'remotion';
 import {ease, pop} from '../anim';
 import {Sfx, SfxOn} from '../components/Sfx';
 import {makeTiming, Timeline} from '../timing';
 import {Paper, Typed} from './Paper';
+import {HookTaille} from './HookTaille';
 import {Cam, Shot} from './Shot';
 import {FONT} from '../theme';
 import {P5} from './style';
@@ -494,6 +495,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			{plan.fond === 'papier' && plan.papiers?.length ? <PhotoPapier files={plan.papiers.map(file)} /> : null}
 			{plan.fond === 'papier' && !plan.papiers?.length ? <Paper /> : null}
 			{plan.sequence?.length ? <Sequence_ files={plan.sequence.map(file)} /> : null}
+			{plan.hookTaille ? <HookTaille cm={plan.hookTaille.cm} carte={loc(plan.hookTaille.carte)} moyenne={loc(plan.hookTaille.moyenne)} /> : null}
 			{img ? (
 				<Shot
 					src={`episodes/${id}/images/${img.fichier}`}
@@ -531,9 +533,9 @@ const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,
 
 const chunkWords = (tl: Timeline, keywords: string[], maxWords = 2, maxChars = 14) =>
 	tl.lines.flatMap((l) => {
-		const out: {from: number; words: string[]}[] = [];
+		const out: {from: number; words: string[]; times: number[]}[] = [];
 		let cur: {f: number; w: string}[] = [];
-		const push = () => cur.length && out.push({from: cur[0].f, words: cur.map((x) => x.w)});
+		const push = () => cur.length && out.push({from: cur[0].f, words: cur.map((x) => x.w), times: cur.map((x) => x.f)});
 		for (const wd of l.words) {
 			const len = cur.map((x) => x.w).join(' ').length + wd.w.length;
 			if (cur.length && (cur.length >= maxWords || len > maxChars || keywords.includes(norm(wd.w)))) {
@@ -556,8 +558,9 @@ type Fenetre = {
 	upper?: boolean;
 	y: number;
 	size: number;
-	chunks: {from: number; words: string[]}[];
+	chunks: {from: number; words: string[]; times: number[]}[];
 	keywords: string[];
+	condense?: boolean;
 	weight: number;
 	stroke: number;
 	pop: boolean;
@@ -572,6 +575,37 @@ const Captions: React.FC<{windows: Fenetre[]}> = ({windows}) => {
 	const c = chunks[idx];
 	if (!c || c.from < win.from - 2) return null;
 	const s = win.pop ? 0.82 + 0.18 * pop(f, c.from, 10) : 1;
+	if (win.condense) {
+		// Mot en cours de prononciation surligné (modèle de l'accroche a56d6d55).
+		const cur = c.times.reduce((k, t, i) => (f >= t ? i : k), 0);
+		return (
+			<div style={{position: 'absolute', left: 40, right: 40, top: win.y, textAlign: 'center'}}>
+				{c.words.map((word, i) => (
+					<span
+						key={i}
+						style={{
+							fontFamily: "'Barlow Condensed', " + FONT,
+							fontWeight: 800,
+							fontSize: win.size,
+							textTransform: 'uppercase',
+							color: '#fff',
+							WebkitTextStroke: `${win.stroke}px #000`,
+							paintOrder: 'stroke fill',
+							display: 'inline-block',
+							margin: '0 6px',
+							padding: '0 14px',
+							borderRadius: 18,
+							lineHeight: 1.1,
+							background: c.words.length > 1 && i === cur ? 'rgba(232,40,80,0.92)' : 'transparent',
+							boxShadow: c.words.length > 1 && i === cur ? '0 0 18px rgba(232,40,80,0.55)' : 'none',
+						}}
+					>
+						{word.replace(/[,.:;?!]$/, '')}
+					</span>
+				))}
+			</div>
+		);
+	}
 	return (
 		<div style={{position: 'absolute', left: 40, right: 40, top: win.y, textAlign: 'center', transform: `scale(${s})`}}>
 			{c.words.map((word, i) => {
@@ -600,8 +634,26 @@ const Captions: React.FC<{windows: Fenetre[]}> = ({windows}) => {
 	);
 };
 
+/** Polices des accroches dessinées (Poppins pour le chiffre, Barlow Condensed pour les sous-titres). */
+const usePolices = () => {
+	const [handle] = useState(() => delayRender('Polices'));
+	useEffect(() => {
+		const fonts = [
+			new FontFace('Poppins', `url(${staticFile('fonts/poppins-latin-800-normal.woff2')})`, {weight: '800'}),
+			new FontFace('Barlow Condensed', `url(${staticFile('fonts/barlow-condensed-latin-800-normal.woff2')})`, {weight: '800'}),
+		];
+		Promise.all(fonts.map((x) => x.load()))
+			.then((loaded) => {
+				loaded.forEach((x) => document.fonts.add(x));
+				continueRender(handle);
+			})
+			.catch((e) => cancelRender(e));
+	}, [handle]);
+};
+
 /* ───────── Composition ───────── */
 export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTitres = true, voix = true, musique = true, bruitages = true}) => {
+	usePolices();
 	if (!data || !timeline) return null;
 	const resolve = makeResolver(timeline);
 	const END = timeline.totalFrames;
@@ -617,6 +669,7 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 		stroke: w.contour ?? 6,
 		keywords: w.motsCles === false ? [] : keywords,
 		pop: w.pop !== false,
+		condense: w.style === 'condense',
 		chunks: chunkWords(timeline, w.motsCles === false ? [] : keywords, w.motsMax, w.carMax),
 	}));
 	const vol = data.musique?.volume ?? 0.08;
