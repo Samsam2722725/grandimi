@@ -7,6 +7,7 @@
 | « Prédiction à partir de nos commentaires », partie 6 | `Episode` (`{"episode":"partie-6"}`) | `rendu/grandimi-partie6.mp4` (33 s) |
 | « Prédiction à partir de nos commentaires », partie 7 | `Episode` (`{"episode":"partie-7"}`) | `rendu/grandimi-partie7.mp4` (32 s) |
 | « Prédiction à partir de nos commentaires », partie 8 | `Episode` (`{"episode":"partie-8"}`) | `rendu/grandimi-partie8.mp4` (34 s) |
+| « Prédiction à partir de nos commentaires », partie 9 | `Episode` (`{"episode":"partie-9"}`) | `rendu/grandimi-partie9.mp4` (34 s) |
 
 | « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
 

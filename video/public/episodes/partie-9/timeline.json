@@ -1,0 +1,535 @@
+{
+  "fps": 30,
+  "totalFrames": 1026,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "1m78, c’est la taille moyenne en France,",
+      "from": 0,
+      "duration": 73,
+      "words": [
+        {
+          "w": "1m78,",
+          "f": 0
+        },
+        {
+          "w": "c’est",
+          "f": 34
+        },
+        {
+          "w": "la",
+          "f": 38
+        },
+        {
+          "w": "taille",
+          "f": 43
+        },
+        {
+          "w": "moyenne",
+          "f": 50
+        },
+        {
+          "w": "en",
+          "f": 62
+        },
+        {
+          "w": "France,",
+          "f": 65
+        }
+      ]
+    },
+    {
+      "id": "hook2",
+      "text": "et voici comment calculer ton potentiel de taille finale.",
+      "from": 74,
+      "duration": 76,
+      "words": [
+        {
+          "w": "et",
+          "f": 74
+        },
+        {
+          "w": "voici",
+          "f": 79
+        },
+        {
+          "w": "comment",
+          "f": 89
+        },
+        {
+          "w": "calculer",
+          "f": 98
+        },
+        {
+          "w": "ton",
+          "f": 110
+        },
+        {
+          "w": "potentiel",
+          "f": 115
+        },
+        {
+          "w": "de",
+          "f": 127
+        },
+        {
+          "w": "taille",
+          "f": 130
+        },
+        {
+          "w": "finale.",
+          "f": 139
+        }
+      ]
+    },
+    {
+      "id": "dan",
+      "text": "Aujourd’hui, on regarde les stats de Silvio.",
+      "from": 151,
+      "duration": 58,
+      "words": [
+        {
+          "w": "Aujourd’hui,",
+          "f": 151
+        },
+        {
+          "w": "on",
+          "f": 163
+        },
+        {
+          "w": "regarde",
+          "f": 168
+        },
+        {
+          "w": "les",
+          "f": 178
+        },
+        {
+          "w": "stats",
+          "f": 182
+        },
+        {
+          "w": "de",
+          "f": 190
+        },
+        {
+          "w": "Silvio.",
+          "f": 192
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 16 ans et avec une taille actuelle de 157 cm, Silvio est bien en dessous de la moyenne.",
+      "from": 210,
+      "duration": 148,
+      "words": [
+        {
+          "w": "À",
+          "f": 210
+        },
+        {
+          "w": "16",
+          "f": 215
+        },
+        {
+          "w": "ans",
+          "f": 222
+        },
+        {
+          "w": "et",
+          "f": 229
+        },
+        {
+          "w": "avec",
+          "f": 232
+        },
+        {
+          "w": "une",
+          "f": 236
+        },
+        {
+          "w": "taille",
+          "f": 241
+        },
+        {
+          "w": "actuelle",
+          "f": 251
+        },
+        {
+          "w": "de",
+          "f": 260
+        },
+        {
+          "w": "157",
+          "f": 263
+        },
+        {
+          "w": "cm,",
+          "f": 284
+        },
+        {
+          "w": "Silvio",
+          "f": 304
+        },
+        {
+          "w": "est",
+          "f": 323
+        },
+        {
+          "w": "bien",
+          "f": 328
+        },
+        {
+          "w": "en",
+          "f": 332
+        },
+        {
+          "w": "dessous",
+          "f": 335
+        },
+        {
+          "w": "de",
+          "f": 342
+        },
+        {
+          "w": "la",
+          "f": 344
+        },
+        {
+          "w": "moyenne.",
+          "f": 347
+        }
+      ]
+    },
+    {
+      "id": "grandimi",
+      "text": "Selon le site Grandimi, sa taille finale estimée est de 169 cm.",
+      "from": 359,
+      "duration": 120,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 359
+        },
+        {
+          "w": "le",
+          "f": 366
+        },
+        {
+          "w": "site",
+          "f": 368
+        },
+        {
+          "w": "Grandimi,",
+          "f": 376
+        },
+        {
+          "w": "sa",
+          "f": 400
+        },
+        {
+          "w": "taille",
+          "f": 404
+        },
+        {
+          "w": "finale",
+          "f": 409
+        },
+        {
+          "w": "estimée",
+          "f": 416
+        },
+        {
+          "w": "est",
+          "f": 434
+        },
+        {
+          "w": "de",
+          "f": 439
+        },
+        {
+          "w": "169",
+          "f": 444
+        },
+        {
+          "w": "cm.",
+          "f": 463
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Avec les bonnes habitudes, Silvio pourrait atteindre 173 cm,",
+      "from": 480,
+      "duration": 109,
+      "words": [
+        {
+          "w": "Avec",
+          "f": 480
+        },
+        {
+          "w": "les",
+          "f": 485
+        },
+        {
+          "w": "bonnes",
+          "f": 490
+        },
+        {
+          "w": "habitudes,",
+          "f": 497
+        },
+        {
+          "w": "Silvio",
+          "f": 511
+        },
+        {
+          "w": "pourrait",
+          "f": 528
+        },
+        {
+          "w": "atteindre",
+          "f": 535
+        },
+        {
+          "w": "173",
+          "f": 550
+        },
+        {
+          "w": "cm,",
+          "f": 574
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "soit 4 cm de croissance supplémentaire.",
+      "from": 590,
+      "duration": 66,
+      "words": [
+        {
+          "w": "soit",
+          "f": 590
+        },
+        {
+          "w": "4",
+          "f": 600
+        },
+        {
+          "w": "cm",
+          "f": 607
+        },
+        {
+          "w": "de",
+          "f": 624
+        },
+        {
+          "w": "croissance",
+          "f": 626
+        },
+        {
+          "w": "supplémentaire.",
+          "f": 641
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Silvio est plus grand que seulement 1,8% des personnes de son âge,",
+      "from": 658,
+      "duration": 127,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 658
+        },
+        {
+          "w": "Silvio",
+          "f": 670
+        },
+        {
+          "w": "est",
+          "f": 697
+        },
+        {
+          "w": "plus",
+          "f": 702
+        },
+        {
+          "w": "grand",
+          "f": 707
+        },
+        {
+          "w": "que",
+          "f": 712
+        },
+        {
+          "w": "seulement",
+          "f": 716
+        },
+        {
+          "w": "1,8%",
+          "f": 724
+        },
+        {
+          "w": "des",
+          "f": 757
+        },
+        {
+          "w": "personnes",
+          "f": 760
+        },
+        {
+          "w": "de",
+          "f": 767
+        },
+        {
+          "w": "son",
+          "f": 772
+        },
+        {
+          "w": "âge,",
+          "f": 776
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et a déjà atteint 93,4% de sa croissance.",
+      "from": 786,
+      "duration": 93,
+      "words": [
+        {
+          "w": "et",
+          "f": 786
+        },
+        {
+          "w": "a",
+          "f": 791
+        },
+        {
+          "w": "déjà",
+          "f": 796
+        },
+        {
+          "w": "atteint",
+          "f": 800
+        },
+        {
+          "w": "93,4%",
+          "f": 815
+        },
+        {
+          "w": "de",
+          "f": 858
+        },
+        {
+          "w": "sa",
+          "f": 860
+        },
+        {
+          "w": "croissance.",
+          "f": 865
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T’es un peu foutu.",
+      "from": 880,
+      "duration": 25,
+      "words": [
+        {
+          "w": "T’es",
+          "f": 880
+        },
+        {
+          "w": "un",
+          "f": 887
+        },
+        {
+          "w": "peu",
+          "f": 889
+        },
+        {
+          "w": "foutu.",
+          "f": 892
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si toi aussi tu veux faire analyser ton potentiel de taille, commente GRAND sous cette vidéo.",
+      "from": 906,
+      "duration": 117,
+      "words": [
+        {
+          "w": "Si",
+          "f": 906
+        },
+        {
+          "w": "toi",
+          "f": 911
+        },
+        {
+          "w": "aussi",
+          "f": 916
+        },
+        {
+          "w": "tu",
+          "f": 923
+        },
+        {
+          "w": "veux",
+          "f": 925
+        },
+        {
+          "w": "faire",
+          "f": 930
+        },
+        {
+          "w": "analyser",
+          "f": 935
+        },
+        {
+          "w": "ton",
+          "f": 947
+        },
+        {
+          "w": "potentiel",
+          "f": 952
+        },
+        {
+          "w": "de",
+          "f": 961
+        },
+        {
+          "w": "taille,",
+          "f": 964
+        },
+        {
+          "w": "commente",
+          "f": 982
+        },
+        {
+          "w": "GRAND",
+          "f": 994
+        },
+        {
+          "w": "sous",
+          "f": 1006
+        },
+        {
+          "w": "cette",
+          "f": 1011
+        },
+        {
+          "w": "vidéo.",
+          "f": 1016
+        }
+      ]
+    }
+  ]
+}
