@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {AbsoluteFill, Audio, CalculateMetadataFunction, cancelRender, continueRender, delayRender, Easing, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Audio, CalculateMetadataFunction, cancelRender, continueRender, delayRender, Easing, Img, interpolate, OffthreadVideo, Sequence, spring, staticFile, useCurrentFrame} from 'remotion';
 import {CYAN, Defs, ENCRE, Membres, O, ORANGE, P, Seg, Tete} from '../dessin/dessin';
 
 /*
@@ -17,7 +17,8 @@ const HAUT = 400; // bandeau du titre
 const BAS = 1060; // début du texte du bas
 const FONT = "'Poppins', 'Inter', sans-serif";
 
-type Plan = {type: 'titre' | 'rapport' | 'saut' | 'cobra' | 'genoux' | 'fente'; de: number; a: number; titre: string; sous?: string; bas?: string; image?: string};
+type Clip = {f: string; debut: number; vitesse?: number};
+type Plan = {type: 'titre' | 'rapport' | 'saut' | 'cobra' | 'genoux' | 'fente'; de: number; a: number; titre: string; sous?: string; bas?: string; image?: string; clip?: Clip};
 export type RoutineProps = {routine: string; plans?: Plan[]};
 
 export const calculateRoutineMetadata: CalculateMetadataFunction<RoutineProps> = async ({props}) => {
@@ -579,7 +580,21 @@ const Contenu: React.FC<{p: Plan; dir: string}> = ({p, dir}) => {
 	const Scene = {saut: PlanSaut, cobra: PlanCobra, genoux: PlanGenoux, fente: PlanFente}[p.type];
 	return (
 		<>
-			<Scene f={f} d={d} />
+			{p.clip ? (
+				// clip 576×400 placé comme dans l'original (y = 185 sur 768), bords cachés par le bandeau et le texte du bas
+				<>
+					<AbsoluteFill style={{background: '#000'}} />
+					<OffthreadVideo
+						src={staticFile(`${dir}/clips/${p.clip.f}`)}
+						trimBefore={p.clip.debut}
+						playbackRate={p.clip.vitesse ?? 1}
+						muted
+						style={{position: 'absolute', left: 0, top: (185 / 768) * BH, width: W, height: (400 / 576) * W}}
+					/>
+				</>
+			) : (
+				<Scene f={f} d={d} />
+			)}
 			<Bandeau titre={p.titre} sous={p.sous} texture />
 			<Badge />
 			{p.bas ? <TexteBas texte={p.bas} /> : null}

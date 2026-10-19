@@ -1,15 +1,71 @@
 {
- "note": "Calqué sur la référence v12044gd0000cvjd14vog65heklc13k0 (routine en 3 étapes, sans voix off). Temps en images (30 i/s), recopiés des coupes de l'original.",
+ "note": "Calqué sur la référence v12044gd0000cvjd14vog65heklc13k0 (routine en 3 étapes, sans voix off). Temps en images (30 i/s), recopiés des coupes de l'original. « clip » : vidéo fournie par l'utilisateur (clips/), debut en images de la source, vitesse de lecture ; sans clip, l'illustration dessinée est utilisée.",
  "plans": [
-  {"type": "titre", "de": 0, "a": 87, "titre": "Combo d'exercices pour grandir", "sous": "(Routine 1)"},
-  {"type": "rapport", "de": 87, "a": 141, "titre": "1. Vérifie ton potentiel de taille", "image": "rapport.png"},
-  {"type": "saut", "de": 141, "a": 303, "titre": "2. Exercices de saut", "sous": "Les sauts créent des micro-fractures",
-   "bas": "Les micro-fractures + l'hormone de croissance libérée par les sauts t'aident à grandir"},
-  {"type": "cobra", "de": 303, "a": 361, "titre": "3. Étirements", "sous": "Allongent les fascias et la colonne",
-   "bas": "Des fascias et une colonne plus longs, avec une meilleure posture, te préparent à grandir et te font paraître plus grand"},
-  {"type": "genoux", "de": 361, "a": 410, "titre": "3. Étirements", "sous": "Allongent les fascias et la colonne",
-   "bas": "Des fascias et une colonne plus longs, avec une meilleure posture, te préparent à grandir et te font paraître plus grand"},
-  {"type": "fente", "de": 410, "a": 470, "titre": "3. Étirements", "sous": "Allongent les fascias et la colonne",
-   "bas": "Des fascias et une colonne plus longs, avec une meilleure posture, te préparent à grandir et te font paraître plus grand"}
+  {
+   "type": "titre",
+   "de": 0,
+   "a": 87,
+   "titre": "Combo d'exercices pour grandir",
+   "sous": "(Routine 1)"
+  },
+  {
+   "type": "rapport",
+   "de": 87,
+   "a": 141,
+   "titre": "1. Vérifie ton potentiel de taille",
+   "image": "rapport.png"
+  },
+  {
+   "type": "saut",
+   "de": 141,
+   "a": 303,
+   "titre": "2. Exercices de saut",
+   "sous": "Les sauts créent des micro-fractures",
+   "bas": "Les micro-fractures + l'hormone de croissance libérée par les sauts t'aident à grandir",
+   "clip": {
+    "f": "exercices.mp4",
+    "debut": 0,
+    "vitesse": 1
+   }
+  },
+  {
+   "type": "cobra",
+   "de": 303,
+   "a": 361,
+   "titre": "3. Étirements",
+   "sous": "Allongent les fascias et la colonne",
+   "bas": "Des fascias et une colonne plus longs, avec une meilleure posture, te préparent à grandir et te font paraître plus grand",
+   "clip": {
+    "f": "exercices.mp4",
+    "debut": 162,
+    "vitesse": 1
+   }
+  },
+  {
+   "type": "genoux",
+   "de": 361,
+   "a": 410,
+   "titre": "3. Étirements",
+   "sous": "Allongent les fascias et la colonne",
+   "bas": "Des fascias et une colonne plus longs, avec une meilleure posture, te préparent à grandir et te font paraître plus grand",
+   "clip": {
+    "f": "exercices.mp4",
+    "debut": 220,
+    "vitesse": 1
+   }
+  },
+  {
+   "type": "fente",
+   "de": 410,
+   "a": 470,
+   "titre": "3. Étirements",
+   "sous": "Allongent les fascias et la colonne",
+   "bas": "Des fascias et une colonne plus longs, avec une meilleure posture, te préparent à grandir et te font paraître plus grand",
+   "clip": {
+    "f": "exercices.mp4",
+    "debut": 269,
+    "vitesse": 0.9
+   }
+  }
  ]
 }
