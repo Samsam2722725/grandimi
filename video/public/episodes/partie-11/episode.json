@@ -114,66 +114,8 @@
   },
   "plans": [
     {
-      "nom": "hook",
-      "debut": 0,
-      "hookTaille": {
-        "cm": 183,
-        "carte": "hook:c-2",
-        "moyenne": "hook:moyenne+3",
-        "france": "hook:france"
-      },
-      "sons": [
-        {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.2
-        },
-        {
-          "a": 5,
-          "son": "tick",
-          "volume": 0.12
-        },
-        {
-          "a": 8,
-          "son": "tick",
-          "volume": 0.12
-        },
-        {
-          "a": 11,
-          "son": "tick",
-          "volume": 0.12
-        },
-        {
-          "a": 14,
-          "son": "tick",
-          "volume": 0.12
-        },
-        {
-          "a": 16,
-          "son": "ding",
-          "volume": 0.22
-        },
-        {
-          "a": "hook:c-2",
-          "son": "whoosh",
-          "volume": 0.2
-        },
-        {
-          "a": "hook:c+5",
-          "son": "pop",
-          "volume": 0.25
-        },
-        {
-          "a": "hook:moyenne+12",
-          "son": "pop",
-          "volume": 0.2
-        }
-      ]
-    },
-    {
       "nom": "accroche",
-      "debut": "hook2-1",
-      "transition": "radial",
+      "debut": 0,
       "image": "accroche",
       "camera": [
         {
@@ -192,13 +134,7 @@
           "son": null
         }
       ],
-      "sons": [
-        {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.2
-        }
-      ]
+      "sons": []
     },
     {
       "nom": "partie",
@@ -564,25 +500,12 @@
     "fenetres": [
       {
         "de": 0,
-        "a": "hook2-1",
-        "y": 1110,
-        "taille": 115,
-        "motsMax": 2,
-        "carMax": 16,
-        "style": "condense",
-        "contour": 5,
-        "poids": 600,
-        "motsCles": false,
-        "pop": false
-      },
-      {
-        "de": "hook2-1",
         "a": "partie",
-        "y": 900,
-        "taille": 88,
+        "y": 914,
+        "taille": 84,
         "motsMax": 3,
-        "carMax": 15,
-        "poids": 600,
+        "carMax": 18,
+        "poids": 700,
         "contour": 3,
         "motsCles": false,
         "pop": false,
@@ -591,11 +514,11 @@
       {
         "de": "cta-1",
         "a": "cta:potentiel+3",
-        "y": 900,
-        "taille": 88,
+        "y": 914,
+        "taille": 84,
         "motsMax": 3,
-        "carMax": 15,
-        "poids": 600,
+        "carMax": 18,
+        "poids": 700,
         "contour": 3,
         "motsCles": false,
         "pop": false,
@@ -604,11 +527,11 @@
       {
         "de": "cta:commente-2",
         "a": "fin",
-        "y": 900,
-        "taille": 88,
+        "y": 914,
+        "taille": 84,
         "motsMax": 3,
-        "carMax": 15,
-        "poids": 600,
+        "carMax": 18,
+        "poids": 700,
         "contour": 3,
         "motsCles": false,
         "pop": false,
@@ -620,5 +543,11 @@
   "reference": "references/p11-your-own-height-potential",
   "deriveCamera": false,
   "sonsMouvements": false,
-  "rythme": "sec"
+  "rythme": "sec",
+  "carteCommentaire": {
+    "nom": "Corey",
+    "texte": "J’ai 13 ans et je fais 1m78, je suis foutu ?",
+    "de": 0,
+    "a": "dan:corey+28"
+  }
 }

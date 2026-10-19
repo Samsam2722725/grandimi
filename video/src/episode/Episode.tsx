@@ -4,6 +4,7 @@ import {ease, pop} from '../anim';
 import {Sfx, SfxOn} from '../components/Sfx';
 import {makeTiming, Timeline} from '../timing';
 import {Paper, Typed} from './Paper';
+import {CarteCommentaire} from './CarteCommentaire';
 import {HookCommentaires} from './HookCommentaires';
 import {HookTaille} from './HookTaille';
 import {TopoAnime} from './TopoAnime';
@@ -807,6 +808,9 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 						</Sequence>
 					);
 				})}
+				{data.carteCommentaire ? (
+					<CarteCommentaire nom={data.carteCommentaire.nom} texte={data.carteCommentaire.texte} de={resolve(data.carteCommentaire.de)} a={resolve(data.carteCommentaire.a)} />
+				) : null}
 				{sousTitres ? <Captions windows={windows} /> : null}
 			</AbsoluteFill>
 		</SfxOn.Provider>

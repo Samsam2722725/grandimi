@@ -76,6 +76,8 @@ export type Plan = {
 
 export type Episode = {
 	partie: number;
+	/** Carte « Réponse au commentaire de … » affichée par-dessus les plans (src/episode/CarteCommentaire.tsx). */
+	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre};
 	/** sec : transitions deux fois plus courtes et flou de mouvement sur les mouvements de caméra (demande du 20/10). */
 	rythme?: 'sec';
 	/** false : pas de légère poussée de caméra entre les mouvements (défaut : true). */
