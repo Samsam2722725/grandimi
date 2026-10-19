@@ -82,59 +82,136 @@ const cam = (f: number, d: number, a: [number, number, number], b: [number, numb
 
 /* ---------- 1. Titre : salle de néons, deux bonshommes, flèches de croissance ---------- */
 
-const PlanTitre: React.FC<{f: number; d: number}> = ({f, d}) => {
-	const couleurs = ['#ff2d55', '#ffd60a', '#32d7ff', '#b45cff', ORANGE, '#30e07a'];
-	const fleches = couleurs.map((c, i) => {
-		const x0 = 425 + i * 46;
-		const amp = 22 + (i % 3) * 8;
-		const pts: string[] = [];
-		for (let k = 0; k <= 20; k++) {
-			const y = 1330 - k * 38;
-			pts.push(`${x0 + amp * Math.sin(k / 3 + i * 1.3 + f / 9)},${y}`);
-		}
-		const pousse = interpolate(f, [i * 2, i * 2 + 22], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
-		const [hx, hy] = pts[20].split(',').map(Number);
-		return (
-			<g key={i}>
-				<polyline points={pts.join(' ')} fill="none" stroke={ENCRE} strokeWidth={50} strokeLinejoin="round" pathLength={1} strokeDasharray={`${pousse} 1`} />
-				<polyline points={pts.join(' ')} fill="none" stroke={c} strokeWidth={36} strokeLinejoin="round" pathLength={1} strokeDasharray={`${pousse} 1`} />
-				{pousse > 0.97 ? <path d={`M ${hx - 44} ${hy + 30} L ${hx} ${hy - 50} L ${hx + 44} ${hy + 30} Z`} fill={c} stroke={ENCRE} strokeWidth={O} strokeLinejoin="round" /> : null}
-			</g>
-		);
-	});
-	const s = interpolate(f, [0, d], [1, 1.06]);
-	const neon = (x1: number, y1: number, x2: number, y2: number, k: number) => (
-		<g key={k}>
-			<line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#2f5bff" strokeWidth={22} opacity={0.6} style={{filter: 'blur(10px)'}} />
-			<line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#cfe0ff" strokeWidth={5} />
+/** Mannequin de profil (tourné vers la droite) aux muscles multicolores, repère 576×768 de l'original. */
+const PALETTE = ['#e8262b', '#2a6bff', '#19b34a', '#ffcf1a', '#9b4dff', '#ff7a1a', '#ff3fa0', '#18c6d8'];
+const Mannequin: React.FC<{id: string; tx: number; ty: number; s: number; miroir?: boolean}> = ({id, tx, ty, s, miroir}) => {
+	const corps = 'M 156 334 C 140 345 136 380 140 410 C 142 430 134 445 132 466 C 128 490 140 506 148 516 C 150 545 150 560 154 576 C 148 592 148 606 156 616 L 196 616 C 200 598 204 586 200 566 C 206 540 210 506 204 472 C 200 456 206 440 206 420 C 210 396 212 368 196 346 C 190 338 182 334 176 332 Z';
+	const bras = 'M 152 340 C 142 380 140 430 146 470 L 162 470 C 160 430 166 380 170 345 Z';
+	// muscles du profil (couleurs vives, fibres sombres), découpés par la silhouette
+	const muscles: [string, string][] = [
+		['M 130 296 L 200 296 L 204 346 L 128 346 Z', '#ffd21a'],
+		['M 128 344 L 160 344 L 158 424 L 128 428 Z', '#2a6bff'],
+		['M 168 342 L 210 346 L 210 398 L 168 394 Z', '#e8262b'],
+		['M 160 394 L 212 398 L 212 452 L 160 452 Z', '#b04dff'],
+		['M 128 424 L 160 424 L 160 456 L 128 458 Z', '#ff3fa0'],
+		['M 128 456 L 166 452 L 166 500 L 128 504 Z', '#ff7a1a'],
+		['M 166 452 L 212 452 L 206 548 L 168 548 Z', '#ff2f4f'],
+		['M 128 500 L 168 498 L 168 548 L 130 550 Z', '#7a3dff'],
+		['M 128 548 L 212 546 L 212 566 L 128 568 Z', '#ffcf1a'],
+		['M 128 566 L 212 564 L 212 640 L 128 640 Z', '#19b34a'],
+	];
+	const fibres = [];
+	for (let y = 300; y < 630; y += 9) fibres.push(<path key={y} d={`M 128 ${y} q 42 ${6 + (y % 5)} 84 ${-2}`} fill="none" stroke="#2a0a14" strokeOpacity={0.35} strokeWidth={1.3} />);
+	const plaques = [
+		...muscles.map(([d, c], i) => <path key={`m${i}`} d={d} fill={c} stroke="#1a0d14" strokeWidth={2.2} />),
+		<ellipse key="delto" cx={166} cy={352} rx={20} ry={16} fill="#19b34a" stroke="#1a0d14" strokeWidth={2.2} />,
+		...fibres,
+	];
+	const brasPlaques = [
+		<path key="b1" d="M 132 336 L 176 336 L 176 400 L 132 404 Z" fill="#e8262b" stroke="#1a0d14" strokeWidth={2} />,
+		<path key="b2" d="M 132 400 L 176 398 L 176 474 L 132 474 Z" fill="#ff7a1a" stroke="#1a0d14" strokeWidth={2} />,
+		<path key="b3" d="M 150 340 L 160 340 L 158 398 L 148 398 Z" fill="#2a6bff" stroke="#1a0d14" strokeWidth={1.5} />,
+	];
+	return (
+		<g transform={`translate(${tx} ${ty}) scale(${miroir ? -s : s} ${s}) translate(172 0) scale(0.84 1) translate(-172 0)`}>
+			<clipPath id={`corps-${id}`}>
+				<path d={corps} />
+			</clipPath>
+			<clipPath id={`bras-${id}`}>
+				<path d={bras} />
+			</clipPath>
+			<path d={corps} fill="#222" stroke="#0b0b0b" strokeWidth={4} />
+			<g clipPath={`url(#corps-${id})`}>{plaques}</g>
+			<path d={corps} fill="none" stroke="#0b0b0b" strokeWidth={3} />
+			<path d={bras} fill="#222" stroke="#0b0b0b" strokeWidth={3} />
+			<g clipPath={`url(#bras-${id})`}>{brasPlaques}</g>
+			<path d={bras} fill="none" stroke="#0b0b0b" strokeWidth={3} />
+			{/* mains, pieds, cou et tête gris (mannequin) */}
+			<path d="M 146 468 C 140 488 150 500 158 494 C 164 488 164 476 162 468 Z" fill="#8a8a8a" stroke="#0b0b0b" strokeWidth={2} />
+			<path d="M 152 610 L 150 628 C 170 634 196 636 214 630 C 210 620 200 612 196 610 Z" fill="#8a8a8a" stroke="#0b0b0b" strokeWidth={2} />
+			<path d="M 158 300 L 160 334 L 184 334 L 180 302 Z" fill="#8a8a8a" stroke="#0b0b0b" strokeWidth={2} />
+			<path d="M 146 280 C 146 255 168 248 182 258 C 192 266 190 280 194 288 C 196 294 190 296 188 300 C 186 312 172 316 160 310 C 148 304 146 294 146 280 Z" fill="#9a9a9a" stroke="#0b0b0b" strokeWidth={2} />
+			<path d="M 152 268 C 158 256 172 254 180 262" fill="none" stroke="#c9c9c9" strokeWidth={4} strokeLinecap="round" />
 		</g>
 	);
+};
+
+/** Ruban marbré terminé par une pointe de flèche. */
+const Ruban: React.FC<{d: string; pointe: [number, number, number]; c1: string; c2: string; pousse: number; id: string}> = ({d, pointe, c1, c2, pousse, id}) => {
+	const [px, py, ang] = pointe;
+	return (
+		<g>
+			<linearGradient id={`g-${id}`} x1="0" y1="1" x2="0" y2="0">
+				<stop offset="0" stopColor={c2} />
+				<stop offset="1" stopColor={c1} />
+			</linearGradient>
+			<path d={d} fill="none" stroke="#120609" strokeWidth={30} pathLength={1} strokeDasharray={`${pousse} 1`} />
+			<path d={d} fill="none" stroke={`url(#g-${id})`} strokeWidth={24} pathLength={1} strokeDasharray={`${pousse} 1`} />
+			<g filter="url(#marbre)" opacity={0.75}>
+				<path d={d} fill="none" stroke="#fff" strokeOpacity={0.55} strokeWidth={4} strokeDasharray="18 10 6 12" transform="translate(-5 0)" />
+				<path d={d} fill="none" stroke="#000" strokeOpacity={0.35} strokeWidth={5} strokeDasharray="10 16 22 8" transform="translate(6 0)" />
+			</g>
+			{pousse > 0.98 ? (
+				<g transform={`translate(${px} ${py}) rotate(${ang})`}>
+					<path d="M -30 22 L 0 -26 L 30 22 L 12 18 L -12 18 Z" fill={c1} stroke="#120609" strokeWidth={3} strokeLinejoin="round" />
+					<path d="M -14 12 L 0 -12 L 6 0" fill="none" stroke="#fff" strokeOpacity={0.5} strokeWidth={3} />
+				</g>
+			) : null}
+		</g>
+	);
+};
+
+/* ---------- 1. Titre : salle de néons, deux mannequins multicolores, rubans-flèches ---------- */
+
+const PlanTitre: React.FC<{f: number; d: number}> = ({f, d}) => {
+	const K = W / 576; // repère de l'original (576×768) → bande 1080×1440
+	const s = interpolate(f, [0, d], [1, 1.05]);
+	const neon = (pts: string, k: number) => (
+		<g key={k}>
+			<polyline points={pts} fill="none" stroke="#2546ff" strokeWidth={12} opacity={0.75} style={{filter: 'blur(7px)'}} />
+			<polyline points={pts} fill="none" stroke="#e6ecff" strokeWidth={3.2} />
+		</g>
+	);
+	const pousse = (i: number) => interpolate(f, [i * 2, i * 2 + 18], [0.25, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+	const rubans: [string, [number, number, number], string, string][] = [
+		['M 262 612 C 268 548 196 488 214 318', [214, 306, -4], '#7fc8ff', '#1f5fe0'],
+		['M 336 606 C 262 536 228 430 242 270', [242, 258, 4], '#ff5fb0', '#b0156a'],
+		['M 214 590 C 300 528 336 432 322 272', [322, 260, 10], '#ffd23a', '#ff8a00'],
+		['M 362 604 C 330 528 300 470 352 304', [356, 292, 18], '#ff6a3a', '#c8201c'],
+		['M 298 618 C 236 524 304 420 290 228', [290, 216, -2], '#ff3b3b', '#9c0f12'],
+	];
 	return (
 		<svg width={W} height={BH} viewBox={`0 0 ${W} ${BH}`}>
 			<Defs />
 			<defs>
-				<radialGradient id="nuit" cx="50%" cy="85%" r="80%">
-					<stop offset="0" stopColor="#1736d6" />
-					<stop offset="0.45" stopColor="#06104a" />
-					<stop offset="1" stopColor="#020208" />
+				<radialGradient id="nuit" cx="50%" cy="92%" r="70%">
+					<stop offset="0" stopColor="#2a48ff" />
+					<stop offset="0.35" stopColor="#0b1a8a" />
+					<stop offset="0.7" stopColor="#040a30" />
+					<stop offset="1" stopColor="#010106" />
 				</radialGradient>
+				<filter id="marbre" x="-20%" y="-5%" width="140%" height="110%">
+					<feTurbulence type="fractalNoise" baseFrequency="0.035 0.09" numOctaves="2" seed="7" />
+					<feDisplacementMap in="SourceGraphic" scale="14" />
+				</filter>
 			</defs>
 			<rect width={W} height={BH} fill="url(#nuit)" />
-			<g transform={`translate(${W / 2} ${BH / 2}) scale(${s}) translate(${-W / 2} ${-BH / 2})`}>
+			<g transform={`translate(${W / 2} ${BH * 0.55}) scale(${s}) translate(${-W / 2} ${-BH * 0.55}) scale(${K})`}>
 				{[
-					[250, 520, 830, 520],
-					[250, 520, 250, 1150],
-					[830, 520, 830, 1150],
-					[250, 1150, 830, 1150],
-					[250, 520, 40, 380],
-					[830, 520, 1040, 380],
-					[250, 1150, 20, 1320],
-					[830, 1150, 1060, 1320],
-				].map(([a, b, c, e], k) => neon(a, b, c, e, k))}
-				<ellipse cx={540} cy={1300} rx={420} ry={40} fill="#000" opacity={0.35} />
-				<Bonhomme pose={debout(240, 1290, 720, f, 0)} humeur="content" />
-				<Bonhomme pose={debout(840, 1290, 720, f, 2)} humeur="content" />
-				{fleches}
+					'46,146 290,14 540,150',
+					'46,146 290,206 540,150',
+					'290,206 290,226',
+					'22,212 252,216 252,522 22,532 22,212',
+					'322,214 554,210 554,538 322,522 322,214',
+					'22,532 0,600',
+					'554,538 576,600',
+				].map((p, k) => neon(p, k))}
+				<ellipse cx={290} cy={640} rx={230} ry={20} fill="#000" opacity={0.22} style={{filter: 'blur(6px)'}} />
+				<Mannequin id="g" tx={0} ty={0} s={1} />
+				{rubans.map(([d, p, c1, c2], i) => (
+					<Ruban key={i} id={`r${i}`} d={d} pointe={p} c1={c1} c2={c2} pousse={pousse(i)} />
+				))}
+				<Mannequin id="d" tx={594} ty={-62} s={1.08} miroir />
 			</g>
 		</svg>
 	);
@@ -478,9 +555,9 @@ const Contenu: React.FC<{p: Plan; dir: string}> = ({p, dir}) => {
 		return (
 			<>
 				<PlanTitre f={f} d={d} />
-				<div style={{position: 'absolute', left: 40, right: 40, top: 40, textAlign: 'center', fontFamily: FONT, fontWeight: 800, color: '#fff', textShadow: '0 5px 0 #000, 0 0 20px #000'}}>
-					<div style={{fontSize: 86, lineHeight: 1.06}}>{p.titre}</div>
-					{p.sous ? <div style={{fontSize: 58, marginTop: 10}}>{p.sous}</div> : null}
+				<div style={{position: 'absolute', left: 30, right: 30, top: 50, textAlign: 'center', fontFamily: FONT, fontWeight: 800, color: '#fff', textShadow: '0 4px 0 #000, 0 0 24px #000'}}>
+					<div style={{fontSize: 90, lineHeight: 1.08, letterSpacing: -0.5}}>{p.titre}</div>
+					{p.sous ? <div style={{fontSize: 62, marginTop: 18}}>{p.sous}</div> : null}
 				</div>
 			</>
 		);
