@@ -42,9 +42,13 @@ export const Shot: React.FC<{
 	libre?: boolean;
 	/** false : caméra parfaitement fixe entre deux mouvements (comme la référence 7436214342510513439). */
 	derive?: boolean;
-}> = ({src, w, h, cams, bg = '#000', children, rotate = 0, libre = false, derive = true}) => {
+	/** Flou proportionnel à la vitesse de la caméra (zooms rapides qui restent fluides). */
+	flouMouvement?: boolean;
+}> = ({src, w, h, cams, bg = '#000', children, rotate = 0, libre = false, derive = true, flouMouvement = false}) => {
 	const f = useCurrentFrame();
 	const c = camAt(cams, f, derive);
+	const p = camAt(cams, f - 1, derive);
+	const flou = flouMouvement ? Math.min(10, (60 * Math.abs(c.z - p.z)) / c.z + 0.06 * Math.hypot(c.x - p.x, c.y - p.y) * c.z) : 0;
 	const s = Math.max(W / w, H / h) * c.z;
 	let tx = W / 2 - c.x * s;
 	let ty = H / 2 - c.y * s;
@@ -65,6 +69,7 @@ export const Shot: React.FC<{
 					height: h,
 					transformOrigin: '0 0',
 					transform: `translate(${tx}px, ${ty}px) scale(${s})${rotate ? ` rotate(${rotate}deg)` : ''}`,
+					filter: flou > 0.4 ? `blur(${flou.toFixed(1)}px)` : undefined,
 				}}
 			>
 				<Img src={staticFile(src)} style={{position: 'absolute', left: 0, top: 0, width: w, height: h}} />

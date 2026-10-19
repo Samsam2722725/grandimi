@@ -76,6 +76,8 @@ export type Plan = {
 
 export type Episode = {
 	partie: number;
+	/** sec : transitions deux fois plus courtes et flou de mouvement sur les mouvements de caméra (demande du 20/10). */
+	rythme?: 'sec';
 	/** false : pas de légère poussée de caméra entre les mouvements (défaut : true). */
 	deriveCamera?: boolean;
 	/** false : pas de whoosh automatique sur les mouvements de caméra et les secousses (préférence 17/10). */

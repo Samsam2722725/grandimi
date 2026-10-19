@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "totalFrames": 1039,
+  "totalFrames": 1018,
   "audio": "voice/voix.wav",
   "lines": [
     {
@@ -31,19 +31,19 @@
         },
         {
           "w": "en",
-          "f": 60
+          "f": 58
         },
         {
           "w": "France.",
-          "f": 62
+          "f": 60
         }
       ]
     },
     {
       "id": "hook2",
-      "text": "On prédit ton potentiel de taille à partir de des commentaires,",
+      "text": "On prédit ton potentiel de taille à partir des commentaires,",
       "from": 70,
-      "duration": 83,
+      "duration": 64,
       "words": [
         {
           "w": "On",
@@ -55,507 +55,503 @@
         },
         {
           "w": "ton",
-          "f": 86
+          "f": 84
         },
         {
           "w": "potentiel",
-          "f": 91
+          "f": 89
         },
         {
           "w": "de",
-          "f": 103
+          "f": 98
         },
         {
           "w": "taille",
-          "f": 108
+          "f": 101
         },
         {
           "w": "à",
-          "f": 115
+          "f": 108
         },
         {
           "w": "partir",
-          "f": 120
-        },
-        {
-          "w": "de",
-          "f": 125
+          "f": 110
         },
         {
           "w": "des",
-          "f": 134
+          "f": 118
         },
         {
           "w": "commentaires,",
-          "f": 139
+          "f": 122
         }
       ]
     },
     {
       "id": "partie",
       "text": "partie 11.",
-      "from": 154,
-      "duration": 20,
+      "from": 134,
+      "duration": 21,
       "words": [
         {
           "w": "partie",
-          "f": 154
+          "f": 134
         },
         {
           "w": "11.",
-          "f": 163
+          "f": 144
         }
       ]
     },
     {
       "id": "dan",
       "text": "On regarde les stats de Corey.",
-      "from": 175,
-      "duration": 38,
+      "from": 156,
+      "duration": 40,
       "words": [
         {
           "w": "On",
-          "f": 175
+          "f": 156
         },
         {
           "w": "regarde",
-          "f": 178
+          "f": 158
         },
         {
           "w": "les",
-          "f": 187
+          "f": 168
         },
         {
           "w": "stats",
-          "f": 190
+          "f": 170
         },
         {
           "w": "de",
-          "f": 197
+          "f": 178
         },
         {
           "w": "Corey.",
-          "f": 199
+          "f": 180
         }
       ]
     },
     {
       "id": "age",
       "text": "À 13 ans et avec une taille actuelle de 178 cm, Corey est bien au-dessus de la moyenne.",
-      "from": 214,
-      "duration": 145,
+      "from": 197,
+      "duration": 141,
       "words": [
         {
           "w": "À",
-          "f": 214
+          "f": 197
         },
         {
           "w": "13",
-          "f": 218
+          "f": 202
         },
         {
           "w": "ans",
-          "f": 226
+          "f": 206
         },
         {
           "w": "et",
-          "f": 233
+          "f": 214
         },
         {
           "w": "avec",
-          "f": 238
+          "f": 218
         },
         {
           "w": "une",
-          "f": 242
+          "f": 223
         },
         {
           "w": "taille",
-          "f": 247
+          "f": 228
         },
         {
           "w": "actuelle",
-          "f": 257
+          "f": 235
         },
         {
           "w": "de",
-          "f": 264
+          "f": 245
         },
         {
           "w": "178",
-          "f": 269
+          "f": 247
         },
         {
           "w": "cm,",
-          "f": 293
+          "f": 274
         },
         {
           "w": "Corey",
-          "f": 310
+          "f": 291
         },
         {
           "w": "est",
-          "f": 326
+          "f": 305
         },
         {
           "w": "bien",
-          "f": 331
+          "f": 310
         },
         {
           "w": "au-dessus",
-          "f": 336
+          "f": 315
         },
         {
           "w": "de",
-          "f": 343
+          "f": 325
         },
         {
           "w": "la",
-          "f": 346
+          "f": 327
         },
         {
           "w": "moyenne.",
-          "f": 348
+          "f": 329
         }
       ]
     },
     {
       "id": "grandimi",
       "text": "Selon Grandimi, sa taille finale estimée est de 195 cm.",
-      "from": 360,
+      "from": 339,
       "duration": 112,
       "words": [
         {
           "w": "Selon",
-          "f": 360
+          "f": 339
         },
         {
           "w": "Grandimi,",
-          "f": 367
+          "f": 346
         },
         {
           "w": "sa",
-          "f": 389
+          "f": 368
         },
         {
           "w": "taille",
-          "f": 394
+          "f": 373
         },
         {
           "w": "finale",
-          "f": 401
+          "f": 380
         },
         {
           "w": "estimée",
-          "f": 410
+          "f": 389
         },
         {
           "w": "est",
-          "f": 422
+          "f": 404
         },
         {
           "w": "de",
-          "f": 427
+          "f": 406
         },
         {
           "w": "195",
-          "f": 432
+          "f": 411
         },
         {
           "w": "cm.",
-          "f": 456
+          "f": 435
         }
       ]
     },
     {
       "id": "habitudes",
       "text": "Avec les bonnes habitudes, Corey pourrait atteindre 200 cm,",
-      "from": 473,
-      "duration": 92,
+      "from": 452,
+      "duration": 93,
       "words": [
         {
           "w": "Avec",
-          "f": 473
+          "f": 452
         },
         {
           "w": "les",
-          "f": 478
+          "f": 457
         },
         {
           "w": "bonnes",
-          "f": 480
+          "f": 459
         },
         {
           "w": "habitudes,",
-          "f": 487
+          "f": 466
         },
         {
           "w": "Corey",
-          "f": 504
+          "f": 478
         },
         {
           "w": "pourrait",
-          "f": 516
+          "f": 488
         },
         {
           "w": "atteindre",
-          "f": 526
+          "f": 505
         },
         {
           "w": "200",
-          "f": 538
+          "f": 517
         },
         {
           "w": "cm,",
-          "f": 550
+          "f": 529
         }
       ]
     },
     {
       "id": "optim",
       "text": "soit 5 cm de croissance supplémentaires.",
-      "from": 566,
-      "duration": 67,
+      "from": 546,
+      "duration": 66,
       "words": [
         {
           "w": "soit",
-          "f": 566
+          "f": 546
         },
         {
           "w": "5",
-          "f": 576
+          "f": 556
         },
         {
           "w": "cm",
-          "f": 586
+          "f": 563
         },
         {
           "w": "de",
-          "f": 600
+          "f": 580
         },
         {
           "w": "croissance",
-          "f": 602
+          "f": 582
         },
         {
           "w": "supplémentaires.",
-          "f": 617
+          "f": 596
         }
       ]
     },
     {
       "id": "pct",
       "text": "Actuellement, Corey est déjà plus grand que 99,6% des personnes de son âge",
-      "from": 634,
-      "duration": 135,
+      "from": 613,
+      "duration": 131,
       "words": [
         {
           "w": "Actuellement,",
-          "f": 634
+          "f": 613
         },
         {
           "w": "Corey",
-          "f": 648
+          "f": 628
         },
         {
           "w": "est",
-          "f": 665
+          "f": 644
         },
         {
           "w": "déjà",
-          "f": 670
+          "f": 649
         },
         {
           "w": "plus",
-          "f": 674
+          "f": 656
         },
         {
           "w": "grand",
-          "f": 679
+          "f": 659
         },
         {
           "w": "que",
-          "f": 684
+          "f": 666
         },
         {
           "w": "99,6%",
-          "f": 691
+          "f": 673
         },
         {
           "w": "des",
-          "f": 744
+          "f": 721
         },
         {
           "w": "personnes",
-          "f": 749
+          "f": 724
         },
         {
           "w": "de",
-          "f": 754
+          "f": 731
         },
         {
           "w": "son",
-          "f": 756
+          "f": 733
         },
         {
           "w": "âge",
-          "f": 761
+          "f": 738
         }
       ]
     },
     {
       "id": "fini",
       "text": "et a déjà atteint 91,2% de sa croissance.",
-      "from": 770,
-      "duration": 90,
+      "from": 745,
+      "duration": 93,
       "words": [
         {
           "w": "et",
-          "f": 770
+          "f": 745
         },
         {
           "w": "a",
-          "f": 775
+          "f": 750
         },
         {
           "w": "déjà",
-          "f": 780
+          "f": 755
         },
         {
           "w": "atteint",
-          "f": 785
+          "f": 760
         },
         {
           "w": "91,2%",
-          "f": 797
+          "f": 777
         },
         {
           "w": "de",
-          "f": 838
+          "f": 818
         },
         {
           "w": "sa",
-          "f": 840
+          "f": 820
         },
         {
           "w": "croissance.",
-          "f": 845
+          "f": 825
         }
       ]
     },
     {
       "id": "foutu",
       "text": "T’es clairement pas foutu.",
-      "from": 861,
-      "duration": 33,
+      "from": 839,
+      "duration": 35,
       "words": [
         {
           "w": "T’es",
-          "f": 861
+          "f": 839
         },
         {
           "w": "clairement",
-          "f": 868
+          "f": 849
         },
         {
           "w": "pas",
-          "f": 878
+          "f": 856
         },
         {
           "w": "foutu.",
-          "f": 880
+          "f": 861
         }
       ]
     },
     {
       "id": "cta",
       "text": "Si toi aussi tu veux faire analyser ton potentiel de taille, commente ton âge et ta taille actuelle sous cette vidéo.",
-      "from": 895,
-      "duration": 143,
+      "from": 875,
+      "duration": 140,
       "words": [
         {
           "w": "Si",
-          "f": 895
+          "f": 875
         },
         {
           "w": "toi",
-          "f": 899
+          "f": 880
         },
         {
           "w": "aussi",
-          "f": 904
+          "f": 885
         },
         {
           "w": "tu",
-          "f": 911
+          "f": 892
         },
         {
           "w": "veux",
-          "f": 914
+          "f": 895
         },
         {
           "w": "faire",
-          "f": 919
+          "f": 899
         },
         {
           "w": "analyser",
-          "f": 923
+          "f": 904
         },
         {
           "w": "ton",
-          "f": 938
+          "f": 916
         },
         {
           "w": "potentiel",
-          "f": 943
+          "f": 921
         },
         {
           "w": "de",
-          "f": 952
+          "f": 933
         },
         {
           "w": "taille,",
-          "f": 955
+          "f": 935
         },
         {
           "w": "commente",
-          "f": 968
+          "f": 947
         },
         {
           "w": "ton",
-          "f": 980
+          "f": 959
         },
         {
           "w": "âge",
-          "f": 985
+          "f": 964
         },
         {
           "w": "et",
-          "f": 990
+          "f": 969
         },
         {
           "w": "ta",
-          "f": 995
+          "f": 974
         },
         {
           "w": "taille",
-          "f": 1000
+          "f": 979
         },
         {
           "w": "actuelle",
-          "f": 1007
+          "f": 986
         },
         {
           "w": "sous",
-          "f": 1019
+          "f": 998
         },
         {
           "w": "cette",
-          "f": 1024
+          "f": 1003
         },
         {
           "w": "vidéo.",
-          "f": 1028
+          "f": 1007
         }
       ]
     }

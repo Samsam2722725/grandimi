@@ -11,7 +11,7 @@
     {
       "id": "hook2",
       "pause": 0,
-      "text": "On prédit ton potentiel de taille à partir de des commentaires,"
+      "text": "On prédit ton potentiel de taille à partir des commentaires,"
     },
     {
       "id": "partie",
@@ -97,18 +97,18 @@
       "z": 0.86
     },
     "taille_actuelle": {
-      "x": 422,
-      "y": 447,
-      "z": 1.53
+      "x": 330,
+      "y": 690,
+      "z": 1.45
     },
     "taille_predite": {
-      "x": 842,
-      "y": 625,
-      "z": 1.556
+      "x": 770,
+      "y": 690,
+      "z": 1.45
     },
     "croissance": {
-      "x": 812,
-      "y": 1154,
+      "x": 790,
+      "y": 1382,
       "z": 1.5
     }
   },
@@ -202,7 +202,7 @@
     },
     {
       "nom": "partie",
-      "debut": "partie+6",
+      "debut": "partie",
       "fond": "papier",
       "sortie": "lumiere-forte",
       "papiers": [
@@ -215,12 +215,13 @@
         {
           "type": "tape",
           "texte": "PARTIE {partie}",
-          "a": 3,
+          "a": 1,
           "y": 830,
           "taille": 200,
           "curseur": true,
           "son": "tick",
-          "volume": 0.3
+          "volume": 0.3,
+          "parLettre": 1
         }
       ],
       "sons": [
@@ -233,7 +234,7 @@
     },
     {
       "nom": "ecran-taille",
-      "debut": "dan+10",
+      "debut": "dan-3",
       "transition": "lumiere",
       "image": "ecran",
       "libre": true,
@@ -246,17 +247,17 @@
         {
           "a": "age:178-8",
           "zone": "taille_actuelle",
-          "duree": 12
+          "duree": 8
         },
         {
           "a": "age:moyenne-1",
           "zone": "tout",
-          "duree": 15
+          "duree": 8
         },
         {
           "a": "grandimi:195+10",
           "zone": "taille_predite",
-          "duree": 12
+          "duree": 8
         }
       ],
       "elements": [
@@ -377,7 +378,7 @@
         {
           "a": "fini:atteint+6",
           "zone": "croissance",
-          "duree": 15
+          "duree": 8
         }
       ],
       "elements": [
@@ -615,8 +616,9 @@
       }
     ]
   },
-  "voix": "Enregistrement ElevenLabs de l'utilisateur, blancs ramenés à 0,08 s, accéléré ×1,14 (34,6 s ; original 32,1 s).",
+  "voix": "Enregistrement ElevenLabs de l'utilisateur, blancs ramenés à 0,08 s, accéléré ×1,14 ; « de » en trop retiré et « On prédit … commentaires » accéléré ×1,2 (33,9 s ; original 32,1 s).",
   "reference": "references/p11-your-own-height-potential",
   "deriveCamera": false,
-  "sonsMouvements": false
+  "sonsMouvements": false,
+  "rythme": "sec"
 }

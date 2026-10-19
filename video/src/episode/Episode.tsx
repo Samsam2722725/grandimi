@@ -48,9 +48,9 @@ const makeResolver = (tl: Timeline) => {
 };
 
 /* ───────── Transitions ───────── */
-const Whip: React.FC<{children: React.ReactNode}> = ({children}) => {
+const Whip: React.FC<{vitesse?: number; children: React.ReactNode}> = ({vitesse = 1, children}) => {
 	const f = useCurrentFrame();
-	const t = ease(f, 0, 7);
+	const t = ease(f, 0, 7 / vitesse);
 	return (
 		<AbsoluteFill
 			style={{
@@ -86,8 +86,9 @@ const MOUVEMENTS: Record<string, {f: number[]; x: number[]; s: number[]; r?: num
 	bascule: {f: [0, 1, 2, 3, 4, 5, 7, 9], x: [0, 0, 0, 0, 0, 0, 0, 0], s: [1.4, 1.15, 1.04, 0.98, 0.95, 0.97, 1, 1], r: [-24, -14, -6, -1, 3, 2, 0.5, 0], flou: 14},
 };
 
-const Mouvement: React.FC<{type: string; at: number; children: React.ReactNode}> = ({type, at, children}) => {
-	const f = useCurrentFrame() - at;
+/** vitesse > 1 : même mouvement en moins de frames (rythme « sec »). */
+const Mouvement: React.FC<{type: string; at: number; vitesse?: number; children: React.ReactNode}> = ({type, at, vitesse = 1, children}) => {
+	const f = (useCurrentFrame() - at) * vitesse;
 	const m = MOUVEMENTS[type];
 	const active = f >= 0 && f <= m.f[m.f.length - 1];
 	const x = active ? kf(f, m.f, m.x) : 0;
@@ -134,8 +135,8 @@ const FonduBlanc: React.FC<{from: number; to: number}> = ({from, to}) => {
 	return o > 0 ? <AbsoluteFill style={{background: '#fff', opacity: o}} /> : null;
 };
 
-const Flash: React.FC<{color: string}> = ({color}) => {
-	const f = useCurrentFrame();
+const Flash: React.FC<{color: string; vitesse?: number}> = ({color, vitesse = 1}) => {
+	const f = useCurrentFrame() * vitesse;
 	const o = interpolate(f, [0, 2, 9], [0, 0.95, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 	return <AbsoluteFill style={{background: color, opacity: o}} />;
 };
@@ -290,9 +291,10 @@ const PhotoPapier: React.FC<{files: string[]; saccade?: number}> = ({files, sacc
 };
 
 /** Coup de zoom flou (mesuré sur l'appel de la référence v12044 : flou radial pendant ~4 frames, zoom ×1,16). */
-const CoupFlou: React.FC<{at?: number; children: React.ReactNode}> = ({at, children}) => {
-	const f = useCurrentFrame();
-	if (at === undefined || f < at) return <>{children}</>;
+const CoupFlou: React.FC<{at?: number; vitesse?: number; children: React.ReactNode}> = ({at, vitesse = 1, children}) => {
+	const f0 = useCurrentFrame();
+	if (at === undefined || f0 < at) return <>{children}</>;
+	const f = at + (f0 - at) * vitesse;
 	const z = 1 + 0.16 * ease(f, at, 8);
 	const b = interpolate(f, [at, at + 2, at + 7], [0, 14, 0], {extrapolateRight: 'clamp'});
 	return <AbsoluteFill style={{transform: `scale(${z})`, filter: b > 0.3 ? `blur(${b}px)` : undefined}}>{children}</AbsoluteFill>;
@@ -501,6 +503,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 	resolve,
 }) => {
 	const loc = (a: Ancre) => resolve(a, start) - start;
+	const vite = ep.rythme === 'sec' ? 2 : 1;
 	const dur = end - start;
 	const img = plan.image ? ep.images[plan.image] : undefined;
 	const file = (name: string) => staticFile(`episodes/${id}/images/${name}`);
@@ -579,7 +582,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 				/>
 			) : null}
 			{plan.fond === 'topo' ? (
-				<CoupFlou at={plan.topo?.coup !== undefined ? loc(plan.topo.coup) : undefined}>
+				<CoupFlou at={plan.topo?.coup !== undefined ? loc(plan.topo.coup) : undefined} vitesse={vite}>
 					<TopoAnime zoomDe={plan.topo?.zoomDe} d={plan.topo?.d} />
 				</CoupFlou>
 			) : null}
@@ -603,16 +606,17 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					bg={plan.fondCouleur}
 					libre={plan.libre}
 					derive={ep.deriveCamera !== false}
+					flouMouvement={ep.rythme === 'sec'}
 				>
 					{inImage}
 				</Shot>
 			) : null}
 			{onScreen}
-			{plan.transition === 'flash' ? <Flash color={P5.yellow} /> : null}
-			{plan.transition === 'flash-blanc' ? <Flash color="#fff" /> : null}
-			{plan.transition === 'lumiere' || plan.transition === 'lumiere-rouge' ? <Lumiere from={0} to={6} entree /> : null}
-			{plan.transition === 'lumiere-rouge' ? <Flash color="#ff1a1a" /> : null}
-			{plan.sortie === 'lumiere' || plan.sortie === 'lumiere-forte' ? <Lumiere from={dur - 8} to={dur} fort={plan.sortie === 'lumiere-forte'} /> : null}
+			{plan.transition === 'flash' ? <Flash color={P5.yellow} vitesse={vite} /> : null}
+			{plan.transition === 'flash-blanc' ? <Flash color="#fff" vitesse={vite} /> : null}
+			{plan.transition === 'lumiere' || plan.transition === 'lumiere-rouge' ? <Lumiere from={0} to={Math.round(6 / vite)} entree /> : null}
+			{plan.transition === 'lumiere-rouge' ? <Flash color="#ff1a1a" vitesse={vite} /> : null}
+			{plan.sortie === 'lumiere' || plan.sortie === 'lumiere-forte' ? <Lumiere from={dur - Math.round(8 / vite)} to={dur} fort={plan.sortie === 'lumiere-forte'} /> : null}
 			{plan.sortie === 'blanc' ? <FonduBlanc from={dur - 4} to={dur - 1} /> : null}
 			{sons.map((s, i) => (
 				<Sfx key={i} at={s.at} name={s.son as never} volume={s.volume} />
@@ -621,12 +625,12 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 	);
 	let out = content;
 	for (const e of plan.effets ?? []) out = <Mouvement type={e.type} at={loc(e.a)}>{out}</Mouvement>;
-	if (plan.transition === 'whip') return <Whip>{out}</Whip>;
-	if (plan.transition === 'glisse' || plan.transition === 'lumiere') return <Mouvement type="glisse" at={0}>{out}</Mouvement>;
-	if (plan.transition === 'rebond') return <Mouvement type="rebond" at={0}>{out}</Mouvement>;
-	if (plan.transition === 'bascule') return <Mouvement type="bascule" at={0}>{out}</Mouvement>;
-	if (plan.transition === 'etire') return <Mouvement type="etire" at={0}>{out}</Mouvement>;
-	if (plan.transition === 'radial') return <Mouvement type="radial" at={0}>{out}</Mouvement>;
+	if (plan.transition === 'whip') return <Whip vitesse={vite}>{out}</Whip>;
+	if (plan.transition === 'glisse' || plan.transition === 'lumiere') return <Mouvement type="glisse" at={0} vitesse={vite}>{out}</Mouvement>;
+	if (plan.transition === 'rebond') return <Mouvement type="rebond" at={0} vitesse={vite}>{out}</Mouvement>;
+	if (plan.transition === 'bascule') return <Mouvement type="bascule" at={0} vitesse={vite}>{out}</Mouvement>;
+	if (plan.transition === 'etire') return <Mouvement type="etire" at={0} vitesse={vite}>{out}</Mouvement>;
+	if (plan.transition === 'radial') return <Mouvement type="radial" at={0} vitesse={vite}>{out}</Mouvement>;
 	return out;
 };
 
