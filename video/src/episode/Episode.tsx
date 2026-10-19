@@ -596,8 +596,10 @@ const Captions: React.FC<{windows: Fenetre[]}> = ({windows}) => {
 							padding: '0 14px',
 							borderRadius: 18,
 							lineHeight: 1.1,
-							background: c.words.length > 1 && i === cur ? 'rgba(232,40,80,0.92)' : 'transparent',
-							boxShadow: c.words.length > 1 && i === cur ? '0 0 18px rgba(232,40,80,0.55)' : 'none',
+							// Pastille du mot prononcé : apparaît en 4 frames (fondu + léger zoom) au lieu de sauter.
+							background: c.words.length > 1 && i === cur ? `rgba(232,40,80,${0.92 * ease(f, c.times[i], 4)})` : 'transparent',
+							boxShadow: c.words.length > 1 && i === cur ? `0 0 18px rgba(232,40,80,${0.55 * ease(f, c.times[i], 4)})` : 'none',
+							transform: c.words.length > 1 && i === cur ? `scale(${0.94 + 0.06 * ease(f, c.times[i], 4)})` : undefined,
 						}}
 					>
 						{word.replace(/[,.:;?!]$/, '')}
