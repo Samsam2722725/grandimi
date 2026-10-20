@@ -1,0 +1,479 @@
+{
+  "partie": 12,
+  "voice": "ff_siwis",
+  "speed": 1.2,
+  "lines": [
+    {
+      "id": "hook",
+      "pause": 0,
+      "text": "13 ans, 1m68. Il va finir à combien ?"
+    },
+    {
+      "id": "analyse",
+      "pause": 0,
+      "text": "Son analyse dit : 1m85."
+    },
+    {
+      "id": "optim",
+      "pause": 0,
+      "text": "Mais en optimisant sa croissance avec Grandimi, il pourrait monter à 1m90, 5 cm de plus."
+    },
+    {
+      "id": "pct",
+      "pause": 0,
+      "text": "Il est déjà plus grand que 94 % des garçons de son âge,"
+    },
+    {
+      "id": "fini",
+      "pause": 0,
+      "text": "et il lui reste presque 10 % de croissance."
+    },
+    {
+      "id": "foutu",
+      "pause": 0,
+      "text": "Steve, t’es clairement pas foutu."
+    },
+    {
+      "id": "plan",
+      "pause": 0,
+      "text": "Son plan pour grandir est sur grandimi.com."
+    },
+    {
+      "id": "cta",
+      "pause": 0,
+      "text": "Et toi, tu vas finir à combien ? Commente TAILLE."
+    }
+  ],
+  "musique": {
+    "fichier": "sfx/music.wav",
+    "volume": 0.08
+  },
+  "images": {
+    "accroche": {
+      "fichier": "accroche.jpg",
+      "w": 1080,
+      "h": 1920
+    },
+    "ecran": {
+      "fichier": "ui.png",
+      "w": 1170,
+      "h": 2072
+    },
+    "verdict": {
+      "fichier": "verdict.jpg",
+      "w": 1080,
+      "h": 1920
+    }
+  },
+  "zones": {
+    "tout": {
+      "x": 585,
+      "y": 1036,
+      "z": 0.86
+    },
+    "taille_actuelle": {
+      "x": 330,
+      "y": 690,
+      "z": 1.39
+    },
+    "taille_predite": {
+      "x": 770,
+      "y": 690,
+      "z": 1.52
+    },
+    "croissance": {
+      "x": 790,
+      "y": 1382,
+      "z": 1.6
+    }
+  },
+  "plans": [
+    {
+      "nom": "accroche",
+      "debut": 0,
+      "image": "accroche",
+      "camera": [
+        {
+          "x": 540,
+          "y": 960,
+          "z": 1,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 540,
+          "y": 960,
+          "z": 1.06,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ]
+    },
+    {
+      "nom": "partie",
+      "debut": "hook:combien+9",
+      "fond": "papier",
+      "sortie": "lumiere-forte",
+      "papiers": [
+        "papier1.jpg",
+        "papier2.jpg",
+        "papier3.jpg",
+        "papier4.jpg"
+      ],
+      "elements": [
+        {
+          "type": "tape",
+          "texte": "PARTIE {partie}",
+          "a": 1,
+          "y": 830,
+          "taille": 200,
+          "curseur": true,
+          "parLettre": 1,
+          "son": "tick",
+          "volume": 0.3
+        }
+      ],
+      "sons": [
+        {
+          "a": 3,
+          "son": "papier",
+          "volume": 0.35
+        }
+      ]
+    },
+    {
+      "nom": "ecran",
+      "debut": "analyse:dit-3",
+      "transition": "lumiere",
+      "image": "ecran",
+      "libre": true,
+      "sortie": "lumiere-forte",
+      "camera": [
+        {
+          "a": 0,
+          "zone": "tout",
+          "duree": 1
+        },
+        {
+          "a": "analyse:1m85",
+          "zone": "taille_predite",
+          "duree": 8
+        },
+        {
+          "a": "optim:mais",
+          "zone": "tout",
+          "duree": 8
+        },
+        {
+          "a": "fini:reste",
+          "zone": "croissance",
+          "duree": 8
+        }
+      ],
+      "effets": [
+        {
+          "type": "flash",
+          "a": "pct:94-4"
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "fichier": "ballon_13.png",
+          "a": 3,
+          "fin": "analyse:1m85-2",
+          "x": 87,
+          "y": 678,
+          "w": 860,
+          "h": 668,
+          "effet": "pop-balance",
+          "son": "pop",
+          "volume": 0.35
+        },
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": "optim:grandimi",
+          "fin": "optim:pourrait+6",
+          "y": 1330,
+          "taille": 88,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 10
+        },
+        {
+          "type": "image",
+          "fichier": "fleche_rouge_bas.png",
+          "a": "optim:pourrait",
+          "fin": "optim:plus+8",
+          "x": 545,
+          "y": 185,
+          "w": 60,
+          "h": 190,
+          "depuis": {
+            "y": -60,
+            "d": 5
+          },
+          "rebond": true
+        },
+        {
+          "type": "image",
+          "fichier": "fleche_rouge_haut.png",
+          "a": "pct:plus-6",
+          "fin": "pct:94-4",
+          "x": 830,
+          "y": 1740,
+          "w": 60,
+          "h": 190,
+          "depuis": {
+            "y": 80,
+            "d": 4
+          },
+          "rebond": true
+        },
+        {
+          "type": "image",
+          "fichier": "fleche_rouge_haut.png",
+          "a": "pct:94-3",
+          "fin": "fini:reste",
+          "x": 360,
+          "y": 1405,
+          "w": 60,
+          "h": 190,
+          "depuis": {
+            "y": 80,
+            "d": 4
+          },
+          "rebond": true
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "verdict",
+      "debut": "foutu-2",
+      "transition": "lumiere",
+      "image": "verdict",
+      "camera": [
+        {
+          "x": 540,
+          "y": 960,
+          "z": 1,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 540,
+          "y": 960,
+          "z": 1.05,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "regle.png",
+          "a": "plan:grandir",
+          "x": 458,
+          "y": 1344,
+          "w": 165,
+          "h": 622,
+          "depuis": {
+            "y": 520,
+            "d": 10
+          }
+        },
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": "plan:sur",
+          "y": 330,
+          "taille": 88,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 10
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": "foutu:pas",
+          "son": "ding",
+          "volume": 0.18
+        }
+      ]
+    },
+    {
+      "nom": "appel",
+      "debut": "cta-1",
+      "transition": "radial",
+      "fond": "topo",
+      "sortie": "noir",
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": 4,
+          "y": 150,
+          "taille": 80,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 10
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "regle_emoji.png",
+          "a": "cta:commente+4",
+          "fin": "cta:taille+20",
+          "x": 600,
+          "y": 1000,
+          "w": 260,
+          "h": 260,
+          "depuis": {
+            "x": 160,
+            "y": 160,
+            "d": 6
+          },
+          "rebond": true
+        },
+        {
+          "type": "tape",
+          "texte": "\"TAILLE\"",
+          "a": "cta:taille",
+          "y": 860,
+          "taille": 120,
+          "couleur": "#3dff52",
+          "contour": 4,
+          "curseur": true,
+          "parLettre": 2,
+          "son": "tick",
+          "volume": 0.25
+        },
+        {
+          "type": "dm",
+          "a": "cta:taille+14",
+          "x": 370,
+          "y": 420,
+          "taille": 340,
+          "de": 95,
+          "vers": 99,
+          "son": "pop",
+          "volume": 0.3
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    }
+  ],
+  "sousTitres": {
+    "motsCles": [],
+    "fenetres": [
+      {
+        "de": 0,
+        "a": "hook:combien+9",
+        "y": 914,
+        "taille": 80,
+        "motsMax": 3,
+        "carMax": 18,
+        "poids": 700,
+        "contour": 3,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true
+      },
+      {
+        "de": "analyse:dit-3",
+        "a": "optim:mais",
+        "y": 914,
+        "taille": 80,
+        "motsMax": 3,
+        "carMax": 18,
+        "poids": 700,
+        "contour": 3,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true
+      },
+      {
+        "de": "foutu-2",
+        "a": "cta-1",
+        "y": 914,
+        "taille": 80,
+        "motsMax": 3,
+        "carMax": 18,
+        "poids": 700,
+        "contour": 3,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "verts": [
+          "pas",
+          "foutu"
+        ]
+      },
+      {
+        "de": "cta-1",
+        "a": "cta:commente",
+        "y": 914,
+        "taille": 80,
+        "motsMax": 3,
+        "carMax": 18,
+        "poids": 700,
+        "contour": 3,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "verts": [
+          "finir",
+          "combien"
+        ]
+      },
+      {
+        "de": "cta:commente",
+        "a": "cta:taille",
+        "y": 914,
+        "taille": 80,
+        "motsMax": 1,
+        "carMax": 18,
+        "poids": 700,
+        "contour": 3,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "verts": []
+      }
+    ]
+  },
+  "voix": "Enregistrement ElevenLabs de l'utilisateur (script B), blancs ramenés à 0,08 s, accéléré ×1,1, 1 s de silence final (22,6 s ; original 34,1 s).",
+  "reference": "references/p12-steve",
+  "deriveCamera": false,
+  "sonsMouvements": false,
+  "rythme": "sec",
+  "carteCommentaire": {
+    "nom": "steve200818",
+    "texte": "J’ai 1m68 à 13 ans, tu peux prédire ma taille ?",
+    "de": 0,
+    "a": "hook:combien+9",
+    "haut": true
+  }
+}

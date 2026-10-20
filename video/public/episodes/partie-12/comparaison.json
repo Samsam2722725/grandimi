@@ -1,0 +1,5 @@
+[["accroche + carte", 0.6, 20], ["papier", 2.8, "hook:combien+17"], ["écran + ballon", 5.8, "analyse:dit+3"],
+ ["zoom taille prédite", 11.0, "analyse:1m85+15"], ["flèche bas", 15.0, "optim:pourrait+20"], ["flèche haut croissance", 20.5, "pct:plus"],
+ ["flash jaune", 21.0, "pct:94-3"], ["flèche haut taller", 22.0, "pct:94+15"], ["zoom croissance", 24.0, "fini:reste+15"],
+ ["lumière sortie", 25.8, "foutu-4"], ["verdict", 26.6, "foutu:pas+4"], ["règle", 28.4, "plan:grandir+12"],
+ ["appel", 29.5, "cta+8"], ["emoji", 31.8, "cta:commente+12"], ["mot tapé", 32.2, "cta:taille+8"], ["DM", 33.4, "cta:taille+22"]]

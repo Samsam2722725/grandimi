@@ -1,0 +1,347 @@
+{
+  "fps": 30,
+  "totalFrames": 681,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "13 ans, 1m68. Il va finir à combien?",
+      "from": 2,
+      "duration": 73,
+      "words": [
+        {
+          "w": "13",
+          "f": 2
+        },
+        {
+          "w": "ans,",
+          "f": 10
+        },
+        {
+          "w": "1m68.",
+          "f": 17
+        },
+        {
+          "w": "Il",
+          "f": 43
+        },
+        {
+          "w": "va",
+          "f": 48
+        },
+        {
+          "w": "finir",
+          "f": 53
+        },
+        {
+          "w": "à",
+          "f": 60
+        },
+        {
+          "w": "combien?",
+          "f": 62
+        }
+      ]
+    },
+    {
+      "id": "analyse",
+      "text": "Son analyse dit: 1m85.",
+      "from": 77,
+      "duration": 64,
+      "words": [
+        {
+          "w": "Son",
+          "f": 77
+        },
+        {
+          "w": "analyse",
+          "f": 82
+        },
+        {
+          "w": "dit:",
+          "f": 96
+        },
+        {
+          "w": "1m85.",
+          "f": 103
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "Mais en optimisant sa croissance avec Grandimi, il pourrait monter à 1m90, 5 cm de plus.",
+      "from": 142,
+      "duration": 168,
+      "words": [
+        {
+          "w": "Mais",
+          "f": 142
+        },
+        {
+          "w": "en",
+          "f": 146
+        },
+        {
+          "w": "optimisant",
+          "f": 151
+        },
+        {
+          "w": "sa",
+          "f": 166
+        },
+        {
+          "w": "croissance",
+          "f": 170
+        },
+        {
+          "w": "avec",
+          "f": 180
+        },
+        {
+          "w": "Grandimi,",
+          "f": 185
+        },
+        {
+          "w": "il",
+          "f": 209
+        },
+        {
+          "w": "pourrait",
+          "f": 211
+        },
+        {
+          "w": "monter",
+          "f": 218
+        },
+        {
+          "w": "à",
+          "f": 223
+        },
+        {
+          "w": "1m90,",
+          "f": 233
+        },
+        {
+          "w": "5",
+          "f": 272
+        },
+        {
+          "w": "cm",
+          "f": 281
+        },
+        {
+          "w": "de",
+          "f": 298
+        },
+        {
+          "w": "plus.",
+          "f": 301
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Il est déjà plus grand que 94% des garçons de son âge,",
+      "from": 310,
+      "duration": 93,
+      "words": [
+        {
+          "w": "Il",
+          "f": 310
+        },
+        {
+          "w": "est",
+          "f": 315
+        },
+        {
+          "w": "déjà",
+          "f": 317
+        },
+        {
+          "w": "plus",
+          "f": 325
+        },
+        {
+          "w": "grand",
+          "f": 329
+        },
+        {
+          "w": "que",
+          "f": 337
+        },
+        {
+          "w": "94%",
+          "f": 344
+        },
+        {
+          "w": "des",
+          "f": 373
+        },
+        {
+          "w": "garçons",
+          "f": 377
+        },
+        {
+          "w": "de",
+          "f": 387
+        },
+        {
+          "w": "son",
+          "f": 389
+        },
+        {
+          "w": "âge,",
+          "f": 394
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il lui reste presque 10% de croissance.",
+      "from": 404,
+      "duration": 61,
+      "words": [
+        {
+          "w": "et",
+          "f": 404
+        },
+        {
+          "w": "il",
+          "f": 406
+        },
+        {
+          "w": "lui",
+          "f": 411
+        },
+        {
+          "w": "reste",
+          "f": 416
+        },
+        {
+          "w": "presque",
+          "f": 425
+        },
+        {
+          "w": "10%",
+          "f": 433
+        },
+        {
+          "w": "de",
+          "f": 449
+        },
+        {
+          "w": "croissance.",
+          "f": 452
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "Steve, t’es clairement pas foutu.",
+      "from": 466,
+      "duration": 52,
+      "words": [
+        {
+          "w": "Steve,",
+          "f": 466
+        },
+        {
+          "w": "t’es",
+          "f": 481
+        },
+        {
+          "w": "clairement",
+          "f": 490
+        },
+        {
+          "w": "pas",
+          "f": 497
+        },
+        {
+          "w": "foutu.",
+          "f": 502
+        }
+      ]
+    },
+    {
+      "id": "plan",
+      "text": "Son plan pour grandir est sur grandimi.com.",
+      "from": 519,
+      "duration": 69,
+      "words": [
+        {
+          "w": "Son",
+          "f": 519
+        },
+        {
+          "w": "plan",
+          "f": 524
+        },
+        {
+          "w": "pour",
+          "f": 529
+        },
+        {
+          "w": "grandir",
+          "f": 533
+        },
+        {
+          "w": "est",
+          "f": 543
+        },
+        {
+          "w": "sur",
+          "f": 548
+        },
+        {
+          "w": "grandimi.com.",
+          "f": 553
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Et toi, tu vas finir à combien? Commente TAILLE.",
+      "from": 589,
+      "duration": 89,
+      "words": [
+        {
+          "w": "Et",
+          "f": 589
+        },
+        {
+          "w": "toi,",
+          "f": 591
+        },
+        {
+          "w": "tu",
+          "f": 598
+        },
+        {
+          "w": "vas",
+          "f": 603
+        },
+        {
+          "w": "finir",
+          "f": 605
+        },
+        {
+          "w": "à",
+          "f": 613
+        },
+        {
+          "w": "combien?",
+          "f": 615
+        },
+        {
+          "w": "Commente",
+          "f": 622
+        },
+        {
+          "w": "TAILLE.",
+          "f": 641
+        }
+      ]
+    }
+  ]
+}

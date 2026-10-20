@@ -1,5 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {AbsoluteFill, Audio, CalculateMetadataFunction, cancelRender, continueRender, delayRender, Easing, Img, interpolate, Sequence, staticFile, useCurrentFrame} from 'remotion';
+import {
+	AbsoluteFill,
+	Audio,
+	CalculateMetadataFunction,
+	cancelRender,
+	continueRender,
+	delayRender,
+	Easing,
+	Img,
+	interpolate,
+	Sequence,
+	staticFile,
+	useCurrentFrame,
+} from 'remotion';
 import {ease, pop} from '../anim';
 import {Sfx, SfxOn} from '../components/Sfx';
 import {makeTiming, Timeline} from '../timing';
@@ -84,7 +97,13 @@ const MOUVEMENTS: Record<string, {f: number[]; x: number[]; s: number[]; r?: num
 	secousse: {f: [0, 3, 6, 9, 12], x: [-90, 24, -6, 1, 0], s: [0.92, 0.979, 0.995, 0.998, 1], flou: 10},
 	etire: {f: [0, 3, 6, 9], x: [0, 0, 0, 0], s: [1.17, 1.03, 0.986, 1], sy: [2.4, 1.15, 1, 1], flou: 16},
 	radial: {f: [0, 3, 6], x: [0, 0, 0], s: [1.3, 1.05, 1], flou: 18},
-	bascule: {f: [0, 1, 2, 3, 4, 5, 7, 9], x: [0, 0, 0, 0, 0, 0, 0, 0], s: [1.4, 1.15, 1.04, 0.98, 0.95, 0.97, 1, 1], r: [-24, -14, -6, -1, 3, 2, 0.5, 0], flou: 14},
+	bascule: {
+		f: [0, 1, 2, 3, 4, 5, 7, 9],
+		x: [0, 0, 0, 0, 0, 0, 0, 0],
+		s: [1.4, 1.15, 1.04, 0.98, 0.95, 0.97, 1, 1],
+		r: [-24, -14, -6, -1, 3, 2, 0.5, 0],
+		flou: 14,
+	},
 };
 
 /** vitesse > 1 : même mouvement en moins de frames (rythme « sec »). */
@@ -98,7 +117,12 @@ const Mouvement: React.FC<{type: string; at: number; vitesse?: number; children:
 	const sy = active && m.sy ? kf(f, m.f, m.sy) : 1;
 	const blur = active ? interpolate(f, [0, 6], [m.flou, 0], {extrapolateRight: 'clamp'}) : 0;
 	return (
-		<AbsoluteFill style={{transform: `translateX(${x}px) scale(${sc})${sy !== 1 ? ` scaleY(${sy})` : ''}${r ? ` rotate(${r}deg)` : ''}`, filter: blur > 0.3 ? `blur(${blur}px)` : undefined}}>
+		<AbsoluteFill
+			style={{
+				transform: `translateX(${x}px) scale(${sc})${sy !== 1 ? ` scaleY(${sy})` : ''}${r ? ` rotate(${r}deg)` : ''}`,
+				filter: blur > 0.3 ? `blur(${blur}px)` : undefined,
+			}}
+		>
 			{children}
 		</AbsoluteFill>
 	);
@@ -108,7 +132,8 @@ const Mouvement: React.FC<{type: string; at: number; vitesse?: number; children:
 /** fort : lumière couvrante jaune-orangé (sans mode « screen »), comme la référence partie 11. */
 const Lumiere: React.FC<{from: number; to: number; entree?: boolean; fort?: boolean}> = ({from, to, entree, fort}) => {
 	const f = useCurrentFrame();
-	const o = entree ? interpolate(f, [from, to], [0.9, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
+	const o = entree
+		? interpolate(f, [from, to], [0.9, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
 		: interpolate(f, [from, to], [0, 0.9], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 	if (o <= 0.01) return null;
 	return (
@@ -121,6 +146,45 @@ const Lumiere: React.FC<{from: number; to: number; entree?: boolean; fort?: bool
 				mixBlendMode: fort ? 'normal' : 'screen',
 			}}
 		/>
+	);
+};
+
+/** Icône message privé (bulle blanche) avec pastille rouge « +N » qui compte de `de` à `vers`. */
+const DM: React.FC<{el: Extract<Element, {type: 'dm'}>; at: number}> = ({el, at}) => {
+	const f = useCurrentFrame();
+	if (f < at) return null;
+	const e = pop(f, at, 11);
+	const n = Math.round(el.de + (el.vers - el.de) * Math.min(1, (f - at) / 8));
+	const t = el.taille;
+	return (
+		<div style={{position: 'absolute', left: el.x, top: el.y, width: t, height: t, transform: `scale(${e})`, opacity: Math.min(1, e * 1.5)}}>
+			<svg width={t} height={t} viewBox="0 0 100 100" style={{position: 'absolute', inset: 0, overflow: 'visible'}}>
+				<path
+					d="M14 18 H86 Q92 18 92 24 V66 Q92 72 86 72 H58 L44 88 L40 72 H14 Q8 72 8 66 V24 Q8 18 14 18 Z"
+					fill="none"
+					stroke="#fff"
+					strokeWidth={7}
+					strokeLinejoin="round"
+				/>
+				<line x1={36} x2={64} y1={45} y2={45} stroke="#fff" strokeWidth={7} strokeLinecap="round" />
+			</svg>
+			<div
+				style={{
+					position: 'absolute',
+					left: t * 0.62,
+					top: -t * 0.22,
+					background: '#fe2c55',
+					color: '#fff',
+					fontFamily: FONT,
+					fontWeight: 800,
+					fontSize: t * 0.24,
+					padding: `${t * 0.05}px ${t * 0.1}px`,
+					borderRadius: t * 0.2,
+				}}
+			>
+				+{n}
+			</div>
+		</div>
 	);
 };
 
@@ -152,7 +216,16 @@ const Trait: React.FC<{el: Extract<Element, {type: 'trait'}>; at: number; fin?: 
 	return (
 		<svg width={w} height={h} style={{position: 'absolute', left: 0, top: 0, overflow: 'visible'}}>
 			<g style={{filter: 'drop-shadow(0 3px 2px rgba(0,0,0,0.55))'}}>
-				<path d={el.d} pathLength={1} stroke={color} strokeWidth={width} fill="none" strokeLinecap="round" strokeDasharray={1} strokeDashoffset={1 - t} />
+				<path
+					d={el.d}
+					pathLength={1}
+					stroke={color}
+					strokeWidth={width}
+					fill="none"
+					strokeLinecap="round"
+					strokeDasharray={1}
+					strokeDashoffset={1 - t}
+				/>
 				{el.tete && t > 0.95 ? (
 					<path d={el.tete} stroke={color} strokeWidth={width} fill="none" strokeLinecap="round" strokeLinejoin="round" />
 				) : null}
@@ -161,14 +234,24 @@ const Trait: React.FC<{el: Extract<Element, {type: 'trait'}>; at: number; fin?: 
 	);
 };
 
-const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?: number; src: string; src2?: string}> = ({el, at, fin, src, src2}) => {
+const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?: number; src: string; src2?: string}> = ({
+	el,
+	at,
+	fin,
+	src,
+	src2,
+}) => {
 	const f = useCurrentFrame();
 	if (f < at) return null;
 	let transform: string | undefined;
 	let clipPath: string | undefined;
 	let opacity: number | undefined;
 	if (el.grandit) {
-		const g = interpolate(f, [at, at + el.grandit.d], [el.grandit.de, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+		const g = interpolate(f, [at, at + el.grandit.d], [el.grandit.de, 1], {
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+			easing: Easing.out(Easing.cubic),
+		});
 		const out = fin !== undefined ? 1 - ease(f, fin, 5) : 1;
 		if (out <= 0.01) return null;
 		transform = `scale(${g * (1 + Math.max(0, f - at - el.grandit.d) * 0.0008)})`;
@@ -194,7 +277,17 @@ const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?
 	return (
 		<Img
 			src={src2 && Math.floor((f - at) / (el.periode ?? 4)) % 2 === 1 ? src2 : src}
-			style={{position: 'absolute', left: el.x, top: el.y, width: el.w, height: el.h, transform, clipPath, opacity, transformOrigin: el.grandit ? '50% 100%' : undefined}}
+			style={{
+				position: 'absolute',
+				left: el.x,
+				top: el.y,
+				width: el.w,
+				height: el.h,
+				transform,
+				clipPath,
+				opacity,
+				transformOrigin: el.grandit ? '50% 100%' : undefined,
+			}}
 		/>
 	);
 };
@@ -474,7 +567,16 @@ const FamillePlan: React.FC<{fam: Famille; aOpt: number; aGain: number}> = ({fam
 					);
 				})}
 				{f >= aOpt ? (
-					<line x1={60} x2={1040} y1={yOf(fam.futur.estimee)} y2={yOf(fam.futur.estimee)} stroke={P5.orange} strokeWidth={4} strokeDasharray="14 12" opacity={0.7} />
+					<line
+						x1={60}
+						x2={1040}
+						y1={yOf(fam.futur.estimee)}
+						y2={yOf(fam.futur.estimee)}
+						stroke={P5.orange}
+						strokeWidth={4}
+						strokeDasharray="14 12"
+						opacity={0.7}
+					/>
 				) : null}
 				{gain > 0.01 ? (
 					<g transform={`translate(${xPill} ${yOf(fam.futur.optimisee) - 150}) scale(${gain})`}>
@@ -486,7 +588,18 @@ const FamillePlan: React.FC<{fam: Famille; aOpt: number; aGain: number}> = ({fam
 				) : null}
 			</svg>
 			{fam.titre ? (
-				<div style={{position: 'absolute', top: 150, left: 0, right: 0, textAlign: 'center', ...P5.caption, fontSize: 70, transform: `scale(${pop(f, 0, 12)})`}}>
+				<div
+					style={{
+						position: 'absolute',
+						top: 150,
+						left: 0,
+						right: 0,
+						textAlign: 'center',
+						...P5.caption,
+						fontSize: 70,
+						transform: `scale(${pop(f, 0, 12)})`,
+					}}
+				>
 					{fam.titre}
 				</div>
 			) : null}
@@ -519,9 +632,11 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 	const sons: {at: number; son: string; volume: number}[] = [
 		...(plan.sons ?? []).map((s) => ({at: loc(s.a), son: s.son, volume: s.volume ?? 0.5})),
 		// Chaque mouvement de caméra (sauf le premier) a son petit whoosh, sauf si son: null.
-		...(plan.camera ?? []).slice(1).flatMap((c, i) =>
-			c.son === null || (ep.sonsMouvements === false && !c.son) ? [] : [{at: cams[i + 1].f, son: c.son ?? 'whoosh', volume: c.volume ?? 0.22}],
-		),
+		...(plan.camera ?? [])
+			.slice(1)
+			.flatMap((c, i) =>
+				c.son === null || (ep.sonsMouvements === false && !c.son) ? [] : [{at: cams[i + 1].f, son: c.son ?? 'whoosh', volume: c.volume ?? 0.22}],
+			),
 		...(ep.sonsMouvements === false ? [] : (plan.effets ?? []).map((e) => ({at: loc(e.a), son: 'whoosh', volume: 0.3}))),
 		...(plan.elements ?? []).flatMap((el) => {
 			if (!el.son) return [];
@@ -548,8 +663,8 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			return <TexteEl key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} partie={ep.partie} />;
 		if (el.type === 'compteur')
 			return <Compteur key={i} el={el} at={loc(el.a)} arrivee={loc(el.arrivee)} fin={el.fin !== undefined ? loc(el.fin) : undefined} />;
-		if (el.type === 'commentaire')
-			return <Commentaire key={i} el={el} at={loc(el.a)} envoi={el.envoi !== undefined ? loc(el.envoi) : undefined} />;
+		if (el.type === 'dm') return <DM key={i} el={el} at={loc(el.a)} />;
+		if (el.type === 'commentaire') return <Commentaire key={i} el={el} at={loc(el.a)} envoi={el.envoi !== undefined ? loc(el.envoi) : undefined} />;
 		if (el.type === 'tape')
 			return (
 				<Typed
@@ -587,6 +702,13 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					<TopoAnime zoomDe={plan.topo?.zoomDe} d={plan.topo?.d} />
 				</CoupFlou>
 			) : null}
+			{(plan.effets ?? [])
+				.filter((e) => e.type === 'flash')
+				.map((e, i) => (
+					<Sequence key={`flash-${i}`} from={loc(e.a)} durationInFrames={12} layout="none">
+						<Flash color={e.couleur ?? P5.yellow} vitesse={vite} />
+					</Sequence>
+				))}
 			{plan.sortie === 'noir' ? <FonduNoir from={dur - 4} to={dur - 2} /> : null}
 			{plan.sequence?.length ? <Sequence_ files={plan.sequence.map(file)} /> : null}
 			{plan.hookTaille ? (
@@ -617,7 +739,9 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			{plan.transition === 'flash-blanc' ? <Flash color="#fff" vitesse={vite} /> : null}
 			{plan.transition === 'lumiere' || plan.transition === 'lumiere-rouge' ? <Lumiere from={0} to={Math.round(6 / vite)} entree /> : null}
 			{plan.transition === 'lumiere-rouge' ? <Flash color="#ff1a1a" vitesse={vite} /> : null}
-			{plan.sortie === 'lumiere' || plan.sortie === 'lumiere-forte' ? <Lumiere from={dur - Math.round(8 / vite)} to={dur} fort={plan.sortie === 'lumiere-forte'} /> : null}
+			{plan.sortie === 'lumiere' || plan.sortie === 'lumiere-forte' ? (
+				<Lumiere from={dur - Math.round(8 / vite)} to={dur} fort={plan.sortie === 'lumiere-forte'} />
+			) : null}
 			{plan.sortie === 'blanc' ? <FonduBlanc from={dur - 4} to={dur - 1} /> : null}
 			{sons.map((s, i) => (
 				<Sfx key={i} at={s.at} name={s.son as never} volume={s.volume} />
@@ -625,18 +749,54 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 		</AbsoluteFill>
 	);
 	let out = content;
-	for (const e of plan.effets ?? []) out = <Mouvement type={e.type} at={loc(e.a)}>{out}</Mouvement>;
+	for (const e of plan.effets ?? [])
+		if (e.type === 'secousse')
+			out = (
+				<Mouvement type={e.type} at={loc(e.a)}>
+					{out}
+				</Mouvement>
+			);
 	if (plan.transition === 'whip') return <Whip vitesse={vite}>{out}</Whip>;
-	if (plan.transition === 'glisse' || plan.transition === 'lumiere') return <Mouvement type="glisse" at={0} vitesse={vite}>{out}</Mouvement>;
-	if (plan.transition === 'rebond') return <Mouvement type="rebond" at={0} vitesse={vite}>{out}</Mouvement>;
-	if (plan.transition === 'bascule') return <Mouvement type="bascule" at={0} vitesse={vite}>{out}</Mouvement>;
-	if (plan.transition === 'etire') return <Mouvement type="etire" at={0} vitesse={vite}>{out}</Mouvement>;
-	if (plan.transition === 'radial') return <Mouvement type="radial" at={0} vitesse={vite}>{out}</Mouvement>;
+	if (plan.transition === 'glisse' || plan.transition === 'lumiere')
+		return (
+			<Mouvement type="glisse" at={0} vitesse={vite}>
+				{out}
+			</Mouvement>
+		);
+	if (plan.transition === 'rebond')
+		return (
+			<Mouvement type="rebond" at={0} vitesse={vite}>
+				{out}
+			</Mouvement>
+		);
+	if (plan.transition === 'bascule')
+		return (
+			<Mouvement type="bascule" at={0} vitesse={vite}>
+				{out}
+			</Mouvement>
+		);
+	if (plan.transition === 'etire')
+		return (
+			<Mouvement type="etire" at={0} vitesse={vite}>
+				{out}
+			</Mouvement>
+		);
+	if (plan.transition === 'radial')
+		return (
+			<Mouvement type="radial" at={0} vitesse={vite}>
+				{out}
+			</Mouvement>
+		);
 	return out;
 };
 
 /* ───────── Sous-titres jaunes, un ou deux mots à la fois ───────── */
-const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '');
+const norm = (s: string) =>
+	s
+		.toLowerCase()
+		.normalize('NFD')
+		.replace(/[̀-ͯ]/g, '')
+		.replace(/[^a-z0-9]/g, '');
 
 const chunkWords = (tl: Timeline, keywords: string[], maxWords = 2, maxChars = 14) =>
 	tl.lines.flatMap((l) => {
@@ -667,6 +827,7 @@ type Fenetre = {
 	size: number;
 	chunks: {from: number; words: string[]; times: number[]}[];
 	keywords: string[];
+	verts: string[];
 	condense?: boolean;
 	weight: number;
 	stroke: number;
@@ -720,6 +881,7 @@ const Captions: React.FC<{windows: Fenetre[]}> = ({windows}) => {
 		<div style={{position: 'absolute', left: 40, right: 40, top: win.y, textAlign: 'center', transform: `scale(${s})`}}>
 			{c.words.map((word, i) => {
 				const key = keywords.includes(norm(word));
+				const vert = win.verts.includes(norm(word));
 				return (
 					<span
 						key={i}
@@ -731,6 +893,7 @@ const Captions: React.FC<{windows: Fenetre[]}> = ({windows}) => {
 							textTransform: win.upper ? 'uppercase' : 'none',
 							display: 'inline-block',
 							margin: '0 12px',
+							...(vert ? {color: '#3dff52', textShadow: '0 0 14px rgba(40,255,70,0.8)'} : {}),
 							...(key
 								? {color: '#fff', WebkitTextStroke: '0px', background: P5.orange, borderRadius: 22, padding: '6px 26px 12px', textShadow: 'none'}
 								: {}),
@@ -780,6 +943,7 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 		keywords: w.motsCles === false ? [] : keywords,
 		pop: w.pop !== false,
 		condense: w.style === 'condense',
+		verts: (w.verts ?? []).map(norm),
 		chunks: chunkWords(timeline, w.motsCles === false ? [] : keywords, w.motsMax, w.carMax),
 	}));
 	const vol = data.musique?.volume ?? 0.08;
@@ -809,7 +973,13 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 					);
 				})}
 				{data.carteCommentaire ? (
-					<CarteCommentaire nom={data.carteCommentaire.nom} texte={data.carteCommentaire.texte} de={resolve(data.carteCommentaire.de)} a={resolve(data.carteCommentaire.a)} />
+					<CarteCommentaire
+						nom={data.carteCommentaire.nom}
+						texte={data.carteCommentaire.texte}
+						de={resolve(data.carteCommentaire.de)}
+						a={resolve(data.carteCommentaire.a)}
+						haut={data.carteCommentaire.haut}
+					/>
 				) : null}
 				{sousTitres ? <Captions windows={windows} /> : null}
 			</AbsoluteFill>

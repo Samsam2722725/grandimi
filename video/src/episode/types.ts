@@ -31,7 +31,9 @@ export type Element =
 	/** Compteur qui défile de `de` à `vers` et se pose sur `arrivee` (révélation avec suspense). */
 	| (Base & {type: 'compteur'; de: number; vers: number; arrivee: Ancre; fin?: Ancre; suffixe?: string; y: number; taille: number; couleur?: string; voile?: boolean})
 	/** Fausse zone de commentaire TikTok qui s'écrit toute seule. */
-	| (Base & {type: 'commentaire'; texte: string; y: number; parLettre?: number; envoi?: Ancre});
+	| (Base & {type: 'commentaire'; texte: string; y: number; parLettre?: number; envoi?: Ancre})
+	/** Icône message privé avec pastille rouge dont le compteur monte (référence Steve, fin). */
+	| (Base & {type: 'dm'; x: number; y: number; taille: number; de: number; vers: number});
 
 /** Silhouettes à l'échelle : parents, personne aujourd'hui, personne adulte qui grandit. */
 export type Famille = {
@@ -50,7 +52,7 @@ export type Plan = {
 	    blanc = fondu au blanc sur les 4 dernières frames (la fin s'enchaîne avec l'accroche dessinée quand la vidéo reboucle). */
 	sortie?: 'lumiere' | 'lumiere-forte' | 'blanc' | 'noir';
 	/** Effets ponctuels sur tout le plan (secousse gauche-droite). */
-	effets?: {type: 'secousse'; a: Ancre}[];
+	effets?: {type: 'secousse' | 'flash'; a: Ancre; couleur?: string}[];
 	famille?: Famille;
 	/** true : la caméra peut sortir de l'image (cadrer une carte au même endroit que la référence). */
 	libre?: boolean;
@@ -77,7 +79,7 @@ export type Plan = {
 export type Episode = {
 	partie: number;
 	/** Carte « Réponse au commentaire de … » affichée par-dessus les plans (src/episode/CarteCommentaire.tsx). */
-	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre};
+	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre; haut?: boolean};
 	/** sec : transitions deux fois plus courtes et flou de mouvement sur les mouvements de caméra (demande du 20/10). */
 	rythme?: 'sec';
 	/** false : pas de légère poussée de caméra entre les mouvements (défaut : true). */
@@ -96,6 +98,7 @@ export type Episode = {
 		/** motsMax / carMax : taille des groupes de mots ; poids : graisse de la police (800 par défaut) ;
 		    motsCles: false : pas de pastille orange dans cette fenêtre. */
 		/** style « condense » : Barlow Condensed blanche en majuscules, mot prononcé surligné dans une pastille rouge. */
-		fenetres: {de: Ancre; a: Ancre; y: number; taille: number; majuscules?: boolean; style?: 'condense'; motsMax?: number; carMax?: number; poids?: number; contour?: number; motsCles?: boolean; pop?: boolean}[];
+		/** verts : mots affichés en vert lumineux (« NOT COOKED », « POTENTIAL ANALYZED » de la référence Steve). */
+		fenetres: {de: Ancre; a: Ancre; y: number; taille: number; majuscules?: boolean; style?: 'condense'; verts?: string[]; motsMax?: number; carMax?: number; poids?: number; contour?: number; motsCles?: boolean; pop?: boolean}[];
 	};
 };
