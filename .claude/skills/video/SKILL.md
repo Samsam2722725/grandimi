@@ -39,7 +39,9 @@ Transcrire par morceaux de ~9 s (un bloc unique saute des phrases).
      + composition `TexteAnime` (`scripts/texte_anime.py <id>`) ;
    - autre chose (personne filmée, 3D…) → le dire à l'utilisateur avant de construire un nouveau moteur.
 5. **Contrôle chiffré** original / épisode (moments ±2 images, positions ±3 %, tailles ±5 %), corriger
-   jusqu'à zéro écart, puis livrer : vidéo, comparaison côte à côte, kit CapCut (`scripts/kit.py`).
+   jusqu'à zéro écart, puis livrer **seulement** : la vidéo finale + les deux vidéos côte à côte en entier
+   (`scripts/cote_a_cote.py ORIGINAL EPISODE out/`, une avec le son de l'original, une avec le son Grandimi).
+   Plus de kit CapCut ni de zip (demande du 21/10).
 6. **Enregistrer et pousser** après chaque étape (commit en français, branche de travail de la session).
 
 ## Préférences de l'utilisateur (à respecter sans qu'il le redise)
@@ -49,3 +51,8 @@ Transcrire par morceaux de ~9 s (un bloc unique saute des phrases).
 - Lien `grandimi.com` bien visible.
 - Copier l'original au maximum ; les chiffres affichés suivent le texte de l'utilisateur.
 - Alternance V1 / V2 d'un épisode à l'autre pour le test (voir `STYLE.md`).
+- Format de référence actuel : copie de la vidéo « Steve » (`references/p12-steve`, épisodes `steve-1`, `steve-12`) :
+  dashboard Grandimi animé (`src/episode/Dashboard.tsx`), transitions `TransitionsSteve.tsx`, sous-titres Montserrat.
+  Nouvel épisode : `python scripts/nouvel_episode.py steve-N --depuis steve-12`, changer voix, chiffres, photos, ancres.
+- Sons du format Steve : whoosh sur chaque zoom avant, son sur la première flèche, rien sur la deuxième flèche ni le flash.
+- Carte commentaire jamais sur la tête de la personne (réglages `x`, `y`).
