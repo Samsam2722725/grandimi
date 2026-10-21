@@ -9,6 +9,7 @@
 
 | « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
 | « Si tu dors sur le dos… » (dessin animé + sous-titres karaoké) | `Dormir` | `rendu/grandimi-dormir.mp4` (21 s) |
+| « La NASA cache une méthode pour grandir » (texte animé) | `TexteAnime` (`{"video":"nasa"}`) | `rendu/grandimi-nasa.mp4` (43 s) |
 | « Combo d'exercices pour grandir (Routine 1) », sans voix off | `Routine` (`{"routine":"routine-1"}`) | `rendu/grandimi-routine-1.mp4` (16 s) |
 
 Format 1080×1920, 30 i/s, son normalisé à −14 LUFS.
@@ -23,6 +24,14 @@ Une vidéo = un dossier `public/textes/<id>/` :
 ```bash
 python scripts/extraire_illustrations.py REF.mp4 public/textes/<id>/illustrations.json public/textes/<id>/images
 python scripts/texte_anime.py <id>      # → timeline.json (tailles ×1,3 plafonnées à la largeur de l'écran)
+```
+
+Options de `ecrans.json` (vidéo « nasa ») : `"gros"` (agrandissement, 1,3 par défaut), `"empile": false` (y posés à la main),
+`"sortie": "haut"` (l'écran part vers le haut) ; par ligne `"a"` (non prononcée, apparaît sur ce mot), `"cache"` (prononcée,
+pas affichée), `"fixe"` (garde sa taille) ; par image `"anim"` `monte|pop|droite|tourne|aucune`, `"trajet"`, `"zoom"`, `"rot"`,
+`"vers": {"a", "top", "cx"}` ; par écran `"croix"` (croix rouge tracée) et `"regle"` (règle en pointillés).
+
+```bash
 npx remotion render TexteAnime out/<id>.mp4 --props='{"video":"<id>"}'
 ```
 

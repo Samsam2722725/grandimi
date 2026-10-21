@@ -1,0 +1,1582 @@
+{
+ "note": "Calqué sur la référence v15044gf0000d0oa3rfog65hhbmfroqg (fiche.md). Tailles finales (gros = 1). Lignes avec « a » : non prononcées, apparaissent sur ce mot. « cache » : prononcé mais pas affiché.",
+ "gros": 1.0,
+ "sortie": "haut",
+ "ecrans": [
+  {
+   "lignes": [
+    {
+     "t": "Scientifiques de la *NASA*",
+     "y": 260,
+     "taille": 67,
+     "mots": [
+      {
+       "w": "Scientifiques",
+       "style": null,
+       "f": 2
+      },
+      {
+       "w": "de",
+       "style": null,
+       "f": 19
+      },
+      {
+       "w": "la",
+       "style": null,
+       "f": 22
+      },
+      {
+       "w": "NASA",
+       "style": "violet",
+       "f": 26
+      }
+     ]
+    },
+    {
+     "t": "*cachent*",
+     "y": 340,
+     "taille": 67,
+     "mots": [
+      {
+       "w": "cachent",
+       "style": "violet",
+       "f": 41
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_nasa.png",
+     "a": 2,
+     "cx": 540,
+     "top": 470,
+     "w": 820,
+     "anim": "monte"
+    }
+   ],
+   "debut": 0,
+   "sortie": "haut",
+   "fin": 50
+  },
+  {
+   "lignes": [
+    {
+     "t": "une méthode *pour grandir*",
+     "y": 255,
+     "taille": 67,
+     "mots": [
+      {
+       "w": "une",
+       "style": null,
+       "f": 53
+      },
+      {
+       "w": "méthode",
+       "style": null,
+       "f": 55
+      },
+      {
+       "w": "pour",
+       "style": "violet",
+       "f": 67
+      },
+      {
+       "w": "grandir",
+       "style": "violet",
+       "f": 72
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "homme.png",
+     "a": 53,
+     "cx": 560,
+     "top": 450,
+     "w": 375,
+     "anim": "pop"
+    }
+   ],
+   "regle": {
+    "a": 55,
+    "x": 300,
+    "haut": 470,
+    "bas": 1290
+   },
+   "debut": 50,
+   "sortie": "haut",
+   "fin": 81
+  },
+  {
+   "lignes": [
+    {
+     "t": "qu'utilisent les *astronautes.*",
+     "y": 600,
+     "taille": 62,
+     "mots": [
+      {
+       "w": "qu'utilisent",
+       "style": null,
+       "f": 84
+      },
+      {
+       "w": "les",
+       "style": null,
+       "f": 103
+      },
+      {
+       "w": "astronautes.",
+       "style": "violet",
+       "f": 108
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_astronaute.png",
+     "a": 84,
+     "cx": 540,
+     "top": 665,
+     "w": 990,
+     "anim": "monte"
+    }
+   ],
+   "debut": 81,
+   "sortie": "haut",
+   "fin": 124
+  },
+  {
+   "lignes": [
+    {
+     "t": "Ils ont découvert",
+     "y": 700,
+     "taille": 56,
+     "x": 200,
+     "align": "left",
+     "mots": [
+      {
+       "w": "Ils",
+       "style": null,
+       "f": 127
+      },
+      {
+       "w": "ont",
+       "style": null,
+       "f": 132
+      },
+      {
+       "w": "découvert",
+       "style": null,
+       "f": 137
+      }
+     ]
+    },
+    {
+     "t": "que",
+     "y": 790,
+     "taille": 104,
+     "x": 200,
+     "align": "left",
+     "fixe": true,
+     "mots": [
+      {
+       "w": "que",
+       "style": null,
+       "f": 149
+      }
+     ]
+    },
+    {
+     "t": "les astronautes reviennent",
+     "y": 880,
+     "taille": 56,
+     "x": 220,
+     "align": "left",
+     "mots": [
+      {
+       "w": "les",
+       "style": null,
+       "f": 154
+      },
+      {
+       "w": "astronautes",
+       "style": null,
+       "f": 156
+      },
+      {
+       "w": "reviennent",
+       "style": null,
+       "f": 173
+      }
+     ]
+    },
+    {
+     "t": "de *l'espace*",
+     "y": 950,
+     "taille": 56,
+     "x": 430,
+     "align": "left",
+     "mots": [
+      {
+       "w": "de",
+       "style": null,
+       "f": 182
+      },
+      {
+       "w": "l'espace",
+       "style": "violet",
+       "f": 185
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "fusee.png",
+     "a": 149,
+     "cx": 830,
+     "top": 560,
+     "w": 260,
+     "anim": "droite",
+     "rot": -12
+    },
+    {
+     "f": "astronaute.png",
+     "a": 151,
+     "cx": 810,
+     "top": 490,
+     "w": 150,
+     "anim": "droite",
+     "rot": -12
+    }
+   ],
+   "debut": 124,
+   "sortie": "haut",
+   "fin": 199
+  },
+  {
+   "lignes": [
+    {
+     "t": "jusqu'à 5 cm *plus grands.*",
+     "y": 480,
+     "taille": 71,
+     "mots": [
+      {
+       "w": "jusqu'à",
+       "style": null,
+       "f": 202
+      },
+      {
+       "w": "5",
+       "style": null,
+       "f": 211
+      },
+      {
+       "w": "cm",
+       "style": null,
+       "f": 221
+      },
+      {
+       "w": "plus",
+       "style": "violet",
+       "f": 240
+      },
+      {
+       "w": "grands.",
+       "style": "violet",
+       "f": 242
+      }
+     ]
+    },
+    {
+     "t": "avant",
+     "y": 1380,
+     "taille": 57,
+     "x": 245,
+     "align": "left",
+     "mots": [
+      {
+       "w": "avant",
+       "style": null,
+       "f": 211
+      }
+     ]
+    },
+    {
+     "t": "*après*",
+     "y": 1380,
+     "taille": 57,
+     "x": 695,
+     "align": "left",
+     "mots": [
+      {
+       "w": "après",
+       "style": "violet",
+       "f": 211
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "astro_avant.png",
+     "a": 202,
+     "cx": 300,
+     "top": 700,
+     "w": 270,
+     "anim": "monte"
+    },
+    {
+     "f": "astro_apres.png",
+     "a": 205,
+     "cx": 760,
+     "top": 620,
+     "w": 310,
+     "anim": "monte"
+    }
+   ],
+   "debut": 199,
+   "sortie": "haut",
+   "fin": 250
+  },
+  {
+   "lignes": [
+    {
+     "t": "Et maintenant,",
+     "y": 580,
+     "taille": 71,
+     "mots": [
+      {
+       "w": "Et",
+       "style": null,
+       "f": 253
+      },
+      {
+       "w": "maintenant,",
+       "style": null,
+       "f": 261
+      }
+     ]
+    }
+   ],
+   "debut": 250,
+   "sortie": "haut",
+   "fin": 272
+  },
+  {
+   "lignes": [
+    {
+     "t": "*0*",
+     "y": 650,
+     "taille": 380,
+     "x": 230,
+     "align": "left",
+     "fixe": true,
+     "mots": [
+      {
+       "w": "0",
+       "style": "violet",
+       "f": 275
+      }
+     ]
+    },
+    {
+     "t": "ce même",
+     "y": 560,
+     "taille": 61,
+     "x": 520,
+     "align": "left",
+     "mots": [
+      {
+       "w": "ce",
+       "style": null,
+       "f": 275
+      },
+      {
+       "w": "même",
+       "style": null,
+       "f": 280
+      }
+     ]
+    },
+    {
+     "t": "!secret!",
+     "y": 640,
+     "taille": 61,
+     "x": 520,
+     "align": "left",
+     "mots": [
+      {
+       "w": "secret",
+       "style": "rouge",
+       "f": 287
+      }
+     ]
+    },
+    {
+     "t": "de *l'apesanteur*",
+     "y": 720,
+     "taille": 61,
+     "x": 520,
+     "align": "left",
+     "mots": [
+      {
+       "w": "de",
+       "style": null,
+       "f": 297
+      },
+      {
+       "w": "l'apesanteur",
+       "style": "violet",
+       "f": 299
+      }
+     ]
+    }
+   ],
+   "debut": 272,
+   "sortie": "haut",
+   "fin": 325
+  },
+  {
+   "lignes": [
+    {
+     "t": "est utilisé",
+     "y": 880,
+     "taille": 69,
+     "mots": [
+      {
+       "w": "est",
+       "style": null,
+       "f": 328
+      },
+      {
+       "w": "utilisé",
+       "style": null,
+       "f": 333
+      }
+     ]
+    },
+    {
+     "t": "*sur*",
+     "y": 1000,
+     "taille": 120,
+     "x": 360,
+     "align": "left",
+     "fixe": true,
+     "mots": [
+      {
+       "w": "sur",
+       "style": "violet",
+       "f": 347
+      }
+     ]
+    },
+    {
+     "t": "Terre",
+     "y": 1000,
+     "taille": 40,
+     "cache": true,
+     "mots": [
+      {
+       "w": "Terre",
+       "style": null,
+       "f": 352
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "terre.png",
+     "a": 352,
+     "cx": 700,
+     "top": 920,
+     "w": 180,
+     "anim": "pop"
+    }
+   ],
+   "debut": 325,
+   "sortie": "haut",
+   "fin": 359
+  },
+  {
+   "lignes": [
+    {
+     "t": "pour gagner",
+     "y": 300,
+     "taille": 116,
+     "fixe": true,
+     "mots": [
+      {
+       "w": "pour",
+       "style": null,
+       "f": 362
+      },
+      {
+       "w": "gagner",
+       "style": null,
+       "f": 366
+      }
+     ]
+    },
+    {
+     "t": "*des centimètres*",
+     "y": 470,
+     "taille": 100,
+     "fixe": true,
+     "monte": {
+      "a": 393,
+      "y": 385
+     },
+     "mots": [
+      {
+       "w": "des",
+       "style": "violet",
+       "f": 376
+      },
+      {
+       "w": "centimètres",
+       "style": "violet",
+       "f": 381
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "garcon.png",
+     "a": 366,
+     "cx": 560,
+     "top": 830,
+     "w": 470,
+     "anim": "monte"
+    }
+   ],
+   "debut": 359,
+   "sortie": "haut",
+   "fin": 397
+  },
+  {
+   "lignes": [
+    {
+     "t": "sans pilule ni compléments bizarres.",
+     "y": 960,
+     "taille": 50,
+     "cache": true,
+     "mots": [
+      {
+       "w": "sans",
+       "style": null,
+       "f": 400
+      },
+      {
+       "w": "pilule",
+       "style": null,
+       "f": 407
+      },
+      {
+       "w": "ni",
+       "style": null,
+       "f": 424
+      },
+      {
+       "w": "compléments",
+       "style": null,
+       "f": 431
+      },
+      {
+       "w": "bizarres.",
+       "style": null,
+       "f": 443
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "pilule.png",
+     "a": 400,
+     "cx": 540,
+     "top": 720,
+     "w": 440,
+     "anim": "pop",
+     "rot": -18
+    }
+   ],
+   "croix": {
+    "a": 409,
+    "fin": 455
+   },
+   "debut": 397,
+   "sortie": "haut",
+   "fin": 452
+  },
+  {
+   "lignes": [
+    {
+     "t": "Ça s'appelle",
+     "y": 840,
+     "taille": 60,
+     "mots": [
+      {
+       "w": "Ça",
+       "style": null,
+       "f": 455
+      },
+      {
+       "w": "s'appelle",
+       "style": null,
+       "f": 462
+      }
+     ]
+    },
+    {
+     "t": "*la décompression*",
+     "y": 935,
+     "taille": 82,
+     "fixe": true,
+     "mots": [
+      {
+       "w": "la",
+       "style": "violet",
+       "f": 474
+      },
+      {
+       "w": "décompression",
+       "style": "violet",
+       "f": 479
+      }
+     ]
+    },
+    {
+     "t": "*vertébrale.*",
+     "y": 1030,
+     "taille": 82,
+     "fixe": true,
+     "mots": [
+      {
+       "w": "vertébrale.",
+       "style": "violet",
+       "f": 503
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "cerveau.png",
+     "a": 455,
+     "cx": 540,
+     "top": 690,
+     "w": 520,
+     "anim": "monte",
+     "zoom": 1.12
+    }
+   ],
+   "debut": 452,
+   "sortie": "haut",
+   "fin": 523
+  },
+  {
+   "lignes": [
+    {
+     "t": "En *apesanteur,*",
+     "y": 640,
+     "taille": 71,
+     "mots": [
+      {
+       "w": "En",
+       "style": null,
+       "f": 526
+      },
+      {
+       "w": "apesanteur,",
+       "style": "violet",
+       "f": 531
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "astro_flottant.png",
+     "a": 526,
+     "cx": 640,
+     "top": 1050,
+     "w": 380,
+     "anim": "tourne",
+     "trajet": {
+      "dx": 160,
+      "dy": -1250,
+      "rot": -70
+     }
+    }
+   ],
+   "debut": 523,
+   "sortie": "haut",
+   "fin": 554
+  },
+  {
+   "lignes": [
+    {
+     "t": "La colonne des",
+     "y": 560,
+     "taille": 60,
+     "mots": [
+      {
+       "w": "La",
+       "style": null,
+       "f": 557
+      },
+      {
+       "w": "colonne",
+       "style": null,
+       "f": 560
+      },
+      {
+       "w": "des",
+       "style": null,
+       "f": 569
+      }
+     ]
+    },
+    {
+     "t": "*astronautes*",
+     "y": 665,
+     "taille": 112,
+     "fixe": true,
+     "mots": [
+      {
+       "w": "astronautes",
+       "style": "violet",
+       "f": 574
+      }
+     ]
+    },
+    {
+     "t": "s'étire parce qu'il",
+     "y": 770,
+     "taille": 62,
+     "mots": [
+      {
+       "w": "s'étire",
+       "style": null,
+       "f": 589
+      },
+      {
+       "w": "parce",
+       "style": null,
+       "f": 610
+      },
+      {
+       "w": "qu'il",
+       "style": null,
+       "f": 613
+      }
+     ]
+    },
+    {
+     "t": "n'y a plus de pression.",
+     "y": 845,
+     "taille": 62,
+     "mots": [
+      {
+       "w": "n'y",
+       "style": null,
+       "f": 617
+      },
+      {
+       "w": "a",
+       "style": null,
+       "f": 622
+      },
+      {
+       "w": "plus",
+       "style": null,
+       "f": 625
+      },
+      {
+       "w": "de",
+       "style": null,
+       "f": 629
+      },
+      {
+       "w": "pression.",
+       "style": null,
+       "f": 632
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "colonne.png",
+     "a": 560,
+     "cx": 540,
+     "top": 560,
+     "w": 250,
+     "anim": "monte"
+    }
+   ],
+   "debut": 554,
+   "sortie": "haut",
+   "fin": 641
+  },
+  {
+   "lignes": [
+    {
+     "t": "C'est pour ça qu'ils",
+     "y": 820,
+     "taille": 62,
+     "x": 150,
+     "align": "left",
+     "mots": [
+      {
+       "w": "C'est",
+       "style": null,
+       "f": 644
+      },
+      {
+       "w": "pour",
+       "style": null,
+       "f": 649
+      },
+      {
+       "w": "ça",
+       "style": null,
+       "f": 651
+      },
+      {
+       "w": "qu'ils",
+       "style": null,
+       "f": 656
+      }
+     ]
+    },
+    {
+     "t": "reviennent",
+     "y": 895,
+     "taille": 62,
+     "x": 150,
+     "align": "left",
+     "mots": [
+      {
+       "w": "reviennent",
+       "style": null,
+       "f": 663
+      }
+     ]
+    },
+    {
+     "t": "*PLUS GRANDS.*",
+     "y": 1000,
+     "taille": 108,
+     "x": 130,
+     "align": "left",
+     "fixe": true,
+     "mots": [
+      {
+       "w": "PLUS",
+       "style": "violet",
+       "f": 675
+      },
+      {
+       "w": "GRANDS.",
+       "style": "violet",
+       "f": 677
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "astro_apres.png",
+     "a": 663,
+     "cx": 850,
+     "top": 690,
+     "w": 280,
+     "anim": "monte"
+    }
+   ],
+   "debut": 641,
+   "sortie": "haut",
+   "fin": 684
+  },
+  {
+   "lignes": [
+    {
+     "t": "Cette *méthode* reproduit cet effet",
+     "y": 800,
+     "taille": 54,
+     "mots": [
+      {
+       "w": "Cette",
+       "style": null,
+       "f": 687
+      },
+      {
+       "w": "méthode",
+       "style": "violet",
+       "f": 692
+      },
+      {
+       "w": "reproduit",
+       "style": null,
+       "f": 704
+      },
+      {
+       "w": "cet",
+       "style": null,
+       "f": 718
+      },
+      {
+       "w": "effet",
+       "style": null,
+       "f": 723
+      }
+     ]
+    },
+    {
+     "t": "avec des",
+     "y": 870,
+     "taille": 60,
+     "mots": [
+      {
+       "w": "avec",
+       "style": null,
+       "f": 733
+      },
+      {
+       "w": "des",
+       "style": null,
+       "f": 737
+      }
+     ]
+    }
+   ],
+   "debut": 684,
+   "sortie": "haut",
+   "fin": 739
+  },
+  {
+   "lignes": [
+    {
+     "t": "*tables d'inversion,*",
+     "y": 650,
+     "taille": 71,
+     "mots": [
+      {
+       "w": "tables",
+       "style": "violet",
+       "f": 742
+      },
+      {
+       "w": "d'inversion,",
+       "style": "violet",
+       "f": 752
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_inversion.png",
+     "a": 742,
+     "cx": 540,
+     "top": 720,
+     "w": 800,
+     "anim": "monte"
+    }
+   ],
+   "debut": 739,
+   "sortie": "haut",
+   "fin": 775
+  },
+  {
+   "lignes": [
+    {
+     "t": "*bottes de gravité,*",
+     "y": 650,
+     "taille": 71,
+     "mots": [
+      {
+       "w": "bottes",
+       "style": "violet",
+       "f": 778
+      },
+      {
+       "w": "de",
+       "style": "violet",
+       "f": 790
+      },
+      {
+       "w": "gravité,",
+       "style": "violet",
+       "f": 793
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_bottes.png",
+     "a": 778,
+     "cx": 540,
+     "top": 720,
+     "w": 800,
+     "anim": "monte"
+    }
+   ],
+   "debut": 775,
+   "sortie": "haut",
+   "fin": 808
+  },
+  {
+   "lignes": [
+    {
+     "t": "ou simplement en te suspendant",
+     "y": 590,
+     "taille": 57,
+     "mots": [
+      {
+       "w": "ou",
+       "style": null,
+       "f": 811
+      },
+      {
+       "w": "simplement",
+       "style": null,
+       "f": 818
+      },
+      {
+       "w": "en",
+       "style": null,
+       "f": 830
+      },
+      {
+       "w": "te",
+       "style": null,
+       "f": 837
+      },
+      {
+       "w": "suspendant",
+       "style": null,
+       "f": 842
+      }
+     ]
+    },
+    {
+     "t": "*à une barre*",
+     "y": 670,
+     "taille": 71,
+     "mots": [
+      {
+       "w": "à",
+       "style": "violet",
+       "f": 859
+      },
+      {
+       "w": "une",
+       "style": "violet",
+       "f": 861
+      },
+      {
+       "w": "barre",
+       "style": "violet",
+       "f": 866
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_barre.png",
+     "a": 811,
+     "cx": 540,
+     "top": 730,
+     "w": 800,
+     "anim": "monte"
+    }
+   ],
+   "debut": 808,
+   "sortie": "haut",
+   "fin": 875
+  },
+  {
+   "lignes": [
+    {
+     "t": "*quelques minutes*",
+     "y": 900,
+     "taille": 80,
+     "x": 120,
+     "align": "left",
+     "fixe": true,
+     "mots": [
+      {
+       "w": "quelques",
+       "style": "violet",
+       "f": 878
+      },
+      {
+       "w": "minutes",
+       "style": "violet",
+       "f": 887
+      }
+     ]
+    },
+    {
+     "t": "par jour.",
+     "y": 990,
+     "taille": 64,
+     "x": 120,
+     "align": "left",
+     "mots": [
+      {
+       "w": "par",
+       "style": null,
+       "f": 895
+      },
+      {
+       "w": "jour.",
+       "style": null,
+       "f": 899
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "horloge.png",
+     "a": 887,
+     "cx": 935,
+     "top": 820,
+     "w": 140,
+     "anim": "pop"
+    }
+   ],
+   "debut": 875,
+   "sortie": "haut",
+   "fin": 904
+  },
+  {
+   "lignes": [
+    {
+     "t": "Ça *décompresse*",
+     "y": 1235,
+     "taille": 50,
+     "x": 110,
+     "align": "left",
+     "mots": [
+      {
+       "w": "Ça",
+       "style": null,
+       "f": 907
+      },
+      {
+       "w": "décompresse",
+       "style": "violet",
+       "f": 914
+      }
+     ]
+    },
+    {
+     "t": "*ta colonne,*",
+     "y": 1300,
+     "taille": 50,
+     "x": 150,
+     "align": "left",
+     "mots": [
+      {
+       "w": "ta",
+       "style": "violet",
+       "f": 933
+      },
+      {
+       "w": "colonne,",
+       "style": "violet",
+       "f": 938
+      }
+     ]
+    },
+    {
+     "t": "*réhydrate*",
+     "y": 1235,
+     "taille": 50,
+     "x": 660,
+     "align": "left",
+     "mots": [
+      {
+       "w": "réhydrate",
+       "style": "violet",
+       "f": 950
+      }
+     ]
+    },
+    {
+     "t": "*tes disques*",
+     "y": 1300,
+     "taille": 50,
+     "x": 650,
+     "align": "left",
+     "mots": [
+      {
+       "w": "tes",
+       "style": "violet",
+       "f": 971
+      },
+      {
+       "w": "disques",
+       "style": "violet",
+       "f": 979
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "colonne_decomp.png",
+     "a": 907,
+     "cx": 320,
+     "top": 720,
+     "w": 230,
+     "anim": "monte"
+    },
+    {
+     "f": "colonne_hydrate.png",
+     "a": 950,
+     "cx": 770,
+     "top": 715,
+     "w": 238,
+     "anim": "droite"
+    }
+   ],
+   "debut": 904,
+   "sortie": "haut",
+   "fin": 988
+  },
+  {
+   "lignes": [
+    {
+     "t": "et avec le temps, peut",
+     "y": 1080,
+     "taille": 62,
+     "mots": [
+      {
+       "w": "et",
+       "style": null,
+       "f": 991
+      },
+      {
+       "w": "avec",
+       "style": null,
+       "f": 995
+      },
+      {
+       "w": "le",
+       "style": null,
+       "f": 1003
+      },
+      {
+       "w": "temps,",
+       "style": null,
+       "f": 1005
+      },
+      {
+       "w": "peut",
+       "style": null,
+       "f": 1023
+      }
+     ]
+    },
+    {
+     "t": "te faire *gagner des centimètres.*",
+     "y": 1160,
+     "taille": 56,
+     "mots": [
+      {
+       "w": "te",
+       "style": null,
+       "f": 1028
+      },
+      {
+       "w": "faire",
+       "style": null,
+       "f": 1033
+      },
+      {
+       "w": "gagner",
+       "style": "violet",
+       "f": 1037
+      },
+      {
+       "w": "des",
+       "style": "violet",
+       "f": 1045
+      },
+      {
+       "w": "centimètres.",
+       "style": "violet",
+       "f": 1047
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "colonne_orange.png",
+     "a": 991,
+     "cx": 540,
+     "top": 640,
+     "w": 150,
+     "anim": "monte"
+    }
+   ],
+   "debut": 988,
+   "sortie": "haut",
+   "fin": 1061
+  },
+  {
+   "lignes": [
+    {
+     "t": "Combine-la avec le régime, l'entraînement et la routine de sommeil",
+     "y": 960,
+     "taille": 27,
+     "cache": true,
+     "mots": [
+      {
+       "w": "Combine-la",
+       "style": null,
+       "f": 1064
+      },
+      {
+       "w": "avec",
+       "style": null,
+       "f": 1081
+      },
+      {
+       "w": "le",
+       "style": null,
+       "f": 1088
+      },
+      {
+       "w": "régime,",
+       "style": null,
+       "f": 1090
+      },
+      {
+       "w": "l'entraînement",
+       "style": null,
+       "f": 1107
+      },
+      {
+       "w": "et",
+       "style": null,
+       "f": 1126
+      },
+      {
+       "w": "la",
+       "style": null,
+       "f": 1131
+      },
+      {
+       "w": "routine",
+       "style": null,
+       "f": 1136
+      },
+      {
+       "w": "de",
+       "style": null,
+       "f": 1145
+      },
+      {
+       "w": "sommeil",
+       "style": null,
+       "f": 1150
+      }
+     ]
+    },
+    {
+     "t": "régime",
+     "y": 1150,
+     "taille": 44,
+     "x": 461,
+     "align": "left",
+     "mots": [
+      {
+       "w": "régime",
+       "style": null,
+       "f": 1090
+      }
+     ]
+    },
+    {
+     "t": "entraînement",
+     "y": 1150,
+     "taille": 44,
+     "x": 47,
+     "align": "left",
+     "mots": [
+      {
+       "w": "entraînement",
+       "style": null,
+       "f": 1107
+      }
+     ]
+    },
+    {
+     "t": "sommeil",
+     "y": 1150,
+     "taille": 44,
+     "x": 782,
+     "align": "left",
+     "mots": [
+      {
+       "w": "sommeil",
+       "style": null,
+       "f": 1150
+      }
+     ]
+    }
+   ],
+   "images": [
+    {
+     "f": "repas.png",
+     "a": 1090,
+     "cx": 540,
+     "top": 800,
+     "w": 300,
+     "anim": "pop"
+    },
+    {
+     "f": "sport.png",
+     "a": 1107,
+     "cx": 205,
+     "top": 815,
+     "w": 300,
+     "anim": "monte"
+    },
+    {
+     "f": "sommeil.png",
+     "a": 1150,
+     "cx": 875,
+     "top": 815,
+     "w": 300,
+     "anim": "monte"
+    }
+   ],
+   "debut": 1061,
+   "sortie": "haut",
+   "fin": 1159
+  },
+  {
+   "lignes": [
+    {
+     "t": "personnalisées de Grandimi",
+     "y": 960,
+     "taille": 40,
+     "cache": true,
+     "mots": [
+      {
+       "w": "personnalisées",
+       "style": null,
+       "f": 1162
+      },
+      {
+       "w": "de",
+       "style": null,
+       "f": 1179
+      },
+      {
+       "w": "Grandimi",
+       "style": null,
+       "f": 1181
+      }
+     ]
+    },
+    {
+     "t": "grandimi.com",
+     "y": 1110,
+     "taille": 60,
+     "mots": [
+      {
+       "w": "grandimi.com",
+       "style": null,
+       "f": 1181
+      }
+     ]
+    }
+   ],
+   "icone": {
+    "a": 1162,
+    "cx": 540,
+    "cy": 900,
+    "taille": 300
+   },
+   "debut": 1159,
+   "sortie": "haut",
+   "fin": 1205
+  },
+  {
+   "lignes": [
+    {
+     "t": "pour booster naturellement ton",
+     "y": 800,
+     "taille": 60,
+     "mots": [
+      {
+       "w": "pour",
+       "style": null,
+       "f": 1208
+      },
+      {
+       "w": "booster",
+       "style": null,
+       "f": 1213
+      },
+      {
+       "w": "naturellement",
+       "style": null,
+       "f": 1225
+      },
+      {
+       "w": "ton",
+       "style": null,
+       "f": 1239
+      }
+     ]
+    },
+    {
+     "t": "*hormone de croissance.*",
+     "y": 885,
+     "taille": 74,
+     "mots": [
+      {
+       "w": "hormone",
+       "style": "violet",
+       "f": 1246
+      },
+      {
+       "w": "de",
+       "style": "violet",
+       "f": 1258
+      },
+      {
+       "w": "croissance.",
+       "style": "violet",
+       "f": 1261
+      }
+     ]
+    }
+   ],
+   "debut": 1205,
+   "sortie": "haut",
+   "fin": 1283
+  }
+ ],
+ "empile": false,
+ "totalFrames": 1283,
+ "fps": 30
+}

@@ -3,6 +3,7 @@
 Chaque entrée : instant, zone (x, y, l, h en pixels de la vidéo 576×1024) et méthode :
   fond   : le blanc relié aux bords de la zone devient transparent
   carte  : la carte colorée (coins arrondis) est découpée telle quelle
+  photo  : la zone est découpée telle quelle, coins arrondis
   couleur: seuls les pixels beiges (et leur contour) sont gardés — illustration posée sur du texte
 Les images sont agrandies ×1,875 (576 → 1080 px de large).
 
@@ -42,6 +43,15 @@ for name, t, (x, y, w, h), mode in ITEMS:
         cv2.rectangle(alpha, (r, 0), (cw - r, ch), 255, -1)
         cv2.rectangle(alpha, (0, r), (cw, ch - r), 255, -1)
         for px, py in [(r, r), (cw - r - 1, r), (r, ch - r - 1), (cw - r - 1, ch - r - 1)]:
+            cv2.circle(alpha, (px, py), r, 255, -1)
+    elif mode == "photo":
+        # photo carrée à coins arrondis : découpée telle quelle, coins transparents
+        ph, pw = im.shape[:2]
+        alpha = np.zeros((ph, pw), np.uint8)
+        r = int(min(pw, ph) * 0.1)
+        cv2.rectangle(alpha, (r, 0), (pw - r, ph), 255, -1)
+        cv2.rectangle(alpha, (0, r), (pw, ph - r), 255, -1)
+        for px, py in [(r, r), (pw - r - 1, r), (r, ph - r - 1), (pw - r - 1, ph - r - 1)]:
             cv2.circle(alpha, (px, py), r, 255, -1)
     elif mode == "couleur":
         hsv = cv2.cvtColor(im, cv2.COLOR_RGB2HSV)

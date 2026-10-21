@@ -1,0 +1,705 @@
+{
+ "note": "Calqué sur la référence v15044gf0000d0oa3rfog65hhbmfroqg (fiche.md). Tailles finales (gros = 1). Lignes avec « a » : non prononcées, apparaissent sur ce mot. « cache » : prononcé mais pas affiché.",
+ "gros": 1.0,
+ "sortie": "haut",
+ "ecrans": [
+  {
+   "lignes": [
+    {
+     "t": "Scientifiques de la *NASA*",
+     "y": 260,
+     "taille": 67
+    },
+    {
+     "t": "*cachent*",
+     "y": 340,
+     "taille": 67
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_nasa.png",
+     "a": "scientifiques",
+     "cx": 540,
+     "top": 470,
+     "w": 820,
+     "anim": "monte"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "une méthode *pour grandir*",
+     "y": 255,
+     "taille": 67
+    }
+   ],
+   "images": [
+    {
+     "f": "homme.png",
+     "a": "une",
+     "cx": 560,
+     "top": 450,
+     "w": 375,
+     "anim": "pop"
+    }
+   ],
+   "regle": {
+    "a": "methode",
+    "x": 300,
+    "haut": 470,
+    "bas": 1290
+   }
+  },
+  {
+   "lignes": [
+    {
+     "t": "qu'utilisent les *astronautes.*",
+     "y": 600,
+     "taille": 69
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_astronaute.png",
+     "a": "qu'utilisent",
+     "cx": 540,
+     "top": 665,
+     "w": 990,
+     "anim": "monte"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "Ils ont découvert",
+     "y": 700,
+     "taille": 64,
+     "x": 200,
+     "align": "left"
+    },
+    {
+     "t": "que",
+     "y": 790,
+     "taille": 104,
+     "x": 200,
+     "align": "left",
+     "fixe": true
+    },
+    {
+     "t": "les astronautes reviennent",
+     "y": 880,
+     "taille": 64,
+     "x": 220,
+     "align": "left"
+    },
+    {
+     "t": "de *l'espace*",
+     "y": 950,
+     "taille": 64,
+     "x": 430,
+     "align": "left"
+    }
+   ],
+   "images": [
+    {
+     "f": "fusee.png",
+     "a": "que",
+     "cx": 830,
+     "top": 560,
+     "w": 260,
+     "anim": "droite",
+     "rot": -12
+    },
+    {
+     "f": "astronaute.png",
+     "a": "que+2",
+     "cx": 810,
+     "top": 490,
+     "w": 150,
+     "anim": "droite",
+     "rot": -12
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "jusqu'à 5 cm *plus grands.*",
+     "y": 480,
+     "taille": 71
+    },
+    {
+     "t": "avant",
+     "y": 1380,
+     "taille": 57,
+     "x": 245,
+     "align": "left",
+     "a": "5"
+    },
+    {
+     "t": "*après*",
+     "y": 1380,
+     "taille": 57,
+     "x": 695,
+     "align": "left",
+     "a": "5"
+    }
+   ],
+   "images": [
+    {
+     "f": "astro_avant.png",
+     "a": "jusqu'à",
+     "cx": 300,
+     "top": 700,
+     "w": 270,
+     "anim": "monte"
+    },
+    {
+     "f": "astro_apres.png",
+     "a": "jusqu'à+3",
+     "cx": 760,
+     "top": 620,
+     "w": 310,
+     "anim": "monte"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "Et maintenant,",
+     "y": 580,
+     "taille": 71
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "*0*",
+     "y": 650,
+     "taille": 380,
+     "x": 230,
+     "align": "left",
+     "fixe": true,
+     "a": "ce"
+    },
+    {
+     "t": "ce même",
+     "y": 560,
+     "taille": 67,
+     "x": 520,
+     "align": "left"
+    },
+    {
+     "t": "!secret!",
+     "y": 640,
+     "taille": 67,
+     "x": 520,
+     "align": "left"
+    },
+    {
+     "t": "de *l'apesanteur*",
+     "y": 720,
+     "taille": 67,
+     "x": 520,
+     "align": "left"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "est utilisé",
+     "y": 880,
+     "taille": 69
+    },
+    {
+     "t": "*sur*",
+     "y": 1000,
+     "taille": 120,
+     "x": 360,
+     "align": "left",
+     "fixe": true
+    },
+    {
+     "t": "Terre",
+     "y": 1000,
+     "taille": 40,
+     "cache": true
+    }
+   ],
+   "images": [
+    {
+     "f": "terre.png",
+     "a": "terre",
+     "cx": 700,
+     "top": 920,
+     "w": 180,
+     "anim": "pop"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "pour gagner",
+     "y": 300,
+     "taille": 116,
+     "fixe": true
+    },
+    {
+     "t": "*des centimètres*",
+     "y": 470,
+     "taille": 100,
+     "fixe": true,
+     "monte": {
+      "a": "centimetres+12",
+      "y": 385
+     }
+    }
+   ],
+   "images": [
+    {
+     "f": "garcon.png",
+     "a": "gagner",
+     "cx": 560,
+     "top": 830,
+     "w": 470,
+     "anim": "monte"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "sans pilule ni compléments bizarres.",
+     "y": 960,
+     "taille": 50,
+     "cache": true
+    }
+   ],
+   "images": [
+    {
+     "f": "pilule.png",
+     "a": "sans",
+     "cx": 540,
+     "top": 720,
+     "w": 440,
+     "anim": "pop",
+     "rot": -18
+    }
+   ],
+   "croix": {
+    "a": "pilule+2",
+    "fin": "bizarres+12"
+   }
+  },
+  {
+   "lignes": [
+    {
+     "t": "Ça s'appelle",
+     "y": 840,
+     "taille": 60
+    },
+    {
+     "t": "*la décompression*",
+     "y": 935,
+     "taille": 82,
+     "fixe": true
+    },
+    {
+     "t": "*vertébrale.*",
+     "y": 1030,
+     "taille": 82,
+     "fixe": true
+    }
+   ],
+   "images": [
+    {
+     "f": "cerveau.png",
+     "a": "ça",
+     "cx": 540,
+     "top": 690,
+     "w": 520,
+     "anim": "monte",
+     "zoom": 1.12
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "En *apesanteur,*",
+     "y": 640,
+     "taille": 71
+    }
+   ],
+   "images": [
+    {
+     "f": "astro_flottant.png",
+     "a": "en",
+     "cx": 640,
+     "top": 1050,
+     "w": 380,
+     "anim": "tourne",
+     "trajet": {
+      "dx": 160,
+      "dy": -1250,
+      "rot": -70
+     }
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "La colonne des",
+     "y": 560,
+     "taille": 60
+    },
+    {
+     "t": "*astronautes*",
+     "y": 665,
+     "taille": 112,
+     "fixe": true
+    },
+    {
+     "t": "s'étire parce qu'il",
+     "y": 770,
+     "taille": 62
+    },
+    {
+     "t": "n'y a plus de pression.",
+     "y": 845,
+     "taille": 62
+    }
+   ],
+   "images": [
+    {
+     "f": "colonne.png",
+     "a": "colonne",
+     "cx": 540,
+     "top": 560,
+     "w": 250,
+     "anim": "monte"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "C'est pour ça qu'ils",
+     "y": 820,
+     "taille": 62,
+     "x": 150,
+     "align": "left"
+    },
+    {
+     "t": "reviennent",
+     "y": 895,
+     "taille": 62,
+     "x": 150,
+     "align": "left"
+    },
+    {
+     "t": "*PLUS GRANDS.*",
+     "y": 1000,
+     "taille": 108,
+     "x": 130,
+     "align": "left",
+     "fixe": true
+    }
+   ],
+   "images": [
+    {
+     "f": "astro_apres.png",
+     "a": "reviennent",
+     "cx": 850,
+     "top": 690,
+     "w": 280,
+     "anim": "monte"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "Cette *méthode* reproduit cet effet",
+     "y": 800,
+     "taille": 60
+    },
+    {
+     "t": "avec des",
+     "y": 870,
+     "taille": 60
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "*tables d'inversion,*",
+     "y": 650,
+     "taille": 71
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_inversion.png",
+     "a": "tables",
+     "cx": 540,
+     "top": 720,
+     "w": 800,
+     "anim": "monte"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "*bottes de gravité,*",
+     "y": 650,
+     "taille": 71
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_bottes.png",
+     "a": "bottes",
+     "cx": 540,
+     "top": 720,
+     "w": 800,
+     "anim": "monte"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "ou simplement en te suspendant",
+     "y": 590,
+     "taille": 57
+    },
+    {
+     "t": "*à une barre*",
+     "y": 670,
+     "taille": 71
+    }
+   ],
+   "images": [
+    {
+     "f": "carte_barre.png",
+     "a": "ou",
+     "cx": 540,
+     "top": 730,
+     "w": 800,
+     "anim": "monte"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "*quelques minutes*",
+     "y": 900,
+     "taille": 80,
+     "x": 120,
+     "align": "left",
+     "fixe": true
+    },
+    {
+     "t": "par jour.",
+     "y": 990,
+     "taille": 64,
+     "x": 120,
+     "align": "left"
+    }
+   ],
+   "images": [
+    {
+     "f": "horloge.png",
+     "a": "minutes",
+     "cx": 935,
+     "top": 820,
+     "w": 140,
+     "anim": "pop"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "Ça *décompresse*",
+     "y": 1235,
+     "taille": 50,
+     "x": 110,
+     "align": "left"
+    },
+    {
+     "t": "*ta colonne,*",
+     "y": 1300,
+     "taille": 50,
+     "x": 150,
+     "align": "left"
+    },
+    {
+     "t": "*réhydrate*",
+     "y": 1235,
+     "taille": 50,
+     "x": 660,
+     "align": "left"
+    },
+    {
+     "t": "*tes disques*",
+     "y": 1300,
+     "taille": 50,
+     "x": 650,
+     "align": "left"
+    }
+   ],
+   "images": [
+    {
+     "f": "colonne_decomp.png",
+     "a": "ça",
+     "cx": 320,
+     "top": 720,
+     "w": 230,
+     "anim": "monte"
+    },
+    {
+     "f": "colonne_hydrate.png",
+     "a": "rehydrate",
+     "cx": 770,
+     "top": 715,
+     "w": 238,
+     "anim": "droite"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "et avec le temps, peut",
+     "y": 1080,
+     "taille": 62
+    },
+    {
+     "t": "te faire *gagner des centimètres.*",
+     "y": 1160,
+     "taille": 62
+    }
+   ],
+   "images": [
+    {
+     "f": "colonne_orange.png",
+     "a": "et",
+     "cx": 540,
+     "top": 640,
+     "w": 150,
+     "anim": "monte"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "Combine-la avec le régime, l'entraînement et la routine de sommeil",
+     "y": 960,
+     "taille": 40,
+     "cache": true
+    },
+    {
+     "t": "régime",
+     "y": 1150,
+     "taille": 44,
+     "x": 461,
+     "align": "left",
+     "a": "regime"
+    },
+    {
+     "t": "entraînement",
+     "y": 1150,
+     "taille": 44,
+     "x": 47,
+     "align": "left",
+     "a": "l'entrainement"
+    },
+    {
+     "t": "sommeil",
+     "y": 1150,
+     "taille": 44,
+     "x": 782,
+     "align": "left",
+     "a": "sommeil"
+    }
+   ],
+   "images": [
+    {
+     "f": "repas.png",
+     "a": "regime",
+     "cx": 540,
+     "top": 800,
+     "w": 300,
+     "anim": "pop"
+    },
+    {
+     "f": "sport.png",
+     "a": "l'entrainement",
+     "cx": 205,
+     "top": 815,
+     "w": 300,
+     "anim": "monte"
+    },
+    {
+     "f": "sommeil.png",
+     "a": "sommeil",
+     "cx": 875,
+     "top": 815,
+     "w": 300,
+     "anim": "monte"
+    }
+   ]
+  },
+  {
+   "lignes": [
+    {
+     "t": "personnalisées de Grandimi",
+     "y": 960,
+     "taille": 40,
+     "cache": true
+    },
+    {
+     "t": "grandimi.com",
+     "y": 1110,
+     "taille": 60,
+     "a": "grandimi"
+    }
+   ],
+   "icone": {
+    "a": "personnalisees",
+    "cx": 540,
+    "cy": 900,
+    "taille": 300
+   }
+  },
+  {
+   "lignes": [
+    {
+     "t": "pour booster naturellement ton",
+     "y": 800,
+     "taille": 62
+    },
+    {
+     "t": "*hormone de croissance.*",
+     "y": 885,
+     "taille": 74
+    }
+   ]
+  }
+ ],
+ "empile": false
+}

@@ -1,0 +1,171 @@
+{
+ "reference": "references/v15044gf0000d0oa3rfog65hhbmfroqg/original.mp4",
+ "note": "Zones en pixels de la vidéo 576×1024, à des instants où ni texte ni filigrane ne recouvrent l'image. Photo NASA, photo d'astronaute, gélules, cerveau, fusée : réinventées (filigrane ou texte posés dessus).",
+ "illustrations": [
+  {
+   "nom": "homme",
+   "t": 2.3,
+   "zone": [
+    200,
+    238,
+    186,
+    456
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "astro_avant",
+   "t": 7.8,
+   "zone": [
+    86,
+    370,
+    154,
+    326
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "astro_apres",
+   "t": 7.8,
+   "zone": [
+    320,
+    330,
+    172,
+    366
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "garcon",
+   "t": 12.0,
+   "zone": [
+    140,
+    440,
+    238,
+    526
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "astro_flottant",
+   "t": 17.4,
+   "zone": [
+    190,
+    410,
+    196,
+    165
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "colonne",
+   "t": 19.0,
+   "zone": [
+    200,
+    520,
+    180,
+    420
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "carte_inversion",
+   "t": 25.9,
+   "zone": [
+    77,
+    380,
+    425,
+    262
+   ],
+   "methode": "carte"
+  },
+  {
+   "nom": "carte_bottes",
+   "t": 26.9,
+   "zone": [
+    77,
+    380,
+    425,
+    262
+   ],
+   "methode": "carte"
+  },
+  {
+   "nom": "carte_barre",
+   "t": 28.5,
+   "zone": [
+    77,
+    380,
+    425,
+    262
+   ],
+   "methode": "carte"
+  },
+  {
+   "nom": "colonne_decomp",
+   "t": 32.8,
+   "zone": [
+    122,
+    385,
+    132,
+    262
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "colonne_hydrate",
+   "t": 32.8,
+   "zone": [
+    350,
+    380,
+    138,
+    266
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "colonne_orange",
+   "t": 35.0,
+   "zone": [
+    250,
+    410,
+    86,
+    212
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "repas",
+   "t": 40.2,
+   "zone": [
+    212,
+    435,
+    152,
+    152
+   ],
+   "methode": "photo"
+  },
+  {
+   "nom": "sport",
+   "t": 40.2,
+   "zone": [
+    33,
+    436,
+    152,
+    152
+   ],
+   "methode": "photo"
+  },
+  {
+   "nom": "sommeil",
+   "t": 40.2,
+   "zone": [
+    391,
+    436,
+    152,
+    152
+   ],
+   "methode": "photo"
+  }
+ ]
+}

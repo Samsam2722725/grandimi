@@ -12,9 +12,30 @@ const COULEURS: Record<string, string> = {violet: '#5b16d6', rouge: '#e3262f', v
 const FONT = "'Poppins', 'Inter', sans-serif";
 
 type Mot = {w: string; style: string | null; f: number};
-type Ligne = {t: string; y: number; taille: number; x?: number; align?: 'left' | 'center'; mots: Mot[]; monte?: {a: number; y: number}; chute?: boolean};
-type Image = {f: string; a: number; fin?: number; cx: number; top: number; w: number; anim: 'monte' | 'pop' | 'aucune'; vers?: {a: number; top: number}};
-type Ecran = {debut: number; fin: number; lignes: Ligne[]; images?: Image[]; icone?: {a: number; cx: number; cy: number; taille: number}};
+type Ligne = {t: string; y: number; taille: number; x?: number; align?: 'left' | 'center'; mots: Mot[]; monte?: {a: number; y: number}; chute?: boolean; cache?: boolean};
+type Image = {
+	f: string;
+	a: number;
+	fin?: number;
+	cx: number;
+	top: number;
+	w: number;
+	anim: 'monte' | 'pop' | 'aucune' | 'droite' | 'tourne';
+	vers?: {a: number; top?: number; cx?: number};
+	trajet?: {dx: number; dy: number; rot: number}; // « tourne » : déplacement et rotation jusqu'à la fin de l'écran
+	zoom?: number; // grossit doucement jusqu'à la fin de l'écran
+	rot?: number;
+};
+type Ecran = {
+	debut: number;
+	fin: number;
+	lignes: Ligne[];
+	images?: Image[];
+	icone?: {a: number; cx: number; cy: number; taille: number};
+	croix?: {a: number; fin?: number}; // grande croix rouge tracée en deux coups
+	regle?: {a: number; x: number; haut: number; bas: number}; // règle violette en pointillés qui grandit
+	sortie?: 'haut';
+};
 type Timeline = {ecrans: Ecran[]; totalFrames: number};
 
 export type TexteAnimeProps = {video: string; musique?: boolean; voix?: boolean; bruitages?: boolean; timeline?: Timeline};
@@ -43,6 +64,7 @@ const usePoppins = () => {
 const entree = (f: number, at: number) => spring({frame: f - at, fps: FPS, config: {damping: 14, stiffness: 220, mass: 0.5}});
 
 const LigneView: React.FC<{l: Ligne; f: number}> = ({l, f}) => {
+	if (l.cache) return null;
 	const y = l.monte ? interpolate(f, [l.monte.a, l.monte.a + 10], [l.y, l.monte.y], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)}) : l.y;
 	const left = l.align === 'left';
 	return (
@@ -95,25 +117,72 @@ const LigneView: React.FC<{l: Ligne; f: number}> = ({l, f}) => {
 	);
 };
 
-const ImageView: React.FC<{im: Image; f: number; dir: string}> = ({im, f, dir}) => {
+const ImageView: React.FC<{im: Image; f: number; dir: string; finEcran: number}> = ({im, f, dir, finEcran}) => {
 	if (f < im.a || (im.fin !== undefined && f >= im.fin)) return null;
 	const s = entree(f, im.a);
+	const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 	let top = im.top;
+	let cx = im.cx;
 	let scale = 1;
 	let opacity = 1;
-	if (im.anim === 'monte') {
+	let rot = im.rot ?? 0;
+	if (im.anim === 'monte' || im.anim === 'tourne') {
 		const k = spring({frame: f - im.a, fps: FPS, config: {damping: 13, stiffness: 300, mass: 0.6}});
 		top = im.top + (1 - k) * 900;
+		opacity = Math.min(1, 0.3 + k);
+	} else if (im.anim === 'droite') {
+		const k = spring({frame: f - im.a, fps: FPS, config: {damping: 14, stiffness: 260, mass: 0.6}});
+		cx = im.cx + (1 - k) * 800;
 	} else if (im.anim === 'pop') {
 		scale = 0.6 + 0.4 * s;
 		opacity = Math.min(1, s * 1.8);
 	}
-	if (im.vers) top = interpolate(f, [im.vers.a, im.vers.a + 10], [top, im.vers.top], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)});
+	if (im.trajet) {
+		const fin = im.fin ?? finEcran;
+		const k = interpolate(f, [im.a, fin], [0, 1], clamp);
+		cx += im.trajet.dx * k;
+		top += im.trajet.dy * k;
+		rot += im.trajet.rot * k;
+	}
+	if (im.vers) {
+		const k = interpolate(f, [im.vers.a, im.vers.a + 10], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
+		if (im.vers.top !== undefined) top += (im.vers.top - im.top) * k;
+		if (im.vers.cx !== undefined) cx += (im.vers.cx - im.cx) * k;
+	}
+	if (im.zoom) scale *= interpolate(f, [im.a, finEcran], [1, im.zoom], clamp);
 	return (
 		<Img
 			src={staticFile(`${dir}/images/${im.f}`)}
-			style={{position: 'absolute', left: im.cx - im.w / 2, top, width: im.w, transform: `scale(${scale})`, transformOrigin: '50% 50%', opacity}}
+			style={{position: 'absolute', left: cx - im.w / 2, top, width: im.w, transform: `rotate(${rot}deg) scale(${scale})`, transformOrigin: '50% 50%', opacity}}
 		/>
+	);
+};
+
+/** Grande croix rouge tracée en deux coups d'un bord à l'autre (« sans pilules »). */
+const Croix: React.FC<{c: NonNullable<Ecran['croix']>; f: number}> = ({c, f}) => {
+	if (f < c.a) return null;
+	const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
+	const t1 = interpolate(f, [c.a, c.a + 5], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+	const t2 = interpolate(f, [c.a + 4, c.a + 9], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+	const op = c.fin !== undefined ? interpolate(f, [c.fin - 10, c.fin], [1, 0], clamp) : 1;
+	return (
+		<svg width={1080} height={1920} style={{position: 'absolute', inset: 0, opacity: op}}>
+			<line x1={90} y1={-60} x2={990} y2={1650} stroke="#e8102e" strokeWidth={58} strokeLinecap="round" pathLength={1} strokeDasharray={`${t1} 1`} />
+			<line x1={990} y1={-60} x2={90} y2={1650} stroke="#e8102e" strokeWidth={58} strokeLinecap="round" pathLength={1} strokeDasharray={`${t2} 1`} />
+		</svg>
+	);
+};
+
+/** Règle violette en pointillés avec flèche, qui grandit du bas vers le haut. */
+const Regle: React.FC<{r: NonNullable<Ecran['regle']>; f: number}> = ({r, f}) => {
+	if (f < r.a) return null;
+	const k = interpolate(f, [r.a, r.a + 14], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+	const y = r.bas + (r.haut - r.bas) * k;
+	return (
+		<svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
+			<line x1={r.x} y1={r.bas} x2={r.x} y2={y} stroke="#5b16d6" strokeWidth={7} strokeDasharray="22 14" />
+			<path d={`M ${r.x - 22} ${y + 26} L ${r.x} ${y} L ${r.x + 22} ${y + 26}`} fill="none" stroke="#5b16d6" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
+		</svg>
 	);
 };
 
@@ -156,12 +225,16 @@ const SORTIE = 6; // images de chevauchement entre deux écrans
 const EcranView: React.FC<{e: Ecran; dir: string}> = ({e, dir}) => {
 	const f = useCurrentFrame() + e.debut; // frames absolues
 	const t = interpolate(f, [e.fin, e.fin + SORTIE], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.in(Easing.quad)});
+	// « haut » : l'écran part vers le haut en fondu (comme un défilement), sinon simple fondu flou
+	const dy = e.sortie === 'haut' ? -260 * t : 0;
 	return (
-		<AbsoluteFill style={{opacity: 1 - t, filter: t > 0.05 ? `blur(${t * 8}px)` : undefined}}>
+		<AbsoluteFill style={{opacity: 1 - t, filter: t > 0.05 ? `blur(${t * 8}px)` : undefined, transform: `translateY(${dy}px)`}}>
 			{(e.images ?? []).map((im, i) => (
-				<ImageView key={i} im={im} f={f} dir={dir} />
+				<ImageView key={i} im={im} f={f} dir={dir} finEcran={e.fin} />
 			))}
+			{e.regle ? <Regle r={e.regle} f={f} /> : null}
 			{e.icone ? <Icone ic={e.icone} f={f} /> : null}
+			{e.croix ? <Croix c={e.croix} f={f} /> : null}
 			{e.lignes.map((l, i) => (
 				<LigneView key={i} l={l} f={f} />
 			))}
@@ -193,6 +266,15 @@ export const TexteAnime: React.FC<TexteAnimeProps> = ({video, timeline, musique 
 							</Sequence>
 						)),
 					)
+				: null}
+			{bruitages
+				? T.ecrans
+						.filter((e) => e.croix)
+						.map((e, i) => (
+							<Sequence key={`x${i}`} from={e.croix!.a} durationInFrames={30} layout="none">
+								<Audio src={staticFile('sfx/wrong.wav')} volume={0.22} />
+							</Sequence>
+						))
 				: null}
 			{T.ecrans.map((e, i) => (
 				<Sequence key={i} from={e.debut} durationInFrames={Math.max(1, e.fin - e.debut + SORTIE)}>

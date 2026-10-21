@@ -18,6 +18,8 @@ ROOT = Path(__file__).resolve().parent.parent / "public" / "textes" / sys.argv[1
 FPS = 30
 spec = json.loads((ROOT / "ecrans.json").read_text())
 heard = json.loads((ROOT / "mots.json").read_text())
+if isinstance(heard, dict):  # format {"duree", "mots"} de la transcription par morceaux
+    heard = heard["mots"]
 info = soundfile.info(str(ROOT / "voice" / "voix.wav"))
 duration = info.frames / info.samplerate
 
@@ -55,6 +57,8 @@ tokens = []  # (écran, ligne, index du mot)
 for si, s in enumerate(spec["ecrans"]):
     for li, l in enumerate(s["lignes"]):
         l["mots"] = parse(l["t"])
+        if "a" in l:  # ligne non prononcée (légende, « 0 » géant) : apparaît d'un coup sur un mot de l'écran
+            continue
         for wi, w in enumerate(l["mots"]):
             tokens.append((si, li, wi))
 a = [norm(spec["ecrans"][si]["lignes"][li]["mots"][wi]["w"]) for si, li, wi in tokens]
@@ -71,44 +75,59 @@ for (si, li, wi), t in zip(tokens, times):
     spec["ecrans"][si]["lignes"][li]["mots"][wi]["f"] = round(t * FPS)
 
 for si, s in enumerate(spec["ecrans"]):
-    words = [w for l in s["lignes"] for w in l["mots"]]
-    s["debut"] = max(0, min(w["f"] for w in words) - 3)
+    words = [w for l in s["lignes"] if "a" not in l for w in l["mots"]]
 
     def anchor(a, words=words):
         m = re.match(r"^(.+?)(?:#(\d+))?([+-]\d+)?$", a)
         word, nth, off = m.groups()
         hits = [w["f"] for w in words if norm(w["w"]).startswith(norm(word))]
+        if len(hits) < (int(nth) if nth else 1):
+            sys.exit(f"Ancre introuvable dans l'écran {si + 1} : {a}")
         return hits[int(nth) - 1 if nth else 0] + int(off or 0)
 
+    for l in s["lignes"]:
+        if "a" in l:
+            fa = anchor(l.pop("a"))
+            for w in l["mots"]:
+                w["f"] = fa
+    s["debut"] = max(0, min(w["f"] for l in s["lignes"] for w in l["mots"]) - 3)
     for im in s.get("images", []):
         im["a"] = anchor(im["a"])
+        s["debut"] = min(s["debut"], max(0, im["a"] - 3))
         if "fin" in im:
             im["fin"] = anchor(im["fin"])
         if "vers" in im:
             im["vers"]["a"] = anchor(im["vers"]["a"])
     if "icone" in s:
         s["icone"]["a"] = anchor(s["icone"]["a"])
+    for k in ("croix", "regle"):
+        if k in s:
+            s[k]["a"] = anchor(s[k]["a"])
+            if "fin" in s[k]:
+                s[k]["fin"] = anchor(s[k]["fin"])
+    if spec.get("sortie") and "sortie" not in s:
+        s["sortie"] = spec["sortie"]
     for l in s["lignes"]:
         if "monte" in l:
             l["monte"]["a"] = anchor(l["monte"]["a"])
 # Taille : ×1,3 (mesuré sur l'original), plafonnée pour que la ligne tienne dans l'écran.
 # Largeur Poppins 800 ≈ 0,56 × taille (marge comprise) par caractère (mesuré sur le rendu).
-GROS, RATIO = 1.3, 0.56
+GROS, RATIO = spec.get("gros", 1.3), 0.56
 for s in spec["ecrans"]:
     def fit(l):
         avail = (1080 - l.get("x", 0) - 50) if l.get("align") == "left" else 1000
         g = 1 if l.get("fixe") else GROS
         return min(l["taille"] * g, avail / (len(l["t"].replace("*", "").replace("!", "").replace("+", "").replace("~", "")) * RATIO))
-    gauche = [l for l in s["lignes"] if l.get("align") == "left"]
+    gauche = [l for l in s["lignes"] if l.get("align") == "left" and not l.get("fixe")]  # « fixe » garde sa taille (« 0 » géant…)
     if gauche:
         t = min(fit(l) for l in gauche)
         for l in gauche:
             l["taille"] = round(t)
     for l in s["lignes"]:
-        if l.get("align") != "left":
+        if l.get("align") != "left" or l.get("fixe"):
             l["taille"] = round(fit(l))
     # Lignes empilées : écart minimal proportionnel à la taille (les lignes ont grossi).
-    ls = sorted(s["lignes"], key=lambda l: l["y"])
+    ls = sorted(s["lignes"], key=lambda l: l["y"]) if spec.get("empile", True) else []  # « empile »: false : y posés à la main
     for a, b in zip(ls, ls[1:]):
         if b["y"] - a["y"] < 200:  # même bloc de texte
             b["y"] = max(b["y"], round(a["y"] + 0.58 * (a["taille"] + b["taille"])))
