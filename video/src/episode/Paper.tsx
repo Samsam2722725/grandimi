@@ -40,7 +40,9 @@ export const Typed: React.FC<{
 	curseur?: boolean;
 	/** Pastille derrière le texte (ex. violet #8100fe, texte blanc sans contour). */
 	fond?: string;
-}> = ({text, at, perLetter = 2, y, size, color, stroke, curseur, fond}) => {
+	police?: string;
+	poids?: number;
+}> = ({text, at, perLetter = 2, y, size, color, stroke, curseur, fond, police, poids}) => {
 	const f = useCurrentFrame();
 	const n = Math.max(0, Math.min(text.length, Math.floor((f - at) / perLetter) + 1));
 	const s = 0.9 + 0.1 * pop(f, at);
@@ -57,6 +59,7 @@ export const Typed: React.FC<{
 				fontSize: size,
 				color: color ?? P5.yellow,
 				WebkitTextStroke: `${stroke ?? size * 0.07}px #000`,
+				...(police ? {fontFamily: `'${police}', sans-serif`, fontWeight: poids ?? 800} : {}),
 				...(fond ? {textShadow: 'none'} : {}),
 			}}
 		>

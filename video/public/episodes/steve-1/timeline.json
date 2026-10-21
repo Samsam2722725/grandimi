@@ -1,0 +1,535 @@
+{
+  "fps": 30,
+  "totalFrames": 1025,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "1m68 à 13 ans, je suis foutu?",
+      "from": 0,
+      "duration": 71,
+      "words": [
+        {
+          "w": "1m68",
+          "f": 0
+        },
+        {
+          "w": "à",
+          "f": 29
+        },
+        {
+          "w": "13",
+          "f": 31
+        },
+        {
+          "w": "ans,",
+          "f": 38
+        },
+        {
+          "w": "je",
+          "f": 46
+        },
+        {
+          "w": "suis",
+          "f": 50
+        },
+        {
+          "w": "foutu?",
+          "f": 55
+        }
+      ]
+    },
+    {
+      "id": "pdt",
+      "text": "Pas du tout.",
+      "from": 72,
+      "duration": 13,
+      "words": [
+        {
+          "w": "Pas",
+          "f": 72
+        },
+        {
+          "w": "du",
+          "f": 77
+        },
+        {
+          "w": "tout.",
+          "f": 79
+        }
+      ]
+    },
+    {
+      "id": "dan",
+      "text": "Aujourd’hui, on regarde les stats de Steve.",
+      "from": 86,
+      "duration": 54,
+      "words": [
+        {
+          "w": "Aujourd’hui,",
+          "f": 86
+        },
+        {
+          "w": "on",
+          "f": 98
+        },
+        {
+          "w": "regarde",
+          "f": 103
+        },
+        {
+          "w": "les",
+          "f": 113
+        },
+        {
+          "w": "stats",
+          "f": 118
+        },
+        {
+          "w": "de",
+          "f": 127
+        },
+        {
+          "w": "Steve.",
+          "f": 130
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 13 ans, il mesure déjà 168 cm.",
+      "from": 142,
+      "duration": 83,
+      "words": [
+        {
+          "w": "À",
+          "f": 142
+        },
+        {
+          "w": "13",
+          "f": 146
+        },
+        {
+          "w": "ans,",
+          "f": 154
+        },
+        {
+          "w": "il",
+          "f": 161
+        },
+        {
+          "w": "mesure",
+          "f": 166
+        },
+        {
+          "w": "déjà",
+          "f": 178
+        },
+        {
+          "w": "168",
+          "f": 187
+        },
+        {
+          "w": "cm.",
+          "f": 206
+        }
+      ]
+    },
+    {
+      "id": "bien",
+      "text": "Ça commence bien.",
+      "from": 226,
+      "duration": 19,
+      "words": [
+        {
+          "w": "Ça",
+          "f": 226
+        },
+        {
+          "w": "commence",
+          "f": 230
+        },
+        {
+          "w": "bien.",
+          "f": 238
+        }
+      ]
+    },
+    {
+      "id": "grandimi",
+      "text": "Selon Grandimi, sa taille finale estimée est de 185 cm.",
+      "from": 245,
+      "duration": 117,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 245
+        },
+        {
+          "w": "Grandimi,",
+          "f": 253
+        },
+        {
+          "w": "sa",
+          "f": 277
+        },
+        {
+          "w": "taille",
+          "f": 281
+        },
+        {
+          "w": "finale",
+          "f": 289
+        },
+        {
+          "w": "estimée",
+          "f": 298
+        },
+        {
+          "w": "est",
+          "f": 313
+        },
+        {
+          "w": "de",
+          "f": 317
+        },
+        {
+          "w": "185",
+          "f": 320
+        },
+        {
+          "w": "cm.",
+          "f": 344
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Avec les bonnes habitudes, Steve pourrait atteindre 191 cm.",
+      "from": 363,
+      "duration": 112,
+      "words": [
+        {
+          "w": "Avec",
+          "f": 363
+        },
+        {
+          "w": "les",
+          "f": 368
+        },
+        {
+          "w": "bonnes",
+          "f": 373
+        },
+        {
+          "w": "habitudes,",
+          "f": 380
+        },
+        {
+          "w": "Steve",
+          "f": 397
+        },
+        {
+          "w": "pourrait",
+          "f": 411
+        },
+        {
+          "w": "atteindre",
+          "f": 418
+        },
+        {
+          "w": "191",
+          "f": 433
+        },
+        {
+          "w": "cm.",
+          "f": 459
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "Soit environ 5 cm de croissance supplémentaire.",
+      "from": 476,
+      "duration": 81,
+      "words": [
+        {
+          "w": "Soit",
+          "f": 476
+        },
+        {
+          "w": "environ",
+          "f": 488
+        },
+        {
+          "w": "5",
+          "f": 500
+        },
+        {
+          "w": "cm",
+          "f": 508
+        },
+        {
+          "w": "de",
+          "f": 522
+        },
+        {
+          "w": "croissance",
+          "f": 524
+        },
+        {
+          "w": "supplémentaire.",
+          "f": 539
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Steve est déjà plus grand que 94,4% des personnes de son âge.",
+      "from": 558,
+      "duration": 142,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 558
+        },
+        {
+          "w": "Steve",
+          "f": 575
+        },
+        {
+          "w": "est",
+          "f": 589
+        },
+        {
+          "w": "déjà",
+          "f": 592
+        },
+        {
+          "w": "plus",
+          "f": 599
+        },
+        {
+          "w": "grand",
+          "f": 604
+        },
+        {
+          "w": "que",
+          "f": 611
+        },
+        {
+          "w": "94,4%",
+          "f": 618
+        },
+        {
+          "w": "des",
+          "f": 668
+        },
+        {
+          "w": "personnes",
+          "f": 673
+        },
+        {
+          "w": "de",
+          "f": 680
+        },
+        {
+          "w": "son",
+          "f": 683
+        },
+        {
+          "w": "âge.",
+          "f": 690
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et a atteint 90,3% de sa croissance.",
+      "from": 701,
+      "duration": 88,
+      "words": [
+        {
+          "w": "Et",
+          "f": 701
+        },
+        {
+          "w": "a",
+          "f": 706
+        },
+        {
+          "w": "atteint",
+          "f": 711
+        },
+        {
+          "w": "90,3%",
+          "f": 723
+        },
+        {
+          "w": "de",
+          "f": 766
+        },
+        {
+          "w": "sa",
+          "f": 769
+        },
+        {
+          "w": "croissance.",
+          "f": 773
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T’es clairement pas foutu!",
+      "from": 790,
+      "duration": 35,
+      "words": [
+        {
+          "w": "T’es",
+          "f": 790
+        },
+        {
+          "w": "clairement",
+          "f": 797
+        },
+        {
+          "w": "pas",
+          "f": 807
+        },
+        {
+          "w": "foutu!",
+          "f": 812
+        }
+      ]
+    },
+    {
+      "id": "encore",
+      "text": "T’as encore de quoi grandir.",
+      "from": 826,
+      "duration": 30,
+      "words": [
+        {
+          "w": "T’as",
+          "f": 826
+        },
+        {
+          "w": "encore",
+          "f": 833
+        },
+        {
+          "w": "de",
+          "f": 838
+        },
+        {
+          "w": "quoi",
+          "f": 841
+        },
+        {
+          "w": "grandir.",
+          "f": 845
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Tu veux aussi faire analyser ton potentiel de taille?",
+      "from": 857,
+      "duration": 59,
+      "words": [
+        {
+          "w": "Tu",
+          "f": 857
+        },
+        {
+          "w": "veux",
+          "f": 862
+        },
+        {
+          "w": "aussi",
+          "f": 867
+        },
+        {
+          "w": "faire",
+          "f": 874
+        },
+        {
+          "w": "analyser",
+          "f": 879
+        },
+        {
+          "w": "ton",
+          "f": 891
+        },
+        {
+          "w": "potentiel",
+          "f": 896
+        },
+        {
+          "w": "de",
+          "f": 905
+        },
+        {
+          "w": "taille?",
+          "f": 908
+        }
+      ]
+    },
+    {
+      "id": "cook",
+      "text": "Commente COOK et je t’envoie un message privé pour analyser le tien.",
+      "from": 917,
+      "duration": 104,
+      "words": [
+        {
+          "w": "Commente",
+          "f": 917
+        },
+        {
+          "w": "COOK",
+          "f": 935
+        },
+        {
+          "w": "et",
+          "f": 947
+        },
+        {
+          "w": "je",
+          "f": 950
+        },
+        {
+          "w": "t’envoie",
+          "f": 952
+        },
+        {
+          "w": "un",
+          "f": 962
+        },
+        {
+          "w": "message",
+          "f": 964
+        },
+        {
+          "w": "privé",
+          "f": 974
+        },
+        {
+          "w": "pour",
+          "f": 981
+        },
+        {
+          "w": "analyser",
+          "f": 986
+        },
+        {
+          "w": "le",
+          "f": 998
+        },
+        {
+          "w": "tien.",
+          "f": 1003
+        }
+      ]
+    }
+  ]
+}

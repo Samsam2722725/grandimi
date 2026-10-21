@@ -19,7 +19,9 @@ import {makeTiming, Timeline} from '../timing';
 import {Paper, Typed} from './Paper';
 import {CarteCommentaire} from './CarteCommentaire';
 import {HookCommentaires} from './HookCommentaires';
+import {DashboardGrandimi} from './Dashboard';
 import {HookTaille} from './HookTaille';
+import {EntreeGlitch, EntreeJauneGlisse, FlashOrangeJaune, SortieGlitch, SortieJaune, SortieRadial, SortieZoomFlou} from './TransitionsSteve';
 import {TopoAnime} from './TopoAnime';
 import {Cam, Shot} from './Shot';
 import {FONT} from '../theme';
@@ -667,18 +669,22 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 		if (el.type === 'commentaire') return <Commentaire key={i} el={el} at={loc(el.a)} envoi={el.envoi !== undefined ? loc(el.envoi) : undefined} />;
 		if (el.type === 'tape')
 			return (
-				<Typed
-					key={i}
-					text={el.texte.replace('{partie}', String(ep.partie))}
-					at={loc(el.a)}
-					perLetter={el.parLettre ?? 2}
-					y={el.y}
-					size={el.taille}
-					color={el.couleur}
-					stroke={el.contour}
-					curseur={el.curseur}
-					fond={el.fond}
-				/>
+				<Sequence key={i} from={0} durationInFrames={el.fin !== undefined ? Math.max(1, loc(el.fin)) : dur} layout="none">
+					<Typed
+						key={i}
+						text={el.texte.replace('{partie}', String(ep.partie))}
+						at={loc(el.a)}
+						perLetter={el.parLettre ?? 2}
+						y={el.y}
+						size={el.taille}
+						color={el.couleur}
+						stroke={el.contour}
+						curseur={el.curseur}
+						fond={el.fond}
+						police={el.police}
+						poids={el.poids}
+					/>
+				</Sequence>
 			);
 		return null;
 	});
@@ -686,6 +692,19 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 	const content = (
 		<AbsoluteFill>
 			{plan.famille ? <FamillePlan fam={plan.famille} aOpt={loc(plan.famille.futur.aOptimisee)} aGain={loc(plan.famille.futur.aGain)} /> : null}
+			{plan.dashboard ? (
+				<DashboardGrandimi
+					d={plan.dashboard.donnees}
+					cams={plan.dashboard.cams.map((c) => ({...c, f: loc(c.a)}))}
+					pops={plan.dashboard.pops.map((p) => ({...p, a: loc(p.a), fin: loc(p.fin)}))}
+					fleches={plan.dashboard.fleches.map((fl) => ({...fl, a: loc(fl.a), fin: loc(fl.fin)}))}
+					ballon={
+						plan.dashboard.ballon
+							? {src: file(plan.dashboard.ballon.fichier), a: loc(plan.dashboard.ballon.a), fin: loc(plan.dashboard.ballon.fin)}
+							: undefined
+					}
+				/>
+			) : null}
 			{plan.fond === 'papier' && plan.papiers?.length ? <PhotoPapier files={plan.papiers.map(file)} /> : null}
 			{plan.fond === 'papier' && !plan.papiers?.length ? <Paper /> : null}
 			{plan.hookCommentaires ? (
@@ -706,7 +725,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 				.filter((e) => e.type === 'flash')
 				.map((e, i) => (
 					<Sequence key={`flash-${i}`} from={loc(e.a)} durationInFrames={12} layout="none">
-						<Flash color={e.couleur ?? P5.yellow} vitesse={vite} />
+						{e.couleur === 'orange-jaune' ? <FlashOrangeJaune /> : <Flash color={e.couleur ?? P5.yellow} vitesse={vite} />}
 					</Sequence>
 				))}
 			{plan.sortie === 'noir' ? <FonduNoir from={dur - 4} to={dur - 2} /> : null}
@@ -743,6 +762,8 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 				<Lumiere from={dur - Math.round(8 / vite)} to={dur} fort={plan.sortie === 'lumiere-forte'} />
 			) : null}
 			{plan.sortie === 'blanc' ? <FonduBlanc from={dur - 4} to={dur - 1} /> : null}
+			{plan.sortie === 'jaune' ? <SortieJaune dur={dur} /> : null}
+			{plan.sortie === 'glitch' ? <SortieGlitch dur={dur} /> : null}
 			{sons.map((s, i) => (
 				<Sfx key={i} at={s.at} name={s.son as never} volume={s.volume} />
 			))}
@@ -756,6 +777,10 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					{out}
 				</Mouvement>
 			);
+	if (plan.sortie === 'zoom-flou') out = <SortieZoomFlou dur={dur}>{out}</SortieZoomFlou>;
+	if (plan.sortie === 'radial-fin') out = <SortieRadial dur={dur}>{out}</SortieRadial>;
+	if (plan.transition === 'jaune-glisse') return <EntreeJauneGlisse>{out}</EntreeJauneGlisse>;
+	if (plan.transition === 'glitch') return <EntreeGlitch>{out}</EntreeGlitch>;
 	if (plan.transition === 'whip') return <Whip vitesse={vite}>{out}</Whip>;
 	if (plan.transition === 'glisse' || plan.transition === 'lumiere')
 		return (
@@ -828,6 +853,9 @@ type Fenetre = {
 	chunks: {from: number; words: string[]; times: number[]}[];
 	keywords: string[];
 	verts: string[];
+	police?: string;
+	couleur?: string;
+	reprise?: boolean;
 	condense?: boolean;
 	weight: number;
 	stroke: number;
@@ -841,7 +869,7 @@ const Captions: React.FC<{windows: Fenetre[]}> = ({windows}) => {
 	const {chunks, keywords} = win;
 	const idx = chunks.findIndex((c, i) => f >= c.from && (i + 1 >= chunks.length || f < chunks[i + 1].from));
 	const c = chunks[idx];
-	if (!c || c.from < win.from - 2) return null;
+	if (!c || (c.from < win.from - 2 && !win.reprise)) return null;
 	const s = win.pop ? 0.82 + 0.18 * pop(f, c.from, 10) : 1;
 	if (win.condense) {
 		// Mot en cours de prononciation surligné (modèle de l'accroche a56d6d55).
@@ -893,7 +921,18 @@ const Captions: React.FC<{windows: Fenetre[]}> = ({windows}) => {
 							textTransform: win.upper ? 'uppercase' : 'none',
 							display: 'inline-block',
 							margin: '0 12px',
-							...(vert ? {color: '#3dff52', textShadow: '0 0 14px rgba(40,255,70,0.8)'} : {}),
+							...(win.police
+								? {
+										fontFamily: `'${win.police}', sans-serif`,
+										color: win.couleur ?? P5.yellow,
+										letterSpacing: 0,
+										margin: '0 9px',
+										textShadow: '0 2px 3px rgba(0,0,0,0.45)',
+									}
+								: {}),
+							...(vert
+								? {color: win.police ? '#24ef3c' : '#3dff52', textShadow: win.police ? '0 2px 3px rgba(0,0,0,0.45)' : '0 0 14px rgba(40,255,70,0.8)'}
+								: {}),
 							...(key
 								? {color: '#fff', WebkitTextStroke: '0px', background: P5.orange, borderRadius: 22, padding: '6px 26px 12px', textShadow: 'none'}
 								: {}),
@@ -914,6 +953,9 @@ const usePolices = () => {
 		const fonts = [
 			new FontFace('Poppins', `url(${staticFile('fonts/poppins-latin-800-normal.woff2')})`, {weight: '800'}),
 			new FontFace('Barlow Condensed', `url(${staticFile('fonts/barlow-condensed-latin-800-normal.woff2')})`, {weight: '800'}),
+			...[600, 700, 800, 900].map(
+				(w) => new FontFace('Montserrat', `url(${staticFile(`fonts/montserrat-latin-${w}-normal.woff2`)})`, {weight: String(w)}),
+			),
 		];
 		Promise.all(fonts.map((x) => x.load()))
 			.then((loaded) => {
@@ -944,6 +986,9 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 		pop: w.pop !== false,
 		condense: w.style === 'condense',
 		verts: (w.verts ?? []).map(norm),
+		police: w.police,
+		reprise: w.reprise,
+		couleur: w.couleur,
 		chunks: chunkWords(timeline, w.motsCles === false ? [] : keywords, w.motsMax, w.carMax),
 	}));
 	const vol = data.musique?.volume ?? 0.08;

@@ -27,7 +27,7 @@ export type Element =
 		grandit?: {de: number; d: number}})
 	| (Base & {type: 'trait'; d: string; tete?: string; couleur?: string; epaisseur?: number; duree?: number; fin?: Ancre})
 	| (Base & {type: 'texte'; texte: string; y: number; taille: number; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance' | 'glitch' | 'fondu'; fin?: Ancre; lueur?: string})
-	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number; curseur?: boolean; fond?: string})
+	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number; curseur?: boolean; fond?: string; police?: string; poids?: number; fin?: Ancre})
 	/** Compteur qui défile de `de` à `vers` et se pose sur `arrivee` (révélation avec suspense). */
 	| (Base & {type: 'compteur'; de: number; vers: number; arrivee: Ancre; fin?: Ancre; suffixe?: string; y: number; taille: number; couleur?: string; voile?: boolean})
 	/** Fausse zone de commentaire TikTok qui s'écrit toute seule. */
@@ -47,10 +47,11 @@ export type Plan = {
 	debut: Ancre;
 	/** Entrée du plan. glisse / rebond / secousse : mouvements mesurés sur la référence 7436214342510513439 ;
 	    bascule : entrée inclinée qui se redresse (référence 7444371749753408810). */
-	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule' | 'etire' | 'radial' | 'lumiere-rouge';
+	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule' | 'etire' | 'radial' | 'lumiere-rouge' | 'jaune-glisse' | 'glitch';
 	/** Sortie du plan : lumiere = lumière jaune qui envahit l'image sur les dernières frames ;
 	    blanc = fondu au blanc sur les 4 dernières frames (la fin s'enchaîne avec l'accroche dessinée quand la vidéo reboucle). */
-	sortie?: 'lumiere' | 'lumiere-forte' | 'blanc' | 'noir';
+	/** jaune / glitch / zoom-flou / radial-fin : sorties mesurées sur la référence « Steve » (src/episode/TransitionsSteve.tsx). */
+	sortie?: 'lumiere' | 'lumiere-forte' | 'blanc' | 'noir' | 'jaune' | 'glitch' | 'zoom-flou' | 'radial-fin';
 	/** Effets ponctuels sur tout le plan (secousse gauche-droite). */
 	effets?: {type: 'secousse' | 'flash'; a: Ancre; couleur?: string}[];
 	famille?: Famille;
@@ -68,6 +69,14 @@ export type Plan = {
 	hookTaille?: {cm: number; carte: Ancre; moyenne: Ancre; france?: Ancre; question?: Ancre};
 	/** Accroche dessinée « on prédit votre potentiel… à partir de vos commentaires » (src/episode/HookCommentaires.tsx). */
 	hookCommentaires?: {actuelle: number; cible: number; potentiel: Ancre; commentaires: Ancre; bulles: {nom: string; texte: string; couleur: string}[]};
+	/** Écran de résultats Grandimi animé (src/episode/Dashboard.tsx) : caméra, lignes qui s'élargissent, flèches, ballon. */
+	dashboard?: {
+		donnees: import('./Dashboard').DashData;
+		cams: {a: Ancre; cx: number; cy: number; z: number; d: number; courbe: 'avant' | 'arriere'}[];
+		pops: {ligne: import('./Dashboard').Ligne; a: Ancre; d: number; fin: Ancre; dFin: number; echelle: number}[];
+		fleches: {sens: 'bas' | 'haut'; x: number; pointe: number; a: Ancre; d: number; fin: Ancre; dFin: number}[];
+		ballon?: {fichier: string; a: Ancre; fin: Ancre};
+	};
 	/** Suite d'images plein écran (une par frame, la dernière reste affichée), à la place de `image`. */
 	sequence?: string[];
 	fondCouleur?: string;
@@ -99,6 +108,7 @@ export type Episode = {
 		    motsCles: false : pas de pastille orange dans cette fenêtre. */
 		/** style « condense » : Barlow Condensed blanche en majuscules, mot prononcé surligné dans une pastille rouge. */
 		/** verts : mots affichés en vert lumineux (« NOT COOKED », « POTENTIAL ANALYZED » de la référence Steve). */
-		fenetres: {de: Ancre; a: Ancre; y: number; taille: number; majuscules?: boolean; style?: 'condense'; verts?: string[]; motsMax?: number; carMax?: number; poids?: number; contour?: number; motsCles?: boolean; pop?: boolean}[];
+		/** police : famille CSS (ex. « Montserrat ») ; couleur : couleur du texte. */
+		fenetres: {de: Ancre; a: Ancre; y: number; taille: number; majuscules?: boolean; style?: 'condense'; verts?: string[]; police?: string; couleur?: string; reprise?: boolean; motsMax?: number; carMax?: number; poids?: number; contour?: number; motsCles?: boolean; pop?: boolean}[];
 	};
 };
