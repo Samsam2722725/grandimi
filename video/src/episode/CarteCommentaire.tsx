@@ -6,13 +6,21 @@ import {FONT} from '../theme';
  * Carte TikTok « Réponse au commentaire de … » (référence partie 11 : x 0,12-0,88, y 0,61-0,82,
  * inclinée de −4°, queue de bulle en bas à gauche, présente de 0 à 4,7 s par-dessus les plans).
  */
-export const CarteCommentaire: React.FC<{nom: string; texte: string; de: number; a: number; haut?: boolean}> = ({nom, texte, de, a, haut}) => {
+export const CarteCommentaire: React.FC<{nom: string; texte: string; de: number; a: number; haut?: boolean; x?: number; y?: number}> = ({
+	nom,
+	texte,
+	de,
+	a,
+	haut,
+	x,
+	y,
+}) => {
 	const f = useCurrentFrame();
 	if (f < de || f >= a) return null;
 	if (haut) {
 		// Variante de la référence « Steve » : petite carte droite en haut de l'écran (x 0,22-0,74, y 0,18-0,31).
 		return (
-			<div style={{position: 'absolute', left: 232, top: 330, width: 580, fontFamily: FONT}}>
+			<div style={{position: 'absolute', left: x ?? 232, top: y ?? 330, width: 580, fontFamily: FONT}}>
 				<div style={{position: 'relative', background: '#fff', borderRadius: 14, padding: '20px 24px 26px 20px'}}>
 					<div style={{fontSize: 31, fontWeight: 500, color: '#8a8a8a', marginLeft: 94, lineHeight: 1.15}}>Réponse au commentaire de {nom}</div>
 					<div style={{display: 'flex', alignItems: 'center', gap: 16, marginTop: 4}}>

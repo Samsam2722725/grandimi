@@ -121,7 +121,7 @@
         {
           "x": 540,
           "y": 960,
-          "z": 1.022,
+          "z": 1.127,
           "duree": 1
         },
         {
@@ -316,42 +316,22 @@
         {
           "a": "age:168+11",
           "son": "whoosh",
-          "volume": 0.15
-        },
-        {
-          "a": "grandimi:selon+10",
-          "son": "whoosh",
-          "volume": 0.12
+          "volume": 0.28
         },
         {
           "a": "grandimi:estimée-2",
           "son": "whoosh",
-          "volume": 0.15
-        },
-        {
-          "a": "habitudes:habitudes-6",
-          "son": "whoosh",
-          "volume": 0.12
-        },
-        {
-          "a": "habitudes:steve+7",
-          "son": "pop",
-          "volume": 0.2
-        },
-        {
-          "a": "pct:94-1",
-          "son": "pop",
-          "volume": 0.2
-        },
-        {
-          "a": "pct:94+15",
-          "son": "ding",
-          "volume": 0.2
+          "volume": 0.28
         },
         {
           "a": "fini:atteint+7",
           "son": "whoosh",
-          "volume": 0.15
+          "volume": 0.28
+        },
+        {
+          "a": "habitudes:steve+7",
+          "son": "pop",
+          "volume": 0.38
         }
       ]
     },

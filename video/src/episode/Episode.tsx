@@ -1024,6 +1024,8 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 						de={resolve(data.carteCommentaire.de)}
 						a={resolve(data.carteCommentaire.a)}
 						haut={data.carteCommentaire.haut}
+						x={data.carteCommentaire.x}
+						y={data.carteCommentaire.y}
 					/>
 				) : null}
 				{sousTitres ? <Captions windows={windows} /> : null}
