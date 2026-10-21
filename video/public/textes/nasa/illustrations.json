@@ -1,6 +1,6 @@
 {
  "reference": "references/v15044gf0000d0oa3rfog65hhbmfroqg/original.mp4",
- "note": "Zones en pixels de la vidéo 576×1024, à des instants où ni texte ni filigrane ne recouvrent l'image. Photo NASA, photo d'astronaute, gélules, cerveau, fusée : réinventées (filigrane ou texte posés dessus).",
+ "note": "Zones en pixels de la vidéo 576×1024, à des instants où ni texte ni filigrane ne recouvrent l'image. Photo NASA, photo d'astronaute, gélules, cerveau, fusée : réinventées (filigrane ou texte posés dessus). Astronaute-fusée : détouré par différence avec le fond (scratchpad detoure_diff.py, 5.30 / 5.4667). Photo NASA : fournie par l'utilisateur.",
  "illustrations": [
   {
    "nom": "homme",
@@ -166,6 +166,39 @@
     152
    ],
    "methode": "photo"
+  },
+  {
+   "nom": "cerveau3d",
+   "t": 14.62,
+   "zone": [
+    100,
+    525,
+    350,
+    300
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "pilules3d",
+   "t": 12.6,
+   "zone": [
+    170,
+    645,
+    240,
+    240
+   ],
+   "methode": "fond"
+  },
+  {
+   "nom": "nuage",
+   "t": 30.2,
+   "zone": [
+    325,
+    525,
+    110,
+    85
+   ],
+   "methode": "fond"
   }
  ]
 }

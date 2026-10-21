@@ -1,14 +1,15 @@
 {
- "note": "Calqué sur la référence v15044gf0000d0oa3rfog65hhbmfroqg (fiche.md). Tailles finales (gros = 1). Lignes avec « a » : non prononcées, apparaissent sur ce mot. « cache » : prononcé mais pas affiché.",
+ "note": "Calqué sur la référence v15044gf0000d0oa3rfog65hhbmfroqg : positions et tailles mesurées sur l'original (576×1024 ×1,875). Lignes avec « a » : non prononcées, apparaissent sur ce mot. « cache » : prononcé mais pas affiché.",
  "gros": 1.0,
+ "empile": false,
  "sortie": "haut",
  "ecrans": [
   {
    "lignes": [
     {
      "t": "Scientifiques de la *NASA*",
-     "y": 260,
-     "taille": 67,
+     "y": 267,
+     "taille": 59,
      "mots": [
       {
        "w": "Scientifiques",
@@ -34,8 +35,8 @@
     },
     {
      "t": "*cachent*",
-     "y": 340,
-     "taille": 67,
+     "y": 357,
+     "taille": 59,
      "mots": [
       {
        "w": "cachent",
@@ -49,9 +50,9 @@
     {
      "f": "carte_nasa.png",
      "a": 2,
-     "cx": 540,
-     "top": 470,
-     "w": 820,
+     "cx": 527,
+     "top": 509,
+     "w": 864,
      "anim": "monte"
     }
    ],
@@ -62,9 +63,11 @@
   {
    "lignes": [
     {
-     "t": "une méthode *pour grandir*",
-     "y": 255,
-     "taille": 67,
+     "t": "une méthode",
+     "y": 278,
+     "taille": 53,
+     "x": 184,
+     "align": "left",
      "mots": [
       {
        "w": "une",
@@ -75,7 +78,16 @@
        "w": "méthode",
        "style": null,
        "f": 55
-      },
+      }
+     ]
+    },
+    {
+     "t": "*pour grandir*",
+     "y": 319,
+     "taille": 53,
+     "x": 605,
+     "align": "left",
+     "mots": [
       {
        "w": "pour",
        "style": "violet",
@@ -93,17 +105,17 @@
     {
      "f": "homme.png",
      "a": 53,
-     "cx": 560,
-     "top": 450,
-     "w": 375,
+     "cx": 540,
+     "top": 531,
+     "w": 360,
      "anim": "pop"
     }
    ],
    "regle": {
     "a": 55,
-    "x": 300,
-    "haut": 470,
-    "bas": 1290
+    "x": 297,
+    "haut": 680,
+    "bas": 1390
    },
    "debut": 50,
    "sortie": "haut",
@@ -113,7 +125,7 @@
    "lignes": [
     {
      "t": "qu'utilisent les *astronautes.*",
-     "y": 600,
+     "y": 607,
      "taille": 62,
      "mots": [
       {
@@ -139,8 +151,8 @@
      "f": "carte_astronaute.png",
      "a": 84,
      "cx": 540,
-     "top": 665,
-     "w": 990,
+     "top": 660,
+     "w": 994,
      "anim": "monte"
     }
    ],
@@ -152,10 +164,11 @@
    "lignes": [
     {
      "t": "Ils ont découvert",
-     "y": 700,
-     "taille": 56,
-     "x": 200,
+     "y": 722,
+     "taille": 68,
+     "x": 270,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "Ils",
@@ -176,9 +189,9 @@
     },
     {
      "t": "que",
-     "y": 790,
-     "taille": 104,
-     "x": 200,
+     "y": 797,
+     "taille": 115,
+     "x": 270,
      "align": "left",
      "fixe": true,
      "mots": [
@@ -191,10 +204,11 @@
     },
     {
      "t": "les astronautes reviennent",
-     "y": 880,
-     "taille": 56,
-     "x": 220,
+     "y": 854,
+     "taille": 51,
+     "x": 290,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "les",
@@ -215,10 +229,11 @@
     },
     {
      "t": "de *l'espace*",
-     "y": 950,
-     "taille": 56,
-     "x": 430,
+     "y": 960,
+     "taille": 64,
+     "x": 443,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "de",
@@ -235,22 +250,12 @@
    ],
    "images": [
     {
-     "f": "fusee.png",
-     "a": 149,
-     "cx": 830,
-     "top": 560,
-     "w": 260,
-     "anim": "droite",
-     "rot": -12
-    },
-    {
-     "f": "astronaute.png",
-     "a": 151,
-     "cx": 810,
-     "top": 490,
-     "w": 150,
-     "anim": "droite",
-     "rot": -12
+     "f": "fusee_astro.png",
+     "a": 153,
+     "cx": 690,
+     "top": 670,
+     "w": 340,
+     "anim": "gauche"
     }
    ],
    "debut": 124,
@@ -261,8 +266,8 @@
    "lignes": [
     {
      "t": "jusqu'à 5 cm *plus grands.*",
-     "y": 480,
-     "taille": 71,
+     "y": 490,
+     "taille": 51,
      "mots": [
       {
        "w": "jusqu'à",
@@ -293,10 +298,11 @@
     },
     {
      "t": "avant",
-     "y": 1380,
-     "taille": 57,
-     "x": 245,
+     "y": 1367,
+     "taille": 53,
+     "x": 241,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "avant",
@@ -307,10 +313,11 @@
     },
     {
      "t": "*après*",
-     "y": 1380,
-     "taille": 57,
-     "x": 695,
+     "y": 1367,
+     "taille": 53,
+     "x": 689,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "après",
@@ -324,16 +331,16 @@
     {
      "f": "astro_avant.png",
      "a": 202,
-     "cx": 300,
-     "top": 700,
-     "w": 270,
+     "cx": 281,
+     "top": 690,
+     "w": 286,
      "anim": "monte"
     },
     {
      "f": "astro_apres.png",
      "a": 205,
-     "cx": 760,
-     "top": 620,
+     "cx": 767,
+     "top": 634,
      "w": 310,
      "anim": "monte"
     }
@@ -346,8 +353,8 @@
    "lignes": [
     {
      "t": "Et maintenant,",
-     "y": 580,
-     "taille": 71,
+     "y": 960,
+     "taille": 55,
      "mots": [
       {
        "w": "Et",
@@ -370,9 +377,9 @@
    "lignes": [
     {
      "t": "*0*",
-     "y": 650,
-     "taille": 380,
-     "x": 230,
+     "y": 977,
+     "taille": 350,
+     "x": 330,
      "align": "left",
      "fixe": true,
      "mots": [
@@ -385,10 +392,11 @@
     },
     {
      "t": "ce même",
-     "y": 560,
-     "taille": 61,
-     "x": 520,
+     "y": 897,
+     "taille": 59,
+     "x": 562,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "ce",
@@ -404,10 +412,11 @@
     },
     {
      "t": "!secret!",
-     "y": 640,
-     "taille": 61,
-     "x": 520,
+     "y": 963,
+     "taille": 59,
+     "x": 562,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "secret",
@@ -418,10 +427,11 @@
     },
     {
      "t": "de *l'apesanteur*",
-     "y": 720,
-     "taille": 61,
-     "x": 520,
+     "y": 1029,
+     "taille": 56,
+     "x": 562,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "de",
@@ -444,8 +454,8 @@
    "lignes": [
     {
      "t": "est utilisé",
-     "y": 880,
-     "taille": 69,
+     "y": 889,
+     "taille": 57,
      "mots": [
       {
        "w": "est",
@@ -461,9 +471,9 @@
     },
     {
      "t": "*sur*",
-     "y": 1000,
-     "taille": 120,
-     "x": 360,
+     "y": 979,
+     "taille": 150,
+     "x": 356,
      "align": "left",
      "fixe": true,
      "mots": [
@@ -492,9 +502,9 @@
     {
      "f": "terre.png",
      "a": 352,
-     "cx": 700,
-     "top": 920,
-     "w": 180,
+     "cx": 653,
+     "top": 1172,
+     "w": 250,
      "anim": "pop"
     }
    ],
@@ -506,8 +516,8 @@
    "lignes": [
     {
      "t": "pour gagner",
-     "y": 300,
-     "taille": 116,
+     "y": 288,
+     "taille": 130,
      "fixe": true,
      "mots": [
       {
@@ -525,11 +535,11 @@
     {
      "t": "*des centimètres*",
      "y": 470,
-     "taille": 100,
+     "taille": 119,
      "fixe": true,
      "monte": {
-      "a": 393,
-      "y": 385
+      "a": 391,
+      "y": 371
      },
      "mots": [
       {
@@ -549,9 +559,9 @@
     {
      "f": "garcon.png",
      "a": 366,
-     "cx": 560,
-     "top": 830,
-     "w": 470,
+     "cx": 491,
+     "top": 828,
+     "w": 400,
      "anim": "monte"
     }
    ],
@@ -597,13 +607,12 @@
    ],
    "images": [
     {
-     "f": "pilule.png",
+     "f": "pilules3d.png",
      "a": 400,
      "cx": 540,
-     "top": 720,
-     "w": 440,
-     "anim": "pop",
-     "rot": -18
+     "top": 780,
+     "w": 420,
+     "anim": "monte"
     }
    ],
    "croix": {
@@ -618,8 +627,9 @@
    "lignes": [
     {
      "t": "Ça s'appelle",
-     "y": 840,
-     "taille": 60,
+     "y": 860,
+     "taille": 44,
+     "fixe": true,
      "mots": [
       {
        "w": "Ça",
@@ -634,10 +644,9 @@
      ]
     },
     {
-     "t": "*la décompression*",
+     "t": "*la décompression vertébrale.*",
      "y": 935,
-     "taille": 82,
-     "fixe": true,
+     "taille": 64,
      "mots": [
       {
        "w": "la",
@@ -648,15 +657,7 @@
        "w": "décompression",
        "style": "violet",
        "f": 479
-      }
-     ]
-    },
-    {
-     "t": "*vertébrale.*",
-     "y": 1030,
-     "taille": 82,
-     "fixe": true,
-     "mots": [
+      },
       {
        "w": "vertébrale.",
        "style": "violet",
@@ -667,13 +668,13 @@
    ],
    "images": [
     {
-     "f": "cerveau.png",
+     "f": "cerveau3d.png",
      "a": 455,
      "cx": 540,
-     "top": 690,
-     "w": 520,
+     "top": 590,
+     "w": 650,
      "anim": "monte",
-     "zoom": 1.12
+     "zoom": 1.06
     }
    ],
    "debut": 452,
@@ -684,8 +685,8 @@
    "lignes": [
     {
      "t": "En *apesanteur,*",
-     "y": 640,
-     "taille": 71,
+     "y": 960,
+     "taille": 74,
      "mots": [
       {
        "w": "En",
@@ -704,14 +705,14 @@
     {
      "f": "astro_flottant.png",
      "a": 526,
-     "cx": 640,
-     "top": 1050,
-     "w": 380,
+     "cx": 470,
+     "top": 820,
+     "w": 335,
      "anim": "tourne",
      "trajet": {
-      "dx": 160,
-      "dy": -1250,
-      "rot": -70
+      "dx": 260,
+      "dy": -650,
+      "rot": 35
      }
     }
    ],
@@ -723,8 +724,9 @@
    "lignes": [
     {
      "t": "La colonne des",
-     "y": 560,
-     "taille": 60,
+     "y": 835,
+     "taille": 50,
+     "fixe": true,
      "mots": [
       {
        "w": "La",
@@ -745,8 +747,8 @@
     },
     {
      "t": "*astronautes*",
-     "y": 665,
-     "taille": 112,
+     "y": 908,
+     "taille": 108,
      "fixe": true,
      "mots": [
       {
@@ -758,8 +760,9 @@
     },
     {
      "t": "s'étire parce qu'il",
-     "y": 770,
-     "taille": 62,
+     "y": 1000,
+     "taille": 50,
+     "fixe": true,
      "mots": [
       {
        "w": "s'étire",
@@ -780,8 +783,9 @@
     },
     {
      "t": "n'y a plus de pression.",
-     "y": 845,
-     "taille": 62,
+     "y": 1060,
+     "taille": 50,
+     "fixe": true,
      "mots": [
       {
        "w": "n'y",
@@ -816,8 +820,8 @@
      "f": "colonne.png",
      "a": 560,
      "cx": 540,
-     "top": 560,
-     "w": 250,
+     "top": 611,
+     "w": 173,
      "anim": "monte"
     }
    ],
@@ -829,10 +833,11 @@
    "lignes": [
     {
      "t": "C'est pour ça qu'ils",
-     "y": 820,
-     "taille": 62,
-     "x": 150,
+     "y": 885,
+     "taille": 44,
+     "x": 250,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "C'est",
@@ -858,10 +863,11 @@
     },
     {
      "t": "reviennent",
-     "y": 895,
-     "taille": 62,
-     "x": 150,
+     "y": 947,
+     "taille": 44,
+     "x": 250,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "reviennent",
@@ -872,9 +878,9 @@
     },
     {
      "t": "*PLUS GRANDS.*",
-     "y": 1000,
-     "taille": 108,
-     "x": 130,
+     "y": 1020,
+     "taille": 76,
+     "x": 245,
      "align": "left",
      "fixe": true,
      "mots": [
@@ -895,9 +901,9 @@
     {
      "f": "astro_apres.png",
      "a": 663,
-     "cx": 850,
-     "top": 690,
-     "w": 280,
+     "cx": 830,
+     "top": 672,
+     "w": 191,
      "anim": "monte"
     }
    ],
@@ -909,8 +915,8 @@
    "lignes": [
     {
      "t": "Cette *méthode* reproduit cet effet",
-     "y": 800,
-     "taille": 54,
+     "y": 927,
+     "taille": 51,
      "mots": [
       {
        "w": "Cette",
@@ -941,8 +947,8 @@
     },
     {
      "t": "avec des",
-     "y": 870,
-     "taille": 60,
+     "y": 1004,
+     "taille": 51,
      "mots": [
       {
        "w": "avec",
@@ -965,8 +971,8 @@
    "lignes": [
     {
      "t": "*tables d'inversion,*",
-     "y": 650,
-     "taille": 71,
+     "y": 674,
+     "taille": 53,
      "mots": [
       {
        "w": "tables",
@@ -986,8 +992,8 @@
      "f": "carte_inversion.png",
      "a": 742,
      "cx": 540,
-     "top": 720,
-     "w": 800,
+     "top": 711,
+     "w": 795,
      "anim": "monte"
     }
    ],
@@ -999,8 +1005,8 @@
    "lignes": [
     {
      "t": "*bottes de gravité,*",
-     "y": 650,
-     "taille": 71,
+     "y": 680,
+     "taille": 53,
      "mots": [
       {
        "w": "bottes",
@@ -1025,8 +1031,8 @@
      "f": "carte_bottes.png",
      "a": 778,
      "cx": 540,
-     "top": 720,
-     "w": 800,
+     "top": 711,
+     "w": 795,
      "anim": "monte"
     }
    ],
@@ -1037,42 +1043,35 @@
   {
    "lignes": [
     {
-     "t": "ou simplement en te suspendant",
-     "y": 590,
-     "taille": 57,
+     "t": "*ou simplement en te suspendant à une barre*",
+     "y": 685,
+     "taille": 43,
      "mots": [
       {
        "w": "ou",
-       "style": null,
+       "style": "violet",
        "f": 811
       },
       {
        "w": "simplement",
-       "style": null,
+       "style": "violet",
        "f": 818
       },
       {
        "w": "en",
-       "style": null,
+       "style": "violet",
        "f": 830
       },
       {
        "w": "te",
-       "style": null,
+       "style": "violet",
        "f": 837
       },
       {
        "w": "suspendant",
-       "style": null,
+       "style": "violet",
        "f": 842
-      }
-     ]
-    },
-    {
-     "t": "*à une barre*",
-     "y": 670,
-     "taille": 71,
-     "mots": [
+      },
       {
        "w": "à",
        "style": "violet",
@@ -1096,8 +1095,8 @@
      "f": "carte_barre.png",
      "a": 811,
      "cx": 540,
-     "top": 730,
-     "w": 800,
+     "top": 711,
+     "w": 795,
      "anim": "monte"
     }
    ],
@@ -1109,9 +1108,9 @@
    "lignes": [
     {
      "t": "*quelques minutes*",
-     "y": 900,
-     "taille": 80,
-     "x": 120,
+     "y": 956,
+     "taille": 79,
+     "x": 270,
      "align": "left",
      "fixe": true,
      "mots": [
@@ -1129,10 +1128,11 @@
     },
     {
      "t": "par jour.",
-     "y": 990,
-     "taille": 64,
-     "x": 120,
+     "y": 1030,
+     "taille": 43,
+     "x": 272,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "par",
@@ -1149,11 +1149,11 @@
    ],
    "images": [
     {
-     "f": "horloge.png",
+     "f": "nuage.png",
      "a": 887,
-     "cx": 935,
-     "top": 820,
-     "w": 140,
+     "cx": 735,
+     "top": 1015,
+     "w": 175,
      "anim": "pop"
     }
    ],
@@ -1165,10 +1165,11 @@
    "lignes": [
     {
      "t": "Ça *décompresse*",
-     "y": 1235,
-     "taille": 50,
-     "x": 110,
+     "y": 1284,
+     "taille": 58,
+     "x": 120,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "Ça",
@@ -1184,10 +1185,11 @@
     },
     {
      "t": "*ta colonne,*",
-     "y": 1300,
-     "taille": 50,
-     "x": 150,
+     "y": 1336,
+     "taille": 58,
+     "x": 155,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "ta",
@@ -1203,10 +1205,11 @@
     },
     {
      "t": "*réhydrate*",
-     "y": 1235,
-     "taille": 50,
-     "x": 660,
+     "y": 1284,
+     "taille": 58,
+     "x": 640,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "réhydrate",
@@ -1217,10 +1220,11 @@
     },
     {
      "t": "*tes disques*",
-     "y": 1300,
-     "taille": 50,
-     "x": 650,
+     "y": 1336,
+     "taille": 58,
+     "x": 605,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "tes",
@@ -1239,17 +1243,17 @@
     {
      "f": "colonne_decomp.png",
      "a": 907,
-     "cx": 320,
-     "top": 720,
-     "w": 230,
+     "cx": 351,
+     "top": 739,
+     "w": 227,
      "anim": "monte"
     },
     {
      "f": "colonne_hydrate.png",
      "a": 950,
-     "cx": 770,
-     "top": 715,
-     "w": 238,
+     "cx": 783,
+     "top": 730,
+     "w": 232,
      "anim": "droite"
     }
    ],
@@ -1261,8 +1265,8 @@
    "lignes": [
     {
      "t": "et avec le temps, peut",
-     "y": 1080,
-     "taille": 62,
+     "y": 1229,
+     "taille": 46,
      "mots": [
       {
        "w": "et",
@@ -1293,8 +1297,8 @@
     },
     {
      "t": "te faire *gagner des centimètres.*",
-     "y": 1160,
-     "taille": 56,
+     "y": 1286,
+     "taille": 46,
      "mots": [
       {
        "w": "te",
@@ -1328,9 +1332,9 @@
     {
      "f": "colonne_orange.png",
      "a": 991,
-     "cx": 540,
-     "top": 640,
-     "w": 150,
+     "cx": 551,
+     "top": 783,
+     "w": 133,
      "anim": "monte"
     }
    ],
@@ -1399,25 +1403,12 @@
      ]
     },
     {
-     "t": "régime",
-     "y": 1150,
-     "taille": 44,
-     "x": 461,
-     "align": "left",
-     "mots": [
-      {
-       "w": "régime",
-       "style": null,
-       "f": 1090
-      }
-     ]
-    },
-    {
      "t": "entraînement",
-     "y": 1150,
-     "taille": 44,
-     "x": 47,
+     "y": 1140,
+     "taille": 42,
+     "x": 59,
      "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "entraînement",
@@ -1427,11 +1418,27 @@
      ]
     },
     {
-     "t": "sommeil",
-     "y": 1150,
-     "taille": 44,
-     "x": 782,
+     "t": "régime",
+     "y": 1140,
+     "taille": 42,
+     "x": 476,
      "align": "left",
+     "fixe": true,
+     "mots": [
+      {
+       "w": "régime",
+       "style": null,
+       "f": 1090
+      }
+     ]
+    },
+    {
+     "t": "sommeil",
+     "y": 1140,
+     "taille": 42,
+     "x": 800,
+     "align": "left",
+     "fixe": true,
      "mots": [
       {
        "w": "sommeil",
@@ -1446,24 +1453,24 @@
      "f": "repas.png",
      "a": 1090,
      "cx": 540,
-     "top": 800,
-     "w": 300,
+     "top": 818,
+     "w": 281,
      "anim": "pop"
     },
     {
      "f": "sport.png",
      "a": 1107,
      "cx": 205,
-     "top": 815,
-     "w": 300,
+     "top": 818,
+     "w": 281,
      "anim": "monte"
     },
     {
      "f": "sommeil.png",
      "a": 1150,
      "cx": 875,
-     "top": 815,
-     "w": 300,
+     "top": 818,
+     "w": 281,
      "anim": "monte"
     }
    ],
@@ -1498,8 +1505,8 @@
     },
     {
      "t": "grandimi.com",
-     "y": 1110,
-     "taille": 60,
+     "y": 1100,
+     "taille": 40,
      "mots": [
       {
        "w": "grandimi.com",
@@ -1511,9 +1518,9 @@
    ],
    "icone": {
     "a": 1162,
-    "cx": 540,
-    "cy": 900,
-    "taille": 300
+    "cx": 524,
+    "cy": 925,
+    "taille": 270
    },
    "debut": 1159,
    "sortie": "haut",
@@ -1523,8 +1530,8 @@
    "lignes": [
     {
      "t": "pour booster naturellement ton",
-     "y": 800,
-     "taille": 60,
+     "y": 939,
+     "taille": 43,
      "mots": [
       {
        "w": "pour",
@@ -1550,8 +1557,8 @@
     },
     {
      "t": "*hormone de croissance.*",
-     "y": 885,
-     "taille": 74,
+     "y": 991,
+     "taille": 43,
      "mots": [
       {
        "w": "hormone",
@@ -1576,7 +1583,6 @@
    "fin": 1283
   }
  ],
- "empile": false,
  "totalFrames": 1283,
  "fps": 30
 }

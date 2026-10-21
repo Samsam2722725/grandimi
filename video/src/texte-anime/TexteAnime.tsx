@@ -20,7 +20,7 @@ type Image = {
 	cx: number;
 	top: number;
 	w: number;
-	anim: 'monte' | 'pop' | 'aucune' | 'droite' | 'tourne';
+	anim: 'monte' | 'pop' | 'aucune' | 'droite' | 'gauche' | 'tourne';
 	vers?: {a: number; top?: number; cx?: number};
 	trajet?: {dx: number; dy: number; rot: number}; // « tourne » : déplacement et rotation jusqu'à la fin de l'écran
 	zoom?: number; // grossit doucement jusqu'à la fin de l'écran
@@ -130,9 +130,9 @@ const ImageView: React.FC<{im: Image; f: number; dir: string; finEcran: number}>
 		const k = spring({frame: f - im.a, fps: FPS, config: {damping: 13, stiffness: 300, mass: 0.6}});
 		top = im.top + (1 - k) * 900;
 		opacity = Math.min(1, 0.3 + k);
-	} else if (im.anim === 'droite') {
+	} else if (im.anim === 'droite' || im.anim === 'gauche') {
 		const k = spring({frame: f - im.a, fps: FPS, config: {damping: 14, stiffness: 260, mass: 0.6}});
-		cx = im.cx + (1 - k) * 800;
+		cx = im.cx + (1 - k) * (im.anim === 'droite' ? 800 : -900);
 	} else if (im.anim === 'pop') {
 		scale = 0.6 + 0.4 * s;
 		opacity = Math.min(1, s * 1.8);
