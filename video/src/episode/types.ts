@@ -87,6 +87,8 @@ export type Plan = {
 	sequence?: string[];
 	fondCouleur?: string;
 	camera?: Camera[];
+	/** Poussée lente et continue de tout le plan : l'échelle passe de 1 à 1 + pousse sur la durée du plan (pas d'image figée). */
+	pousse?: number;
 	elements?: Element[];
 	sons?: {a: Ancre; son: string; volume?: number}[];
 };
@@ -96,7 +98,8 @@ export type Episode = {
 	/** Carte « Réponse au commentaire de … » affichée par-dessus les plans (src/episode/CarteCommentaire.tsx). */
 	/** Titre fixe en haut de l'écran, style texte TikTok (référence rayan.taller : « 1m60 à 13 ans 🙊💊 »). */
 	titre?: {texte: string; de?: Ancre; a?: Ancre; y?: number; taille?: number};
-	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre; haut?: boolean; x?: number; y?: number};
+	/** ligne : ligne de commentaire TikTok pleine largeur (référence rayan.taller). */
+	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre; haut?: boolean; x?: number; y?: number; ligne?: boolean};
 	/** sec : transitions deux fois plus courtes et flou de mouvement sur les mouvements de caméra (demande du 20/10). */
 	rythme?: 'sec';
 	/** false : pas de légère poussée de caméra entre les mouvements (défaut : true). */

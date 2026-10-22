@@ -75,58 +75,78 @@
           "a": 0,
           "son": "whoosh",
           "volume": 0.2
+        },
+        {
+          "a": "fini:laisse",
+          "son": "wrong",
+          "volume": 0.25
+        },
+        {
+          "a": "fini:fini",
+          "son": "crack",
+          "volume": 0.4
         }
-      ]
-    },
-    {
-      "nom": "fini",
-      "debut": "fini-2",
-      "transition": "lumiere-rouge",
+      ],
       "elements": [
         {
           "type": "image",
           "ecran": true,
+          "fichier": "voile_rouge.png",
+          "a": "fini:laisse",
+          "x": 0,
+          "y": 0,
+          "w": 1080,
+          "h": 1920,
+          "depuis": {
+            "y": 0,
+            "d": 4
+          }
+        },
+        {
+          "type": "image",
+          "ecran": true,
           "fichier": "crane.png",
-          "a": "fini:mec",
-          "x": 390,
-          "y": 420,
+          "a": "fini:laisse+3",
+          "x": 130,
+          "y": 590,
           "w": 300,
           "h": 300,
-          "effet": "pop-balance"
+          "effet": "pop-balance",
+          "son": "pop",
+          "volume": 0.3
         },
         {
           "type": "texte",
           "texte": "C'EST FINI",
           "a": "fini:c'est",
-          "y": 800,
+          "y": 1060,
           "taille": 150,
           "couleur": "#ff2a2a",
           "effet": "glitch",
-          "contour": 6
+          "contour": 7
         },
         {
           "type": "texte",
           "texte": "POUR TOI",
           "a": "fini:pour",
-          "y": 970,
-          "taille": 120,
+          "y": 1215,
+          "taille": 100,
           "couleur": "#fff",
           "contour": 6
         }
       ],
       "effets": [
         {
+          "type": "flash",
+          "a": "fini:laisse",
+          "couleur": "#ff1a1a"
+        },
+        {
           "type": "secousse",
           "a": "fini:fini"
         }
       ],
-      "sons": [
-        {
-          "a": "fini:fini",
-          "son": "crack",
-          "volume": 0.4
-        }
-      ]
+      "pousse": 0.1
     },
     {
       "nom": "blague",
@@ -422,11 +442,11 @@
         },
         "cams": [
           {
-            "a": "resultat:seras-2",
+            "a": "resultat:si",
             "cx": 0.646,
             "cy": 0.286,
             "z": 1.77,
-            "d": 11,
+            "d": 26,
             "courbe": "avant"
           },
           {
@@ -438,18 +458,26 @@
             "courbe": "arriere"
           },
           {
-            "a": "optim:1,5-6",
+            "a": "optim:peux",
             "cx": 0.5,
             "cy": 0.33,
             "z": 1.12,
-            "d": 12,
+            "d": 14,
+            "courbe": "avant"
+          },
+          {
+            "a": "optim:cm",
+            "cx": 0.5,
+            "cy": 0.33,
+            "z": 1.3,
+            "d": 7,
             "courbe": "avant"
           }
         ],
         "pops": [
           {
             "ligne": "optimiser",
-            "a": "optim:optimiser",
+            "a": "conseils:conseils+8",
             "d": 20,
             "fin": "enorme:énorme+6",
             "dFin": 12,
@@ -478,6 +506,39 @@
       ],
       "elements": [
         {
+          "type": "image",
+          "ecran": true,
+          "fichier": "fete.png",
+          "a": "resultat:1m80+3",
+          "x": 790,
+          "y": 250,
+          "w": 240,
+          "h": 240,
+          "effet": "pop-balance",
+          "fin": "conseils+2"
+        },
+        {
+          "type": "texte",
+          "texte": "+1,5 CM 📈",
+          "a": "optim:1,5",
+          "y": 1180,
+          "taille": 130,
+          "couleur": "#24ef3c",
+          "contour": 7,
+          "fin": "enorme:du"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "feu.png",
+          "a": "enorme:carrément",
+          "x": 400,
+          "y": 1150,
+          "w": 280,
+          "h": 280,
+          "effet": "pop-balance"
+        },
+        {
           "type": "texte",
           "texte": "🔗 grandimi.com",
           "a": "enorme:du",
@@ -486,6 +547,15 @@
           "couleur": "#fff",
           "fond": "#ff5a1f",
           "amorti": 10
+        },
+        {
+          "type": "texte",
+          "texte": "COMMENTE TON ÂGE + TAILLE 👇",
+          "a": "enorme:énorme",
+          "y": 1480,
+          "taille": 58,
+          "couleur": "#fff",
+          "contour": 5
         }
       ],
       "sons": [
@@ -510,11 +580,32 @@
           "volume": 0.38
         },
         {
-          "a": "optim:1,5-6",
+          "a": "optim:peux",
           "son": "whoosh",
           "volume": 0.28
+        },
+        {
+          "a": "resultat:1m80+3",
+          "son": "sparkle",
+          "volume": 0.25
+        },
+        {
+          "a": "optim:1,5",
+          "son": "pop",
+          "volume": 0.3
+        },
+        {
+          "a": "optim:cm",
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "enorme:énorme",
+          "son": "pop",
+          "volume": 0.25
         }
-      ]
+      ],
+      "pousse": 0.06
     }
   ],
   "sousTitres": {
@@ -576,17 +667,15 @@
   "deriveCamera": false,
   "sonsMouvements": false,
   "carteCommentaire": {
-    "nom": "lucas.13",
-    "texte": "J'ai 13 ans et je fais 1m60, je vais faire combien ?",
+    "nom": "Lucas",
+    "texte": "J'ai 13 ans et je fais 1m60, je ferai combien ?",
     "de": 0,
     "a": "blague-2",
-    "haut": true,
-    "x": 250,
-    "y": 1400
+    "ligne": true
   },
   "titre": {
     "texte": "1m60 à 13 ans 🙊💊",
-    "de": "fini-2",
+    "de": "blague-2",
     "a": "resultat-3",
     "y": 300,
     "taille": 92

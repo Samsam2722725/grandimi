@@ -191,6 +191,11 @@ const DM: React.FC<{el: Extract<Element, {type: 'dm'}>; at: number}> = ({el, at}
 	);
 };
 
+const Pousse: React.FC<{dur: number; de: number; children: React.ReactNode}> = ({dur, de, children}) => {
+	const z = 1 + (de * useCurrentFrame()) / Math.max(1, dur);
+	return <AbsoluteFill style={{transform: `scale(${z})`}}>{children}</AbsoluteFill>;
+};
+
 /** Fond qui passe au noir à la fin (les éléments restent par-dessus, référence partie 11). */
 const FonduNoir: React.FC<{from: number; to: number}> = ({from, to}) => {
 	const o = interpolate(useCurrentFrame(), [from, to], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -794,6 +799,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					{out}
 				</Mouvement>
 			);
+	if (plan.pousse) out = <Pousse dur={dur} de={plan.pousse}>{out}</Pousse>;
 	if (plan.sortie === 'zoom-flou') out = <SortieZoomFlou dur={dur}>{out}</SortieZoomFlou>;
 	if (plan.sortie === 'radial-fin') out = <SortieRadial dur={dur}>{out}</SortieRadial>;
 	if (plan.transition === 'jaune-glisse') return <EntreeJauneGlisse>{out}</EntreeJauneGlisse>;
@@ -1070,6 +1076,7 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 						haut={data.carteCommentaire.haut}
 						x={data.carteCommentaire.x}
 						y={data.carteCommentaire.y}
+						ligne={data.carteCommentaire.ligne}
 					/>
 				) : null}
 				{data.titre ? (
