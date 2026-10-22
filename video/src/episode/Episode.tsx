@@ -1082,6 +1082,7 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 						y={data.carteCommentaire.y}
 						ligne={data.carteCommentaire.ligne}
 						w={data.carteCommentaire.w}
+						reponse={data.carteCommentaire.reponse}
 					/>
 				) : null}
 				{data.titre ? (

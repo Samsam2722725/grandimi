@@ -16,9 +16,55 @@ export const CarteCommentaire: React.FC<{
 	y?: number;
 	ligne?: boolean;
 	w?: number;
-}> = ({nom, texte, de, a, haut, x, y, ligne, w}) => {
+	reponse?: {h: number; rotation: number};
+}> = ({nom, texte, de, a, haut, x, y, ligne, w, reponse}) => {
 	const f = useCurrentFrame();
 	if (f < de || f >= a) return null;
+	if (reponse) {
+		// Variante « Reply to … comment » des vidéos Taller (photo du port) : carte blanche penchée, en-tête gris
+		// sur deux lignes, avatar carré arrondi, commentaire en gras, queue de bulle en bas à gauche.
+		const W = w ?? 725;
+		const k = W / 725;
+		return (
+			<div
+				style={{
+					position: 'absolute',
+					left: x ?? 160,
+					top: y ?? 1018,
+					width: W,
+					height: reponse.h,
+					transform: `rotate(${reponse.rotation}deg)`,
+					fontFamily: FONT,
+				}}
+			>
+				<div style={{position: 'absolute', inset: 0, background: '#fff', borderRadius: 20 * k}} />
+				<div style={{position: 'absolute', left: 14 * k, bottom: -34 * k, width: 0, height: 0, borderLeft: `${4 * k}px solid #fff`, borderRight: `${40 * k}px solid transparent`, borderTop: `${36 * k}px solid #fff`}} />
+				<div style={{position: 'absolute', left: 137 * k, right: 30 * k, top: 40 * k, fontSize: 37 * k, fontWeight: 600, color: '#9b9b9b', lineHeight: 1.22}}>
+					Réponse au commentaire de {nom}
+				</div>
+				<div
+					style={{
+						position: 'absolute',
+						left: 34 * k,
+						top: 146 * k,
+						width: 84 * k,
+						height: 84 * k,
+						borderRadius: 26 * k,
+						background: '#1d1d1d',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						fontSize: 48 * k,
+					}}
+				>
+					👟
+				</div>
+				<div style={{position: 'absolute', left: 137 * k, right: 30 * k, top: 150 * k, fontSize: 54 * k, fontWeight: 800, color: '#111', lineHeight: 1.18, letterSpacing: -0.5}}>
+					{texte}
+				</div>
+			</div>
+		);
+	}
 	if (ligne) {
 		// Variante de la référence rayan.taller : ligne de commentaire TikTok, bande blanche droite x 40-1039, y 1340-1639.
 		const gris = '#8a8a8a';

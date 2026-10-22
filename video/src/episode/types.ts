@@ -101,7 +101,9 @@ export type Episode = {
 	/** Titre fixe en haut de l'écran, style texte TikTok (référence rayan.taller : « 1m60 à 13 ans 🙊💊 »). */
 	titre?: {texte: string; de?: Ancre; a?: Ancre; y?: number; taille?: number};
 	/** ligne : ligne de commentaire TikTok pleine largeur (référence rayan.taller). */
-	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre; haut?: boolean; x?: number; y?: number; ligne?: boolean; w?: number};
+	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre; haut?: boolean; x?: number; y?: number; ligne?: boolean; w?: number;
+		/** Carte « Réponse au commentaire » penchée des vidéos Taller : hauteur et rotation (degrés). */
+		reponse?: {h: number; rotation: number}};
 	/** sec : transitions deux fois plus courtes et flou de mouvement sur les mouvements de caméra (demande du 20/10). */
 	rythme?: 'sec';
 	/** false : pas de légère poussée de caméra entre les mouvements (défaut : true). */

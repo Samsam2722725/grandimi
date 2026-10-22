@@ -67,16 +67,16 @@
       "image": "accroche",
       "camera": [
         {
-          "x": 520,
-          "y": 640,
-          "z": 1.95,
+          "x": 504,
+          "y": 1000,
+          "z": 1.04,
           "duree": 1
         },
         {
           "a": 1,
-          "x": 520,
-          "y": 640,
-          "z": 1.6,
+          "x": 504,
+          "y": 1000,
+          "z": 1.0,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -87,7 +87,7 @@
           "type": "texte",
           "texte": "1M75",
           "a": "hook:1m75",
-          "y": 720,
+          "y": 560,
           "taille": 60,
           "x": 850,
           "couleur": "#fff",
@@ -99,7 +99,7 @@
           "type": "texte",
           "texte": "17 ANS",
           "a": "hook:17",
-          "y": 815,
+          "y": 652,
           "taille": 60,
           "x": 850,
           "couleur": "#fff",
@@ -111,7 +111,7 @@
           "type": "texte",
           "texte": "PÈRE 1M76",
           "a": "hook:1m76",
-          "y": 910,
+          "y": 744,
           "taille": 60,
           "x": 850,
           "couleur": "#fff",
@@ -123,7 +123,7 @@
           "type": "texte",
           "texte": "MÈRE 1M63",
           "a": "hook:1m63",
-          "y": 1005,
+          "y": 836,
           "taille": 60,
           "x": 850,
           "couleur": "#fff",
@@ -135,7 +135,7 @@
           "type": "texte",
           "texte": "63 KG",
           "a": "hook:63",
-          "y": 1100,
+          "y": 928,
           "taille": 60,
           "x": 850,
           "couleur": "#fff",
@@ -740,14 +740,17 @@
   "deriveCamera": false,
   "sonsMouvements": false,
   "carteCommentaire": {
-    "nom": "maxime.17",
-    "texte": "17 ans 1m75, je suis foutu ? 💀",
+    "nom": "maman.dit.jvais.grandir",
+    "texte": "17 ans 1m75, je suis cuit 💀",
     "de": 0,
     "a": "site-2",
-    "haut": true,
-    "x": 190,
-    "y": 1330,
-    "w": 700
+    "x": 132,
+    "y": 1140,
+    "w": 778,
+    "reponse": {
+      "h": 350,
+      "rotation": -2.6
+    }
   },
   "zones": {}
 }
