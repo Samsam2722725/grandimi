@@ -216,7 +216,8 @@ export const DashboardGrandimi: React.FC<{
 	pops: DashPop[];
 	fleches: DashFleche[];
 	ballon?: {src: string; a: number; fin: number};
-}> = ({d, cams, pops, fleches, ballon}) => {
+	revele?: number;
+}> = ({d, cams, pops, fleches, ballon, revele}) => {
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
 	const sx = (l: Ligne) => echelleLigne(pops, l, f);
@@ -271,7 +272,36 @@ export const DashboardGrandimi: React.FC<{
 				</Bloc>
 				<Bloc ligne="predite" sx={sx('predite')} fond={`linear-gradient(135deg, ${OR} 0%, ${OR2} 100%)`}>
 					<div style={{position: 'absolute', left: 40, top: 52, fontSize: 32, color: 'rgba(255,255,255,0.88)', fontWeight: 600}}>Taille prédite</div>
-					<div style={{position: 'absolute', left: 40, top: 112, fontSize: 76, fontWeight: 800, letterSpacing: -1}}>{d.predite}</div>
+					{revele !== undefined && f < revele ? (
+						<div
+							style={{
+								position: 'absolute',
+								left: 40,
+								top: 112,
+								fontSize: 76,
+								fontWeight: 800,
+								letterSpacing: 2,
+								transform: `translateX(${Math.sin(f * 1.7) * 3}px)`,
+							}}
+						>
+							??? cm
+						</div>
+					) : (
+						<div
+							style={{
+								position: 'absolute',
+								left: 40,
+								top: 112,
+								fontSize: 76,
+								fontWeight: 800,
+								letterSpacing: -1,
+								transformOrigin: '0% 50%',
+								transform: `scale(${revele !== undefined && f >= revele ? 1 + 0.25 * Math.max(0, 1 - (f - revele) / 6) : 1})`,
+							}}
+						>
+							{d.predite}
+						</div>
+					)}
 				</Bloc>
 				<Bloc ligne="optimiser" sx={sx('optimiser')}>
 					<div

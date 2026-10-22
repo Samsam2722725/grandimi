@@ -698,6 +698,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					cams={plan.dashboard.cams.map((c) => ({...c, f: loc(c.a)}))}
 					pops={plan.dashboard.pops.map((p) => ({...p, a: loc(p.a), fin: loc(p.fin)}))}
 					fleches={plan.dashboard.fleches.map((fl) => ({...fl, a: loc(fl.a), fin: loc(fl.fin)}))}
+					revele={plan.dashboard.revele !== undefined ? loc(plan.dashboard.revele) : undefined}
 					ballon={
 						plan.dashboard.ballon
 							? {src: file(plan.dashboard.ballon.fichier), a: loc(plan.dashboard.ballon.a), fin: loc(plan.dashboard.ballon.fin)}
@@ -737,6 +738,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					moyenne={loc(plan.hookTaille.moyenne)}
 					france={plan.hookTaille.france !== undefined ? loc(plan.hookTaille.france) : undefined}
 					question={plan.hookTaille.question !== undefined ? loc(plan.hookTaille.question) : undefined}
+					direct={plan.hookTaille.direct}
 				/>
 			) : null}
 			{img ? (

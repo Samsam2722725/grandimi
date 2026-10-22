@@ -66,7 +66,7 @@ export type Plan = {
 	image?: string;
 	/** Accroche dessinée « taille moyenne » : barre qui monte jusqu'à `cm`, puis carte de France à `carte`,
 	    silhouette en pointillés à `moyenne`, la carte bat à `france`, « ? » à `question` (src/episode/HookTaille.tsx). */
-	hookTaille?: {cm: number; carte: Ancre; moyenne: Ancre; france?: Ancre; question?: Ancre};
+	hookTaille?: {cm: number; carte: Ancre; moyenne: Ancre; france?: Ancre; question?: Ancre; direct?: boolean};
 	/** Accroche dessinée « on prédit votre potentiel… à partir de vos commentaires » (src/episode/HookCommentaires.tsx). */
 	hookCommentaires?: {actuelle: number; cible: number; potentiel: Ancre; commentaires: Ancre; bulles: {nom: string; texte: string; couleur: string}[]};
 	/** Écran de résultats Grandimi animé (src/episode/Dashboard.tsx) : caméra, lignes qui s'élargissent, flèches, ballon. */
@@ -76,6 +76,8 @@ export type Plan = {
 		pops: {ligne: import('./Dashboard').Ligne; a: Ancre; d: number; fin: Ancre; dFin: number; echelle: number}[];
 		fleches: {sens: 'bas' | 'haut'; x: number; pointe: number; a: Ancre; d: number; fin: Ancre; dFin: number}[];
 		ballon?: {fichier: string; a: Ancre; fin: Ancre};
+		/** La taille prédite reste cachée (« ??? cm ») jusqu'à cette ancre. */
+		revele?: Ancre;
 	};
 	/** Suite d'images plein écran (une par frame, la dernière reste affichée), à la place de `image`. */
 	sequence?: string[];

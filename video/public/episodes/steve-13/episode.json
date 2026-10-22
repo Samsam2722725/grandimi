@@ -1,0 +1,655 @@
+{
+  "partie": 13,
+  "voice": "ff_siwis",
+  "speed": 1.2,
+  "lines": [
+    {
+      "id": "hook",
+      "pause": 0,
+      "text": "1m78, c'est la taille moyenne des jeunes Français."
+    },
+    {
+      "id": "hook2",
+      "pause": 0,
+      "text": "Et voici comment calculer ton potentiel de taille finale."
+    },
+    {
+      "id": "partie",
+      "pause": 0,
+      "text": "Partie 13."
+    },
+    {
+      "id": "parsa",
+      "pause": 0,
+      "text": "{Parsa|Par ça}, 14 ans, déjà {1m75|1,75 mètres}."
+    },
+    {
+      "id": "devine",
+      "pause": 0,
+      "text": "Devine jusqu'où il va grandir."
+    },
+    {
+      "id": "grandimi",
+      "pause": 0,
+      "text": "D'après Grandimi, {1m89|1,89 mètres}."
+    },
+    {
+      "id": "habitudes",
+      "pause": 0,
+      "text": "Mais avec les bonnes habitudes, il pourrait atteindre {1m93|1,93 mètres}."
+    },
+    {
+      "id": "optim",
+      "pause": 0,
+      "text": "Plus de 4 cm en plus grâce à son plan personnalisé sur Grandimi."
+    },
+    {
+      "id": "pct",
+      "pause": 0,
+      "text": "Il est déjà plus grand que 93 % des garçons de son âge,"
+    },
+    {
+      "id": "fini",
+      "pause": 0,
+      "text": "et il lui reste encore 7 % de croissance."
+    },
+    {
+      "id": "foutu",
+      "pause": 0,
+      "text": "T'es clairement pas foutu."
+    },
+    {
+      "id": "cta",
+      "pause": 0,
+      "text": "Et toi ? Tu vas finir à combien ?"
+    },
+    {
+      "id": "com",
+      "pause": 0,
+      "text": "Indique ton âge, ta taille en commentaire."
+    }
+  ],
+  "musique": {
+    "fichier": "sfx/music.wav",
+    "volume": 0.08
+  },
+  "images": {
+    "accroche": {
+      "fichier": "accroche.jpg",
+      "w": 1008,
+      "h": 2224
+    },
+    "verdict": {
+      "fichier": "verdict.jpg",
+      "w": 1008,
+      "h": 2224
+    }
+  },
+  "zones": {
+    "tout": {
+      "x": 585,
+      "y": 1036,
+      "z": 0.86
+    },
+    "taille_actuelle": {
+      "x": 330,
+      "y": 690,
+      "z": 1.39
+    },
+    "taille_predite": {
+      "x": 770,
+      "y": 690,
+      "z": 1.52
+    },
+    "croissance": {
+      "x": 790,
+      "y": 1382,
+      "z": 1.6
+    }
+  },
+  "plans": [
+    {
+      "nom": "hook",
+      "debut": 0,
+      "hookTaille": {
+        "cm": 178,
+        "carte": "hook:c-2",
+        "moyenne": "hook:moyenne+3",
+        "france": "hook:français",
+        "question": "hook2:ton",
+        "direct": true
+      },
+      "sons": [
+        {
+          "a": "hook:c-2",
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": "hook2:ton",
+          "son": "pop",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "partie",
+      "debut": "partie-1",
+      "fond": "papier",
+      "sortie": "jaune",
+      "papiers": [
+        "papier1.jpg",
+        "papier2.jpg",
+        "papier3.jpg",
+        "papier4.jpg"
+      ],
+      "elements": [
+        {
+          "type": "tape",
+          "texte": "PARTIE {partie}",
+          "a": 1,
+          "y": 860,
+          "taille": 150,
+          "police": "Montserrat",
+          "poids": 900,
+          "contour": 9,
+          "curseur": true,
+          "parLettre": 1,
+          "son": "tick",
+          "volume": 0.3
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": 3,
+          "son": "papier",
+          "volume": 0.35
+        }
+      ]
+    },
+    {
+      "nom": "accroche",
+      "debut": "parsa-2",
+      "transition": "radial",
+      "image": "accroche",
+      "camera": [
+        {
+          "x": 504,
+          "y": 1112,
+          "z": 1.127,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 504,
+          "y": 1112,
+          "z": 1.0,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "ballon_14.png",
+          "a": "parsa:14",
+          "fin": "parsa:14+20",
+          "x": 150,
+          "y": 1150,
+          "w": 780,
+          "h": 573,
+          "effet": "pop-balance",
+          "son": "pop",
+          "volume": 0.3
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "ecran",
+      "debut": "devine-2",
+      "transition": "jaune-glisse",
+      "dashboard": {
+        "donnees": {
+          "actuelle": "175 cm",
+          "predite": "189 cm",
+          "optimiser": "+4 cm",
+          "bulle": "186 cm",
+          "courbe": [
+            175,
+            180.5,
+            184,
+            186.3,
+            187.7,
+            188.5,
+            189
+          ],
+          "ages": [
+            "14",
+            "15,2",
+            "16,3",
+            "17,5",
+            "18,7",
+            "19,8",
+            "21"
+          ],
+          "rang": "93,2 %",
+          "chances": "35 %",
+          "chancesCm": "193 cm",
+          "croissance": "92,9 %"
+        },
+        "cams": [
+          {
+            "a": "grandimi",
+            "cx": 0.646,
+            "cy": 0.286,
+            "z": 1.77,
+            "d": 11,
+            "courbe": "avant"
+          },
+          {
+            "a": "habitudes+4",
+            "cx": 0.5,
+            "cy": 0.5,
+            "z": 1,
+            "d": 20,
+            "courbe": "arriere"
+          }
+        ],
+        "pops": [],
+        "fleches": [],
+        "revele": "grandimi:1m89"
+      },
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "grandimi",
+          "son": "whoosh",
+          "volume": 0.28
+        },
+        {
+          "a": "grandimi:1m89",
+          "son": "ding",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "chiffre",
+      "debut": "habitudes:1m93-4",
+      "transition": "radial",
+      "fond": "topo",
+      "topo": {
+        "zoomDe": 0.6,
+        "d": 18
+      },
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "silhouette.png",
+          "a": 0,
+          "x": 324,
+          "y": 760,
+          "w": 432,
+          "h": 1170,
+          "grandit": {
+            "de": 0.4,
+            "d": 45
+          }
+        },
+        {
+          "type": "tape",
+          "texte": "193 cm",
+          "a": "habitudes:1m93+4",
+          "y": 95,
+          "taille": 150,
+          "couleur": "#fff",
+          "contour": 0,
+          "police": "Montserrat",
+          "poids": 800,
+          "curseur": true,
+          "fond": "#8100fe",
+          "parLettre": 2,
+          "son": "tick",
+          "volume": 0.25
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "ecran2",
+      "debut": "optim-2",
+      "transition": "jaune-glisse",
+      "sortie": "glitch",
+      "dashboard": {
+        "donnees": {
+          "actuelle": "175 cm",
+          "predite": "189 cm",
+          "optimiser": "+4 cm",
+          "bulle": "186 cm",
+          "courbe": [
+            175,
+            180.5,
+            184,
+            186.3,
+            187.7,
+            188.5,
+            189
+          ],
+          "ages": [
+            "14",
+            "15,2",
+            "16,3",
+            "17,5",
+            "18,7",
+            "19,8",
+            "21"
+          ],
+          "rang": "93,2 %",
+          "chances": "35 %",
+          "chancesCm": "193 cm",
+          "croissance": "92,9 %"
+        },
+        "cams": [
+          {
+            "a": "fini:reste",
+            "cx": 0.67,
+            "cy": 0.615,
+            "z": 1.93,
+            "d": 13,
+            "courbe": "avant"
+          }
+        ],
+        "pops": [
+          {
+            "ligne": "optimiser",
+            "a": "optim+2",
+            "d": 24,
+            "fin": "pct",
+            "dFin": 18,
+            "echelle": 1.16
+          },
+          {
+            "ligne": "rang",
+            "a": "pct:plus",
+            "d": 40,
+            "fin": "pct:âge+7",
+            "dFin": 8,
+            "echelle": 1.14
+          }
+        ],
+        "fleches": [
+          {
+            "sens": "bas",
+            "x": 0.5,
+            "pointe": 0.25,
+            "a": "optim+4",
+            "d": 12,
+            "fin": "optim:grâce",
+            "dFin": 20
+          },
+          {
+            "sens": "haut",
+            "x": 0.5,
+            "pointe": 0.705,
+            "a": "pct:93-1",
+            "d": 14,
+            "fin": "pct:garçons",
+            "dFin": 18
+          }
+        ]
+      },
+      "effets": [
+        {
+          "type": "flash",
+          "a": "pct:93+12",
+          "couleur": "orange-jaune"
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "optim+4",
+          "son": "pop",
+          "volume": 0.38
+        },
+        {
+          "a": "fini:reste",
+          "son": "whoosh",
+          "volume": 0.28
+        }
+      ]
+    },
+    {
+      "nom": "verdict",
+      "debut": "foutu-2",
+      "transition": "glitch",
+      "sortie": "zoom-flou",
+      "image": "verdict",
+      "camera": [
+        {
+          "x": 504,
+          "y": 1112,
+          "z": 1.0,
+          "duree": 1
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "regle.png",
+          "a": "foutu:pas",
+          "x": 436,
+          "y": 1133,
+          "w": 209,
+          "h": 787,
+          "depuis": {
+            "y": 700,
+            "d": 12
+          }
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "appel",
+      "debut": "cta+4",
+      "transition": "radial",
+      "fond": "topo",
+      "sortie": "radial-fin",
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": 4,
+          "y": 150,
+          "taille": 80,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 10
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "regle_emoji.png",
+          "a": "com:indique+6",
+          "fin": "com:en",
+          "x": 400,
+          "y": 1080,
+          "w": 330,
+          "h": 330,
+          "depuis": {
+            "x": 420,
+            "y": -60,
+            "d": 6
+          }
+        },
+        {
+          "type": "tape",
+          "texte": "\"ÂGE + TAILLE\"",
+          "a": "com:indique",
+          "fin": "com:en",
+          "y": 890,
+          "taille": 96,
+          "couleur": "#24ef3c",
+          "contour": 0,
+          "police": "Montserrat",
+          "poids": 700,
+          "curseur": true,
+          "parLettre": 1,
+          "son": "tick",
+          "volume": 0.2
+        },
+        {
+          "type": "dm",
+          "a": "com:commentaire-4",
+          "x": 350,
+          "y": 330,
+          "taille": 380,
+          "de": 95,
+          "vers": 99,
+          "son": "pop",
+          "volume": 0.3
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    }
+  ],
+  "sousTitres": {
+    "motsCles": [],
+    "fenetres": [
+      {
+        "de": 0,
+        "a": "partie-1",
+        "y": 1110,
+        "taille": 115,
+        "motsMax": 2,
+        "carMax": 16,
+        "style": "condense",
+        "contour": 5,
+        "poids": 600,
+        "motsCles": false,
+        "pop": false
+      },
+      {
+        "de": "parsa-2",
+        "a": "devine-2",
+        "y": 912,
+        "taille": 76,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 4,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#f7f319"
+      },
+      {
+        "de": "devine-2",
+        "a": "grandimi",
+        "y": 912,
+        "taille": 76,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 4,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#f7f319"
+      },
+      {
+        "de": "foutu-2",
+        "a": "com:indique",
+        "y": 912,
+        "taille": 76,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 4,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#f7f319",
+        "verts": [
+          "pas",
+          "foutu",
+          "combien"
+        ]
+      },
+      {
+        "de": "com:en",
+        "a": "fin",
+        "y": 912,
+        "taille": 76,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 4,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#f7f319"
+      }
+    ]
+  },
+  "voix": "Enregistrement ElevenLabs de l'utilisateur (Victor), blancs ramenés à 0,08 s, vitesse d'origine.",
+  "reference": "references/p12-steve",
+  "deriveCamera": false,
+  "sonsMouvements": false,
+  "carteCommentaire": {
+    "nom": "parsa.14",
+    "texte": "14 ans 1m75, je vais faire combien ?",
+    "de": "parsa-1",
+    "a": "devine+12",
+    "haut": true,
+    "x": 40,
+    "y": 470
+  }
+}

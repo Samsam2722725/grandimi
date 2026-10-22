@@ -1,0 +1,479 @@
+{
+  "fps": 30,
+  "totalFrames": 888,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "1m78, c'est la taille moyenne des jeunes Français.",
+      "from": 0,
+      "duration": 81,
+      "words": [
+        {
+          "w": "1m78,",
+          "f": 0
+        },
+        {
+          "w": "c'est",
+          "f": 34
+        },
+        {
+          "w": "la",
+          "f": 38
+        },
+        {
+          "w": "taille",
+          "f": 41
+        },
+        {
+          "w": "moyenne",
+          "f": 48
+        },
+        {
+          "w": "des",
+          "f": 58
+        },
+        {
+          "w": "jeunes",
+          "f": 65
+        },
+        {
+          "w": "Français.",
+          "f": 72
+        }
+      ]
+    },
+    {
+      "id": "hook2",
+      "text": "Et voici comment calculer ton potentiel de taille finale.",
+      "from": 82,
+      "duration": 76,
+      "words": [
+        {
+          "w": "Et",
+          "f": 82
+        },
+        {
+          "w": "voici",
+          "f": 86
+        },
+        {
+          "w": "comment",
+          "f": 96
+        },
+        {
+          "w": "calculer",
+          "f": 103
+        },
+        {
+          "w": "ton",
+          "f": 118
+        },
+        {
+          "w": "potentiel",
+          "f": 122
+        },
+        {
+          "w": "de",
+          "f": 134
+        },
+        {
+          "w": "taille",
+          "f": 139
+        },
+        {
+          "w": "finale.",
+          "f": 149
+        }
+      ]
+    },
+    {
+      "id": "partie",
+      "text": "Partie 13.",
+      "from": 158,
+      "duration": 21,
+      "words": [
+        {
+          "w": "Partie",
+          "f": 158
+        },
+        {
+          "w": "13.",
+          "f": 170
+        }
+      ]
+    },
+    {
+      "id": "parsa",
+      "text": "Parsa, 14 ans, déjà 1m75.",
+      "from": 180,
+      "duration": 90,
+      "words": [
+        {
+          "w": "Parsa,",
+          "f": 180
+        },
+        {
+          "w": "14",
+          "f": 199
+        },
+        {
+          "w": "ans,",
+          "f": 209
+        },
+        {
+          "w": "déjà",
+          "f": 221
+        },
+        {
+          "w": "1m75.",
+          "f": 230
+        }
+      ]
+    },
+    {
+      "id": "devine",
+      "text": "Devine jusqu'où il va grandir.",
+      "from": 271,
+      "duration": 40,
+      "words": [
+        {
+          "w": "Devine",
+          "f": 271
+        },
+        {
+          "w": "jusqu'où",
+          "f": 283
+        },
+        {
+          "w": "il",
+          "f": 295
+        },
+        {
+          "w": "va",
+          "f": 298
+        },
+        {
+          "w": "grandir.",
+          "f": 300
+        }
+      ]
+    },
+    {
+      "id": "grandimi",
+      "text": "D'après Grandimi, 1m89.",
+      "from": 312,
+      "duration": 71,
+      "words": [
+        {
+          "w": "D'après",
+          "f": 312
+        },
+        {
+          "w": "Grandimi,",
+          "f": 322
+        },
+        {
+          "w": "1m89.",
+          "f": 343
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Mais avec les bonnes habitudes, il pourrait atteindre 1m93.",
+      "from": 384,
+      "duration": 107,
+      "words": [
+        {
+          "w": "Mais",
+          "f": 384
+        },
+        {
+          "w": "avec",
+          "f": 389
+        },
+        {
+          "w": "les",
+          "f": 394
+        },
+        {
+          "w": "bonnes",
+          "f": 398
+        },
+        {
+          "w": "habitudes,",
+          "f": 406
+        },
+        {
+          "w": "il",
+          "f": 420
+        },
+        {
+          "w": "pourrait",
+          "f": 425
+        },
+        {
+          "w": "atteindre",
+          "f": 432
+        },
+        {
+          "w": "1m93.",
+          "f": 444
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "Plus de 4 cm en plus grâce à son plan personnalisé sur Grandimi.",
+      "from": 492,
+      "duration": 107,
+      "words": [
+        {
+          "w": "Plus",
+          "f": 492
+        },
+        {
+          "w": "de",
+          "f": 499
+        },
+        {
+          "w": "4",
+          "f": 504
+        },
+        {
+          "w": "cm",
+          "f": 511
+        },
+        {
+          "w": "en",
+          "f": 526
+        },
+        {
+          "w": "plus",
+          "f": 528
+        },
+        {
+          "w": "grâce",
+          "f": 535
+        },
+        {
+          "w": "à",
+          "f": 542
+        },
+        {
+          "w": "son",
+          "f": 545
+        },
+        {
+          "w": "plan",
+          "f": 550
+        },
+        {
+          "w": "personnalisé",
+          "f": 559
+        },
+        {
+          "w": "sur",
+          "f": 574
+        },
+        {
+          "w": "Grandimi.",
+          "f": 578
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Il est déjà plus grand que 93% des garçons de son âge,",
+      "from": 600,
+      "duration": 83,
+      "words": [
+        {
+          "w": "Il",
+          "f": 600
+        },
+        {
+          "w": "est",
+          "f": 605
+        },
+        {
+          "w": "déjà",
+          "f": 607
+        },
+        {
+          "w": "plus",
+          "f": 614
+        },
+        {
+          "w": "grand",
+          "f": 619
+        },
+        {
+          "w": "que",
+          "f": 624
+        },
+        {
+          "w": "93%",
+          "f": 631
+        },
+        {
+          "w": "des",
+          "f": 655
+        },
+        {
+          "w": "garçons",
+          "f": 660
+        },
+        {
+          "w": "de",
+          "f": 670
+        },
+        {
+          "w": "son",
+          "f": 672
+        },
+        {
+          "w": "âge,",
+          "f": 677
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il lui reste encore 7% de croissance.",
+      "from": 684,
+      "duration": 60,
+      "words": [
+        {
+          "w": "et",
+          "f": 684
+        },
+        {
+          "w": "il",
+          "f": 689
+        },
+        {
+          "w": "lui",
+          "f": 691
+        },
+        {
+          "w": "reste",
+          "f": 696
+        },
+        {
+          "w": "encore",
+          "f": 703
+        },
+        {
+          "w": "7%",
+          "f": 710
+        },
+        {
+          "w": "de",
+          "f": 727
+        },
+        {
+          "w": "croissance.",
+          "f": 730
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T'es clairement pas foutu.",
+      "from": 745,
+      "duration": 33,
+      "words": [
+        {
+          "w": "T'es",
+          "f": 745
+        },
+        {
+          "w": "clairement",
+          "f": 752
+        },
+        {
+          "w": "pas",
+          "f": 761
+        },
+        {
+          "w": "foutu.",
+          "f": 764
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Et toi? Tu vas finir à combien?",
+      "from": 778,
+      "duration": 40,
+      "words": [
+        {
+          "w": "Et",
+          "f": 778
+        },
+        {
+          "w": "toi?",
+          "f": 783
+        },
+        {
+          "w": "Tu",
+          "f": 790
+        },
+        {
+          "w": "vas",
+          "f": 795
+        },
+        {
+          "w": "finir",
+          "f": 797
+        },
+        {
+          "w": "à",
+          "f": 805
+        },
+        {
+          "w": "combien?",
+          "f": 807
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "Indique ton âge, ta taille en commentaire.",
+      "from": 819,
+      "duration": 66,
+      "words": [
+        {
+          "w": "Indique",
+          "f": 819
+        },
+        {
+          "w": "ton",
+          "f": 829
+        },
+        {
+          "w": "âge,",
+          "f": 833
+        },
+        {
+          "w": "ta",
+          "f": 845
+        },
+        {
+          "w": "taille",
+          "f": 850
+        },
+        {
+          "w": "en",
+          "f": 860
+        },
+        {
+          "w": "commentaire.",
+          "f": 862
+        }
+      ]
+    }
+  ]
+}

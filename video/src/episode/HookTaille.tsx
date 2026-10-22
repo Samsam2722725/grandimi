@@ -192,12 +192,14 @@ export const Eclats: React.FC<{cx: number; cy: number; f: number; at: number}> =
 	);
 };
 
-export const HookTaille: React.FC<{cm: number; carte: number; moyenne: number; france?: number; question?: number}> = ({
+/** direct : le chiffre est déjà affiché, net et plein, dès la première image (pas de flou d'entrée ni de compteur). */
+export const HookTaille: React.FC<{cm: number; carte: number; moyenne: number; france?: number; question?: number; direct?: boolean}> = ({
 	cm,
 	carte,
 	moyenne,
 	france,
 	question,
+	direct,
 }) => {
 	const f = useCurrentFrame();
 	const [map, setMap] = useState<{w: number; h: number; d: string} | null>(null);
@@ -215,16 +217,16 @@ export const HookTaille: React.FC<{cm: number; carte: number; moyenne: number; f
 		/* ── Plan 1 : la barre ── */
 		const SOL = 1488;
 		const TOP = 529;
-		const zin = interpolate(f, [0, 7], [1.6, 1], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
-		const flouIn = interpolate(f, [0, 6], [20, 0], {extrapolateRight: 'clamp'});
+		const zin = direct ? 1 : interpolate(f, [0, 7], [1.6, 1], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+		const flouIn = direct ? 0 : interpolate(f, [0, 6], [20, 0], {extrapolateRight: 'clamp'});
 		const zout = interpolate(f, [carte - 4, carte], [1, 1.45], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.in(Easing.quad)});
 		const flouOut = interpolate(f, [carte - 4, carte], [0, 16], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 		const grow = ressort(f, 3, 12, 95);
 		const g1 = Math.min(1, grow);
 		const pose = Math.min(carte - 6, 16); // frame où le chiffre se pose (barre arrivée)
 		const barTop = SOL - (SOL - TOP) * grow;
-		const shown = Math.round(100 + (cm - 100) * (f >= pose ? 1 : Math.min(0.995, g1)));
-		const num = ressort(f, 4, 11, 210);
+		const shown = direct ? cm : Math.round(100 + (cm - 100) * (f >= pose ? 1 : Math.min(0.995, g1)));
+		const num = direct ? 1 : ressort(f, 4, 11, 210);
 		const punch = bosse(f, pose, 7);
 		const cam = 1 + Math.max(0, f - 7) * 0.0022 + 0.05 * punch; // poussée continue + coup sur la pose
 		const suiviY = 50 * g1; // la caméra monte avec la barre
