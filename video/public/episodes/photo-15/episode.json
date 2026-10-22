@@ -1,0 +1,753 @@
+{
+  "partie": 15,
+  "voice": "ff_siwis",
+  "speed": 1.2,
+  "lines": [
+    {
+      "id": "hook",
+      "pause": 0,
+      "text": "T'es 1m75. T'as 17 ans. Ton père fait 1m76. Ta mère mesure 1m63. Tu pèses 63 kg."
+    },
+    {
+      "id": "site",
+      "pause": 0,
+      "text": "On va voir ensemble avec le site grandimi.com quelle taille tu auras plus tard."
+    },
+    {
+      "id": "infos",
+      "pause": 0,
+      "text": "Pendant que je rentre les infos sur le site, n'hésite pas à commenter toutes ces infos là pour que je puisse faire de nouvelles vidéos de prédiction de taille."
+    },
+    {
+      "id": "choisir",
+      "pause": 0,
+      "text": "Je choisirai dans les prochains commentaires, mon gars."
+    },
+    {
+      "id": "predit",
+      "pause": 0,
+      "text": "Le site te prédit une taille de 1m78."
+    },
+    {
+      "id": "pct",
+      "pause": 0,
+      "text": "T'es plus grand que 50 % des gens de ton âge."
+    },
+    {
+      "id": "optim",
+      "pause": 0,
+      "text": "Et tu peux optimiser 2,1 cm pour atteindre jusqu'à 1m80, 1m81 environ."
+    },
+    {
+      "id": "conseils",
+      "pause": 0,
+      "text": "Du coup, n'hésite pas à suivre tous les conseils donnés par ce site parce que c'est vraiment un site qui peut t'aider à grandir."
+    }
+  ],
+  "musique": {
+    "fichier": "sfx/music.wav",
+    "volume": 0.08
+  },
+  "images": {
+    "accroche": {
+      "fichier": "accroche.jpg",
+      "w": 1008,
+      "h": 2224
+    },
+    "verdict": {
+      "fichier": "verdict.jpg",
+      "w": 1170,
+      "h": 2153
+    }
+  },
+  "plans": [
+    {
+      "nom": "accroche",
+      "debut": 0,
+      "image": "accroche",
+      "camera": [
+        {
+          "x": 520,
+          "y": 640,
+          "z": 1.95,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 520,
+          "y": 640,
+          "z": 1.6,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "1M75",
+          "a": "hook:1m75",
+          "y": 720,
+          "taille": 60,
+          "x": 850,
+          "couleur": "#fff",
+          "contour": 6,
+          "son": "pop",
+          "volume": 0.18
+        },
+        {
+          "type": "texte",
+          "texte": "17 ANS",
+          "a": "hook:17",
+          "y": 815,
+          "taille": 60,
+          "x": 850,
+          "couleur": "#fff",
+          "contour": 6,
+          "son": "pop",
+          "volume": 0.18
+        },
+        {
+          "type": "texte",
+          "texte": "PÈRE 1M76",
+          "a": "hook:1m76",
+          "y": 910,
+          "taille": 60,
+          "x": 850,
+          "couleur": "#fff",
+          "contour": 6,
+          "son": "pop",
+          "volume": 0.18
+        },
+        {
+          "type": "texte",
+          "texte": "MÈRE 1M63",
+          "a": "hook:1m63",
+          "y": 1005,
+          "taille": 60,
+          "x": 850,
+          "couleur": "#fff",
+          "contour": 6,
+          "son": "pop",
+          "volume": 0.18
+        },
+        {
+          "type": "texte",
+          "texte": "63 KG",
+          "a": "hook:63",
+          "y": 1100,
+          "taille": 60,
+          "x": 850,
+          "couleur": "#fff",
+          "contour": 6,
+          "son": "pop",
+          "volume": 0.18
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "site",
+      "debut": "site-2",
+      "transition": "radial",
+      "fond": "topo",
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "icone.png",
+          "a": "site:voir",
+          "x": 390,
+          "y": 500,
+          "w": 300,
+          "h": 300,
+          "effet": "pop",
+          "son": "pop",
+          "volume": 0.3
+        },
+        {
+          "type": "tape",
+          "texte": "grandimi.com",
+          "a": "site:site",
+          "y": 900,
+          "taille": 96,
+          "couleur": "#111",
+          "contour": 0,
+          "fond": "#fff",
+          "curseur": true,
+          "parLettre": 1,
+          "police": "Montserrat",
+          "poids": 800,
+          "son": "tick",
+          "volume": 0.2
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "saisie",
+      "debut": "infos-2",
+      "transition": "glisse",
+      "elements": [
+        {
+          "type": "formulaire",
+          "a": 0,
+          "fin": "choisir-2",
+          "ecrans": [
+            {
+              "titre": "Ton sexe",
+              "a": 2,
+              "options": [
+                "Homme",
+                "Femme",
+                "Autre"
+              ],
+              "choisi": 0
+            },
+            {
+              "titre": "Ton âge",
+              "a": "infos:infos",
+              "roues": [
+                {
+                  "label": "Âge",
+                  "valeurs": [
+                    "14",
+                    "15",
+                    "16",
+                    "17",
+                    "18",
+                    "19",
+                    "20"
+                  ],
+                  "choisi": 3
+                }
+              ]
+            },
+            {
+              "titre": "Taille et poids",
+              "a": "infos:n'hésite",
+              "roues": [
+                {
+                  "label": "Taille (cm)",
+                  "valeurs": [
+                    "172",
+                    "173",
+                    "174",
+                    "175",
+                    "176",
+                    "177",
+                    "178"
+                  ],
+                  "choisi": 3
+                },
+                {
+                  "label": "Poids (kg)",
+                  "valeurs": [
+                    "60",
+                    "61",
+                    "62",
+                    "63",
+                    "64",
+                    "65",
+                    "66"
+                  ],
+                  "choisi": 3
+                }
+              ]
+            },
+            {
+              "titre": "Taille des parents",
+              "a": "infos:infos#2",
+              "roues": [
+                {
+                  "label": "Père (cm)",
+                  "valeurs": [
+                    "173",
+                    "174",
+                    "175",
+                    "176",
+                    "177",
+                    "178",
+                    "179"
+                  ],
+                  "choisi": 3
+                },
+                {
+                  "label": "Mère (cm)",
+                  "valeurs": [
+                    "160",
+                    "161",
+                    "162",
+                    "163",
+                    "164",
+                    "165",
+                    "166"
+                  ],
+                  "choisi": 3
+                }
+              ]
+            },
+            {
+              "titre": "Ton sport",
+              "a": "infos:nouvelles",
+              "options": [
+                "Basket",
+                "Foot",
+                "Natation",
+                "Autre"
+              ],
+              "choisi": 0
+            }
+          ]
+        },
+        {
+          "type": "texte",
+          "texte": "💬 COMMENTE TES INFOS 👇",
+          "a": "infos:commenter",
+          "y": 1430,
+          "taille": 62,
+          "couleur": "#f7f319",
+          "contour": 5,
+          "fin": "choisir-2"
+        },
+        {
+          "type": "chargement",
+          "a": "choisir-2",
+          "fin": "choisir:gars+6",
+          "x": 0,
+          "y": 0,
+          "w": 1080,
+          "h": 1920,
+          "etapes": [
+            {
+              "texte": "Analyse des facteurs",
+              "a": "choisir:je+4"
+            },
+            {
+              "texte": "Taille des parents",
+              "a": "choisir:dans"
+            },
+            {
+              "texte": "Fenêtre de croissance",
+              "a": "choisir:prochains"
+            },
+            {
+              "texte": "Construction du plan",
+              "a": "choisir:commentaires"
+            },
+            {
+              "texte": "Création de la routine",
+              "a": "choisir:gars"
+            }
+          ]
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "infos:infos",
+          "son": "tick",
+          "volume": 0.25
+        },
+        {
+          "a": "infos:n'hésite",
+          "son": "tick",
+          "volume": 0.25
+        },
+        {
+          "a": "infos:infos#2",
+          "son": "tick",
+          "volume": 0.25
+        },
+        {
+          "a": "choisir-2",
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": "infos:nouvelles",
+          "son": "tick",
+          "volume": 0.25
+        }
+      ],
+      "pousse": 0.07
+    },
+    {
+      "nom": "ecran",
+      "debut": "predit-2",
+      "transition": "jaune-glisse",
+      "sortie": "glitch",
+      "pousse": 0.04,
+      "dashboard": {
+        "donnees": {
+          "actuelle": "175 cm",
+          "predite": "178 cm",
+          "optimiser": "+2,1 cm",
+          "bulle": "177 cm",
+          "courbe": [
+            175,
+            176.3,
+            177.1,
+            177.6,
+            177.8,
+            177.9,
+            178
+          ],
+          "ages": [
+            "17",
+            "17,7",
+            "18,3",
+            "19",
+            "19,7",
+            "20,3",
+            "21"
+          ],
+          "rang": "50 %",
+          "chances": "90 %",
+          "chancesCm": "180 cm",
+          "croissance": "98 %"
+        },
+        "cams": [
+          {
+            "a": "predit:une",
+            "cx": 0.646,
+            "cy": 0.286,
+            "z": 1.77,
+            "d": 16,
+            "courbe": "avant"
+          },
+          {
+            "a": "predit:1m78+12",
+            "cx": 0.5,
+            "cy": 0.5,
+            "z": 1,
+            "d": 18,
+            "courbe": "arriere"
+          },
+          {
+            "a": "optim:cm",
+            "cx": 0.5,
+            "cy": 0.33,
+            "z": 1.25,
+            "d": 8,
+            "courbe": "avant"
+          }
+        ],
+        "pops": [
+          {
+            "ligne": "rang",
+            "a": "pct:plus",
+            "d": 30,
+            "fin": "optim",
+            "dFin": 10,
+            "echelle": 1.14
+          },
+          {
+            "ligne": "optimiser",
+            "a": "optim:optimiser",
+            "d": 20,
+            "fin": "optim:1m80",
+            "dFin": 10,
+            "echelle": 1.14
+          }
+        ],
+        "fleches": [
+          {
+            "sens": "haut",
+            "x": 0.5,
+            "pointe": 0.705,
+            "a": "pct:50-1",
+            "d": 14,
+            "fin": "pct:âge",
+            "dFin": 14
+          },
+          {
+            "sens": "bas",
+            "x": 0.5,
+            "pointe": 0.25,
+            "a": "optim:tu",
+            "d": 12,
+            "fin": "optim:atteindre",
+            "dFin": 14
+          }
+        ],
+        "revele": "predit:1m78"
+      },
+      "effets": [
+        {
+          "type": "flash",
+          "a": "pct:50+10",
+          "couleur": "orange-jaune"
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "fete.png",
+          "a": "predit:1m78+3",
+          "x": 790,
+          "y": 250,
+          "w": 240,
+          "h": 240,
+          "effet": "pop-balance",
+          "fin": "pct-2"
+        },
+        {
+          "type": "texte",
+          "texte": "+2,1 CM 📈",
+          "a": "optim:2,1",
+          "y": 1180,
+          "taille": 130,
+          "couleur": "#24ef3c",
+          "contour": 7
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "predit:une",
+          "son": "whoosh",
+          "volume": 0.28
+        },
+        {
+          "a": "predit:1m78",
+          "son": "ding",
+          "volume": 0.25
+        },
+        {
+          "a": "optim:tu",
+          "son": "pop",
+          "volume": 0.38
+        },
+        {
+          "a": "optim:2,1",
+          "son": "pop",
+          "volume": 0.25
+        },
+        {
+          "a": "optim:cm",
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "verdict",
+      "debut": "optim:1m80-2",
+      "transition": "glitch",
+      "sortie": "zoom-flou",
+      "image": "verdict",
+      "camera": [
+        {
+          "x": 585,
+          "y": 1076,
+          "z": 1.0,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 585,
+          "y": 1076,
+          "z": 1.05,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "    1M80    ",
+          "a": "optim:1m80-2",
+          "y": 890,
+          "taille": 120,
+          "couleur": "#000",
+          "fin": "optim:1m81",
+          "fond": "#24ef3c",
+          "amorti": 8
+        },
+        {
+          "type": "texte",
+          "texte": "    1M81 !!    ",
+          "a": "optim:1m81",
+          "y": 890,
+          "taille": 120,
+          "couleur": "#000",
+          "son": "pop",
+          "volume": 0.3,
+          "fond": "#24ef3c",
+          "amorti": 8
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "regle.png",
+          "a": "optim:1m81",
+          "x": 800,
+          "y": 1000,
+          "w": 209,
+          "h": 787,
+          "depuis": {
+            "y": 700,
+            "d": 12
+          }
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "conseils",
+      "debut": "conseils-2",
+      "transition": "radial",
+      "fond": "topo",
+      "sortie": "radial-fin",
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": "conseils:site",
+          "y": 150,
+          "taille": 80,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 10
+        },
+        {
+          "type": "chargement",
+          "a": 2,
+          "fin": "conseils:grandir",
+          "x": 305,
+          "y": 400,
+          "w": 470,
+          "h": 1000,
+          "titre": "Tes conseils Grandimi",
+          "etapes": [
+            {
+              "texte": "😴 Dormir 9 h",
+              "a": "conseils:suivre"
+            },
+            {
+              "texte": "🥛 Calcium + protéines",
+              "a": "conseils:conseils"
+            },
+            {
+              "texte": "🏀 Sport chaque jour",
+              "a": "conseils:site"
+            },
+            {
+              "texte": "🧍 Posture droite",
+              "a": "conseils:vraiment"
+            },
+            {
+              "texte": "✅ Plan du jour",
+              "a": "conseils:t'aider"
+            }
+          ]
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    }
+  ],
+  "sousTitres": {
+    "motsCles": [],
+    "fenetres": [
+      {
+        "de": "site-2",
+        "a": "infos-2",
+        "y": 1250,
+        "taille": 76,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 4,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#f7f319"
+      },
+      {
+        "de": "predit-2",
+        "a": "optim:1m80-2",
+        "y": 1000,
+        "taille": 76,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 4,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#f7f319",
+        "verts": [
+          "1m78",
+          "2,1"
+        ]
+      },
+      {
+        "de": "conseils-2",
+        "a": "fin",
+        "y": 1560,
+        "taille": 76,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 4,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#f7f319"
+      }
+    ]
+  },
+  "voix": "Enregistrement ElevenLabs de l'utilisateur (Paul K), « tu es 49 pieds toll » coupé, blancs ramenés à 0,08 s, ×1,15.",
+  "reference": "references/p12-steve",
+  "deriveCamera": false,
+  "sonsMouvements": false,
+  "carteCommentaire": {
+    "nom": "maxime.17",
+    "texte": "17 ans 1m75, je suis foutu ? 💀",
+    "de": 0,
+    "a": "site-2",
+    "haut": true,
+    "x": 190,
+    "y": 1330,
+    "w": 700
+  },
+  "zones": {}
+}

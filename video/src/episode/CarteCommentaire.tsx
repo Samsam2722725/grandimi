@@ -15,7 +15,8 @@ export const CarteCommentaire: React.FC<{
 	x?: number;
 	y?: number;
 	ligne?: boolean;
-}> = ({nom, texte, de, a, haut, x, y, ligne}) => {
+	w?: number;
+}> = ({nom, texte, de, a, haut, x, y, ligne, w}) => {
 	const f = useCurrentFrame();
 	if (f < de || f >= a) return null;
 	if (ligne) {
@@ -46,7 +47,7 @@ export const CarteCommentaire: React.FC<{
 	if (haut) {
 		// Variante de la référence « Steve » : petite carte droite en haut de l'écran (x 0,22-0,74, y 0,18-0,31).
 		return (
-			<div style={{position: 'absolute', left: x ?? 232, top: y ?? 330, width: 580, fontFamily: FONT}}>
+			<div style={{position: 'absolute', left: x ?? 232, top: y ?? 330, width: 580, fontFamily: FONT, transform: `scale(${(w ?? 580) / 580})`, transformOrigin: '0 0'}}>
 				<div style={{position: 'relative', background: '#fff', borderRadius: 14, padding: '20px 24px 26px 20px'}}>
 					<div style={{fontSize: 31, fontWeight: 500, color: '#8a8a8a', marginLeft: 94, lineHeight: 1.15}}>Réponse au commentaire de {nom}</div>
 					<div style={{display: 'flex', alignItems: 'center', gap: 16, marginTop: 4}}>

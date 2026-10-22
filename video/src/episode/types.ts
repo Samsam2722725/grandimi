@@ -37,7 +37,9 @@ export type Element =
 	| (Base & {type: 'dm'; x: number; y: number; taille: number; de: number; vers: number})
 	/** Écran « Création de ton plan… » qui glisse depuis la droite ; chaque étape se coche à son ancre, 100 % à `fin`
 	    (référence rayan.taller, src/episode/ChargementPlan.tsx). */
-	| (Base & {type: 'chargement'; fin: Ancre; etapes: {texte: string; a: Ancre}[]; x?: number; y?: number; w?: number; h?: number});
+	| (Base & {type: 'chargement'; fin: Ancre; etapes: {texte: string; a: Ancre}[]; x?: number; y?: number; w?: number; h?: number; titre?: string})
+	/** Écrans de saisie Grandimi plein écran (sexe, âge, taille et poids, parents), un par ancre (src/episode/FormulaireGrandimi.tsx). */
+	| (Base & {type: 'formulaire'; fin: Ancre; ecrans: {titre: string; a: Ancre; options?: string[]; choisi?: number; roues?: {label: string; valeurs: string[]; choisi: number}[]}[]});
 
 /** Silhouettes à l'échelle : parents, personne aujourd'hui, personne adulte qui grandit. */
 export type Famille = {
@@ -99,7 +101,7 @@ export type Episode = {
 	/** Titre fixe en haut de l'écran, style texte TikTok (référence rayan.taller : « 1m60 à 13 ans 🙊💊 »). */
 	titre?: {texte: string; de?: Ancre; a?: Ancre; y?: number; taille?: number};
 	/** ligne : ligne de commentaire TikTok pleine largeur (référence rayan.taller). */
-	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre; haut?: boolean; x?: number; y?: number; ligne?: boolean};
+	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre; haut?: boolean; x?: number; y?: number; ligne?: boolean; w?: number};
 	/** sec : transitions deux fois plus courtes et flou de mouvement sur les mouvements de caméra (demande du 20/10). */
 	rythme?: 'sec';
 	/** false : pas de légère poussée de caméra entre les mouvements (défaut : true). */

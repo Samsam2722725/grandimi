@@ -17,7 +17,8 @@ export const ChargementPlan: React.FC<{
 	y: number;
 	w: number;
 	h: number;
-}> = ({at, fin, etapes, x, y, w, h}) => {
+	titre?: string;
+}> = ({at, fin, etapes, x, y, w, h, titre}) => {
 	const f = useCurrentFrame();
 	if (f < at) return null;
 	const entree = interpolate(f, [at, at + 9], [1, 0], {extrapolateRight: 'clamp', easing: Easing.out(Easing.back(1.3))});
@@ -46,7 +47,7 @@ export const ChargementPlan: React.FC<{
 				<span style={{background: '#e2362b', borderRadius: 12 * k, padding: `${2 * k}px ${12 * k}px`}}>15:35</span>
 				<span>5G ▮</span>
 			</div>
-			<div style={{textAlign: 'center', fontSize: 34 * k, fontWeight: 800, marginTop: 24 * k}}>Création de ton plan…</div>
+			<div style={{textAlign: 'center', fontSize: 34 * k, fontWeight: 800, marginTop: 24 * k}}>{titre ?? 'Création de ton plan…'}</div>
 			<div style={{display: 'flex', justifyContent: 'center', marginTop: 40 * k}}>
 				<div
 					style={{

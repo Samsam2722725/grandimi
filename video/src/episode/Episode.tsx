@@ -19,6 +19,7 @@ import {makeTiming, Timeline} from '../timing';
 import {Paper, Typed} from './Paper';
 import {CarteCommentaire} from './CarteCommentaire';
 import {ChargementPlan} from './ChargementPlan';
+import {FormulaireGrandimi} from './FormulaireGrandimi';
 import {HookCommentaires} from './HookCommentaires';
 import {DashboardGrandimi} from './Dashboard';
 import {HookTaille} from './HookTaille';
@@ -684,8 +685,11 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					y={el.y ?? 560}
 					w={el.w ?? 470}
 					h={el.h ?? 1000}
+					titre={el.titre}
 				/>
 			);
+		if (el.type === 'formulaire')
+			return <FormulaireGrandimi key={i} fin={loc(el.fin)} ecrans={el.ecrans.map((e) => ({...e, a: loc(e.a)}))} />;
 		if (el.type === 'commentaire') return <Commentaire key={i} el={el} at={loc(el.a)} envoi={el.envoi !== undefined ? loc(el.envoi) : undefined} />;
 		if (el.type === 'tape')
 			return (
@@ -1077,6 +1081,7 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 						x={data.carteCommentaire.x}
 						y={data.carteCommentaire.y}
 						ligne={data.carteCommentaire.ligne}
+						w={data.carteCommentaire.w}
 					/>
 				) : null}
 				{data.titre ? (

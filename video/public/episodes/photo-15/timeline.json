@@ -1,0 +1,559 @@
+{
+  "fps": 30,
+  "totalFrames": 1042,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "T'es 1m75. T'as 17 ans. Ton père fait 1m76. Ta mère mesure 1m63. Tu pèses 63 kg.",
+      "from": 0,
+      "duration": 215,
+      "words": [
+        {
+          "w": "T'es",
+          "f": 0
+        },
+        {
+          "w": "1m75.",
+          "f": 7
+        },
+        {
+          "w": "T'as",
+          "f": 36
+        },
+        {
+          "w": "17",
+          "f": 43
+        },
+        {
+          "w": "ans.",
+          "f": 53
+        },
+        {
+          "w": "Ton",
+          "f": 60
+        },
+        {
+          "w": "père",
+          "f": 65
+        },
+        {
+          "w": "fait",
+          "f": 70
+        },
+        {
+          "w": "1m76.",
+          "f": 77
+        },
+        {
+          "w": "Ta",
+          "f": 110
+        },
+        {
+          "w": "mère",
+          "f": 115
+        },
+        {
+          "w": "mesure",
+          "f": 122
+        },
+        {
+          "w": "1m63.",
+          "f": 132
+        },
+        {
+          "w": "Tu",
+          "f": 163
+        },
+        {
+          "w": "pèses",
+          "f": 168
+        },
+        {
+          "w": "63",
+          "f": 180
+        },
+        {
+          "w": "kg.",
+          "f": 194
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "On va voir ensemble avec le site grandimi.com quelle taille tu auras plus tard.",
+      "from": 216,
+      "duration": 109,
+      "words": [
+        {
+          "w": "On",
+          "f": 216
+        },
+        {
+          "w": "va",
+          "f": 218
+        },
+        {
+          "w": "voir",
+          "f": 223
+        },
+        {
+          "w": "ensemble",
+          "f": 228
+        },
+        {
+          "w": "avec",
+          "f": 238
+        },
+        {
+          "w": "le",
+          "f": 242
+        },
+        {
+          "w": "site",
+          "f": 245
+        },
+        {
+          "w": "grandimi.com",
+          "f": 252
+        },
+        {
+          "w": "quelle",
+          "f": 288
+        },
+        {
+          "w": "taille",
+          "f": 295
+        },
+        {
+          "w": "tu",
+          "f": 305
+        },
+        {
+          "w": "auras",
+          "f": 307
+        },
+        {
+          "w": "plus",
+          "f": 317
+        },
+        {
+          "w": "tard.",
+          "f": 319
+        }
+      ]
+    },
+    {
+      "id": "infos",
+      "text": "Pendant que je rentre les infos sur le site, n'hésite pas à commenter toutes ces infos là pour que je puisse faire de nouvelles vidéos de prédiction de taille.",
+      "from": 326,
+      "duration": 179,
+      "words": [
+        {
+          "w": "Pendant",
+          "f": 326
+        },
+        {
+          "w": "que",
+          "f": 334
+        },
+        {
+          "w": "je",
+          "f": 336
+        },
+        {
+          "w": "rentre",
+          "f": 341
+        },
+        {
+          "w": "les",
+          "f": 350
+        },
+        {
+          "w": "infos",
+          "f": 355
+        },
+        {
+          "w": "sur",
+          "f": 362
+        },
+        {
+          "w": "le",
+          "f": 365
+        },
+        {
+          "w": "site,",
+          "f": 367
+        },
+        {
+          "w": "n'hésite",
+          "f": 377
+        },
+        {
+          "w": "pas",
+          "f": 389
+        },
+        {
+          "w": "à",
+          "f": 394
+        },
+        {
+          "w": "commenter",
+          "f": 396
+        },
+        {
+          "w": "toutes",
+          "f": 408
+        },
+        {
+          "w": "ces",
+          "f": 413
+        },
+        {
+          "w": "infos",
+          "f": 420
+        },
+        {
+          "w": "là",
+          "f": 420
+        },
+        {
+          "w": "pour",
+          "f": 434
+        },
+        {
+          "w": "que",
+          "f": 439
+        },
+        {
+          "w": "je",
+          "f": 442
+        },
+        {
+          "w": "puisse",
+          "f": 444
+        },
+        {
+          "w": "faire",
+          "f": 451
+        },
+        {
+          "w": "de",
+          "f": 456
+        },
+        {
+          "w": "nouvelles",
+          "f": 458
+        },
+        {
+          "w": "vidéos",
+          "f": 468
+        },
+        {
+          "w": "de",
+          "f": 475
+        },
+        {
+          "w": "prédiction",
+          "f": 480
+        },
+        {
+          "w": "de",
+          "f": 494
+        },
+        {
+          "w": "taille.",
+          "f": 497
+        }
+      ]
+    },
+    {
+      "id": "choisir",
+      "text": "Je choisirai dans les prochains commentaires, mon gars.",
+      "from": 506,
+      "duration": 59,
+      "words": [
+        {
+          "w": "Je",
+          "f": 506
+        },
+        {
+          "w": "choisirai",
+          "f": 514
+        },
+        {
+          "w": "dans",
+          "f": 528
+        },
+        {
+          "w": "les",
+          "f": 533
+        },
+        {
+          "w": "prochains",
+          "f": 535
+        },
+        {
+          "w": "commentaires,",
+          "f": 542
+        },
+        {
+          "w": "mon",
+          "f": 554
+        },
+        {
+          "w": "gars.",
+          "f": 559
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Le site te prédit une taille de 1m78.",
+      "from": 566,
+      "duration": 74,
+      "words": [
+        {
+          "w": "Le",
+          "f": 566
+        },
+        {
+          "w": "site",
+          "f": 569
+        },
+        {
+          "w": "te",
+          "f": 581
+        },
+        {
+          "w": "prédit",
+          "f": 586
+        },
+        {
+          "w": "une",
+          "f": 596
+        },
+        {
+          "w": "taille",
+          "f": 598
+        },
+        {
+          "w": "de",
+          "f": 605
+        },
+        {
+          "w": "1m78.",
+          "f": 608
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "T'es plus grand que 50% des gens de ton âge.",
+      "from": 641,
+      "duration": 69,
+      "words": [
+        {
+          "w": "T'es",
+          "f": 641
+        },
+        {
+          "w": "plus",
+          "f": 651
+        },
+        {
+          "w": "grand",
+          "f": 656
+        },
+        {
+          "w": "que",
+          "f": 661
+        },
+        {
+          "w": "50%",
+          "f": 665
+        },
+        {
+          "w": "des",
+          "f": 685
+        },
+        {
+          "w": "gens",
+          "f": 687
+        },
+        {
+          "w": "de",
+          "f": 694
+        },
+        {
+          "w": "ton",
+          "f": 697
+        },
+        {
+          "w": "âge.",
+          "f": 701
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "Et tu peux optimiser 2,1 cm pour atteindre jusqu'à 1m80, 1m81 environ.",
+      "from": 711,
+      "duration": 163,
+      "words": [
+        {
+          "w": "Et",
+          "f": 711
+        },
+        {
+          "w": "tu",
+          "f": 716
+        },
+        {
+          "w": "peux",
+          "f": 721
+        },
+        {
+          "w": "optimiser",
+          "f": 725
+        },
+        {
+          "w": "2,1",
+          "f": 740
+        },
+        {
+          "w": "cm",
+          "f": 764
+        },
+        {
+          "w": "pour",
+          "f": 781
+        },
+        {
+          "w": "atteindre",
+          "f": 783
+        },
+        {
+          "w": "jusqu'à",
+          "f": 797
+        },
+        {
+          "w": "1m80,",
+          "f": 805
+        },
+        {
+          "w": "1m81",
+          "f": 834
+        },
+        {
+          "w": "environ.",
+          "f": 863
+        }
+      ]
+    },
+    {
+      "id": "conseils",
+      "text": "Du coup, n'hésite pas à suivre tous les conseils donnés par ce site parce que c'est vraiment un site qui peut t'aider à grandir.",
+      "from": 875,
+      "duration": 164,
+      "words": [
+        {
+          "w": "Du",
+          "f": 875
+        },
+        {
+          "w": "coup,",
+          "f": 877
+        },
+        {
+          "w": "n'hésite",
+          "f": 887
+        },
+        {
+          "w": "pas",
+          "f": 896
+        },
+        {
+          "w": "à",
+          "f": 901
+        },
+        {
+          "w": "suivre",
+          "f": 904
+        },
+        {
+          "w": "tous",
+          "f": 916
+        },
+        {
+          "w": "les",
+          "f": 920
+        },
+        {
+          "w": "conseils",
+          "f": 923
+        },
+        {
+          "w": "donnés",
+          "f": 932
+        },
+        {
+          "w": "par",
+          "f": 942
+        },
+        {
+          "w": "ce",
+          "f": 944
+        },
+        {
+          "w": "site",
+          "f": 949
+        },
+        {
+          "w": "parce",
+          "f": 959
+        },
+        {
+          "w": "que",
+          "f": 964
+        },
+        {
+          "w": "c'est",
+          "f": 968
+        },
+        {
+          "w": "vraiment",
+          "f": 973
+        },
+        {
+          "w": "un",
+          "f": 980
+        },
+        {
+          "w": "site",
+          "f": 983
+        },
+        {
+          "w": "qui",
+          "f": 990
+        },
+        {
+          "w": "peut",
+          "f": 995
+        },
+        {
+          "w": "t'aider",
+          "f": 997
+        },
+        {
+          "w": "à",
+          "f": 1012
+        },
+        {
+          "w": "grandir.",
+          "f": 1016
+        }
+      ]
+    }
+  ]
+}
