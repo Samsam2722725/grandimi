@@ -57,6 +57,10 @@ Transcrire par morceaux de ~9 s (un bloc unique saute des phrases).
 - Sons du format Steve : whoosh sur chaque zoom avant, son sur la première flèche, rien sur la deuxième flèche ni le flash.
 - Carte commentaire jamais sur la tête de la personne (réglages `x`, `y`).
 
+- Format « face caméra » (référence `references/p14-rayan`, rayan.taller) refait sans personne filmée : épisode `rayan-1`.
+  Titre fixe en haut (`titre`), carte commentaire, écran « Création de ton plan… » (élément `chargement`,
+  `src/episode/ChargementPlan.tsx`), liste à gauche (élément `texte` avec `x`), puis dashboard avec « ??? cm » révélé.
+
 ## Résultats mesurés (TikTok, à garder en tête pour chaque script)
 
 | Vidéo | Vues | Visionnage moyen | Vue en entier | Accroche |

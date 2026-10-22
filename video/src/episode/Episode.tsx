@@ -18,6 +18,7 @@ import {Sfx, SfxOn} from '../components/Sfx';
 import {makeTiming, Timeline} from '../timing';
 import {Paper, Typed} from './Paper';
 import {CarteCommentaire} from './CarteCommentaire';
+import {ChargementPlan} from './ChargementPlan';
 import {HookCommentaires} from './HookCommentaires';
 import {DashboardGrandimi} from './Dashboard';
 import {HookTaille} from './HookTaille';
@@ -301,6 +302,7 @@ const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; fin?
 	const s = el.effet === 'glitch' || el.effet === 'fondu' ? sortie : pop(f, at, el.amorti ?? 9) * sortie;
 	if (s <= 0.01) return null;
 	const texte = el.texte.replace('{partie}', String(partie));
+	const dx = el.x !== undefined ? el.x - 540 : 0;
 	if (el.effet === 'glitch' || el.effet === 'fondu') {
 		// glitch : décalages rouge / vert et tranches décalées pendant 6 frames (« ANALYZED », référence partie 11) ;
 		// fondu : apparition en fondu avec lueur qui s'intensifie (« Not cooked »).
@@ -312,8 +314,8 @@ const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; fin?
 			<div
 				style={{
 					position: 'absolute',
-					left: 0,
-					right: 0,
+					left: dx,
+					right: -dx,
 					top: el.y,
 					textAlign: 'center',
 					...P5.caption,
@@ -338,7 +340,7 @@ const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; fin?
 	const rot = el.effet === 'pop-balance' ? Math.sin(f / 8) * 6 : 0;
 	if (el.fond) {
 		return (
-			<div style={{position: 'absolute', left: 0, right: 0, top: el.y, display: 'flex', justifyContent: 'center'}}>
+			<div style={{position: 'absolute', left: dx, right: -dx, top: el.y, display: 'flex', justifyContent: 'center'}}>
 				<div
 					style={{
 						...P5.caption,
@@ -373,7 +375,7 @@ const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; fin?
 							: P5.caption.textShadow,
 				};
 	return (
-		<div style={{position: 'absolute', left: 0, right: 0, top: el.y, textAlign: 'center', ...style, transform: `scale(${s}) rotate(${rot}deg)`}}>
+		<div style={{position: 'absolute', left: dx, right: -dx, top: el.y, textAlign: 'center', ...style, transform: `scale(${s}) rotate(${rot}deg)`}}>
 			{texte}
 		</div>
 	);
@@ -666,6 +668,19 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 		if (el.type === 'compteur')
 			return <Compteur key={i} el={el} at={loc(el.a)} arrivee={loc(el.arrivee)} fin={el.fin !== undefined ? loc(el.fin) : undefined} />;
 		if (el.type === 'dm') return <DM key={i} el={el} at={loc(el.a)} />;
+		if (el.type === 'chargement')
+			return (
+				<ChargementPlan
+					key={i}
+					at={loc(el.a)}
+					fin={loc(el.fin)}
+					etapes={el.etapes.map((e) => ({texte: e.texte, a: loc(e.a)}))}
+					x={el.x ?? 575}
+					y={el.y ?? 560}
+					w={el.w ?? 470}
+					h={el.h ?? 1000}
+				/>
+			);
 		if (el.type === 'commentaire') return <Commentaire key={i} el={el} at={loc(el.a)} envoi={el.envoi !== undefined ? loc(el.envoi) : undefined} />;
 		if (el.type === 'tape')
 			return (
@@ -968,6 +983,33 @@ const usePolices = () => {
 	}, [handle]);
 };
 
+/** Titre fixe style texte TikTok : blanc, contour noir fin, émojis en couleur. */
+const TitreFixe: React.FC<{texte: string; de: number; a: number; y: number; taille: number}> = ({texte, de, a, y, taille}) => {
+	const f = useCurrentFrame();
+	if (f < de || f >= a) return null;
+	return (
+		<div
+			style={{
+				position: 'absolute',
+				left: 0,
+				right: 0,
+				top: y,
+				textAlign: 'center',
+				fontFamily: `${FONT}, 'Noto Color Emoji'`,
+				fontWeight: 800,
+				fontSize: taille,
+				color: '#fff',
+				WebkitTextStroke: `${Math.round(taille / 16)}px #000`,
+				paintOrder: 'stroke fill',
+				letterSpacing: -1,
+				whiteSpace: 'nowrap',
+			}}
+		>
+			{texte}
+		</div>
+	);
+};
+
 /* ───────── Composition ───────── */
 export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTitres = true, voix = true, musique = true, bruitages = true}) => {
 	usePolices();
@@ -1028,6 +1070,15 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 						haut={data.carteCommentaire.haut}
 						x={data.carteCommentaire.x}
 						y={data.carteCommentaire.y}
+					/>
+				) : null}
+				{data.titre ? (
+					<TitreFixe
+						texte={data.titre.texte}
+						de={data.titre.de !== undefined ? resolve(data.titre.de) : 0}
+						a={data.titre.a !== undefined ? resolve(data.titre.a) : END}
+						y={data.titre.y ?? 300}
+						taille={data.titre.taille ?? 92}
 					/>
 				) : null}
 				{sousTitres ? <Captions windows={windows} /> : null}

@@ -11,6 +11,7 @@
 | « Prédiction à partir de nos commentaires », partie 10 | `Episode` (`{"episode":"partie-10"}`) | `rendu/grandimi-partie10.mp4` (35 s) |
 | « Prédiction à partir de nos commentaires », partie 11 | `Episode` (`{"episode":"partie-11"}`) | `rendu/grandimi-partie11.mp4` (35 s, photo de verdict à fournir) |
 | « Prédiction », partie 13 (format Steve, Parsa) | `Episode` (`{"episode":"steve-13"}`) | `rendu/grandimi-partie13-parsa.mp4` (30 s) |
+| « 1m60 à 13 ans » (format rayan.taller, voix seule) | `Episode` (`{"episode":"rayan-1"}`) | `rendu/grandimi-1m60-13ans.mp4` (26 s) |
 
 | « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
 

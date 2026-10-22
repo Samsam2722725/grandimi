@@ -26,14 +26,18 @@ export type Element =
 		/** Grandit depuis le bas (échelle `de` → 1 en `d` frames), puis continue très lentement. */
 		grandit?: {de: number; d: number}})
 	| (Base & {type: 'trait'; d: string; tete?: string; couleur?: string; epaisseur?: number; duree?: number; fin?: Ancre})
-	| (Base & {type: 'texte'; texte: string; y: number; taille: number; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance' | 'glitch' | 'fondu'; fin?: Ancre; lueur?: string})
+	/** x : centre horizontal du texte (défaut : milieu de l'écran). */
+	| (Base & {type: 'texte'; texte: string; x?: number; y: number; taille: number; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance' | 'glitch' | 'fondu'; fin?: Ancre; lueur?: string})
 	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number; curseur?: boolean; fond?: string; police?: string; poids?: number; fin?: Ancre})
 	/** Compteur qui défile de `de` à `vers` et se pose sur `arrivee` (révélation avec suspense). */
 	| (Base & {type: 'compteur'; de: number; vers: number; arrivee: Ancre; fin?: Ancre; suffixe?: string; y: number; taille: number; couleur?: string; voile?: boolean})
 	/** Fausse zone de commentaire TikTok qui s'écrit toute seule. */
 	| (Base & {type: 'commentaire'; texte: string; y: number; parLettre?: number; envoi?: Ancre})
 	/** Icône message privé avec pastille rouge dont le compteur monte (référence Steve, fin). */
-	| (Base & {type: 'dm'; x: number; y: number; taille: number; de: number; vers: number});
+	| (Base & {type: 'dm'; x: number; y: number; taille: number; de: number; vers: number})
+	/** Écran « Création de ton plan… » qui glisse depuis la droite ; chaque étape se coche à son ancre, 100 % à `fin`
+	    (référence rayan.taller, src/episode/ChargementPlan.tsx). */
+	| (Base & {type: 'chargement'; fin: Ancre; etapes: {texte: string; a: Ancre}[]; x?: number; y?: number; w?: number; h?: number});
 
 /** Silhouettes à l'échelle : parents, personne aujourd'hui, personne adulte qui grandit. */
 export type Famille = {
@@ -90,6 +94,8 @@ export type Plan = {
 export type Episode = {
 	partie: number;
 	/** Carte « Réponse au commentaire de … » affichée par-dessus les plans (src/episode/CarteCommentaire.tsx). */
+	/** Titre fixe en haut de l'écran, style texte TikTok (référence rayan.taller : « 1m60 à 13 ans 🙊💊 »). */
+	titre?: {texte: string; de?: Ancre; a?: Ancre; y?: number; taille?: number};
 	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre; haut?: boolean; x?: number; y?: number};
 	/** sec : transitions deux fois plus courtes et flou de mouvement sur les mouvements de caméra (demande du 20/10). */
 	rythme?: 'sec';
