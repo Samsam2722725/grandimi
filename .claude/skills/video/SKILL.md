@@ -56,3 +56,14 @@ Transcrire par morceaux de ~9 s (un bloc unique saute des phrases).
   Nouvel épisode : `python scripts/nouvel_episode.py steve-N --depuis steve-12`, changer voix, chiffres, photos, ancres.
 - Sons du format Steve : whoosh sur chaque zoom avant, son sur la première flèche, rien sur la deuxième flèche ni le flash.
 - Carte commentaire jamais sur la tête de la personne (réglages `x`, `y`).
+
+## Résultats mesurés (TikTok, à garder en tête pour chaque script)
+
+| Vidéo | Vues | Visionnage moyen | Vue en entier | Accroche |
+|---|---|---|---|---|
+| Partie 9 | 1,1 k | 12,0 s / 34 s | 9,8 % | « 1m78, c'est la taille moyenne… » (dessinée) |
+| Partie 12 (Hugo) | 828 | 5,1 s | 1,4 % | « Prédiction de la taille maximale » + photo : 75 % partis en 3 s |
+| Partie 13 (Parsa) | 834 (6 h) | 12,9 s / 29,6 s | 11,2 % | accroche 1m78 + « Devine… » + « ??? cm » révélé ; ~2 k vues sur Instagram |
+
+Garder l'accroche 1m78 qui parle au spectateur, la valeur cachée puis révélée, pas de temps mort après l'accroche.
+Les vues TikTok plafonnent vers 800-1 100 quel que soit le visionnage : publier aussi sur Instagram Reels.
