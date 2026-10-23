@@ -38,3 +38,6 @@ dist/
 
 # Dependencies (each package installs its own; never versioned)
 node_modules/
+
+# Captures d'écran de outils/capture-mobile.cjs
+captures/
