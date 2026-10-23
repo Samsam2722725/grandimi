@@ -386,14 +386,44 @@ function PaywallPage({ onBackHome }) {
   }, [planChoisi])
   const planWhop = urlPrechargee ? (urlPrechargee.match(/checkout\/(plan_[A-Za-z0-9]+)/) || [])[1] : null
 
+  /* Whop a coupé l'ancien paiement intégré (loader.js) le 21/10/2026 : il
+     affichait « This checkout is no longer available » sur toutes les
+     offres. On utilise Whop Elements, son remplaçant (e-mails Whop des
+     07, 13, 15 et 21/10). */
+  const [whopPret, setWhopPret] = useState(() => typeof window !== 'undefined' && !!window.WhopElements)
   useEffect(() => {
-    if (document.getElementById('whop-checkout-loader')) return
-    const script = document.createElement('script')
-    script.id = 'whop-checkout-loader'
-    script.src = 'https://js.whop.com/static/checkout/loader.js'
-    script.async = true
-    document.head.appendChild(script)
+    if (window.WhopElements) { setWhopPret(true); return undefined }
+    let script = document.getElementById('whop-elements')
+    if (!script) {
+      script = document.createElement('script')
+      script.id = 'whop-elements'
+      script.src = 'https://cdn.whop.com/elements/amber/elements.js'
+      script.setAttribute('data-whop-elements', '')
+      script.async = true
+      document.head.appendChild(script)
+    }
+    const pret = () => setWhopPret(!!window.WhopElements)
+    script.addEventListener('load', pret)
+    return () => script.removeEventListener('load', pret)
   }, [])
+
+  // Le formulaire de paiement, monté dans le panneau dès que l'offre est connue.
+  const blocWhopRef = useRef(null)
+  useEffect(() => {
+    if (!whopPret || !planWhop || !blocWhopRef.current) return undefined
+    let paiement
+    try {
+      paiement = window.WhopElements({ locale: 'fr' }).checkout.create({
+        plan: planWhop,
+        returnUrl: `${window.location.origin}/`,
+        onComplete: (resultat) => window.grandimiPaiementTermine?.(resultat),
+      })
+      paiement.create('checkout').mount(blocWhopRef.current)
+    } catch (e) {
+      capture('whop_erreur_paiement', { etape: String(e?.message || 'montage').slice(0, 80) })
+    }
+    return () => { try { paiement?.destroy() } catch { /* déjà détruit */ } }
+  }, [whopPret, planWhop])
 
   useEffect(() => {
     /* Le script Whop appelle cette fonction avec TROIS valeurs, dans cet
@@ -406,6 +436,8 @@ function PaywallPage({ onBackHome }) {
     window.grandimiPaiementTermine = (premier, idPaiement, details) => {
       oublierPaiementEnCours()
       const id =
+        // Whop Elements : { result: 'payment', paymentId: 'pay_…' }
+        (premier && typeof premier === 'object' && premier.paymentId) ||
         (details && details.receipt_id) ||
         (typeof idPaiement === 'string' && idPaiement) ||
         (premier && typeof premier === 'object' && premier.receipt_id) ||
@@ -829,24 +861,7 @@ function PaywallPage({ onBackHome }) {
                 )}
               </div>
             )}
-            <div
-              key={planWhop}
-              className="pw2-feuille-whop"
-              data-whop-checkout-plan-id={planWhop}
-              data-whop-checkout-prefill-email={email}
-              data-whop-checkout-theme="dark"
-              // Le formulaire Whop aux couleurs et dans la langue du site
-              // (16/10/2026) : sans ça, bouton violet « Rejoindre » et pays
-              // en anglais au moment de payer. Options lues par
-              // js.whop.com/static/checkout/index.js.
-              data-whop-checkout-theme-accent-color="orange"
-              data-whop-checkout-theme-button-text="Payer"
-              data-whop-checkout-locale="fr"
-              data-whop-checkout-on-complete="grandimiPaiementTermine"
-              data-whop-checkout-on-payment-error="grandimiPaiementErreur"
-              data-whop-checkout-on-state-change="grandimiPaiementEtat"
-              data-whop-checkout-return-url={`${window.location.origin}/`}
-            />
+            <div key={planWhop} ref={blocWhopRef} className="pw2-feuille-whop" />
           </div>
         </div>
       )}

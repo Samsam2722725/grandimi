@@ -48,7 +48,10 @@ const AccountPage = lazy(() => import('./pages/AccountPage'));
    Les deux formes sont désormais reconnues. */
 function retourDePaiementReussi(params) {
   return (
-    params.get('checkout_status') === 'success' || params.get('status') === 'success'
+    params.get('checkout_status') === 'success' ||
+    params.get('status') === 'success' ||
+    // Whop Elements (depuis le 23/10/2026) renvoie status=succeeded.
+    params.get('status') === 'succeeded'
   );
 }
 
@@ -627,7 +630,8 @@ function App() {
           return '';
         }
       })();
-      const idPaiement = params.get('payment_id') || params.get('receipt_id') || '';
+      // Whop Elements renvoie l'identifiant dans `payment` (pay_…).
+      const idPaiement = params.get('payment_id') || params.get('payment') || params.get('receipt_id') || '';
 
       const reclamer = async () => {
         if (!idPaiement || !idCompte) return false;
