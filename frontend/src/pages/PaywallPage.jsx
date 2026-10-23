@@ -413,17 +413,22 @@ function PaywallPage({ onBackHome }) {
     if (!whopPret || !planWhop || !blocWhopRef.current) return undefined
     let paiement
     try {
-      paiement = window.WhopElements({ locale: 'fr' }).checkout.create({
+      /* Thème sombre : en clair, le résumé Whop (« Abonnez-vous à Grandimi »,
+         prix) s'affichait en gris foncé sur le fond noir du panneau, illisible.
+         Pas de `compact` : sur téléphone, il coupe le côté droit du formulaire. */
+      paiement = window.WhopElements({ locale: 'fr', appearance: { theme: { appearance: 'dark' } } }).checkout.create({
         plan: planWhop,
         returnUrl: `${window.location.origin}/`,
         onComplete: (resultat) => window.grandimiPaiementTermine?.(resultat),
       })
-      paiement.create('checkout').mount(blocWhopRef.current)
+      paiement
+        .create('checkout', { buyerEmail: emailValide ? email : '' })
+        .mount(blocWhopRef.current)
     } catch (e) {
       capture('whop_erreur_paiement', { etape: String(e?.message || 'montage').slice(0, 80) })
     }
     return () => { try { paiement?.destroy() } catch { /* déjà détruit */ } }
-  }, [whopPret, planWhop])
+  }, [whopPret, planWhop, email, emailValide])
 
   useEffect(() => {
     /* Le script Whop appelle cette fonction avec TROIS valeurs, dans cet
