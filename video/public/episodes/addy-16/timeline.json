@@ -1,0 +1,515 @@
+{
+  "fps": 30,
+  "totalFrames": 1001,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "astuce",
+      "text": "Astuce pour connaître la taille que tu auras à l'âge adulte.",
+      "from": 2,
+      "duration": 81,
+      "words": [
+        {
+          "w": "Astuce",
+          "f": 2
+        },
+        {
+          "w": "pour",
+          "f": 17
+        },
+        {
+          "w": "connaître",
+          "f": 22
+        },
+        {
+          "w": "la",
+          "f": 31
+        },
+        {
+          "w": "taille",
+          "f": 36
+        },
+        {
+          "w": "que",
+          "f": 43
+        },
+        {
+          "w": "tu",
+          "f": 48
+        },
+        {
+          "w": "auras",
+          "f": 53
+        },
+        {
+          "w": "à",
+          "f": 60
+        },
+        {
+          "w": "l'âge",
+          "f": 62
+        },
+        {
+          "w": "adulte.",
+          "f": 72
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on analyse les stats d'Addy.",
+      "from": 84,
+      "duration": 61,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 84
+        },
+        {
+          "w": "on",
+          "f": 98
+        },
+        {
+          "w": "analyse",
+          "f": 106
+        },
+        {
+          "w": "les",
+          "f": 115
+        },
+        {
+          "w": "stats",
+          "f": 120
+        },
+        {
+          "w": "d'Addy.",
+          "f": 127
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 14 ans, Addy mesure 1m63.",
+      "from": 146,
+      "duration": 78,
+      "words": [
+        {
+          "w": "À",
+          "f": 146
+        },
+        {
+          "w": "14",
+          "f": 151
+        },
+        {
+          "w": "ans,",
+          "f": 158
+        },
+        {
+          "w": "Addy",
+          "f": 166
+        },
+        {
+          "w": "mesure",
+          "f": 180
+        },
+        {
+          "w": "1m63.",
+          "f": 192
+        }
+      ]
+    },
+    {
+      "id": "moyenne",
+      "text": "Il est donc dans la moyenne.",
+      "from": 226,
+      "duration": 33,
+      "words": [
+        {
+          "w": "Il",
+          "f": 226
+        },
+        {
+          "w": "est",
+          "f": 230
+        },
+        {
+          "w": "donc",
+          "f": 235
+        },
+        {
+          "w": "dans",
+          "f": 240
+        },
+        {
+          "w": "la",
+          "f": 245
+        },
+        {
+          "w": "moyenne.",
+          "f": 247
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site grandimi.com, sa taille adulte est prédite à 1m76.",
+      "from": 259,
+      "duration": 142,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 259
+        },
+        {
+          "w": "le",
+          "f": 266
+        },
+        {
+          "w": "site",
+          "f": 269
+        },
+        {
+          "w": "grandimi.com,",
+          "f": 276
+        },
+        {
+          "w": "sa",
+          "f": 319
+        },
+        {
+          "w": "taille",
+          "f": 323
+        },
+        {
+          "w": "adulte",
+          "f": 331
+        },
+        {
+          "w": "est",
+          "f": 343
+        },
+        {
+          "w": "prédite",
+          "f": 347
+        },
+        {
+          "w": "à",
+          "f": 362
+        },
+        {
+          "w": "1m76.",
+          "f": 367
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Addy pourrait atteindre 1m80,",
+      "from": 403,
+      "duration": 102,
+      "words": [
+        {
+          "w": "Et",
+          "f": 403
+        },
+        {
+          "w": "avec",
+          "f": 407
+        },
+        {
+          "w": "les",
+          "f": 415
+        },
+        {
+          "w": "bonnes",
+          "f": 417
+        },
+        {
+          "w": "habitudes,",
+          "f": 424
+        },
+        {
+          "w": "Addy",
+          "f": 439
+        },
+        {
+          "w": "pourrait",
+          "f": 453
+        },
+        {
+          "w": "atteindre",
+          "f": 463
+        },
+        {
+          "w": "1m80,",
+          "f": 475
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "soit 4 cm de plus en optimisant sa croissance.",
+      "from": 506,
+      "duration": 111,
+      "words": [
+        {
+          "w": "soit",
+          "f": 506
+        },
+        {
+          "w": "4",
+          "f": 513
+        },
+        {
+          "w": "cm",
+          "f": 532
+        },
+        {
+          "w": "de",
+          "f": 549
+        },
+        {
+          "w": "plus",
+          "f": 549
+        },
+        {
+          "w": "en",
+          "f": 563
+        },
+        {
+          "w": "optimisant",
+          "f": 584
+        },
+        {
+          "w": "sa",
+          "f": 601
+        },
+        {
+          "w": "croissance.",
+          "f": 605
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Pour l'instant, Addy est plus grand que la moitié des garçons de son âge,",
+      "from": 617,
+      "duration": 105,
+      "words": [
+        {
+          "w": "Pour",
+          "f": 617
+        },
+        {
+          "w": "l'instant,",
+          "f": 622
+        },
+        {
+          "w": "Addy",
+          "f": 634
+        },
+        {
+          "w": "est",
+          "f": 651
+        },
+        {
+          "w": "plus",
+          "f": 665
+        },
+        {
+          "w": "grand",
+          "f": 668
+        },
+        {
+          "w": "que",
+          "f": 675
+        },
+        {
+          "w": "la",
+          "f": 680
+        },
+        {
+          "w": "moitié",
+          "f": 682
+        },
+        {
+          "w": "des",
+          "f": 692
+        },
+        {
+          "w": "garçons",
+          "f": 697
+        },
+        {
+          "w": "de",
+          "f": 706
+        },
+        {
+          "w": "son",
+          "f": 709
+        },
+        {
+          "w": "âge,",
+          "f": 713
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et sa croissance est accomplie à 92,7%.",
+      "from": 723,
+      "duration": 100,
+      "words": [
+        {
+          "w": "et",
+          "f": 723
+        },
+        {
+          "w": "sa",
+          "f": 728
+        },
+        {
+          "w": "croissance",
+          "f": 733
+        },
+        {
+          "w": "est",
+          "f": 745
+        },
+        {
+          "w": "accomplie",
+          "f": 757
+        },
+        {
+          "w": "à",
+          "f": 771
+        },
+        {
+          "w": "92,7%.",
+          "f": 776
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "Il n'est pas du tout foutu.",
+      "from": 824,
+      "duration": 32,
+      "words": [
+        {
+          "w": "Il",
+          "f": 824
+        },
+        {
+          "w": "n'est",
+          "f": 824
+        },
+        {
+          "w": "pas",
+          "f": 831
+        },
+        {
+          "w": "du",
+          "f": 833
+        },
+        {
+          "w": "tout",
+          "f": 836
+        },
+        {
+          "w": "foutu.",
+          "f": 850
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Tu veux savoir combien de centimètres tu pourrais encore gagner?",
+      "from": 857,
+      "duration": 73,
+      "words": [
+        {
+          "w": "Tu",
+          "f": 857
+        },
+        {
+          "w": "veux",
+          "f": 862
+        },
+        {
+          "w": "savoir",
+          "f": 866
+        },
+        {
+          "w": "combien",
+          "f": 874
+        },
+        {
+          "w": "de",
+          "f": 883
+        },
+        {
+          "w": "centimètres",
+          "f": 886
+        },
+        {
+          "w": "tu",
+          "f": 902
+        },
+        {
+          "w": "pourrais",
+          "f": 905
+        },
+        {
+          "w": "encore",
+          "f": 914
+        },
+        {
+          "w": "gagner?",
+          "f": 919
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "Mets ton âge et ta taille en commentaire.",
+      "from": 931,
+      "duration": 67,
+      "words": [
+        {
+          "w": "Mets",
+          "f": 931
+        },
+        {
+          "w": "ton",
+          "f": 938
+        },
+        {
+          "w": "âge",
+          "f": 943
+        },
+        {
+          "w": "et",
+          "f": 949
+        },
+        {
+          "w": "ta",
+          "f": 955
+        },
+        {
+          "w": "taille",
+          "f": 962
+        },
+        {
+          "w": "en",
+          "f": 972
+        },
+        {
+          "w": "commentaire.",
+          "f": 974
+        }
+      ]
+    }
+  ]
+}
