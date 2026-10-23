@@ -46,6 +46,7 @@ export const Typed: React.FC<{
 	const f = useCurrentFrame();
 	const n = Math.max(0, Math.min(text.length, Math.floor((f - at) / perLetter) + 1));
 	const s = 0.9 + 0.1 * pop(f, at);
+	if (f < at) return null; // ni pastille vide ni curseur seul avant le début de la frappe
 	return (
 		<div
 			style={{

@@ -182,12 +182,7 @@
           }
         ],
         "fleches": [],
-        "revele": "predit:1m76",
-        "ballon": {
-          "fichier": "ballon_14.png",
-          "a": "age:14",
-          "fin": "age:14+24"
-        }
+        "revele": "predit:1m76"
       },
       "effets": [
         {
@@ -201,11 +196,6 @@
           "a": 0,
           "son": "whoosh",
           "volume": 0.22
-        },
-        {
-          "a": "age:14",
-          "son": "pop",
-          "volume": 0.3
         },
         {
           "a": "predit:1m76",
@@ -336,7 +326,7 @@
         {
           "type": "tape",
           "texte": "180 cm",
-          "a": "habitudes:1m80",
+          "a": 3,
           "y": 95,
           "taille": 150,
           "couleur": "#fff",
@@ -363,7 +353,7 @@
       "debut": "optim-2",
       "transition": "glitch",
       "sortie": "glitch",
-      "pousse": 0.04,
+      "pousse": 0.08,
       "dashboard": {
         "donnees": {
           "actuelle": "163 cm",
@@ -486,8 +476,8 @@
           "type": "texte",
           "texte": "+4 CM 📈",
           "a": "optim:4",
-          "y": 1180,
-          "taille": 130,
+          "y": 960,
+          "taille": 140,
           "couleur": "#24ef3c",
           "contour": 7,
           "fin": "pct"
@@ -588,7 +578,7 @@
         {
           "type": "texte",
           "texte": "🔗 grandimi.com",
-          "a": "cta:combien",
+          "a": 2,
           "y": 150,
           "taille": 80,
           "couleur": "#fff",
@@ -598,7 +588,7 @@
         {
           "type": "texte",
           "texte": "COMBIEN DE CM ? 🤔",
-          "a": "cta:centimètres",
+          "a": "cta:veux",
           "y": 620,
           "taille": 96,
           "couleur": "#f7f319",
@@ -682,7 +672,7 @@
       },
       {
         "de": "stats-2",
-        "a": "habitudes-2",
+        "a": "stats:analyse+8",
         "y": 1000,
         "taille": 76,
         "motsMax": 4,
@@ -694,14 +684,11 @@
         "majuscules": true,
         "police": "Montserrat",
         "couleur": "#f7f319",
-        "reprise": true,
-        "verts": [
-          "1m76"
-        ]
+        "reprise": true
       },
       {
-        "de": "optim-2",
-        "a": "foutu-2",
+        "de": "moyenne",
+        "a": "predit:sa",
         "y": 1000,
         "taille": 76,
         "motsMax": 4,
@@ -735,21 +722,6 @@
           "tout",
           "foutu"
         ]
-      },
-      {
-        "de": "cta-2",
-        "a": "com:mets",
-        "y": 1250,
-        "taille": 76,
-        "motsMax": 4,
-        "carMax": 17,
-        "poids": 600,
-        "contour": 4,
-        "motsCles": false,
-        "pop": false,
-        "majuscules": true,
-        "police": "Montserrat",
-        "couleur": "#f7f319"
       },
       {
         "de": "com:commentaire",
