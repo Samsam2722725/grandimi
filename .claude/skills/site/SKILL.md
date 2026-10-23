@@ -6,7 +6,9 @@ description: Modifier le site grandimi.com, le tester en taille téléphone et l
 # Modifier, tester, publier le site
 
 Réponds en français, directement. Le site (frontend React/Vite) est dans `frontend/`.
-Render publie tout seul ce qui arrive sur `main` (`render.yaml`).
+grandimi.com est servi par **GitHub Pages depuis le dossier `docs/` de `main`** :
+le site déjà construit. Modifier `frontend/src` ne publie RIEN tant que `docs/` n'est
+pas reconstruit (voir « 3. Publier »). `render.yaml` ne sert pas le site.
 
 ## 0. Partir de la bonne version
 
@@ -48,9 +50,17 @@ Limites connues dans le cloud :
 
 ## 3. Publier
 
-1. Commit sur une branche `claude/…`, push.
-2. Montre les captures et demande « je publie ? ». Publier = fusionner sur `main`.
-3. Sur le « oui » : ouvre la pull request et fusionne-la (outils GitHub).
-4. Render reconstruit en quelques minutes. L'utilisateur vérifie sur grandimi.com
+1. Commit des sources sur une branche `claude/…`, push.
+2. Montre les captures et demande « je publie ? ».
+3. Sur le « oui », dans la même branche :
+   ```bash
+   cd frontend && npm run build && cd .. && cp -r frontend/dist/. docs/
+   git checkout frontend/dist/index.html   # ne pas committer dist
+   git add docs && git commit -m "Publication : …"
+   ```
+   Vérifie que le nouveau `docs/assets/PaywallPage-*.js` (ou la page modifiée)
+   contient bien le changement (`grep`).
+4. Ouvre la pull request et fusionne-la sur `main` (outils GitHub). GitHub Pages
+   met en ligne en 1 à 3 minutes. L'utilisateur vérifie sur grandimi.com
    en navigation privée. Pour le paiement : code promo de test à −100 %
    (l'utilisateur l'a ; ne jamais l'écrire dans le dépôt).
