@@ -16,10 +16,53 @@ export const CarteCommentaire: React.FC<{
 	y?: number;
 	ligne?: boolean;
 	w?: number;
-	reponse?: {h: number; rotation: number};
+	reponse?: {h: number; rotation: number; modele?: 'parsa'; avatar?: string};
 }> = ({nom, texte, de, a, haut, x, y, ligne, w, reponse}) => {
 	const f = useCurrentFrame();
 	if (f < de || f >= a) return null;
+	if (reponse?.modele === 'parsa') {
+		// Carte de la vidéo Taller « Parsa » (references/p16-ref) : 856 × 273 px, centre (539, 1281), penchée de −3,6°,
+		// en-tête gris sur une ligne, avatar rond, commentaire très court en gros.
+		return (
+			<div
+				style={{
+					position: 'absolute',
+					left: x ?? 111,
+					top: y ?? 1145,
+					width: w ?? 856,
+					height: reponse.h,
+					transform: `rotate(${reponse.rotation}deg)`,
+					fontFamily: FONT,
+				}}
+			>
+				<div style={{position: 'absolute', inset: 0, background: '#fff', borderRadius: 22}} />
+				<div style={{position: 'absolute', left: 10, bottom: -30, width: 0, height: 0, borderLeft: '4px solid #fff', borderRight: '42px solid transparent', borderTop: '34px solid #fff'}} />
+				<div style={{position: 'absolute', left: 175, top: 50, fontSize: 37, fontWeight: 600, color: '#9b9b9b', whiteSpace: 'nowrap'}}>
+					Réponse au commentaire de {nom}
+				</div>
+				<div
+					style={{
+						position: 'absolute',
+						left: 37,
+						top: 121,
+						width: 106,
+						height: 106,
+						borderRadius: 53,
+						background: '#0d0d0d',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						fontSize: 66,
+					}}
+				>
+					{reponse.avatar ?? '👽'}
+				</div>
+				<div style={{position: 'absolute', left: 175, top: 108, fontSize: 78, fontWeight: 800, color: '#111', whiteSpace: 'nowrap', letterSpacing: -1}}>
+					{texte}
+				</div>
+			</div>
+		);
+	}
 	if (reponse) {
 		// Variante « Reply to … comment » des vidéos Taller (photo du port) : carte blanche penchée, en-tête gris
 		// sur deux lignes, avatar carré arrondi, commentaire en gras, queue de bulle en bas à gauche.

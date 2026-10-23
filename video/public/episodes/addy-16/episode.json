@@ -69,10 +69,15 @@
     "volume": 0.08
   },
   "images": {
-    "ado": {
-      "fichier": "ado.jpg",
-      "w": 1170,
-      "h": 2153
+    "accroche": {
+      "fichier": "accroche.jpg",
+      "w": 1008,
+      "h": 2224
+    },
+    "verdict": {
+      "fichier": "verdict.jpg",
+      "w": 1008,
+      "h": 2224
     }
   },
   "zones": {},
@@ -80,18 +85,18 @@
     {
       "nom": "accroche",
       "debut": 0,
-      "image": "ado",
+      "image": "accroche",
       "camera": [
         {
-          "x": 585,
-          "y": 1076,
+          "x": 504,
+          "y": 1112,
           "z": 1.127,
           "duree": 1
         },
         {
           "a": 1,
-          "x": 585,
-          "y": 1076,
+          "x": 504,
+          "y": 1112,
           "z": 1.0,
           "duree": "fin",
           "lineaire": true,
@@ -526,18 +531,18 @@
       "debut": "foutu-2",
       "transition": "glitch",
       "sortie": "zoom-flou",
-      "image": "ado",
+      "image": "verdict",
       "camera": [
         {
-          "x": 585,
-          "y": 1076,
+          "x": 504,
+          "y": 1112,
           "z": 1.0,
           "duree": 1
         },
         {
           "a": 1,
-          "x": 585,
-          "y": 1076,
+          "x": 504,
+          "y": 1112,
           "z": 1.05,
           "duree": "fin",
           "lineaire": true,
@@ -546,24 +551,12 @@
       ],
       "elements": [
         {
-          "type": "texte",
-          "texte": "    PAS FOUTU ✅    ",
-          "a": "foutu:pas",
-          "y": 890,
-          "taille": 110,
-          "couleur": "#000",
-          "fond": "#24ef3c",
-          "amorti": 8,
-          "son": "pop",
-          "volume": 0.3
-        },
-        {
           "type": "image",
           "ecran": true,
           "fichier": "regle.png",
-          "a": "foutu:foutu",
-          "x": 800,
-          "y": 1000,
+          "a": "foutu:pas",
+          "x": 436,
+          "y": 1133,
           "w": 209,
           "h": 787,
           "depuis": {
@@ -577,6 +570,11 @@
           "a": 0,
           "son": "whoosh",
           "volume": 0.22
+        },
+        {
+          "a": "foutu:foutu",
+          "son": "pop",
+          "volume": 0.25
         }
       ]
     },
@@ -667,7 +665,7 @@
       {
         "de": 0,
         "a": "stats-2",
-        "y": 1250,
+        "y": 912,
         "taille": 76,
         "motsMax": 4,
         "carMax": 17,
@@ -718,6 +716,27 @@
         "reprise": true
       },
       {
+        "de": "foutu-2",
+        "a": "cta-2",
+        "y": 912,
+        "taille": 76,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 4,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#f7f319",
+        "verts": [
+          "pas",
+          "du",
+          "tout",
+          "foutu"
+        ]
+      },
+      {
         "de": "cta-2",
         "a": "com:mets",
         "y": 1250,
@@ -754,16 +773,18 @@
   "deriveCamera": false,
   "sonsMouvements": false,
   "carteCommentaire": {
-    "nom": "addy.14",
-    "texte": "14 ans 1m63, je vais faire combien ? 😭",
+    "nom": "addy_zz",
+    "texte": "14 1m63",
     "de": 0,
     "a": "stats",
-    "x": 150,
-    "y": 745,
-    "w": 780,
+    "x": 111,
+    "y": 1145,
+    "w": 856,
     "reponse": {
-      "h": 330,
-      "rotation": -2.6
+      "modele": "parsa",
+      "h": 273,
+      "rotation": -3.6,
+      "avatar": "👽"
     }
   }
 }
