@@ -827,17 +827,17 @@ function PaywallPage({ onBackHome }) {
         >
           <div className="pw2-feuille-panneau" role="dialog" aria-label="Paiement">
             <div className="pw2-feuille-tete">
-              <span>Paiement sécurisé par Whop</span>
+              <span>{offre.nom} · {euros(prixOffre(offre))}</span>
               <button type="button" onClick={fermerPaiement} aria-label="Fermer le paiement">
-                <X size={22} aria-hidden="true" />
+                <X size={20} aria-hidden="true" />
               </button>
             </div>
-            {!carteRefusee && (
+            <p className="pw2-feuille-sous-titre">
+              {offre.jours ? 'Sans engagement · résiliable à tout moment' : 'Paiement unique · accès à vie'}
+            </p>
+            {!carteRefusee && NAVIGATEUR_INTEGRE && (
               <p className="pw2-avertissement">
-                🔒 Ta banque peut te demander de <strong>valider dans son appli</strong> : valide, puis <strong>reviens ici sans fermer cette page</strong>.
-                {NAVIGATEUR_INTEGRE && (
-                  <> Tu es dans {NAVIGATEUR_INTEGRE} : si la page se recharge, ouvre grandimi.com dans Safari ou Chrome.</>
-                )}
+                Tu es dans {NAVIGATEUR_INTEGRE} : si la page se recharge, ouvre grandimi.com dans Safari ou Chrome.
               </p>
             )}
             {carteRefusee && (
@@ -866,7 +866,21 @@ function PaywallPage({ onBackHome }) {
                 )}
               </div>
             )}
-            <div key={planWhop} ref={blocWhopRef} className="pw2-feuille-whop" />
+            <div className="pw2-feuille-carte">
+              <div key={planWhop} ref={blocWhopRef} className="pw2-feuille-whop" />
+            </div>
+            <p className="pw2-feuille-securite">🔒 Paiement sécurisé, encaissé par Whop</p>
+            {urlPrechargee && (
+              <p className="pw2-feuille-secours">
+                Le paiement ne s’affiche pas ?
+                <a
+                  href={urlPrechargee}
+                  onClick={() => capture('whop_lien_secours', { etape: planChoisi })}
+                >
+                  Payer sur la page sécurisée Whop ↗
+                </a>
+              </p>
+            )}
           </div>
         </div>
       )}
