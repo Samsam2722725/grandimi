@@ -7,6 +7,8 @@
 
 ## En pause
 
+- **Mot de passe oublié automatique** (« plus tard », décidé le 24/10/2026) : lien de réinitialisation envoyé par e-mail (Resend est déjà branché pour la relance J+30). Aujourd'hui : e-mail à grandimi14@gmail.com et remise à zéro à la main (voir OU-ON-EN-EST.md).
+
 - **Parcours parent** (bonus, pas la priorité — décidé le 12/10/2026). Une version est prête dans le commit 9fb9289 : bouton « Envoyer à mon parent » (partage natif, WhatsApp, SMS) avec message prérempli, et page parent refaite comme le paywall (offres, minuteur, contenu du plan, rassurances, FAQ parents). Annulée par c6085ed avant publication. Pour la reprendre : `git revert c6085ed`. Constat qui l'avait motivée : 34 ados ont ouvert « faire payer par un parent » en 3 jours, 0 parent arrivé.
 
 ## Après paiement — à faire (noté le 08/10/2026)

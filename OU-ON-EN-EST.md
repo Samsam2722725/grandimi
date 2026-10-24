@@ -1,5 +1,17 @@
 # Où on en est — 24/10/2026
 
+## 24/10 après-midi — en ligne
+
+- PR #8 : message « E-mail ou mot de passe incorrect. » en français.
+- PR #9 : les réponses du questionnaire suivent le compte sur un autre
+  téléphone. **À faire par Samuel : coller
+  `migrations/011_reponses_questionnaire.sql` dans Supabase** (SQL Editor).
+  Sans elle, rien ne casse, mais le plan reste générique sur un 2e téléphone.
+- Mot de passe oublié : reste un e-mail vers grandimi14@gmail.com (choix de
+  Samuel, « plus tard »). Remise à zéro à la main dans Supabase :
+  `UPDATE users SET password_hash = NULL WHERE email = '…';` puis le client
+  fait « Choisir mon mot de passe ». Lien automatique : voir BACKLOG.md.
+
 ## Vérification complète de l'après-paiement (24/10, après fusion de la PR #7)
 
 Fonctionnel, testé dans un navigateur contre le serveur local (offres
