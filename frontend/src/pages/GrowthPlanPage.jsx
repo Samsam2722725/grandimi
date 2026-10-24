@@ -596,7 +596,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
             )}
 
             {sousOnglet === 'nutrition' && (
-              <RepasDuJour />
+              <RepasDuJour plan={plan} prediction={predictionData} regime={prefs.regime || 'tout'} onRegime={(v) => changerPref('regime', v)} />
             )}
           </section>
         )}

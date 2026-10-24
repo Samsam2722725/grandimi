@@ -43,7 +43,7 @@ export const clePref = (groupe, valeur) => `pref-${groupe}-${valeur}`;
 export function lirePrefs(cles) {
   const prefs = {};
   for (const cle of cles) {
-    const m = /^pref-(temps|douleur)-(\w+)$/.exec(cle);
+    const m = /^pref-(temps|douleur|regime)-([\w-]+)$/.exec(cle);
     if (m) prefs[m[1]] = m[2];
   }
   return prefs;
