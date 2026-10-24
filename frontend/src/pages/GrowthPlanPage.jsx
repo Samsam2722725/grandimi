@@ -527,17 +527,63 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
      faibles portent « À corriger » : ce sont les « points à corriger » de
      l'onglet Taille. */
   const heuresSommeil = Number(plan.sleep?.hours) || 9;
+  /* Comme la routine de Taller : des gestes concrets avec des quantités.
+     Leurs compléments (moringa, zinc, oméga 3, glucosamine…) sont remplacés
+     par les aliments qui apportent la même chose : pas de compléments pour
+     des mineurs sans avis médical. Chaque ligne a son détail (ⓘ). */
+  const regime = prefs.regime || 'tout';
+  const sansLactose = regime === 'sans-lactose';
+  const vegetarien = regime === 'vegetarien';
+  const objectifP = Number(plan.nutrition?.protein_g) || 80;
+  const coucher = plan.sleep?.bedtime;
   const ROUTINE = [
-    { key: 'routine-petitdej', etiquette: 'Nutrition', label: 'Un vrai petit-déjeuner (œufs, lait ou yaourt)', emoji: '🍳' },
-    { key: 'routine-proteines', etiquette: 'Nutrition', label: 'Des protéines à chaque repas', emoji: '🍗', corrige: 'tes protéines' },
-    { key: 'routine-laitages', etiquette: 'Nutrition', label: '3 produits laitiers dans la journée', emoji: '🥛', corrige: 'ton calcium' },
-    // 60 min d'activité par jour : la recommandation de l'OMS pour les 5-17 ans.
-    { key: 'routine-bouger', etiquette: 'Sport', label: 'Bouger 1 h dans la journée (sport, marche, vélo)', emoji: '🏃', corrige: 'ton sport' },
-    { key: 'routine-soleil', etiquette: 'Vitamine D', label: '20 min dehors en journée', emoji: '☀️' },
-    { key: 'routine-posture', etiquette: 'Posture', label: 'Dos droit assis, debout toutes les heures', emoji: '🧍', corrige: 'ta posture' },
-    { key: 'routine-ecrans', etiquette: 'Sommeil', label: 'Écrans coupés 45 min avant de dormir', emoji: '📵', corrige: 'ton téléphone au lit' },
-    { key: 'routine-coucher', etiquette: 'Sommeil', label: plan.sleep?.bedtime ? `Au lit à ${plan.sleep.bedtime}` : 'Au lit à la même heure chaque soir', emoji: '🛏️', corrige: 'ton heure de coucher' },
-    { key: 'routine-dormir', etiquette: 'Sommeil', label: `Dormir ${heuresSommeil} heures et plus`, emoji: '😴', corrige: 'ton sommeil' },
+    {
+      key: 'routine-lait', etiquette: 'Nutrition', emoji: '🍯🥛', corrige: 'ton calcium',
+      label: sansLactose ? '1 verre de boisson soja enrichie + miel' : '1 verre de lait + miel',
+      detail: `Au petit-déjeuner, un grand verre (250 ml)${sansLactose ? ' de boisson soja enrichie en calcium' : ' de lait'}, avec une cuillère de miel si tu veux. C’est environ 300 mg de calcium et 8 g de protéines : le calcium construit tes os, et c’est maintenant que tu en stockes le plus.`,
+    },
+    {
+      key: 'routine-avoine', etiquette: 'Nutrition', emoji: '🌾',
+      label: '50 g de flocons d’avoine',
+      detail: 'Au petit-déjeuner ou au goûter, dans du lait ou un yaourt, avec une banane. Des glucides lents pour l’énergie de la journée, des fibres, du magnésium et du zinc, qui servent à la croissance.',
+    },
+    {
+      key: 'routine-proteines', etiquette: 'Nutrition', emoji: vegetarien ? '🥚' : '🍗', corrige: 'tes protéines',
+      label: `${objectifP} g de protéines sur la journée`,
+      detail: vegetarien
+        ? `Ton objectif : ${objectifP} g. Repères : 2 œufs = 12 g, 150 g de lentilles cuites = 13 g, 150 g de tofu = 18 g, 1 yaourt grec = 15 g. Mets-en à chaque repas : tes os et tes muscles en ont besoin pour grandir.`
+        : `Ton objectif : ${objectifP} g. Repères : 2 œufs = 12 g, 1 blanc de poulet = 30 g, 1 boîte de thon = 25 g, 1 yaourt grec = 15 g. Mets-en à chaque repas : tes os et tes muscles en ont besoin pour grandir.`,
+    },
+    {
+      key: 'routine-laitages', etiquette: 'Nutrition', emoji: '🧀', corrige: 'ton calcium',
+      label: sansLactose ? '2 laitages au soja enrichis en plus' : '1 yaourt + 1 part de fromage',
+      detail: `Avec le verre du matin, ça fait 3 produits laitiers : environ 1 000 mg de calcium, presque tout ce qu’il te faut par jour (1 300 mg entre 9 et 18 ans).${sansLactose ? ' Prends-les enrichis en calcium, sinon ils n’en apportent presque pas.' : ''}`,
+    },
+    {
+      key: 'routine-omega', etiquette: 'Nutrition', emoji: '🌰',
+      label: vegetarien ? 'Une poignée de noix (30 g)' : 'Une poignée de noix, ou du poisson gras',
+      detail: 'C’est la version « aliment » de l’huile de poisson de Taller : des oméga 3. Une poignée de noix par jour, et si tu manges du poisson, du saumon, des sardines ou du maquereau 2 fois par semaine (ils apportent aussi de la vitamine D).',
+    },
+    {
+      key: 'routine-soleil', etiquette: 'Vitamine D', emoji: '☀️',
+      label: '20 min dehors en journée',
+      detail: 'Bras et visage à l’air, entre 11 h et 15 h si possible. Ta peau fabrique de la vitamine D au soleil, et sans elle ton corps n’absorbe pas bien le calcium. En hiver, le soleil ne suffit pas toujours : parles-en à ton médecin.',
+    },
+    {
+      key: 'routine-bouger', etiquette: 'Sport', emoji: '🏃', corrige: 'ton sport',
+      label: 'Bouger 1 h dans la journée',
+      detail: 'Sport, foot, basket, vélo, marche rapide : 1 h au total, en plus de ta séance. C’est ce que l’OMS conseille entre 5 et 17 ans. Les sports où l’on court et saute rendent les os plus solides.',
+    },
+    {
+      key: 'routine-ecrans', etiquette: 'Sommeil', emoji: '📵', corrige: 'ton téléphone au lit',
+      label: 'Écrans coupés 45 min avant de dormir',
+      detail: 'La lumière des écrans retarde l’endormissement, et le sommeil profond du début de nuit est celui où l’hormone de croissance est surtout libérée. Laisse le téléphone hors de la chambre, ou en mode avion loin du lit.',
+    },
+    {
+      key: 'routine-dormir', etiquette: 'Sommeil', emoji: '😴', corrige: ['ton sommeil', 'ton heure de coucher'],
+      label: `Dormir ${heuresSommeil} heures et plus`,
+      detail: `${coucher ? `Au lit à ${coucher}, à la même heure chaque soir (week-end compris, à 30 min près). ` : 'Au lit à la même heure chaque soir, week-end compris. '}Entre 13 et 18 ans, il faut 8 à 10 h. C’est la nuit que tu grandis : c’est le geste le plus important de la liste.`,
+    },
   ];
   const nbRoutine = ROUTINE.length + 1;
   const faitesRoutine = ROUTINE.filter((t) => completedKeys.has(t.key)).length + (aujourdhuiFait ? 1 : 0);
@@ -715,9 +761,10 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
               </li>
               {ROUTINE.map((tache) => {
                 const fait = completedKeys.has(tache.key);
-                const aCorriger = tache.corrige && faibles.includes(tache.corrige);
+                const aCorriger = [].concat(tache.corrige || []).some((f) => faibles.includes(f));
+                const ouvert = openWhy.has(tache.key);
                 return (
-                  <li key={tache.key}>
+                  <li key={tache.key} className="routine-ligne">
                     <button type="button" className={`routine-item ${fait ? 'fait' : ''}`} onClick={() => basculerTache(tache.key)} aria-pressed={fait}>
                       <span className="routine-rond" aria-hidden="true">{fait ? '✓' : ''}</span>
                       <span className="routine-textes">
@@ -726,7 +773,11 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                           {aCorriger && <span className="routine-corrige">À corriger</span>}
                         </span>
                         <span className="routine-libelle">{tache.label} <span aria-hidden="true">{tache.emoji}</span></span>
+                        {ouvert && <span className="routine-detail-texte">{tache.detail}</span>}
                       </span>
+                    </button>
+                    <button type="button" className={`routine-info ${ouvert ? 'ouvert' : ''}`} onClick={() => basculerPourquoi(tache.key)} aria-expanded={ouvert} aria-label={`Détail : ${tache.label}`}>
+                      i
                     </button>
                   </li>
                 );
