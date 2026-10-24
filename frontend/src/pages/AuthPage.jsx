@@ -189,10 +189,10 @@ function AuthPage({ onAuthComplete }) {
               </p>
               <a
                 className="btn-primary btn-full"
-                href="mailto:grandimi14@gmail.com?subject=Mot%20de%20passe%20oubli%C3%A9%20Grandimi"
+                href="mailto:bonjour@grandimi.com?subject=Mot%20de%20passe%20oubli%C3%A9%20Grandimi"
                 style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
               >
-                Écrire à grandimi14@gmail.com
+                Écrire à bonjour@grandimi.com
               </a>
 
               <div className="auth-footer">

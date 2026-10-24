@@ -244,7 +244,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             <a href="/cgv.html" className="hover:text-ink">Conditions de vente</a>
             <a href="/mentions-legales.html" className="hover:text-ink">Mentions légales</a>
             <a href="/privacy.html" className="hover:text-ink">Confidentialité</a>
-            <a href="mailto:grandimi14@gmail.com" className="hover:text-ink">Contact</a>
+            <a href="mailto:bonjour@grandimi.com" className="hover:text-ink">Contact</a>
           </nav>
         </div>
       </footer>

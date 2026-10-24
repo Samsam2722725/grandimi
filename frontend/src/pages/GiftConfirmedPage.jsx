@@ -61,8 +61,8 @@ function GiftConfirmedPage({ onBackHome, confirme = true }) {
             <p className="paywall-subtitle">
               Nous n’avons pas encore pu confirmer l’activation sur le compte de votre
               enfant. Si son plan ne s’ouvre pas quand il se connecte, écrivez-nous à{' '}
-              <a href="mailto:grandimi14@gmail.com?subject=Activation%20abonnement%20enfant">
-                grandimi14@gmail.com
+              <a href="mailto:bonjour@grandimi.com?subject=Activation%20abonnement%20enfant">
+                bonjour@grandimi.com
               </a>{' '}
               en indiquant l’adresse e-mail de votre enfant : on l’active à la main.
             </p>

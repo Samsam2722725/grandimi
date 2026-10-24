@@ -172,3 +172,9 @@
   .night .account-modal-actions { flex-direction: column-reverse; gap: 8px; }
   .night .account-modal-actions button { width: 100%; min-height: 48px; }
 }
+
+/* Mon compte : adresse connectée, déconnexion, abonnement introuvable. */
+.night .account-email { margin: 16px 16px 0; font-size: 14px; color: #a39d97; }
+.night .account-empty p { margin: 0 0 10px; line-height: 1.5; }
+.night .account-empty .btn-secondary { margin-top: 4px; }
+.night .account-deconnexion { width: 100%; min-height: 48px; color: #f4efe9; }

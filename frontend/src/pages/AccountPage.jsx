@@ -37,8 +37,17 @@ const estAVie = (planKey) => planKey === 'vie' || planKey === 'vie_normal';
    réponse positive du backend (lui-même dépendant de la confirmation de
    Whop) — jamais de façon optimiste, pour ne jamais annoncer une
    résiliation qui n'aurait pas réellement eu lieu côté facturation. */
-function AccountPage({ onBackHome, retourVersPlan = false }) {
+function AccountPage({ onBackHome, retourVersPlan = false, onLogout }) {
   const [loading, setLoading] = useState(true);
+  // Relancer la lecture de l'abonnement (bouton « Vérifier à nouveau »).
+  const [essai, setEssai] = useState(0);
+  const emailCompte = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('user') || '{}').email || '';
+    } catch {
+      return '';
+    }
+  })();
   const [erreur, setErreur] = useState(null);
   const [abonnement, setAbonnement] = useState(null);
 
@@ -49,6 +58,7 @@ function AccountPage({ onBackHome, retourVersPlan = false }) {
 
   useEffect(() => {
     let annule = false;
+    setErreur(null);
     apiClient
       .getSubscription()
       .then((res) => {
@@ -63,7 +73,7 @@ function AccountPage({ onBackHome, retourVersPlan = false }) {
     return () => {
       annule = true;
     };
-  }, []);
+  }, [essai]);
 
   const confirmerResiliation = async () => {
     /* Émis à la demande, pas au succès : l'échec est précisément ce
@@ -111,6 +121,8 @@ function AccountPage({ onBackHome, retourVersPlan = false }) {
         <h1>Mon compte</h1>
       </header>
 
+      {emailCompte && <p className="account-email">Connecté avec {emailCompte}</p>}
+
       <section className="account-section">
         <h2>Abonnement</h2>
 
@@ -121,8 +133,19 @@ function AccountPage({ onBackHome, retourVersPlan = false }) {
           </div>
         )}
 
+        {/* On arrive aussi ici quand l'accès n'a pas été confirmé 30 s
+            après un paiement : ne pas laisser croire que l'argent est perdu. */}
         {!erreur && abonnement && !abonnement.has_subscription && (
-          <p className="account-empty">Tu n'as pas d'abonnement actif.</p>
+          <div className="account-empty">
+            <p>On ne trouve pas encore d'abonnement sur ce compte.</p>
+            <p>
+              Tu viens de payer ? L'activation peut prendre une minute. Vérifie à nouveau ; si rien ne change,
+              écris-nous à bonjour@grandimi.com avec l'adresse utilisée pour payer, on règle ça.
+            </p>
+            <button type="button" className="btn-secondary" onClick={() => { setLoading(true); setEssai((n) => n + 1); }}>
+              Vérifier à nouveau
+            </button>
+          </div>
         )}
 
         {!erreur && abonnement && abonnement.has_subscription && (
@@ -222,12 +245,20 @@ function AccountPage({ onBackHome, retourVersPlan = false }) {
         )}
       </section>
 
+      {onLogout && (
+        <section className="account-section">
+          <button type="button" className="btn-tertiary account-deconnexion" onClick={onLogout}>
+            Se déconnecter
+          </button>
+        </section>
+      )}
+
       <section className="account-section account-contact">
         <h2>Nous contacter</h2>
         <p>
           Une question sur ton plan, ton paiement ou ton abonnement ? Écris-nous, on répond
           par e-mail :{' '}
-          <a href="mailto:grandimi14@gmail.com?subject=Mon%20compte%20Grandimi">grandimi14@gmail.com</a>
+          <a href="mailto:bonjour@grandimi.com?subject=Mon%20compte%20Grandimi">bonjour@grandimi.com</a>
         </p>
       </section>
 

@@ -348,11 +348,20 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
 
   // Toutes les tâches du jour, tous moments confondus (Matin/Journée/Soir/
   // Coucher), avec leur moment d'origine gardé pour l'affichage groupé.
-  const tachesDuJour = monthlyPlan
+  const tachesBrutes = monthlyPlan
     ? monthlyPlan.daily_routine.flatMap((bloc) =>
         bloc.tasks.map((tache) => ({ ...tache, moment: bloc.moment, heure: bloc.heure }))
       )
     : [];
+  /* La liste du serveur se répète au mois du sommeil : « Chambre à
+     18-20 °C » deux fois, « même heure » deux fois, et une « Séance du
+     mois — Le sommeil » qui n'est pas une séance. On garde la première
+     de chaque doublon et on renomme l'objectif. Les clés ne changent pas. */
+  const autreQue = (cle, motif) => tachesBrutes.some((t) => t.key !== cle && motif.test(t.label));
+  const tachesDuJour = tachesBrutes
+    .filter((t) => !(t.key === 'coucher-1' && autreQue(t.key, /18-20/)))
+    .filter((t) => !(t.key === 'coucher-2' && autreQue(t.key, /même heure/i)))
+    .map((t) => (t.key === 'soir-0' ? { ...t, label: t.label.replace(/^Séance du mois — [^:]+ : /, 'Objectif du mois : ') } : t));
 
   const nbFaites = tachesDuJour.filter((t) => completedKeys.has(t.key)).length;
 
@@ -660,7 +669,24 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
 
             <div className="app-liste-tete">
               <h2 className="app-carte-titre">Ta liste du jour</h2>
-              <span className="app-compteur">{nbFaites}/{tachesDuJour.length}</span>
+              <span className="app-compteur">{nbFaites + (aujourdhuiFait ? 1 : 0)}/{tachesDuJour.length + 1}</span>
+            </div>
+
+            {/* Le parcours en tête de liste, comme « Routine physique » chez Taller. */}
+            <div className={`todo-item todo-item--parcours ${aujourdhuiFait ? 'fait' : ''}`}>
+              <span className="todo-checkbox" aria-hidden="true">{aujourdhuiFait ? '✓' : ''}</span>
+              <div className="todo-body">
+                <button
+                  type="button"
+                  className="todo-label todo-label-bouton"
+                  onClick={() => (parcours.ouvert ? ouvrirJour(jourAccueil) : allerA('grandir', 'exercices'))}
+                >
+                  {aujourdhuiFait
+                    ? `Séance du jour ${jourDansNiveau(jourAccueil)} faite`
+                    : `Ta séance du jour ${jourDansNiveau(jourAccueil)} · ${Math.round(dureeSecondes(seanceDuParcours(jourAccueil, profil).etapes) / 60)} min`}
+                </button>
+                <span className="todo-parcours-niveau">Parcours · Niveau {niveauDuJour(jourAccueil)}</span>
+              </div>
             </div>
 
             {['Matin', 'Journée', 'Soir', 'Coucher'].map((moment) => {

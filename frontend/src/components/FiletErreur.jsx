@@ -37,7 +37,7 @@ class FiletErreur extends Component {
         <h1>Oups, cet écran n’a pas pu s’afficher</h1>
         <p>
           Recharge la page. Si ça recommence, écris-nous à{' '}
-          <a href="mailto:grandimi14@gmail.com?subject=Page%20bloqu%C3%A9e">grandimi14@gmail.com</a>{' '}
+          <a href="mailto:bonjour@grandimi.com?subject=Page%20bloqu%C3%A9e">bonjour@grandimi.com</a>{' '}
           avec une capture de cet écran.
         </p>
         <button type="button" className="filet-erreur-principal" onClick={() => window.location.reload()}>

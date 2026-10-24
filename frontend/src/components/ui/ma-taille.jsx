@@ -152,7 +152,7 @@ export function MaTaille({ predictionData, onMiseAJour, verrouille = false, onDe
           </button>
         </div>
         <p className="ma-taille-aide">
-          Mesure-toi chaque semaine, le matin, pieds nus, dos au mur.{' '}
+          Mesure-toi une fois par mois, le matin, pieds nus, dos au mur : en une semaine, la différence ne se voit pas.{' '}
           {predictionData.payload_prediction
             ? 'Chaque mesure recalcule ton estimation.'
             : 'Chaque mesure est enregistrée dans ton suivi.'}

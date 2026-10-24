@@ -159,3 +159,7 @@ button.parcours-rond { cursor: pointer; }
 .taille-courbe-age { fill: #6f6964; font-size: 11px; font-family: inherit; }
 .taille-percentile { display: block; text-align: center; font-weight: 700; font-size: 15.5px; color: #f4efe9; }
 .taille-percentile strong { color: #ff8a52; }
+
+/* La séance du parcours en tête de la liste du jour. */
+.todo-item--parcours { border-color: rgba(255, 106, 43, 0.35); }
+.todo-parcours-niveau { font-size: 12.5px; font-weight: 700; color: #ff8a52; }

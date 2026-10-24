@@ -539,9 +539,14 @@ function App() {
      client était précisément la faille. C'est désormais le webhook Whop
      qui met à jour is_premium en base, et checkPremium qui fait foi. */
 
+  /* Se déconnecter (Mon compte) : sur un téléphone partagé, le suivant ne
+     doit retrouver ni la session, ni les réponses, ni l'app de l'autre. */
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+    localStorage.removeItem('predictionData');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem(CLE_ABONNE);
     setIsAuthenticated(false);
     setIsPaid(false);
     setCurrentPage('home');
@@ -918,7 +923,7 @@ function App() {
 
       {/* Mon compte -> Abonnement : offre en cours, prochain paiement, résiliation. */}
       {currentPage === 'account' && isAuthenticated && (
-        <AccountPage onBackHome={isPaid && predictionData ? handleReprendre : handleBackHome} retourVersPlan={Boolean(isPaid && predictionData)} />
+        <AccountPage onBackHome={isPaid && predictionData ? handleReprendre : handleBackHome} retourVersPlan={Boolean(isPaid && predictionData)} onLogout={handleLogout} />
       )}
 
       {/* Paiement par un parent, via le lien partagé */}
