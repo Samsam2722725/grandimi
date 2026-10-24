@@ -140,6 +140,8 @@ func main() {
 	{
 		prive.GET("/api/v1/check-premium", api.CheckPremium)
 		prive.GET("/api/user/predictions", api.GetPredictionsByEmail)
+		prive.GET("/api/user/questionnaire", api.LireQuestionnaire)
+		prive.POST("/api/user/questionnaire", api.EnregistrerQuestionnaire)
 
 		/* Suivi de taille : derriere authentification, pas derriere
 		   abonnement. La relance J+30 promet une mise a jour gratuite,

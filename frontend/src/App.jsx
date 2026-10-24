@@ -6,6 +6,7 @@ import './App.css';
 import apiClient from './lib/api';
 import Spinner from './components/Spinner';
 import { capturePageview } from './lib/analytics';
+import { aDesReponses } from './lib/prediction-serveur';
 /* UNE SEULE PAGE EST CHARGEE TOUT DE SUITE : CELLE QU ON VOIT.
 
    Les douze pages etaient importees d un bloc, donc empaquetees
@@ -261,6 +262,54 @@ function App() {
       }
     }
   }, []);
+
+  /* Les réponses du questionnaire suivent le compte d'un téléphone à
+     l'autre (migrations/011). Connecté avec elles : on les garde sur le
+     serveur. Connecté sans elles (autre téléphone, prédiction
+     reconstruite depuis la base) : on les récupère. Sans ça, « Ce qui te
+     freine » et le mois 1 redevenaient génériques ailleurs que sur le
+     premier téléphone. */
+  const dernierEnvoiReponses = useRef('');
+  useEffect(() => {
+    if (!isAuthenticated || !localStorage.getItem('token')) return undefined;
+
+    if (aDesReponses(predictionData)) {
+      let compte = {};
+      try {
+        compte = JSON.parse(localStorage.getItem('user') || '{}');
+      } catch {
+        return undefined;
+      }
+      // Seulement les réponses de CE compte : un téléphone partagé peut
+      // garder celles de quelqu'un d'autre.
+      const memeAdresse =
+        compte.email &&
+        predictionData.email &&
+        String(compte.email).trim().toLowerCase() === String(predictionData.email).trim().toLowerCase();
+      const corps = JSON.stringify(predictionData);
+      if (memeAdresse && corps !== dernierEnvoiReponses.current) {
+        dernierEnvoiReponses.current = corps;
+        apiClient.saveQuestionnaire(predictionData).catch(() => {
+          dernierEnvoiReponses.current = '';
+        });
+      }
+      return undefined;
+    }
+
+    let annule = false;
+    apiClient
+      .getQuestionnaire()
+      .then((res) => {
+        if (annule || !aDesReponses(res?.donnees)) return;
+        dernierEnvoiReponses.current = JSON.stringify(res.donnees);
+        localStorage.setItem('predictionData', dernierEnvoiReponses.current);
+        setPredictionData(res.donnees);
+      })
+      .catch(() => {});
+    return () => {
+      annule = true;
+    };
+  }, [isAuthenticated, predictionData]);
 
   // Vérifie la session au montage.
   //
