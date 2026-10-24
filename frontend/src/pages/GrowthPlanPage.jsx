@@ -16,6 +16,7 @@ import { APERCU_PLAN, PLAN_APERCU } from '../lib/plan-apercu';
    valeurs que le calcul a réellement produites. */
 import { GrowthProjectionChart } from '../components/ui/growth-projection-chart';
 import { MaTaille } from '../components/ui/ma-taille';
+import { TailleAccueil } from '../components/ui/taille-accueil';
 import { LeconsPlan } from '../components/ui/lecons-plan';
 import { pointsFaibles } from '../lib/offres';
 import { capture } from '../lib/analytics';
@@ -34,13 +35,18 @@ import {
   NB_JOURS_PARCOURS,
   Parcours,
   cleJourParcours,
+  cleLibre,
+  clePref,
   dureeSecondes,
   etatParcours,
   jourDansNiveau,
+  lirePrefs,
   niveauDuJour,
   numeroJourParcours,
   piments,
+  profilParcours,
   seanceDuParcours,
+  seanceLibre,
 } from '../components/ui/parcours';
 import { MonteeEnGamme } from '../components/ui/montee-en-gamme';
 import { VisiteGuidee, visiteDejaVue } from '../components/ui/visite-guidee';
@@ -114,7 +120,10 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   // Le serveur coche OU décoche : tant que le carnet n'est pas lu, on
   // n'y écrit rien, sinon refaire un jour déjà noté l'effacerait.
   const [carnetLu, setCarnetLu] = useState(APERCU_PLAN);
-  const [ficheJour, setFicheJour] = useState(null);
+  // Les deux réglages du parcours (temps par jour, douleur), lus du carnet.
+  const [prefs, setPrefs] = useState({});
+  // La fiche ouverte : { n } pour un jour du parcours, { libre } pour une séance libre.
+  const [fiche, setFiche] = useState(null);
   const [seanceParcours, setSeanceParcours] = useState(null);
 
   /* Mesure de l'usage (après paiement) : savoir qui revient, qui fait sa
@@ -203,7 +212,9 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
     apiClient
       .getTodayTasks(CARNET_PARCOURS)
       .then((res) => {
-        setJoursFaits(new Set((res.completed_keys || []).map(numeroJourParcours).filter(Boolean)));
+        const cles = res.completed_keys || [];
+        setJoursFaits(new Set(cles.map(numeroJourParcours).filter(Boolean)));
+        setPrefs(lirePrefs(cles));
         setCarnetLu(true);
       })
       .catch(() => {});
@@ -216,7 +227,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
 
   const basculerTache = (cle) => {
     if (!completedKeys.has(cle)) {
-      const famille = cle.startsWith('nutri-') ? 'nutrition' : cle.startsWith('sommeil-h-') ? 'sommeil' : cle === 'posture-test-mur' ? 'posture' : cle === 'seance-du-jour' ? 'seance' : cle.startsWith('parcours-') ? 'parcours' : 'tache';
+      const famille = cle.startsWith('nutri-') ? 'nutrition' : cle.startsWith('sommeil-h-') ? 'sommeil' : cle === 'posture-test-mur' ? 'posture' : cle === 'seance-du-jour' ? 'seance' : cle.startsWith('parcours-') ? 'parcours' : cle.startsWith('libre-') ? 'libre' : 'tache';
       capture('app_coche', { etape: famille });
     }
     setCompletedKeys((prev) => {
@@ -269,16 +280,38 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
     if (!completedKeys.has(CLE_SEANCE)) basculerTache(CLE_SEANCE);
   };
 
-  const ouvrirJour = (n) => setFicheJour(n);
+  // Une séance libre terminée : elle compte pour la série, pas pour le parcours.
+  const terminerLibre = (id) => {
+    capture('seance_terminee', { etape: id });
+    if (!completedKeys.has(cleLibre(id))) basculerTache(cleLibre(id));
+  };
 
-  const commencerJour = (n, etapes) => {
-    capture('seance_commencee', { etape: `j${n}` });
-    setFicheJour(null);
-    setSeanceParcours({ n, etapes, nouveau: !joursFaits.has(n) });
+  /* Changer un réglage : le serveur coche ou décoche, donc on décoche
+     l'ancienne valeur avant de cocher la nouvelle. */
+  const changerPref = (groupe, valeur) => {
+    const ancienne = prefs[groupe];
+    if (ancienne === valeur) return;
+    setPrefs((p) => ({ ...p, [groupe]: valeur }));
+    if (APERCU_PLAN || !carnetLu) return;
+    if (ancienne) apiClient.toggleTask(clePref(groupe, ancienne), CARNET_PARCOURS).catch(() => {});
+    apiClient.toggleTask(clePref(groupe, valeur), CARNET_PARCOURS).catch(() => {});
+  };
+
+  const profil = profilParcours(predictionData, prefs);
+  const ouvrirJour = (n) => setFiche({ n });
+  const ouvrirLibre = (libre) => setFiche({ libre });
+  const seanceDeLaFiche = fiche ? (fiche.libre ? seanceLibre(fiche.libre, profil) : seanceDuParcours(fiche.n, profil)) : null;
+
+  const commencer = (etapes) => {
+    const { n, libre } = fiche;
+    capture('seance_commencee', { etape: libre || `j${n}` });
+    setSeanceParcours({ n, libre, titre: seanceDeLaFiche.titre, etapes, nouveau: libre ? false : !joursFaits.has(n) });
+    setFiche(null);
   };
 
   // Le texte de l'écran de fin : trophée au bout des 7 jours.
-  const finDuJour = ({ n, nouveau }) => {
+  const finDuJour = ({ n, libre, nouveau }) => {
+    if (libre) return { emoji: '💪', titre: 'Séance terminée', texte: 'Bien joué. Elle compte pour ta série d’aujourd’hui.' };
     const jour = jourDansNiveau(n);
     const niveau = niveauDuJour(n);
     if (!nouveau) return { emoji: '💪', titre: 'Séance refaite', texte: 'Bien joué. Ton prochain jour t’attend sur ton parcours.' };
@@ -504,6 +537,16 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
               })}
             </div>
 
+            {/* Sa taille d'abord, comme l'accueil de Taller. */}
+            <TailleAccueil
+              predictionData={predictionData}
+              verrouille={tailleVerrouillee}
+              nbPoints={faibles.length}
+              onDebloquer={() => { capture('montee_ouverte', { etape: planKey || '' }); setMonteeOuverte(true); }}
+              onVoirCourbe={() => allerA('taille')}
+              onVoirPoints={() => document.querySelector('.app-freine')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            />
+
             {/* Le parcours : le jour à faire aujourd'hui, et où il se trouve. */}
             <div className="app-carte app-parcours-carte">
               <div className="app-parcours-tete">
@@ -517,7 +560,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
               </div>
               <h2 className="app-carte-titre app-parcours-titre">
                 {parcours.ouvert
-                  ? `Ta séance du jour : ${seanceDuParcours(jourAccueil).theme.toLowerCase()}`
+                  ? `Ta séance du jour · ${seanceDuParcours(jourAccueil, profil).etapes.filter((e) => !e.repos).length} exercices`
                   : parcours.fini ? 'Parcours terminé 🏆'
                     : jourDansNiveau(jourAccueil) === JOURS_PAR_NIVEAU
                       ? `Niveau ${niveauDuJour(jourAccueil)} terminé 🏆 Le niveau ${niveauDuJour(jourAccueil) + 1} se débloque demain.`
@@ -529,7 +572,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                 onClick={() => (parcours.ouvert ? ouvrirJour(jourAccueil) : allerA('grandir', 'exercices'))}
               >
                 {parcours.ouvert
-                  ? `Commencer le jour ${jourDansNiveau(jourAccueil)} — ${Math.round(dureeSecondes(seanceDuParcours(jourAccueil).etapes) / 60)} min`
+                  ? `Commencer le jour ${jourDansNiveau(jourAccueil)} — ${Math.round(dureeSecondes(seanceDuParcours(jourAccueil, profil).etapes) / 60)} min`
                   : 'Voir mon parcours'}
               </button>
             </div>
@@ -657,7 +700,19 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                 faite={seanceFaite}
                 onCommencer={() => { capture('seance_commencee', { etape: String(mois) }); setSeanceOuverte(true); }}
                 exercicesDuPlan={plan.posture_exercises}
-                parcours={<Parcours joursFaits={joursFaits} aujourdhuiFait={aujourdhuiFait} onOuvrirJour={ouvrirJour} />}
+                parcours={(
+                  <Parcours
+                    joursFaits={joursFaits}
+                    aujourdhuiFait={aujourdhuiFait}
+                    onOuvrirJour={ouvrirJour}
+                    onOuvrirLibre={ouvrirLibre}
+                    libresFaites={completedKeys}
+                    profil={profil}
+                    prefs={prefs}
+                    prefsConnues={Boolean(prefs.temps || prefs.douleur)}
+                    onPref={changerPref}
+                  />
+                )}
               />
             )}
 
@@ -726,7 +781,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
             <LeconsPlan />
             <p className="plan-contact">
               Une question, un souci, une idée ? Écris-nous :{' '}
-              <a href="mailto:grandimi14@gmail.com?subject=Mon%20plan%20Grandimi">grandimi14@gmail.com</a>
+              <a href="mailto:bonjour@grandimi.com?subject=Mon%20plan%20Grandimi">bonjour@grandimi.com</a>
             </p>
           </section>
         )}
@@ -743,28 +798,28 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
         />
       )}
 
-      {ficheJour && (
+      {seanceDeLaFiche && (
         <FicheSeance
-          key={ficheJour}
-          n={ficheJour}
-          faite={joursFaits.has(ficheJour)}
-          ouverte={parcours.ouvert && ficheJour === parcours.prochain}
-          onFermer={() => setFicheJour(null)}
-          onCommencer={(etapes) => commencerJour(ficheJour, etapes)}
+          key={seanceDeLaFiche.cle}
+          seance={seanceDeLaFiche}
+          faite={fiche.libre ? completedKeys.has(cleLibre(fiche.libre)) : joursFaits.has(fiche.n)}
+          ouverte={Boolean(fiche.libre) || (parcours.ouvert && fiche.n === parcours.prochain)}
+          onFermer={() => setFiche(null)}
+          onCommencer={commencer}
         />
       )}
 
       {seanceParcours && (
         <SeanceGuidee
           etapes={seanceParcours.etapes}
-          titre={`Jour ${jourDansNiveau(seanceParcours.n)}`}
+          titre={seanceParcours.titre}
           fin={finDuJour(seanceParcours)}
           onFermer={() => setSeanceParcours(null)}
-          onTerminee={() => terminerJour(seanceParcours.n)}
+          onTerminee={() => (seanceParcours.libre ? terminerLibre(seanceParcours.libre) : terminerJour(seanceParcours.n))}
         />
       )}
 
-      {visite && activeTab === 'accueil' && !seanceOuverte && !seanceParcours && !ficheJour && <VisiteGuidee onFin={() => setVisite(false)} />}
+      {visite && activeTab === 'accueil' && !seanceOuverte && !seanceParcours && !fiche && <VisiteGuidee onFin={() => setVisite(false)} />}
 
       {monteeOuverte && <MonteeEnGamme predictionData={predictionData} onFermer={() => setMonteeOuverte(false)} />}
 

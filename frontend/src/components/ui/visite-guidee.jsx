@@ -9,6 +9,7 @@ import { capture } from '@/lib/analytics';
 const CLE = 'grandimi:visite-faite';
 
 const ETAPES = [
+  { selecteur: '.taille-accueil', texte: 'Ta taille : où tu en es, ta courbe, et ce qui te freine. Mesure-toi chaque mois, tout se met à jour.' },
   { selecteur: '.app-parcours-carte', texte: 'Ton parcours : chaque jour, une nouvelle séance de quelques minutes, guidée exercice par exercice. 7 jours, un trophée, puis le niveau suivant.' },
   { selecteur: '.app-freine', texte: 'Voici ce qui freine ta croissance, d’après tes réponses. Touche une ligne pour voir comment le corriger.' },
   { selecteur: '.app-domaines', texte: 'Tes trois scores du jour : sommeil, nutrition, exercices. Ils montent à chaque chose que tu fais.' },
