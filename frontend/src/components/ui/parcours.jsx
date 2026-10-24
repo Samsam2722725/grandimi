@@ -73,6 +73,7 @@ const FOND = {
   haut: '#3a2b5c',
   equilibre: '#4a4220',
   sauts: '#5c2330',
+  gainage: '#5a2a14',
   calme: '#25324f',
 };
 
@@ -138,6 +139,14 @@ const EXOS = {
   'cou-rotation': { nom: 'Rotation du cou', emoji: '↩️', s: 30, z: 'haut', consigne: 'Tourne lentement la tête pour regarder par-dessus une épaule, puis l’autre.' },
   'dos-mur': { nom: 'Dos au mur', emoji: '📏', s: 60, z: 'haut', consigne: 'Talons, fesses, omoplates et tête contre le mur. Rentre le menton et grandis-toi, sans cambrer.' },
 
+  // Gainage et dos : les muscles qui tiennent la posture toute la journée
+  planche: { nom: 'Planche', emoji: '🧱', s: 30, z: 'gainage', consigne: 'Sur les avant-bras, corps bien droit de la tête aux talons. Serre le ventre.' },
+  'planche-cote': { nom: 'Planche sur le côté', emoji: '📏', s: 30, z: 'gainage', consigne: 'Sur un avant-bras, corps droit, bassin levé. Change de côté à la moitié.' },
+  pont: { nom: 'Pont', emoji: '🌉', s: 30, z: 'gainage', consigne: 'Sur le dos, genoux pliés, monte le bassin jusqu’à aligner genoux, hanches et épaules.' },
+  superman: { nom: 'Superman', emoji: '🦸', s: 30, z: 'gainage', sans: ['dos'], consigne: 'Sur le ventre, lève bras, poitrine et jambes de quelques centimètres.' },
+  'bras-jambe': { nom: 'Bras et jambe opposés', emoji: '🐾', s: 30, z: 'gainage', consigne: 'À quatre pattes, tends le bras droit et la jambe gauche, puis change.' },
+  insecte: { nom: 'Insecte mort', emoji: '🪲', s: 30, z: 'gainage', consigne: 'Sur le dos, descends un bras et la jambe opposée sans décoller le bas du dos.' },
+
   // Équilibre et pieds
   'une-jambe': { nom: 'Équilibre sur une jambe', emoji: '🦩', s: 30, z: 'equilibre', consigne: 'Tiens sur une jambe en regardant droit devant. Change à la moitié. Trop facile ? Ferme les yeux.' },
   chevilles: { nom: 'Cercles de chevilles', emoji: '🔁', s: 30, z: 'equilibre', consigne: 'Pied levé, dessine de grands cercles avec la cheville, dans un sens puis dans l’autre. Change de pied à la moitié.' },
@@ -162,32 +171,38 @@ function etape(id, s, i) {
 
 const arrondi15 = (s) => Math.max(15, Math.round(s / 15) * 15);
 
-/* ---------- Les 112 jours ---------- */
+/* ---------- Les 112 jours ----------
 
-// Le jour 1 de Taller, tel quel (5:30).
-const JOUR_1 = [['torsion-assise', 60], ['pigeon', 60], ['mollet-mur', 60], ['une-jambe', 30], ['triceps', 30], ['fente-arriere', 60], ['cactus', 30]];
+   Ce qui aide un ado à grandir, et ce que la séance en fait :
+   - la posture se travaille tous les jours : c'est la hauteur qu'on perd en
+     se tassant, et ce qui se voit en premier → un bloc posture chaque jour ;
+   - les sauts rendent les os plus solides pendant la croissance, 3 fois par
+     semaine avec un jour de repos entre deux → jours 1, 3, 5 ;
+   - un dos droit tient grâce au ventre et au dos musclés → gainage les
+     jours 2, 4, 6 ;
+   - la souplesse de la colonne, des hanches et de l'arrière des cuisses
+     replace le bassin → des étirements tous les jours, qui changent ;
+   - le jour 7 reprend tout (le défi), puis le trophée.
+   Aucun exercice n'allonge les os : on ne promet aucun centimètre. */
 
-// Chaque jour prend un exercice par zone, à tour de rôle, dans cet ordre.
-const POOLS = {
-  colonne: ['torsion-assise', 'cobra', 'fil-aiguille', 'chiot', 'torsion-allongee', 'chien', 'poupee', 'chameau', 'bascule-bassin'],
+const ETIREMENTS = {
+  colonne: ['torsion-assise', 'cobra', 'fil-aiguille', 'chiot', 'torsion-allongee', 'chien', 'poupee', 'chameau', 'bascule-bassin', 'flexion-avant'],
   hanches: ['pigeon', 'lezard', '90-90', 'figure-quatre', 'quadri-genou', 'jambes-ecartees', 'double-pigeon', 'squat-profond', 'fente-laterale'],
-  jambes: ['mollet-mur', 'orteils', 'jambes-croisees', 'hurdler', 'flexion-assise', 'ischios-allonge', 'quadri-debout', 'fente-arriere', 'ecart-assis', 'quadri-cote', 'fente-avant'],
-  haut: ['triceps', 'cactus', 'ouverture-poitrine', 'bras-croise', 'pecs-mur', 'plongeur', 'chien-mur', 'epaule-inversee', 'bras-mur', 'scalenes', 'omoplate'],
-  equilibre: ['une-jambe', 'pointes', 'chevilles', 'orteils-ecartes'],
+  jambes: ['ischios-allonge', 'hurdler', 'mollet-mur', 'flexion-assise', 'jambes-croisees', 'quadri-debout', 'ecart-assis', 'quadri-cote', 'orteils'],
 };
-const ORDRE_ZONES = ['colonne', 'hanches', 'jambes', 'haut', 'equilibre'];
-const ECHAUFFEMENTS = ['rotations-epaules', 'cou-roule', 'salut'];
-const POSTURE_PERSO = ['menton', 'dos-mur', 'cactus', 'bras-mur'];
+const ORDRE_ETIREMENTS = ['colonne', 'hanches', 'jambes'];
+const GAINAGE = ['planche', 'pont', 'bras-jambe', 'superman', 'planche-cote', 'insecte'];
+const POSTURE_TOURNANTE = ['cactus', 'bras-mur', 'epaule-inversee', 'ouverture-poitrine', 'pecs-mur'];
+const COU = ['oreille-epaule', 'scalenes', 'cou-rotation', 'omoplate'];
+const ECHAUFFEMENTS = ['rotations-epaules', 'salut', 'cou-roule'];
 
-const TEXTES = [
-  'Tout le corps, du cou aux chevilles : c’est chaque jour que ta posture se construit.',
-  'Ta colonne et tes hanches s’ouvrent un peu plus : tu te tiens plus droit sans y penser.',
-  'Aujourd’hui, des sauts : les impacts rendent tes os plus solides.',
-  'Épaules en arrière, menton rentré : c’est ce qui se voit en premier.',
-  'Des jambes souples, c’est un bassin bien placé et un dos droit.',
-  'Deuxième séance de sauts de la semaine : courts, dynamiques, en douceur.',
-  'Le défi du niveau : plus long que d’habitude. Termine-le pour gagner ton trophée.',
-];
+const TYPE_DU_JOUR = { 1: 'sauts', 2: 'gainage', 3: 'sauts', 4: 'gainage', 5: 'sauts', 6: 'gainage', 7: 'defi' };
+const TEXTES = {
+  sauts: 'Jour de sauts : les impacts rendent tes os plus solides pendant ta croissance. Atterris toujours en douceur.',
+  sansSauts: 'Jour sans impact : équilibre et montées sur pointes, pour muscler pieds et chevilles sans forcer.',
+  gainage: 'Jour de gainage : tu muscles le ventre et le dos qui te tiennent droit toute la journée.',
+  defi: 'Le défi du niveau : posture, sauts, gainage et étirements. Termine-le pour gagner ton trophée.',
+};
 
 export const niveauDuJour = (n) => Math.ceil(n / JOURS_PAR_NIVEAU);
 export const jourDansNiveau = (n) => ((n - 1) % JOURS_PAR_NIVEAU) + 1;
@@ -196,86 +211,111 @@ export const nbPiments = (niveau) => Math.min(6, Math.max(1, Math.ceil(niveau / 
 export const piments = (niveau) => '🌶️'.repeat(nbPiments(niveau));
 // Le rond « 👀 » : un jour par niveau dont on ne voit le contenu qu'en y arrivant.
 export const jourSurprise = (niveau) => ((niveau * 3) % 6) + 1;
-const JOURS_SAUTS = [3, 6];
+
+// Les sauts Masaï : nombre de séries et durée, selon son niveau d'effort.
+function seriesSauts(effort) {
+  if (effort <= 3) return [2, 20];
+  if (effort <= 6) return [2, 30];
+  if (effort <= 9) return [3, 30];
+  if (effort <= 12) return [3, 45];
+  return [4, 45];
+}
 
 /** La séance du jour n du parcours (1 à 112), adaptée à son profil. */
 export function seanceDuParcours(n, profil = profilParcours()) {
   const niveau = niveauDuJour(n);
   const jour = jourDansNiveau(n);
+  const type = TYPE_DU_JOUR[jour];
   const pourToi = [];
-  // Les temps montent par paliers de 15 s : +4 % par niveau, plafond +50 %.
-  const facteur = Math.min(1.5, 1 + 0.04 * (niveau - 1)) * (profil.temps === '5' ? 0.8 : 1);
-  // Comme chez Taller, un exercice ne dépasse jamais 1:00 : ensuite, on en ajoute.
+  // Son niveau d'effort : plus bas s'il bouge peu, plus haut s'il est sportif.
+  const effort = Math.max(1, Math.min(16, niveau + (profil.sport === 'doux' ? -2 : profil.sport === 'sportif' ? 2 : 0)));
+  // Les temps montent par paliers de 15 s ; un exercice ne dépasse pas 1:00.
+  const facteur = Math.min(1.6, 1 + 0.04 * (effort - 1)) * (profil.temps === '5' ? 0.8 : 1);
   const duree = (id, base = EXOS[id].s) => (EXOS[id].repos ? base : Math.min(60, arrondi15(base * facteur)));
   const choisis = [];
   const deja = new Set();
-  const sauts = n !== 1 && JOURS_SAUTS.includes(jour) && !exclu('masai', profil);
-  const ajouter = (id, s) => { choisis.push([id, s ?? duree(id)]); deja.add(id); };
+  const ajouter = (id, s) => {
+    if (deja.has(id) || exclu(id, profil)) return false;
+    choisis.push([id, s ?? duree(id)]);
+    deja.add(id);
+    return true;
+  };
+  // Le k-ième élément d'une liste, en tournant d'un cran chaque jour.
+  const tour = (liste, k) => liste[(n + k) % liste.length];
 
-  if (n === 1) {
-    for (const [id, s] of JOUR_1) {
-      if (!exclu(id, profil)) { ajouter(id, s); continue; }
-      const zone = EXOS[id].z;
-      const remplacant = POOLS[zone].find((x) => !exclu(x, profil) && !deja.has(x) && !JOUR_1.some(([j]) => j === x));
-      if (remplacant) ajouter(remplacant, EXOS[remplacant].s);
-    }
-  } else {
-    // Nombre d'exercices : 6 au niveau 1, un de plus tous les 2 niveaux
-    // (10 au plus), 3 de plus le jour du défi. Comme Taller : 15 min au plus.
-    let combien = Math.min(10, 6 + Math.floor((niveau - 1) / 2)) + (jour === 7 ? 3 : 0);
-    if (profil.sport === 'doux') combien -= 1;
-    if (profil.sport === 'sportif') combien += 1;
-    if (profil.temps === '5') combien = Math.min(combien, 6);
-    if (profil.temps === '15') combien += 2;
-    combien = Math.min(combien, 14);
+  // 1. Échauffement.
+  ajouter(type === 'sauts' ? 'chevilles' : tour(ECHAUFFEMENTS, 0));
 
-    ajouter(ECHAUFFEMENTS[n % ECHAUFFEMENTS.length]);
-    for (let k = 0; choisis.length - 1 < combien && k < combien * 4; k++) {
-      const zone = ORDRE_ZONES[k % ORDRE_ZONES.length];
-      if (zone === 'equilibre' && sauts) continue;
-      const pool = POOLS[zone];
-      // Le décalage change avec le jour : 2 ou 3 exercices nouveaux d'un jour à l'autre.
-      for (let essai = 0; essai < pool.length; essai++) {
-        const id = pool[(n * 2 + Math.floor(k / ORDRE_ZONES.length) * 3 + essai) % pool.length];
-        if (!deja.has(id) && !exclu(id, profil)) { ajouter(id); break; }
-      }
-    }
-    if (sauts) {
-      // Comme la séance Masaï de Taller : saut, repos, saut…
-      const tours = niveau <= 5 ? 1 : niveau <= 10 ? 2 : 3;
-      const tempsSaut = niveau <= 5 ? 30 : niveau <= 10 ? 45 : 60;
-      for (let t = 0; t < tours; t++) {
-        choisis.push(['masai', tempsSaut]);
-        if (t < tours - 1) choisis.push(['repos', 30]);
-      }
-    }
-  }
-
+  // 2. Posture, tous les jours.
+  ajouter('dos-mur', profil.voute ? 60 : Math.min(60, 30 + 15 * Math.floor((effort - 1) / 4)));
+  ajouter('menton', 30);
+  for (let k = 0; k < POSTURE_TOURNANTE.length && !ajouter(tour(POSTURE_TOURNANTE, k)); k++);
   if (profil.voute) {
-    // Un exercice de posture en plus, qui change d'un jour à l'autre.
-    const id = POSTURE_PERSO.map((_, i) => POSTURE_PERSO[(n + i) % POSTURE_PERSO.length]).find((x) => !deja.has(x));
-    if (id) {
-      choisis.splice(1, 0, [id, duree(id)]);
-      deja.add(id);
-      pourToi.push(`${EXOS[id].nom} ajouté : tu nous as dit être voûté.`);
+    for (let k = 0; k < COU.length && !ajouter(tour(COU, k), 30); k++);
+    pourToi.push('Bloc posture plus long : tu nous as dit être voûté.');
+  }
+
+  // 3. Le cœur du jour.
+  const sautsPossibles = !exclu('masai', profil);
+  const faireSauts = (moitie) => {
+    if (!sautsPossibles) {
+      ajouter('pointes');
+      ajouter('une-jambe');
+      ajouter('orteils-ecartes');
+      return;
     }
-  }
-  if (n !== 1) {
-    const fin = profil.sommeilFaible ? 'respiration' : jour % 2 ? 'enfant' : 'calin-ours';
-    if (!deja.has(fin)) choisis.push([fin, Math.min(90, duree(fin))]);
+    const [series, temps] = seriesSauts(effort);
+    const nb = moitie ? Math.max(1, Math.ceil(series / 2)) : series;
+    for (let t = 0; t < nb; t++) {
+      choisis.push(['masai', temps]);
+      if (t < nb - 1) choisis.push(['repos', 30]);
+    }
+    deja.add('masai');
+    ajouter('pointes');
+    if (!moitie) ajouter('mollet-mur');
+  };
+  const faireGainage = (combien) => {
+    let mis = 0;
+    for (let k = 0; mis < combien && k < GAINAGE.length; k++) {
+      // On tourne de 2 crans par jour de gainage pour varier les paires.
+      if (ajouter(GAINAGE[(Math.floor(n / 2) * 2 + k) % GAINAGE.length])) mis++;
+    }
+  };
+  const nbGainage = Math.min(profil.temps === '5' ? 2 : 6, effort <= 5 ? 3 : effort <= 10 ? 4 : 5);
+  if (type === 'sauts') faireSauts(false);
+  if (type === 'gainage') faireGainage(nbGainage);
+  if (type === 'defi') {
+    faireSauts(true);
+    faireGainage(2);
   }
 
+  // 4. Étirements, tous les jours : colonne, hanches, arrière des cuisses.
+  let nbEtirements = effort <= 5 ? 2 : effort <= 10 ? 3 : 4;
+  if (type === 'defi') nbEtirements += 1;
+  if (profil.temps === '5') nbEtirements = Math.min(nbEtirements, 2);
+  if (profil.temps === '15') nbEtirements += 2;
+  for (let k = 0, mis = 0; mis < nbEtirements && k < 30; k++) {
+    const liste = ETIREMENTS[ORDRE_ETIREMENTS[k % 3]];
+    if (ajouter(liste[(n * 2 + Math.floor(k / 3)) % liste.length])) mis++;
+  }
+
+  // 5. Retour au calme.
+  ajouter(profil.sommeilFaible ? 'respiration' : jour % 2 ? 'enfant' : 'calin-ours', 60);
+
+  if (!sautsPossibles && type !== 'gainage') pourToi.push(`Sans sauts pour protéger ${profil.douleur === 'dos' ? 'ton dos' : 'tes genoux'} : équilibre et pointes à la place.`);
+  if (profil.douleur === 'dos') pourToi.push('Sans Cobra, Chameau ni Superman : ton dos.');
+  if (profil.douleur === 'genoux') pourToi.push('Sans fentes ni postures à genoux : tes genoux.');
   if (profil.sommeilFaible) pourToi.push('Fais-la le soir : la respiration de la fin aide à t’endormir.');
-  if (profil.sport === 'doux' && n !== 1) pourToi.push('Rythme doux pour commencer : tu fais peu de sport.');
-  if (profil.sport === 'sportif' && n !== 1) pourToi.push('Un exercice de plus : tu es déjà sportif.');
-  if (profil.douleur === 'dos') pourToi.push('Sans sauts ni Cobra ni Chameau : ton dos.');
-  if (profil.douleur === 'genoux') pourToi.push('Sans fentes, sauts ni postures à genoux : tes genoux.');
+  if (profil.sport === 'doux') pourToi.push('Rythme plus doux pour commencer : tu fais peu de sport.');
+  if (profil.sport === 'sportif') pourToi.push('Un cran plus dur : tu es déjà sportif.');
 
-  const etapes = choisis.map(([id, s], i) => etape(id, s, i));
-  const texte = n === 1
-    ? 'Bienvenue au jour 1 de ton parcours. Au fil des jours, la séance devient un peu plus difficile.'
-    : JOURS_SAUTS.includes(jour) && !sauts ? TEXTES[jour === 3 ? 1 : 4] : TEXTES[jour - 1];
-  return { cle: cleJourParcours(n), titre: `Jour ${jour}`, sousTitre: `Niv. ${niveau}`, texte, etapes, pourToi, n, niveau, jour };
+  const etapes = choisis.map(([id, t], i) => etape(id, t, i));
+  const texte = type === 'sauts' && !sautsPossibles ? TEXTES.sansSauts : TEXTES[type];
+  return {
+    cle: cleJourParcours(n), titre: `Jour ${jour}`, sousTitre: `Niv. ${niveau}`,
+    texte: n === 1 ? `Bienvenue au jour 1 de ton parcours. ${texte}` : texte,
+    etapes, pourToi, n, niveau, jour,
+  };
 }
 
 /* ---------- La bibliothèque (l'onglet « Train » de Taller) ---------- */

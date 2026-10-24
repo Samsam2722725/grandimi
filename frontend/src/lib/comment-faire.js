@@ -290,6 +290,38 @@ export const COMMENT_FAIRE = {
     'Relâche et recommence. Ça muscle la voûte du pied.',
   ],
 
+  // Gainage et dos : les muscles qui tiennent la posture
+  planche: [
+    'Pose les avant-bras au sol, coudes sous les épaules, et tends les jambes derrière toi sur la pointe des pieds.',
+    'Ton corps forme une ligne droite de la tête aux talons. Serre le ventre et les fesses.',
+    'Ne laisse pas tomber le bassin ni monter les fesses. Respire normalement. Trop dur ? Pose les genoux.',
+  ],
+  'planche-cote': [
+    'Allonge-toi sur le côté droit, avant-bras au sol, coude sous l’épaule, jambes tendues l’une sur l’autre.',
+    'Monte le bassin : ton corps fait une ligne droite des pieds à la tête.',
+    'Tiens sans laisser le bassin retomber. Change de côté à la moitié. Trop dur ? Garde le genou du bas au sol.',
+  ],
+  pont: [
+    'Allonge-toi sur le dos, genoux pliés, pieds à plat écartés de la largeur des hanches.',
+    'Pousse dans les talons et monte le bassin jusqu’à aligner genoux, hanches et épaules.',
+    'Serre les fesses en haut, tiens 2 secondes, redescends lentement. Recommence.',
+  ],
+  superman: [
+    'Allonge-toi sur le ventre, bras tendus devant toi, front vers le sol.',
+    'Lève en même temps les bras, la poitrine et les jambes de quelques centimètres.',
+    'Regarde le sol, pas devant toi. Tiens 2 secondes, repose, recommence. Pas besoin de monter haut.',
+  ],
+  'bras-jambe': [
+    'Mets-toi à quatre pattes, mains sous les épaules, genoux sous les hanches, dos plat.',
+    'Tends en même temps le bras droit devant toi et la jambe gauche derrière toi.',
+    'Tiens 2 secondes sans bouger le bassin, puis change de côté. Comme si tu portais un verre d’eau sur le dos.',
+  ],
+  insecte: [
+    'Allonge-toi sur le dos, bras tendus vers le plafond, genoux pliés en l’air au-dessus des hanches.',
+    'Descends lentement le bras droit derrière ta tête et la jambe gauche vers le sol, sans les poser.',
+    'Le bas du dos reste collé au sol. Reviens au centre, puis change de côté.',
+  ],
+
   // Sauts
   masai: [
     'Debout, pieds joints, bras le long du corps.',
