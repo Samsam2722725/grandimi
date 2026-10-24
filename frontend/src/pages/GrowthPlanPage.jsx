@@ -528,10 +528,11 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
      l'onglet Taille. */
   const heuresSommeil = Number(plan.sleep?.hours) || 9;
   const ROUTINE = [
-    { key: 'routine-lait', etiquette: 'Nutrition', label: '1 verre de lait au petit-déjeuner', emoji: '🥛', corrige: 'ton calcium' },
+    { key: 'routine-petitdej', etiquette: 'Nutrition', label: 'Un vrai petit-déjeuner (œufs, lait ou yaourt)', emoji: '🍳' },
     { key: 'routine-proteines', etiquette: 'Nutrition', label: 'Des protéines à chaque repas', emoji: '🍗', corrige: 'tes protéines' },
-    { key: 'routine-laitages', etiquette: 'Nutrition', label: '3 produits laitiers dans la journée', emoji: '🧀', corrige: 'ton calcium' },
-    { key: 'routine-eau', etiquette: 'Nutrition', label: 'Boire 1,5 L d’eau', emoji: '💧' },
+    { key: 'routine-laitages', etiquette: 'Nutrition', label: '3 produits laitiers dans la journée', emoji: '🥛', corrige: 'ton calcium' },
+    // 60 min d'activité par jour : la recommandation de l'OMS pour les 5-17 ans.
+    { key: 'routine-bouger', etiquette: 'Sport', label: 'Bouger 1 h dans la journée (sport, marche, vélo)', emoji: '🏃', corrige: 'ton sport' },
     { key: 'routine-soleil', etiquette: 'Vitamine D', label: '20 min dehors en journée', emoji: '☀️' },
     { key: 'routine-posture', etiquette: 'Posture', label: 'Dos droit assis, debout toutes les heures', emoji: '🧍', corrige: 'ta posture' },
     { key: 'routine-ecrans', etiquette: 'Sommeil', label: 'Écrans coupés 45 min avant de dormir', emoji: '📵', corrige: 'ton téléphone au lit' },
