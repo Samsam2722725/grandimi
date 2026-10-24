@@ -4,6 +4,14 @@ import apiClient from '../lib/api';
 import { enregistrerPredictionServeur } from '../lib/prediction-serveur';
 import '../styles/auth-page.css';
 
+// Les réponses du questionnaire gardées sur le serveur. Un échec (réseau,
+// table pas encore créée) ne bloque pas la connexion : on reconstruit.
+const lireReponsesServeur = () =>
+  apiClient
+    .getQuestionnaire()
+    .then((res) => res?.donnees ?? null)
+    .catch(() => null);
+
 function AuthPage({ onAuthComplete }) {
   const [mode, setMode] = useState('login'); // login, signup, forgot
   const [email, setEmail] = useState('');
@@ -28,8 +36,11 @@ function AuthPage({ onAuthComplete }) {
 
         // Recharger la prédiction complète (âge, sexe, poids…) : sans elle,
         // le plan d'un abonné qui se reconnecte répondait « âge obligatoire ».
-        const predictions = await apiClient.getMyPredictions();
-        enregistrerPredictionServeur(predictions, email);
+        const [predictions, reponses] = await Promise.all([
+          apiClient.getMyPredictions(),
+          lireReponsesServeur(),
+        ]);
+        enregistrerPredictionServeur(predictions, email, reponses);
       } else if (mode === 'signup') {
         if (!email || !password) throw new Error('Email et mot de passe requis');
 
@@ -41,8 +52,11 @@ function AuthPage({ onAuthComplete }) {
         // Enfant dont le parent a payé depuis un autre téléphone : sans ce
         // rechargement, il atterrissait sur l'accueil au lieu de son plan.
         try {
-          const predictions = await apiClient.getMyPredictions();
-          enregistrerPredictionServeur(predictions, email);
+          const [predictions, reponses] = await Promise.all([
+            apiClient.getMyPredictions(),
+            lireReponsesServeur(),
+          ]);
+          enregistrerPredictionServeur(predictions, email, reponses);
         } catch {
           // Pas de prédiction lisible : l'accueil proposera le questionnaire.
         }

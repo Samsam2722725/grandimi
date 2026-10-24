@@ -63,9 +63,18 @@ export function predictionDepuisServeur(p, email) {
    prédiction complète de cette même adresse (celle du questionnaire, avec
    les réponses sur le sommeil, le sport, la puberté) : elle est plus riche
    que ce que la base peut rendre, on ne l'écrase pas. */
-export function enregistrerPredictionServeur(predictions, email) {
-  if (!Array.isArray(predictions) || predictions.length === 0) return null
+/* Les réponses du questionnaire (coucher, posture, protéines…) : c'est ce
+   qui distingue la prédiction d'origine d'une prédiction reconstruite
+   depuis la base. */
+export function aDesReponses(donnees) {
+  return Boolean(donnees && typeof donnees === 'object' && donnees.habitudes)
+}
 
+/* `reponses` : la prédiction d'origine, gardée sur le serveur (voir
+   migrations/011). Quand elle existe, elle passe avant la reconstruction :
+   sans elle, un abonné sur un autre téléphone retrouvait un plan
+   générique (« Tu as de bonnes bases ») au lieu du sien. */
+export function enregistrerPredictionServeur(predictions, email, reponses = null) {
   let existante = null
   try {
     existante = JSON.parse(localStorage.getItem('predictionData') || 'null')
@@ -76,9 +85,20 @@ export function enregistrerPredictionServeur(predictions, email) {
     existante &&
     existante.email &&
     String(existante.email).trim().toLowerCase() === String(email).trim().toLowerCase()
-  if (memeAdresse && existante.age && existante.sex && existante.predicted_height_cm) {
+  if (
+    memeAdresse && existante.age && existante.sex && existante.predicted_height_cm &&
+    (aDesReponses(existante) || !aDesReponses(reponses))
+  ) {
     return existante
   }
+
+  if (aDesReponses(reponses)) {
+    localStorage.setItem('predictionData', JSON.stringify(reponses))
+    localStorage.setItem('userEmail', email)
+    return reponses
+  }
+
+  if (!Array.isArray(predictions) || predictions.length === 0) return null
 
   const reconstruite = predictionDepuisServeur(predictions[0], email)
   localStorage.setItem('predictionData', JSON.stringify(reconstruite))

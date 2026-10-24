@@ -215,6 +215,21 @@ class APIClient {
     return this.request('/api/user/predictions');
   }
 
+  /**
+   * Les réponses du questionnaire, gardées sur le serveur pour suivre le
+   * compte sur un autre téléphone. `donnees` vaut null s'il n'y en a pas.
+   */
+  async getQuestionnaire() {
+    return this.request('/api/user/questionnaire');
+  }
+
+  async saveQuestionnaire(donnees) {
+    return this.request('/api/user/questionnaire', {
+      method: 'POST',
+      body: JSON.stringify({ donnees }),
+    });
+  }
+
   // ---------- Suivi de la taille ----------
 
   /** Enregistre une mesure (aujourd'hui) ; rend l'historique à jour. */
