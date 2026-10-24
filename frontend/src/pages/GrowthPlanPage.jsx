@@ -20,7 +20,6 @@ import { TailleAccueil } from '../components/ui/taille-accueil';
 import { RepasDuJour } from '../components/ui/repas';
 import { Reglages } from '../components/ui/reglages';
 import { genererCarteResultat, partagerCarte } from '../lib/share-card';
-import { LeconsPlan } from '../components/ui/lecons-plan';
 import { pointsFaibles } from '../lib/offres';
 import { capture } from '../lib/analytics';
 import {
@@ -711,16 +710,6 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
           </section>
         )}
 
-        {activeTab === 'guide' && (
-          <section className="tab-content">
-            <h1 className="app-titre">Ton guide</h1>
-            <LeconsPlan />
-            <p className="plan-contact">
-              Une question, un souci, une idée ? Écris-nous :{' '}
-              <a href="mailto:bonjour@grandimi.com?subject=Mon%20plan%20Grandimi">bonjour@grandimi.com</a>
-            </p>
-          </section>
-        )}
       </main>
 
       {seanceOuverte && (
@@ -761,7 +750,6 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
         <Reglages
           onFermer={() => setReglagesOuverts(false)}
           onMesure={() => { setReglagesOuverts(false); allerA('taille'); setTailleDetail(true); }}
-          onGuide={() => { setReglagesOuverts(false); allerA('guide'); }}
           onAbonnement={() => { setReglagesOuverts(false); onGoToAccount?.(); }}
           onDeconnexion={onLogout}
         />

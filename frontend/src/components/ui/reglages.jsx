@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { BookOpen, ChevronLeft, CreditCard, FileText, LineChart, LogOut, Mail, Ruler, Shield, X } from 'lucide-react';
+import { ChevronLeft, CreditCard, FileText, LineChart, LogOut, Mail, Ruler, Shield, X } from 'lucide-react';
 
 /* Les réglages, copiés de ceux de Taller (le bouton ⚙︎ en haut à droite) :
    mettre à jour ses données, le support, la méthode de prédiction, puis
-   confidentialité, conditions et déconnexion. On y ajoute le guide et
-   l'abonnement, qui chez nous ont leur page. */
+   confidentialité, conditions et déconnexion. On y ajoute
+   l'abonnement, qui chez nous a sa page. */
 
 function Methode() {
   return (
@@ -27,7 +27,7 @@ function Methode() {
   );
 }
 
-export function Reglages({ onFermer, onMesure, onGuide, onAbonnement, onDeconnexion }) {
+export function Reglages({ onFermer, onMesure, onAbonnement, onDeconnexion }) {
   const [page, setPage] = useState(null);
 
   useEffect(() => {
@@ -38,7 +38,6 @@ export function Reglages({ onFermer, onMesure, onGuide, onAbonnement, onDeconnex
 
   const LIGNES = [
     { Icone: Ruler, libelle: 'Mettre à jour ma taille', action: onMesure },
-    { Icone: BookOpen, libelle: 'Ton guide', action: onGuide },
     { Icone: Mail, libelle: 'Contacter le support', lien: 'mailto:bonjour@grandimi.com?subject=Mon%20plan%20Grandimi' },
     { Icone: LineChart, libelle: 'Méthode de prédiction de taille', action: () => setPage('methode') },
     { Icone: CreditCard, libelle: 'Mon abonnement', action: onAbonnement },
