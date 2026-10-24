@@ -52,6 +52,10 @@ export async function initAnalytics() {
     api_host: HOTE,
     capture_pageview: false,
     disable_session_recording: true,
+    // Les plantages du site chez les visiteurs remontent dans PostHog →
+    // Error tracking (message et écran, jamais le contenu des champs).
+    // Ajouté le 24/10/2026 : on ne voyait les pannes que par hasard.
+    capture_exceptions: true,
     persistence: 'localStorage+cookie',
   });
 
