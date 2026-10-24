@@ -61,6 +61,21 @@ var evenementsTunnel = map[string]bool{
 	"whop_erreur_paiement":   true,
 	"whop_etat":              true,
 	"whop_repli_redirection": true,
+	// Ajoutés le 15/10/2026 : envoyés par le site depuis des semaines mais
+	// absents d'ici, donc rejetés sans bruit (les stats affichaient 0).
+	"paiement_ferme_sans_payer":            true,
+	"refus_vers_parent":                    true,
+	"paiement_repris_apres_rechargement":   true,
+	"paiement_reessaye_apres_rechargement": true,
+	// L'app après paiement (GrowthPlanPage.jsx et ses composants).
+	"app_ouverte":      true,
+	"app_coche":        true,
+	"app_onglet":       true,
+	"seance_commencee": true,
+	"seance_terminee":  true,
+	"visite_finie":     true,
+	"montee_ouverte":   true,
+	"montee_en_gamme":  true,
 }
 
 const (
