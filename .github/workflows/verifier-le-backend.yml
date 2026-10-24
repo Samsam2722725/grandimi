@@ -44,7 +44,7 @@ jobs:
       # `go mod tidy` avant de construire. On reproduit la même séquence
       # pour tester ce qui sera réellement déployé.
       - name: Résoudre les dépendances
-        run: go mod tidy
+        run: go mod download && go mod verify
 
       - name: Compiler
         run: go build ./...
