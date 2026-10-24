@@ -325,3 +325,13 @@ button.parcours-rond { cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .seance-anneau-trait { transition: none; } }
 
 ol.fiche-consigne { padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+
+/* Préférences : au premier lancement (fenêtre) et dans ⚙︎. */
+.parcours-questions { position: fixed; inset: 0; z-index: 52; display: flex; align-items: flex-end; justify-content: center; background: rgba(0, 0, 0, 0.7); padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); }
+.parcours-questions-carte { width: 100%; max-width: 480px; padding: 20px; border-radius: 24px; background: #141414; border: 1px solid rgba(244, 239, 233, 0.08); }
+.parcours-questions .parcours-reglages-titre { font-family: 'Syne', sans-serif; font-size: 22px; }
+.reglages-preferences { padding: 0 20px 24px; }
+.fiche-pour-toi-ligne { margin: 10px 0 0; font-size: 13.5px; font-weight: 700; line-height: 1.4; color: #ff8a52; }
+
+.routine-detail { font-size: 13px; color: #8a847e; }
+.routine-corrige { margin-left: 8px; padding: 2px 7px; border-radius: 999px; background: rgba(239, 68, 68, 0.14); color: #f87171; font-size: 10.5px; letter-spacing: 0.04em; }

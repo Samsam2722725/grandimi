@@ -32,6 +32,7 @@ import {
   JOURS_PAR_NIVEAU,
   NB_JOURS_PARCOURS,
   Parcours,
+  PreferencesParcours,
   Seances,
   cleJourParcours,
   cleLibre,
@@ -520,8 +521,25 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
 
   // Routine : 3 jours avant, aujourd'hui, 3 jours après (comme Taller).
   const semaineRoutine = Array.from({ length: 7 }, (_, i) => dateDuJour(i - 3));
-  const nbRoutine = tachesDuJour.length + 1;
-  const faitesRoutine = nbFaites + (aujourdhuiFait ? 1 : 0);
+  /* La routine du jour, comme « Routine quotidienne » de Taller : la séance
+     (« va faire ta séance »), puis les bons gestes pour grandir. Pas de
+     compléments (public mineur). Les gestes qui corrigent un de SES points
+     faibles portent « À corriger » : ce sont les « points à corriger » de
+     l'onglet Taille. */
+  const heuresSommeil = Number(plan.sleep?.hours) || 9;
+  const ROUTINE = [
+    { key: 'routine-lait', etiquette: 'Nutrition', label: '1 verre de lait au petit-déjeuner', emoji: '🥛', corrige: 'ton calcium' },
+    { key: 'routine-proteines', etiquette: 'Nutrition', label: 'Des protéines à chaque repas', emoji: '🍗', corrige: 'tes protéines' },
+    { key: 'routine-laitages', etiquette: 'Nutrition', label: '3 produits laitiers dans la journée', emoji: '🧀', corrige: 'ton calcium' },
+    { key: 'routine-eau', etiquette: 'Nutrition', label: 'Boire 1,5 L d’eau', emoji: '💧' },
+    { key: 'routine-soleil', etiquette: 'Vitamine D', label: '20 min dehors en journée', emoji: '☀️' },
+    { key: 'routine-posture', etiquette: 'Posture', label: 'Dos droit assis, debout toutes les heures', emoji: '🧍', corrige: 'ta posture' },
+    { key: 'routine-ecrans', etiquette: 'Sommeil', label: 'Écrans coupés 45 min avant de dormir', emoji: '📵', corrige: 'ton téléphone au lit' },
+    { key: 'routine-coucher', etiquette: 'Sommeil', label: plan.sleep?.bedtime ? `Au lit à ${plan.sleep.bedtime}` : 'Au lit à la même heure chaque soir', emoji: '🛏️', corrige: 'ton heure de coucher' },
+    { key: 'routine-dormir', etiquette: 'Sommeil', label: `Dormir ${heuresSommeil} heures et plus`, emoji: '😴', corrige: 'ton sommeil' },
+  ];
+  const nbRoutine = ROUTINE.length + 1;
+  const faitesRoutine = ROUTINE.filter((t) => completedKeys.has(t.key)).length + (aujourdhuiFait ? 1 : 0);
 
   return (
     <div className="night growth-plan-page app-plan">
@@ -625,7 +643,8 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                 onOuvrirJour={ouvrirJour}
                 profil={profil}
                 prefs={prefs}
-                prefsConnues={Boolean(prefs.temps || prefs.douleur)}
+                // Tant que le carnet n'est pas lu, on ne sait pas : pas de question.
+                prefsConnues={!carnetLu || Boolean(prefs.temps || prefs.douleur || prefs.regime)}
                 onPref={changerPref}
               />
             )}
@@ -642,7 +661,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
             )}
 
             {sousOnglet === 'nutrition' && (
-              <RepasDuJour plan={plan} prediction={predictionData} regime={prefs.regime || 'tout'} onRegime={(v) => changerPref('regime', v)} />
+              <RepasDuJour plan={plan} prediction={predictionData} regime={prefs.regime || 'tout'} />
             )}
           </section>
         )}
@@ -686,21 +705,26 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                   <span className="routine-rond" aria-hidden="true">{aujourdhuiFait ? '✓' : ''}</span>
                   <span className="routine-textes">
                     <span className="routine-etiquette">Exercice</span>
-                    <span className="routine-libelle">
-                      Séance du jour {jourDansNiveau(jourAccueil)} · niveau {niveauDuJour(jourAccueil)} · {Math.round(dureeSecondes(seanceDuParcours(jourAccueil, profil).etapes) / 60)} min <span aria-hidden="true">🏋️</span>
+                    <span className="routine-libelle">Ta séance du jour <span aria-hidden="true">🏋️</span></span>
+                    <span className="routine-detail">
+                      Jour {jourDansNiveau(jourAccueil)} · niveau {niveauDuJour(jourAccueil)} · {Math.round(dureeSecondes(seanceDuParcours(jourAccueil, profil).etapes) / 60)} min
                     </span>
                   </span>
                 </button>
               </li>
-              {tachesDuJour.map((tache) => {
+              {ROUTINE.map((tache) => {
                 const fait = completedKeys.has(tache.key);
+                const aCorriger = tache.corrige && faibles.includes(tache.corrige);
                 return (
                   <li key={tache.key}>
                     <button type="button" className={`routine-item ${fait ? 'fait' : ''}`} onClick={() => basculerTache(tache.key)} aria-pressed={fait}>
                       <span className="routine-rond" aria-hidden="true">{fait ? '✓' : ''}</span>
                       <span className="routine-textes">
-                        <span className="routine-etiquette">{ETIQUETTE[domaineDe(tache)]}</span>
-                        <span className="routine-libelle">{tache.label} <span aria-hidden="true">{emojiTache(tache.label)}</span></span>
+                        <span className="routine-etiquette">
+                          {tache.etiquette}
+                          {aCorriger && <span className="routine-corrige">À corriger</span>}
+                        </span>
+                        <span className="routine-libelle">{tache.label} <span aria-hidden="true">{tache.emoji}</span></span>
                       </span>
                     </button>
                   </li>
@@ -752,6 +776,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
           onMesure={() => { setReglagesOuverts(false); allerA('taille'); setTailleDetail(true); }}
           onAbonnement={() => { setReglagesOuverts(false); onGoToAccount?.(); }}
           onDeconnexion={onLogout}
+          preferences={<PreferencesParcours prefs={prefs} onPref={changerPref} />}
         />
       )}
 

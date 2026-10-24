@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Check, Lock, Minus, Plus, Trophy, X } from 'lucide-react';
 
 import { COMMENT_FAIRE } from '@/lib/comment-faire';
+import { REGIMES } from '@/lib/menus';
 
 /* Le parcours, copié de Taller (onglets « Physique » et « Train ») :
    - 16 niveaux de 7 jours, un rond par jour relié aux autres, un trophée au
@@ -455,13 +456,7 @@ export function FicheSeance({ seance, faite, ouverte, onFermer, onCommencer }) {
       <div className="fiche-defile">
         <p className="fiche-meta">{formatDuree(total).toUpperCase()} · {seance.etapes.filter((e) => !e.repos).length} EXERCICES</p>
         <p className="fiche-texte">{seance.texte}</p>
-        {seance.pourToi.length > 0 && (
-          <div className="fiche-pour-toi">
-            <p className="fiche-pour-toi-titre">Adapté à toi</p>
-            <ul>{seance.pourToi.map((p) => <li key={p}>{p}</li>)}</ul>
-          </div>
-        )}
-        <p className="fiche-astuce">Touche un exercice pour voir comment le faire.</p>
+        {seance.pourToi.length > 0 && <p className="fiche-pour-toi-ligne">{seance.pourToi.join(' · ')}</p>}
         <ul className="fiche-liste">
           {seance.etapes.map((e, i) => (
             <li key={e.id} className="fiche-ligne">
@@ -478,7 +473,6 @@ export function FicheSeance({ seance, faite, ouverte, onFermer, onCommencer }) {
             </li>
           ))}
         </ul>
-        <p className="fiche-securite">Ça tire, ça ne fait pas mal. Si tu as mal, arrête l’exercice et passe au suivant.</p>
       </div>
       <div className="fiche-bas">
         {ouverte || faite ? (
@@ -495,11 +489,16 @@ export function FicheSeance({ seance, faite, ouverte, onFermer, onCommencer }) {
 
 /* ---------- Les réglages du parcours ---------- */
 
-function Reglages({ prefs, onPref, onFermer }) {
+const QUESTIONS = {
+  ...REGLAGES,
+  regime: { question: 'Ce que tu manges', choix: REGIMES, defaut: 'tout' },
+};
+
+export function PreferencesParcours({ prefs, onPref, onValider, titre }) {
   return (
-    <div className="app-carte parcours-reglages">
-      <p className="parcours-reglages-titre">Adapte ton parcours</p>
-      {Object.entries(REGLAGES).map(([groupe, { question, choix, defaut }]) => (
+    <div className="parcours-reglages">
+      {titre && <p className="parcours-reglages-titre">{titre}</p>}
+      {Object.entries(QUESTIONS).map(([groupe, { question, choix, defaut }]) => (
         <fieldset key={groupe} className="parcours-reglage">
           <legend>{question}</legend>
           <div className="parcours-choix">
@@ -514,7 +513,19 @@ function Reglages({ prefs, onPref, onFermer }) {
           </div>
         </fieldset>
       ))}
-      <button type="button" className="parcours-reglages-ok" onClick={onFermer}>C’est bon</button>
+      {onValider && (
+        <button
+          type="button"
+          className="parcours-reglages-ok"
+          onClick={() => {
+            // Noter aussi les réponses laissées par défaut : la question ne revient plus.
+            for (const [groupe, { defaut }] of Object.entries(QUESTIONS)) if (!prefs[groupe]) onPref(groupe, defaut);
+            onValider();
+          }}
+        >
+          C’est bon
+        </button>
+      )}
     </div>
   );
 }
@@ -538,10 +549,16 @@ const TRAITS = [
 ];
 
 export function Parcours({ joursFaits, aujourdhuiFait, onOuvrirJour, profil, prefs, prefsConnues, onPref }) {
-  const { prochain, ouvert, fini, faits } = etatParcours(joursFaits, aujourdhuiFait);
+  const { prochain, ouvert, fini } = etatParcours(joursFaits, aujourdhuiFait);
   const niveauCourant = niveauDuJour(prochain);
   const refCourant = useRef(null);
-  const [reglagesOuverts, setReglagesOuverts] = useState(!prefsConnues);
+  /* La fenêtre de questions s'ouvre une fois si ses préférences sont
+     inconnues, et reste ouverte jusqu'à « C'est bon » (la première réponse
+     les rend connues : sans ce verrou, elle se refermait aussitôt). */
+  const [questions, setQuestions] = useState(null);
+  useEffect(() => {
+    if (!prefsConnues && questions === null) setQuestions(true);
+  }, [prefsConnues, questions]);
 
   // À l'ouverture, on amène le niveau en cours à l'écran.
   useEffect(() => {
@@ -550,19 +567,13 @@ export function Parcours({ joursFaits, aujourdhuiFait, onOuvrirJour, profil, pre
 
   return (
     <div className="parcours">
-      <div className="parcours-tete">
-        <div>
-          <p className="parcours-tete-libelle">Ton parcours</p>
-          <p className="parcours-tete-chiffre">{fini ? 'Terminé 🏆' : `Niveau ${niveauCourant} · Jour ${jourDansNiveau(prochain)}`}</p>
+      {questions === true && (
+        <div className="parcours-questions" role="dialog" aria-modal="true" aria-label="Adapte ton parcours">
+          <div className="parcours-questions-carte">
+            <PreferencesParcours prefs={prefs} onPref={onPref} onValider={() => setQuestions(false)} titre="Avant de commencer" />
+          </div>
         </div>
-        <button type="button" className="parcours-tete-reglages" onClick={() => setReglagesOuverts((o) => !o)} aria-expanded={reglagesOuverts}>
-          Réglages
-        </button>
-      </div>
-      <span className="parcours-hero-barre" aria-hidden="true"><span style={{ width: `${(faits / NB_JOURS_PARCOURS) * 100}%` }} /></span>
-      <span className="parcours-hero-pct">Progression {Math.round((faits / NB_JOURS_PARCOURS) * 100)} %</span>
-
-      {reglagesOuverts && <Reglages prefs={prefs} onPref={onPref} onFermer={() => setReglagesOuverts(false)} />}
+      )}
 
       {Array.from({ length: NB_NIVEAUX }, (_, k) => k + 1).map((niveau) => {
         const premier = (niveau - 1) * JOURS_PAR_NIVEAU + 1;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { REGIMES, heuresRepas, numeroDuJour, repasDuJour } from '@/lib/menus';
+import { heuresRepas, numeroDuJour, repasDuJour } from '@/lib/menus';
 
 /* « Tes repas ! », copié de l'onglet Nutrition de Taller : les repas du
    jour avec protéines, glucides et lipides, une note sur 10, et la recette
@@ -19,7 +19,8 @@ const MACROS = [
   { cle: 'l', nom: 'Lipides', couleur: '#ff8a52' },
 ];
 
-export function RepasDuJour({ plan, prediction, regime = 'tout', onRegime }) {
+// Le régime se choisit au premier lancement et dans ⚙︎ (Mes préférences).
+export function RepasDuJour({ plan, prediction, regime = 'tout' }) {
   const [ouverts, setOuverts] = useState(() => new Set());
   const basculer = (id) => setOuverts((o) => {
     const suivant = new Set(o);
@@ -51,13 +52,6 @@ export function RepasDuJour({ plan, prediction, regime = 'tout', onRegime }) {
         </span>
       </p>
 
-      <div className="repas-regimes" role="group" aria-label="Ce que tu manges">
-        {REGIMES.map(([valeur, libelle]) => (
-          <button key={valeur} type="button" className={`repas-regime ${regime === valeur ? 'actif' : ''}`} aria-pressed={regime === valeur} onClick={() => onRegime?.(valeur)}>
-            {libelle}
-          </button>
-        ))}
-      </div>
 
       {repas.map((r) => {
         const ouvert = ouverts.has(r.id);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ChevronLeft, CreditCard, FileText, LineChart, LogOut, Mail, Ruler, Shield, X } from 'lucide-react';
+import { ChevronLeft, CreditCard, FileText, LineChart, LogOut, Mail, Ruler, Shield, SlidersHorizontal, X } from 'lucide-react';
 
 /* Les réglages, copiés de ceux de Taller (le bouton ⚙︎ en haut à droite) :
    mettre à jour ses données, le support, la méthode de prédiction, puis
@@ -27,7 +27,7 @@ function Methode() {
   );
 }
 
-export function Reglages({ onFermer, onMesure, onAbonnement, onDeconnexion }) {
+export function Reglages({ onFermer, onMesure, onAbonnement, onDeconnexion, preferences }) {
   const [page, setPage] = useState(null);
 
   useEffect(() => {
@@ -38,6 +38,7 @@ export function Reglages({ onFermer, onMesure, onAbonnement, onDeconnexion }) {
 
   const LIGNES = [
     { Icone: Ruler, libelle: 'Mettre à jour ma taille', action: onMesure },
+    { Icone: SlidersHorizontal, libelle: 'Mes préférences', action: () => setPage('preferences') },
     { Icone: Mail, libelle: 'Contacter le support', lien: 'mailto:bonjour@grandimi.com?subject=Mon%20plan%20Grandimi' },
     { Icone: LineChart, libelle: 'Méthode de prédiction de taille', action: () => setPage('methode') },
     { Icone: CreditCard, libelle: 'Mon abonnement', action: onAbonnement },
@@ -51,13 +52,13 @@ export function Reglages({ onFermer, onMesure, onAbonnement, onDeconnexion }) {
             <ChevronLeft size={22} aria-hidden="true" />
           </button>
         ) : <span />}
-        <h2 className="reglages-titre">{page ? 'Notre méthode' : 'Réglages'}</h2>
+        <h2 className="reglages-titre">{page === 'methode' ? 'Notre méthode' : page === 'preferences' ? 'Mes préférences' : 'Réglages'}</h2>
         <button type="button" className="reglages-bouton-rond" onClick={onFermer} aria-label="Fermer">
           <X size={22} aria-hidden="true" />
         </button>
       </div>
 
-      {page === 'methode' ? <Methode /> : (
+      {page === 'methode' ? <Methode /> : page === 'preferences' ? <div className="reglages-preferences">{preferences}</div> : (
         <>
           <ul className="reglages-liste">
             {LIGNES.map(({ Icone, libelle, action, lien }) => (
