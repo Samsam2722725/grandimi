@@ -157,6 +157,17 @@ func metadataTexte(metadata map[string]interface{}, cle string) string {
    payeur, qui n'est pas celle saisie sur Grandimi. Le client payait
    et se connectait sur un compte resté gratuit. */
 func resoudreBeneficiaire(payload WhopWebhookPayload) (*db.User, error) {
+	/* Un abonnement deja connu appartient au compte qui le porte : la
+	   reclamation l'y a mis, et c'est la seule source sure. Sans ce
+	   cas, la fin d'abonnement visait le compte de l'e-mail Whop et le
+	   vrai compte gardait l'acces pour toujours (reproduit en local le
+	   24/10/2026). */
+	if id, err := db.ProprietaireAbonnement(payload.Data.ID); err == nil && id != "" {
+		if proprietaire, err := db.GetUserByID(id); err == nil && proprietaire != nil {
+			return proprietaire, nil
+		}
+	}
+
 	if id := metadataTexte(payload.Data.Metadata, "child_user_id"); id != "" {
 		enfant, err := db.GetUserByID(id)
 		if err == nil && enfant != nil {
@@ -173,6 +184,15 @@ func resoudreBeneficiaire(payload WhopWebhookPayload) (*db.User, error) {
 			return acheteur, nil
 		}
 		fmt.Printf("[whop] grandimi_user_id %q introuvable, repli sur l'email du compte Whop: %v\n", id, err)
+	}
+
+	/* Le client est parfois revenu sur le site, et a reclame son
+	   paiement, avant que ce webhook n'arrive : le compte qui vient de
+	   le reclamer est le bon, pas celui de l'e-mail Whop. */
+	if id, err := db.CompteAyantReclame(payload.Data.User.ID); err == nil && id != "" {
+		if acheteur, err := db.GetUserByID(id); err == nil && acheteur != nil {
+			return acheteur, nil
+		}
 	}
 
 	/* Dernier recours. Cette adresse est celle du COMPTE WHOP, pas

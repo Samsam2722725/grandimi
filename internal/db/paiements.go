@@ -37,6 +37,34 @@ type ResultatReclamation struct {
 	DejaAuMemeCompte bool
 	// Motif, quand rien n'a ete accorde.
 	Motif string
+	// L'abonnement Whop rattache a ce compte par la reclamation, et son
+	// offre : sert a arreter le 1 mois lors d'une montee en gamme.
+	AbonnementDeplace string
+	PlanAbonnement    string
+}
+
+/* CompteAyantReclame : le compte qui vient de reclamer un paiement de ce
+   client Whop. Le client revient parfois avant le webhook
+   membership.activated : sans ce lien, l abonnement arrivait apres coup
+   sur le compte de l e-mail Whop, et « Mon compte » comme la fin
+   d abonnement visaient le mauvais compte. Renvoie "" si aucun. */
+func CompteAyantReclame(whopUserID string) (string, error) {
+	if whopUserID == "" {
+		return "", nil
+	}
+	var id string
+	err := DB.QueryRowContext(context.Background(),
+		`SELECT user_id::text
+		   FROM paiements_whop
+		  WHERE whop_user_id = $1
+		    AND user_id IS NOT NULL
+		    AND reclame_at >= now() - interval '10 minutes'
+		  ORDER BY reclame_at DESC
+		  LIMIT 1`, whopUserID).Scan(&id)
+	if err == sql.ErrNoRows {
+		return "", nil
+	}
+	return id, err
 }
 
 /* ReclamerPaiement rattache un paiement a un compte Grandimi.
@@ -153,19 +181,60 @@ func ReclamerPaiement(paymentID, userID string) (ResultatReclamation, error) {
 	   bon, mais la marge est trop mince pour en faire une regle. Si
 	   l'ordre s'inverse, une borne stricte ne deplacerait rien du tout
 	   et le parcours parent casserait en silence. */
+	/* OU CHERCHER L ABONNEMENT. Le webhook membership.activated le pose
+	   sur le compte de l e-mail Whop, qui ne porte pas toujours
+	   whop_customer_id : au deuxieme achat avec le meme compte Whop, un
+	   autre compte le detient deja (index unique). On le retrouve donc
+	   aussi par le journal des webhooks, qui garde l identifiant Whop du
+	   payeur avec celui de l abonnement.
+
+	   Mesure en local le 24/10/2026 : sans ce second chemin, le 3 mois
+	   d une montee en gamme n etait jamais rattache, et le 1 mois jamais
+	   arrete. */
+	var abonnementDeplace, ancienProprietaire, planDeplace sql.NullString
 	if whopUserID != "" {
-		if _, err := tx.ExecContext(context.Background(),
-			`UPDATE subscriptions
+		err := tx.QueryRowContext(context.Background(),
+			`WITH cible AS (
+			      SELECT s.id, s.user_id
+			        FROM subscriptions s
+			       WHERE s.created_at >= ($3 AT TIME ZONE 'UTC') - interval '5 minutes'
+			         AND (s.user_id IN (SELECT id FROM users WHERE whop_customer_id = $1)
+			              OR s.whop_subscription_id IN (
+			                   SELECT payload::jsonb -> 'data' ->> 'id'
+			                     FROM webhook_logs
+			                    WHERE event_type = 'membership.activated'
+			                      AND created_at >= $3::timestamptz - interval '1 day'
+			                      AND payload::jsonb -> 'data' -> 'user' ->> 'id' = $1))
+			       ORDER BY s.created_at DESC
+			       LIMIT 1)
+			 UPDATE subscriptions s
 			    SET user_id = $2
-			  WHERE id = (
-			        SELECT s.id
-			          FROM subscriptions s
-			          JOIN users u ON u.id = s.user_id
-			         WHERE u.whop_customer_id = $1
-			           AND s.created_at >= ($3 AT TIME ZONE 'UTC') - interval '5 minutes'
-			         ORDER BY s.created_at DESC
-			         LIMIT 1)`,
-			whopUserID, userID, paiementCreeLe); err != nil {
+			   FROM cible
+			  WHERE s.id = cible.id
+			  RETURNING s.whop_subscription_id, cible.user_id::text, s.plan_type`,
+			whopUserID, userID, paiementCreeLe,
+		).Scan(&abonnementDeplace, &ancienProprietaire, &planDeplace)
+		if err != nil && err != sql.ErrNoRows {
+			return ResultatReclamation{}, err
+		}
+
+		/* L ancien compte ne perd l acces que s il ne lui reste aucun
+		   abonnement actif.
+
+		   La version precedente le retirait a tout compte portant cet
+		   identifiant Whop. Un parent qui paie pour un second enfant, ou
+		   un client qui rachete depuis le meme compte Whop, coupait ainsi
+		   l acces deja paye du premier compte. Reproduit en local le
+		   24/10/2026 (scenario « 2e achat, meme compte Whop »). */
+		if _, err := tx.ExecContext(context.Background(),
+			`UPDATE users u
+			    SET is_premium = false
+			  WHERE u.id <> $2
+			    AND (u.whop_customer_id = $1 OR u.id::text = $3)
+			    AND NOT EXISTS (
+			          SELECT 1 FROM subscriptions s
+			           WHERE s.user_id = u.id AND s.status = 'active')`,
+			whopUserID, userID, ancienProprietaire.String); err != nil {
 			return ResultatReclamation{}, err
 		}
 
@@ -185,8 +254,7 @@ func ReclamerPaiement(paymentID, userID string) (ResultatReclamation, error) {
 		   qu on veut. Les lectures font deja COALESCE (selectUserSQL). */
 		if _, err := tx.ExecContext(context.Background(),
 			`UPDATE users
-			    SET is_premium = false,
-			        whop_customer_id = NULL
+			    SET whop_customer_id = NULL
 			  WHERE whop_customer_id = $1
 			    AND id <> $2`,
 			whopUserID, userID); err != nil {
@@ -206,5 +274,9 @@ func ReclamerPaiement(paymentID, userID string) (ResultatReclamation, error) {
 	if err := tx.Commit(); err != nil {
 		return ResultatReclamation{}, err
 	}
-	return ResultatReclamation{Accorde: true}, nil
+	return ResultatReclamation{
+		Accorde:           true,
+		AbonnementDeplace: abonnementDeplace.String,
+		PlanAbonnement:    planDeplace.String,
+	}, nil
 }
