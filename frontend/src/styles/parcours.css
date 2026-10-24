@@ -1,0 +1,101 @@
+/* Le parcours : 16 niveaux de 7 jours (copié de l'onglet « Physique » de
+   Taller), aux couleurs de Grandimi. */
+
+/* ---------- La carte de l'accueil ---------- */
+.app-parcours-carte { margin: 4px 0 24px; }
+.app-parcours-carte .app-cta { margin: 14px 0 0; }
+.app-parcours-tete { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 14px; }
+.app-parcours-niveau { color: #f4efe9; }
+.app-parcours-jour { color: #ff8a52; }
+.app-parcours-points { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 12px 0 14px; }
+.app-parcours-points span { height: 6px; border-radius: 999px; background: #2a2725; }
+.app-parcours-points span.fait { background: #ff6a2b; }
+.app-parcours-points span.courant { background: repeating-linear-gradient(90deg, #ff6a2b 0 6px, transparent 6px 10px); }
+.app-parcours-titre { margin: 0; font-size: 17px; line-height: 1.3; }
+
+/* ---------- L'écran du parcours ---------- */
+.parcours { padding-bottom: 8px; }
+.parcours-hero {
+  position: relative; overflow: hidden; display: grid; gap: 4px; padding: 22px 18px 18px; border-radius: 22px;
+  background: radial-gradient(120% 140% at 100% 0%, rgba(255, 106, 43, 0.55), rgba(255, 106, 43, 0) 60%), #1a1311;
+  border: 1px solid rgba(255, 106, 43, 0.25);
+}
+.parcours-hero-chiffre { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 56px; line-height: 1; letter-spacing: -0.04em; color: #f4efe9; }
+.parcours-hero-libelle { font-weight: 700; color: #f4efe9; font-size: 16px; }
+.parcours-hero-barre { display: block; height: 8px; margin-top: 12px; border-radius: 999px; background: rgba(244, 239, 233, 0.12); overflow: hidden; }
+.parcours-hero-barre span { display: block; height: 100%; border-radius: inherit; background: #ff6a2b; }
+.parcours-hero-pct { font-size: 13px; font-weight: 700; color: #c9c3bd; }
+
+.parcours-niveau { margin-top: 30px; scroll-margin-top: 90px; }
+.parcours-niveau.a-venir { opacity: 0.55; }
+.parcours-niveau-tete { display: flex; justify-content: space-between; align-items: baseline; }
+.parcours-niveau-tete h3 { margin: 0; font-size: 21px; font-weight: 800; color: #f4efe9; letter-spacing: -0.01em; }
+.parcours-compte { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: #f4efe9; }
+.parcours-barre { display: block; height: 7px; margin: 12px 0 22px; border-radius: 999px; background: #232120; overflow: hidden; }
+.parcours-barre span { display: block; height: 100%; border-radius: inherit; background: #ff6a2b; transition: width 0.4s ease; }
+
+/* 4 ronds en haut, on descend à droite, 3 ronds et le trophée en bas. Les
+   traits passent derrière les ronds, au centre de chaque colonne. */
+.parcours-chemin {
+  --rond: 66px; --ecart: 26px;
+  position: relative; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: var(--rond) var(--rond);
+  row-gap: var(--ecart); justify-items: center;
+}
+.parcours-trait { position: absolute; background: #1c1a19; }
+.parcours-trait.fait { background: #ff6a2b; }
+.parcours-rond {
+  position: relative; z-index: 1; width: var(--rond); height: var(--rond); border-radius: 999px; border: 0;
+  display: inline-flex; align-items: center; justify-content: center; padding: 0;
+  background: #1c1a19; color: #6f6964; font-weight: 700; font-size: 13.5px; font-family: inherit;
+}
+button.parcours-rond { cursor: pointer; }
+.parcours-rond:disabled { cursor: default; }
+.parcours-rond.fait { background: #ff6a2b; color: #0b0b0c; }
+.parcours-rond.courant {
+  color: #f4efe9; outline: 3px dashed #ff6a2b; outline-offset: -3px;
+  animation: parcours-pouls 2s ease-in-out infinite;
+}
+.parcours-rond.demain { color: #a39d97; outline: 2px dashed #4a4542; outline-offset: -2px; }
+.parcours-rond:focus-visible { outline: 3px solid #f4efe9; outline-offset: 3px; }
+.parcours-rond span { font-size: 26px; }
+.parcours-trophee { color: #4a4542; }
+.parcours-trophee.gagne { background: linear-gradient(160deg, #ffd36b, #ff9a3c); color: #3a1d06; }
+@keyframes parcours-pouls {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 106, 43, 0); }
+  50% { box-shadow: 0 0 0 8px rgba(255, 106, 43, 0.22); }
+}
+.parcours-suite { margin: 34px 0 6px; text-align: center; font-weight: 700; color: #c9c3bd; }
+
+/* ---------- La fiche d'un jour, avant de commencer ---------- */
+.fiche {
+  position: fixed; inset: 0; z-index: 55; display: flex; flex-direction: column; background: #0a0a0a; color: #f4efe9;
+  padding-top: env(safe-area-inset-top);
+}
+.fiche-haut { display: grid; grid-template-columns: 56px 1fr 56px; align-items: center; padding: 10px 12px; border-bottom: 1px solid #1f1d1c; }
+.fiche-fermer { width: 44px; height: 44px; border-radius: 999px; border: 0; background: none; color: #f4efe9; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.fiche-titre { margin: 0; text-align: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; }
+.fiche-niveau { justify-self: end; font-size: 12px; font-weight: 800; color: #ff8a52; }
+.fiche-defile { flex: 1; overflow-y: auto; width: 100%; max-width: 560px; margin: 0 auto; padding: 18px 16px 130px; box-sizing: border-box; }
+.fiche-meta { margin: 0; font-size: 13.5px; font-weight: 800; letter-spacing: 0.04em; color: #8a847e; }
+.fiche-texte { margin: 8px 0 0; padding-bottom: 18px; border-bottom: 1px solid #1f1d1c; font-size: 16px; line-height: 1.45; color: #e6e0da; }
+.fiche-liste { list-style: none; margin: 8px 0 0; padding: 0; }
+.fiche-ligne { display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 10px; padding: 10px 0; }
+.fiche-exo { display: flex; align-items: center; gap: 14px; min-width: 0; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.fiche-rond { flex-shrink: 0; width: 54px; height: 54px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 27px; }
+.fiche-nom { font-weight: 700; font-size: 16px; line-height: 1.25; color: #f4efe9; }
+.fiche-reglage { display: inline-flex; align-items: center; gap: 6px; }
+.fiche-reglage button { width: 36px; height: 36px; border-radius: 999px; border: 0; background: #1f1d1c; color: #f4efe9; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.fiche-temps { min-width: 40px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+.fiche-consigne { grid-column: 1 / -1; margin: 10px 0 2px 68px; font-size: 14.5px; line-height: 1.45; color: #c9c3bd; }
+.fiche-bas {
+  position: fixed; left: 0; right: 0; bottom: 0; padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, #0a0a0a 70%, rgba(10, 10, 10, 0));
+}
+.fiche-go { display: block; max-width: 528px; margin: 0 auto; }
+.fiche-ferme { display: flex; align-items: center; justify-content: center; gap: 8px; max-width: 528px; margin: 0 auto; min-height: 56px; border-radius: 999px; background: #1a1817; color: #a39d97; font-weight: 700; }
+
+/* L'exercice en cours, dans son rond de couleur. */
+.seance-emoji--rond { width: 112px; height: 112px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 58px; }
+
+@media (max-width: 360px) { .parcours-chemin { --rond: 58px; } .parcours-rond { font-size: 12px; } }
+@media (prefers-reduced-motion: reduce) { .parcours-rond.courant { animation: none; } .parcours-barre span { transition: none; } }

@@ -41,8 +41,10 @@ export function dureeSeanceMin(mois = 1) {
   return Math.round(seanceDuMois(mois).reduce((t, m) => t + m.s, 0) / 60);
 }
 
-export function SeanceGuidee({ mois = 1, onFermer, onTerminee }) {
-  const etapes = seanceDuMois(mois);
+/* `etapes` : la séance du parcours (avec les durées réglées sur la fiche) ;
+   sans elle, la séance du mois d'avant. `fin` : le texte de l'écran final. */
+export function SeanceGuidee({ mois = 1, etapes: etapesDonnees, titre = 'Séance du jour', fin, onFermer, onTerminee }) {
+  const [etapes] = useState(() => etapesDonnees || seanceDuMois(mois));
   const [index, setIndex] = useState(0);
   const [reste, setReste] = useState(etapes[0].s);
   const [enPause, setEnPause] = useState(false);
@@ -80,9 +82,9 @@ export function SeanceGuidee({ mois = 1, onFermer, onTerminee }) {
   const circonference = 2 * Math.PI * rayon;
 
   return (
-    <div className="seance" role="dialog" aria-label="Séance du jour">
+    <div className="seance" role="dialog" aria-label={titre}>
       <div className="seance-haut">
-        <span className="seance-etape">{finie ? 'Terminé' : `${index + 1} / ${etapes.length}`}</span>
+        <span className="seance-etape">{finie ? 'Terminé' : `${titre} · ${index + 1} / ${etapes.length}`}</span>
         <button type="button" className="seance-fermer" onClick={onFermer} aria-label="Fermer la séance">
           <X size={22} aria-hidden="true" />
         </button>
@@ -91,15 +93,15 @@ export function SeanceGuidee({ mois = 1, onFermer, onTerminee }) {
 
       {finie ? (
         <div className="seance-fin">
-          <p className="seance-emoji" aria-hidden="true">🔥</p>
-          <h2>Séance terminée</h2>
-          <p>Bien joué. Ta posture et ta colonne te disent merci. Reviens demain pour garder ta série.</p>
+          <p className="seance-emoji" aria-hidden="true">{fin?.emoji || '🔥'}</p>
+          <h2>{fin?.titre || 'Séance terminée'}</h2>
+          <p>{fin?.texte || 'Bien joué. Ta posture et ta colonne te disent merci. Reviens demain pour garder ta série.'}</p>
           <button type="button" className="funnel-cta" onClick={onFermer}>Retour à mon plan</button>
         </div>
       ) : (
         <>
           <div className="seance-centre">
-            <p className="seance-emoji" aria-hidden="true">{etape.emoji}</p>
+            <p className={`seance-emoji ${etape.fond ? 'seance-emoji--rond' : ''}`} style={etape.fond ? { background: etape.fond } : undefined} aria-hidden="true">{etape.emoji}</p>
             <h2 className="seance-nom">{etape.nom}</h2>
             <p className="seance-consigne">{etape.consigne}</p>
             <div className="seance-minuteur">
@@ -133,11 +135,14 @@ export function SeanceGuidee({ mois = 1, onFermer, onTerminee }) {
 
 /* ---------- Exercices ---------- */
 
-export function ExercicesDuJour({ mois = 1, faite, onCommencer, exercicesDuPlan = [] }) {
+// `parcours` : l'écran du parcours, qui remplace la séance unique du mois.
+export function ExercicesDuJour({ mois = 1, faite, onCommencer, exercicesDuPlan = [], parcours }) {
   const etapes = seanceDuMois(mois).filter((m) => !m.repos);
   const [ouvert, setOuvert] = useState(null);
   return (
     <>
+      {parcours || (
+      <>
       <div className="app-carte app-seance-carte">
         <div className="app-seance-tete">
           <span className="app-niveau">Niveau {mois}</span>
@@ -161,6 +166,8 @@ export function ExercicesDuJour({ mois = 1, faite, onCommencer, exercicesDuPlan 
           </li>
         ))}
       </ul>
+      </>
+      )}
 
       {exercicesDuPlan.length > 0 && (
         <>

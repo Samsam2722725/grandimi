@@ -9,10 +9,10 @@ import { capture } from '@/lib/analytics';
 const CLE = 'grandimi:visite-faite';
 
 const ETAPES = [
+  { selecteur: '.app-parcours-carte', texte: 'Ton parcours : chaque jour, une nouvelle séance de quelques minutes, guidée exercice par exercice. 7 jours, un trophée, puis le niveau suivant.' },
   { selecteur: '.app-freine', texte: 'Voici ce qui freine ta croissance, d’après tes réponses. Touche une ligne pour voir comment le corriger.' },
   { selecteur: '.app-domaines', texte: 'Tes trois scores du jour : sommeil, nutrition, exercices. Ils montent à chaque chose que tu fais.' },
-  { selecteur: '.app-cta', texte: 'Ta séance du jour : quelques minutes, guidée exercice par exercice.' },
-  { selecteur: '.app-nav', texte: 'En bas : Grandir pour tes exercices, ta nutrition et ton sommeil, Ma taille pour te mesurer, et ton Guide.' },
+  { selecteur: '.app-nav', texte: 'En bas : Grandir pour ton parcours, ta nutrition et ton sommeil, Ma taille pour te mesurer, et ton Guide.' },
 ];
 
 export function visiteDejaVue() {

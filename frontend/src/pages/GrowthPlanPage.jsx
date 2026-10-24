@@ -5,6 +5,7 @@ import Spinner from '../components/Spinner';
    le skin sombre plus bas dans growth-plan.css n'a aucune valeur à résoudre. */
 import '../styles/funnel.css';
 import '../styles/growth-plan.css';
+import '../styles/parcours.css';
 import apiClient from '../lib/api';
 import { APERCU_PLAN, PLAN_APERCU } from '../lib/plan-apercu';
 /* Le graphique à deux trajectoires existait déjà dans le projet — construit
@@ -24,9 +25,23 @@ import {
   NutritionJauges,
   SeanceGuidee,
   SommeilSuivi,
-  dureeSeanceMin,
   scoreNutrition,
 } from '../components/ui/app-grandir';
+import {
+  CARNET_PARCOURS,
+  FicheSeance,
+  JOURS_PAR_NIVEAU,
+  NB_JOURS_PARCOURS,
+  Parcours,
+  cleJourParcours,
+  dureeSecondes,
+  etatParcours,
+  jourDansNiveau,
+  niveauDuJour,
+  numeroJourParcours,
+  piments,
+  seanceDuParcours,
+} from '../components/ui/parcours';
 import { MonteeEnGamme } from '../components/ui/montee-en-gamme';
 import { VisiteGuidee, visiteDejaVue } from '../components/ui/visite-guidee';
 
@@ -89,6 +104,18 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   const [seanceOuverte, setSeanceOuverte] = useState(false);
   const [moisAbonnement, setMoisAbonnement] = useState(1);
   const [testMurOuvert, setTestMurOuvert] = useState(false);
+
+  /* Le parcours (16 niveaux de 7 jours) : les jours déjà faits, la fiche
+     ouverte et la séance en cours. En aperçu, ?parcours=N simule N jours faits. */
+  const [joursFaits, setJoursFaits] = useState(() => {
+    const simules = APERCU_PLAN ? Number(new URLSearchParams(window.location.search).get('parcours')) || 0 : 0;
+    return new Set(Array.from({ length: simules }, (_, i) => i + 1));
+  });
+  // Le serveur coche OU décoche : tant que le carnet n'est pas lu, on
+  // n'y écrit rien, sinon refaire un jour déjà noté l'effacerait.
+  const [carnetLu, setCarnetLu] = useState(APERCU_PLAN);
+  const [ficheJour, setFicheJour] = useState(null);
+  const [seanceParcours, setSeanceParcours] = useState(null);
 
   /* Mesure de l'usage (après paiement) : savoir qui revient, qui fait sa
      séance, qui coche, pour comprendre qui résilie. Lu par
@@ -174,6 +201,14 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
       .catch(() => {});
 
     apiClient
+      .getTodayTasks(CARNET_PARCOURS)
+      .then((res) => {
+        setJoursFaits(new Set((res.completed_keys || []).map(numeroJourParcours).filter(Boolean)));
+        setCarnetLu(true);
+      })
+      .catch(() => {});
+
+    apiClient
       .getTaskHistory(7)
       .then((res) => setHistory(res.history || []))
       .catch(() => {});
@@ -181,7 +216,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
 
   const basculerTache = (cle) => {
     if (!completedKeys.has(cle)) {
-      const famille = cle.startsWith('nutri-') ? 'nutrition' : cle.startsWith('sommeil-h-') ? 'sommeil' : cle === 'posture-test-mur' ? 'posture' : cle === 'seance-du-jour' ? 'seance' : 'tache';
+      const famille = cle.startsWith('nutri-') ? 'nutrition' : cle.startsWith('sommeil-h-') ? 'sommeil' : cle === 'posture-test-mur' ? 'posture' : cle === 'seance-du-jour' ? 'seance' : cle.startsWith('parcours-') ? 'parcours' : 'tache';
       capture('app_coche', { etape: famille });
     }
     setCompletedKeys((prev) => {
@@ -211,6 +246,45 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
       else suivant.add(cle);
       return suivant;
     });
+  };
+
+  /* Un jour du parcours terminé. Seul un jour nouveau fait avancer : le
+     noter dans le carnet (tous les jours faits) et à la date du jour (le
+     jour d'aujourd'hui est fait, la série compte). Refaire un jour déjà
+     fait ne change rien. */
+  const terminerJour = (n) => {
+    capture('seance_terminee', { etape: `j${n}` });
+    if (joursFaits.has(n)) return;
+    setJoursFaits((prev) => new Set(prev).add(n));
+    if (!APERCU_PLAN && carnetLu) {
+      apiClient.toggleTask(cleJourParcours(n), CARNET_PARCOURS).catch(() => {
+        setJoursFaits((prev) => {
+          const suivant = new Set(prev);
+          suivant.delete(n);
+          return suivant;
+        });
+      });
+    }
+    if (!completedKeys.has(cleJourParcours(n))) basculerTache(cleJourParcours(n));
+    if (!completedKeys.has(CLE_SEANCE)) basculerTache(CLE_SEANCE);
+  };
+
+  const ouvrirJour = (n) => setFicheJour(n);
+
+  const commencerJour = (n, etapes) => {
+    capture('seance_commencee', { etape: `j${n}` });
+    setFicheJour(null);
+    setSeanceParcours({ n, etapes, nouveau: !joursFaits.has(n) });
+  };
+
+  // Le texte de l'écran de fin : trophée au bout des 7 jours.
+  const finDuJour = ({ n, nouveau }) => {
+    const jour = jourDansNiveau(n);
+    const niveau = niveauDuJour(n);
+    if (!nouveau) return { emoji: '💪', titre: 'Séance refaite', texte: 'Bien joué. Ton prochain jour t’attend sur ton parcours.' };
+    if (n === NB_JOURS_PARCOURS) return { emoji: '🏆', titre: 'Parcours terminé', texte: 'Tu as fait les 112 jours. Garde ces habitudes : ton corps les a apprises.' };
+    if (jour === JOURS_PAR_NIVEAU) return { emoji: '🏆', titre: `Niveau ${niveau} terminé`, texte: `Trophée gagné. Le niveau ${niveau + 1} ${piments(niveau + 1)} se débloque demain, un cran plus dur.` };
+    return { emoji: '🔥', titre: `Jour ${jour} terminé`, texte: `Le jour ${jour + 1} se débloque demain. Reviens pour garder ta série.` };
   };
 
   if (loading) {
@@ -257,7 +331,10 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   );
   const septDerniersJours = Array.from({ length: 7 }, (_, i) => dateDuJour(i - 6));
   let serieEnCours = 0;
-  for (let i = septDerniersJours.length - 1; i >= 0; i--) {
+  // Tant qu'aujourd'hui n'est pas encore fait, la série d'hier tient
+  // toujours : on compte à partir d'hier, pas de zéro dès le réveil.
+  const departSerie = completedKeys.size > 0 ? 6 : 5;
+  for (let i = departSerie; i >= 0; i--) {
     if (joursAvecAuMoinsUneTache.has(septDerniersJours[i]) || (i === 6 && completedKeys.size > 0)) {
       serieEnCours++;
     } else {
@@ -287,6 +364,11 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
     (f) => THEME_DU_POINT_FAIBLE[f] === ordreThemes[(mois - 1) % 12],
   );
   const seanceFaite = completedKeys.has(CLE_SEANCE);
+  const aujourdhuiFait = [...completedKeys].some((k) => numeroJourParcours(k));
+  const parcours = etatParcours(joursFaits, aujourdhuiFait);
+  // Sur l'accueil : le jour à faire, ou celui qu'on vient de finir aujourd'hui.
+  const jourAccueil = parcours.ouvert || parcours.fini ? parcours.prochain : Math.max(1, parcours.prochain - 1);
+  const premierDuNiveau = (niveauDuJour(jourAccueil) - 1) * JOURS_PAR_NIVEAU + 1;
   const ciblesNutrition = { prot: Number(plan.nutrition.protein_g) || 80, ca: Number(plan.nutrition.calcium_mg) || 1300 };
   const nutrition = scoreNutrition(completedKeys, ciblesNutrition);
   const resumeDomaine = (cle) => {
@@ -371,7 +453,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   ];
 
   const PILULES = [
-    { cle: 'exercices', nom: 'Exercices' },
+    { cle: 'exercices', nom: 'Parcours' },
     { cle: 'nutrition', nom: 'Nutrition' },
     { cle: 'sommeil', nom: 'Sommeil' },
     { cle: 'mois', nom: 'Ce mois-ci' },
@@ -401,7 +483,8 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                 <h1 className="app-titre">Aujourd’hui</h1>
               </div>
               <span className="app-serie">
-                🔥 {serieEnCours > 1 ? `${serieEnCours} jours` : 'Jour 1'}
+                {/* Jours d'affilée, pas un numéro de jour : « Jour 3/7 » est celui du parcours. */}
+                🔥 {serieEnCours} {serieEnCours > 1 ? 'jours' : 'jour'}
               </span>
             </div>
 
@@ -419,6 +502,36 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                   </div>
                 );
               })}
+            </div>
+
+            {/* Le parcours : le jour à faire aujourd'hui, et où il se trouve. */}
+            <div className="app-carte app-parcours-carte">
+              <div className="app-parcours-tete">
+                <span className="app-parcours-niveau">Niveau {niveauDuJour(jourAccueil)} {piments(niveauDuJour(jourAccueil))}</span>
+                <span className="app-parcours-jour">Jour {jourDansNiveau(jourAccueil)}/{JOURS_PAR_NIVEAU}</span>
+              </div>
+              <div className="app-parcours-points" aria-hidden="true">
+                {Array.from({ length: JOURS_PAR_NIVEAU }, (_, j) => premierDuNiveau + j).map((n) => (
+                  <span key={n} className={`${joursFaits.has(n) ? 'fait' : ''} ${n === jourAccueil && parcours.ouvert ? 'courant' : ''}`} />
+                ))}
+              </div>
+              <h2 className="app-carte-titre app-parcours-titre">
+                {parcours.ouvert
+                  ? `Ta séance du jour : ${seanceDuParcours(jourAccueil).theme.toLowerCase()}`
+                  : parcours.fini ? 'Parcours terminé 🏆'
+                    : jourDansNiveau(jourAccueil) === JOURS_PAR_NIVEAU
+                      ? `Niveau ${niveauDuJour(jourAccueil)} terminé 🏆 Le niveau ${niveauDuJour(jourAccueil) + 1} se débloque demain.`
+                      : `Jour ${jourDansNiveau(jourAccueil)} fait ✓ Le suivant se débloque demain.`}
+              </h2>
+              <button
+                type="button"
+                className={`funnel-cta app-cta ${parcours.ouvert ? '' : 'app-cta--fait'}`}
+                onClick={() => (parcours.ouvert ? ouvrirJour(jourAccueil) : allerA('grandir', 'exercices'))}
+              >
+                {parcours.ouvert
+                  ? `Commencer le jour ${jourDansNiveau(jourAccueil)} — ${Math.round(dureeSecondes(seanceDuParcours(jourAccueil).etapes) / 60)} min`
+                  : 'Voir mon parcours'}
+              </button>
             </div>
 
             {/* Ce qui te freine : la promesse du paywall, tenue dès l'accueil. */}
@@ -502,10 +615,6 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
               })}
             </div>
 
-            <button type="button" className={`funnel-cta app-cta ${seanceFaite ? 'app-cta--fait' : ''}`} onClick={() => { capture('seance_commencee', { etape: String(mois) }); setSeanceOuverte(true); }}>
-              {seanceFaite ? 'Séance faite ✓ — la refaire' : `Commencer ma séance — ${dureeSeanceMin(mois)} min`}
-            </button>
-
             <div className="app-liste-tete">
               <h2 className="app-carte-titre">Ta liste du jour</h2>
               <span className="app-compteur">{nbFaites}/{tachesDuJour.length}</span>
@@ -548,6 +657,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                 faite={seanceFaite}
                 onCommencer={() => { capture('seance_commencee', { etape: String(mois) }); setSeanceOuverte(true); }}
                 exercicesDuPlan={plan.posture_exercises}
+                parcours={<Parcours joursFaits={joursFaits} aujourdhuiFait={aujourdhuiFait} onOuvrirJour={ouvrirJour} />}
               />
             )}
 
@@ -633,7 +743,28 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
         />
       )}
 
-      {visite && activeTab === 'accueil' && !seanceOuverte && <VisiteGuidee onFin={() => setVisite(false)} />}
+      {ficheJour && (
+        <FicheSeance
+          key={ficheJour}
+          n={ficheJour}
+          faite={joursFaits.has(ficheJour)}
+          ouverte={parcours.ouvert && ficheJour === parcours.prochain}
+          onFermer={() => setFicheJour(null)}
+          onCommencer={(etapes) => commencerJour(ficheJour, etapes)}
+        />
+      )}
+
+      {seanceParcours && (
+        <SeanceGuidee
+          etapes={seanceParcours.etapes}
+          titre={`Jour ${jourDansNiveau(seanceParcours.n)}`}
+          fin={finDuJour(seanceParcours)}
+          onFermer={() => setSeanceParcours(null)}
+          onTerminee={() => terminerJour(seanceParcours.n)}
+        />
+      )}
+
+      {visite && activeTab === 'accueil' && !seanceOuverte && !seanceParcours && !ficheJour && <VisiteGuidee onFin={() => setVisite(false)} />}
 
       {monteeOuverte && <MonteeEnGamme predictionData={predictionData} onFermer={() => setMonteeOuverte(false)} />}
 
