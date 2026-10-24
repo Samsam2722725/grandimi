@@ -912,6 +912,7 @@ function App() {
           predictionData={predictionData}
           onBackHome={handleBackHome}
           onGoToAccount={handleGoToAccount}
+          onLogout={handleLogout}
           onMiseAJourPrediction={(nouvelles) => {
             // Nouvelle mesure → estimation recalculée : on la garde comme
             // la prédiction courante, au même endroit que la première.

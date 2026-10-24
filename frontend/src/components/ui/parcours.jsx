@@ -577,46 +577,76 @@ export function Parcours({ joursFaits, aujourdhuiFait, onOuvrirJour, profil, pre
 /* ---------- Les séances libres (l'onglet « Train » de Taller) ----------
    « Browse by area » : la liste des zones, puis les séances de la zone. */
 
-export function Seances({ profil, libresFaites, onOuvrirLibre }) {
+// La couleur du rond de chaque zone, comme les dessins de Taller.
+const FOND_ZONE = {
+  Posture: '#1f4a52', 'Sauts Masaï': '#7a5a12', 'Haut du corps': '#3a2b5c', 'Pieds et chevilles': '#6b3a2a',
+  Poitrine: '#5c2330', 'Bas du corps': '#2c4a2a', Cou: '#4a4220', Épaules: '#25324f', Ischios: '#5a3418',
+};
+
+export function Seances({ profil, libresFaites, onOuvrirLibre, progression = 0, aujourdhuiFait, onCommencerProgramme }) {
   const [zoneOuverte, setZoneOuverte] = useState(null);
   const recommandees = zonesRecommandees(profil);
   const zones = [...BIBLIOTHEQUE].sort((a, b) => recommandees.includes(b.zone) - recommandees.includes(a.zone));
   const zone = zones.find((z) => z.zone === zoneOuverte);
 
-  if (zone) {
-    return (
-      <div className="seances">
-        <button type="button" className="seances-retour" onClick={() => setZoneOuverte(null)}>← Toutes les zones</button>
-        <h2 className="seances-zone-titre"><span aria-hidden="true">{zone.emoji}</span> {zone.zone}</h2>
-        <div className="seances-liste">
-          {zone.seances.map((x) => {
-            const seance = seanceLibre(x.id, profil);
-            const faite = libresFaites.has(cleLibre(x.id));
-            return (
-              <button key={x.id} type="button" className={`seances-carte ${faite ? 'faite' : ''}`} onClick={() => onOuvrirLibre(x.id)}>
-                <span className="seances-carte-nom">{x.nom}</span>
-                <span className="seances-carte-duree">{faite ? 'Faite aujourd’hui ✓' : formatDuree(dureeSecondes(seance.etapes))}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (!zone) return undefined;
+    const touche = (e) => { if (e.key === 'Escape') setZoneOuverte(null); };
+    window.addEventListener('keydown', touche);
+    return () => window.removeEventListener('keydown', touche);
+  }, [zone]);
 
   return (
     <div className="seances">
-      <h2 className="seances-titre">Par zone</h2>
+      <div className="seances-progression">
+        <span>Progression</span>
+        <span className="seances-progression-barre" aria-hidden="true"><span style={{ width: `${progression}%` }} /></span>
+        <span>{progression} %</span>
+      </div>
+      <button type="button" className="seances-programme" onClick={onCommencerProgramme}>
+        {aujourdhuiFait ? 'Voir mon programme' : 'Commencer mon programme'} <span aria-hidden="true">→</span>
+      </button>
+
+      <p className="seances-titre">Par zone</p>
       <div className="seances-zones">
         {zones.map((z) => (
           <button key={z.zone} type="button" className="seances-zone" onClick={() => setZoneOuverte(z.zone)}>
-            <span className="seances-zone-emoji" aria-hidden="true">{z.emoji}</span>
+            <span className="seances-zone-rond" style={{ background: FOND_ZONE[z.zone] }} aria-hidden="true">{z.emoji}</span>
             <span className="seances-zone-nom">{z.zone}</span>
-            <span className="seances-zone-nb">{z.seances.length} séances</span>
-            {recommandees.includes(z.zone) && <span className="parcours-reco">Pour toi</span>}
+            {recommandees.includes(z.zone) && <span className="seances-zone-reco">Pour toi</span>}
           </button>
         ))}
       </div>
+
+      {zone && (
+        <div className="seances-plein" role="dialog" aria-modal="true" aria-label={zone.zone}>
+          <div className="fiche-haut">
+            <button type="button" className="fiche-fermer" onClick={() => setZoneOuverte(null)} aria-label="Fermer">
+              <X size={22} aria-hidden="true" />
+            </button>
+            <h2 className="fiche-titre">{zone.zone}</h2>
+            <span />
+          </div>
+          <ul className="seances-plein-liste">
+            {zone.seances.map((x) => {
+              const seance = seanceLibre(x.id, profil);
+              const faite = libresFaites.has(cleLibre(x.id));
+              return (
+                <li key={x.id}>
+                  <button type="button" className="seances-plein-ligne" onClick={() => onOuvrirLibre(x.id)}>
+                    {/* Comme Taller : une image par séance, ici son premier vrai exercice. */}
+                    <span className="seances-plein-carre" style={{ background: seance.etapes[1]?.fond || FOND_ZONE[zone.zone] }} aria-hidden="true">{seance.etapes[1]?.emoji || zone.emoji}</span>
+                    <span className="seances-plein-textes">
+                      <span className="seances-plein-nom">{x.nom}</span>
+                      <span className={`seances-plein-duree ${faite ? 'faite' : ''}`}>{faite ? 'FAITE AUJOURD’HUI ✓' : formatDuree(dureeSecondes(seance.etapes)).toUpperCase().replace('MIN', 'MINUTES')}</span>
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

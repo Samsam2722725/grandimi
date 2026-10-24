@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, CalendarCheck, ChevronRight, Ruler, TrendingUp, User } from 'lucide-react';
+import { ArrowUp, CalendarCheck, ChevronRight, Ruler, Settings, TrendingUp, User } from 'lucide-react';
 import Spinner from '../components/Spinner';
 /* funnel.css porte les jetons `--funnel-*` sur la classe `.night` : sans lui,
    le skin sombre plus bas dans growth-plan.css n'a aucune valeur à résoudre. */
@@ -18,6 +18,8 @@ import { GrowthProjectionChart } from '../components/ui/growth-projection-chart'
 import { MaTaille } from '../components/ui/ma-taille';
 import { TailleAccueil } from '../components/ui/taille-accueil';
 import { RepasDuJour } from '../components/ui/repas';
+import { Reglages } from '../components/ui/reglages';
+import { genererCarteResultat, partagerCarte } from '../lib/share-card';
 import { LeconsPlan } from '../components/ui/lecons-plan';
 import { pointsFaibles } from '../lib/offres';
 import { capture } from '../lib/analytics';
@@ -98,13 +100,16 @@ function ordreDesThemes(faibles) {
   return ordre;
 }
 
-function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJourPrediction }) {
+function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJourPrediction, onLogout }) {
   const [plan, setPlan] = useState(null);
   const [monthlyPlan, setMonthlyPlan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('taille');
-  const [sousOnglet, setSousOnglet] = useState('parcours');
+  // Comme Taller, « grow » s'ouvre sur les séances (Train).
+  const [sousOnglet, setSousOnglet] = useState('seances');
+  const [reglagesOuverts, setReglagesOuverts] = useState(false);
+  const [partageEnCours, setPartageEnCours] = useState(false);
   // Onglet Taille : le détail (mesure, courbe complète) et les points à corriger.
   const [tailleDetail, setTailleDetail] = useState(false);
   const [pointsOuverts, setPointsOuverts] = useState(false);
@@ -465,6 +470,14 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   };
 
   const JOURS_COURTS = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
+  // L'emoji au bout de chaque ligne de la routine, comme chez Taller.
+  const EMOJIS = [
+    [/suspension/i, '🧗'], [/étirement doux/i, '🧘'], [/étirement/i, '🙆'], [/petit-déj/i, '🍳'], [/protéine/i, '🍗'],
+    [/lait|laitier|calcium/i, '🥛'], [/boire|eau/i, '💧'], [/marcher|lever/i, '🚶'], [/chambre|18-20/i, '🌡️'],
+    [/écran/i, '📵'], [/objectif du mois/i, '🎯'], [/coucher|dormir|sommeil|heure/i, '😴'], [/gainage|planche/i, '🧱'],
+    [/posture|mur/i, '🧍'], [/soleil|dehors/i, '☀️'],
+  ];
+  const emojiTache = (label) => (EMOJIS.find(([motif]) => motif.test(label)) || [null, '✅'])[1];
   const ETIQUETTE = { exercices: 'Exercice', nutrition: 'Nutrition', sommeil: 'Sommeil' };
 
   // La barre du bas de Taller : taille, grandir, routine (et le compte).
@@ -477,10 +490,34 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
 
   // Comme l'onglet « grow » de Taller : Train / Physique / Nutrition.
   const PILULES = [
-    { cle: 'parcours', nom: 'Parcours' },
-    { cle: 'seances', nom: 'Séances' },
-    { cle: 'nutrition', nom: 'Nutrition' },
+    { cle: 'seances', nom: 'Séances', titre: 'Séances' },
+    { cle: 'parcours', nom: 'Parcours', titre: 'Ton plan' },
+    { cle: 'nutrition', nom: 'Nutrition', titre: 'Tes repas !' },
   ];
+
+  /* Le bouton ↑ de Taller : une image de ses résultats à partager. Pas pour
+     l'offre 1 mois, dont la taille prédite est sous cadenas. */
+  const partager = async () => {
+    if (partageEnCours) return;
+    setPartageEnCours(true);
+    try {
+      const predite = Number(predictionData.predicted_height_cm);
+      const plage = predictionData.confidence_range || {};
+      const blob = await genererCarteResultat({
+        predicted: Math.round(predite),
+        rangeMin: Math.round(Number(plage.min) || predite - 4),
+        rangeMax: Math.round(Number(plage.max) || predite + 4),
+        margeCm: Math.round(((Number(plage.max) - Number(plage.min)) / 2) || 4),
+        croissanceRestante: predite - Number(predictionData.current_height_cm),
+      });
+      await partagerCarte(blob, 'Ma taille adulte estimée par Grandimi');
+      capture('app_onglet', { etape: 'partage' });
+    } catch {
+      /* partage annulé ou impossible : rien à dire */
+    } finally {
+      setPartageEnCours(false);
+    }
+  };
 
   // Routine : 3 jours avant, aujourd'hui, 3 jours après (comme Taller).
   const semaineRoutine = Array.from({ length: 7 }, (_, i) => dateDuJour(i - 3));
@@ -491,9 +528,16 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
     <div className="night growth-plan-page app-plan">
       <header className="app-haut">
         <span className="app-marque">Grandimi</span>
-        <button type="button" className="app-compte" onClick={() => allerA('guide')} aria-label="Ton guide">
-          <BookOpen size={20} aria-hidden="true" />
-        </button>
+        <span className="app-haut-boutons">
+          {!tailleVerrouillee && (
+            <button type="button" className="app-compte" onClick={partager} aria-label="Partager mes résultats" disabled={partageEnCours}>
+              <ArrowUp size={20} aria-hidden="true" />
+            </button>
+          )}
+          <button type="button" className="app-compte" onClick={() => setReglagesOuverts(true)} aria-label="Réglages">
+            <Settings size={20} aria-hidden="true" />
+          </button>
+        </span>
       </header>
 
       <main className="app-contenu">
@@ -552,19 +596,15 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                   </div>
                 )}
               </div>
-            ) : (
-              <button type="button" className="app-taille-maj" onClick={() => setTailleDetail(true)}>
-                Mettre à jour ma taille
-              </button>
-            )}
+            ) : null}
           </section>
         )}
 
         {activeTab === 'grandir' && (
           <section className="tab-content">
-            {/* Comme Taller : le titre change sur la nutrition. */}
-            <h1 className="app-titre">{sousOnglet === 'nutrition' ? 'Tes repas !' : 'Ton plan'}</h1>
-            <div className="app-pilules" role="tablist" aria-label="Grandir">
+            {/* Comme Taller : le titre suit l'onglet, dans une seule barre. */}
+            <h1 className="app-titre">{PILULES.find((x) => x.cle === sousOnglet)?.titre}</h1>
+            <div className="app-pilules app-segments" role="tablist" aria-label="Grandir">
               {PILULES.map(({ cle, nom }) => (
                 <button
                   key={cle}
@@ -592,7 +632,14 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
             )}
 
             {sousOnglet === 'seances' && (
-              <Seances profil={profil} libresFaites={completedKeys} onOuvrirLibre={ouvrirLibre} />
+              <Seances
+                profil={profil}
+                libresFaites={completedKeys}
+                onOuvrirLibre={ouvrirLibre}
+                progression={Math.round((parcours.faits / NB_JOURS_PARCOURS) * 100)}
+                aujourdhuiFait={aujourdhuiFait}
+                onCommencerProgramme={() => (parcours.ouvert ? ouvrirJour(jourAccueil) : setSousOnglet('parcours'))}
+              />
             )}
 
             {sousOnglet === 'nutrition' && (
@@ -641,7 +688,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                   <span className="routine-textes">
                     <span className="routine-etiquette">Exercice</span>
                     <span className="routine-libelle">
-                      Séance du jour {jourDansNiveau(jourAccueil)} · niveau {niveauDuJour(jourAccueil)} · {Math.round(dureeSecondes(seanceDuParcours(jourAccueil, profil).etapes) / 60)} min
+                      Séance du jour {jourDansNiveau(jourAccueil)} · niveau {niveauDuJour(jourAccueil)} · {Math.round(dureeSecondes(seanceDuParcours(jourAccueil, profil).etapes) / 60)} min <span aria-hidden="true">🏋️</span>
                     </span>
                   </span>
                 </button>
@@ -654,7 +701,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                       <span className="routine-rond" aria-hidden="true">{fait ? '✓' : ''}</span>
                       <span className="routine-textes">
                         <span className="routine-etiquette">{ETIQUETTE[domaineDe(tache)]}</span>
-                        <span className="routine-libelle">{tache.label}</span>
+                        <span className="routine-libelle">{tache.label} <span aria-hidden="true">{emojiTache(tache.label)}</span></span>
                       </span>
                     </button>
                   </li>
@@ -709,6 +756,16 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
       )}
 
       {visite && activeTab === 'taille' && !seanceOuverte && !seanceParcours && !fiche && <VisiteGuidee onFin={() => setVisite(false)} />}
+
+      {reglagesOuverts && (
+        <Reglages
+          onFermer={() => setReglagesOuverts(false)}
+          onMesure={() => { setReglagesOuverts(false); allerA('taille'); setTailleDetail(true); }}
+          onGuide={() => { setReglagesOuverts(false); allerA('guide'); }}
+          onAbonnement={() => { setReglagesOuverts(false); onGoToAccount?.(); }}
+          onDeconnexion={onLogout}
+        />
+      )}
 
       {monteeOuverte && <MonteeEnGamme predictionData={predictionData} onFermer={() => setMonteeOuverte(false)} />}
 
