@@ -66,6 +66,14 @@ func ReclamerPaiement(c *gin.Context) {
 
 	if resultat.Accorde {
 		fmt.Printf("[paiement] %s rattaché au compte %s\n", req.PaymentID, req.UserID)
+		/* Montée en gamme : quand l'e-mail Whop n'est pas celui du compte,
+		   le webhook ne savait pas quel 1 mois arrêter. C'est ici, une fois
+		   l'abonnement rattaché au bon compte, qu'on le sait. En tâche de
+		   fond : un appel Whop lent ne doit pas retenir le client sur
+		   l'écran « on prépare ton accès ». */
+		if resultat.AbonnementDeplace != "" && estOffreSuperieure(resultat.PlanAbonnement) {
+			go arreterAnciensMensuels(req.UserID, resultat.AbonnementDeplace)
+		}
 		c.JSON(http.StatusOK, gin.H{"status": "granted"})
 		return
 	}

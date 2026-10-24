@@ -179,11 +179,44 @@ func SetUserPremium(userID string, isPremium bool) error {
 }
 
 // UpdateUserPremium - update user premium info
+//
+// whop_customer_id n'est posé que si aucun autre compte ne le détient :
+// l'index est unique, et un même compte Whop peut payer pour plusieurs
+// comptes Grandimi (second enfant, rachat). Le poser quand même faisait
+// échouer tout le webhook en 500 : abonnement jamais enregistré, montée
+// en gamme jamais appliquée (reproduit en local le 24/10/2026).
 func UpdateUserPremium(userID string, whopCustomerID string, whopSubscriptionID string) error {
 	_, err := DB.ExecContext(context.Background(),
-		"UPDATE users SET is_premium = $1, whop_customer_id = $2, whop_subscription_id = $3 WHERE id = $4",
-		true, whopCustomerID, whopSubscriptionID, userID)
+		`UPDATE users
+		    SET is_premium = true,
+		        whop_subscription_id = $3,
+		        whop_customer_id = CASE
+		            WHEN $2 = '' OR EXISTS (
+		                   SELECT 1 FROM users autre
+		                    WHERE autre.whop_customer_id = $2 AND autre.id <> $1)
+		            THEN whop_customer_id
+		            ELSE $2
+		        END
+		  WHERE id = $1`,
+		userID, whopCustomerID, whopSubscriptionID)
 	return err
+}
+
+// ProprietaireAbonnement : le compte qui porte cet abonnement Whop, ""
+// s'il est inconnu.
+func ProprietaireAbonnement(whopSubscriptionID string) (string, error) {
+	if whopSubscriptionID == "" {
+		return "", nil
+	}
+	var id string
+	err := DB.QueryRowContext(context.Background(),
+		`SELECT user_id::text FROM subscriptions
+		  WHERE whop_subscription_id = $1 AND user_id IS NOT NULL`,
+		whopSubscriptionID).Scan(&id)
+	if err == sql.ErrNoRows {
+		return "", nil
+	}
+	return id, err
 }
 
 // SavePrediction - save prediction to database
