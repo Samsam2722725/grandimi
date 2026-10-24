@@ -330,7 +330,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	if user == nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid email or password"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "E-mail ou mot de passe incorrect."})
 		return
 	}
 
@@ -342,7 +342,7 @@ func Login(c *gin.Context) {
 	}
 
 	if !VerifyPassword(req.Password, hashEnregistre) {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid email or password"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "E-mail ou mot de passe incorrect."})
 		return
 	}
 
