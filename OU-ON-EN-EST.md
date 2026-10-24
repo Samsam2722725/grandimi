@@ -1,6 +1,30 @@
 # Où on en est — 24/10/2026
 
-## Ce qui vient d'être fait (branche `claude/ou-on-en-est-review-ecu37d`, pas encore sur main)
+## Vérification complète de l'après-paiement (24/10, après fusion de la PR #7)
+
+Fonctionnel, testé dans un navigateur contre le serveur local (offres
+1 mois, 3 mois, À vie) : retour Whop → mot de passe → 5 questions →
+Aujourd'hui, Grandir, Ma taille (verrouillée en 1 mois, ouverte en
+3 mois / À vie), Guide, visite guidée, Mon compte, confirmation de
+résiliation. Aucune erreur JavaScript ni API, hors outils de mesure
+(bloqués par le réseau du test) et résiliation sans `WHOP_API_KEY`
+(attendu en local).
+
+Légal — à traiter, par ordre de risque :
+1. `docs/mentions-legales.html` publiée avec des « [À REMPLIR] » :
+   éditeur, SIRET, adresse, directeur de publication, médiateur de la
+   consommation. Obligatoire pour vendre. Il faut les infos de Samuel.
+2. Pixel publicitaire Whop et PostHog chargés sans consentement ; la
+   politique dit « utilise le blocage de ton navigateur ». La CNIL exige un
+   consentement préalable pour le pixel publicitaire. À décider : bandeau.
+3. « 98 % de précision » (Ma taille, CGV) sur une estimation à ±4-8 cm :
+   formulation à risque (pratique commerciale trompeuse).
+4. CGV muettes sur la montée en gamme (jours restants non remboursés,
+   pourtant affiché dans l'app avant paiement).
+5. Confidentialité : « [À REMPLIR si CNIL requis] » (DPO) et durée de
+   conservation contradictoire (« suppression complète sur demande »).
+
+## Ce qui vient d'être fait (fusionné dans main, PR #7, commit 765d5ba)
 
 Samuel a testé le paiement : après la création du compte, « ça ne marche
 pas » ; et après une résiliation, l'accès a sauté alors que Whop annonçait
