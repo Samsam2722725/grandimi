@@ -17,12 +17,12 @@ import { APERCU_PLAN, PLAN_APERCU } from '../lib/plan-apercu';
 import { GrowthProjectionChart } from '../components/ui/growth-projection-chart';
 import { MaTaille } from '../components/ui/ma-taille';
 import { TailleAccueil } from '../components/ui/taille-accueil';
+import { RepasDuJour } from '../components/ui/repas';
 import { LeconsPlan } from '../components/ui/lecons-plan';
 import { pointsFaibles } from '../lib/offres';
 import { capture } from '../lib/analytics';
 import {
   CLE_SEANCE,
-  NutritionJauges,
   SeanceGuidee,
 } from '../components/ui/app-grandir';
 import {
@@ -412,7 +412,6 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   // Sur l'accueil : le jour à faire, ou celui qu'on vient de finir aujourd'hui.
   const jourAccueil = parcours.ouvert || parcours.fini ? parcours.prochain : Math.max(1, parcours.prochain - 1);
   const premierDuNiveau = (niveauDuJour(jourAccueil) - 1) * JOURS_PAR_NIVEAU + 1;
-  const ciblesNutrition = { prot: Number(plan.nutrition.protein_g) || 80, ca: Number(plan.nutrition.calcium_mg) || 1300 };
 
   const faibles = pointsFaibles(predictionData);
   const correction = {
@@ -563,7 +562,8 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
 
         {activeTab === 'grandir' && (
           <section className="tab-content">
-            <h1 className="app-titre">Ton plan</h1>
+            {/* Comme Taller : le titre change sur la nutrition. */}
+            <h1 className="app-titre">{sousOnglet === 'nutrition' ? 'Tes repas !' : 'Ton plan'}</h1>
             <div className="app-pilules" role="tablist" aria-label="Grandir">
               {PILULES.map(({ cle, nom }) => (
                 <button
@@ -596,7 +596,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
             )}
 
             {sousOnglet === 'nutrition' && (
-              <NutritionJauges completedKeys={completedKeys} basculer={basculerTache} cibles={ciblesNutrition} />
+              <RepasDuJour />
             )}
           </section>
         )}
