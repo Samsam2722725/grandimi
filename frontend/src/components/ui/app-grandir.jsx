@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Pause, Play, SkipForward, X } from 'lucide-react';
+import { Pause, Play, SkipBack, SkipForward, X } from 'lucide-react';
 
 import apiClient from '@/lib/api';
 
@@ -42,7 +42,12 @@ export function dureeSeanceMin(mois = 1) {
 }
 
 /* `etapes` : la séance du parcours (avec les durées réglées sur la fiche) ;
-   sans elle, la séance du mois d'avant. `fin` : le texte de l'écran final. */
+   sans elle, la séance du mois d'avant. `fin` : le texte de l'écran final.
+
+   L'écran copie celui de Taller : « 1 / 7 », l'exercice dans un grand rond
+   entouré de sa progression, le nom, le temps, et précédent / pause /
+   suivant. Comme on n'a pas de dessin, « Comment faire » est écrit
+   dessous, étape par étape. */
 export function SeanceGuidee({ mois = 1, etapes: etapesDonnees, titre = 'Séance du jour', fin, onFermer, onTerminee }) {
   const [etapes] = useState(() => etapesDonnees || seanceDuMois(mois));
   const [index, setIndex] = useState(0);
@@ -76,20 +81,27 @@ export function SeanceGuidee({ mois = 1, etapes: etapesDonnees, titre = 'Séance
   }, [finie, onTerminee]);
 
   const passer = () => setReste(0);
+  const precedent = () => {
+    const i = Math.max(0, index - 1);
+    setIndex(i);
+    setReste(etapes[i].s);
+  };
   const etape = etapes[index];
-  const progression = finie ? 1 : (index + (1 - reste / etape.s)) / etapes.length;
-  const rayon = 70;
+  const rayon = 92;
   const circonference = 2 * Math.PI * rayon;
+  const temps = (x) => `${Math.floor(Math.max(0, x) / 60)}:${String(Math.max(0, x) % 60).padStart(2, '0')}`;
+  // Une phrase = une étape.
+  const etapesComment = etape.comment || (etape.consigne || '').split(/(?<=[.!?])\s+/).filter(Boolean);
 
   return (
-    <div className="seance" role="dialog" aria-label={titre}>
-      <div className="seance-haut">
-        <span className="seance-etape">{finie ? 'Terminé' : `${titre} · ${index + 1} / ${etapes.length}`}</span>
+    <div className="seance seance--taller" role="dialog" aria-label={titre}>
+      <div className="seance-tete">
         <button type="button" className="seance-fermer" onClick={onFermer} aria-label="Fermer la séance">
-          <X size={22} aria-hidden="true" />
+          <X size={24} aria-hidden="true" />
         </button>
+        <span className="seance-compteur">{finie ? titre : `${index + 1} / ${etapes.length}`}</span>
+        <span />
       </div>
-      <div className="seance-barre"><span style={{ width: `${progression * 100}%` }} /></div>
 
       {finie ? (
         <div className="seance-fin">
@@ -100,31 +112,37 @@ export function SeanceGuidee({ mois = 1, etapes: etapesDonnees, titre = 'Séance
         </div>
       ) : (
         <>
-          <div className="seance-centre">
-            <p className={`seance-emoji ${etape.fond ? 'seance-emoji--rond' : ''}`} style={etape.fond ? { background: etape.fond } : undefined} aria-hidden="true">{etape.emoji}</p>
-            <h2 className="seance-nom">{etape.nom}</h2>
-            <p className="seance-consigne">{etape.consigne}</p>
-            <div className="seance-minuteur">
-              <svg viewBox="0 0 160 160" aria-hidden="true">
-                <circle cx="80" cy="80" r={rayon} className="seance-cercle-fond" />
+          <div className="seance-corps">
+            <div className="seance-anneau">
+              <svg viewBox="0 0 200 200" aria-hidden="true">
+                <circle cx="100" cy="100" r={rayon} className="seance-anneau-fond" />
                 <circle
-                  cx="80" cy="80" r={rayon} className={`seance-cercle ${etape.repos ? 'repos' : ''}`}
+                  cx="100" cy="100" r={rayon} className={`seance-anneau-trait ${etape.repos ? 'repos' : ''}`}
                   strokeDasharray={circonference}
-                  strokeDashoffset={circonference * (1 - reste / etape.s)}
+                  strokeDashoffset={circonference * (reste / etape.s)}
                 />
               </svg>
-              <span className="seance-secondes">{reste}</span>
+              <span className="seance-image" style={{ background: etape.fond || '#1d1b1a' }} aria-hidden="true">{etape.emoji}</span>
             </div>
-            {etapes[index + 1] && <p className="seance-suivant">Ensuite : {etapes[index + 1].nom}</p>}
+            <h2 className="seance-nom">{etape.nom}</h2>
+            <p className="seance-temps" aria-live="off">{temps(reste)}</p>
+            {etapesComment.length > 0 && !etape.repos && (
+              <div className="seance-comment">
+                <p className="seance-comment-titre">Comment faire</p>
+                <ol>{etapesComment.map((e) => <li key={e}>{e}</li>)}</ol>
+              </div>
+            )}
+            {etape.repos && <p className="seance-repos">{etape.consigne}</p>}
           </div>
-          <div className="seance-commandes">
-            <button type="button" className="seance-bouton" onClick={() => setEnPause((p) => !p)}>
-              {enPause ? <Play size={22} aria-hidden="true" /> : <Pause size={22} aria-hidden="true" />}
-              {enPause ? 'Reprendre' : 'Pause'}
+          <div className="seance-boutons">
+            <button type="button" className="seance-rond" onClick={precedent} disabled={index === 0} aria-label="Exercice précédent">
+              <SkipBack size={24} aria-hidden="true" />
             </button>
-            <button type="button" className="seance-bouton" onClick={passer}>
-              <SkipForward size={22} aria-hidden="true" />
-              Passer
+            <button type="button" className="seance-rond seance-rond--grand" onClick={() => setEnPause((x) => !x)} aria-label={enPause ? 'Reprendre' : 'Pause'}>
+              {enPause ? <Play size={30} aria-hidden="true" /> : <Pause size={30} aria-hidden="true" />}
+            </button>
+            <button type="button" className="seance-rond" onClick={passer} aria-label="Exercice suivant">
+              <SkipForward size={24} aria-hidden="true" />
             </button>
           </div>
         </>

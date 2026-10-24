@@ -298,3 +298,30 @@ button.parcours-rond { cursor: pointer; }
 /* Cases du bas centrées, comme Taller. */
 .taille-duo .taille-case:not(.taille-case--accent) { align-items: center; text-align: center; }
 .taille-duo .taille-case:not(.taille-case--accent) .taille-barre { align-self: stretch; }
+
+/* ---------- L'écran de séance, comme Taller ---------- */
+.seance--taller { padding: env(safe-area-inset-top) 0 calc(20px + env(safe-area-inset-bottom)); overflow-y: auto; }
+.seance-tete { display: grid; grid-template-columns: 56px 1fr 56px; align-items: center; padding: 10px 12px; border-bottom: 1px solid #1f1d1c; }
+.seance-tete .seance-fermer { background: none; }
+.seance-compteur { text-align: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: #f4efe9; }
+.seance-corps { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 28px 20px 12px; text-align: center; }
+.seance-anneau { position: relative; width: min(74vw, 300px); aspect-ratio: 1; }
+.seance-anneau svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.seance-anneau-fond { fill: none; stroke: #1f1a24; stroke-width: 8; }
+.seance-anneau-trait { fill: none; stroke: #ff6a2b; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+.seance-anneau-trait.repos { stroke: #8b9cff; }
+.seance-image { position: absolute; inset: 9%; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-size: min(28vw, 116px); }
+.seance--taller .seance-nom { margin: 26px 0 0; font-family: inherit; font-weight: 700; font-size: 26px; color: #f4efe9; }
+.seance-temps { margin: 6px 0 0; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 56px; line-height: 1; color: #bdb7b1; font-variant-numeric: tabular-nums; }
+.seance-comment { width: 100%; max-width: 420px; margin-top: 22px; padding: 14px 16px; border-radius: 16px; background: #141414; text-align: left; }
+.seance-comment-titre { margin: 0 0 6px; font-size: 12.5px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #ff8a52; }
+.seance-comment ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 15.5px; line-height: 1.4; color: #e6e0da; }
+.seance-repos { margin: 20px 0 0; font-size: 16px; color: #c9c3bd; }
+.seance-boutons { display: flex; justify-content: center; align-items: center; gap: 28px; padding: 8px 0; }
+.seance-rond { width: 64px; height: 64px; border-radius: 999px; border: 0; background: #1f1d1c; color: #f4efe9; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.seance-rond:disabled { color: #5a5653; cursor: default; }
+.seance-rond--grand { width: 86px; height: 86px; }
+.fiche-astuce { margin: 14px 0 0; font-size: 13.5px; color: #8a847e; }
+@media (prefers-reduced-motion: reduce) { .seance-anneau-trait { transition: none; } }
+
+ol.fiche-consigne { padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }

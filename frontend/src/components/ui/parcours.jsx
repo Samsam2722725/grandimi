@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Check, Lock, Minus, Plus, Trophy, X } from 'lucide-react';
 
+import { COMMENT_FAIRE } from '@/lib/comment-faire';
+
 /* Le parcours, copié de Taller (onglets « Physique » et « Train ») :
    - 16 niveaux de 7 jours, un rond par jour relié aux autres, un trophée au
      bout de chaque niveau ; un nouveau jour se débloque chaque jour ;
@@ -155,7 +157,7 @@ const exclu = (id, profil) => (EXOS[id].sans || []).includes(profil.douleur);
 
 function etape(id, s, i) {
   const e = EXOS[id];
-  return { id: `${id}-${i}`, cle: id, nom: e.nom, emoji: e.emoji, consigne: e.consigne, repos: !!e.repos, fond: FOND[e.z], s };
+  return { id: `${id}-${i}`, cle: id, nom: e.nom, emoji: e.emoji, consigne: e.consigne, comment: COMMENT_FAIRE[id], repos: !!e.repos, fond: FOND[e.z], s };
 }
 
 const arrondi15 = (s) => Math.max(15, Math.round(s / 15) * 15);
@@ -281,7 +283,7 @@ export function seanceDuParcours(n, profil = profilParcours()) {
 // Les séances vues chez Taller, avec leurs exercices et leurs durées.
 export const BIBLIOTHEQUE = [
   {
-    zone: 'Posture', emoji: '🧍', seances: [
+    zone: 'Posture', emoji: '🧍', texte: 'Redresse ton dos, tes épaules et ta tête : tu te tiens à ta vraie hauteur, et c’est ce qui se voit en premier.', seances: [
       { id: 'posture-1', nom: 'Cou de téléphone', exos: [['rotations-epaules', 30], ['menton', 30], ['cou-flexion', 30], ['cou-extension', 30], ['oreille-epaule', 30], ['omoplate', 30], ['cactus', 30], ['dos-mur', 60]] },
       { id: 'posture-2', nom: 'Bassin', exos: [['bascule-bassin', 60], ['figure-quatre', 60], ['quadri-genou', 60], ['chiot', 30], ['enfant', 60]] },
       { id: 'posture-3', nom: 'Posture stable', exos: [['dos-mur', 60], ['bras-mur', 30], ['cactus', 30], ['epaule-inversee', 30], ['une-jambe', 30], ['menton', 30], ['calin-ours', 30]] },
@@ -289,53 +291,53 @@ export const BIBLIOTHEQUE = [
     ],
   },
   {
-    zone: 'Sauts Masaï', emoji: '🦘', seances: [
+    zone: 'Sauts Masaï', emoji: '🦘', texte: 'Des sauts courts et répétés : les impacts rendent tes os plus solides pendant ta croissance.', seances: [
       { id: 'sauts-1', nom: 'Sauts Masaï 1', exos: [['chevilles', 30], ['masai', 60], ['repos', 30], ['masai', 60], ['repos', 30], ['masai', 60], ['repos', 30], ['mollet-mur', 60]] },
       { id: 'sauts-2', nom: 'Sauts Masaï 2', exos: [['chevilles', 30], ['masai', 60], ['repos', 30], ['masai', 60], ['repos', 30], ['masai', 60], ['repos', 30], ['masai', 60], ['repos', 30], ['mollet-mur', 60]] },
     ],
   },
   {
-    zone: 'Haut du corps', emoji: '💪', seances: [
+    zone: 'Haut du corps', emoji: '💪', texte: 'Ouvre la poitrine et les épaules pour arrêter de te tasser vers l’avant.', seances: [
       { id: 'haut-1', nom: 'Haut du corps 1', exos: [['rotations-epaules', 30], ['ouverture-poitrine', 30], ['bras-croise', 30], ['triceps', 30], ['bras-mur', 30], ['cactus', 30], ['calin-ours', 30]] },
       { id: 'haut-2', nom: 'Haut du corps 2', exos: [['rotations-epaules', 30], ['ouverture-poitrine', 30], ['bras-croise', 60], ['triceps', 60], ['bras-mur', 60], ['pecs-mur', 60], ['plongeur', 30], ['chien-mur', 60], ['cactus', 30], ['calin-ours', 30]] },
       { id: 'haut-3', nom: 'Haut du corps 3', exos: [['ouverture-poitrine', 30], ['triceps', 30], ['pecs-mur', 30], ['plongeur', 30], ['chien-mur', 60], ['epaule-inversee', 30], ['cobra', 30], ['calin-ours', 30]] },
     ],
   },
   {
-    zone: 'Pieds et chevilles', emoji: '🦶', seances: [
+    zone: 'Pieds et chevilles', emoji: '🦶', texte: 'Des chevilles et des pieds solides : la base d’une posture droite, de bas en haut.', seances: [
       { id: 'pieds-1', nom: 'Pieds et chevilles 1', exos: [['une-jambe', 60], ['chevilles', 60], ['pointes', 30], ['orteils-ecartes', 30], ['mollet-mur', 60]] },
       { id: 'pieds-2', nom: 'Pieds et chevilles 2', exos: [['une-jambe', 60], ['chevilles', 60], ['pointes', 60], ['orteils-ecartes', 60], ['mollet-mur', 60], ['une-jambe', 60], ['pointes', 60], ['mollet-mur', 60]] },
     ],
   },
   {
-    zone: 'Poitrine', emoji: '🫶', seances: [
+    zone: 'Poitrine', emoji: '🫶', texte: 'Étire la poitrine pour ramener les épaules en arrière et redresser le haut du dos.', seances: [
       { id: 'poitrine-1', nom: 'Poitrine 1', exos: [['ouverture-poitrine', 30], ['bras-croise', 30], ['bras-mur', 60], ['pecs-mur', 60], ['epaule-inversee', 30], ['menton', 30], ['calin-ours', 60]] },
       { id: 'poitrine-2', nom: 'Poitrine 2', exos: [['ouverture-poitrine', 30], ['bras-mur', 60], ['pecs-mur', 60], ['fil-aiguille', 60], ['cobra', 30], ['chiot', 30], ['calin-ours', 60]] },
       { id: 'poitrine-3', nom: 'Poitrine 3', exos: [['ouverture-poitrine', 30], ['bras-croise', 30], ['bras-mur', 60], ['fil-aiguille', 60], ['cobra', 30], ['chiot', 60], ['chameau', 30], ['torsion-allongee', 60], ['enfant', 60]] },
     ],
   },
   {
-    zone: 'Bas du corps', emoji: '🦵', seances: [
+    zone: 'Bas du corps', emoji: '🦵', texte: 'Des hanches souples : ton bassin se replace et le bas de ton dos se redresse.', seances: [
       { id: 'bas-1', nom: 'Bas du corps 1', exos: [['jambes-ecartees', 30], ['fente-avant', 60], ['fente-arriere', 60], ['fente-laterale', 60], ['chien', 30], ['pigeon', 60]] },
       { id: 'bas-2', nom: 'Bas du corps 2', exos: [['jambes-ecartees', 30], ['fente-avant', 60], ['fente-arriere', 60], ['fente-laterale', 60], ['quadri-genou', 60], ['chien', 30], ['pigeon', 60], ['double-pigeon', 60], ['hurdler', 60], ['torsion-assise', 60]] },
       { id: 'bas-3', nom: 'Bas du corps 3', exos: [['jambes-ecartees', 30], ['fente-avant', 60], ['fente-arriere', 60], ['fente-laterale', 60], ['quadri-genou', 60], ['chien', 30], ['lezard', 60], ['pigeon', 60], ['double-pigeon', 60], ['hurdler', 60], ['90-90', 60], ['torsion-assise', 60], ['figure-quatre', 60], ['enfant', 60]] },
     ],
   },
   {
-    zone: 'Cou', emoji: '🦒', seances: [
+    zone: 'Cou', emoji: '🦒', texte: 'Contre le cou penché sur le téléphone : ta tête revient au-dessus de tes épaules.', seances: [
       { id: 'cou-1', nom: 'Cou 1', exos: [['rotations-epaules', 15], ['cou-roule', 15], ['salut', 15], ['menton', 15], ['plongeur', 15], ['cactus', 15], ['cou-extension', 15], ['cou-flexion', 15], ['oreille-epaule', 15], ['scalenes', 15], ['omoplate', 15], ['cou-rotation', 15], ['bras-mur', 30], ['bras-croise', 30], ['triceps', 30], ['epaule-inversee', 15], ['calin-ours', 15]] },
       { id: 'cou-2', nom: 'Cou 2', exos: [['rotations-epaules', 30], ['cou-roule', 30], ['salut', 30], ['menton', 30], ['plongeur', 30], ['cactus', 30], ['cou-extension', 30], ['cou-flexion', 30], ['oreille-epaule', 30], ['scalenes', 30], ['omoplate', 30], ['cou-rotation', 30], ['bras-mur', 30], ['bras-croise', 30], ['triceps', 30]] },
       { id: 'cou-3', nom: 'Cou 3', exos: [['rotations-epaules', 30], ['cou-roule', 30], ['salut', 30], ['menton', 30], ['plongeur', 30], ['cactus', 30], ['cou-extension', 30], ['cou-flexion', 30], ['oreille-epaule', 30], ['scalenes', 30], ['omoplate', 30], ['cou-rotation', 30], ['bras-mur', 60], ['bras-croise', 60], ['triceps', 60], ['epaule-inversee', 30], ['calin-ours', 30]] },
     ],
   },
   {
-    zone: 'Épaules', emoji: '🤲', seances: [
+    zone: 'Épaules', emoji: '🤲', texte: 'Des épaules mobiles et en arrière : tu gagnes en allure et en hauteur visible.', seances: [
       { id: 'epaules-1', nom: 'Épaules 1', exos: [['ouverture-poitrine', 30], ['bras-croise', 30], ['epaule-inversee', 30], ['triceps', 30], ['bras-mur', 30], ['flexion-avant', 30], ['pecs-mur', 30], ['plongeur', 30], ['chien-mur', 60]] },
       { id: 'epaules-2', nom: 'Épaules 2', exos: [['ouverture-poitrine', 30], ['bras-croise', 30], ['epaule-inversee', 30], ['triceps', 30], ['bras-mur', 60], ['flexion-avant', 30], ['pecs-mur', 60], ['plongeur', 30], ['chien-mur', 30], ['rotations-epaules', 60], ['cou-roule', 30], ['oreille-epaule', 30], ['cactus', 30], ['calin-ours', 30], ['cobra', 30]] },
     ],
   },
   {
-    zone: 'Ischios', emoji: '🦿', seances: [
+    zone: 'Ischios', emoji: '🦿', texte: 'L’arrière des cuisses plus souple : ton bassin ne tire plus ton dos vers l’avant.', seances: [
       { id: 'ischios-1', nom: 'Ischios 1', exos: [['orteils', 30], ['jambes-croisees', 60], ['jambes-ecartees', 30], ['fente-laterale', 60], ['fente-arriere', 60], ['flexion-assise', 30], ['hurdler', 60]] },
       { id: 'ischios-2', nom: 'Ischios 2', exos: [['orteils', 30], ['jambes-croisees', 60], ['jambes-ecartees', 30], ['fente-laterale', 60], ['fente-arriere', 60], ['chien', 30], ['pigeon', 60], ['flexion-assise', 30], ['hurdler', 60], ['ecart-assis', 30], ['figure-quatre', 60], ['ischios-allonge', 60]] },
       { id: 'ischios-3', nom: 'Ischios 3', exos: [['poupee', 30], ['orteils', 30], ['jambes-croisees', 60], ['quadri-debout', 60], ['jambes-ecartees', 30], ['squat-profond', 30], ['fente-laterale', 60], ['fente-arriere', 60], ['quadri-genou', 60], ['cobra', 30], ['chien', 30], ['lezard', 60], ['pigeon', 60], ['flexion-assise', 30], ['hurdler', 60], ['quadri-cote', 60], ['ecart-assis', 30], ['figure-quatre', 60], ['ischios-allonge', 60]] },
@@ -354,7 +356,7 @@ export function seanceLibre(id, profil = profilParcours()) {
       cle: cleLibre(id),
       titre: s.nom,
       sousTitre: zone.zone,
-      texte: `Une séance libre, en plus de ton jour. Elle ne fait pas avancer ton parcours mais compte pour ta série.`,
+      texte: zone.texte,
       pourToi: retires > 0 && profil.douleur !== 'aucune' ? [`Exercices retirés : ${profil.douleur === 'dos' ? 'ton dos' : 'tes genoux'}.`] : [],
       etapes: exos.map(([e, d], i) => etape(e, d, i)),
     };
@@ -419,6 +421,7 @@ export function FicheSeance({ seance, faite, ouverte, onFermer, onCommencer }) {
             <ul>{seance.pourToi.map((p) => <li key={p}>{p}</li>)}</ul>
           </div>
         )}
+        <p className="fiche-astuce">Touche un exercice pour voir comment le faire.</p>
         <ul className="fiche-liste">
           {seance.etapes.map((e, i) => (
             <li key={e.id} className="fiche-ligne">
@@ -431,7 +434,7 @@ export function FicheSeance({ seance, faite, ouverte, onFermer, onCommencer }) {
                 <span className="fiche-temps">{formatMinSec(durees[i])}</span>
                 <button type="button" onClick={() => regler(i, 15)} aria-label={`Plus de temps pour ${e.nom}`}><Plus size={16} aria-hidden="true" /></button>
               </span>
-              {detail === i && <p className="fiche-consigne">{e.consigne}</p>}
+              {detail === i && (e.comment ? <ol className="fiche-consigne">{e.comment.map((x) => <li key={x}>{x}</li>)}</ol> : <p className="fiche-consigne">{e.consigne}</p>)}
             </li>
           ))}
         </ul>
