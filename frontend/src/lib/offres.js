@@ -14,7 +14,7 @@ export const OFFRES = [
     reduit: 14.99,
     normal: 19.99,
     facture: 'par mois',
-    avantages: ['Ton diagnostic : ce qui te freine', 'Ton plan personnalisé : exercices, posture, sommeil, alimentation', 'Ton guide pour grandir'],
+    avantages: ['Ton diagnostic : ce qui te freine', 'Ton plan personnalisé : exercices, posture, sommeil, alimentation', 'Tes repas du jour, adaptés à toi'],
   },
   {
     duree: 'm3',
@@ -105,11 +105,11 @@ export function contenuPlan(prediction) {
         : 'Ce qui freine ta croissance, d’après tes réponses.',
     },
     { titre: 'Ton programme jour par jour', texte: 'Chaque jour, quoi faire. Tu coches, tu avances. Il change chaque mois, au rythme de ta croissance.' },
-    { titre: 'Tes exercices pour grandir', texte: `Étirements, suspension, posture : quelques minutes par jour${precisionSport}.` },
+    { titre: 'Tes exercices pour grandir', texte: `Étirements, sauts, gainage, posture : quelques minutes par jour${precisionSport}.` },
     { titre: 'Ton protocole sommeil', texte: `Ton heure de coucher avancée petit à petit${precisionSommeil}.` },
     { titre: 'Ton alimentation pour grandir', texte: `Protéines, calcium, vitamine D : quoi manger chaque jour${precisionRepas}.` },
     { titre: 'Ta posture corrigée', texte: `Ta posture te fait paraître plus petit. On la redresse.${precisionPosture}` },
-    { titre: 'Ton guide pour grandir', texte: 'Tout ce qui fait grandir, expliqué simplement.' },
+    { titre: 'Tes repas du jour', texte: '3 repas par jour adaptés à tes besoins, avec la recette.' },
     { titre: 'Ta taille adulte estimée, 98 % de précision', texte: '' },
   ]
 }
