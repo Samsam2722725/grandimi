@@ -44,9 +44,6 @@ jobs:
         run: |
           sed -i 's/RUN go mod tidy \&\& /RUN go mod download \&\& /' Dockerfile
           grep -q 'go mod download' Dockerfile
-          sed -i 's/        run: go mod tidy/        run: go mod download \&\& go mod verify/' .github/workflows/verifier-le-backend.yml
-          grep -q 'go mod verify' .github/workflows/verifier-le-backend.yml
-          git rm -q .github/workflows/figer-dependances-go.yml
 
       - name: Publier
         run: |
