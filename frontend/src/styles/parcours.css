@@ -163,3 +163,50 @@ button.parcours-rond { cursor: pointer; }
 /* La séance du parcours en tête de la liste du jour. */
 .todo-item--parcours { border-color: rgba(255, 106, 43, 0.35); }
 .todo-parcours-niveau { font-size: 12.5px; font-weight: 700; color: #ff8a52; }
+
+/* ---------- Onglet Taille : points à corriger, mise à jour ---------- */
+.app-points { margin-bottom: 12px; }
+.app-taille-maj { width: 100%; min-height: 50px; margin: 4px 0 8px; border-radius: 16px; border: 1px solid rgba(244, 239, 233, 0.12); background: #141414; color: #f4efe9; font: inherit; font-weight: 700; font-size: 15px; cursor: pointer; }
+.app-taille-detail { margin-top: 8px; }
+
+/* ---------- Séances par zone (« Browse by area ») ---------- */
+.seances-titre { margin: 4px 0 12px; font-size: 20px; font-weight: 800; color: #f4efe9; }
+.seances-zones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.seances-zone { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-height: 112px; padding: 14px; border-radius: 18px; border: 1px solid rgba(244, 239, 233, 0.06); background: #141414; color: #f4efe9; font: inherit; text-align: left; cursor: pointer; }
+.seances-zone-emoji { font-size: 30px; line-height: 1; margin-bottom: auto; }
+.seances-zone-nom { font-weight: 800; font-size: 16px; }
+.seances-zone-nb { font-size: 13px; color: #8a847e; }
+.seances-zone .parcours-reco { position: absolute; top: 12px; right: 12px; }
+.seances-retour { min-height: 40px; padding: 0; border: 0; background: none; color: #ff8a52; font: inherit; font-weight: 700; cursor: pointer; }
+.seances-zone-titre { margin: 6px 0 14px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 26px; color: #f4efe9; }
+.seances-liste { display: flex; flex-direction: column; gap: 10px; }
+.seances-carte { display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 64px; padding: 0 16px; border-radius: 16px; border: 1px solid rgba(244, 239, 233, 0.06); background: #141414; color: #f4efe9; font: inherit; cursor: pointer; }
+.seances-carte-nom { font-weight: 800; font-size: 16px; }
+.seances-carte-duree { font-size: 13.5px; color: #8a847e; }
+.seances-carte.faite .seances-carte-duree { color: #4ade80; }
+
+/* ---------- Routine quotidienne (l'onglet « daily » de Taller) ---------- */
+.routine-dates { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 16px 0; }
+.routine-date { display: flex; flex-direction: column; align-items: center; padding: 10px 0; border-radius: 14px; background: #141414; }
+.routine-date-num { font-weight: 800; font-size: 18px; color: #f4efe9; }
+.routine-date-mois { font-size: 12px; color: #8a847e; }
+.routine-date.fait { box-shadow: inset 0 -3px 0 #ff6a2b; }
+.routine-date.aujourdhui { background: #ff6a2b; }
+.routine-date.aujourdhui .routine-date-num, .routine-date.aujourdhui .routine-date-mois { color: #0b0b0c; }
+.routine-serie { display: flex; justify-content: space-between; align-items: center; padding: 8px 8px 8px 22px; border-radius: 22px; background: #141414; }
+.routine-serie-libelle { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 24px; color: #f4efe9; }
+.routine-serie-chiffre { min-width: 104px; padding: 10px 0; border-radius: 16px; background: #ff6a2b; color: #0b0b0c; text-align: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; }
+.routine-tete { display: flex; justify-content: space-between; margin-top: 22px; font-weight: 800; font-size: 19px; color: #f4efe9; }
+.routine-barre { display: block; height: 8px; margin: 12px 0 16px; border-radius: 999px; background: #232120; overflow: hidden; }
+.routine-barre span { display: block; height: 100%; border-radius: inherit; background: #ff6a2b; transition: width 0.3s ease; }
+.routine-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.routine-item { width: 100%; display: flex; align-items: center; gap: 16px; padding: 16px; border-radius: 18px; border: 0; background: #141414; color: #f4efe9; font: inherit; text-align: left; cursor: pointer; }
+.routine-item--seance { box-shadow: inset 4px 0 0 #ff6a2b; }
+.routine-rond { flex-shrink: 0; width: 30px; height: 30px; border-radius: 999px; border: 2.5px solid #3a3633; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; color: #0b0b0c; }
+.routine-item--seance .routine-rond { border-color: #ff6a2b; }
+.routine-item.fait .routine-rond { background: #ff6a2b; border-color: #ff6a2b; }
+.routine-item.fait .routine-libelle { color: #8a847e; text-decoration: line-through; }
+.routine-textes { display: flex; flex-direction: column; gap: 3px; }
+.routine-etiquette { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #ff8a52; }
+.routine-libelle { font-weight: 600; font-size: 15.5px; line-height: 1.35; }
+@media (prefers-reduced-motion: reduce) { .routine-barre span { transition: none; } }

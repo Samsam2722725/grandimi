@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, ChevronRight, Dumbbell, Home, Moon, Ruler, TrendingUp, User, Utensils } from 'lucide-react';
+import { BookOpen, CalendarCheck, ChevronRight, Ruler, TrendingUp, User } from 'lucide-react';
 import Spinner from '../components/Spinner';
 /* funnel.css porte les jetons `--funnel-*` sur la classe `.night` : sans lui,
    le skin sombre plus bas dans growth-plan.css n'a aucune valeur à résoudre. */
@@ -22,11 +22,8 @@ import { pointsFaibles } from '../lib/offres';
 import { capture } from '../lib/analytics';
 import {
   CLE_SEANCE,
-  ExercicesDuJour,
   NutritionJauges,
   SeanceGuidee,
-  SommeilSuivi,
-  scoreNutrition,
 } from '../components/ui/app-grandir';
 import {
   CARNET_PARCOURS,
@@ -34,6 +31,7 @@ import {
   JOURS_PAR_NIVEAU,
   NB_JOURS_PARCOURS,
   Parcours,
+  Seances,
   cleJourParcours,
   cleLibre,
   clePref,
@@ -105,8 +103,11 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   const [monthlyPlan, setMonthlyPlan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('accueil');
-  const [sousOnglet, setSousOnglet] = useState('exercices');
+  const [activeTab, setActiveTab] = useState('taille');
+  const [sousOnglet, setSousOnglet] = useState('parcours');
+  // Onglet Taille : le détail (mesure, courbe complète) et les points à corriger.
+  const [tailleDetail, setTailleDetail] = useState(false);
+  const [pointsOuverts, setPointsOuverts] = useState(false);
   const [seanceOuverte, setSeanceOuverte] = useState(false);
   const [moisAbonnement, setMoisAbonnement] = useState(1);
   const [testMurOuvert, setTestMurOuvert] = useState(false);
@@ -412,21 +413,6 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   const jourAccueil = parcours.ouvert || parcours.fini ? parcours.prochain : Math.max(1, parcours.prochain - 1);
   const premierDuNiveau = (niveauDuJour(jourAccueil) - 1) * JOURS_PAR_NIVEAU + 1;
   const ciblesNutrition = { prot: Number(plan.nutrition.protein_g) || 80, ca: Number(plan.nutrition.calcium_mg) || 1300 };
-  const nutrition = scoreNutrition(completedKeys, ciblesNutrition);
-  const resumeDomaine = (cle) => {
-    if (cle === 'nutrition') {
-      return { pct: nutrition.pct, detail: `${nutrition.prot} g protéines` };
-    }
-    const taches = parDomaine(cle);
-    let faites = taches.filter((t) => completedKeys.has(t.key)).length;
-    let total = taches.length;
-    if (cle === 'exercices') {
-      total += 2;
-      if (seanceFaite) faites += 1;
-      if (completedKeys.has(CLE_TEST_MUR)) faites += 1;
-    }
-    return { pct: total ? Math.round((faites / total) * 100) : 0, detail: `${faites}/${total} faites` };
-  };
 
   const faibles = pointsFaibles(predictionData);
   const correction = {
@@ -480,129 +466,60 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   };
 
   const JOURS_COURTS = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
+  const ETIQUETTE = { exercices: 'Exercice', nutrition: 'Nutrition', sommeil: 'Sommeil' };
 
+  // La barre du bas de Taller : taille, grandir, routine (et le compte).
   const NAV = [
-    { cle: 'accueil', libelle: 'Aujourd’hui', Icone: Home },
+    { cle: 'taille', libelle: 'Taille', Icone: Ruler },
     { cle: 'grandir', libelle: 'Grandir', Icone: TrendingUp },
-    { cle: 'taille', libelle: 'Ma taille', Icone: Ruler },
-    { cle: 'guide', libelle: 'Guide', Icone: BookOpen },
+    { cle: 'routine', libelle: 'Routine', Icone: CalendarCheck },
+    { cle: 'compte', libelle: 'Compte', Icone: User },
   ];
 
-  const DOMAINES = [
-    { cle: 'sommeil', nom: 'Sommeil', Icone: Moon },
-    { cle: 'nutrition', nom: 'Nutrition', Icone: Utensils },
-    { cle: 'exercices', nom: 'Exercices', Icone: Dumbbell },
-  ];
-
+  // Comme l'onglet « grow » de Taller : Train / Physique / Nutrition.
   const PILULES = [
-    { cle: 'exercices', nom: 'Parcours' },
+    { cle: 'parcours', nom: 'Parcours' },
+    { cle: 'seances', nom: 'Séances' },
     { cle: 'nutrition', nom: 'Nutrition' },
-    { cle: 'sommeil', nom: 'Sommeil' },
-    { cle: 'mois', nom: 'Ce mois-ci' },
   ];
+
+  // Routine : 3 jours avant, aujourd'hui, 3 jours après (comme Taller).
+  const semaineRoutine = Array.from({ length: 7 }, (_, i) => dateDuJour(i - 3));
+  const nbRoutine = tachesDuJour.length + 1;
+  const faitesRoutine = nbFaites + (aujourdhuiFait ? 1 : 0);
 
   return (
     <div className="night growth-plan-page app-plan">
-      {/* Barre du haut, fine : le nom, et le compte. Plus de grand titre
-          répété sur chaque écran. */}
       <header className="app-haut">
         <span className="app-marque">Grandimi</span>
-        {onGoToAccount && (
-          <button type="button" className="app-compte" onClick={onGoToAccount} aria-label="Mon compte">
-            <User size={20} aria-hidden="true" />
-          </button>
-        )}
+        <button type="button" className="app-compte" onClick={() => allerA('guide')} aria-label="Ton guide">
+          <BookOpen size={20} aria-hidden="true" />
+        </button>
       </header>
 
       <main className="app-contenu">
-        {activeTab === 'accueil' && (
+        {activeTab === 'taille' && (
           <section className="tab-content">
-            <div className="app-titre-ligne">
-              <div>
-                <p className="app-surtitre">
-                  {monthlyPlan ? `Mois ${mois} · ${monthlyPlan.focus}` : 'Ton plan'}
-                </p>
-                <h1 className="app-titre">Aujourd’hui</h1>
-              </div>
-              <span className="app-serie">
-                {/* Jours d'affilée, pas un numéro de jour : « Jour 3/7 » est celui du parcours. */}
-                🔥 {serieEnCours} {serieEnCours > 1 ? 'jours' : 'jour'}
-              </span>
-            </div>
-
-            {/* Bande de 7 jours, avec le jour sous chaque pastille. */}
-            <div className="app-semaine">
-              {septDerniersJours.map((jour, idx) => {
-                const estAujourdhui = idx === 6;
-                const fait = estAujourdhui ? completedKeys.size > 0 : joursAvecAuMoinsUneTache.has(jour);
-                const d = new Date(`${jour}T12:00:00`);
-                return (
-                  <div key={jour} className={`app-jour ${fait ? 'fait' : ''} ${estAujourdhui ? 'aujourdhui' : ''}`}>
-                    <span className="app-jour-nom">{JOURS_COURTS[d.getDay()]}</span>
-                    <span className="app-jour-num">{d.getDate()}</span>
-                    <span className="app-jour-point" aria-hidden="true" />
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Sa taille d'abord, comme l'accueil de Taller. */}
             <TailleAccueil
               predictionData={predictionData}
               verrouille={tailleVerrouillee}
               nbPoints={faibles.length}
               onDebloquer={() => { capture('montee_ouverte', { etape: planKey || '' }); setMonteeOuverte(true); }}
-              onVoirCourbe={() => allerA('taille')}
-              onVoirPoints={() => document.querySelector('.app-freine')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              onVoirCourbe={() => setTailleDetail(true)}
+              onVoirPoints={() => setPointsOuverts((o) => !o)}
             />
 
-            {/* Le parcours : le jour à faire aujourd'hui, et où il se trouve. */}
-            <div className="app-carte app-parcours-carte">
-              <div className="app-parcours-tete">
-                <span className="app-parcours-niveau">Niveau {niveauDuJour(jourAccueil)} {piments(niveauDuJour(jourAccueil))}</span>
-                <span className="app-parcours-jour">Jour {jourDansNiveau(jourAccueil)}/{JOURS_PAR_NIVEAU}</span>
-              </div>
-              <div className="app-parcours-points" aria-hidden="true">
-                {Array.from({ length: JOURS_PAR_NIVEAU }, (_, j) => premierDuNiveau + j).map((n) => (
-                  <span key={n} className={`${joursFaits.has(n) ? 'fait' : ''} ${n === jourAccueil && parcours.ouvert ? 'courant' : ''}`} />
-                ))}
-              </div>
-              <h2 className="app-carte-titre app-parcours-titre">
-                {parcours.ouvert
-                  ? `Ta séance du jour · ${seanceDuParcours(jourAccueil, profil).etapes.filter((e) => !e.repos).length} exercices`
-                  : parcours.fini ? 'Parcours terminé 🏆'
-                    : jourDansNiveau(jourAccueil) === JOURS_PAR_NIVEAU
-                      ? `Niveau ${niveauDuJour(jourAccueil)} terminé 🏆 Le niveau ${niveauDuJour(jourAccueil) + 1} se débloque demain.`
-                      : `Jour ${jourDansNiveau(jourAccueil)} fait ✓ Le suivant se débloque demain.`}
-              </h2>
-              <button
-                type="button"
-                className={`funnel-cta app-cta ${parcours.ouvert ? '' : 'app-cta--fait'}`}
-                onClick={() => (parcours.ouvert ? ouvrirJour(jourAccueil) : allerA('grandir', 'exercices'))}
-              >
-                {parcours.ouvert
-                  ? `Commencer le jour ${jourDansNiveau(jourAccueil)} — ${Math.round(dureeSecondes(seanceDuParcours(jourAccueil, profil).etapes) / 60)} min`
-                  : 'Voir mon parcours'}
-              </button>
-            </div>
-
-            {/* Ce qui te freine : la promesse du paywall, tenue dès l'accueil. */}
-            <div className="app-carte app-freine">
-              <h2 className="app-carte-titre">Ce qui te freine</h2>
-              {faibles.length ? (
+            {pointsOuverts && faibles.length > 0 && (
+              <div className="app-carte app-points">
+                <h2 className="app-carte-titre">Tes {faibles.length} {faibles.length > 1 ? 'points' : 'point'} à corriger</h2>
                 <ul className="app-freine-liste">
                   {faibles.map((f) => {
                     const [texte, sous] = correction[f] || ['', 'exercices'];
                     return (
                       <li key={f}>
-                        <button type="button" onClick={() => allerA('grandir', sous)}>
+                        <button type="button" onClick={() => (sous === 'nutrition' ? allerA('grandir', 'nutrition') : sous === 'exercices' ? allerA('grandir', 'parcours') : allerA('routine'))}>
                           <span className="app-freine-textes">
-                            <span className="app-freine-nom">
-                              {f.charAt(0).toUpperCase() + f.slice(1)}
-                              {THEME_DU_POINT_FAIBLE[f] === ordreThemes[(mois - 1) % 12] && (
-                                <span className="app-focus-badge">Ton focus ce mois-ci</span>
-                              )}
-                            </span>
+                            <span className="app-freine-nom">{f.charAt(0).toUpperCase() + f.slice(1)}</span>
                             <span className="app-freine-fix">{texte}</span>
                           </span>
                           <ChevronRight size={18} aria-hidden="true" />
@@ -611,101 +528,43 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
                     );
                   })}
                 </ul>
-              ) : (
-                <p className="app-freine-ok">Tu as de bonnes bases. Ton plan va chercher le maximum, jour après jour.</p>
-              )}
-            </div>
-
-            {/* La posture : le seul résultat visible en quelques semaines.
-                On le met en avant, avec un geste simple et vérifiable. */}
-            <div className="app-carte app-posture">
-              <div className="app-posture-tete">
-                <span className="app-posture-emoji" aria-hidden="true">🧍</span>
-                <div>
-                  <h2 className="app-carte-titre">Paraître plus grand en 3 semaines</h2>
-                  <p className="app-posture-texte">Ta posture, c’est ce que tu verras changer en premier dans le miroir.</p>
-                </div>
               </div>
-              {(predictionData.habitudes?.posture === 'voute' || predictionData.habitudes?.posture === 'un-peu-voute') && (
-                <p className="app-posture-toi">Tu nous as dit être {predictionData.habitudes.posture === 'voute' ? 'souvent' : 'un peu'} voûté : c’est ton gain le plus rapide.</p>
-              )}
-              <button type="button" className="app-posture-lien" onClick={() => setTestMurOuvert((o) => !o)} aria-expanded={testMurOuvert}>
-                {testMurOuvert ? 'Masquer' : 'Le test du mur (1 min)'}
-              </button>
-              {testMurOuvert && (
-                <ol className="app-posture-etapes">
-                  <li>Dos contre un mur, talons à 5 cm du mur.</li>
-                  <li>Fesses, omoplates et arrière de la tête touchent le mur.</li>
-                  <li>Ta tête ne touche pas sans lever le menton ? Ta posture te fait perdre de la hauteur.</li>
-                  <li>Reste 1 minute comme ça, en te grandissant : c’est l’exercice. Chaque jour.</li>
-                  <li>Prends une photo de profil aujourd’hui, et refais-la dans 3 semaines au même endroit.</li>
-                </ol>
-              )}
-              <button
-                type="button"
-                className={`app-posture-fait ${completedKeys.has(CLE_TEST_MUR) ? 'fait' : ''}`}
-                onClick={() => basculerTache(CLE_TEST_MUR)}
-                aria-pressed={completedKeys.has(CLE_TEST_MUR)}
-              >
-                {completedKeys.has(CLE_TEST_MUR) ? '✓ Test du mur fait aujourd’hui' : 'J’ai fait le test du mur aujourd’hui'}
-              </button>
-            </div>
+            )}
 
-            {/* Trois domaines, chacun avec son score du jour (comme GoTall). */}
-            <div className="app-domaines">
-              {DOMAINES.map(({ cle, nom, Icone }) => {
-                const { pct, detail } = resumeDomaine(cle);
-                return (
-                  <button key={cle} type="button" className={`app-domaine app-domaine--${cle}`} onClick={() => allerA('grandir', cle)}>
-                    <Icone size={20} aria-hidden="true" />
-                    <span className="app-domaine-nom">{nom}</span>
-                    <span className="app-domaine-pct">{pct} %</span>
-                    <span className="app-domaine-barre"><span style={{ width: `${pct}%` }} /></span>
-                    <span className="app-domaine-detail">{detail}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="app-liste-tete">
-              <h2 className="app-carte-titre">Ta liste du jour</h2>
-              <span className="app-compteur">{nbFaites + (aujourdhuiFait ? 1 : 0)}/{tachesDuJour.length + 1}</span>
-            </div>
-
-            {/* Le parcours en tête de liste, comme « Routine physique » chez Taller. */}
-            <div className={`todo-item todo-item--parcours ${aujourdhuiFait ? 'fait' : ''}`}>
-              <span className="todo-checkbox" aria-hidden="true">{aujourdhuiFait ? '✓' : ''}</span>
-              <div className="todo-body">
-                <button
-                  type="button"
-                  className="todo-label todo-label-bouton"
-                  onClick={() => (parcours.ouvert ? ouvrirJour(jourAccueil) : allerA('grandir', 'exercices'))}
-                >
-                  {aujourdhuiFait
-                    ? `Séance du jour ${jourDansNiveau(jourAccueil)} faite`
-                    : `Ta séance du jour ${jourDansNiveau(jourAccueil)} · ${Math.round(dureeSecondes(seanceDuParcours(jourAccueil, profil).etapes) / 60)} min`}
-                </button>
-                <span className="todo-parcours-niveau">Parcours · Niveau {niveauDuJour(jourAccueil)}</span>
+            {tailleDetail ? (
+              <div className="app-taille-detail">
+                <MaTaille predictionData={predictionData} onMiseAJour={onMiseAJourPrediction} verrouille={tailleVerrouillee} onDebloquer={() => { capture('montee_ouverte', { etape: planKey || '' }); setMonteeOuverte(true); }} />
+                {!tailleVerrouillee && (
+                  <div className="card plan-chart-card">
+                    <h3 className="plan-chart-title">Ta trajectoire de croissance</h3>
+                    <GrowthProjectionChart
+                      ageNow={Number(predictionData.age)}
+                      heightNow={Number(predictionData.current_height_cm)}
+                      predicted={Number(predictionData.predicted_height_cm)}
+                      potentiel={Number(predictionData.potential_height_cm)}
+                      velocityCM={predictionData.height_velocity_cm}
+                      sex={predictionData.sex}
+                    />
+                  </div>
+                )}
+                {!tailleVerrouillee && predictionData.out_of_domain && predictionData.warning && (
+                  <div className="alert alert-warning" style={{ marginTop: '16px' }} role="status">
+                    <div><span aria-hidden="true">⚕️ </span>{predictionData.warning}</div>
+                  </div>
+                )}
               </div>
-            </div>
-
-            {['Matin', 'Journée', 'Soir', 'Coucher'].map((moment) => {
-              const taches = tachesDuJour.filter((t) => t.moment === moment);
-              if (taches.length === 0) return null;
-              return (
-                <div key={moment} className="todo-group">
-                  <div className="todo-group-heading">{moment}</div>
-                  {taches.map(renderTache)}
-                </div>
-              );
-            })}
+            ) : (
+              <button type="button" className="app-taille-maj" onClick={() => setTailleDetail(true)}>
+                Mettre à jour ma taille
+              </button>
+            )}
           </section>
         )}
 
         {activeTab === 'grandir' && (
           <section className="tab-content">
-            <h1 className="app-titre">Grandir</h1>
-            <div className="app-pilules" role="tablist" aria-label="Domaines">
+            <h1 className="app-titre">Ton plan</h1>
+            <div className="app-pilules" role="tablist" aria-label="Grandir">
               {PILULES.map(({ cle, nom }) => (
                 <button
                   key={cle}
@@ -720,84 +579,88 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
               ))}
             </div>
 
-            {sousOnglet === 'exercices' && (
-              <ExercicesDuJour
-                mois={mois}
-                faite={seanceFaite}
-                onCommencer={() => { capture('seance_commencee', { etape: String(mois) }); setSeanceOuverte(true); }}
-                exercicesDuPlan={plan.posture_exercises}
-                parcours={(
-                  <Parcours
-                    joursFaits={joursFaits}
-                    aujourdhuiFait={aujourdhuiFait}
-                    onOuvrirJour={ouvrirJour}
-                    onOuvrirLibre={ouvrirLibre}
-                    libresFaites={completedKeys}
-                    profil={profil}
-                    prefs={prefs}
-                    prefsConnues={Boolean(prefs.temps || prefs.douleur)}
-                    onPref={changerPref}
-                  />
-                )}
+            {sousOnglet === 'parcours' && (
+              <Parcours
+                joursFaits={joursFaits}
+                aujourdhuiFait={aujourdhuiFait}
+                onOuvrirJour={ouvrirJour}
+                profil={profil}
+                prefs={prefs}
+                prefsConnues={Boolean(prefs.temps || prefs.douleur)}
+                onPref={changerPref}
               />
+            )}
+
+            {sousOnglet === 'seances' && (
+              <Seances profil={profil} libresFaites={completedKeys} onOuvrirLibre={ouvrirLibre} />
             )}
 
             {sousOnglet === 'nutrition' && (
               <NutritionJauges completedKeys={completedKeys} basculer={basculerTache} cibles={ciblesNutrition} />
             )}
-
-            {sousOnglet === 'sommeil' && (
-              <SommeilSuivi completedKeys={completedKeys} basculer={basculerTache} plan={plan} apercu={APERCU_PLAN} />
-            )}
-
-            {sousOnglet === 'mois' && monthlyPlan && (
-              <>
-                <h2 className="app-carte-titre">Mois {mois} — {monthlyPlan.focus}</h2>
-                {themeVientDeSesFaibles && (
-                  <p className="app-focus-raison">On commence par là : c’est ce qui te freine le plus d’après tes réponses.</p>
-                )}
-                <p className="app-texte">{monthlyPlan.why_this_month}</p>
-                <div className="alert alert-info" style={{ margin: '16px 0' }}>
-                  <div><strong>Ton objectif du mois :</strong> {monthlyPlan.month_target}</div>
-                </div>
-                <h2 className="app-carte-titre">Semaine par semaine</h2>
-                <ul className="action-list">
-                  {monthlyPlan.weekly_goals.map((objectif, idx) => <li key={idx}>{objectif}</li>)}
-                </ul>
-                <div className="alert alert-info" style={{ marginTop: '16px' }}>
-                  <div>
-                    Mesure-toi à la fin du mois : ton prochain plan en dépend.
-                    <br />
-                    <strong>{`Mois ${mois + 1} : ${themeSuivant}`}</strong>
-                  </div>
-                </div>
-              </>
-            )}
           </section>
         )}
 
-        {activeTab === 'taille' && (
+        {activeTab === 'routine' && (
           <section className="tab-content">
-            <h1 className="app-titre">Ma taille</h1>
-            <MaTaille predictionData={predictionData} onMiseAJour={onMiseAJourPrediction} verrouille={tailleVerrouillee} onDebloquer={() => { capture('montee_ouverte', { etape: planKey || '' }); setMonteeOuverte(true); }} />
-            {!tailleVerrouillee && (
-            <div className="card plan-chart-card">
-              <h3 className="plan-chart-title">Ta trajectoire de croissance</h3>
-              <GrowthProjectionChart
-                ageNow={Number(predictionData.age)}
-                heightNow={Number(predictionData.current_height_cm)}
-                predicted={Number(predictionData.predicted_height_cm)}
-                potentiel={Number(predictionData.potential_height_cm)}
-                velocityCM={predictionData.height_velocity_cm}
-                sex={predictionData.sex}
-              />
+            <h1 className="app-titre">Routine quotidienne</h1>
+
+            <div className="routine-dates">
+              {semaineRoutine.map((jour, idx) => {
+                const d = new Date(`${jour}T12:00:00`);
+                const estAujourdhui = idx === 3;
+                const fait = estAujourdhui ? completedKeys.size > 0 : joursAvecAuMoinsUneTache.has(jour);
+                return (
+                  <div key={jour} className={`routine-date ${estAujourdhui ? 'aujourdhui' : ''} ${fait ? 'fait' : ''}`}>
+                    <span className="routine-date-num">{d.getDate()}</span>
+                    <span className="routine-date-mois">{d.toLocaleDateString('fr-FR', { month: 'short' })}</span>
+                  </div>
+                );
+              })}
             </div>
-            )}
-            {!tailleVerrouillee && predictionData.out_of_domain && predictionData.warning && (
-              <div className="alert alert-warning" style={{ marginTop: '16px' }} role="status">
-                <div><span aria-hidden="true">⚕️ </span>{predictionData.warning}</div>
-              </div>
-            )}
+
+            <div className="routine-serie">
+              <span className="routine-serie-libelle">Série <span aria-hidden="true">🔥</span></span>
+              <span className="routine-serie-chiffre">{serieEnCours}</span>
+            </div>
+
+            <div className="routine-tete">
+              <span>En cours</span>
+              <span>{faitesRoutine}/{nbRoutine}</span>
+            </div>
+            <span className="routine-barre" aria-hidden="true"><span style={{ width: `${(faitesRoutine / nbRoutine) * 100}%` }} /></span>
+
+            <ul className="routine-liste">
+              <li>
+                <button
+                  type="button"
+                  className={`routine-item routine-item--seance ${aujourdhuiFait ? 'fait' : ''}`}
+                  onClick={() => (parcours.ouvert ? ouvrirJour(jourAccueil) : allerA('grandir', 'parcours'))}
+                >
+                  <span className="routine-rond" aria-hidden="true">{aujourdhuiFait ? '✓' : ''}</span>
+                  <span className="routine-textes">
+                    <span className="routine-etiquette">Exercice</span>
+                    <span className="routine-libelle">
+                      Séance du jour {jourDansNiveau(jourAccueil)} · niveau {niveauDuJour(jourAccueil)} · {Math.round(dureeSecondes(seanceDuParcours(jourAccueil, profil).etapes) / 60)} min
+                    </span>
+                  </span>
+                </button>
+              </li>
+              {tachesDuJour.map((tache) => {
+                const fait = completedKeys.has(tache.key);
+                return (
+                  <li key={tache.key}>
+                    <button type="button" className={`routine-item ${fait ? 'fait' : ''}`} onClick={() => basculerTache(tache.key)} aria-pressed={fait}>
+                      <span className="routine-rond" aria-hidden="true">{fait ? '✓' : ''}</span>
+                      <span className="routine-textes">
+                        <span className="routine-etiquette">{ETIQUETTE[domaineDe(tache)]}</span>
+                        <span className="routine-libelle">{tache.label}</span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
           </section>
         )}
 
@@ -845,7 +708,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
         />
       )}
 
-      {visite && activeTab === 'accueil' && !seanceOuverte && !seanceParcours && !fiche && <VisiteGuidee onFin={() => setVisite(false)} />}
+      {visite && activeTab === 'taille' && !seanceOuverte && !seanceParcours && !fiche && <VisiteGuidee onFin={() => setVisite(false)} />}
 
       {monteeOuverte && <MonteeEnGamme predictionData={predictionData} onFermer={() => setMonteeOuverte(false)} />}
 
@@ -856,7 +719,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
             key={cle}
             type="button"
             className={`app-nav-item ${activeTab === cle ? 'active' : ''}`}
-            onClick={() => allerA(cle)}
+            onClick={() => (cle === 'compte' ? onGoToAccount?.() : allerA(cle))}
             aria-current={activeTab === cle ? 'page' : undefined}
           >
             <Icone size={22} aria-hidden="true" />

@@ -494,13 +494,11 @@ const TRAITS = [
   ...[3, 2, 1].map((col, k) => ({ de: 4 + k, a: 5 + k, style: { left: centre(col), width: '25%', top: 'calc(var(--rond) * 1.5 + var(--ecart) - 5px)', height: 10 } })),
 ];
 
-export function Parcours({ joursFaits, aujourdhuiFait, onOuvrirJour, onOuvrirLibre, libresFaites, profil, prefs, prefsConnues, onPref }) {
+export function Parcours({ joursFaits, aujourdhuiFait, onOuvrirJour, profil, prefs, prefsConnues, onPref }) {
   const { prochain, ouvert, fini, faits } = etatParcours(joursFaits, aujourdhuiFait);
   const niveauCourant = niveauDuJour(prochain);
   const refCourant = useRef(null);
   const [reglagesOuverts, setReglagesOuverts] = useState(!prefsConnues);
-  const recommandees = zonesRecommandees(profil);
-  const zones = [...BIBLIOTHEQUE].sort((a, b) => recommandees.includes(b.zone) - recommandees.includes(a.zone));
 
   // À l'ouverture, on amène le niveau en cours à l'écran.
   useEffect(() => {
@@ -572,28 +570,53 @@ export function Parcours({ joursFaits, aujourdhuiFait, onOuvrirJour, onOuvrirLib
         );
       })}
 
-      <h2 className="app-carte-titre parcours-biblio-titre">Séances libres, par zone</h2>
-      <p className="parcours-biblio-texte">En plus de ton jour, quand tu veux. Elles comptent pour ta série.</p>
-      {zones.map((zone) => (
-        <div key={zone.zone} className="parcours-zone">
-          <p className="parcours-zone-nom">
-            <span aria-hidden="true">{zone.emoji}</span> {zone.zone}
-            {recommandees.includes(zone.zone) && <span className="parcours-reco">Recommandé pour toi</span>}
-          </p>
-          <div className="parcours-zone-seances">
-            {zone.seances.map((s) => {
-              const seance = seanceLibre(s.id, profil);
-              const faite = libresFaites.has(cleLibre(s.id));
-              return (
-                <button key={s.id} type="button" className={`parcours-libre ${faite ? 'faite' : ''}`} onClick={() => onOuvrirLibre(s.id)}>
-                  <span className="parcours-libre-nom">{s.nom}</span>
-                  <span className="parcours-libre-duree">{faite ? 'Faite aujourd’hui ✓' : formatDuree(dureeSecondes(seance.etapes))}</span>
-                </button>
-              );
-            })}
-          </div>
+    </div>
+  );
+}
+
+/* ---------- Les séances libres (l'onglet « Train » de Taller) ----------
+   « Browse by area » : la liste des zones, puis les séances de la zone. */
+
+export function Seances({ profil, libresFaites, onOuvrirLibre }) {
+  const [zoneOuverte, setZoneOuverte] = useState(null);
+  const recommandees = zonesRecommandees(profil);
+  const zones = [...BIBLIOTHEQUE].sort((a, b) => recommandees.includes(b.zone) - recommandees.includes(a.zone));
+  const zone = zones.find((z) => z.zone === zoneOuverte);
+
+  if (zone) {
+    return (
+      <div className="seances">
+        <button type="button" className="seances-retour" onClick={() => setZoneOuverte(null)}>← Toutes les zones</button>
+        <h2 className="seances-zone-titre"><span aria-hidden="true">{zone.emoji}</span> {zone.zone}</h2>
+        <div className="seances-liste">
+          {zone.seances.map((x) => {
+            const seance = seanceLibre(x.id, profil);
+            const faite = libresFaites.has(cleLibre(x.id));
+            return (
+              <button key={x.id} type="button" className={`seances-carte ${faite ? 'faite' : ''}`} onClick={() => onOuvrirLibre(x.id)}>
+                <span className="seances-carte-nom">{x.nom}</span>
+                <span className="seances-carte-duree">{faite ? 'Faite aujourd’hui ✓' : formatDuree(dureeSecondes(seance.etapes))}</span>
+              </button>
+            );
+          })}
         </div>
-      ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="seances">
+      <h2 className="seances-titre">Par zone</h2>
+      <div className="seances-zones">
+        {zones.map((z) => (
+          <button key={z.zone} type="button" className="seances-zone" onClick={() => setZoneOuverte(z.zone)}>
+            <span className="seances-zone-emoji" aria-hidden="true">{z.emoji}</span>
+            <span className="seances-zone-nom">{z.zone}</span>
+            <span className="seances-zone-nb">{z.seances.length} séances</span>
+            {recommandees.includes(z.zone) && <span className="parcours-reco">Pour toi</span>}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
