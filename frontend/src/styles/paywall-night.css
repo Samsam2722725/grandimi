@@ -1273,3 +1273,10 @@
 .pw3-reprise-titre { font-weight: 800; font-size: 16px; color: #ff8a52; margin-bottom: 4px !important; }
 .pw3-reprise-cta { width: 100%; min-height: 50px; margin-top: 12px; }
 .pw3-reprise-fermer { width: 100%; min-height: 44px; margin-top: 6px; border: 0; background: none; color: #c9c3bd; font-weight: 700; text-decoration: underline; cursor: pointer; }
+
+/* Le formulaire Whop a besoin de toute la largeur du téléphone : dans le
+   cadre (334 px sur un écran de 375), son contenu était coupé à droite
+   (« Code prom… », Visa, textes). Constaté le 25/10/2026. */
+@media (max-width: 520px) {
+  .pw2-feuille-carte { margin: 0 -12px; padding: 8px 0 0; border: 0; border-radius: 0; }
+}

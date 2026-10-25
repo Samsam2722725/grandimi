@@ -372,9 +372,14 @@ function PaywallPage({ onBackHome }) {
   carteRefuseeRef.current = carteRefusee
   /* Fermer le paiement sans payer : mesuré, pour savoir combien partent
      avant même d'essayer une carte et combien après un refus. */
+  // Moment d'ouverture, pour mesurer le temps passé avant de fermer.
+  const ouvertLeRef = useRef(0)
   const fermerPaiement = () => {
     oublierPaiementEnCours()
-    capture('paiement_ferme_sans_payer', { etape: carteRefuseeRef.current ? 'apres_refus' : 'sans_essai' })
+    capture('paiement_ferme_sans_payer', {
+      etape: carteRefuseeRef.current ? 'apres_refus' : 'sans_essai',
+      secondes: ouvertLeRef.current ? Math.round((Date.now() - ouvertLeRef.current) / 1000) : null,
+    })
     setFeuilleOuverte(false)
   }
   useEffect(() => () => clearTimeout(repliRef.current), [])
@@ -482,6 +487,7 @@ function PaywallPage({ onBackHome }) {
       checkoutOuvert(planChoisi)
       noterPaiementEnCours(planChoisi)
       setRepriseVisible(false)
+      ouvertLeRef.current = Date.now()
       setFeuilleOuverte(true)
       /* Bloqueur de pub, navigateur intégré, réseau lent : si le formulaire
          Whop n'est toujours pas là après 4 s, on part sur la page de
@@ -821,9 +827,11 @@ function PaywallPage({ onBackHome }) {
         <div
           className={`pw2-feuille ${feuilleOuverte ? 'is-ouverte' : ''}`}
           aria-hidden={!feuilleOuverte}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) fermerPaiement()
-          }}
+          /* Plus de fermeture en touchant le fond : sur téléphone, le haut
+             de la page reste visible au-dessus du paiement, et un toucher
+             là (défiler, viser la croix de la page) le refermait sans le
+             vouloir. Près de la moitié des fermetures arrivaient en moins
+             de 3 s (25/10/2026). On ferme avec la croix du panneau. */
         >
           <div className="pw2-feuille-panneau" role="dialog" aria-label="Paiement">
             <div className="pw2-feuille-tete">
