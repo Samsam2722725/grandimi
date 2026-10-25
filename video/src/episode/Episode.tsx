@@ -20,6 +20,7 @@ import {Paper, Typed} from './Paper';
 import {CarteCommentaire} from './CarteCommentaire';
 import {ChargementPlan} from './ChargementPlan';
 import {FormulaireGrandimi} from './FormulaireGrandimi';
+import {SceneFamille} from './SceneFamille';
 import {HookCommentaires} from './HookCommentaires';
 import {DashboardGrandimi} from './Dashboard';
 import {HookTaille} from './HookTaille';
@@ -715,6 +716,15 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 
 	const content = (
 		<AbsoluteFill>
+			{plan.scene ? (
+				<SceneFamille
+					fond={file(plan.scene.fond)}
+					personnes={plan.scene.personnes.map((p) => ({id: p.id, src: file(p.fichier), w: p.w, h: p.h}))}
+					etapes={plan.scene.etapes.map((e) => ({f: loc(e.a), poses: e.poses}))}
+					etiquettes={plan.scene.etiquettes.map((e) => ({...e, a: loc(e.a), fin: e.fin !== undefined ? loc(e.fin) : undefined}))}
+					mots={(plan.scene.mots ?? []).map((m) => ({...m, a: loc(m.a), fin: loc(m.fin)}))}
+				/>
+			) : null}
 			{plan.famille ? <FamillePlan fam={plan.famille} aOpt={loc(plan.famille.futur.aOptimisee)} aGain={loc(plan.famille.futur.aGain)} /> : null}
 			{plan.dashboard ? (
 				<DashboardGrandimi
@@ -1076,20 +1086,23 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 						</Sequence>
 					);
 				})}
-				{data.carteCommentaire ? (
-					<CarteCommentaire
-						nom={data.carteCommentaire.nom}
-						texte={data.carteCommentaire.texte}
-						de={resolve(data.carteCommentaire.de)}
-						a={resolve(data.carteCommentaire.a)}
-						haut={data.carteCommentaire.haut}
-						x={data.carteCommentaire.x}
-						y={data.carteCommentaire.y}
-						ligne={data.carteCommentaire.ligne}
-						w={data.carteCommentaire.w}
-						reponse={data.carteCommentaire.reponse}
-					/>
-				) : null}
+				{data.carteCommentaire
+					? [data.carteCommentaire, ...(data.carteCommentaire.retour ? [{...data.carteCommentaire, ...data.carteCommentaire.retour}] : [])].map((c, k) => (
+							<CarteCommentaire
+								key={k}
+								nom={c.nom}
+								texte={c.texte}
+								de={resolve(c.de)}
+								a={resolve(c.a)}
+								haut={c.haut}
+								x={c.x}
+								y={c.y}
+								ligne={c.ligne}
+								w={c.w}
+								reponse={c.reponse}
+							/>
+						))
+					: null}
 				{data.titre ? (
 					<TitreFixe
 						texte={data.titre.texte}

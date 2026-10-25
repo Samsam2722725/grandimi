@@ -1,0 +1,467 @@
+{
+  "fps": 30,
+  "totalFrames": 931,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "mere",
+      "text": "Ta mère mesure 1m57.",
+      "from": 0,
+      "duration": 49,
+      "words": [
+        {
+          "w": "Ta",
+          "f": 0
+        },
+        {
+          "w": "mère",
+          "f": 5
+        },
+        {
+          "w": "mesure",
+          "f": 12
+        },
+        {
+          "w": "1m57.",
+          "f": 22
+        }
+      ]
+    },
+    {
+      "id": "toi",
+      "text": "Et toi, à seulement 15 ans, tu mesures déjà 1m75.",
+      "from": 50,
+      "duration": 105,
+      "words": [
+        {
+          "w": "Et",
+          "f": 50
+        },
+        {
+          "w": "toi,",
+          "f": 53
+        },
+        {
+          "w": "à",
+          "f": 62
+        },
+        {
+          "w": "seulement",
+          "f": 67
+        },
+        {
+          "w": "15",
+          "f": 79
+        },
+        {
+          "w": "ans,",
+          "f": 86
+        },
+        {
+          "w": "tu",
+          "f": 96
+        },
+        {
+          "w": "mesures",
+          "f": 103
+        },
+        {
+          "w": "déjà",
+          "f": 113
+        },
+        {
+          "w": "1m75.",
+          "f": 120
+        }
+      ]
+    },
+    {
+      "id": "pere",
+      "text": "Ton père faisait la même taille que toi à ton âge,",
+      "from": 156,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Ton",
+          "f": 156
+        },
+        {
+          "w": "père",
+          "f": 161
+        },
+        {
+          "w": "faisait",
+          "f": 168
+        },
+        {
+          "w": "la",
+          "f": 175
+        },
+        {
+          "w": "même",
+          "f": 178
+        },
+        {
+          "w": "taille",
+          "f": 185
+        },
+        {
+          "w": "que",
+          "f": 192
+        },
+        {
+          "w": "toi",
+          "f": 194
+        },
+        {
+          "w": "à",
+          "f": 199
+        },
+        {
+          "w": "ton",
+          "f": 202
+        },
+        {
+          "w": "âge,",
+          "f": 206
+        }
+      ]
+    },
+    {
+      "id": "pere2",
+      "text": "et aujourd'hui, il mesure 1m83.",
+      "from": 214,
+      "duration": 61,
+      "words": [
+        {
+          "w": "et",
+          "f": 214
+        },
+        {
+          "w": "aujourd'hui,",
+          "f": 219
+        },
+        {
+          "w": "il",
+          "f": 231
+        },
+        {
+          "w": "mesure",
+          "f": 236
+        },
+        {
+          "w": "1m83.",
+          "f": 248
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon grandimi.com, il pourrait atteindre 1m84 à l'âge adulte.",
+      "from": 277,
+      "duration": 112,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 277
+        },
+        {
+          "w": "grandimi.com,",
+          "f": 284
+        },
+        {
+          "w": "il",
+          "f": 320
+        },
+        {
+          "w": "pourrait",
+          "f": 325
+        },
+        {
+          "w": "atteindre",
+          "f": 332
+        },
+        {
+          "w": "1m84",
+          "f": 341
+        },
+        {
+          "w": "à",
+          "f": 368
+        },
+        {
+          "w": "l'âge",
+          "f": 370
+        },
+        {
+          "w": "adulte.",
+          "f": 377
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "Et avec les bonnes habitudes, il pourrait même atteindre 1m88, soit 4 cm de plus.",
+      "from": 389,
+      "duration": 142,
+      "words": [
+        {
+          "w": "Et",
+          "f": 389
+        },
+        {
+          "w": "avec",
+          "f": 394
+        },
+        {
+          "w": "les",
+          "f": 399
+        },
+        {
+          "w": "bonnes",
+          "f": 401
+        },
+        {
+          "w": "habitudes,",
+          "f": 409
+        },
+        {
+          "w": "il",
+          "f": 421
+        },
+        {
+          "w": "pourrait",
+          "f": 425
+        },
+        {
+          "w": "même",
+          "f": 430
+        },
+        {
+          "w": "atteindre",
+          "f": 435
+        },
+        {
+          "w": "1m88,",
+          "f": 460
+        },
+        {
+          "w": "soit",
+          "f": 489
+        },
+        {
+          "w": "4",
+          "f": 499
+        },
+        {
+          "w": "cm",
+          "f": 506
+        },
+        {
+          "w": "de",
+          "f": 520
+        },
+        {
+          "w": "plus.",
+          "f": 523
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Samuel est plus grand que 77,2% des garçons de son âge,",
+      "from": 532,
+      "duration": 121,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 532
+        },
+        {
+          "w": "Samuel",
+          "f": 547
+        },
+        {
+          "w": "est",
+          "f": 563
+        },
+        {
+          "w": "plus",
+          "f": 566
+        },
+        {
+          "w": "grand",
+          "f": 571
+        },
+        {
+          "w": "que",
+          "f": 578
+        },
+        {
+          "w": "77,2%",
+          "f": 583
+        },
+        {
+          "w": "des",
+          "f": 626
+        },
+        {
+          "w": "garçons",
+          "f": 628
+        },
+        {
+          "w": "de",
+          "f": 638
+        },
+        {
+          "w": "son",
+          "f": 640
+        },
+        {
+          "w": "âge,",
+          "f": 645
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a déjà terminé 95,4% de sa croissance.",
+      "from": 655,
+      "duration": 99,
+      "words": [
+        {
+          "w": "et",
+          "f": 655
+        },
+        {
+          "w": "il",
+          "f": 659
+        },
+        {
+          "w": "a",
+          "f": 664
+        },
+        {
+          "w": "déjà",
+          "f": 667
+        },
+        {
+          "w": "terminé",
+          "f": 674
+        },
+        {
+          "w": "95,4%",
+          "f": 683
+        },
+        {
+          "w": "de",
+          "f": 718
+        },
+        {
+          "w": "sa",
+          "f": 733
+        },
+        {
+          "w": "croissance.",
+          "f": 740
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T'es vraiment pas foutu!",
+      "from": 754,
+      "duration": 42,
+      "words": [
+        {
+          "w": "T'es",
+          "f": 754
+        },
+        {
+          "w": "vraiment",
+          "f": 766
+        },
+        {
+          "w": "pas",
+          "f": 773
+        },
+        {
+          "w": "foutu!",
+          "f": 778
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux aussi connaître ta taille adulte, écris ton âge, ta taille actuelle en commentaire.",
+      "from": 797,
+      "duration": 131,
+      "words": [
+        {
+          "w": "Si",
+          "f": 797
+        },
+        {
+          "w": "tu",
+          "f": 802
+        },
+        {
+          "w": "veux",
+          "f": 805
+        },
+        {
+          "w": "aussi",
+          "f": 809
+        },
+        {
+          "w": "connaître",
+          "f": 814
+        },
+        {
+          "w": "ta",
+          "f": 826
+        },
+        {
+          "w": "taille",
+          "f": 831
+        },
+        {
+          "w": "adulte,",
+          "f": 841
+        },
+        {
+          "w": "écris",
+          "f": 853
+        },
+        {
+          "w": "ton",
+          "f": 862
+        },
+        {
+          "w": "âge,",
+          "f": 867
+        },
+        {
+          "w": "ta",
+          "f": 877
+        },
+        {
+          "w": "taille",
+          "f": 881
+        },
+        {
+          "w": "actuelle",
+          "f": 889
+        },
+        {
+          "w": "en",
+          "f": 901
+        },
+        {
+          "w": "commentaire.",
+          "f": 905
+        }
+      ]
+    }
+  ]
+}

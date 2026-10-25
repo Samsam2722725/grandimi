@@ -1,0 +1,414 @@
+{
+  "partie": 17,
+  "voice": "ff_siwis",
+  "speed": 1.2,
+  "lines": [
+    {
+      "id": "mere",
+      "pause": 0,
+      "text": "Ta mère mesure 1m57."
+    },
+    {
+      "id": "toi",
+      "pause": 0,
+      "text": "Et toi, à seulement 15 ans, tu mesures déjà 1m75."
+    },
+    {
+      "id": "pere",
+      "pause": 0,
+      "text": "Ton père faisait la même taille que toi à ton âge,"
+    },
+    {
+      "id": "pere2",
+      "pause": 0,
+      "text": "et aujourd'hui, il mesure 1m83."
+    },
+    {
+      "id": "predit",
+      "pause": 0,
+      "text": "Selon grandimi.com, il pourrait atteindre 1m84 à l'âge adulte."
+    },
+    {
+      "id": "optim",
+      "pause": 0,
+      "text": "Et avec les bonnes habitudes, il pourrait même atteindre 1m88, soit 4 cm de plus."
+    },
+    {
+      "id": "pct",
+      "pause": 0,
+      "text": "Actuellement, Samuel est plus grand que 77,2 % des garçons de son âge,"
+    },
+    {
+      "id": "fini",
+      "pause": 0,
+      "text": "et il a déjà terminé 95,4 % de sa croissance."
+    },
+    {
+      "id": "foutu",
+      "pause": 0,
+      "text": "T'es vraiment pas foutu !"
+    },
+    {
+      "id": "cta",
+      "pause": 0,
+      "text": "Si tu veux aussi connaître ta taille adulte, écris ton âge, ta taille actuelle en commentaire."
+    }
+  ],
+  "musique": {
+    "fichier": "sfx/music.wav",
+    "volume": 0.08
+  },
+  "images": {},
+  "zones": {},
+  "plans": [
+    {
+      "nom": "scene",
+      "debut": 0,
+      "sortie": "radial-fin",
+      "scene": {
+        "fond": "grille.jpg",
+        "personnes": [
+          {
+            "id": "mere",
+            "fichier": "mere.png",
+            "w": 544,
+            "h": 1837
+          },
+          {
+            "id": "fils",
+            "fichier": "fils.png",
+            "w": 580,
+            "h": 1797
+          },
+          {
+            "id": "pere",
+            "fichier": "pere.png",
+            "w": 546,
+            "h": 1530
+          }
+        ],
+        "etapes": [
+          {
+            "a": 0,
+            "poses": {
+              "mere": {
+                "x": 540,
+                "h": 1540,
+                "sol": 1880,
+                "z": 2
+              }
+            }
+          },
+          {
+            "a": "toi:et",
+            "poses": {
+              "mere": {
+                "x": 227,
+                "h": 1256,
+                "sol": 1800,
+                "z": 1
+              },
+              "fils": {
+                "x": 545,
+                "h": 1600,
+                "sol": 1880,
+                "z": 3
+              }
+            }
+          },
+          {
+            "a": "pere:ton",
+            "poses": {
+              "mere": {
+                "x": 227,
+                "h": 1256,
+                "sol": 1800,
+                "z": 1
+              },
+              "pere": {
+                "x": 540,
+                "h": 1640,
+                "sol": 1880,
+                "z": 3
+              },
+              "fils": {
+                "x": 900,
+                "h": 1400,
+                "sol": 1800,
+                "z": 1
+              }
+            }
+          },
+          {
+            "a": "predit:selon",
+            "poses": {
+              "mere": {
+                "x": 227,
+                "h": 1256,
+                "sol": 1800,
+                "z": 1
+              },
+              "fils": {
+                "x": 545,
+                "h": 1400,
+                "sol": 1800,
+                "z": 2
+              },
+              "pere": {
+                "x": 890,
+                "h": 1464,
+                "sol": 1800,
+                "z": 1
+              }
+            }
+          },
+          {
+            "a": "optim:1m88-3",
+            "poses": {
+              "mere": {
+                "x": 227,
+                "h": 1256,
+                "sol": 1800,
+                "z": 1
+              },
+              "fils": {
+                "x": 545,
+                "h": 1600,
+                "sol": 1880,
+                "z": 3
+              },
+              "pere": {
+                "x": 890,
+                "h": 1464,
+                "sol": 1800,
+                "z": 1
+              }
+            }
+          }
+        ],
+        "etiquettes": [
+          {
+            "personne": "mere",
+            "texte": "1m57",
+            "a": "mere:1m57",
+            "fin": "pere2:1m83"
+          },
+          {
+            "personne": "fils",
+            "texte": "1m75",
+            "a": "toi:1m75",
+            "fin": "pere2:1m83"
+          },
+          {
+            "personne": "pere",
+            "texte": "1m75",
+            "a": "pere:même",
+            "fin": "pere2:1m83"
+          },
+          {
+            "personne": "pere",
+            "texte": "1m83",
+            "a": "pere2:1m83",
+            "fin": "predit:selon"
+          },
+          {
+            "personne": "fils",
+            "texte": "1m84",
+            "a": "predit:1m84",
+            "fin": "optim:1m88"
+          },
+          {
+            "personne": "fils",
+            "texte": "1m88",
+            "a": "optim:1m88"
+          }
+        ],
+        "mots": [
+          {
+            "personne": "mere",
+            "texte": "MÈRE",
+            "a": "mere:mère",
+            "fin": "toi:et"
+          }
+        ]
+      },
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": "predit:grandimi.com",
+          "y": 90,
+          "taille": 76,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 10,
+          "fin": "optim"
+        },
+        {
+          "type": "texte",
+          "texte": "+4 CM 📈",
+          "a": "optim:4",
+          "y": 1040,
+          "taille": 130,
+          "couleur": "#24ef3c",
+          "contour": 8,
+          "fin": "pct",
+          "son": "pop",
+          "volume": 0.3
+        },
+        {
+          "type": "texte",
+          "texte": "PLUS GRAND QUE 77,2 % 🌍",
+          "a": "pct:77,2",
+          "y": 1060,
+          "taille": 70,
+          "couleur": "#111",
+          "fond": "#f2ff1f",
+          "amorti": 8,
+          "fin": "fini:95,4",
+          "son": "pop",
+          "volume": 0.3
+        },
+        {
+          "type": "texte",
+          "texte": "CROISSANCE : 95,4 %",
+          "a": "fini:95,4",
+          "y": 1060,
+          "taille": 80,
+          "couleur": "#111",
+          "fond": "#f2ff1f",
+          "amorti": 8,
+          "fin": "foutu",
+          "son": "pop",
+          "volume": 0.3
+        },
+        {
+          "type": "texte",
+          "texte": "PAS FOUTU ✅",
+          "a": "foutu:pas",
+          "y": 1040,
+          "taille": 140,
+          "couleur": "#24ef3c",
+          "contour": 9,
+          "fin": "cta:écris",
+          "son": "ding",
+          "volume": 0.25
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "icone.png",
+          "a": "cta:connaître",
+          "x": 395,
+          "y": 250,
+          "w": 290,
+          "h": 290,
+          "effet": "pop",
+          "son": "pop",
+          "volume": 0.3
+        },
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": "cta:commentaire-6",
+          "y": 1600,
+          "taille": 80,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 8
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "toi:et",
+          "son": "whoosh",
+          "volume": 0.25
+        },
+        {
+          "a": "pere:ton",
+          "son": "whoosh",
+          "volume": 0.25
+        },
+        {
+          "a": "predit:selon",
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": "optim:1m88-3",
+          "son": "whoosh",
+          "volume": 0.28
+        },
+        {
+          "a": "mere:1m57",
+          "son": "pop",
+          "volume": 0.25
+        },
+        {
+          "a": "toi:1m75",
+          "son": "pop",
+          "volume": 0.25
+        },
+        {
+          "a": "pere2:1m83",
+          "son": "pop",
+          "volume": 0.25
+        },
+        {
+          "a": "predit:1m84",
+          "son": "pop",
+          "volume": 0.25
+        },
+        {
+          "a": "optim:1m88",
+          "son": "ding",
+          "volume": 0.25
+        }
+      ],
+      "pousse": 0.06
+    }
+  ],
+  "sousTitres": {
+    "motsCles": [],
+    "fenetres": [
+      {
+        "de": 0,
+        "a": "fin",
+        "y": 1330,
+        "taille": 130,
+        "motsMax": 1,
+        "carMax": 14,
+        "poids": 900,
+        "contour": 8,
+        "motsCles": false,
+        "pop": true,
+        "majuscules": false,
+        "police": "Montserrat",
+        "couleur": "#f2ff1f"
+      }
+    ]
+  },
+  "voix": "Enregistrement ElevenLabs de l'utilisateur, blancs ramenés à 0,08 s, ×1,12.",
+  "reference": "references/p12-steve",
+  "deriveCamera": false,
+  "sonsMouvements": false,
+  "carteCommentaire": {
+    "nom": "samuel.dsl",
+    "texte": "15 ans 1m75, mère 1m57 et père 1m83",
+    "de": 0,
+    "a": "pere-2",
+    "haut": true,
+    "x": 95,
+    "y": 880,
+    "w": 890,
+    "retour": {
+      "de": "cta:écris",
+      "a": "fin"
+    }
+  }
+}

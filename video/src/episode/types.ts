@@ -91,6 +91,14 @@ export type Plan = {
 		/** logo : en-tête « GRANDIMI » + icône, sans barre d'état (diapos format Taller). */
 		entete?: 'logo' | 'aucun';
 	};
+	/** Scène « famille » (référence p19-ref) : personnes détourées qui changent de place selon la voix (src/episode/SceneFamille.tsx). */
+	scene?: {
+		fond: string;
+		personnes: {id: string; fichier: string; w: number; h: number}[];
+		etapes: {a: Ancre; poses: Record<string, {x: number; h: number; sol: number; z?: number}>}[];
+		etiquettes: {personne: string; texte: string; a: Ancre; fin?: Ancre; couleur?: string}[];
+		mots?: {personne: string; texte: string; a: Ancre; fin: Ancre}[];
+	};
 	/** Suite d'images plein écran (une par frame, la dernière reste affichée), à la place de `image`. */
 	sequence?: string[];
 	fondCouleur?: string;
@@ -109,7 +117,9 @@ export type Episode = {
 	/** ligne : ligne de commentaire TikTok pleine largeur (référence rayan.taller). */
 	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre; haut?: boolean; x?: number; y?: number; ligne?: boolean; w?: number;
 		/** Carte « Réponse au commentaire » penchée des vidéos Taller : hauteur et rotation (degrés). */
-		reponse?: {h: number; rotation: number; modele?: 'parsa'; avatar?: string}};
+		reponse?: {h: number; rotation: number; modele?: 'parsa'; avatar?: string};
+		/** Deuxième passage de la même carte (appel à commenter de la fin). */
+		retour?: {de: Ancre; a: Ancre}};
 	/** sec : transitions deux fois plus courtes et flou de mouvement sur les mouvements de caméra (demande du 20/10). */
 	rythme?: 'sec';
 	/** false : pas de légère poussée de caméra entre les mouvements (défaut : true). */
