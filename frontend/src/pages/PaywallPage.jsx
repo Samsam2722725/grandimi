@@ -481,28 +481,41 @@ function PaywallPage({ onBackHome }) {
     }
   }, [])
 
+  const ouvrirFeuille = (urlDeCetteOffre) => {
+    setErreur(null)
+    checkoutOuvert(planChoisi)
+    noterPaiementEnCours(planChoisi)
+    setRepriseVisible(false)
+    ouvertLeRef.current = Date.now()
+    setFeuilleOuverte(true)
+    /* Bloqueur de pub, navigateur intégré, réseau lent : si le formulaire
+       Whop n'est toujours pas là après 4 s, on part sur la page de
+       paiement whop.com déjà préparée, au lieu de laisser un panneau vide. */
+    clearTimeout(repliRef.current)
+    repliRef.current = setTimeout(() => {
+      if (!feuilleOuverteRef.current) return
+      const bloc = document.querySelector('.pw2-feuille-whop')
+      const monte = bloc && (bloc.querySelector('iframe') || bloc.hasAttribute('data-whop-checkout-mounted'))
+      if (!monte && urlDeCetteOffre) {
+        capture('whop_repli_redirection', { etape: planChoisi })
+        window.location.href = urlDeCetteOffre
+      }
+    }, 4000)
+  }
+
+  useEffect(() => {
+    const auRetour = (e) => {
+      if (!e.persisted) return
+      setLoading(false)
+      setAttenteLongue(false)
+    }
+    window.addEventListener('pageshow', auRetour)
+    return () => window.removeEventListener('pageshow', auRetour)
+  }, [])
+
   const lancerPaiement = async () => {
     if (planWhop) {
-      setErreur(null)
-      checkoutOuvert(planChoisi)
-      noterPaiementEnCours(planChoisi)
-      setRepriseVisible(false)
-      ouvertLeRef.current = Date.now()
-      setFeuilleOuverte(true)
-      /* Bloqueur de pub, navigateur intégré, réseau lent : si le formulaire
-         Whop n'est toujours pas là après 4 s, on part sur la page de
-         paiement whop.com déjà préparée, au lieu de laisser un panneau vide. */
-      clearTimeout(repliRef.current)
-      const urlDeCetteOffre = urlPrechargee
-      repliRef.current = setTimeout(() => {
-        if (!feuilleOuverteRef.current) return
-        const bloc = document.querySelector('.pw2-feuille-whop')
-        const monte = bloc && (bloc.querySelector('iframe') || bloc.hasAttribute('data-whop-checkout-mounted'))
-        if (!monte && urlDeCetteOffre) {
-          capture('whop_repli_redirection', { etape: planChoisi })
-          window.location.href = urlDeCetteOffre
-        }
-      }, 4000)
+      ouvrirFeuille(urlPrechargee)
       return
     }
 
@@ -550,6 +563,20 @@ function PaywallPage({ onBackHome }) {
       }
 
       localStorage.setItem('user', JSON.stringify({ ...utilisateur, email }))
+
+      /* Constaté le 25/10/2026 : changer d'offre efface le lien le temps
+         d'en obtenir un nouveau. Toucher « Continuer » à ce moment-là
+         quittait le site pour whop.com, et le bouton restait bloqué sur
+         « Redirection… ». Le formulaire intégré marche avec ce lien : on
+         l'ouvre sur place, comme d'habitude. */
+      if (/checkout\/plan_[A-Za-z0-9]+/.test(checkoutURL)) {
+        finir()
+        setLoading(false)
+        setUrlPrechargee(checkoutURL)
+        ouvrirFeuille(checkoutURL)
+        return
+      }
+
       /* Émis AVANT window.location.href : la redirection décharge la
          page, et PostHog n'aurait plus le temps d'envoyer quoi que ce
          soit après. */
