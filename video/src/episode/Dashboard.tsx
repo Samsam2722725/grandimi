@@ -219,7 +219,9 @@ export const DashboardGrandimi: React.FC<{
 	revele?: number;
 	/** Page ouverte dans Safari : barre d'état et barre d'adresse fixes en haut, page décalée dessous. */
 	url?: string;
-}> = ({d, cams, pops, fleches, ballon, revele, url}) => {
+	/** logo : en-tête « GRANDIMI » + icône à la place de « Dernier rapport », sans barre d'état (format des diapos Taller). */
+	entete?: 'logo';
+}> = ({d, cams, pops, fleches, ballon, revele, url, entete}) => {
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
 	const sx = (l: Ligne) => echelleLigne(pops, l, f);
@@ -242,8 +244,8 @@ export const DashboardGrandimi: React.FC<{
 				}}
 			>
 				{/* Barre d'état (visible dans les zooms, comme sur l'enregistrement d'écran de l'original). */}
-				<div style={{position: 'absolute', left: 140, top: 18, fontSize: 30, fontWeight: 700, opacity: url ? 0 : 1}}>15:35</div>
-				<div style={{position: 'absolute', right: 140, top: 22, display: url ? 'none' : 'flex', gap: 10, alignItems: 'flex-end'}}>
+				<div style={{position: 'absolute', left: 140, top: 18, fontSize: 30, fontWeight: 700, opacity: url || entete ? 0 : 1}}>15:35</div>
+				<div style={{position: 'absolute', right: 140, top: 22, display: url || entete ? 'none' : 'flex', gap: 10, alignItems: 'flex-end'}}>
 					{[10, 15, 20, 25].map((h, i) => (
 						<div key={i} style={{width: 6, height: h, borderRadius: 2, background: i < 3 ? '#fff' : '#666'}} />
 					))}
@@ -252,7 +254,29 @@ export const DashboardGrandimi: React.FC<{
 					</div>
 				</div>
 				{/* En-tête */}
-				<div style={{position: 'absolute', left: 122, top: 92, fontSize: 64, fontWeight: 800, letterSpacing: -1}}>Dernier rapport</div>
+				{entete === 'logo' ? (
+					<div style={{position: 'absolute', left: 118, top: 84, display: 'flex', alignItems: 'center', gap: 22}}>
+						<div style={{fontSize: 76, fontWeight: 900, letterSpacing: -2}}>GRANDIMI</div>
+						<div
+							style={{
+								width: 88,
+								height: 88,
+								borderRadius: 22,
+								background: `linear-gradient(135deg, ${OR} 0%, ${OR2} 100%)`,
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}
+						>
+							<svg width={40} height={64} viewBox="0 0 70 110">
+								<circle cx={35} cy={13} r={12} fill="#fff" />
+								<path d="M17 30 H53 Q58 30 58 36 V66 H50 V106 H38 V72 H32 V106 H20 V66 H12 V36 Q12 30 17 30 Z" fill="#fff" />
+							</svg>
+						</div>
+					</div>
+				) : (
+					<div style={{position: 'absolute', left: 122, top: 92, fontSize: 64, fontWeight: 800, letterSpacing: -1}}>Dernier rapport</div>
+				)}
 				<IconeRonde x={741}>
 					<svg width={44} height={44} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
 						<path d="M12 19V5M5 12l7-7 7 7" />

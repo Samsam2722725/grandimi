@@ -44,40 +44,17 @@
           {
             "a": 0,
             "cx": 0.5,
-            "cy": 0.47,
-            "z": 1.13,
+            "cy": 0.452,
+            "z": 1.2,
             "d": 1,
             "courbe": "avant"
           }
         ],
         "pops": [],
         "fleches": [],
-        "url": "grandimi.com"
+        "entete": "logo"
       },
-      "elements": [
-        {
-          "type": "texte",
-          "texte": "Taille actuelle et",
-          "a": 0,
-          "y": 920,
-          "taille": 112,
-          "couleur": "#fff",
-          "contour": 8,
-          "poids": 800,
-          "amorti": 1
-        },
-        {
-          "type": "texte",
-          "texte": "potentiel‼️‼️",
-          "a": 0,
-          "y": 1055,
-          "taille": 112,
-          "couleur": "#fff",
-          "contour": 8,
-          "poids": 800,
-          "amorti": 1
-        }
-      ]
+      "elements": []
     }
   ],
   "sousTitres": {

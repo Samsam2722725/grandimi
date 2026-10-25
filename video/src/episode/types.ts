@@ -88,6 +88,8 @@ export type Plan = {
 		revele?: Ancre;
 		/** Page vue dans Safari : barre d'adresse avec ce lien en haut (diapos pub). */
 		url?: string;
+		/** logo : en-tête « GRANDIMI » + icône, sans barre d'état (diapos format Taller). */
+		entete?: 'logo';
 	};
 	/** Suite d'images plein écran (une par frame, la dernière reste affichée), à la place de `image`. */
 	sequence?: string[];
