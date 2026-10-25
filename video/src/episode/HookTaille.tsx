@@ -93,7 +93,7 @@ export const Bonhomme: React.FC<{
 				<circle cx={x} cy={cy} r={head} fill="#fff" strokeWidth={sw * 1.15} />
 				<ellipse cx={x - 28 * u + px} cy={cy - 6 * u + py} rx={7 * u} ry={11 * u * blink * (1 + 0.25 * surpris)} fill={ENCRE} stroke="none" />
 				<ellipse cx={x + 45 * u + px} cy={cy - 6 * u + py} rx={7 * u} ry={11 * u * blink * (1 + 0.25 * surpris)} fill={ENCRE} stroke="none" />
-				<path d={`M${x - 52 * u},${cy - 32 * u + sourcil} L${x - 14 * u},${cy - 30 * u + sourcil}`} strokeWidth={sw * 0.6} />
+				<path d={`M${x - 52 * u},${cy - 32 * u + sourcil} L${x - 14 * u},${cy - 30 * u + sourcil}`} strokeWidth={sw * 0.6} opacity={surpris} />
 				<path d={`M${x + 28 * u},${cy - 30 * u + sourcil} L${x + 62 * u},${cy - 32 * u + sourcil}`} strokeWidth={sw * 0.6} opacity={surpris} />
 				{surpris > 0.5 ? (
 					<ellipse cx={x + 16 * u} cy={cy + 46 * u} rx={13 * u} ry={17 * u * surpris} fill={ENCRE} stroke="none" />
@@ -192,28 +192,6 @@ export const Eclats: React.FC<{cx: number; cy: number; f: number; at: number}> =
 	);
 };
 
-/** Grand bonhomme « taille finale » : silhouette noire pleine, contour lumineux cyan (référence glowup, 4,7-5,1 s). */
-const Adulte: React.FC<{x: number; sol: number; h: number; f: number; lueur: number}> = ({x, sol, h, f, lueur}) => {
-	if (h < 10) return null;
-	const u = h / 900;
-	const t = sol - h;
-	const r = 72 * u;
-	const n = t + 2 * r + 8 * u;
-	const corps = `M${x - 50 * u},${n} L${x + 50 * u},${n} L${x + 56 * u},${n + 330 * u} L${x + 36 * u},${n + 330 * u}
-		L${x + 46 * u},${sol} L${x + 8 * u},${sol} L${x},${n + 380 * u} L${x - 8 * u},${sol} L${x - 46 * u},${sol} L${x - 36 * u},${n + 330 * u}
-		L${x - 56 * u},${n + 330 * u} Z`;
-	const bras = (c: number) => `M${x + c * 50 * u},${n + 10 * u} L${x + c * 92 * u},${n + 330 * u} L${x + c * 68 * u},${n + 336 * u} L${x + c * 50 * u},${n + 80 * u} Z`;
-	const halo = 0.55 + 0.45 * Math.sin(f / 4);
-	return (
-		<g style={{filter: lueur > 0.05 ? `drop-shadow(0 0 ${22 * lueur * halo}px #2fe3ff) drop-shadow(0 0 ${8 * lueur}px #2fe3ff)` : undefined}}>
-			<circle cx={x} cy={t + r} r={r} fill={ENCRE} />
-			<path d={corps} fill={ENCRE} />
-			<path d={bras(1)} fill={ENCRE} />
-			<path d={bras(-1)} fill={ENCRE} />
-		</g>
-	);
-};
-
 /** direct : le chiffre est déjà affiché, net et plein, dès la première image (pas de flou d'entrée ni de compteur).
  *  regle / potentiel / finale : plan 3 de la référence glowup (« Et voici comment calculer ton potentiel de taille finale ») :
  *  zoom traversant vers une grande règle, le bonhomme lève la tête, des repères rouges cherchent puis se posent sur
@@ -262,8 +240,8 @@ export const HookTaille: React.FC<{
 		const entree = ressort(f, 0, 10, 220);
 		const ecrase = bosse(f, 0, 8) * 0.8 + bosse(f, pose, 6) * 0.6;
 		const bras = ease(f, 2, 12);
-		const regard = ease(f, 6, 10);
-		const surpris = f >= pose ? (bosse(f, pose, 16) > 0.2 ? 1 : 0) : 0;
+		const regard = ease(f, 6, 10) * (1 - ease(f, pose + 4, 8)); // lève les yeux vers le chiffre, puis regarde la caméra
+		const surpris = f >= pose ? (bosse(f, pose, 9) > 0.2 ? 1 : 0) : 0;
 		// Traînée de vitesse au sommet de la barre pendant la montée.
 		const vitesse = Math.max(0, Math.min(1, (ressort(f, 3, 12, 95) - ressort(f - 1, 3, 12, 95)) * 8));
 		const ticks = [];
@@ -290,7 +268,6 @@ export const HookTaille: React.FC<{
 								<stop offset="1" stopColor="#fff" stopOpacity={0} />
 							</linearGradient>
 						</defs>
-						{ticks}
 						<g transform={`translate(300 ${SOL}) scale(${0.85 + 0.15 * entree}) translate(-300 ${-SOL})`}>
 							<Bonhomme x={300} sol={SOL - 2} h={900} f={f} bras={bras} mainY={barTop + 40} regard={regard} surpris={surpris} ecrase={ecrase} />
 						</g>
@@ -323,62 +300,85 @@ export const HookTaille: React.FC<{
 	}
 
 	if (regle !== undefined && f >= regle) {
-		/* ── Plan 3 : la règle (référence glowup 2,5-5,1 s) ── */
+		/* ── Plan 3 : la règle (référence glowup 2,5-5,1 s, mesures en 1080×1920) ── */
 		const g = f - regle;
-		const RX = 372;
-		const SOL = 1690;
-		const HAUT = 300;
 		const pot = potentiel ?? regle + 40;
 		const fin = finale ?? pot + 20;
-		const zin = interpolate(g, [0, 7], [1.7, 1], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
-		const flou = interpolate(g, [0, 6], [16, 0], {extrapolateRight: 'clamp'});
-		const recul = 1 + ease(f, fin, 10) * -0.1 + g * 0.001; // on recule un peu pour faire entrer le grand bonhomme
-		const trace = ease(g, 1, 9);
-		const CIBLE = 760; // repère final : la « taille finale », au-dessus de la tête du petit bonhomme
-		// Avant `potentiel`, trois repères cherchent la bonne hauteur ; ensuite un seul se pose sur la cible.
+		const SOL = 1587;
+		// Arrivée : le petit bonhomme minuscule sur fond blanc, puis la caméra fonce sur lui en se redressant.
+		const loin = interpolate(g, [0, 8], [0.26, 0.4], {extrapolateRight: 'clamp'});
+		const fonce = interpolate(g, [8, 15], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic)});
+		const zoom = loin + (1 - loin) * fonce + g * 0.0009;
+		const pente = 9 * (1 - fonce) + 1.5;
 		const cherche = f < pot;
 		const pose = ressort(f, pot, 12, 160);
-		const repY = cherche ? 0 : 1180 + (CIBLE - 1180) * Math.min(1.05, pose);
-		const eclat = bosse(f, pot + 8, 10);
-		const grand = ressort(f, fin, 11, 120);
-		const hAdulte = (SOL - CIBLE) * Math.min(1.04, grand);
+		const CIBLE = 1062; // juste au-dessus de la tête du bonhomme
+		const repY = 820 + (CIBLE - 820) * Math.min(1.05, pose);
+		const eclat = bosse(f, pot + 6, 12);
+		const grand = ressort(f, fin, 12, 150);
+		const gris = f < fin + 3;
+		const cyan = ease(f, fin + 7, 5);
 		const repere = (y: number, k: number, o = 1) => (
 			<g key={k} opacity={o}>
-				<rect x={RX - 46} y={y - 9} width={56} height={18} fill={ROUGE} />
-				<line x1={RX} x2={RX + 118} y1={y} y2={y} stroke={ROUGE} strokeWidth={7} />
+				<rect x={300} y={y - 13} width={96} height={26} fill={ROUGE} />
+				<line x1={396} x2={562} y1={y} y2={y} stroke={ROUGE} strokeWidth={15} strokeLinecap="round" />
+			</g>
+		);
+		const ticks = [];
+		for (let y = SOL - 22, i = 0; y > 215; y -= 33, i++) ticks.push(<line key={i} x1={430 - (i % 5 === 0 ? 74 : 44)} x2={430} y1={y} y2={y} />);
+		// Grand bonhomme-bâton (traits épais, tête ronde) qui pousse depuis ses pieds.
+		const Baton = ({x, tete, r, pied, ep, couleur}: {x: number; tete: number; r: number; pied: number; ep: number; couleur: string}) => {
+			const cou = tete + r;
+			const hanche = cou + (pied - cou) * 0.46;
+			return (
+				<g stroke={couleur} strokeWidth={ep} strokeLinecap="round" strokeLinejoin="round" fill="none">
+					<circle cx={x} cy={tete} r={r} fill={couleur} stroke="none" />
+					<path d={`M${x},${cou} L${x - 12},${hanche}`} />
+					<path d={`M${x - 4},${cou + 50} L${x - 86},${hanche - 40}`} />
+					<path d={`M${x - 12},${hanche} L${x - 48},${pied} L${x - 120},${pied}`} />
+					<path d={`M${x - 12},${hanche} L${x + 26},${pied}`} />
+				</g>
+			);
+		};
+		const grands = (couleur: string, ep: number, dx: number, dy: number) => (
+			<g transform={`translate(${dx} ${dy})`}>
+				<g transform={`translate(1020 1760) scale(1 ${Math.min(1.03, grand)}) translate(-1020 -1760)`}>
+					<Baton x={1030} tete={640} r={100} pied={1760} ep={ep} couleur={couleur} />
+				</g>
+				<g transform={`translate(830 1700) scale(1 ${Math.min(1.03, grand)}) translate(-830 -1700)`}>
+					<Baton x={815} tete={500} r={106} pied={1700} ep={ep} couleur={couleur} />
+				</g>
 			</g>
 		);
 		return (
 			<AbsoluteFill>
 				<Fond />
-				<AbsoluteFill
-					style={{
-						transformOrigin: '45% 62%',
-						transform: `scale(${zin * recul})`,
-						filter: flou > 0.3 ? `blur(${flou}px)` : undefined,
-					}}
-				>
+				<AbsoluteFill style={{transformOrigin: '48% 72%', transform: `scale(${zoom}) rotate(${pente}deg)`}}>
 					<svg width={1080} height={1920} style={{position: 'absolute', inset: 0, overflow: 'visible'}}>
-						<Regle x={RX} y0={HAUT} y1={SOL} trace={trace} />
+						<g stroke={ENCRE} strokeWidth={7}>
+							<rect x={350} y={208} width={80} height={SOL - 208} fill="#fff" stroke="none" />
+							<line x1={430} x2={430} y1={208} y2={SOL} strokeWidth={12} />
+							<line x1={355} x2={430} y1={208} y2={208} strokeWidth={10} />
+							{ticks}
+						</g>
 						{cherche
-							? [0, 1, 2].map((k) => {
-									const y = 1060 + 230 * Math.sin(g * 0.33 + k * 2.1) * Math.cos(g * 0.11 + k);
-									return repere(y, k, f % 6 < 4 || k === 0 ? 1 : 0.35);
+							? [0, 1].map((k) => {
+									const y = 760 + 120 * Math.sin(g * 0.3 + k * 2.4) + (k ? -90 : 0);
+									return repere(y, k, k === 0 ? 1 : 0.3);
 								})
 							: repere(repY, 9)}
+						<Mini x={520} sol={SOL} h={590} f={f} marche={0} leve={cherche ? 1 : 0.4} />
 						{eclat > 0 ? (
-							<g transform={`translate(${RX + 130} ${CIBLE}) rotate(${g * 6}) scale(${eclat})`}>
-								<path d="M0,-46 L10,-10 L46,0 L10,10 L0,46 L-10,10 L-46,0 L-10,-10 Z" fill="#ffd400" stroke={ENCRE} strokeWidth={4} />
+							<g transform={`translate(600 1012) rotate(${g * 8}) scale(${eclat})`}>
+								<path d="M0,-30 L7,-7 L30,0 L7,7 L0,30 L-7,7 L-30,0 L-7,-7 Z" fill="#fff" stroke={ENCRE} strokeWidth={4} />
 							</g>
 						) : null}
 						{f >= fin ? (
-							<line x1={RX + 118} x2={760} y1={CIBLE} y2={CIBLE} stroke={ROUGE} strokeWidth={6} strokeDasharray="18 12" opacity={Math.min(1, grand)} />
+							<g>
+								{cyan > 0 ? <g opacity={cyan}>{grands('#2fe3ff', 100, -42, 30)}</g> : null}
+								{grands(gris ? '#bdbdbd' : ENCRE, 38, 0, 0)}
+							</g>
 						) : null}
-						<g opacity={0.45}>
-							<Adulte x={880} sol={SOL - 6} h={(SOL - CIBLE) * 0.93 * Math.min(1.04, ressort(f, fin + 3, 11, 120))} f={f} lueur={ease(f, fin + 7, 8)} />
-						</g>
-						<Adulte x={770} sol={SOL - 6} h={hAdulte} f={f} lueur={ease(f, fin + 4, 8)} />
-						<Mini x={500} sol={SOL} h={330} f={f} marche={0} leve={1} />
 					</svg>
 				</AbsoluteFill>
 			</AbsoluteFill>
