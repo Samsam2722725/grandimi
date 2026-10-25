@@ -95,7 +95,8 @@ export type Plan = {
 	scene?: {
 		fond: string;
 		personnes: {id: string; fichier: string; w: number; h: number}[];
-		etapes: {a: Ancre; poses: Record<string, {x: number; h: number; sol: number; z?: number}>}[];
+		/** fond : image, ou « grille » pour la grille verte animée (src/episode/GrilleAnimee.tsx). */
+		etapes: {a: Ancre; poses: Record<string, {x: number; h: number; sol: number; z?: number; entree?: 'zoom' | 'droite' | 'bas'}>}[];
 		etiquettes: {personne: string; texte: string; a: Ancre; fin?: Ancre; couleur?: string}[];
 		mots?: {personne: string; texte: string; a: Ancre; fin: Ancre}[];
 	};
@@ -119,7 +120,9 @@ export type Episode = {
 		/** Carte « Réponse au commentaire » penchée des vidéos Taller : hauteur et rotation (degrés). */
 		reponse?: {h: number; rotation: number; modele?: 'parsa'; avatar?: string};
 		/** Deuxième passage de la même carte (appel à commenter de la fin). */
-		retour?: {de: Ancre; a: Ancre}};
+		retour?: {de: Ancre; a: Ancre};
+		/** Photo de profil (fichier de images/) pour la variante haut. */
+		photo?: string};
 	/** sec : transitions deux fois plus courtes et flou de mouvement sur les mouvements de caméra (demande du 20/10). */
 	rythme?: 'sec';
 	/** false : pas de légère poussée de caméra entre les mouvements (défaut : true). */

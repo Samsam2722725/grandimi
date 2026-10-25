@@ -66,7 +66,7 @@
       "debut": 0,
       "sortie": "radial-fin",
       "scene": {
-        "fond": "grille.jpg",
+        "fond": "grille",
         "personnes": [
           {
             "id": "mere",
@@ -93,9 +93,10 @@
             "poses": {
               "mere": {
                 "x": 540,
-                "h": 1540,
-                "sol": 1880,
-                "z": 2
+                "h": 1700,
+                "sol": 1960,
+                "z": 2,
+                "entree": "zoom"
               }
             }
           },
@@ -103,39 +104,58 @@
             "a": "toi:et",
             "poses": {
               "mere": {
-                "x": 227,
-                "h": 1256,
-                "sol": 1800,
+                "x": 205,
+                "h": 1340,
+                "sol": 1870,
                 "z": 1
               },
               "fils": {
-                "x": 545,
-                "h": 1600,
-                "sol": 1880,
-                "z": 3
+                "x": 575,
+                "h": 1640,
+                "sol": 1870,
+                "z": 3,
+                "entree": "droite"
               }
             }
           },
           {
-            "a": "pere:ton",
+            "a": "pere:ton-6",
             "poses": {
               "mere": {
-                "x": 227,
-                "h": 1256,
-                "sol": 1800,
+                "x": 205,
+                "h": 1360,
+                "sol": 1880,
+                "z": 1
+              },
+              "fils": {
+                "x": 890,
+                "h": 1460,
+                "sol": 1895,
+                "z": 1
+              }
+            }
+          },
+          {
+            "a": "pere:père",
+            "poses": {
+              "mere": {
+                "x": 205,
+                "h": 1360,
+                "sol": 1880,
+                "z": 1
+              },
+              "fils": {
+                "x": 890,
+                "h": 1460,
+                "sol": 1895,
                 "z": 1
               },
               "pere": {
                 "x": 540,
                 "h": 1640,
-                "sol": 1880,
-                "z": 3
-              },
-              "fils": {
-                "x": 900,
-                "h": 1400,
-                "sol": 1800,
-                "z": 1
+                "sol": 1900,
+                "z": 3,
+                "entree": "bas"
               }
             }
           },
@@ -143,20 +163,20 @@
             "a": "predit:selon",
             "poses": {
               "mere": {
-                "x": 227,
-                "h": 1256,
-                "sol": 1800,
+                "x": 205,
+                "h": 1360,
+                "sol": 1880,
                 "z": 1
               },
               "fils": {
                 "x": 545,
-                "h": 1400,
-                "sol": 1800,
+                "h": 1450,
+                "sol": 1820,
                 "z": 2
               },
               "pere": {
                 "x": 890,
-                "h": 1464,
+                "h": 1360,
                 "sol": 1800,
                 "z": 1
               }
@@ -166,20 +186,20 @@
             "a": "optim:1m88-3",
             "poses": {
               "mere": {
-                "x": 227,
-                "h": 1256,
-                "sol": 1800,
+                "x": 205,
+                "h": 1360,
+                "sol": 1880,
                 "z": 1
               },
               "fils": {
                 "x": 545,
-                "h": 1600,
-                "sol": 1880,
+                "h": 1640,
+                "sol": 1860,
                 "z": 3
               },
               "pere": {
                 "x": 890,
-                "h": 1464,
+                "h": 1360,
                 "sol": 1800,
                 "z": 1
               }
@@ -330,11 +350,6 @@
           "volume": 0.25
         },
         {
-          "a": "pere:ton",
-          "son": "whoosh",
-          "volume": 0.25
-        },
-        {
           "a": "predit:selon",
           "son": "whoosh",
           "volume": 0.2
@@ -368,6 +383,11 @@
           "a": "optim:1m88",
           "son": "ding",
           "volume": 0.25
+        },
+        {
+          "a": "pere:père",
+          "son": "whoosh",
+          "volume": 0.25
         }
       ],
       "pousse": 0.06
@@ -379,16 +399,16 @@
       {
         "de": 0,
         "a": "fin",
-        "y": 1330,
-        "taille": 130,
+        "y": 1320,
+        "taille": 150,
         "motsMax": 1,
         "carMax": 14,
-        "poids": 900,
-        "contour": 8,
+        "poids": 700,
+        "contour": 9,
         "motsCles": false,
         "pop": true,
         "majuscules": false,
-        "police": "Montserrat",
+        "police": "Fredoka",
         "couleur": "#f2ff1f"
       }
     ]
@@ -404,11 +424,12 @@
     "a": "pere-2",
     "haut": true,
     "x": 95,
-    "y": 880,
+    "y": 886,
     "w": 890,
     "retour": {
       "de": "cta:écris",
       "a": "fin"
-    }
+    },
+    "photo": "avatar.png"
   }
 }

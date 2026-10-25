@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Img, interpolate, spring, useCurrentFrame} from 'remotion';
 import {FONT} from '../theme';
+import {GrilleAnimee} from './GrilleAnimee';
 
 /*
  * Scène « famille » de la référence p19-ref (TallUp, 20 s) : personnes détourées debout sur une grille verte.
@@ -8,12 +9,16 @@ import {FONT} from '../theme';
  * Chaque changement de place est un ressort court ; une personne qui entre arrive avec un éclair jaune.
  * Les tailles s'affichent en jaune au-dessus des têtes et suivent la personne.
  */
-export type Pose = {x: number; h: number; sol: number; z?: number};
+/** entree : comment la personne arrive quand elle apparaît (zoom = arrive de près et se pose, droite = glisse depuis la droite,
+ *  bas = monte du bas en grandissant ; mesuré sur la référence à 0,0 s, 2,3 s et 4,9 s). */
+export type Pose = {x: number; h: number; sol: number; z?: number; entree?: 'zoom' | 'droite' | 'bas'};
 export type PersonneScene = {id: string; src: string; w: number; h: number};
 export type EtapeScene = {f: number; poses: Record<string, Pose>};
 export type EtiquetteScene = {personne: string; texte: string; a: number; fin?: number; couleur?: string};
 
 const ressort = (f: number, at: number) => (f < at ? 0 : spring({frame: f - at, fps: 30, config: {damping: 14, stiffness: 190, mass: 0.6}}));
+// Changements de place plus lents (~0,5 s) : sur la référence, la mère rapetisse de 1450 à 1340 px entre 2,5 et 3 s.
+const glisse = (f: number, at: number) => (f < at ? 0 : spring({frame: f - at, fps: 30, config: {damping: 20, stiffness: 70, mass: 0.8}}));
 
 const poseA = (etapes: EtapeScene[], id: string, f: number): {p: Pose; entree: number} | null => {
 	let i = -1;
@@ -22,12 +27,25 @@ const poseA = (etapes: EtapeScene[], id: string, f: number): {p: Pose; entree: n
 	const cible = etapes[i].poses[id];
 	let j = i - 1;
 	while (j >= 0 && !etapes[j].poses[id]) j--;
-	const t = ressort(f, etapes[i].f);
 	if (j < 0 || j < i - 1) {
-		// Entrée : la personne surgit à sa place (échelle 0,7 → 1).
-		const s = 0.7 + 0.3 * t;
-		return {p: {...cible, h: cible.h * s}, entree: etapes[i].f};
+		const g = f - etapes[i].f;
+		if (cible.entree === 'zoom') {
+			// Image 0 : très près et plus bas, puis posée en 4 images.
+			const k = interpolate(g, [0, 4], [1, 0], {extrapolateRight: 'clamp'});
+			return {p: {...cible, h: cible.h * (1 + 0.6 * k), sol: cible.sol + 700 * k}, entree: etapes[i].f + 5};
+		}
+		if (cible.entree === 'droite') {
+			const t = glisse(f, etapes[i].f);
+			return {p: {...cible, x: cible.x + 650 * (1 - t)}, entree: etapes[i].f + 6};
+		}
+		if (cible.entree === 'bas') {
+			const t = glisse(f, etapes[i].f);
+			return {p: {...cible, h: cible.h * (0.62 + 0.38 * t), sol: cible.sol + 260 * (1 - t)}, entree: etapes[i].f + 8};
+		}
+		const t = ressort(f, etapes[i].f);
+		return {p: {...cible, h: cible.h * (0.7 + 0.3 * t)}, entree: etapes[i].f};
 	}
+	const t = glisse(f, etapes[i].f);
 	const de = etapes[j].poses[id];
 	const m = (a: number, b: number) => a + (b - a) * t;
 	return {p: {x: m(de.x, cible.x), h: m(de.h, cible.h), sol: m(de.sol, cible.sol), z: cible.z}, entree: -99};
@@ -76,7 +94,11 @@ export const SceneFamille: React.FC<{
 	};
 	return (
 		<AbsoluteFill style={{background: '#000', overflow: 'hidden'}}>
-			<Img src={fond} style={{position: 'absolute', inset: 0, width: 1080, height: 1920, transform: `scale(${1.04 + 0.03 * Math.sin(f / 40)})`}} />
+			{fond === 'grille' ? (
+				<GrilleAnimee />
+			) : (
+				<Img src={fond} style={{position: 'absolute', inset: 0, width: 1080, height: 1920, transform: `scale(${1.04 + 0.03 * Math.sin(f / 40)})`}} />
+			)}
 			{mots.map((m, i) => {
 				const t = tete(m.personne);
 				if (!t || f < m.a || f >= m.fin) return null;
@@ -88,17 +110,19 @@ export const SceneFamille: React.FC<{
 							position: 'absolute',
 							left: 0,
 							right: 0,
-							top: t.y + t.h * 0.12,
+							top: 430,
 							textAlign: 'center',
 							fontFamily: FONT,
 							fontWeight: 900,
-							fontSize: 260,
-							letterSpacing: 10,
+							fontSize: 330,
+							letterSpacing: -6,
+							lineHeight: 1,
 							color: '#f2ff1f',
 							WebkitTextStroke: '6px #000',
 							paintOrder: 'stroke fill',
 							transform: `scale(${0.6 + 0.4 * s})`,
 							opacity: Math.min(1, s * 2),
+							textShadow: `0 0 ${40 * Math.max(0, 1 - (f - m.a) / 8)}px #f2ff1f`,
 						}}
 					>
 						{m.texte}

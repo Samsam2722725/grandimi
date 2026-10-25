@@ -1,5 +1,5 @@
 import React from 'react';
-import {useCurrentFrame} from 'remotion';
+import {Img, useCurrentFrame} from 'remotion';
 import {FONT} from '../theme';
 
 /*
@@ -17,7 +17,9 @@ export const CarteCommentaire: React.FC<{
 	ligne?: boolean;
 	w?: number;
 	reponse?: {h: number; rotation: number; modele?: 'parsa'; avatar?: string};
-}> = ({nom, texte, de, a, haut, x, y, ligne, w, reponse}) => {
+	/** Photo de profil ronde (variante haut). */
+	photo?: string;
+}> = ({nom, texte, de, a, haut, x, y, ligne, w, reponse, photo}) => {
 	const f = useCurrentFrame();
 	if (f < de || f >= a) return null;
 	if (reponse?.modele === 'parsa') {
@@ -138,9 +140,15 @@ export const CarteCommentaire: React.FC<{
 		return (
 			<div style={{position: 'absolute', left: x ?? 232, top: y ?? 330, width: 580, fontFamily: FONT, transform: `scale(${(w ?? 580) / 580})`, transformOrigin: '0 0'}}>
 				<div style={{position: 'relative', background: '#fff', borderRadius: 14, padding: '20px 24px 26px 20px'}}>
-					<div style={{fontSize: 31, fontWeight: 500, color: '#8a8a8a', marginLeft: 94, lineHeight: 1.15}}>Réponse au commentaire de {nom}</div>
+					<div style={{fontSize: photo ? 23 : 31, fontWeight: 500, color: '#8a8a8a', marginLeft: 94, lineHeight: 1.15, whiteSpace: photo ? 'nowrap' : undefined}}>
+						Réponse au commentaire de {nom}
+					</div>
 					<div style={{display: 'flex', alignItems: 'center', gap: 16, marginTop: 4}}>
-						<div style={{width: 78, height: 78, borderRadius: 39, background: '#000', flexShrink: 0}} />
+						{photo ? (
+							<Img src={photo} style={{width: 78, height: 78, borderRadius: 39, flexShrink: 0, objectFit: 'cover'}} />
+						) : (
+							<div style={{width: 78, height: 78, borderRadius: 39, background: '#000', flexShrink: 0}} />
+						)}
 						<div style={{fontSize: 42, fontWeight: 700, color: '#111', lineHeight: 1.1}}>{texte}</div>
 					</div>
 					<div

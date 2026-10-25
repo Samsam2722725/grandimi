@@ -718,7 +718,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 		<AbsoluteFill>
 			{plan.scene ? (
 				<SceneFamille
-					fond={file(plan.scene.fond)}
+					fond={plan.scene.fond === 'grille' ? 'grille' : file(plan.scene.fond)}
 					personnes={plan.scene.personnes.map((p) => ({id: p.id, src: file(p.fichier), w: p.w, h: p.h}))}
 					etapes={plan.scene.etapes.map((e) => ({f: loc(e.a), poses: e.poses}))}
 					etiquettes={plan.scene.etiquettes.map((e) => ({...e, a: loc(e.a), fin: e.fin !== undefined ? loc(e.fin) : undefined}))}
@@ -995,6 +995,7 @@ const usePolices = () => {
 		const fonts = [
 			new FontFace('Poppins', `url(${staticFile('fonts/poppins-latin-800-normal.woff2')})`, {weight: '800'}),
 			new FontFace('Barlow Condensed', `url(${staticFile('fonts/barlow-condensed-latin-800-normal.woff2')})`, {weight: '800'}),
+			new FontFace('Fredoka', `url(${staticFile('fonts/fredoka-latin-700-normal.woff2')})`, {weight: '700'}),
 			...[600, 700, 800, 900].map(
 				(w) => new FontFace('Montserrat', `url(${staticFile(`fonts/montserrat-latin-${w}-normal.woff2`)})`, {weight: String(w)}),
 			),
@@ -1100,6 +1101,7 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 								ligne={c.ligne}
 								w={c.w}
 								reponse={c.reponse}
+								photo={c.photo ? staticFile(`episodes/${episode}/images/${c.photo}`) : undefined}
 							/>
 						))
 					: null}
