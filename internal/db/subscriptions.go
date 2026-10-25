@@ -101,6 +101,29 @@ func SetCancelAtPeriodEnd(whopSubscriptionID string, cancel bool, canceledAt *ti
 	return err
 }
 
+/* AccesPayeEnCours : le compte a resilie, mais la periode deja payee
+   n est pas finie.
+
+   Constate le 25/10/2026 : notre bouton demande a Whop une resiliation
+   « at_period_end », Whop repond 200 mais coupe l abonnement tout de
+   suite et envoie membership.deactivated dans la seconde. Le client
+   perdait alors l acces au mois qu il venait de payer, alors que l ecran
+   lui promet « ton acces reste actif jusqu au … ».
+
+   Seules les resiliations comptent (cancel_at_period_end = true) : un
+   echec de paiement ou un remboursement coupe toujours l acces. */
+func AccesPayeEnCours(userID string) (bool, error) {
+	var encore bool
+	err := DB.QueryRowContext(context.Background(),
+		`SELECT EXISTS (
+		          SELECT 1 FROM subscriptions
+		           WHERE user_id = $1
+		             AND cancel_at_period_end = true
+		             AND current_period_end > now()
+		        )`, userID).Scan(&encore)
+	return encore, err
+}
+
 /* RevoquerSiPlusAucunAbonnement traite une desactivation Whop.
 
    LE BUG QU ELLE CORRIGE. Le webhook membership.deactivated retirait le

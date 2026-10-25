@@ -913,6 +913,16 @@ function App() {
           onBackHome={handleBackHome}
           onGoToAccount={handleGoToAccount}
           onLogout={handleLogout}
+          onAbonnementTermine={() => {
+            // Plus abonné : on oublie la note et on l'emmène au paywall.
+            try {
+              localStorage.removeItem(CLE_ABONNE);
+            } catch {
+              /* stockage refusé */
+            }
+            setIsPaid(false);
+            setCurrentPage('paywall');
+          }}
           onMiseAJourPrediction={(nouvelles) => {
             // Nouvelle mesure → estimation recalculée : on la garde comme
             // la prédiction courante, au même endroit que la première.

@@ -155,6 +155,21 @@ func AuthMiddleware() gin.HandlerFunc {
 	}
 }
 
+// accesOuvert : abonné, ou résilié avec une période payée pas encore
+// finie (voir db.AccesPayeEnCours). En cas d'erreur de lecture, on s'en
+// tient à is_premium.
+func accesOuvert(user *db.User) bool {
+	if user.IsPremium {
+		return true
+	}
+	encore, err := db.AccesPayeEnCours(user.ID)
+	if err != nil {
+		fmt.Printf("[premium] AccesPayeEnCours(%s): %v\n", user.ID, err)
+		return false
+	}
+	return encore
+}
+
 // PremiumMiddleware protège ce qui est vendu. À monter derrière
 // AuthMiddleware, qui pose l'identifiant de l'appelant.
 //
@@ -170,7 +185,7 @@ func PremiumMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if user == nil || !user.IsPremium {
+		if user == nil || !accesOuvert(user) {
 			c.JSON(http.StatusPaymentRequired, gin.H{"error": "abonnement requis"})
 			c.Abort()
 			return

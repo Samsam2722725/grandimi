@@ -592,7 +592,7 @@ func CheckPremium(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"user_id":            user.ID,
-		"is_premium":         user.IsPremium,
+		"is_premium":         accesOuvert(user),
 		"subscription_month": moisAbonnement(debutAbonnement(user)),
 	})
 }

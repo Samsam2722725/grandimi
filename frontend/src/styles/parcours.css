@@ -343,3 +343,9 @@ ol.fiche-consigne { padding-left: 20px; display: flex; flex-direction: column; g
 .routine-info.ouvert { border-color: #ff6a2b; color: #ff8a52; }
 .routine-detail-texte { margin-top: 6px; font-size: 14px; font-weight: 400; line-height: 1.45; color: #c9c3bd; }
 .routine-item.fait .routine-detail-texte { text-decoration: none; }
+
+/* Abonnement terminé : un vrai écran au lieu d'« abonnement requis ». */
+.app-termine { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 420px; margin: 0 auto; padding: 80px 20px; text-align: center; }
+.app-termine-emoji { margin: 0; font-size: 48px; }
+.app-termine .funnel-cta, .app-termine .btn-secondary { width: 100%; }
+.app-termine-aide { font-size: 13.5px; color: #8a847e; }

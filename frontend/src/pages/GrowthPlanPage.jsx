@@ -100,7 +100,7 @@ function ordreDesThemes(faibles) {
   return ordre;
 }
 
-function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJourPrediction, onLogout }) {
+function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJourPrediction, onLogout, onAbonnementTermine }) {
   const [plan, setPlan] = useState(null);
   const [monthlyPlan, setMonthlyPlan] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -199,7 +199,9 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
         setMonthlyPlan(data.monthly_plan);
         setLoading(false);
       } catch (err) {
-        setError(err.message);
+        // 402 : plus d'abonnement actif. On le dit clairement au lieu du
+        // message brut du serveur (« abonnement requis »).
+        setError(err.status === 402 ? 'termine' : err.message);
         setLoading(false);
       }
     };
@@ -330,6 +332,21 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
     return (
       <div className="night growth-plan-page">
         <Spinner size="page" label="Création de ton plan personnalisé..." />
+      </div>
+    );
+  }
+
+  if (error === 'termine') {
+    return (
+      <div className="night growth-plan-page">
+        <div className="error-container app-termine">
+          <p className="app-termine-emoji" aria-hidden="true">⏸️</p>
+          <h1 className="app-titre">Ton abonnement n’est plus actif</h1>
+          <p className="app-texte">Ton parcours, ta série et tes réglages sont gardés. Reprends ton abonnement pour retrouver ton plan là où tu l’as laissé.</p>
+          <button type="button" className="funnel-cta" onClick={onAbonnementTermine || onBackHome}>Reprendre mon abonnement</button>
+          {onGoToAccount && <button type="button" className="btn-secondary" onClick={onGoToAccount}>Mon compte</button>}
+          <p className="app-texte app-termine-aide">Une erreur ? Écris-nous à bonjour@grandimi.com.</p>
+        </div>
       </div>
     );
   }
