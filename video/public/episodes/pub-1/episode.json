@@ -44,7 +44,7 @@
           {
             "a": 0,
             "cx": 0.5,
-            "cy": 0.452,
+            "cy": 0.511,
             "z": 1.2,
             "d": 1,
             "courbe": "avant"
@@ -52,7 +52,8 @@
         ],
         "pops": [],
         "fleches": [],
-        "entete": "logo"
+        "entete": "aucun",
+        "url": "grandimi.com"
       },
       "elements": []
     }
