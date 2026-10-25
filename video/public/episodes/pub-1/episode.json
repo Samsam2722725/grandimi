@@ -1,0 +1,86 @@
+{
+  "partie": 0,
+  "voice": "",
+  "speed": 1,
+  "lines": [],
+  "images": {},
+  "zones": {},
+  "sonsMouvements": false,
+  "deriveCamera": false,
+  "plans": [
+    {
+      "nom": "pub",
+      "debut": 0,
+      "dashboard": {
+        "donnees": {
+          "actuelle": "162 cm",
+          "predite": "179 cm",
+          "optimiser": "+3 cm",
+          "bulle": "175 cm",
+          "courbe": [
+            162,
+            168,
+            172.5,
+            175.5,
+            177.5,
+            178.5,
+            179
+          ],
+          "ages": [
+            "17",
+            "17,7",
+            "18,3",
+            "19",
+            "19,7",
+            "20,3",
+            "21"
+          ],
+          "rang": "1,6 %",
+          "chances": "12 %",
+          "chancesCm": "185 cm",
+          "croissance": "90,5 %"
+        },
+        "cams": [
+          {
+            "a": 0,
+            "cx": 0.5,
+            "cy": 0.47,
+            "z": 1.13,
+            "d": 1,
+            "courbe": "avant"
+          }
+        ],
+        "pops": [],
+        "fleches": []
+      },
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "Taille actuelle et",
+          "a": 0,
+          "y": 770,
+          "taille": 112,
+          "couleur": "#fff",
+          "contour": 8,
+          "poids": 800,
+          "amorti": 1
+        },
+        {
+          "type": "texte",
+          "texte": "potentiel‼️‼️",
+          "a": 0,
+          "y": 905,
+          "taille": 112,
+          "couleur": "#fff",
+          "contour": 8,
+          "poids": 800,
+          "amorti": 1
+        }
+      ]
+    }
+  ],
+  "sousTitres": {
+    "motsCles": [],
+    "fenetres": []
+  }
+}
