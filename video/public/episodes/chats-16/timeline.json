@@ -1,0 +1,483 @@
+{
+  "fps": 30,
+  "totalFrames": 786,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Attends, il a 15 ans et mesure 1m68?",
+      "from": 0,
+      "duration": 71,
+      "words": [
+        {
+          "w": "Attends,",
+          "f": 0
+        },
+        {
+          "w": "il",
+          "f": 10
+        },
+        {
+          "w": "a",
+          "f": 14
+        },
+        {
+          "w": "15",
+          "f": 17
+        },
+        {
+          "w": "ans",
+          "f": 24
+        },
+        {
+          "w": "et",
+          "f": 29
+        },
+        {
+          "w": "mesure",
+          "f": 34
+        },
+        {
+          "w": "1m68?",
+          "f": 43
+        }
+      ]
+    },
+    {
+      "id": "normal",
+      "text": "C'est une taille normale pour son âge.",
+      "from": 72,
+      "duration": 40,
+      "words": [
+        {
+          "w": "C'est",
+          "f": 72
+        },
+        {
+          "w": "une",
+          "f": 77
+        },
+        {
+          "w": "taille",
+          "f": 82
+        },
+        {
+          "w": "normale",
+          "f": 89
+        },
+        {
+          "w": "pour",
+          "f": 96
+        },
+        {
+          "w": "son",
+          "f": 98
+        },
+        {
+          "w": "âge.",
+          "f": 103
+        }
+      ]
+    },
+    {
+      "id": "pere",
+      "text": "Son père mesure 1m68",
+      "from": 113,
+      "duration": 52,
+      "words": [
+        {
+          "w": "Son",
+          "f": 113
+        },
+        {
+          "w": "père",
+          "f": 118
+        },
+        {
+          "w": "mesure",
+          "f": 125
+        },
+        {
+          "w": "1m68",
+          "f": 134
+        }
+      ]
+    },
+    {
+      "id": "mere",
+      "text": "et sa mère 1m57.",
+      "from": 166,
+      "duration": 47,
+      "words": [
+        {
+          "w": "et",
+          "f": 166
+        },
+        {
+          "w": "sa",
+          "f": 168
+        },
+        {
+          "w": "mère",
+          "f": 173
+        },
+        {
+          "w": "1m57.",
+          "f": 182
+        }
+      ]
+    },
+    {
+      "id": "petits",
+      "text": "Donc ses parents sont plutôt petits.",
+      "from": 214,
+      "duration": 42,
+      "words": [
+        {
+          "w": "Donc",
+          "f": 214
+        },
+        {
+          "w": "ses",
+          "f": 221
+        },
+        {
+          "w": "parents",
+          "f": 226
+        },
+        {
+          "w": "sont",
+          "f": 235
+        },
+        {
+          "w": "plutôt",
+          "f": 240
+        },
+        {
+          "w": "petits.",
+          "f": 247
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "J'ai mis ces informations sur grandimi.com pour voir quelle taille il pourrait atteindre,",
+      "from": 257,
+      "duration": 105,
+      "words": [
+        {
+          "w": "J'ai",
+          "f": 257
+        },
+        {
+          "w": "mis",
+          "f": 264
+        },
+        {
+          "w": "ces",
+          "f": 269
+        },
+        {
+          "w": "informations",
+          "f": 271
+        },
+        {
+          "w": "sur",
+          "f": 278
+        },
+        {
+          "w": "grandimi.com",
+          "f": 283
+        },
+        {
+          "w": "pour",
+          "f": 319
+        },
+        {
+          "w": "voir",
+          "f": 322
+        },
+        {
+          "w": "quelle",
+          "f": 326
+        },
+        {
+          "w": "taille",
+          "f": 334
+        },
+        {
+          "w": "il",
+          "f": 341
+        },
+        {
+          "w": "pourrait",
+          "f": 346
+        },
+        {
+          "w": "atteindre,",
+          "f": 353
+        }
+      ]
+    },
+    {
+      "id": "surpris",
+      "text": "et le résultat m'a surpris.",
+      "from": 362,
+      "duration": 35,
+      "words": [
+        {
+          "w": "et",
+          "f": 362
+        },
+        {
+          "w": "le",
+          "f": 367
+        },
+        {
+          "w": "résultat",
+          "f": 370
+        },
+        {
+          "w": "m'a",
+          "f": 379
+        },
+        {
+          "w": "surpris.",
+          "f": 384
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "Écris ta taille, ton âge et la taille de tes parents en commentaire pour que je puisse aussi analyser ta taille.",
+      "from": 398,
+      "duration": 136,
+      "words": [
+        {
+          "w": "Écris",
+          "f": 398
+        },
+        {
+          "w": "ta",
+          "f": 408
+        },
+        {
+          "w": "taille,",
+          "f": 413
+        },
+        {
+          "w": "ton",
+          "f": 422
+        },
+        {
+          "w": "âge",
+          "f": 427
+        },
+        {
+          "w": "et",
+          "f": 437
+        },
+        {
+          "w": "la",
+          "f": 439
+        },
+        {
+          "w": "taille",
+          "f": 444
+        },
+        {
+          "w": "de",
+          "f": 449
+        },
+        {
+          "w": "tes",
+          "f": 451
+        },
+        {
+          "w": "parents",
+          "f": 458
+        },
+        {
+          "w": "en",
+          "f": 468
+        },
+        {
+          "w": "commentaire",
+          "f": 470
+        },
+        {
+          "w": "pour",
+          "f": 485
+        },
+        {
+          "w": "que",
+          "f": 490
+        },
+        {
+          "w": "je",
+          "f": 492
+        },
+        {
+          "w": "puisse",
+          "f": 494
+        },
+        {
+          "w": "aussi",
+          "f": 502
+        },
+        {
+          "w": "analyser",
+          "f": 509
+        },
+        {
+          "w": "ta",
+          "f": 521
+        },
+        {
+          "w": "taille.",
+          "f": 526
+        }
+      ]
+    },
+    {
+      "id": "va",
+      "text": "Va sur grandimi.com pour découvrir quelle taille tu pourrais atteindre.",
+      "from": 535,
+      "duration": 88,
+      "words": [
+        {
+          "w": "Va",
+          "f": 535
+        },
+        {
+          "w": "sur",
+          "f": 540
+        },
+        {
+          "w": "grandimi.com",
+          "f": 545
+        },
+        {
+          "w": "pour",
+          "f": 574
+        },
+        {
+          "w": "découvrir",
+          "f": 578
+        },
+        {
+          "w": "quelle",
+          "f": 588
+        },
+        {
+          "w": "taille",
+          "f": 595
+        },
+        {
+          "w": "tu",
+          "f": 602
+        },
+        {
+          "w": "pourrais",
+          "f": 607
+        },
+        {
+          "w": "atteindre.",
+          "f": 614
+        }
+      ]
+    },
+    {
+      "id": "resultat",
+      "text": "Sa taille adulte est estimée à environ 1m75,",
+      "from": 624,
+      "duration": 88,
+      "words": [
+        {
+          "w": "Sa",
+          "f": 624
+        },
+        {
+          "w": "taille",
+          "f": 629
+        },
+        {
+          "w": "adulte",
+          "f": 636
+        },
+        {
+          "w": "est",
+          "f": 646
+        },
+        {
+          "w": "estimée",
+          "f": 650
+        },
+        {
+          "w": "à",
+          "f": 662
+        },
+        {
+          "w": "environ",
+          "f": 665
+        },
+        {
+          "w": "1m75,",
+          "f": 674
+        }
+      ]
+    },
+    {
+      "id": "fin",
+      "text": "donc il pourrait être un peu plus grand que la moyenne.",
+      "from": 713,
+      "duration": 70,
+      "words": [
+        {
+          "w": "donc",
+          "f": 713
+        },
+        {
+          "w": "il",
+          "f": 720
+        },
+        {
+          "w": "pourrait",
+          "f": 725
+        },
+        {
+          "w": "être",
+          "f": 734
+        },
+        {
+          "w": "un",
+          "f": 739
+        },
+        {
+          "w": "peu",
+          "f": 742
+        },
+        {
+          "w": "plus",
+          "f": 746
+        },
+        {
+          "w": "grand",
+          "f": 751
+        },
+        {
+          "w": "que",
+          "f": 756
+        },
+        {
+          "w": "la",
+          "f": 761
+        },
+        {
+          "w": "moyenne.",
+          "f": 766
+        }
+      ]
+    }
+  ]
+}

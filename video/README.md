@@ -15,6 +15,7 @@
 | « 1m75 à 17 ans » (photo + saisie Grandimi) | `Episode` (`{"episode":"photo-15"}`) | `rendu/grandimi-photo-15.mp4` (35 s, photos tierces non versionnées) |
 | « Addy, 14 ans 1m63 » (format Steve amélioré, version de travail) | `Episode` (`{"episode":"addy-16"}`) | `rendu/grandimi-addy-16.mp4` (33 s, photo tierce non versionnée) |
 | Partie 15 « Addy » (accroche glowup complète + format Taller) | `Episode` (`{"episode":"addy-15"}`) | `rendu/grandimi-partie15.mp4` (34 s, photo tierce non versionnée) |
+| « 15 ans 1m68 » (chats 3D, format Tallex) | `Episode` (`{"episode":"chats-16"}`) | `rendu/grandimi-chats-16.mp4` (26 s) |
 
 | « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
 
