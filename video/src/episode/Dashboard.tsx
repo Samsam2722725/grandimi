@@ -217,7 +217,9 @@ export const DashboardGrandimi: React.FC<{
 	fleches: DashFleche[];
 	ballon?: {src: string; a: number; fin: number};
 	revele?: number;
-}> = ({d, cams, pops, fleches, ballon, revele}) => {
+	/** Page ouverte dans Safari : barre d'état et barre d'adresse fixes en haut, page décalée dessous. */
+	url?: string;
+}> = ({d, cams, pops, fleches, ballon, revele, url}) => {
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
 	const sx = (l: Ligne) => echelleLigne(pops, l, f);
@@ -234,14 +236,14 @@ export const DashboardGrandimi: React.FC<{
 					width: W,
 					height: H,
 					transformOrigin: '0 0',
-					transform: `translate(${W / 2}px, ${H / 2}px) scale(${c.z}) translate(${-c.cx * W}px, ${-c.cy * H}px)`,
+					transform: `translateY(${url ? 150 : 0}px) translate(${W / 2}px, ${H / 2}px) scale(${c.z}) translate(${-c.cx * W}px, ${-c.cy * H}px)`,
 					fontFamily: FONT,
 					color: '#fff',
 				}}
 			>
 				{/* Barre d'état (visible dans les zooms, comme sur l'enregistrement d'écran de l'original). */}
-				<div style={{position: 'absolute', left: 140, top: 18, fontSize: 30, fontWeight: 700}}>15:35</div>
-				<div style={{position: 'absolute', right: 140, top: 22, display: 'flex', gap: 10, alignItems: 'flex-end'}}>
+				<div style={{position: 'absolute', left: 140, top: 18, fontSize: 30, fontWeight: 700, opacity: url ? 0 : 1}}>15:35</div>
+				<div style={{position: 'absolute', right: 140, top: 22, display: url ? 'none' : 'flex', gap: 10, alignItems: 'flex-end'}}>
 					{[10, 15, 20, 25].map((h, i) => (
 						<div key={i} style={{width: 6, height: h, borderRadius: 2, background: i < 3 ? '#fff' : '#666'}} />
 					))}
@@ -370,6 +372,47 @@ export const DashboardGrandimi: React.FC<{
 					<Fleche key={i} fl={fl} f={f} />
 				))}
 			</div>
+			{url ? (
+				<div style={{position: 'absolute', left: 0, top: 0, width: W, height: 172, background: '#000', fontFamily: FONT, color: '#fff'}}>
+					<div style={{position: 'absolute', left: 70, top: 14, fontSize: 32, fontWeight: 700}}>15:35</div>
+					<div style={{position: 'absolute', right: 70, top: 20, display: 'flex', gap: 8, alignItems: 'flex-end'}}>
+						{[10, 15, 20, 25].map((h, i) => (
+							<div key={i} style={{width: 6, height: h, borderRadius: 2, background: '#fff'}} />
+						))}
+						<div style={{fontSize: 24, fontWeight: 700, marginLeft: 8}}>5G</div>
+						<div style={{width: 46, height: 22, borderRadius: 6, border: '3px solid #bbb', marginLeft: 6}}>
+							<div style={{width: '75%', height: '100%', background: '#fff', borderRadius: 2}} />
+						</div>
+					</div>
+					<div
+						style={{
+							position: 'absolute',
+							left: 36,
+							right: 36,
+							top: 66,
+							height: 86,
+							borderRadius: 28,
+							background: '#2c2c2e',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<div style={{position: 'absolute', left: 30, fontSize: 30, fontWeight: 600, color: '#ddd'}}>
+							<span style={{fontSize: 22}}>A</span>A
+						</div>
+						<svg width={22} height={28} viewBox="0 0 22 28" style={{marginRight: 12}}>
+							<rect x={2} y={12} width={18} height={14} rx={3} fill="#ddd" />
+							<path d="M6 12 V8 a5 5 0 0 1 10 0 V12" fill="none" stroke="#ddd" strokeWidth={3} />
+						</svg>
+						<div style={{fontSize: 36, fontWeight: 500}}>{url}</div>
+						<svg width={34} height={34} viewBox="0 0 24 24" style={{position: 'absolute', right: 30}} fill="none" stroke="#ddd" strokeWidth={2.4} strokeLinecap="round">
+							<path d="M20 12a8 8 0 1 1-2.3-5.7" />
+							<path d="M20 4v5h-5" />
+						</svg>
+					</div>
+				</div>
+			) : null}
 		</AbsoluteFill>
 	);
 };

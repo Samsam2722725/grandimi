@@ -51,14 +51,15 @@
           }
         ],
         "pops": [],
-        "fleches": []
+        "fleches": [],
+        "url": "grandimi.com"
       },
       "elements": [
         {
           "type": "texte",
           "texte": "Taille actuelle et",
           "a": 0,
-          "y": 770,
+          "y": 920,
           "taille": 112,
           "couleur": "#fff",
           "contour": 8,
@@ -69,7 +70,7 @@
           "type": "texte",
           "texte": "potentiel‼️‼️",
           "a": 0,
-          "y": 905,
+          "y": 1055,
           "taille": 112,
           "couleur": "#fff",
           "contour": 8,

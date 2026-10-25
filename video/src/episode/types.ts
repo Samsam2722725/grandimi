@@ -86,6 +86,8 @@ export type Plan = {
 		ballon?: {fichier: string; a: Ancre; fin: Ancre};
 		/** La taille prédite reste cachée (« ??? cm ») jusqu'à cette ancre. */
 		revele?: Ancre;
+		/** Page vue dans Safari : barre d'adresse avec ce lien en haut (diapos pub). */
+		url?: string;
 	};
 	/** Suite d'images plein écran (une par frame, la dernière reste affichée), à la place de `image`. */
 	sequence?: string[];

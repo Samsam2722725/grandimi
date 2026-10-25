@@ -723,6 +723,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					pops={plan.dashboard.pops.map((p) => ({...p, a: loc(p.a), fin: loc(p.fin)}))}
 					fleches={plan.dashboard.fleches.map((fl) => ({...fl, a: loc(fl.a), fin: loc(fl.fin)}))}
 					revele={plan.dashboard.revele !== undefined ? loc(plan.dashboard.revele) : undefined}
+					url={plan.dashboard.url}
 					ballon={
 						plan.dashboard.ballon
 							? {src: file(plan.dashboard.ballon.fichier), a: loc(plan.dashboard.ballon.a), fin: loc(plan.dashboard.ballon.fin)}
