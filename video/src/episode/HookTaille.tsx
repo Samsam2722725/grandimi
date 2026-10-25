@@ -192,15 +192,43 @@ export const Eclats: React.FC<{cx: number; cy: number; f: number; at: number}> =
 	);
 };
 
-/** direct : le chiffre est déjà affiché, net et plein, dès la première image (pas de flou d'entrée ni de compteur). */
-export const HookTaille: React.FC<{cm: number; carte: number; moyenne: number; france?: number; question?: number; direct?: boolean}> = ({
-	cm,
-	carte,
-	moyenne,
-	france,
-	question,
-	direct,
-}) => {
+/** Grand bonhomme « taille finale » : silhouette noire pleine, contour lumineux cyan (référence glowup, 4,7-5,1 s). */
+const Adulte: React.FC<{x: number; sol: number; h: number; f: number; lueur: number}> = ({x, sol, h, f, lueur}) => {
+	if (h < 10) return null;
+	const u = h / 900;
+	const t = sol - h;
+	const r = 72 * u;
+	const n = t + 2 * r + 8 * u;
+	const corps = `M${x - 50 * u},${n} L${x + 50 * u},${n} L${x + 56 * u},${n + 330 * u} L${x + 36 * u},${n + 330 * u}
+		L${x + 46 * u},${sol} L${x + 8 * u},${sol} L${x},${n + 380 * u} L${x - 8 * u},${sol} L${x - 46 * u},${sol} L${x - 36 * u},${n + 330 * u}
+		L${x - 56 * u},${n + 330 * u} Z`;
+	const bras = (c: number) => `M${x + c * 50 * u},${n + 10 * u} L${x + c * 92 * u},${n + 330 * u} L${x + c * 68 * u},${n + 336 * u} L${x + c * 50 * u},${n + 80 * u} Z`;
+	const halo = 0.55 + 0.45 * Math.sin(f / 4);
+	return (
+		<g style={{filter: lueur > 0.05 ? `drop-shadow(0 0 ${22 * lueur * halo}px #2fe3ff) drop-shadow(0 0 ${8 * lueur}px #2fe3ff)` : undefined}}>
+			<circle cx={x} cy={t + r} r={r} fill={ENCRE} />
+			<path d={corps} fill={ENCRE} />
+			<path d={bras(1)} fill={ENCRE} />
+			<path d={bras(-1)} fill={ENCRE} />
+		</g>
+	);
+};
+
+/** direct : le chiffre est déjà affiché, net et plein, dès la première image (pas de flou d'entrée ni de compteur).
+ *  regle / potentiel / finale : plan 3 de la référence glowup (« Et voici comment calculer ton potentiel de taille finale ») :
+ *  zoom traversant vers une grande règle, le bonhomme lève la tête, des repères rouges cherchent puis se posent sur
+ *  `potentiel` (éclat), et sur `finale` le grand bonhomme lumineux surgit à droite jusqu'au repère. */
+export const HookTaille: React.FC<{
+	cm: number;
+	carte: number;
+	moyenne: number;
+	france?: number;
+	question?: number;
+	direct?: boolean;
+	regle?: number;
+	potentiel?: number;
+	finale?: number;
+}> = ({cm, carte, moyenne, france, question, direct, regle, potentiel, finale}) => {
 	const f = useCurrentFrame();
 	const [map, setMap] = useState<{w: number; h: number; d: string} | null>(null);
 	const [handle] = useState(() => delayRender('carte de France'));
@@ -289,6 +317,69 @@ export const HookTaille: React.FC<{cm: number; carte: number; moyenne: number; f
 						{shown}
 						<span style={{fontSize: 52, fontWeight: 700, color: '#666', letterSpacing: 0, marginLeft: 10, opacity: ease(f, pose, 5)}}>cm</span>
 					</div>
+				</AbsoluteFill>
+			</AbsoluteFill>
+		);
+	}
+
+	if (regle !== undefined && f >= regle) {
+		/* ── Plan 3 : la règle (référence glowup 2,5-5,1 s) ── */
+		const g = f - regle;
+		const RX = 372;
+		const SOL = 1690;
+		const HAUT = 300;
+		const pot = potentiel ?? regle + 40;
+		const fin = finale ?? pot + 20;
+		const zin = interpolate(g, [0, 7], [1.7, 1], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+		const flou = interpolate(g, [0, 6], [16, 0], {extrapolateRight: 'clamp'});
+		const recul = 1 + ease(f, fin, 10) * -0.1 + g * 0.001; // on recule un peu pour faire entrer le grand bonhomme
+		const trace = ease(g, 1, 9);
+		const CIBLE = 760; // repère final : la « taille finale », au-dessus de la tête du petit bonhomme
+		// Avant `potentiel`, trois repères cherchent la bonne hauteur ; ensuite un seul se pose sur la cible.
+		const cherche = f < pot;
+		const pose = ressort(f, pot, 12, 160);
+		const repY = cherche ? 0 : 1180 + (CIBLE - 1180) * Math.min(1.05, pose);
+		const eclat = bosse(f, pot + 8, 10);
+		const grand = ressort(f, fin, 11, 120);
+		const hAdulte = (SOL - CIBLE) * Math.min(1.04, grand);
+		const repere = (y: number, k: number, o = 1) => (
+			<g key={k} opacity={o}>
+				<rect x={RX - 46} y={y - 9} width={56} height={18} fill={ROUGE} />
+				<line x1={RX} x2={RX + 118} y1={y} y2={y} stroke={ROUGE} strokeWidth={7} />
+			</g>
+		);
+		return (
+			<AbsoluteFill>
+				<Fond />
+				<AbsoluteFill
+					style={{
+						transformOrigin: '45% 62%',
+						transform: `scale(${zin * recul})`,
+						filter: flou > 0.3 ? `blur(${flou}px)` : undefined,
+					}}
+				>
+					<svg width={1080} height={1920} style={{position: 'absolute', inset: 0, overflow: 'visible'}}>
+						<Regle x={RX} y0={HAUT} y1={SOL} trace={trace} />
+						{cherche
+							? [0, 1, 2].map((k) => {
+									const y = 1060 + 230 * Math.sin(g * 0.33 + k * 2.1) * Math.cos(g * 0.11 + k);
+									return repere(y, k, f % 6 < 4 || k === 0 ? 1 : 0.35);
+								})
+							: repere(repY, 9)}
+						{eclat > 0 ? (
+							<g transform={`translate(${RX + 130} ${CIBLE}) rotate(${g * 6}) scale(${eclat})`}>
+								<path d="M0,-46 L10,-10 L46,0 L10,10 L0,46 L-10,10 L-46,0 L-10,-10 Z" fill="#ffd400" stroke={ENCRE} strokeWidth={4} />
+							</g>
+						) : null}
+						{f >= fin ? (
+							<line x1={RX + 118} x2={760} y1={CIBLE} y2={CIBLE} stroke={ROUGE} strokeWidth={6} strokeDasharray="18 12" opacity={Math.min(1, grand)} />
+						) : null}
+						<g opacity={0.45}>
+							<Adulte x={880} sol={SOL - 6} h={(SOL - CIBLE) * 0.93 * Math.min(1.04, ressort(f, fin + 3, 11, 120))} f={f} lueur={ease(f, fin + 7, 8)} />
+						</g>
+						<Adulte x={770} sol={SOL - 6} h={hAdulte} f={f} lueur={ease(f, fin + 4, 8)} />
+						<Mini x={500} sol={SOL} h={330} f={f} marche={0} leve={1} />
+					</svg>
 				</AbsoluteFill>
 			</AbsoluteFill>
 		);

@@ -1,0 +1,868 @@
+{
+  "partie": 15,
+  "voice": "ff_siwis",
+  "speed": 1.2,
+  "lines": [
+    {
+      "id": "hook",
+      "pause": 0,
+      "text": "1m83, c'est la moyenne en France."
+    },
+    {
+      "id": "hook2",
+      "pause": 0,
+      "text": "Et voici comment calculer ton potentiel de taille finale."
+    },
+    {
+      "id": "partie",
+      "pause": 0,
+      "text": "Partie 15."
+    },
+    {
+      "id": "stats",
+      "pause": 0,
+      "text": "Aujourd'hui, on regarde les stats d'Addy."
+    },
+    {
+      "id": "age",
+      "pause": 0,
+      "text": "À 14 ans et avec une taille actuelle de 163 cm, Addy est dans la moyenne."
+    },
+    {
+      "id": "predit",
+      "pause": 0,
+      "text": "Selon le site Grandimi, sa taille finale estimée est de 175 cm."
+    },
+    {
+      "id": "habitudes",
+      "pause": 0,
+      "text": "Avec les bonnes habitudes, Addy pourrait atteindre 180 cm,"
+    },
+    {
+      "id": "optim",
+      "pause": 0,
+      "text": "soit 5 cm de croissance supplémentaire."
+    },
+    {
+      "id": "pct",
+      "pause": 0,
+      "text": "Actuellement, Addy est plus grand que seulement 50,7 % des personnes de son âge"
+    },
+    {
+      "id": "fini",
+      "pause": 0,
+      "text": "et a déjà atteint 92,7 % de sa croissance."
+    },
+    {
+      "id": "foutu",
+      "pause": 0,
+      "text": "T'es un peu foutu."
+    },
+    {
+      "id": "cta",
+      "pause": 0,
+      "text": "Si toi aussi tu veux faire analyser ton potentiel de taille, commente GRAND sous cette vidéo."
+    }
+  ],
+  "musique": {
+    "fichier": "sfx/music.wav",
+    "volume": 0.08
+  },
+  "images": {
+    "verdict": {
+      "fichier": "verdict.jpg",
+      "w": 1008,
+      "h": 2224
+    }
+  },
+  "zones": {},
+  "plans": [
+    {
+      "nom": "accroche",
+      "debut": 0,
+      "hookTaille": {
+        "cm": 183,
+        "carte": "hook:c-2",
+        "moyenne": "hook:moyenne+3",
+        "france": "hook:france",
+        "regle": "hook2:et",
+        "potentiel": "hook2:potentiel",
+        "finale": "hook2:taille"
+      },
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": 5,
+          "son": "tick",
+          "volume": 0.12
+        },
+        {
+          "a": 8,
+          "son": "tick",
+          "volume": 0.12
+        },
+        {
+          "a": 11,
+          "son": "tick",
+          "volume": 0.12
+        },
+        {
+          "a": 14,
+          "son": "tick",
+          "volume": 0.12
+        },
+        {
+          "a": 16,
+          "son": "ding",
+          "volume": 0.22
+        },
+        {
+          "a": "hook:c-2",
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": "hook:c+5",
+          "son": "pop",
+          "volume": 0.25
+        },
+        {
+          "a": "hook:moyenne+12",
+          "son": "pop",
+          "volume": 0.2
+        },
+        {
+          "a": "hook2:et",
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "hook2:potentiel+8",
+          "son": "sparkle",
+          "volume": 0.25
+        },
+        {
+          "a": "hook2:taille",
+          "son": "whoosh",
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "nom": "partie",
+      "debut": "partie-1",
+      "fond": "papier",
+      "sortie": "jaune",
+      "papiers": [
+        "papier1.jpg",
+        "papier2.jpg",
+        "papier3.jpg",
+        "papier4.jpg"
+      ],
+      "elements": [
+        {
+          "type": "tape",
+          "texte": "PARTIE {partie}",
+          "a": 1,
+          "y": 860,
+          "taille": 150,
+          "police": "Montserrat",
+          "poids": 900,
+          "contour": 9,
+          "curseur": true,
+          "parLettre": 1,
+          "son": "tick",
+          "volume": 0.3
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": 3,
+          "son": "papier",
+          "volume": 0.35
+        }
+      ]
+    },
+    {
+      "nom": "ecran",
+      "debut": "stats-2",
+      "transition": "jaune-glisse",
+      "pousse": 0.04,
+      "dashboard": {
+        "donnees": {
+          "actuelle": "163 cm",
+          "predite": "175 cm",
+          "optimiser": "+5 cm",
+          "bulle": "171 cm",
+          "courbe": [
+            163,
+            167,
+            170.5,
+            172.6,
+            173.9,
+            174.6,
+            175
+          ],
+          "ages": [
+            "14",
+            "15,2",
+            "16,3",
+            "17,5",
+            "18,7",
+            "19,8",
+            "21"
+          ],
+          "rang": "50,7 %",
+          "chances": "100 %",
+          "chancesCm": "180 cm",
+          "croissance": "92,7 %"
+        },
+        "cams": [
+          {
+            "a": "stats:regarde",
+            "cx": 0.38,
+            "cy": 0.26,
+            "z": 1.61,
+            "d": 90,
+            "courbe": "avant"
+          },
+          {
+            "a": "age:163",
+            "cx": 0.38,
+            "cy": 0.26,
+            "z": 1.85,
+            "d": 7,
+            "courbe": "avant"
+          },
+          {
+            "a": "age:addy-2",
+            "cx": 0.5,
+            "cy": 0.5,
+            "z": 1,
+            "d": 14,
+            "courbe": "arriere"
+          },
+          {
+            "a": "predit:sa",
+            "cx": 0.646,
+            "cy": 0.286,
+            "z": 1.77,
+            "d": 26,
+            "courbe": "avant"
+          }
+        ],
+        "pops": [
+          {
+            "ligne": "rang",
+            "a": "age:moyenne",
+            "d": 14,
+            "fin": "predit:grandimi",
+            "dFin": 10,
+            "echelle": 1.12
+          }
+        ],
+        "fleches": [],
+        "revele": "predit:175"
+      },
+      "effets": [
+        {
+          "type": "flash",
+          "a": "predit:175",
+          "couleur": "orange-jaune"
+        }
+      ],
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": "predit:grandimi",
+          "y": 1650,
+          "taille": 76,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 10,
+          "fin": "predit:175"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "fete.png",
+          "a": "predit:175+4",
+          "x": 790,
+          "y": 250,
+          "w": 240,
+          "h": 240,
+          "effet": "pop-balance"
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "stats:regarde",
+          "son": "whoosh",
+          "volume": 0.25
+        },
+        {
+          "a": "age:moyenne",
+          "son": "pop",
+          "volume": 0.25
+        },
+        {
+          "a": "predit:grandimi",
+          "son": "pop",
+          "volume": 0.22
+        },
+        {
+          "a": "predit:sa",
+          "son": "whoosh",
+          "volume": 0.28
+        },
+        {
+          "a": "predit:175",
+          "son": "ding",
+          "volume": 0.25
+        },
+        {
+          "a": "predit:175+4",
+          "son": "sparkle",
+          "volume": 0.22
+        },
+        {
+          "a": "age:163",
+          "son": "pop",
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "nom": "routine",
+      "debut": "habitudes-2",
+      "transition": "radial",
+      "elements": [
+        {
+          "type": "chargement",
+          "a": 0,
+          "fin": "habitudes:atteindre-4",
+          "x": 0,
+          "y": 0,
+          "w": 1080,
+          "h": 1920,
+          "titre": "Ta routine du jour",
+          "etapes": [
+            {
+              "texte": "🏃 Routine posture",
+              "a": "habitudes:bonnes"
+            },
+            {
+              "texte": "🥛 1 verre de lait",
+              "a": "habitudes:habitudes"
+            },
+            {
+              "texte": "🥗 Protéines à chaque repas",
+              "a": "habitudes:addy"
+            },
+            {
+              "texte": "☀️ 15 min dehors",
+              "a": "habitudes:pourrait"
+            },
+            {
+              "texte": "😴 Dormir 9 h",
+              "a": "habitudes:atteindre-4"
+            }
+          ]
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "chiffre",
+      "debut": "habitudes:atteindre-3",
+      "transition": "radial",
+      "fond": "topo",
+      "topo": {
+        "zoomDe": 0.6,
+        "d": 18
+      },
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "silhouette.png",
+          "a": 0,
+          "x": 324,
+          "y": 760,
+          "w": 432,
+          "h": 1170,
+          "grandit": {
+            "de": 0.4,
+            "d": 40
+          }
+        },
+        {
+          "type": "tape",
+          "texte": "180 cm",
+          "a": 3,
+          "y": 95,
+          "taille": 150,
+          "couleur": "#fff",
+          "contour": 0,
+          "police": "Montserrat",
+          "poids": 800,
+          "curseur": true,
+          "fond": "#ff5a1f",
+          "parLettre": 2,
+          "son": "tick",
+          "volume": 0.25
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "ecran2",
+      "debut": "optim-2",
+      "transition": "glitch",
+      "sortie": "glitch",
+      "pousse": 0.08,
+      "dashboard": {
+        "donnees": {
+          "actuelle": "163 cm",
+          "predite": "175 cm",
+          "optimiser": "+5 cm",
+          "bulle": "171 cm",
+          "courbe": [
+            163,
+            167,
+            170.5,
+            172.6,
+            173.9,
+            174.6,
+            175
+          ],
+          "ages": [
+            "14",
+            "15,2",
+            "16,3",
+            "17,5",
+            "18,7",
+            "19,8",
+            "21"
+          ],
+          "rang": "50,7 %",
+          "chances": "100 %",
+          "chancesCm": "180 cm",
+          "croissance": "92,7 %"
+        },
+        "cams": [
+          {
+            "a": "optim:cm",
+            "cx": 0.5,
+            "cy": 0.33,
+            "z": 1.25,
+            "d": 10,
+            "courbe": "avant"
+          },
+          {
+            "a": "optim:supplémentaire",
+            "cx": 0.5,
+            "cy": 0.5,
+            "z": 1,
+            "d": 14,
+            "courbe": "arriere"
+          },
+          {
+            "a": "pct:addy",
+            "cx": 0.5,
+            "cy": 0.75,
+            "z": 1.22,
+            "d": 16,
+            "courbe": "avant"
+          },
+          {
+            "a": "pct:personnes",
+            "cx": 0.5,
+            "cy": 0.75,
+            "z": 1.32,
+            "d": 8,
+            "courbe": "avant"
+          },
+          {
+            "a": "fini:atteint",
+            "cx": 0.67,
+            "cy": 0.615,
+            "z": 1.93,
+            "d": 13,
+            "courbe": "avant"
+          },
+          {
+            "a": "fini:92,7",
+            "cx": 0.67,
+            "cy": 0.615,
+            "z": 2.15,
+            "d": 7,
+            "courbe": "avant"
+          },
+          {
+            "a": "fini:de",
+            "cx": 0.67,
+            "cy": 0.615,
+            "z": 2.35,
+            "d": 20,
+            "courbe": "avant"
+          }
+        ],
+        "pops": [
+          {
+            "ligne": "optimiser",
+            "a": "optim:soit+2",
+            "d": 22,
+            "fin": "pct",
+            "dFin": 16,
+            "echelle": 1.14
+          },
+          {
+            "ligne": "rang",
+            "a": "pct:addy",
+            "d": 36,
+            "fin": "pct:âge+6",
+            "dFin": 8,
+            "echelle": 1.14
+          }
+        ],
+        "fleches": [
+          {
+            "sens": "bas",
+            "x": 0.5,
+            "pointe": 0.25,
+            "a": "optim:soit",
+            "d": 12,
+            "fin": "optim:croissance",
+            "dFin": 18
+          },
+          {
+            "sens": "haut",
+            "x": 0.5,
+            "pointe": 0.705,
+            "a": "pct:50,7-1",
+            "d": 14,
+            "fin": "pct:âge",
+            "dFin": 16
+          }
+        ]
+      },
+      "effets": [
+        {
+          "type": "flash",
+          "a": "pct:50,7+10",
+          "couleur": "orange-jaune"
+        }
+      ],
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "+5 CM 📈",
+          "a": "optim:5",
+          "y": 960,
+          "taille": 140,
+          "couleur": "#24ef3c",
+          "contour": 7,
+          "fin": "pct"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "doigt.png",
+          "a": "pct:âge",
+          "x": 640,
+          "y": 1120,
+          "w": 220,
+          "h": 220,
+          "fin": "fini:atteint",
+          "depuis": {
+            "y": 160,
+            "d": 7
+          },
+          "rebond": true
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "optim:soit",
+          "son": "pop",
+          "volume": 0.38
+        },
+        {
+          "a": "optim:5",
+          "son": "pop",
+          "volume": 0.25
+        },
+        {
+          "a": "optim:cm",
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "fini:atteint",
+          "son": "whoosh",
+          "volume": 0.28
+        },
+        {
+          "a": "fini:92,7",
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "verdict",
+      "debut": "foutu-2",
+      "transition": "glitch",
+      "sortie": "zoom-flou",
+      "image": "verdict",
+      "camera": [
+        {
+          "x": 504,
+          "y": 1112,
+          "z": 1.0,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 504,
+          "y": 1112,
+          "z": 1.06,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "UN PEU FOUTU 💀",
+          "a": "foutu:un",
+          "y": 860,
+          "taille": 110,
+          "couleur": "#ff2a2a",
+          "effet": "glitch",
+          "contour": 7,
+          "son": "crack",
+          "volume": 0.3
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "regle.png",
+          "a": "foutu:foutu",
+          "x": 436,
+          "y": 1133,
+          "w": 209,
+          "h": 787,
+          "depuis": {
+            "y": 700,
+            "d": 12
+          }
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "appel",
+      "debut": "cta-2",
+      "transition": "radial",
+      "fond": "topo",
+      "sortie": "radial-fin",
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": 2,
+          "y": 150,
+          "taille": 80,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 10
+        },
+        {
+          "type": "texte",
+          "texte": "ANALYSÉ ✅",
+          "a": "cta:analyser",
+          "y": 520,
+          "taille": 120,
+          "couleur": "#f7f319",
+          "effet": "glitch",
+          "contour": 7,
+          "fin": "cta:grand"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "equerre.png",
+          "a": "cta:potentiel+5",
+          "x": 286,
+          "y": 1100,
+          "w": 508,
+          "h": 508,
+          "fin": "cta:commente",
+          "depuis": {
+            "y": 320,
+            "d": 9
+          }
+        },
+        {
+          "type": "texte",
+          "texte": "GRAND",
+          "a": "cta:grand",
+          "y": 760,
+          "taille": 190,
+          "couleur": "#fff",
+          "fond": "#8100fe",
+          "amorti": 8,
+          "son": "pop",
+          "volume": 0.35
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "doigt.png",
+          "a": "cta:sous+6",
+          "x": 390,
+          "y": 1215,
+          "w": 300,
+          "h": 300,
+          "depuis": {
+            "y": 220,
+            "d": 8
+          },
+          "rebond": true
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    }
+  ],
+  "sousTitres": {
+    "motsCles": [],
+    "fenetres": [
+      {
+        "de": 0,
+        "a": "partie-1",
+        "y": 1110,
+        "taille": 115,
+        "motsMax": 2,
+        "carMax": 16,
+        "style": "condense",
+        "contour": 5,
+        "poids": 600,
+        "motsCles": false,
+        "pop": false
+      },
+      {
+        "de": "stats-2",
+        "a": "stats:regarde+8",
+        "y": 1000,
+        "taille": 76,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 4,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#f7f319",
+        "reprise": true
+      },
+      {
+        "de": "age:addy-2",
+        "a": "predit:sa",
+        "y": 1000,
+        "taille": 76,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 4,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#f7f319",
+        "reprise": true
+      },
+      {
+        "de": "cta-2",
+        "a": "cta:commente",
+        "y": 1250,
+        "taille": 76,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 4,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#f7f319"
+      }
+    ]
+  },
+  "voix": "Enregistrement ElevenLabs de l'utilisateur, blancs ramenés à 0,08 s, ×1,08.",
+  "reference": "references/p12-steve",
+  "deriveCamera": false,
+  "sonsMouvements": false,
+  "carteCommentaire": {
+    "nom": "addy_zz",
+    "texte": "14 1m63",
+    "de": "partie-1",
+    "a": "stats-2",
+    "x": 111,
+    "y": 1145,
+    "w": 856,
+    "reponse": {
+      "modele": "parsa",
+      "h": 273,
+      "rotation": -3.6,
+      "avatar": "👽"
+    }
+  }
+}

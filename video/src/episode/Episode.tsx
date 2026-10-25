@@ -763,6 +763,9 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					france={plan.hookTaille.france !== undefined ? loc(plan.hookTaille.france) : undefined}
 					question={plan.hookTaille.question !== undefined ? loc(plan.hookTaille.question) : undefined}
 					direct={plan.hookTaille.direct}
+					regle={plan.hookTaille.regle !== undefined ? loc(plan.hookTaille.regle) : undefined}
+					potentiel={plan.hookTaille.potentiel !== undefined ? loc(plan.hookTaille.potentiel) : undefined}
+					finale={plan.hookTaille.finale !== undefined ? loc(plan.hookTaille.finale) : undefined}
 				/>
 			) : null}
 			{img ? (

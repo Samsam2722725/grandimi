@@ -72,7 +72,9 @@ export type Plan = {
 	image?: string;
 	/** Accroche dessinée « taille moyenne » : barre qui monte jusqu'à `cm`, puis carte de France à `carte`,
 	    silhouette en pointillés à `moyenne`, la carte bat à `france`, « ? » à `question` (src/episode/HookTaille.tsx). */
-	hookTaille?: {cm: number; carte: Ancre; moyenne: Ancre; france?: Ancre; question?: Ancre; direct?: boolean};
+	hookTaille?: {cm: number; carte: Ancre; moyenne: Ancre; france?: Ancre; question?: Ancre; direct?: boolean;
+		/** Plan 3 glowup : règle et repères rouges à `regle`, repère posé à `potentiel`, grand bonhomme lumineux à `finale`. */
+		regle?: Ancre; potentiel?: Ancre; finale?: Ancre};
 	/** Accroche dessinée « on prédit votre potentiel… à partir de vos commentaires » (src/episode/HookCommentaires.tsx). */
 	hookCommentaires?: {actuelle: number; cible: number; potentiel: Ancre; commentaires: Ancre; bulles: {nom: string; texte: string; couleur: string}[]};
 	/** Écran de résultats Grandimi animé (src/episode/Dashboard.tsx) : caméra, lignes qui s'élargissent, flèches, ballon. */

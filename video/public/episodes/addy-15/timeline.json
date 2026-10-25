@@ -1,0 +1,531 @@
+{
+  "fps": 30,
+  "totalFrames": 1019,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "1m83, c'est la moyenne en France.",
+      "from": 0,
+      "duration": 69,
+      "words": [
+        {
+          "w": "1m83,",
+          "f": 0
+        },
+        {
+          "w": "c'est",
+          "f": 36
+        },
+        {
+          "w": "la",
+          "f": 41
+        },
+        {
+          "w": "moyenne",
+          "f": 43
+        },
+        {
+          "w": "en",
+          "f": 55
+        },
+        {
+          "w": "France.",
+          "f": 58
+        }
+      ]
+    },
+    {
+      "id": "hook2",
+      "text": "Et voici comment calculer ton potentiel de taille finale.",
+      "from": 70,
+      "duration": 78,
+      "words": [
+        {
+          "w": "Et",
+          "f": 70
+        },
+        {
+          "w": "voici",
+          "f": 74
+        },
+        {
+          "w": "comment",
+          "f": 84
+        },
+        {
+          "w": "calculer",
+          "f": 91
+        },
+        {
+          "w": "ton",
+          "f": 106
+        },
+        {
+          "w": "potentiel",
+          "f": 110
+        },
+        {
+          "w": "de",
+          "f": 122
+        },
+        {
+          "w": "taille",
+          "f": 125
+        },
+        {
+          "w": "finale.",
+          "f": 134
+        }
+      ]
+    },
+    {
+      "id": "partie",
+      "text": "Partie 15.",
+      "from": 149,
+      "duration": 21,
+      "words": [
+        {
+          "w": "Partie",
+          "f": 149
+        },
+        {
+          "w": "15.",
+          "f": 158
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les stats d'Addy.",
+      "from": 170,
+      "duration": 52,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 170
+        },
+        {
+          "w": "on",
+          "f": 182
+        },
+        {
+          "w": "regarde",
+          "f": 187
+        },
+        {
+          "w": "les",
+          "f": 194
+        },
+        {
+          "w": "stats",
+          "f": 197
+        },
+        {
+          "w": "d'Addy.",
+          "f": 206
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 14 ans et avec une taille actuelle de 163 cm, Addy est dans la moyenne.",
+      "from": 223,
+      "duration": 127,
+      "words": [
+        {
+          "w": "À",
+          "f": 223
+        },
+        {
+          "w": "14",
+          "f": 228
+        },
+        {
+          "w": "ans",
+          "f": 235
+        },
+        {
+          "w": "et",
+          "f": 245
+        },
+        {
+          "w": "avec",
+          "f": 250
+        },
+        {
+          "w": "une",
+          "f": 255
+        },
+        {
+          "w": "taille",
+          "f": 260
+        },
+        {
+          "w": "actuelle",
+          "f": 267
+        },
+        {
+          "w": "de",
+          "f": 277
+        },
+        {
+          "w": "163",
+          "f": 279
+        },
+        {
+          "w": "cm,",
+          "f": 298
+        },
+        {
+          "w": "Addy",
+          "f": 315
+        },
+        {
+          "w": "est",
+          "f": 329
+        },
+        {
+          "w": "dans",
+          "f": 334
+        },
+        {
+          "w": "la",
+          "f": 337
+        },
+        {
+          "w": "moyenne.",
+          "f": 339
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille finale estimée est de 175 cm.",
+      "from": 351,
+      "duration": 124,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 351
+        },
+        {
+          "w": "le",
+          "f": 358
+        },
+        {
+          "w": "site",
+          "f": 361
+        },
+        {
+          "w": "Grandimi,",
+          "f": 368
+        },
+        {
+          "w": "sa",
+          "f": 392
+        },
+        {
+          "w": "taille",
+          "f": 397
+        },
+        {
+          "w": "finale",
+          "f": 404
+        },
+        {
+          "w": "estimée",
+          "f": 413
+        },
+        {
+          "w": "est",
+          "f": 428
+        },
+        {
+          "w": "de",
+          "f": 430
+        },
+        {
+          "w": "175",
+          "f": 435
+        },
+        {
+          "w": "cm.",
+          "f": 457
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Avec les bonnes habitudes, Addy pourrait atteindre 180 cm,",
+      "from": 476,
+      "duration": 99,
+      "words": [
+        {
+          "w": "Avec",
+          "f": 476
+        },
+        {
+          "w": "les",
+          "f": 481
+        },
+        {
+          "w": "bonnes",
+          "f": 485
+        },
+        {
+          "w": "habitudes,",
+          "f": 493
+        },
+        {
+          "w": "Addy",
+          "f": 508
+        },
+        {
+          "w": "pourrait",
+          "f": 520
+        },
+        {
+          "w": "atteindre",
+          "f": 527
+        },
+        {
+          "w": "180",
+          "f": 539
+        },
+        {
+          "w": "cm,",
+          "f": 559
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "soit 5 cm de croissance supplémentaire.",
+      "from": 575,
+      "duration": 64,
+      "words": [
+        {
+          "w": "soit",
+          "f": 575
+        },
+        {
+          "w": "5",
+          "f": 585
+        },
+        {
+          "w": "cm",
+          "f": 592
+        },
+        {
+          "w": "de",
+          "f": 609
+        },
+        {
+          "w": "croissance",
+          "f": 611
+        },
+        {
+          "w": "supplémentaire.",
+          "f": 623
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Addy est plus grand que seulement 50,7% des personnes de son âge",
+      "from": 640,
+      "duration": 127,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 640
+        },
+        {
+          "w": "Addy",
+          "f": 655
+        },
+        {
+          "w": "est",
+          "f": 669
+        },
+        {
+          "w": "plus",
+          "f": 674
+        },
+        {
+          "w": "grand",
+          "f": 676
+        },
+        {
+          "w": "que",
+          "f": 683
+        },
+        {
+          "w": "seulement",
+          "f": 688
+        },
+        {
+          "w": "50,7%",
+          "f": 698
+        },
+        {
+          "w": "des",
+          "f": 736
+        },
+        {
+          "w": "personnes",
+          "f": 741
+        },
+        {
+          "w": "de",
+          "f": 748
+        },
+        {
+          "w": "son",
+          "f": 751
+        },
+        {
+          "w": "âge",
+          "f": 755
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et a déjà atteint 92,7% de sa croissance.",
+      "from": 768,
+      "duration": 95,
+      "words": [
+        {
+          "w": "et",
+          "f": 768
+        },
+        {
+          "w": "a",
+          "f": 773
+        },
+        {
+          "w": "déjà",
+          "f": 778
+        },
+        {
+          "w": "atteint",
+          "f": 785
+        },
+        {
+          "w": "92,7%",
+          "f": 797
+        },
+        {
+          "w": "de",
+          "f": 840
+        },
+        {
+          "w": "sa",
+          "f": 842
+        },
+        {
+          "w": "croissance.",
+          "f": 847
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T'es un peu foutu.",
+      "from": 864,
+      "duration": 25,
+      "words": [
+        {
+          "w": "T'es",
+          "f": 864
+        },
+        {
+          "w": "un",
+          "f": 871
+        },
+        {
+          "w": "peu",
+          "f": 874
+        },
+        {
+          "w": "foutu.",
+          "f": 876
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si toi aussi tu veux faire analyser ton potentiel de taille, commente GRAND sous cette vidéo.",
+      "from": 890,
+      "duration": 126,
+      "words": [
+        {
+          "w": "Si",
+          "f": 890
+        },
+        {
+          "w": "toi",
+          "f": 895
+        },
+        {
+          "w": "aussi",
+          "f": 900
+        },
+        {
+          "w": "tu",
+          "f": 907
+        },
+        {
+          "w": "veux",
+          "f": 910
+        },
+        {
+          "w": "faire",
+          "f": 914
+        },
+        {
+          "w": "analyser",
+          "f": 919
+        },
+        {
+          "w": "ton",
+          "f": 931
+        },
+        {
+          "w": "potentiel",
+          "f": 936
+        },
+        {
+          "w": "de",
+          "f": 948
+        },
+        {
+          "w": "taille,",
+          "f": 950
+        },
+        {
+          "w": "commente",
+          "f": 965
+        },
+        {
+          "w": "GRAND",
+          "f": 977
+        },
+        {
+          "w": "sous",
+          "f": 989
+        },
+        {
+          "w": "cette",
+          "f": 994
+        },
+        {
+          "w": "vidéo.",
+          "f": 998
+        }
+      ]
+    }
+  ]
+}
