@@ -778,6 +778,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					regle={plan.hookTaille.regle !== undefined ? loc(plan.hookTaille.regle) : undefined}
 					potentiel={plan.hookTaille.potentiel !== undefined ? loc(plan.hookTaille.potentiel) : undefined}
 					finale={plan.hookTaille.finale !== undefined ? loc(plan.hookTaille.finale) : undefined}
+					perso={plan.hookTaille.perso ? staticFile(plan.hookTaille.perso) : undefined}
 				/>
 			) : null}
 			{img ? (

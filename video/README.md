@@ -17,6 +17,7 @@
 | Partie 15 « Addy » (accroche glowup complète + format Taller) | `Episode` (`{"episode":"addy-15"}`) | `rendu/grandimi-partie15.mp4` (34 s, photo tierce non versionnée) |
 | « 15 ans 1m68 » (chats 3D, format Tallex) | `Episode` (`{"episode":"chats-16"}`) | `rendu/grandimi-chats-16.mp4` (26 s) |
 | « Ta mère mesure 1m57 » (scène famille sur grille verte, format TallUp) | `Episode` (`{"episode":"famille-17"}`) | `rendu/grandimi-famille-17.mp4` (31 s) |
+| Partie 16 « Paul » (copie de la partie 15, bonhomme fourni) | `Episode` (`{"episode":"paul-16"}`) | `rendu/grandimi-partie16-paul.mp4` (34 s, photo tierce non versionnée) |
 
 | « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
 

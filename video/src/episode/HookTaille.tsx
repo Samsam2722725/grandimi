@@ -206,7 +206,9 @@ export const HookTaille: React.FC<{
 	regle?: number;
 	potentiel?: number;
 	finale?: number;
-}> = ({cm, carte, moyenne, france, question, direct, regle, potentiel, finale}) => {
+	/** Bonhomme dessiné fourni (image détourée, main levée à droite) à la place du bonhomme vectoriel du plan 1. */
+	perso?: string;
+}> = ({cm, carte, moyenne, france, question, direct, regle, potentiel, finale, perso}) => {
 	const f = useCurrentFrame();
 	const [map, setMap] = useState<{w: number; h: number; d: string} | null>(null);
 	const [handle] = useState(() => delayRender('carte de France'));
@@ -269,7 +271,14 @@ export const HookTaille: React.FC<{
 							</linearGradient>
 						</defs>
 						<g transform={`translate(300 ${SOL}) scale(${0.85 + 0.15 * entree}) translate(-300 ${-SOL})`}>
-							<Bonhomme x={300} sol={SOL - 2} h={900} f={f} bras={bras} mainY={barTop + 40} regard={regard} surpris={surpris} ecrase={ecrase} />
+							{perso ? (
+								// Placé sur la référence glowup (0,87 s) : tête en haut à y 597, pieds sur le sol, main contre la barre.
+								<g transform={`translate(300 ${SOL}) scale(${1 + 0.06 * ecrase} ${1 - 0.06 * ecrase}) translate(-300 ${-SOL})`}>
+									<image href={perso} x={150} y={SOL - 889} width={320} height={889} />
+								</g>
+							) : (
+								<Bonhomme x={300} sol={SOL - 2} h={900} f={f} bras={bras} mainY={barTop + 40} regard={regard} surpris={surpris} ecrase={ecrase} />
+							)}
 						</g>
 						<Eclats cx={556} cy={395} f={f} at={pose} />
 					</svg>

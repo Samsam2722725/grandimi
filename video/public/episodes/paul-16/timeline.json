@@ -1,0 +1,543 @@
+{
+  "fps": 30,
+  "totalFrames": 1028,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "1m80, c'est la moyenne en France.",
+      "from": 0,
+      "duration": 59,
+      "words": [
+        {
+          "w": "1m80,",
+          "f": 0
+        },
+        {
+          "w": "c'est",
+          "f": 29
+        },
+        {
+          "w": "la",
+          "f": 34
+        },
+        {
+          "w": "moyenne",
+          "f": 36
+        },
+        {
+          "w": "en",
+          "f": 48
+        },
+        {
+          "w": "France.",
+          "f": 50
+        }
+      ]
+    },
+    {
+      "id": "hook2",
+      "text": "Et voici comment calculer ton potentiel de taille finale.",
+      "from": 60,
+      "duration": 76,
+      "words": [
+        {
+          "w": "Et",
+          "f": 60
+        },
+        {
+          "w": "voici",
+          "f": 62
+        },
+        {
+          "w": "comment",
+          "f": 72
+        },
+        {
+          "w": "calculer",
+          "f": 82
+        },
+        {
+          "w": "ton",
+          "f": 94
+        },
+        {
+          "w": "potentiel",
+          "f": 98
+        },
+        {
+          "w": "de",
+          "f": 110
+        },
+        {
+          "w": "taille",
+          "f": 115
+        },
+        {
+          "w": "finale.",
+          "f": 125
+        }
+      ]
+    },
+    {
+      "id": "partie",
+      "text": "Partie 16.",
+      "from": 137,
+      "duration": 23,
+      "words": [
+        {
+          "w": "Partie",
+          "f": 137
+        },
+        {
+          "w": "16.",
+          "f": 149
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les stats de Paul.",
+      "from": 161,
+      "duration": 52,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 161
+        },
+        {
+          "w": "on",
+          "f": 173
+        },
+        {
+          "w": "regarde",
+          "f": 178
+        },
+        {
+          "w": "les",
+          "f": 187
+        },
+        {
+          "w": "stats",
+          "f": 192
+        },
+        {
+          "w": "de",
+          "f": 199
+        },
+        {
+          "w": "Paul.",
+          "f": 202
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 12 ans et avec une taille actuelle de 175 cm, il est au-dessus de la moyenne.",
+      "from": 214,
+      "duration": 127,
+      "words": [
+        {
+          "w": "À",
+          "f": 214
+        },
+        {
+          "w": "12",
+          "f": 218
+        },
+        {
+          "w": "ans",
+          "f": 223
+        },
+        {
+          "w": "et",
+          "f": 234
+        },
+        {
+          "w": "avec",
+          "f": 239
+        },
+        {
+          "w": "une",
+          "f": 244
+        },
+        {
+          "w": "taille",
+          "f": 248
+        },
+        {
+          "w": "actuelle",
+          "f": 256
+        },
+        {
+          "w": "de",
+          "f": 265
+        },
+        {
+          "w": "175",
+          "f": 268
+        },
+        {
+          "w": "cm,",
+          "f": 289
+        },
+        {
+          "w": "il",
+          "f": 308
+        },
+        {
+          "w": "est",
+          "f": 313
+        },
+        {
+          "w": "au-dessus",
+          "f": 316
+        },
+        {
+          "w": "de",
+          "f": 325
+        },
+        {
+          "w": "la",
+          "f": 328
+        },
+        {
+          "w": "moyenne.",
+          "f": 330
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille finale estimée est de 194 cm.",
+      "from": 342,
+      "duration": 124,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 342
+        },
+        {
+          "w": "le",
+          "f": 349
+        },
+        {
+          "w": "site",
+          "f": 352
+        },
+        {
+          "w": "Grandimi,",
+          "f": 359
+        },
+        {
+          "w": "sa",
+          "f": 383
+        },
+        {
+          "w": "taille",
+          "f": 385
+        },
+        {
+          "w": "finale",
+          "f": 392
+        },
+        {
+          "w": "estimée",
+          "f": 402
+        },
+        {
+          "w": "est",
+          "f": 414
+        },
+        {
+          "w": "de",
+          "f": 419
+        },
+        {
+          "w": "194",
+          "f": 421
+        },
+        {
+          "w": "cm.",
+          "f": 448
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Mais avec les bonnes habitudes, Paul pourrait atteindre 198 cm,",
+      "from": 467,
+      "duration": 117,
+      "words": [
+        {
+          "w": "Mais",
+          "f": 467
+        },
+        {
+          "w": "avec",
+          "f": 474
+        },
+        {
+          "w": "les",
+          "f": 481
+        },
+        {
+          "w": "bonnes",
+          "f": 484
+        },
+        {
+          "w": "habitudes,",
+          "f": 491
+        },
+        {
+          "w": "Paul",
+          "f": 508
+        },
+        {
+          "w": "pourrait",
+          "f": 520
+        },
+        {
+          "w": "atteindre",
+          "f": 527
+        },
+        {
+          "w": "198",
+          "f": 539
+        },
+        {
+          "w": "cm,",
+          "f": 568
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "soit 4 cm de croissance supplémentaire.",
+      "from": 585,
+      "duration": 64,
+      "words": [
+        {
+          "w": "soit",
+          "f": 585
+        },
+        {
+          "w": "4",
+          "f": 595
+        },
+        {
+          "w": "cm",
+          "f": 602
+        },
+        {
+          "w": "de",
+          "f": 616
+        },
+        {
+          "w": "croissance",
+          "f": 619
+        },
+        {
+          "w": "supplémentaire.",
+          "f": 631
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Paul est plus grand que déjà 99% des personnes de son âge",
+      "from": 650,
+      "duration": 114,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 650
+        },
+        {
+          "w": "Paul",
+          "f": 667
+        },
+        {
+          "w": "est",
+          "f": 679
+        },
+        {
+          "w": "plus",
+          "f": 681
+        },
+        {
+          "w": "grand",
+          "f": 686
+        },
+        {
+          "w": "que",
+          "f": 693
+        },
+        {
+          "w": "déjà",
+          "f": 698
+        },
+        {
+          "w": "99%",
+          "f": 707
+        },
+        {
+          "w": "des",
+          "f": 739
+        },
+        {
+          "w": "personnes",
+          "f": 741
+        },
+        {
+          "w": "de",
+          "f": 748
+        },
+        {
+          "w": "son",
+          "f": 751
+        },
+        {
+          "w": "âge",
+          "f": 755
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et a déjà atteint 90,2% de sa croissance.",
+      "from": 765,
+      "duration": 107,
+      "words": [
+        {
+          "w": "et",
+          "f": 765
+        },
+        {
+          "w": "a",
+          "f": 770
+        },
+        {
+          "w": "déjà",
+          "f": 775
+        },
+        {
+          "w": "atteint",
+          "f": 779
+        },
+        {
+          "w": "90,2%",
+          "f": 801
+        },
+        {
+          "w": "de",
+          "f": 842
+        },
+        {
+          "w": "sa",
+          "f": 844
+        },
+        {
+          "w": "croissance.",
+          "f": 849
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "Pas du tout foutu.",
+      "from": 873,
+      "duration": 23,
+      "words": [
+        {
+          "w": "Pas",
+          "f": 873
+        },
+        {
+          "w": "du",
+          "f": 875
+        },
+        {
+          "w": "tout",
+          "f": 878
+        },
+        {
+          "w": "foutu.",
+          "f": 883
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si toi aussi tu veux faire analyser ton potentiel de taille, commente GRAND sous cette vidéo.",
+      "from": 897,
+      "duration": 128,
+      "words": [
+        {
+          "w": "Si",
+          "f": 897
+        },
+        {
+          "w": "toi",
+          "f": 902
+        },
+        {
+          "w": "aussi",
+          "f": 907
+        },
+        {
+          "w": "tu",
+          "f": 914
+        },
+        {
+          "w": "veux",
+          "f": 916
+        },
+        {
+          "w": "faire",
+          "f": 921
+        },
+        {
+          "w": "analyser",
+          "f": 926
+        },
+        {
+          "w": "ton",
+          "f": 938
+        },
+        {
+          "w": "potentiel",
+          "f": 943
+        },
+        {
+          "w": "de",
+          "f": 955
+        },
+        {
+          "w": "taille,",
+          "f": 957
+        },
+        {
+          "w": "commente",
+          "f": 969
+        },
+        {
+          "w": "GRAND",
+          "f": 983
+        },
+        {
+          "w": "sous",
+          "f": 993
+        },
+        {
+          "w": "cette",
+          "f": 1000
+        },
+        {
+          "w": "vidéo.",
+          "f": 1007
+        }
+      ]
+    }
+  ]
+}
