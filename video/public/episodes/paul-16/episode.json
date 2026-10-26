@@ -197,7 +197,7 @@
       "nom": "ecran",
       "debut": "stats-2",
       "transition": "jaune-glisse",
-      "pousse": 0.04,
+      "pousse": 0.08,
       "dashboard": {
         "donnees": {
           "actuelle": "175 cm",
@@ -229,19 +229,19 @@
         },
         "cams": [
           {
-            "a": "stats:regarde",
+            "a": "age:12",
             "cx": 0.38,
             "cy": 0.26,
             "z": 1.61,
-            "d": 90,
+            "d": 14,
             "courbe": "avant"
           },
           {
             "a": "age:175",
-            "cx": 0.38,
-            "cy": 0.26,
-            "z": 1.85,
-            "d": 7,
+            "cx": 0.33,
+            "cy": 0.2,
+            "z": 1.8,
+            "d": 6,
             "courbe": "avant"
           },
           {
@@ -249,7 +249,7 @@
             "cx": 0.5,
             "cy": 0.5,
             "z": 1,
-            "d": 14,
+            "d": 12,
             "courbe": "arriere"
           },
           {
@@ -257,16 +257,24 @@
             "cx": 0.646,
             "cy": 0.286,
             "z": 1.77,
-            "d": 26,
+            "d": 12,
+            "courbe": "avant"
+          },
+          {
+            "a": "predit:194",
+            "cx": 0.646,
+            "cy": 0.286,
+            "z": 1.95,
+            "d": 6,
             "courbe": "avant"
           }
         ],
         "pops": [
           {
             "ligne": "rang",
-            "a": "age:moyenne",
-            "d": 14,
-            "fin": "predit:grandimi",
+            "a": "age:au-dessus",
+            "d": 12,
+            "fin": "predit:selon",
             "dFin": 10,
             "echelle": 1.12
           }
@@ -312,19 +320,24 @@
           "volume": 0.22
         },
         {
-          "a": "stats:regarde",
+          "a": "age:12",
           "son": "whoosh",
-          "volume": 0.25
+          "volume": 0.26
         },
         {
-          "a": "age:moyenne",
+          "a": "age:175",
           "son": "pop",
-          "volume": 0.25
+          "volume": 0.22
+        },
+        {
+          "a": "age:au-dessus",
+          "son": "pop",
+          "volume": 0.22
         },
         {
           "a": "predit:grandimi",
           "son": "pop",
-          "volume": 0.22
+          "volume": 0.2
         },
         {
           "a": "predit:sa",
@@ -339,12 +352,7 @@
         {
           "a": "predit:194+4",
           "son": "sparkle",
-          "volume": 0.22
-        },
-        {
-          "a": "age:175",
-          "son": "pop",
-          "volume": 0.25
+          "volume": 0.2
         }
       ]
     },
@@ -536,12 +544,12 @@
             "courbe": "avant"
           },
           {
-            "a": "fini:de",
-            "cx": 0.67,
-            "cy": 0.615,
-            "z": 2.35,
-            "d": 20,
-            "courbe": "avant"
+            "a": "fini:croissance",
+            "cx": 0.5,
+            "cy": 0.5,
+            "z": 1,
+            "d": 12,
+            "courbe": "arriere"
           }
         ],
         "pops": [
@@ -646,6 +654,11 @@
         },
         {
           "a": "fini:90,2%",
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": "fini:croissance",
           "son": "whoosh",
           "volume": 0.2
         }
@@ -808,7 +821,7 @@
       },
       {
         "de": "stats-2",
-        "a": "stats:regarde+8",
+        "a": "age:12",
         "y": 1000,
         "taille": 76,
         "motsMax": 4,
@@ -823,7 +836,7 @@
         "reprise": true
       },
       {
-        "de": "age:il-2",
+        "de": "age:il+10",
         "a": "predit:sa",
         "y": 1000,
         "taille": 76,
