@@ -10,6 +10,7 @@ import {
 	Img,
 	interpolate,
 	Sequence,
+	spring,
 	staticFile,
 	useCurrentFrame,
 } from 'remotion';
@@ -348,12 +349,28 @@ const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?
 		opacity = out;
 	} else if (el.depuis) {
 		const d = el.depuis.d ?? 8;
-		const t = ease(f, at, d);
-		const out = fin !== undefined ? 1 - ease(f, fin, 5) : 1;
+		// ressort : entrée avec dépassement puis retour (personnages de la référence rhino), sans fondu.
+		const t = el.ressort ? spring({frame: f - at, fps: 30, config: {damping: 13, stiffness: 210, mass: 0.6}}) : ease(f, at, d);
+		let out = fin !== undefined ? 1 - ease(f, fin, 5) : 1;
+		let sx = 0;
+		let sy = 0;
+		if (el.sortie && fin !== undefined) {
+			// Sortie en glissant hors de l'écran au lieu d'un fondu.
+			const k = interpolate(f, [fin, fin + (el.sortie.d ?? 5)], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.in(Easing.cubic)});
+			if (k >= 1) return null;
+			out = 1;
+			sx = k * (el.sortie.x ?? 0);
+			sy = k * (el.sortie.y ?? 0);
+		}
 		if (out <= 0.01) return null;
 		const bob = el.rebond && f > at + d ? -Math.abs(Math.sin((f - at - d) / 4)) * 16 : 0;
-		transform = `translate(${(1 - t) * (el.depuis.x ?? 0)}px, ${(1 - t) * (el.depuis.y ?? 0) + bob}px)`;
-		opacity = Math.min(1, t * 1.6) * out;
+		transform = `translate(${(1 - t) * (el.depuis.x ?? 0) + sx}px, ${(1 - t) * (el.depuis.y ?? 0) + bob + sy}px)`;
+		opacity = el.ressort ? out : Math.min(1, t * 1.6) * out;
+	} else if (el.effet === 'change') {
+		// Changement de pose au même endroit : petit rebond d'échelle, sans fondu (référence rhino).
+		if (fin !== undefined && f >= fin) return null;
+		const k = interpolate(f, [at, at + 5], [1.07, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.back(2))});
+		transform = `scale(${k})`;
 	} else if (el.effet === 'revele-bas') {
 		clipPath = `inset(${(1 - ease(f, at, 8)) * 100}% 0 0 0)`;
 		// Rebond vertical une fois la flèche apparue, comme un sticker animé.
@@ -370,6 +387,11 @@ const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?
 		transform = `scale(${s}) rotate(${wob}deg)`;
 	}
 	if (fin !== undefined && f >= fin && !el.effet && !el.depuis && !el.grandit) return null;
+	if (el.vivant) {
+		// Respiration légère : les personnages de la référence ne sont jamais figés.
+		const r = Math.sin((f - at) / 7 + el.x / 97);
+		transform = `${transform ?? ''} scale(${1 - 0.006 * r}, ${1 + 0.014 * r})`;
+	}
 	if (el.miroir) transform = `${transform ?? ''} scaleX(-1)`;
 	return (
 		<Img
@@ -383,7 +405,7 @@ const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?
 				transform,
 				clipPath,
 				opacity,
-				transformOrigin: el.grandit ? '50% 100%' : el.zoom ? `${el.zoom.ox ?? 50}% ${el.zoom.oy ?? 50}%` : undefined,
+				transformOrigin: el.grandit || (el.vivant && !el.zoom) ? '50% 100%' : el.zoom ? `${el.zoom.ox ?? 50}% ${el.zoom.oy ?? 50}%` : undefined,
 			}}
 		/>
 	);

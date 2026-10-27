@@ -105,17 +105,17 @@
           "type": "image",
           "ecran": true,
           "fichier": "pointe.png",
-          "a": 0,
+          "a": 3,
           "x": -560,
           "y": 640,
           "w": 1664,
           "h": 2280,
-          "zoom": {
-            "de": 1.35,
-            "d": 10,
-            "ox": 30,
-            "oy": 40
+          "depuis": {
+            "x": -500,
+            "y": 700
           },
+          "ressort": true,
+          "vivant": true,
           "fin": "hook:à"
         },
         {
@@ -127,7 +127,12 @@
           "y": 945,
           "w": 440,
           "h": 785,
-          "effet": "pop"
+          "depuis": {
+            "x": 600,
+            "y": 0
+          },
+          "ressort": true,
+          "vivant": true
         },
         {
           "type": "image",
@@ -137,7 +142,9 @@
           "x": -410,
           "y": 710,
           "w": 1029,
-          "h": 1410
+          "h": 1410,
+          "effet": "change",
+          "vivant": true
         },
         {
           "type": "texte",
@@ -161,8 +168,13 @@
           "volume": 0.22
         },
         {
-          "a": "hook:à",
+          "a": 3,
           "son": "pop",
+          "volume": 0.3
+        },
+        {
+          "a": "hook:à",
+          "son": "whoosh",
           "volume": 0.25
         }
       ]
@@ -183,7 +195,7 @@
           "a": 1,
           "x": 380,
           "y": 700,
-          "z": 1.66,
+          "z": 1.68,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -198,7 +210,8 @@
           "x": 440,
           "y": 440,
           "w": 696,
-          "h": 1240
+          "h": 1240,
+          "vivant": true
         },
         {
           "type": "texte",
@@ -222,7 +235,7 @@
           "y1": 1710,
           "de": 100,
           "vers": 160,
-          "d": 28,
+          "d": 24,
           "son": "tick",
           "volume": 0.2
         },
@@ -236,9 +249,11 @@
           "w": 766,
           "h": 1785,
           "depuis": {
-            "x": -500,
-            "d": 6
-          }
+            "x": -700,
+            "y": 0
+          },
+          "ressort": true,
+          "vivant": true
         }
       ],
       "sons": [
@@ -263,14 +278,14 @@
         {
           "x": 380,
           "y": 700,
-          "z": 1.6,
+          "z": 1.68,
           "duree": 1
         },
         {
           "a": 1,
           "x": 380,
           "y": 700,
-          "z": 1.66,
+          "z": 1.74,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -285,7 +300,8 @@
           "x": 440,
           "y": 440,
           "w": 696,
-          "h": 1240
+          "h": 1240,
+          "vivant": true
         },
         {
           "type": "texte",
@@ -316,14 +332,12 @@
           "ecran": true,
           "fichier": "pouce.png",
           "a": 0,
-          "x": 200,
-          "y": 790,
+          "x": -250,
+          "y": 760,
           "w": 959,
           "h": 1456,
-          "depuis": {
-            "y": 500,
-            "d": 6
-          }
+          "effet": "change",
+          "vivant": true
         }
       ],
       "sons": [
@@ -365,7 +379,13 @@
           "x": -78,
           "y": 513,
           "w": 716,
-          "h": 1320
+          "h": 1320,
+          "depuis": {
+            "x": -800,
+            "y": 0
+          },
+          "ressort": true,
+          "vivant": true
         },
         {
           "type": "image",
@@ -377,9 +397,11 @@
           "w": 672,
           "h": 1320,
           "depuis": {
-            "x": 300,
-            "d": 7
-          }
+            "x": -900,
+            "y": 0
+          },
+          "ressort": true,
+          "vivant": true
         },
         {
           "type": "texte",
@@ -421,7 +443,7 @@
         {
           "a": "predire:prédire",
           "son": "whoosh",
-          "volume": 0.2
+          "volume": 0.22
         }
       ]
     },
@@ -429,7 +451,7 @@
       "nom": "saisie",
       "debut": "saisie",
       "transition": "glisse",
-      "pousse": 0.04,
+      "pousse": 0.05,
       "elements": [
         {
           "type": "formulaire",
@@ -483,6 +505,11 @@
           "volume": 0.25
         },
         {
+          "a": "saisie:ces",
+          "son": "tick",
+          "volume": 0.2
+        },
+        {
           "a": "saisie:infos",
           "son": "tick",
           "volume": 0.25
@@ -505,7 +532,7 @@
           "a": 1,
           "x": 540,
           "y": 960,
-          "z": 1.05,
+          "z": 1.06,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -527,10 +554,35 @@
           "y": 400,
           "w": 570,
           "h": 900,
-          "fin": "com:âge",
           "depuis": {
-            "y": 120,
-            "d": 6
+            "x": 0,
+            "y": 900
+          },
+          "ressort": true,
+          "vivant": true,
+          "fin": "com:commenter",
+          "sortie": {
+            "y": 1100
+          }
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pointe.png",
+          "a": "com:commenter",
+          "x": -560,
+          "y": 700,
+          "w": 1533,
+          "h": 2100,
+          "depuis": {
+            "x": -700,
+            "y": 500
+          },
+          "ressort": true,
+          "vivant": true,
+          "fin": "com:âge",
+          "sortie": {
+            "x": -1200
           }
         },
         {
@@ -617,14 +669,35 @@
           "y": 700,
           "w": 1095,
           "h": 1500,
-          "miroir": true,
           "depuis": {
-            "x": 500,
-            "d": 7
-          }
+            "x": 800,
+            "y": 0
+          },
+          "ressort": true,
+          "vivant": true,
+          "miroir": true,
+          "fin": "com:poids"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "main.png",
+          "a": "com:poids",
+          "x": 330,
+          "y": 760,
+          "w": 876,
+          "h": 1250,
+          "effet": "change",
+          "vivant": true,
+          "miroir": true
         }
       ],
       "sons": [
+        {
+          "a": "com:commenter",
+          "son": "whoosh",
+          "volume": 0.25
+        },
         {
           "a": "com:âge",
           "son": "whoosh",
@@ -668,7 +741,7 @@
           "a": 1,
           "x": 504,
           "y": 1112,
-          "z": 1.1,
+          "z": 1.12,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -683,35 +756,37 @@
           "x": 169,
           "y": 486,
           "w": 743,
-          "h": 1324
+          "h": 1324,
+          "vivant": true
         },
         {
           "type": "image",
           "ecran": true,
           "fichier": "pointe.png",
-          "a": "chaud:mec",
+          "a": "chaud:oh+2",
           "x": -410,
           "y": 760,
           "w": 985,
           "h": 1350,
           "depuis": {
-            "x": -400,
-            "d": 6
-          }
+            "x": -700,
+            "y": 0
+          },
+          "ressort": true,
+          "vivant": true,
+          "fin": "chaud:félicitations"
         },
         {
           "type": "image",
           "ecran": true,
           "fichier": "pouce.png",
           "a": "chaud:félicitations",
-          "x": 560,
-          "y": 1050,
-          "w": 560,
-          "h": 850,
-          "depuis": {
-            "y": 400,
-            "d": 6
-          }
+          "x": -300,
+          "y": 820,
+          "w": 823,
+          "h": 1250,
+          "effet": "change",
+          "vivant": true
         }
       ],
       "effets": [
@@ -723,6 +798,11 @@
       "sons": [
         {
           "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "chaud:oh+2",
           "son": "whoosh",
           "volume": 0.22
         },
@@ -800,22 +880,47 @@
         {
           "type": "image",
           "ecran": true,
-          "fichier": "pointe.png",
-          "a": 0,
-          "x": 108,
-          "y": 380,
-          "w": 504,
-          "h": 690
+          "fichier": "main.png",
+          "a": 2,
+          "x": 60,
+          "y": 420,
+          "w": 435,
+          "h": 620,
+          "depuis": {
+            "x": -600,
+            "y": 0
+          },
+          "ressort": true,
+          "vivant": true,
+          "fin": "result:1m80"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pouce.png",
+          "a": "result:1m80",
+          "x": 60,
+          "y": 420,
+          "w": 408,
+          "h": 620,
+          "effet": "change",
+          "vivant": true
         },
         {
           "type": "image",
           "ecran": true,
           "fichier": "heros.png",
-          "a": 0,
+          "a": 5,
           "x": 567,
           "y": 890,
           "w": 471,
-          "h": 840
+          "h": 840,
+          "depuis": {
+            "x": 600,
+            "y": 0
+          },
+          "ressort": true,
+          "vivant": true
         }
       ],
       "sons": [
@@ -852,7 +957,7 @@
           "a": 1,
           "x": 540,
           "y": 960,
-          "z": 1.04,
+          "z": 1.05,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -867,7 +972,7 @@
           "type": "image",
           "ecran": true,
           "fichier": "pastille.png",
-          "a": 0,
+          "a": "conseils:profite",
           "x": 101,
           "y": 202,
           "w": 877,
@@ -878,7 +983,7 @@
           "type": "image",
           "ecran": true,
           "fichier": "rond.png",
-          "a": "conseils:conseils",
+          "a": 0,
           "x": 215,
           "y": 470,
           "w": 650,
@@ -897,9 +1002,9 @@
           "w": 920,
           "h": 270,
           "depuis": {
-            "y": 160,
-            "d": 6
+            "y": 260
           },
+          "ressort": true,
           "son": "ding",
           "volume": 0.2
         }
@@ -980,13 +1085,14 @@
         {
           "type": "image",
           "ecran": true,
-          "fichier": "pointe.png",
+          "fichier": "pouce.png",
           "a": 0,
-          "x": 108,
-          "y": 380,
-          "w": 504,
-          "h": 690,
-          "fin": "optim:optimiser"
+          "x": 60,
+          "y": 420,
+          "w": 408,
+          "h": 620,
+          "fin": "optim:optimiser",
+          "vivant": true
         },
         {
           "type": "image",
@@ -997,7 +1103,24 @@
           "y": 890,
           "w": 471,
           "h": 840,
-          "fin": "optim:optimiser"
+          "fin": "optim:optimiser",
+          "vivant": true
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pointe.png",
+          "a": "optim:optimiser+4",
+          "x": -83,
+          "y": 1100,
+          "w": 504,
+          "h": 690,
+          "depuis": {
+            "x": -500,
+            "y": 0
+          },
+          "ressort": true,
+          "vivant": true
         }
       ],
       "sons": [
@@ -1026,10 +1149,10 @@
           "duree": 1
         },
         {
-          "a": 1,
+          "a": "enorme:carrément",
           "x": 504,
-          "y": 1112,
-          "z": 1.14,
+          "y": 1000,
+          "z": 1.22,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -1044,20 +1167,27 @@
           "x": 169,
           "y": 486,
           "w": 743,
-          "h": 1324
+          "h": 1324,
+          "vivant": true
         },
         {
           "type": "image",
           "ecran": true,
-          "fichier": "bras.png",
-          "a": "enorme:énorme",
-          "x": -200,
-          "y": 820,
-          "w": 558,
-          "h": 1300,
+          "fichier": "pointe.png",
+          "a": 0,
+          "x": -300,
+          "y": 900,
+          "w": 1533,
+          "h": 2100,
           "depuis": {
-            "x": -400,
-            "d": 6
+            "x": 0,
+            "y": 900
+          },
+          "ressort": true,
+          "vivant": true,
+          "fin": "enorme:carrément",
+          "sortie": {
+            "y": 1300
           }
         }
       ],
@@ -1068,9 +1198,9 @@
           "volume": 0.22
         },
         {
-          "a": "enorme:énorme",
-          "son": "pop",
-          "volume": 0.25
+          "a": "enorme:carrément",
+          "son": "whoosh",
+          "volume": 0.22
         }
       ]
     }

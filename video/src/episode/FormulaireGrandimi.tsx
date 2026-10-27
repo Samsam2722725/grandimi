@@ -62,7 +62,8 @@ export const FormulaireGrandimi: React.FC<{ecrans: EcranSaisie[]; fin: number}> 
 				if (f < e.a || f >= suivant + 6) return null;
 				const entree = interpolate(f, [e.a, e.a + 6], [1, 0], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
 				const sortie = interpolate(f, [suivant, suivant + 6], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.in(Easing.cubic)});
-				const choix = interpolate(f, [e.a + 7, e.a + 17], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+				// Les roues tournent pendant presque tout l'écran, comme une saisie en direct (référence rhino 11-14 s).
+				const choix = interpolate(f, [e.a + 4, Math.max(e.a + 17, suivant - 8)], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
 				const appui = interpolate(f, [suivant - 5, suivant - 2, suivant], [1, 0.93, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 				return (
 					<div

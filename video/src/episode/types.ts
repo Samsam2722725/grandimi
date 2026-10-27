@@ -18,7 +18,7 @@ export type Camera = {a?: Ancre; zone?: string; x?: number; y?: number; z?: numb
 
 type Base = {a: Ancre; son?: string; volume?: number};
 export type Element =
-	| (Base & {type: 'image'; fichier: string; x: number; y: number; w: number; h: number; fin?: Ancre; effet?: 'pop' | 'pop-balance' | 'revele-bas'; rebond?: boolean; ecran?: boolean;
+	| (Base & {type: 'image'; fichier: string; x: number; y: number; w: number; h: number; fin?: Ancre; effet?: 'pop' | 'pop-balance' | 'revele-bas' | 'change'; rebond?: boolean; ecran?: boolean;
 		/** Entrée glissée : part de (x, y) pixels de décalage et rejoint sa place en d frames, en fondu. */
 		depuis?: {x?: number; y?: number; d?: number};
 		/** Deuxième image qui alterne avec la première toutes les `periode` frames (flèche dorée / bleue). */
@@ -28,7 +28,12 @@ export type Element =
 		/** Arrive de très près (échelle `de` → 1 en `d` frames) ; ox, oy : point fixe en % de l'image. */
 		zoom?: {de: number; d: number; ox?: number; oy?: number};
 		/** Image retournée horizontalement. */
-		miroir?: boolean})
+		miroir?: boolean;
+		/** Personnage vivant : respiration légère permanente. */
+		vivant?: boolean;
+		/** Avec `depuis` : entrée en ressort (dépassement) sans fondu ; `sortie` : glisse hors de l'écran à `fin`. */
+		ressort?: boolean;
+		sortie?: {x?: number; y?: number; d?: number}})
 	| (Base & {type: 'trait'; d: string; tete?: string; couleur?: string; epaisseur?: number; duree?: number; fin?: Ancre})
 	/** x : centre horizontal du texte (défaut : milieu de l'écran). */
 	| (Base & {type: 'texte'; texte: string; x?: number; y: number; taille: number; police?: string; rotation?: number; aligne?: 'left' | 'center'; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance' | 'glitch' | 'fondu'; fin?: Ancre; lueur?: string})
