@@ -1,0 +1,1110 @@
+{
+  "partie": 0,
+  "voice": "",
+  "speed": 1,
+  "images": {
+    "salle_jeu": {
+      "fichier": "salle_jeu.jpg",
+      "w": 1008,
+      "h": 1836
+    },
+    "salon": {
+      "fichier": "salon.jpg",
+      "w": 1008,
+      "h": 2224
+    },
+    "pause_fond": {
+      "fichier": "pause_fond.jpg",
+      "w": 1080,
+      "h": 1920
+    }
+  },
+  "zones": {},
+  "sonsMouvements": false,
+  "lines": [
+    {
+      "id": "hook",
+      "pause": 0,
+      "text": "Oh ! 1m60 à 13 ans."
+    },
+    {
+      "id": "fini",
+      "pause": 0,
+      "text": "Laisse tomber, mec, c'est fini pour toi."
+    },
+    {
+      "id": "blague",
+      "pause": 0,
+      "text": "Évidemment, c'était une blague."
+    },
+    {
+      "id": "predire",
+      "pause": 0,
+      "text": "On va prédire ta taille avec {Grandimi|Grandimmy}."
+    },
+    {
+      "id": "saisie",
+      "pause": 0,
+      "text": "Pendant que je saisis ces infos,"
+    },
+    {
+      "id": "com",
+      "pause": 0,
+      "text": "n'hésite pas à commenter ton âge, ta taille, la taille de tes deux parents, ton poids et tes sports."
+    },
+    {
+      "id": "chaud",
+      "pause": 0,
+      "text": "Oh mec, t'es chaud ! Félicitations !"
+    },
+    {
+      "id": "result",
+      "pause": 0,
+      "text": "Normalement, si tout se passe bien, tu feras 1m80."
+    },
+    {
+      "id": "conseils",
+      "pause": 0,
+      "text": "Et profite des conseils donnés sur le site Grandimi."
+    },
+    {
+      "id": "optim",
+      "pause": 0,
+      "text": "Tu peux optimiser jusqu'à 3 cm."
+    },
+    {
+      "id": "enorme",
+      "pause": 0,
+      "text": "Du coup, c'est carrément énorme."
+    }
+  ],
+  "plans": [
+    {
+      "nom": "ouverture",
+      "debut": 0,
+      "image": "salle_jeu",
+      "camera": [
+        {
+          "x": 504,
+          "y": 930,
+          "z": 1.04,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 504,
+          "y": 930,
+          "z": 1.1,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pointe.png",
+          "a": 0,
+          "x": -560,
+          "y": 640,
+          "w": 1664,
+          "h": 2280,
+          "zoom": {
+            "de": 1.35,
+            "d": 10,
+            "ox": 30,
+            "oy": 40
+          },
+          "fin": "hook:à"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "heros.png",
+          "a": "hook:à",
+          "x": 600,
+          "y": 945,
+          "w": 440,
+          "h": 785,
+          "effet": "pop"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pointe.png",
+          "a": "hook:à",
+          "x": -410,
+          "y": 710,
+          "w": 1029,
+          "h": 1410
+        },
+        {
+          "type": "texte",
+          "texte": "13",
+          "a": "hook:13",
+          "y": 770,
+          "taille": 130,
+          "x": 725,
+          "police": "Caveat",
+          "poids": 500,
+          "couleur": "#fff",
+          "contour": 1,
+          "contourCouleur": "rgba(0,0,0,0.25)",
+          "amorti": 6
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "hook:à",
+          "son": "pop",
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "nom": "regle",
+      "debut": "fini",
+      "transition": "coupe",
+      "image": "salle_jeu",
+      "camera": [
+        {
+          "x": 380,
+          "y": 700,
+          "z": 1.6,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 380,
+          "y": 700,
+          "z": 1.66,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "heros.png",
+          "a": 0,
+          "x": 440,
+          "y": 440,
+          "w": 696,
+          "h": 1240
+        },
+        {
+          "type": "texte",
+          "texte": "13",
+          "a": 0,
+          "y": 190,
+          "taille": 250,
+          "x": 750,
+          "police": "Caveat",
+          "poids": 500,
+          "couleur": "#fff",
+          "contour": 1,
+          "contourCouleur": "rgba(0,0,0,0.25)",
+          "amorti": 6
+        },
+        {
+          "type": "jauge",
+          "a": 0,
+          "x": 140,
+          "y0": 530,
+          "y1": 1710,
+          "de": 100,
+          "vers": 160,
+          "d": 28,
+          "son": "tick",
+          "volume": 0.2
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "bras.png",
+          "a": "fini:c'est",
+          "x": -170,
+          "y": 680,
+          "w": 766,
+          "h": 1785,
+          "depuis": {
+            "x": -500,
+            "d": 6
+          }
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.24
+        },
+        {
+          "a": "fini:c'est",
+          "son": "whoosh",
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "nom": "blague",
+      "debut": "blague",
+      "transition": "coupe",
+      "image": "salle_jeu",
+      "camera": [
+        {
+          "x": 380,
+          "y": 700,
+          "z": 1.6,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 380,
+          "y": 700,
+          "z": 1.66,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "heros.png",
+          "a": 0,
+          "x": 440,
+          "y": 440,
+          "w": 696,
+          "h": 1240
+        },
+        {
+          "type": "texte",
+          "texte": "13",
+          "a": 0,
+          "y": 190,
+          "taille": 250,
+          "x": 750,
+          "police": "Caveat",
+          "poids": 500,
+          "couleur": "#fff",
+          "contour": 1,
+          "contourCouleur": "rgba(0,0,0,0.25)",
+          "amorti": 6
+        },
+        {
+          "type": "jauge",
+          "a": 0,
+          "x": 140,
+          "y0": 530,
+          "y1": 1710,
+          "de": 160,
+          "vers": 160,
+          "d": 1
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pouce.png",
+          "a": 0,
+          "x": 200,
+          "y": 790,
+          "w": 959,
+          "h": 1456,
+          "depuis": {
+            "y": 500,
+            "d": 6
+          }
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "pop",
+          "volume": 0.28
+        }
+      ]
+    },
+    {
+      "nom": "parents",
+      "debut": "predire",
+      "transition": "coupe",
+      "image": "salon",
+      "camera": [
+        {
+          "x": 504,
+          "y": 1112,
+          "z": 1.0,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 504,
+          "y": 1112,
+          "z": 1.06,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pere.png",
+          "a": 0,
+          "x": -78,
+          "y": 513,
+          "w": 716,
+          "h": 1320
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "mere.png",
+          "a": "predire:prédire",
+          "x": 484,
+          "y": 540,
+          "w": 672,
+          "h": 1320,
+          "depuis": {
+            "x": 300,
+            "d": 7
+          }
+        },
+        {
+          "type": "texte",
+          "texte": "Père",
+          "a": "predire:ta",
+          "y": 330,
+          "taille": 92,
+          "x": 280,
+          "aligne": "center",
+          "police": "Noto Serif",
+          "poids": 600,
+          "couleur": "#fff",
+          "contour": 1,
+          "contourCouleur": "rgba(0,0,0,0.5)",
+          "amorti": 6
+        },
+        {
+          "type": "texte",
+          "texte": "Mère",
+          "a": "predire:avec",
+          "y": 360,
+          "taille": 92,
+          "x": 820,
+          "aligne": "center",
+          "police": "Noto Serif",
+          "poids": 600,
+          "couleur": "#fff",
+          "contour": 1,
+          "contourCouleur": "rgba(0,0,0,0.5)",
+          "amorti": 6
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "predire:prédire",
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "saisie",
+      "debut": "saisie",
+      "transition": "glisse",
+      "pousse": 0.04,
+      "elements": [
+        {
+          "type": "formulaire",
+          "a": 0,
+          "fin": "com",
+          "ecrans": [
+            {
+              "titre": "Taille des parents",
+              "a": 0,
+              "roues": [
+                {
+                  "label": "Père (cm)",
+                  "valeurs": [
+                    "172",
+                    "173",
+                    "174",
+                    "175",
+                    "176",
+                    "177",
+                    "178"
+                  ],
+                  "choisi": 3
+                },
+                {
+                  "label": "Mère (cm)",
+                  "valeurs": [
+                    "160",
+                    "161",
+                    "162",
+                    "163",
+                    "164",
+                    "165",
+                    "166"
+                  ],
+                  "choisi": 3
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": "saisie:saisis",
+          "son": "tick",
+          "volume": 0.25
+        },
+        {
+          "a": "saisie:infos",
+          "son": "tick",
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "nom": "pause",
+      "debut": "com",
+      "transition": "coupe",
+      "image": "pause_fond",
+      "camera": [
+        {
+          "x": 540,
+          "y": 960,
+          "z": 1.0,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 540,
+          "y": 960,
+          "z": 1.05,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "pause",
+          "a": 0,
+          "son": "tick",
+          "volume": 0.3
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "doigt.png",
+          "a": 0,
+          "x": 297,
+          "y": 400,
+          "w": 570,
+          "h": 900,
+          "fin": "com:âge",
+          "depuis": {
+            "y": 120,
+            "d": 6
+          }
+        },
+        {
+          "type": "texte",
+          "texte": "-Âge",
+          "a": "com:âge",
+          "y": 250,
+          "taille": 92,
+          "x": 40,
+          "aligne": "left",
+          "police": "Noto Serif",
+          "poids": 600,
+          "couleur": "#fff",
+          "contour": 1,
+          "contourCouleur": "rgba(0,0,0,0.5)",
+          "amorti": 6
+        },
+        {
+          "type": "texte",
+          "texte": "-Taille",
+          "a": "com:taille",
+          "y": 470,
+          "taille": 92,
+          "x": 40,
+          "aligne": "left",
+          "police": "Noto Serif",
+          "poids": 600,
+          "couleur": "#fff",
+          "contour": 1,
+          "contourCouleur": "rgba(0,0,0,0.5)",
+          "amorti": 6
+        },
+        {
+          "type": "texte",
+          "texte": "-Taille des parents",
+          "a": "com:parents",
+          "y": 690,
+          "taille": 92,
+          "x": 40,
+          "aligne": "left",
+          "police": "Noto Serif",
+          "poids": 600,
+          "couleur": "#fff",
+          "contour": 1,
+          "contourCouleur": "rgba(0,0,0,0.5)",
+          "amorti": 6
+        },
+        {
+          "type": "texte",
+          "texte": "-Poids",
+          "a": "com:poids",
+          "y": 910,
+          "taille": 92,
+          "x": 40,
+          "aligne": "left",
+          "police": "Noto Serif",
+          "poids": 600,
+          "couleur": "#fff",
+          "contour": 1,
+          "contourCouleur": "rgba(0,0,0,0.5)",
+          "amorti": 6
+        },
+        {
+          "type": "texte",
+          "texte": "-Sports",
+          "a": "com:sports",
+          "y": 1130,
+          "taille": 92,
+          "x": 40,
+          "aligne": "left",
+          "police": "Noto Serif",
+          "poids": 600,
+          "couleur": "#fff",
+          "contour": 1,
+          "contourCouleur": "rgba(0,0,0,0.5)",
+          "amorti": 6
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pointe.png",
+          "a": "com:âge",
+          "x": 250,
+          "y": 700,
+          "w": 1095,
+          "h": 1500,
+          "miroir": true,
+          "depuis": {
+            "x": 500,
+            "d": 7
+          }
+        }
+      ],
+      "sons": [
+        {
+          "a": "com:âge",
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "com:taille",
+          "son": "pop",
+          "volume": 0.2
+        },
+        {
+          "a": "com:parents",
+          "son": "pop",
+          "volume": 0.2
+        },
+        {
+          "a": "com:poids",
+          "son": "pop",
+          "volume": 0.2
+        },
+        {
+          "a": "com:sports",
+          "son": "pop",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "chaud",
+      "debut": "chaud",
+      "transition": "coupe",
+      "image": "salon",
+      "camera": [
+        {
+          "x": 504,
+          "y": 1112,
+          "z": 1.04,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 504,
+          "y": 1112,
+          "z": 1.1,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "heros.png",
+          "a": 0,
+          "x": 169,
+          "y": 486,
+          "w": 743,
+          "h": 1324
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pointe.png",
+          "a": "chaud:mec",
+          "x": -410,
+          "y": 760,
+          "w": 985,
+          "h": 1350,
+          "depuis": {
+            "x": -400,
+            "d": 6
+          }
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pouce.png",
+          "a": "chaud:félicitations",
+          "x": 560,
+          "y": 1050,
+          "w": 560,
+          "h": 850,
+          "depuis": {
+            "y": 400,
+            "d": 6
+          }
+        }
+      ],
+      "effets": [
+        {
+          "type": "secousse",
+          "a": "chaud:chaud"
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "chaud:félicitations",
+          "son": "sparkle",
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "nom": "resultat",
+      "debut": "result",
+      "transition": "coupe",
+      "dashboard": {
+        "donnees": {
+          "actuelle": "160 cm",
+          "predite": "180 cm",
+          "optimiser": "+3 cm",
+          "bulle": "176 cm",
+          "courbe": [
+            160,
+            167,
+            172,
+            175.5,
+            177.8,
+            179.2,
+            180
+          ],
+          "ages": [
+            "13",
+            "14,3",
+            "15,7",
+            "17",
+            "18,3",
+            "19,7",
+            "21"
+          ],
+          "rang": "65 %",
+          "chances": "70 %",
+          "chancesCm": "183 cm",
+          "croissance": "88,9 %"
+        },
+        "entete": "logo",
+        "cams": [
+          {
+            "a": "result:tu",
+            "cx": 0.646,
+            "cy": 0.25,
+            "z": 1.5,
+            "d": 8,
+            "courbe": "avant"
+          },
+          {
+            "a": "result:1m80+14",
+            "cx": 0.5,
+            "cy": 0.5,
+            "z": 1,
+            "d": 10,
+            "courbe": "arriere"
+          }
+        ],
+        "pops": [],
+        "fleches": [],
+        "revele": "result:1m80"
+      },
+      "effets": [
+        {
+          "type": "flash",
+          "a": "result:1m80",
+          "couleur": "orange-jaune"
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pointe.png",
+          "a": 0,
+          "x": 108,
+          "y": 380,
+          "w": 504,
+          "h": 690
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "heros.png",
+          "a": 0,
+          "x": 567,
+          "y": 890,
+          "w": 471,
+          "h": 840
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "result:tu",
+          "son": "whoosh",
+          "volume": 0.25
+        },
+        {
+          "a": "result:1m80",
+          "son": "ding",
+          "volume": 0.25
+        }
+      ]
+    },
+    {
+      "nom": "logo",
+      "debut": "conseils",
+      "transition": "coupe",
+      "image": "pause_fond",
+      "camera": [
+        {
+          "x": 540,
+          "y": 960,
+          "z": 1.0,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 540,
+          "y": 960,
+          "z": 1.04,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "pause",
+          "a": 0
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pastille.png",
+          "a": 0,
+          "x": 101,
+          "y": 202,
+          "w": 877,
+          "h": 200,
+          "effet": "pop"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "rond.png",
+          "a": "conseils:conseils",
+          "x": 215,
+          "y": 470,
+          "w": 650,
+          "h": 650,
+          "effet": "pop",
+          "son": "pop",
+          "volume": 0.3
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "bouton.png",
+          "a": "conseils:site",
+          "x": 80,
+          "y": 1228,
+          "w": 920,
+          "h": 270,
+          "depuis": {
+            "y": 160,
+            "d": 6
+          },
+          "son": "ding",
+          "volume": 0.2
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "optim",
+      "debut": "optim",
+      "transition": "coupe",
+      "dashboard": {
+        "donnees": {
+          "actuelle": "160 cm",
+          "predite": "180 cm",
+          "optimiser": "+3 cm",
+          "bulle": "176 cm",
+          "courbe": [
+            160,
+            167,
+            172,
+            175.5,
+            177.8,
+            179.2,
+            180
+          ],
+          "ages": [
+            "13",
+            "14,3",
+            "15,7",
+            "17",
+            "18,3",
+            "19,7",
+            "21"
+          ],
+          "rang": "65 %",
+          "chances": "70 %",
+          "chancesCm": "183 cm",
+          "croissance": "88,9 %"
+        },
+        "entete": "logo",
+        "cams": [
+          {
+            "a": "optim:optimiser",
+            "cx": 0.5,
+            "cy": 0.294,
+            "z": 1.65,
+            "d": 9,
+            "courbe": "avant"
+          },
+          {
+            "a": "optim:3",
+            "cx": 0.5,
+            "cy": 0.294,
+            "z": 1.85,
+            "d": 5,
+            "courbe": "avant"
+          }
+        ],
+        "pops": [
+          {
+            "ligne": "optimiser",
+            "a": "optim:3",
+            "d": 10,
+            "fin": "enorme",
+            "dFin": 6,
+            "echelle": 1.14
+          }
+        ],
+        "fleches": []
+      },
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "pointe.png",
+          "a": 0,
+          "x": 108,
+          "y": 380,
+          "w": 504,
+          "h": 690,
+          "fin": "optim:optimiser"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "heros.png",
+          "a": 0,
+          "x": 567,
+          "y": 890,
+          "w": 471,
+          "h": 840,
+          "fin": "optim:optimiser"
+        }
+      ],
+      "sons": [
+        {
+          "a": "optim:optimiser",
+          "son": "whoosh",
+          "volume": 0.25
+        },
+        {
+          "a": "optim:3",
+          "son": "pop",
+          "volume": 0.3
+        }
+      ]
+    },
+    {
+      "nom": "fin",
+      "debut": "enorme",
+      "transition": "coupe",
+      "image": "salon",
+      "camera": [
+        {
+          "x": 504,
+          "y": 1112,
+          "z": 1.04,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 504,
+          "y": 1112,
+          "z": 1.14,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "heros.png",
+          "a": 0,
+          "x": 169,
+          "y": 486,
+          "w": 743,
+          "h": 1324
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "bras.png",
+          "a": "enorme:énorme",
+          "x": -200,
+          "y": 820,
+          "w": 558,
+          "h": 1300,
+          "depuis": {
+            "x": -400,
+            "d": 6
+          }
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "enorme:énorme",
+          "son": "pop",
+          "volume": 0.25
+        }
+      ]
+    }
+  ],
+  "sousTitres": {
+    "motsCles": [],
+    "fenetres": [
+      {
+        "de": 0,
+        "a": "fin",
+        "y": 1490,
+        "taille": 128,
+        "motsMax": 1,
+        "carMax": 14,
+        "poids": 400,
+        "contour": 9,
+        "motsCles": false,
+        "pop": true,
+        "majuscules": true,
+        "police": "Bangers",
+        "couleur": "#fff"
+      }
+    ]
+  },
+  "carteCommentaire": {
+    "nom": "jsuis.petit.mais.chaud",
+    "texte": "1m60 à 13 ans, je suis foutu ? 😭",
+    "de": 0,
+    "a": "fini",
+    "haut": true,
+    "x": 40,
+    "y": 210,
+    "w": 920,
+    "photo": "avatar.png"
+  },
+  "voix": "Enregistrement ElevenLabs de l'utilisateur (Marco), blancs ramenés à 0,08 s, vitesse d'origine."
+}

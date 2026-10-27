@@ -24,10 +24,14 @@ export type Element =
 		/** Deuxième image qui alterne avec la première toutes les `periode` frames (flèche dorée / bleue). */
 		alterne?: string; periode?: number;
 		/** Grandit depuis le bas (échelle `de` → 1 en `d` frames), puis continue très lentement. */
-		grandit?: {de: number; d: number}})
+		grandit?: {de: number; d: number};
+		/** Arrive de très près (échelle `de` → 1 en `d` frames) ; ox, oy : point fixe en % de l'image. */
+		zoom?: {de: number; d: number; ox?: number; oy?: number};
+		/** Image retournée horizontalement. */
+		miroir?: boolean})
 	| (Base & {type: 'trait'; d: string; tete?: string; couleur?: string; epaisseur?: number; duree?: number; fin?: Ancre})
 	/** x : centre horizontal du texte (défaut : milieu de l'écran). */
-	| (Base & {type: 'texte'; texte: string; x?: number; y: number; taille: number; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance' | 'glitch' | 'fondu'; fin?: Ancre; lueur?: string})
+	| (Base & {type: 'texte'; texte: string; x?: number; y: number; taille: number; police?: string; rotation?: number; aligne?: 'left' | 'center'; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance' | 'glitch' | 'fondu'; fin?: Ancre; lueur?: string})
 	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number; curseur?: boolean; fond?: string; police?: string; poids?: number; fin?: Ancre})
 	/** Compteur qui défile de `de` à `vers` et se pose sur `arrivee` (révélation avec suspense). */
 	| (Base & {type: 'compteur'; de: number; vers: number; arrivee: Ancre; fin?: Ancre; suffixe?: string; y: number; taille: number; couleur?: string; voile?: boolean})
@@ -35,6 +39,10 @@ export type Element =
 	| (Base & {type: 'commentaire'; texte: string; y: number; parLettre?: number; envoi?: Ancre})
 	/** Icône message privé avec pastille rouge dont le compteur monte (référence Steve, fin). */
 	| (Base & {type: 'dm'; x: number; y: number; taille: number; de: number; vers: number})
+	/** Règle lumineuse et compteur de taille (référence rhino) : barre en x de y0 à y1, compteur de `de` à `vers` cm en `d` frames. */
+	| (Base & {type: 'jauge'; x: number; y0: number; y1: number; de: number; vers: number; d: number; fin?: Ancre})
+	/** Fausse pause (« PAUSE ❚❚ » + symbole en bas). */
+	| (Base & {type: 'pause'; icone?: 'pause' | 'lecture'})
 	/** Écran « Création de ton plan… » qui glisse depuis la droite ; chaque étape se coche à son ancre, 100 % à `fin`
 	    (référence rayan.taller, src/episode/ChargementPlan.tsx). */
 	| (Base & {type: 'chargement'; fin: Ancre; etapes: {texte: string; a: Ancre}[]; x?: number; y?: number; w?: number; h?: number; titre?: string})

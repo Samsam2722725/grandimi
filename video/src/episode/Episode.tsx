@@ -198,6 +198,86 @@ const Pousse: React.FC<{dur: number; de: number; children: React.ReactNode}> = (
 	return <AbsoluteFill style={{transform: `scale(${z})`}}>{children}</AbsoluteFill>;
 };
 
+/** Règle lumineuse de la référence rhino (2-5 s) : barre blanche fixe qui brille, compteur cyan souligné de rouge
+ *  qui monte du bas vers le haut de la barre en comptant les centimètres. */
+const Jauge: React.FC<{el: Extract<Element, {type: 'jauge'}>; at: number; fin?: number}> = ({el, at, fin}) => {
+	const f = useCurrentFrame();
+	if (f < at || (fin !== undefined && f >= fin)) return null;
+	const t = interpolate(f, [at, at + el.d], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+	const cm = Math.round(el.de + (el.vers - el.de) * t);
+	const y = el.y1 - 150 - (el.y1 - el.y0 - 150) * t;
+	const lueur = 0.75 + 0.25 * Math.sin(f / 3);
+	return (
+		<>
+			<div
+				style={{
+					position: 'absolute',
+					left: el.x - 16,
+					top: el.y0,
+					width: 32,
+					height: el.y1 - el.y0,
+					borderRadius: 16,
+					background: 'linear-gradient(90deg, #fff6e0, #ffffff 50%, #fff6e0)',
+					boxShadow: `0 0 ${30 * lueur}px ${12 * lueur}px rgba(255,236,190,0.75), 0 0 80px 20px rgba(255,220,160,0.35)`,
+				}}
+			/>
+			<div style={{position: 'absolute', left: el.x + 60, top: y}}>
+				<div
+					style={{
+						fontFamily: "'Caveat', sans-serif",
+						fontWeight: 500,
+						fontSize: 150,
+						lineHeight: 1,
+						color: '#5ff4ff',
+						textShadow: '0 0 18px #19d8ff, 0 0 34px #19d8ff',
+					}}
+				>
+					{Math.floor(cm / 100)}m{String(cm % 100).padStart(2, '0')}
+				</div>
+				<div style={{height: 12, borderRadius: 6, background: '#e8202a', marginTop: 4, boxShadow: '0 0 10px rgba(232,32,42,0.8)'}} />
+			</div>
+		</>
+	);
+};
+
+/** Fausse mise en pause de la référence rhino (16-26 s) : « PAUSE ❚❚ » en haut à gauche, grand symbole en bas au centre. */
+const PauseFactice: React.FC<{icone: 'pause' | 'lecture'; at: number}> = ({icone, at}) => {
+	const f = useCurrentFrame();
+	if (f < at) return null;
+	const g = f - at;
+	const tremble = g < 4 ? (g % 2 ? 4 : -4) : 0;
+	return (
+		<>
+			<div
+				style={{
+					position: 'absolute',
+					left: 30 + tremble,
+					top: 28,
+					fontFamily: FONT,
+					fontWeight: 800,
+					fontSize: 58,
+					letterSpacing: 6,
+					color: '#fff',
+					textShadow: `${3 + tremble}px 0 0 rgba(255,0,60,0.6), ${-3 - tremble}px 0 0 rgba(0,220,255,0.6)`,
+					opacity: 0.85,
+				}}
+			>
+				PAUSE ❚❚
+			</div>
+			{icone === 'pause' ? (
+				<div style={{position: 'absolute', left: 470, top: 1660, display: 'flex', gap: 46}}>
+					<div style={{width: 62, height: 214, background: '#fff', borderRadius: 4}} />
+					<div style={{width: 62, height: 214, background: '#fff', borderRadius: 4}} />
+				</div>
+			) : (
+				<svg width={190} height={220} viewBox="0 0 190 220" style={{position: 'absolute', left: 470, top: 1650}}>
+					<path d="M10 10 L180 110 L10 210 Z" fill="#cfcfcf" />
+				</svg>
+			)}
+		</>
+	);
+};
+
 /** Fond qui passe au noir à la fin (les éléments restent par-dessus, référence partie 11). */
 const FonduNoir: React.FC<{from: number; to: number}> = ({from, to}) => {
 	const o = interpolate(useCurrentFrame(), [from, to], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -278,12 +358,19 @@ const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?
 		clipPath = `inset(${(1 - ease(f, at, 8)) * 100}% 0 0 0)`;
 		// Rebond vertical une fois la flèche apparue, comme un sticker animé.
 		if (el.rebond && f > at + 8) transform = `translateY(${-Math.abs(Math.sin((f - at - 8) / 4)) * 22}px)`;
+	} else if (el.zoom) {
+		// Arrive de très près puis se pose (zoom avant de la référence rhino, 0-0,7 s).
+		if (fin !== undefined && f >= fin) return null;
+		const t = interpolate(f, [at, at + el.zoom.d], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+		transform = `scale(${el.zoom.de + (1 - el.zoom.de) * t})`;
 	} else if (el.effet) {
 		const s = pop(f, at, 9) * (fin !== undefined ? 1 - ease(f, fin, 6) : 1);
 		if (s <= 0.01) return null;
 		const wob = el.effet === 'pop-balance' ? Math.sin((f - at) / 5) * 3 : 0;
 		transform = `scale(${s}) rotate(${wob}deg)`;
 	}
+	if (fin !== undefined && f >= fin && !el.effet && !el.depuis && !el.grandit) return null;
+	if (el.miroir) transform = `${transform ?? ''} scaleX(-1)`;
 	return (
 		<Img
 			src={src2 && Math.floor((f - at) / (el.periode ?? 4)) % 2 === 1 ? src2 : src}
@@ -296,7 +383,7 @@ const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?
 				transform,
 				clipPath,
 				opacity,
-				transformOrigin: el.grandit ? '50% 100%' : undefined,
+				transformOrigin: el.grandit ? '50% 100%' : el.zoom ? `${el.zoom.ox ?? 50}% ${el.zoom.oy ?? 50}%` : undefined,
 			}}
 		/>
 	);
@@ -310,6 +397,8 @@ const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; fin?
 	if (s <= 0.01) return null;
 	const texte = el.texte.replace('{partie}', String(partie));
 	const dx = el.x !== undefined ? el.x - 540 : 0;
+	const famille = el.police ? {fontFamily: `'${el.police}', sans-serif`} : {};
+	const rot0 = el.rotation ?? 0;
 	if (el.effet === 'glitch' || el.effet === 'fondu') {
 		// glitch : décalages rouge / vert et tranches décalées pendant 6 frames (« ANALYZED », référence partie 11) ;
 		// fondu : apparition en fondu avec lueur qui s'intensifie (« Not cooked »).
@@ -382,7 +471,17 @@ const TexteEl: React.FC<{el: Extract<Element, {type: 'texte'}>; at: number; fin?
 							: P5.caption.textShadow,
 				};
 	return (
-		<div style={{position: 'absolute', left: dx, right: -dx, top: el.y, textAlign: 'center', ...style, transform: `scale(${s}) rotate(${rot}deg)`}}>
+		<div
+			style={{
+				position: 'absolute',
+				...(el.aligne === 'left' ? {left: el.x ?? 0, right: 0, transformOrigin: '0% 50%'} : {left: dx, right: -dx}),
+				top: el.y,
+				textAlign: el.aligne ?? 'center',
+				...style,
+				...famille,
+				transform: `scale(${s}) rotate(${rot + rot0}deg)`,
+			}}
+		>
 			{texte}
 		</div>
 	);
@@ -675,6 +774,8 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 		if (el.type === 'compteur')
 			return <Compteur key={i} el={el} at={loc(el.a)} arrivee={loc(el.arrivee)} fin={el.fin !== undefined ? loc(el.fin) : undefined} />;
 		if (el.type === 'dm') return <DM key={i} el={el} at={loc(el.a)} />;
+		if (el.type === 'jauge') return <Jauge key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} />;
+		if (el.type === 'pause') return <PauseFactice key={i} icone={el.icone ?? 'pause'} at={loc(el.a)} />;
 		if (el.type === 'chargement')
 			return (
 				<ChargementPlan
@@ -997,6 +1098,9 @@ const usePolices = () => {
 			new FontFace('Poppins', `url(${staticFile('fonts/poppins-latin-800-normal.woff2')})`, {weight: '800'}),
 			new FontFace('Barlow Condensed', `url(${staticFile('fonts/barlow-condensed-latin-800-normal.woff2')})`, {weight: '800'}),
 			new FontFace('Fredoka', `url(${staticFile('fonts/fredoka-latin-700-normal.woff2')})`, {weight: '700'}),
+			new FontFace('Bangers', `url(${staticFile('fonts/bangers-latin-400-normal.woff2')})`, {weight: '400'}),
+			new FontFace('Caveat', `url(${staticFile('fonts/caveat-latin-500-normal.woff2')})`, {weight: '500'}),
+			new FontFace('Noto Serif', `url(${staticFile('fonts/noto-serif-latin-600-normal.woff2')})`, {weight: '600'}),
 			...[600, 700, 800, 900].map(
 				(w) => new FontFace('Montserrat', `url(${staticFile(`fonts/montserrat-latin-${w}-normal.woff2`)})`, {weight: String(w)}),
 			),
