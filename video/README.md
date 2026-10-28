@@ -19,6 +19,7 @@
 | « Ta mère mesure 1m57 » (scène famille sur grille verte, format TallUp) | `Episode` (`{"episode":"famille-17"}`) | `rendu/grandimi-famille-17.mp4` (31 s) |
 | Partie 16 « Paul » (copie de la partie 15, bonhomme fourni) | `Episode` (`{"episode":"paul-16"}`) | `rendu/grandimi-partie16-paul.mp4` (34 s, photo tierce non versionnée) |
 | « 1m60 à 13 ans » rhinos 3D (format tallertips) | `Episode` (`{"episode":"rhino-1"}`) | `rendu/grandimi-rhino-1m60.mp4` (22 s) |
+| Partie 18 « Heyam » (format Taller « Predicting height potential ») | `Episode` (`{"episode":"heyam-18"}`) | `rendu/grandimi-partie18-heyam.mp4` (39 s, photos tierces non versionnées) |
 
 | « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
 

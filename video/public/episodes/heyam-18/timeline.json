@@ -1,0 +1,531 @@
+{
+  "fps": 30,
+  "totalFrames": 1165,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 18.",
+      "from": 0,
+      "duration": 76,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 17
+        },
+        {
+          "w": "tailles",
+          "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 31
+        },
+        {
+          "w": "partie",
+          "f": 48
+        },
+        {
+          "w": "18.",
+          "f": 58
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Heyam.",
+      "from": 77,
+      "duration": 66,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 77
+        },
+        {
+          "w": "on",
+          "f": 91
+        },
+        {
+          "w": "regarde",
+          "f": 96
+        },
+        {
+          "w": "les",
+          "f": 108
+        },
+        {
+          "w": "infos",
+          "f": 110
+        },
+        {
+          "w": "de",
+          "f": 120
+        },
+        {
+          "w": "Heyam.",
+          "f": 122
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 14 ans, Heyam mesure actuellement 1m68,",
+      "from": 144,
+      "duration": 92,
+      "words": [
+        {
+          "w": "À",
+          "f": 144
+        },
+        {
+          "w": "14",
+          "f": 149
+        },
+        {
+          "w": "ans,",
+          "f": 156
+        },
+        {
+          "w": "Heyam",
+          "f": 163
+        },
+        {
+          "w": "mesure",
+          "f": 182
+        },
+        {
+          "w": "actuellement",
+          "f": 192
+        },
+        {
+          "w": "1m68,",
+          "f": 202
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est au-dessus de la norme.",
+      "from": 237,
+      "duration": 42,
+      "words": [
+        {
+          "w": "ce",
+          "f": 237
+        },
+        {
+          "w": "qui",
+          "f": 244
+        },
+        {
+          "w": "est",
+          "f": 249
+        },
+        {
+          "w": "au-dessus",
+          "f": 254
+        },
+        {
+          "w": "de",
+          "f": 263
+        },
+        {
+          "w": "la",
+          "f": 266
+        },
+        {
+          "w": "norme.",
+          "f": 268
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon Grandimi, sa taille adulte prévue est de 1m79.",
+      "from": 280,
+      "duration": 117,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 280
+        },
+        {
+          "w": "Grandimi,",
+          "f": 287
+        },
+        {
+          "w": "sa",
+          "f": 311
+        },
+        {
+          "w": "taille",
+          "f": 316
+        },
+        {
+          "w": "adulte",
+          "f": 326
+        },
+        {
+          "w": "prévue",
+          "f": 340
+        },
+        {
+          "w": "est",
+          "f": 352
+        },
+        {
+          "w": "de",
+          "f": 355
+        },
+        {
+          "w": "1m79.",
+          "f": 359
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Heyam pourrait atteindre 1m83,",
+      "from": 398,
+      "duration": 113,
+      "words": [
+        {
+          "w": "Et",
+          "f": 398
+        },
+        {
+          "w": "avec",
+          "f": 403
+        },
+        {
+          "w": "les",
+          "f": 410
+        },
+        {
+          "w": "bonnes",
+          "f": 412
+        },
+        {
+          "w": "habitudes,",
+          "f": 422
+        },
+        {
+          "w": "Heyam",
+          "f": 436
+        },
+        {
+          "w": "pourrait",
+          "f": 458
+        },
+        {
+          "w": "atteindre",
+          "f": 467
+        },
+        {
+          "w": "1m83,",
+          "f": 477
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "avec 4 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 512,
+      "duration": 133,
+      "words": [
+        {
+          "w": "avec",
+          "f": 512
+        },
+        {
+          "w": "4",
+          "f": 521
+        },
+        {
+          "w": "cm",
+          "f": 529
+        },
+        {
+          "w": "de",
+          "f": 543
+        },
+        {
+          "w": "croissance",
+          "f": 548
+        },
+        {
+          "w": "supplémentaire",
+          "f": 560
+        },
+        {
+          "w": "grâce",
+          "f": 584
+        },
+        {
+          "w": "à",
+          "f": 593
+        },
+        {
+          "w": "l'optimisation",
+          "f": 596
+        },
+        {
+          "w": "de",
+          "f": 620
+        },
+        {
+          "w": "sa",
+          "f": 625
+        },
+        {
+          "w": "croissance.",
+          "f": 629
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Heyam est plus grand que 73,4% des personnes de son âge,",
+      "from": 646,
+      "duration": 136,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 646
+        },
+        {
+          "w": "Heyam",
+          "f": 663
+        },
+        {
+          "w": "est",
+          "f": 682
+        },
+        {
+          "w": "plus",
+          "f": 687
+        },
+        {
+          "w": "grand",
+          "f": 692
+        },
+        {
+          "w": "que",
+          "f": 697
+        },
+        {
+          "w": "73,4%",
+          "f": 704
+        },
+        {
+          "w": "des",
+          "f": 752
+        },
+        {
+          "w": "personnes",
+          "f": 757
+        },
+        {
+          "w": "de",
+          "f": 764
+        },
+        {
+          "w": "son",
+          "f": 769
+        },
+        {
+          "w": "âge,",
+          "f": 773
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a déjà terminé 93,4% de sa croissance.",
+      "from": 784,
+      "duration": 109,
+      "words": [
+        {
+          "w": "et",
+          "f": 784
+        },
+        {
+          "w": "il",
+          "f": 788
+        },
+        {
+          "w": "a",
+          "f": 793
+        },
+        {
+          "w": "déjà",
+          "f": 796
+        },
+        {
+          "w": "terminé",
+          "f": 805
+        },
+        {
+          "w": "93,4%",
+          "f": 820
+        },
+        {
+          "w": "de",
+          "f": 868
+        },
+        {
+          "w": "sa",
+          "f": 870
+        },
+        {
+          "w": "croissance.",
+          "f": 875
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 894,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Si",
+          "f": 894
+        },
+        {
+          "w": "tu",
+          "f": 899
+        },
+        {
+          "w": "veux",
+          "f": 901
+        },
+        {
+          "w": "connaître",
+          "f": 906
+        },
+        {
+          "w": "ton",
+          "f": 918
+        },
+        {
+          "w": "potentiel",
+          "f": 923
+        },
+        {
+          "w": "de",
+          "f": 935
+        },
+        {
+          "w": "taille,",
+          "f": 940
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écrivez votre âge et votre taille actuelle en commentaire sous cette vidéo,",
+      "from": 952,
+      "duration": 112,
+      "words": [
+        {
+          "w": "écrivez",
+          "f": 952
+        },
+        {
+          "w": "votre",
+          "f": 966
+        },
+        {
+          "w": "âge",
+          "f": 973
+        },
+        {
+          "w": "et",
+          "f": 979
+        },
+        {
+          "w": "votre",
+          "f": 985
+        },
+        {
+          "w": "taille",
+          "f": 992
+        },
+        {
+          "w": "actuelle",
+          "f": 1002
+        },
+        {
+          "w": "en",
+          "f": 1014
+        },
+        {
+          "w": "commentaire",
+          "f": 1019
+        },
+        {
+          "w": "sous",
+          "f": 1033
+        },
+        {
+          "w": "cette",
+          "f": 1040
+        },
+        {
+          "w": "vidéo,",
+          "f": 1045
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "ou va directement sur grandimi.com pour tout avoir.",
+      "from": 1064,
+      "duration": 97,
+      "words": [
+        {
+          "w": "ou",
+          "f": 1064
+        },
+        {
+          "w": "va",
+          "f": 1072
+        },
+        {
+          "w": "directement",
+          "f": 1076
+        },
+        {
+          "w": "sur",
+          "f": 1088
+        },
+        {
+          "w": "grandimi.com",
+          "f": 1093
+        },
+        {
+          "w": "pour",
+          "f": 1132
+        },
+        {
+          "w": "tout",
+          "f": 1136
+        },
+        {
+          "w": "avoir.",
+          "f": 1144
+        }
+      ]
+    }
+  ]
+}
