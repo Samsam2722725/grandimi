@@ -215,7 +215,7 @@ export const DashboardGrandimi: React.FC<{
 	cams: DashCam[];
 	pops: DashPop[];
 	fleches: DashFleche[];
-	ballon?: {src: string; a: number; fin: number};
+	ballon?: {src: string; a: number; fin: number; chute?: boolean};
 	revele?: number;
 	/** Page ouverte dans Safari : barre d'état et barre d'adresse fixes en haut, page décalée dessous. */
 	url?: string;
@@ -228,6 +228,10 @@ export const DashboardGrandimi: React.FC<{
 	const b = ballon && f >= ballon.a && f < ballon.fin ? ballon : null;
 	// Ballon : apparaît, déborde d'une image (×1,25), se pose (mesuré : images 162-164).
 	const bs = b ? (f - b.a === 1 ? 1.25 : 1) : 0;
+	// chute : arrive du haut en 4 images avec flou de mouvement, petit rebond (référence p22-ref, 5,73-5,93 s).
+	const g = b ? f - b.a : 0;
+	const chuteY = b?.chute ? interpolate(g, [0, 4, 6, 8], [-0.62 * H, 0, -0.015 * H, 0], {extrapolateRight: 'clamp', easing: Easing.in(Easing.quad)}) : 0;
+	const chuteFlou = b?.chute && g < 4 ? 14 : 0;
 	return (
 		<AbsoluteFill style={{background: '#000', overflow: 'hidden'}}>
 			<div
@@ -392,7 +396,8 @@ export const DashboardGrandimi: React.FC<{
 							width: 0.69 * W,
 							height: 0.26 * H,
 							objectFit: 'contain',
-							transform: `scale(${bs})`,
+							transform: b.chute ? `translateY(${chuteY}px)` : `scale(${bs})`,
+							filter: chuteFlou ? `blur(${chuteFlou}px)` : undefined,
 						}}
 					/>
 				) : null}
@@ -400,47 +405,50 @@ export const DashboardGrandimi: React.FC<{
 					<Fleche key={i} fl={fl} f={f} />
 				))}
 			</div>
-			{url ? (
-				<div style={{position: 'absolute', left: 0, top: 0, width: W, height: 172, background: '#000', fontFamily: FONT, color: '#fff'}}>
-					<div style={{position: 'absolute', left: 70, top: 14, fontSize: 32, fontWeight: 700}}>15:35</div>
-					<div style={{position: 'absolute', right: 70, top: 20, display: 'flex', gap: 8, alignItems: 'flex-end'}}>
-						{[10, 15, 20, 25].map((h, i) => (
-							<div key={i} style={{width: 6, height: h, borderRadius: 2, background: '#fff'}} />
-						))}
-						<div style={{fontSize: 24, fontWeight: 700, marginLeft: 8}}>5G</div>
-						<div style={{width: 46, height: 22, borderRadius: 6, border: '3px solid #bbb', marginLeft: 6}}>
-							<div style={{width: '75%', height: '100%', background: '#fff', borderRadius: 2}} />
-						</div>
-					</div>
-					<div
-						style={{
-							position: 'absolute',
-							left: 36,
-							right: 36,
-							top: 66,
-							height: 86,
-							borderRadius: 28,
-							background: '#2c2c2e',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-						}}
-					>
-						<div style={{position: 'absolute', left: 30, fontSize: 30, fontWeight: 600, color: '#ddd'}}>
-							<span style={{fontSize: 22}}>A</span>A
-						</div>
-						<svg width={22} height={28} viewBox="0 0 22 28" style={{marginRight: 12}}>
-							<rect x={2} y={12} width={18} height={14} rx={3} fill="#ddd" />
-							<path d="M6 12 V8 a5 5 0 0 1 10 0 V12" fill="none" stroke="#ddd" strokeWidth={3} />
-						</svg>
-						<div style={{fontSize: 36, fontWeight: 500}}>{url}</div>
-						<svg width={34} height={34} viewBox="0 0 24 24" style={{position: 'absolute', right: 30}} fill="none" stroke="#ddd" strokeWidth={2.4} strokeLinecap="round">
-							<path d="M20 12a8 8 0 1 1-2.3-5.7" />
-							<path d="M20 4v5h-5" />
-						</svg>
-					</div>
-				</div>
-			) : null}
+			{url ? <BarreSafari url={url} /> : null}
 		</AbsoluteFill>
 	);
 };
+
+/** Barre d'état + barre d'adresse Safari (« comme si on était sur le site »), 1080 × 172 px en haut de l'écran. */
+export const BarreSafari: React.FC<{url: string}> = ({url}) => (
+	<div style={{position: 'absolute', left: 0, top: 0, width: W, height: 172, background: '#000', fontFamily: FONT, color: '#fff'}}>
+			<div style={{position: 'absolute', left: 70, top: 14, fontSize: 32, fontWeight: 700}}>15:35</div>
+			<div style={{position: 'absolute', right: 70, top: 20, display: 'flex', gap: 8, alignItems: 'flex-end'}}>
+				{[10, 15, 20, 25].map((h, i) => (
+					<div key={i} style={{width: 6, height: h, borderRadius: 2, background: '#fff'}} />
+				))}
+				<div style={{fontSize: 24, fontWeight: 700, marginLeft: 8}}>5G</div>
+				<div style={{width: 46, height: 22, borderRadius: 6, border: '3px solid #bbb', marginLeft: 6}}>
+					<div style={{width: '75%', height: '100%', background: '#fff', borderRadius: 2}} />
+				</div>
+			</div>
+			<div
+				style={{
+					position: 'absolute',
+					left: 36,
+					right: 36,
+					top: 66,
+					height: 86,
+					borderRadius: 28,
+					background: '#2c2c2e',
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+				}}
+			>
+				<div style={{position: 'absolute', left: 30, fontSize: 30, fontWeight: 600, color: '#ddd'}}>
+					<span style={{fontSize: 22}}>A</span>A
+				</div>
+				<svg width={22} height={28} viewBox="0 0 22 28" style={{marginRight: 12}}>
+					<rect x={2} y={12} width={18} height={14} rx={3} fill="#ddd" />
+					<path d="M6 12 V8 a5 5 0 0 1 10 0 V12" fill="none" stroke="#ddd" strokeWidth={3} />
+				</svg>
+				<div style={{fontSize: 36, fontWeight: 500}}>{url}</div>
+				<svg width={34} height={34} viewBox="0 0 24 24" style={{position: 'absolute', right: 30}} fill="none" stroke="#ddd" strokeWidth={2.4} strokeLinecap="round">
+					<path d="M20 12a8 8 0 1 1-2.3-5.7" />
+					<path d="M20 4v5h-5" />
+				</svg>
+			</div>
+		</div>
+);

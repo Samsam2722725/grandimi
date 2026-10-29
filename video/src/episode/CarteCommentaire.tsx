@@ -16,12 +16,38 @@ export const CarteCommentaire: React.FC<{
 	y?: number;
 	ligne?: boolean;
 	w?: number;
-	reponse?: {h: number; rotation: number; modele?: 'parsa'; avatar?: string};
+	reponse?: {h: number; rotation: number; modele?: 'parsa' | 'taller'; avatar?: string};
 	/** Photo de profil ronde (variante haut). */
 	photo?: string;
 }> = ({nom, texte, de, a, haut, x, y, ligne, w, reponse, photo}) => {
 	const f = useCurrentFrame();
 	if (f < de || f >= a) return null;
+	if (reponse?.modele === 'taller') {
+		// Carte de la référence p22-ref, mesurée à 1,0 s : x 88-993, y 1045-1275, rayon 34, queue en bas à gauche,
+		// avatar rond (centre 137, 128 ; rayon 72), en-tête gris et commentaire en gras sur une ligne chacun.
+		return (
+			<div style={{position: 'absolute', left: x ?? 88, top: y ?? 1045, width: w ?? 905, height: reponse.h, fontFamily: FONT, transform: reponse.rotation ? `rotate(${reponse.rotation}deg)` : undefined}}>
+				<div style={{position: 'absolute', inset: 0, background: '#fff', borderRadius: 34}} />
+				<svg width={90} height={80} viewBox="0 0 90 80" style={{position: 'absolute', left: 0, top: reponse.h - 44}}>
+					<path d="M0 0 L0 76 L74 18 Z" fill="#fff" />
+				</svg>
+				{photo ? (
+					<Img src={photo} style={{position: 'absolute', left: 65, top: reponse.h / 2 - 72, width: 144, height: 144, borderRadius: 72, border: '4px solid #bdbdbd', objectFit: 'cover', boxSizing: 'border-box'}} />
+				) : (
+					<div style={{position: 'absolute', left: 65, top: reponse.h / 2 - 72, width: 144, height: 144, borderRadius: 72, border: '5px solid #9a9a9a', background: '#fff', boxSizing: 'border-box', overflow: 'hidden'}}>
+						<div style={{position: 'absolute', left: 42, top: 22, width: 52, height: 52, borderRadius: 26, background: '#9a9a9a'}} />
+						<div style={{position: 'absolute', left: 18, top: 84, width: 100, height: 70, borderRadius: 50, background: '#9a9a9a'}} />
+					</div>
+				)}
+				<div style={{position: 'absolute', left: 257, right: 24, top: reponse.h / 2 - 66, fontSize: 31, fontWeight: 700, color: '#8a8a8a', whiteSpace: 'nowrap', letterSpacing: -0.3}}>
+					Réponse au commentaire de {nom}
+				</div>
+				<div style={{position: 'absolute', left: 257, right: 24, top: reponse.h / 2 - 14, fontSize: 34, fontWeight: 800, color: '#141414', lineHeight: 1.18, letterSpacing: -0.3}}>
+					{texte}
+				</div>
+			</div>
+		);
+	}
 	if (reponse?.modele === 'parsa') {
 		// Carte de la vidéo Taller « Parsa » (references/p16-ref) : 856 × 273 px, centre (539, 1281), penchée de −3,6°,
 		// en-tête gris sur une ligne, avatar rond, commentaire très court en gros.

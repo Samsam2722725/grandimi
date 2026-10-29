@@ -88,33 +88,22 @@
       "image": "accroche",
       "camera": [
         {
-          "x": 520,
-          "y": 900,
-          "z": 1.0,
+          "x": 600,
+          "y": 760,
+          "z": 1.13,
           "duree": 1
         },
         {
           "a": 1,
-          "x": 520,
-          "y": 900,
-          "z": 1.06,
+          "x": 600,
+          "y": 760,
+          "z": 1.0,
           "duree": "fin",
           "lineaire": true,
           "son": null
         }
       ],
-      "elements": [
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "carte.png",
-          "a": 0,
-          "x": 110,
-          "y": 1010,
-          "w": 860,
-          "h": 378
-        }
-      ],
+      "elements": [],
       "sons": [
         {
           "a": 0,
@@ -149,16 +138,6 @@
           "parLettre": 1,
           "son": "tick",
           "volume": 0.3
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "carte.png",
-          "a": 0,
-          "x": 110,
-          "y": 1010,
-          "w": 860,
-          "h": 378
         }
       ],
       "sons": [
@@ -211,7 +190,7 @@
           {
             "a": "age:actuellement",
             "cx": 0.38,
-            "cy": 0.26,
+            "cy": 0.3085,
             "z": 1.61,
             "d": 11,
             "courbe": "avant"
@@ -227,7 +206,7 @@
           {
             "a": "predit:taille",
             "cx": 0.646,
-            "cy": 0.286,
+            "cy": 0.3301,
             "z": 1.77,
             "d": 11,
             "courbe": "avant"
@@ -247,22 +226,12 @@
         "ballon": {
           "fichier": "ballon_13.png",
           "a": "age:13",
-          "fin": "age:13+24"
-        }
+          "fin": "age:13+30",
+          "chute": true
+        },
+        "url": "grandimi.com"
       },
-      "elements": [
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "carte.png",
-          "a": 0,
-          "x": 110,
-          "y": 1010,
-          "w": 860,
-          "h": 378,
-          "fin": "age:13"
-        }
-      ],
+      "elements": [],
       "sons": [
         {
           "a": 0,
@@ -298,36 +267,11 @@
       "sortie": "glitch",
       "elements": [
         {
-          "type": "chargement",
+          "type": "routine",
           "a": 0,
-          "fin": "habitudes:1m86-4",
-          "x": 0,
-          "y": 0,
-          "w": 1080,
-          "h": 1920,
-          "titre": "Ta routine du jour",
-          "etapes": [
-            {
-              "texte": "🏃 Routine posture",
-              "a": "habitudes:bonnes"
-            },
-            {
-              "texte": "🥛 1 verre de lait",
-              "a": "habitudes:habitudes"
-            },
-            {
-              "texte": "🥗 Protéines à chaque repas",
-              "a": "habitudes:sam"
-            },
-            {
-              "texte": "☀️ 15 min dehors",
-              "a": "habitudes:pourrait"
-            },
-            {
-              "texte": "😴 Dormir 9 h",
-              "a": "habitudes:atteindre"
-            }
-          ]
+          "url": "grandimi.com",
+          "flou": 13,
+          "chut": "habitudes:bonnes"
         }
       ],
       "sons": [
@@ -335,6 +279,11 @@
           "a": 0,
           "son": "whoosh",
           "volume": 0.22
+        },
+        {
+          "a": "habitudes:bonnes",
+          "son": "pop",
+          "volume": 0.3
         }
       ]
     },
@@ -425,10 +374,10 @@
         "cams": [
           {
             "a": "fini:terminé",
-            "cx": 0.67,
-            "cy": 0.615,
-            "z": 1.93,
-            "d": 13,
+            "cx": 0.7,
+            "cy": 0.8291,
+            "z": 2.0,
+            "d": 12,
             "courbe": "avant"
           }
         ],
@@ -460,7 +409,8 @@
             "fin": "optim:croissance",
             "dFin": 16
           }
-        ]
+        ],
+        "url": "grandimi.com"
       },
       "effets": [
         {
@@ -473,31 +423,19 @@
         {
           "type": "image",
           "ecran": true,
-          "fichier": "main.png",
-          "a": "pct:que",
-          "x": 450,
-          "y": 1060,
-          "w": 200,
-          "h": 200,
-          "fin": "pct:personnes",
+          "fichier": "curseur.png",
+          "a": "pct:plus",
+          "x": 404,
+          "y": 1442,
+          "w": 192,
+          "h": 204,
           "depuis": {
-            "y": 140,
-            "d": 6
+            "y": 520
           },
-          "rebond": true
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "main.png",
-          "a": "fini:déjà",
-          "x": 200,
-          "y": 1540,
-          "w": 200,
-          "h": 200,
-          "fin": "fini:terminé",
-          "depuis": {
-            "y": 140,
+          "ressort": true,
+          "fin": "fini:et",
+          "sortie": {
+            "y": 700,
             "d": 6
           }
         }
@@ -657,12 +595,12 @@
       {
         "de": 0,
         "a": "hook:partie-1",
-        "y": 830,
-        "taille": 76,
+        "y": 822,
+        "taille": 86,
         "motsMax": 4,
         "carMax": 17,
-        "poids": 700,
-        "contour": 5,
+        "poids": 600,
+        "contour": 3,
         "motsCles": false,
         "pop": false,
         "majuscules": true,
@@ -672,12 +610,12 @@
       {
         "de": "cta",
         "a": "fin",
-        "y": 830,
-        "taille": 76,
+        "y": 822,
+        "taille": 86,
         "motsMax": 4,
         "carMax": 17,
-        "poids": 700,
-        "contour": 5,
+        "poids": 600,
+        "contour": 3,
         "motsCles": false,
         "pop": false,
         "majuscules": true,
@@ -689,5 +627,20 @@
   "voix": "Enregistrement ElevenLabs de l'utilisateur (voix ElevenLabs), blancs ramenés à 0,08 s, vitesse d'origine.",
   "reference": "references/p12-steve",
   "deriveCamera": false,
-  "sonsMouvements": false
+  "sonsMouvements": false,
+  "carteCommentaire": {
+    "nom": "ahnaf_quits",
+    "texte": "Je fais 1m63 à 13 ans, je suis foutu ?",
+    "de": 0,
+    "a": "age:13",
+    "x": 88,
+    "y": 1045,
+    "w": 905,
+    "photo": "avatar.png",
+    "reponse": {
+      "modele": "taller",
+      "h": 230,
+      "rotation": 0
+    }
+  }
 }

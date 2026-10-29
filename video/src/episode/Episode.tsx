@@ -22,6 +22,7 @@ import {CarteCommentaire} from './CarteCommentaire';
 import {ChargementPlan} from './ChargementPlan';
 import {FormulaireGrandimi} from './FormulaireGrandimi';
 import {SceneFamille} from './SceneFamille';
+import {RoutineGrandimi} from './RoutineGrandimi';
 import {HookCommentaires} from './HookCommentaires';
 import {DashboardGrandimi} from './Dashboard';
 import {HookTaille} from './HookTaille';
@@ -797,6 +798,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			return <Compteur key={i} el={el} at={loc(el.a)} arrivee={loc(el.arrivee)} fin={el.fin !== undefined ? loc(el.fin) : undefined} />;
 		if (el.type === 'dm') return <DM key={i} el={el} at={loc(el.a)} />;
 		if (el.type === 'jauge') return <Jauge key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} />;
+		if (el.type === 'routine') return <RoutineGrandimi key={i} at={loc(el.a)} url={el.url} flou={el.flou} chut={el.chut !== undefined ? loc(el.chut) : undefined} />;
 		if (el.type === 'pause') return <PauseFactice key={i} icone={el.icone ?? 'pause'} at={loc(el.a)} />;
 		if (el.type === 'chargement')
 			return (
@@ -860,7 +862,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					entete={plan.dashboard.entete}
 					ballon={
 						plan.dashboard.ballon
-							? {src: file(plan.dashboard.ballon.fichier), a: loc(plan.dashboard.ballon.a), fin: loc(plan.dashboard.ballon.fin)}
+							? {src: file(plan.dashboard.ballon.fichier), a: loc(plan.dashboard.ballon.a), fin: loc(plan.dashboard.ballon.fin), chute: plan.dashboard.ballon.chute}
 							: undefined
 					}
 				/>
