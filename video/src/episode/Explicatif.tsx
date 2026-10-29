@@ -133,8 +133,15 @@ const Nom: React.FC<{x: number; y: number; texte: string; couleur?: string; f: n
 		</div>
 	);
 
-export const Explicatif: React.FC<{phrases: PhraseExplicatif[]; t: Record<string, number>; v: Record<string, string>; fin: number}> = ({phrases, t, v, fin}) => {
-	const f = useCurrentFrame();
+/** debut : image absolue où commence le plan (les moments de `t` et des phrases sont absolus) ; fin : dernière image de la vidéo. */
+export const Explicatif: React.FC<{phrases: PhraseExplicatif[]; t: Record<string, number>; v: Record<string, string>; fin: number; debut?: number}> = ({
+	phrases,
+	t,
+	v,
+	fin,
+	debut = 0,
+}) => {
+	const f = useCurrentFrame() + debut;
 	const scene = f < t.mj ? 1 : f < t.sci ? 2 : f < t.range ? 3 : f < t.send ? 4 : 5;
 	const debutScene = [0, 0, t.mj, t.sci, t.range, t.send][scene];
 	const finScene = [0, t.mj, t.sci, t.range, t.send, fin][scene];

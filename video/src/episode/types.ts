@@ -109,7 +109,7 @@ export type Plan = {
 		entete?: 'logo' | 'aucun';
 	};
 	/** Vidéo explicative (référence p25-ref, src/episode/Explicatif.tsx) : phrases mot par mot, moments et valeurs. */
-	explicatif?: {phrases: {titre: string; de: number; a: number; mots: {w: string; f: number; gras?: boolean}[]}[]; t: Record<string, number>; v: Record<string, string>};
+	explicatif?: {phrases: {titre: string; de: number; a: number; mots: {w: string; f: number; gras?: boolean}[]}[]; t: Record<string, number>; v: Record<string, string>; fin?: number};
 	/** Scène « famille » (référence p19-ref) : personnes détourées qui changent de place selon la voix (src/episode/SceneFamille.tsx). */
 	scene?: {
 		fond: string;

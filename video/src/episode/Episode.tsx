@@ -842,7 +842,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 
 	const content = (
 		<AbsoluteFill>
-			{plan.explicatif ? <Explicatif phrases={plan.explicatif.phrases} t={plan.explicatif.t} v={plan.explicatif.v} fin={dur} /> : null}
+			{plan.explicatif ? <Explicatif phrases={plan.explicatif.phrases} t={plan.explicatif.t} v={plan.explicatif.v} fin={plan.explicatif.fin ?? dur} debut={start} /> : null}
 			{plan.scene ? (
 				<SceneFamille
 					fond={plan.scene.fond === 'grille' ? 'grille' : file(plan.scene.fond)}
