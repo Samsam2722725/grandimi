@@ -22,6 +22,7 @@
 | Partie 18 « Heyam » (format Taller « Predicting height potential ») | `Episode` (`{"episode":"heyam-18"}`) | `rendu/grandimi-partie18-heyam.mp4` (39 s, photos tierces non versionnées) |
 | Partie 39 « Sam » (même format) | `Episode` (`{"episode":"sam-39"}`) | `rendu/grandimi-partie39-sam.mp4` (38 s, photos tierces non versionnées) |
 | Partie 19 « Cory » (même format, extraterrestre) | `Episode` (`{"episode":"cory-19"}`) | `rendu/grandimi-partie19-cory.mp4` (40 s, photos tierces non versionnées) |
+| « Comment il fait 1m85 ? » (explicatif bonshommes, référence p25) | `Episode` (`{"episode":"jordan-1"}`) | `rendu/grandimi-jordan.mp4` (54 s) |
 
 | « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
 

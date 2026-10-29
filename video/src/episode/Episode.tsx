@@ -23,6 +23,7 @@ import {ChargementPlan} from './ChargementPlan';
 import {FormulaireGrandimi} from './FormulaireGrandimi';
 import {SceneFamille} from './SceneFamille';
 import {RoutineGrandimi} from './RoutineGrandimi';
+import {Explicatif} from './Explicatif';
 import {HookCommentaires} from './HookCommentaires';
 import {DashboardGrandimi} from './Dashboard';
 import {HookTaille} from './HookTaille';
@@ -841,6 +842,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 
 	const content = (
 		<AbsoluteFill>
+			{plan.explicatif ? <Explicatif phrases={plan.explicatif.phrases} t={plan.explicatif.t} v={plan.explicatif.v} fin={dur} /> : null}
 			{plan.scene ? (
 				<SceneFamille
 					fond={plan.scene.fond === 'grille' ? 'grille' : file(plan.scene.fond)}
