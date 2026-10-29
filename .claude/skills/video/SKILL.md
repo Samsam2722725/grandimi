@@ -39,9 +39,11 @@ Transcrire par morceaux de ~9 s (un bloc unique saute des phrases).
      + composition `TexteAnime` (`scripts/texte_anime.py <id>`) ;
    - autre chose (personne filmée, 3D…) → le dire à l'utilisateur avant de construire un nouveau moteur.
 5. **Contrôle chiffré** original / épisode (moments ±2 images, positions ±3 %, tailles ±5 %), corriger
-   jusqu'à zéro écart, puis livrer **seulement** : la vidéo finale + les deux vidéos côte à côte en entier
-   (`scripts/cote_a_cote.py ORIGINAL EPISODE out/`, une avec le son de l'original, une avec le son Grandimi).
-   Plus de kit CapCut ni de zip (demande du 21/10).
+   jusqu'à zéro écart, puis livrer **seulement** : la vidéo finale + **une seule** vidéo côte à côte en entier,
+   avec le son Grandimi (`scripts/cote_a_cote.py ORIGINAL EPISODE out/` → `out/cote-a-cote-son-grandimi.mp4` ;
+   demande du 29/10 : « j'en ai besoin que d'une »). Plus de kit CapCut ni de zip (demande du 21/10).
+   Recopier aussi les **personnages** à l'identique (forme, visage, membres arrière, pieds) et les **polices**
+   (famille, graisse, taille mesurée sur l'original ramené en 1080 × 1920) : les mesurer, ne pas les approximer.
 6. **Enregistrer et pousser** après chaque étape (commit en français, branche de travail de la session).
 
 ## Préférences de l'utilisateur (à respecter sans qu'il le redise)
