@@ -53,7 +53,10 @@ Transcrire par morceaux de ~9 s (un bloc unique saute des phrases).
 - Lien `grandimi.com` bien visible.
 - Copier l'original au maximum ; les chiffres affichés suivent le texte de l'utilisateur.
 - Alternance V1 / V2 d'un épisode à l'autre pour le test (voir `STYLE.md`).
-- Format de référence actuel : copie de la vidéo « Steve » (`references/p12-steve`, épisodes `steve-1`, `steve-12`) :
+- **Format prédiction actuel (29/10) : « Je prédis vos tailles, partie N », copie de Taller partie 39.**
+  Pour une nouvelle partie : suivre `video/FORMAT_PREDICTION.md` (copier `cory-19`, changer voix, texte, chiffres,
+  photos ; ne rien remesurer). Outils voix : `scripts/blancs.py`, `scripts/transcrire.py`, contrôle `scripts/statique.py`.
+- Ancien format de référence : copie de la vidéo « Steve » (`references/p12-steve`, épisodes `steve-1`, `steve-12`) :
   dashboard Grandimi animé (`src/episode/Dashboard.tsx`), transitions `TransitionsSteve.tsx`, sous-titres Montserrat.
   Nouvel épisode : `python scripts/nouvel_episode.py steve-N --depuis steve-12`, changer voix, chiffres, photos, ancres.
 - Sons du format Steve : whoosh sur chaque zoom avant, son sur la première flèche, rien sur la deuxième flèche ni le flash.
