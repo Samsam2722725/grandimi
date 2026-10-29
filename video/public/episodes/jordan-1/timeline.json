@@ -1,13 +1,13 @@
 {
   "fps": 30,
-  "totalFrames": 1631,
+  "totalFrames": 1561,
   "audio": "voice/voix.wav",
   "lines": [
     {
       "id": "rep",
       "text": "Sa mère mesure 1m68, son père 1m78, et lui, à 16 ans, mesure déjà 1m85.",
       "from": 0,
-      "duration": 193,
+      "duration": 186,
       "words": [
         {
           "w": "Sa",
@@ -15,7 +15,7 @@
         },
         {
           "w": "mère",
-          "f": 7
+          "f": 5
         },
         {
           "w": "mesure",
@@ -23,859 +23,859 @@
         },
         {
           "w": "1m68,",
-          "f": 24
+          "f": 22
         },
         {
           "w": "son",
-          "f": 58
+          "f": 53
         },
         {
           "w": "père",
-          "f": 62
+          "f": 58
         },
         {
           "w": "1m78,",
-          "f": 72
+          "f": 65
         },
         {
           "w": "et",
-          "f": 106
+          "f": 98
         },
         {
           "w": "lui,",
-          "f": 110
+          "f": 103
         },
         {
           "w": "à",
-          "f": 120
+          "f": 110
         },
         {
           "w": "16",
-          "f": 125
+          "f": 115
         },
         {
           "w": "ans,",
-          "f": 132
+          "f": 125
         },
         {
           "w": "mesure",
-          "f": 142
+          "f": 134
         },
         {
           "w": "déjà",
-          "f": 154
+          "f": 146
         },
         {
           "w": "1m85.",
-          "f": 161
+          "f": 154
         }
       ]
     },
     {
       "id": "how",
       "text": "Alors il m'a demandé: comment c'est possible?",
-      "from": 194,
+      "from": 187,
       "duration": 51,
       "words": [
         {
           "w": "Alors",
-          "f": 194
+          "f": 187
         },
         {
           "w": "il",
-          "f": 202
+          "f": 192
         },
         {
           "w": "m'a",
-          "f": 204
+          "f": 197
         },
         {
           "w": "demandé:",
-          "f": 209
+          "f": 202
         },
         {
           "w": "comment",
-          "f": 222
+          "f": 214
         },
         {
           "w": "c'est",
-          "f": 232
+          "f": 223
         },
         {
           "w": "possible?",
-          "f": 236
+          "f": 228
         }
       ]
     },
     {
       "id": "mj",
       "text": "Michael Jordan avait la même famille: son père mesurait 1m78 et sa mère 1m65.",
-      "from": 246,
-      "duration": 150,
+      "from": 239,
+      "duration": 141,
       "words": [
         {
           "w": "Michael",
-          "f": 246
+          "f": 239
         },
         {
           "w": "Jordan",
-          "f": 256
+          "f": 248
         },
         {
           "w": "avait",
-          "f": 270
+          "f": 260
         },
         {
           "w": "la",
-          "f": 277
+          "f": 265
         },
         {
           "w": "même",
-          "f": 280
+          "f": 268
         },
         {
           "w": "famille:",
-          "f": 284
+          "f": 272
         },
         {
           "w": "son",
-          "f": 296
+          "f": 284
         },
         {
           "w": "père",
-          "f": 301
+          "f": 289
         },
         {
           "w": "mesurait",
-          "f": 308
+          "f": 294
         },
         {
           "w": "1m78",
-          "f": 320
+          "f": 308
         },
         {
           "w": "et",
-          "f": 352
+          "f": 337
         },
         {
           "w": "sa",
-          "f": 356
+          "f": 340
         },
         {
           "w": "mère",
-          "f": 361
+          "f": 344
         },
         {
           "w": "1m65.",
-          "f": 368
+          "f": 352
         }
       ]
     },
     {
       "id": "mj2",
       "text": "Et il a atteint 1m98.",
-      "from": 397,
-      "duration": 54,
+      "from": 380,
+      "duration": 49,
       "words": [
         {
           "w": "Et",
-          "f": 397
+          "f": 380
         },
         {
           "w": "il",
-          "f": 402
+          "f": 383
         },
         {
           "w": "a",
-          "f": 404
+          "f": 388
         },
         {
           "w": "atteint",
-          "f": 409
+          "f": 390
         },
         {
           "w": "1m98.",
-          "f": 419
+          "f": 400
         }
       ]
     },
     {
       "id": "lett",
       "text": "Dans une interview chez Letterman, il a même plaisanté en disant que le livreur de lait mesurait environ 2m01.",
-      "from": 452,
-      "duration": 153,
+      "from": 431,
+      "duration": 150,
       "words": [
         {
           "w": "Dans",
-          "f": 452
+          "f": 431
         },
         {
           "w": "une",
-          "f": 457
+          "f": 436
         },
         {
           "w": "interview",
-          "f": 460
+          "f": 438
         },
         {
           "w": "chez",
-          "f": 467
+          "f": 445
         },
         {
           "w": "Letterman,",
-          "f": 474
+          "f": 450
         },
         {
           "w": "il",
-          "f": 493
+          "f": 472
         },
         {
           "w": "a",
-          "f": 498
+          "f": 476
         },
         {
           "w": "même",
-          "f": 500
+          "f": 479
         },
         {
           "w": "plaisanté",
-          "f": 505
+          "f": 484
         },
         {
           "w": "en",
-          "f": 520
+          "f": 500
         },
         {
           "w": "disant",
-          "f": 522
+          "f": 503
         },
         {
           "w": "que",
-          "f": 529
+          "f": 508
         },
         {
           "w": "le",
-          "f": 532
+          "f": 510
         },
         {
           "w": "livreur",
-          "f": 534
+          "f": 515
         },
         {
           "w": "de",
-          "f": 546
+          "f": 524
         },
         {
           "w": "lait",
-          "f": 548
+          "f": 527
         },
         {
           "w": "mesurait",
-          "f": 558
+          "f": 536
         },
         {
           "w": "environ",
-          "f": 570
+          "f": 546
         },
         {
           "w": "2m01.",
-          "f": 577
+          "f": 553
         }
       ]
     },
     {
       "id": "sci",
       "text": "Mais la vraie explication?",
-      "from": 606,
-      "duration": 28,
+      "from": 582,
+      "duration": 25,
       "words": [
         {
           "w": "Mais",
-          "f": 606
+          "f": 582
         },
         {
           "w": "la",
-          "f": 611
+          "f": 587
         },
         {
           "w": "vraie",
-          "f": 613
+          "f": 589
         },
         {
           "w": "explication?",
-          "f": 618
+          "f": 594
         }
       ]
     },
     {
       "id": "genes",
-      "text": "Tes parents peuvent des gènes de grande taille qu'ils n'ont pas utilisés de leurs propres parents.",
-      "from": 635,
-      "duration": 110,
+      "text": "Tes parents peuvent porter des gènes de grande taille qu'ils n'ont pas utilisés de leurs propres parents.",
+      "from": 608,
+      "duration": 106,
       "words": [
         {
           "w": "Tes",
-          "f": 635
+          "f": 608
         },
         {
           "w": "parents",
-          "f": 640
+          "f": 613
         },
         {
           "w": "peuvent",
-          "f": 647
+          "f": 620
+        },
+        {
+          "w": "porter",
+          "f": 626
         },
         {
           "w": "des",
-          "f": 659
+          "f": 632
         },
         {
           "w": "gènes",
-          "f": 661
+          "f": 635
         },
         {
           "w": "de",
-          "f": 673
+          "f": 644
         },
         {
           "w": "grande",
-          "f": 676
+          "f": 647
         },
         {
           "w": "taille",
-          "f": 680
+          "f": 654
         },
         {
           "w": "qu'ils",
-          "f": 690
+          "f": 661
         },
         {
           "w": "n'ont",
-          "f": 697
+          "f": 668
         },
         {
           "w": "pas",
-          "f": 704
+          "f": 673
         },
         {
           "w": "utilisés",
-          "f": 707
+          "f": 678
         },
         {
           "w": "de",
-          "f": 719
+          "f": 690
         },
         {
           "w": "leurs",
-          "f": 724
+          "f": 695
         },
         {
           "w": "propres",
-          "f": 728
+          "f": 700
         },
         {
           "w": "parents.",
-          "f": 736
+          "f": 707
         }
       ]
     },
     {
       "id": "lucky",
       "text": "Et parfois, t'as de la chance et tu hérites du bon mélange de génétique.",
-      "from": 746,
-      "duration": 93,
+      "from": 716,
+      "duration": 90,
       "words": [
         {
           "w": "Et",
-          "f": 746
+          "f": 716
         },
         {
           "w": "parfois,",
-          "f": 751
+          "f": 721
         },
         {
           "w": "t'as",
-          "f": 763
+          "f": 733
         },
         {
           "w": "de",
-          "f": 772
+          "f": 740
         },
         {
           "w": "la",
-          "f": 775
+          "f": 742
         },
         {
           "w": "chance",
-          "f": 777
+          "f": 745
         },
         {
           "w": "et",
-          "f": 784
+          "f": 752
         },
         {
           "w": "tu",
-          "f": 787
+          "f": 757
         },
         {
           "w": "hérites",
-          "f": 791
+          "f": 761
         },
         {
           "w": "du",
-          "f": 803
+          "f": 771
         },
         {
           "w": "bon",
-          "f": 806
+          "f": 773
         },
         {
           "w": "mélange",
-          "f": 811
+          "f": 778
         },
         {
           "w": "de",
-          "f": 820
+          "f": 788
         },
         {
           "w": "génétique.",
-          "f": 823
+          "f": 790
         }
       ]
     },
     {
       "id": "range",
       "text": "Mais du coup, quelle taille pourrait-il atteindre à l'âge adulte?",
-      "from": 839,
+      "from": 807,
       "duration": 66,
       "words": [
         {
           "w": "Mais",
-          "f": 839
+          "f": 807
         },
         {
           "w": "du",
-          "f": 844
+          "f": 812
         },
         {
           "w": "coup,",
-          "f": 847
+          "f": 814
         },
         {
           "w": "quelle",
-          "f": 851
+          "f": 821
         },
         {
           "w": "taille",
-          "f": 859
+          "f": 829
         },
         {
           "w": "pourrait-il",
-          "f": 866
+          "f": 836
         },
         {
           "w": "atteindre",
-          "f": 878
+          "f": 848
         },
         {
           "w": "à",
-          "f": 887
+          "f": 855
         },
         {
           "w": "l'âge",
-          "f": 890
+          "f": 857
         },
         {
           "w": "adulte?",
-          "f": 895
+          "f": 865
         }
       ]
     },
     {
       "id": "pred",
       "text": "Selon le site Grandimi, sa taille adulte prévue est de 1m89.",
-      "from": 907,
-      "duration": 96,
+      "from": 874,
+      "duration": 95,
       "words": [
         {
           "w": "Selon",
-          "f": 907
+          "f": 874
         },
         {
           "w": "le",
-          "f": 911
+          "f": 881
         },
         {
           "w": "site",
-          "f": 914
+          "f": 884
         },
         {
           "w": "Grandimi,",
-          "f": 921
+          "f": 891
         },
         {
           "w": "sa",
-          "f": 945
+          "f": 913
         },
         {
           "w": "taille",
-          "f": 950
+          "f": 917
         },
         {
           "w": "adulte",
-          "f": 957
+          "f": 922
         },
         {
           "w": "prévue",
-          "f": 969
+          "f": 934
         },
         {
           "w": "est",
-          "f": 979
+          "f": 946
         },
         {
           "w": "de",
-          "f": 981
+          "f": 949
         },
         {
           "w": "1m89.",
-          "f": 983
+          "f": 951
         }
       ]
     },
     {
       "id": "opt",
       "text": "Et avec les bonnes habitudes, il pourrait atteindre 1m94 avec 5 centimètres de croissance supplémentaire grâce à l'optimisation de sa croissance.",
-      "from": 1003,
-      "duration": 230,
+      "from": 970,
+      "duration": 227,
       "words": [
         {
           "w": "Et",
-          "f": 1003
+          "f": 970
         },
         {
           "w": "avec",
-          "f": 1024
+          "f": 989
         },
         {
           "w": "les",
-          "f": 1028
+          "f": 994
         },
         {
           "w": "bonnes",
-          "f": 1031
+          "f": 996
         },
         {
           "w": "habitudes,",
-          "f": 1038
+          "f": 1003
         },
         {
           "w": "il",
-          "f": 1052
+          "f": 1020
         },
         {
           "w": "pourrait",
-          "f": 1060
+          "f": 1025
         },
         {
           "w": "atteindre",
-          "f": 1067
+          "f": 1032
         },
         {
           "w": "1m94",
-          "f": 1076
+          "f": 1042
         },
         {
           "w": "avec",
-          "f": 1115
+          "f": 1080
         },
         {
           "w": "5",
-          "f": 1122
+          "f": 1085
         },
         {
           "w": "centimètres",
-          "f": 1129
+          "f": 1094
         },
         {
           "w": "de",
-          "f": 1146
+          "f": 1109
         },
         {
           "w": "croissance",
-          "f": 1148
+          "f": 1111
         },
         {
           "w": "supplémentaire",
-          "f": 1160
+          "f": 1123
         },
         {
           "w": "grâce",
-          "f": 1182
+          "f": 1145
         },
         {
           "w": "à",
-          "f": 1187
+          "f": 1152
         },
         {
           "w": "l'optimisation",
-          "f": 1192
+          "f": 1154
         },
         {
           "w": "de",
-          "f": 1211
+          "f": 1174
         },
         {
           "w": "sa",
-          "f": 1216
+          "f": 1176
         },
         {
           "w": "croissance.",
-          "f": 1220
+          "f": 1181
         }
       ]
     },
     {
       "id": "foutu",
-      "text": "Franchement, t'es pas foutu.",
-      "from": 1235,
-      "duration": 52,
+      "text": "T'es pas foutu.",
+      "from": 1198,
+      "duration": 22,
       "words": [
         {
-          "w": "Franchement,",
-          "f": 1235
-        },
-        {
-          "w": "t'es",
-          "f": 1252
+          "w": "T'es",
+          "f": 1198
         },
         {
           "w": "pas",
-          "f": 1268
+          "f": 1202
         },
         {
           "w": "foutu.",
-          "f": 1273
+          "f": 1207
         }
       ]
     },
     {
       "id": "send",
       "text": "Envoie cette vidéo à ton pote qui est plus grand que son père.",
-      "from": 1288,
-      "duration": 57,
+      "from": 1220,
+      "duration": 61,
       "words": [
         {
           "w": "Envoie",
-          "f": 1288
+          "f": 1220
         },
         {
           "w": "cette",
-          "f": 1297
+          "f": 1232
         },
         {
           "w": "vidéo",
-          "f": 1300
+          "f": 1237
         },
         {
           "w": "à",
-          "f": 1304
+          "f": 1242
         },
         {
           "w": "ton",
-          "f": 1307
+          "f": 1244
         },
         {
           "w": "pote",
-          "f": 1312
+          "f": 1249
         },
         {
           "w": "qui",
-          "f": 1319
+          "f": 1256
         },
         {
           "w": "est",
-          "f": 1321
+          "f": 1259
         },
         {
           "w": "plus",
-          "f": 1326
+          "f": 1261
         },
         {
           "w": "grand",
-          "f": 1328
+          "f": 1264
         },
         {
           "w": "que",
-          "f": 1333
+          "f": 1268
         },
         {
           "w": "son",
-          "f": 1336
+          "f": 1273
         },
         {
           "w": "père.",
-          "f": 1338
+          "f": 1276
         }
       ]
     },
     {
       "id": "com",
       "text": "Et si tu veux connaître ton potentiel de taille, écris ton âge, ta taille et celle de tes parents en commentaire sous cette vidéo,",
-      "from": 1345,
-      "duration": 159,
+      "from": 1283,
+      "duration": 148,
       "words": [
         {
           "w": "Et",
-          "f": 1345
+          "f": 1283
         },
         {
           "w": "si",
-          "f": 1350
+          "f": 1288
         },
         {
           "w": "tu",
-          "f": 1355
+          "f": 1290
         },
         {
           "w": "veux",
-          "f": 1357
+          "f": 1292
         },
         {
           "w": "connaître",
-          "f": 1360
+          "f": 1297
         },
         {
           "w": "ton",
-          "f": 1369
+          "f": 1307
         },
         {
           "w": "potentiel",
-          "f": 1374
+          "f": 1312
         },
         {
           "w": "de",
-          "f": 1386
+          "f": 1321
         },
         {
           "w": "taille,",
-          "f": 1388
+          "f": 1326
         },
         {
           "w": "écris",
-          "f": 1400
+          "f": 1336
         },
         {
           "w": "ton",
-          "f": 1410
+          "f": 1345
         },
         {
           "w": "âge,",
-          "f": 1415
+          "f": 1350
         },
         {
           "w": "ta",
-          "f": 1424
+          "f": 1362
         },
         {
           "w": "taille",
-          "f": 1429
+          "f": 1367
         },
         {
           "w": "et",
-          "f": 1439
+          "f": 1374
         },
         {
           "w": "celle",
-          "f": 1441
+          "f": 1376
         },
         {
           "w": "de",
-          "f": 1448
+          "f": 1384
         },
         {
           "w": "tes",
-          "f": 1451
+          "f": 1386
         },
         {
           "w": "parents",
-          "f": 1456
+          "f": 1391
         },
         {
           "w": "en",
-          "f": 1465
+          "f": 1400
         },
         {
           "w": "commentaire",
-          "f": 1470
+          "f": 1405
         },
         {
           "w": "sous",
-          "f": 1480
+          "f": 1415
         },
         {
           "w": "cette",
-          "f": 1487
+          "f": 1422
         },
         {
           "w": "vidéo,",
-          "f": 1492
+          "f": 1424
         }
       ]
     },
     {
       "id": "site",
       "text": "ou va sur grandimi.com pour découvrir comment atteindre ton potentiel de taille.",
-      "from": 1505,
-      "duration": 123,
+      "from": 1432,
+      "duration": 127,
       "words": [
         {
           "w": "ou",
-          "f": 1505
+          "f": 1432
         },
         {
           "w": "va",
-          "f": 1510
+          "f": 1436
         },
         {
           "w": "sur",
-          "f": 1512
+          "f": 1441
         },
         {
           "w": "grandimi.com",
-          "f": 1517
+          "f": 1446
         },
         {
           "w": "pour",
-          "f": 1548
+          "f": 1477
         },
         {
           "w": "découvrir",
-          "f": 1553
+          "f": 1480
         },
         {
           "w": "comment",
-          "f": 1565
+          "f": 1495
         },
         {
           "w": "atteindre",
-          "f": 1574
+          "f": 1507
         },
         {
           "w": "ton",
-          "f": 1586
+          "f": 1516
         },
         {
           "w": "potentiel",
-          "f": 1591
+          "f": 1521
         },
         {
           "w": "de",
-          "f": 1603
+          "f": 1533
         },
         {
           "w": "taille.",
-          "f": 1608
+          "f": 1538
         }
       ]
     }
