@@ -1,0 +1,559 @@
+{
+  "fps": 30,
+  "totalFrames": 1190,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles, partie 19.",
+      "from": 0,
+      "duration": 73,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 17
+        },
+        {
+          "w": "tailles,",
+          "f": 22
+        },
+        {
+          "w": "partie",
+          "f": 46
+        },
+        {
+          "w": "19.",
+          "f": 55
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Cory.",
+      "from": 74,
+      "duration": 61,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 74
+        },
+        {
+          "w": "on",
+          "f": 89
+        },
+        {
+          "w": "regarde",
+          "f": 94
+        },
+        {
+          "w": "les",
+          "f": 106
+        },
+        {
+          "w": "infos",
+          "f": 108
+        },
+        {
+          "w": "de",
+          "f": 115
+        },
+        {
+          "w": "Cory.",
+          "f": 120
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 13 ans, Cory mesure actuellement 1m78,",
+      "from": 137,
+      "duration": 95,
+      "words": [
+        {
+          "w": "À",
+          "f": 137
+        },
+        {
+          "w": "13",
+          "f": 142
+        },
+        {
+          "w": "ans,",
+          "f": 146
+        },
+        {
+          "w": "Cory",
+          "f": 154
+        },
+        {
+          "w": "mesure",
+          "f": 168
+        },
+        {
+          "w": "actuellement",
+          "f": 180
+        },
+        {
+          "w": "1m78,",
+          "f": 190
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est largement au-dessus de la norme.",
+      "from": 233,
+      "duration": 50,
+      "words": [
+        {
+          "w": "ce",
+          "f": 233
+        },
+        {
+          "w": "qui",
+          "f": 238
+        },
+        {
+          "w": "est",
+          "f": 242
+        },
+        {
+          "w": "largement",
+          "f": 247
+        },
+        {
+          "w": "au-dessus",
+          "f": 259
+        },
+        {
+          "w": "de",
+          "f": 269
+        },
+        {
+          "w": "la",
+          "f": 271
+        },
+        {
+          "w": "norme.",
+          "f": 274
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prévue est de 1m95,",
+      "from": 284,
+      "duration": 126,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 284
+        },
+        {
+          "w": "le",
+          "f": 291
+        },
+        {
+          "w": "site",
+          "f": 293
+        },
+        {
+          "w": "Grandimi,",
+          "f": 301
+        },
+        {
+          "w": "sa",
+          "f": 327
+        },
+        {
+          "w": "taille",
+          "f": 332
+        },
+        {
+          "w": "adulte",
+          "f": 339
+        },
+        {
+          "w": "prévue",
+          "f": 351
+        },
+        {
+          "w": "est",
+          "f": 363
+        },
+        {
+          "w": "de",
+          "f": 368
+        },
+        {
+          "w": "1m95,",
+          "f": 373
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "et avec les bonnes habitudes, Cory pourrait atteindre 2m.",
+      "from": 411,
+      "duration": 87,
+      "words": [
+        {
+          "w": "et",
+          "f": 411
+        },
+        {
+          "w": "avec",
+          "f": 416
+        },
+        {
+          "w": "les",
+          "f": 421
+        },
+        {
+          "w": "bonnes",
+          "f": 425
+        },
+        {
+          "w": "habitudes,",
+          "f": 433
+        },
+        {
+          "w": "Cory",
+          "f": 445
+        },
+        {
+          "w": "pourrait",
+          "f": 461
+        },
+        {
+          "w": "atteindre",
+          "f": 469
+        },
+        {
+          "w": "2m.",
+          "f": 481
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "Avec centimètres de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 499,
+      "duration": 131,
+      "words": [
+        {
+          "w": "Avec",
+          "f": 499
+        },
+        {
+          "w": "centimètres",
+          "f": 508
+        },
+        {
+          "w": "de",
+          "f": 535
+        },
+        {
+          "w": "croissance",
+          "f": 537
+        },
+        {
+          "w": "supplémentaire",
+          "f": 551
+        },
+        {
+          "w": "grâce",
+          "f": 571
+        },
+        {
+          "w": "à",
+          "f": 578
+        },
+        {
+          "w": "l'optimisation",
+          "f": 583
+        },
+        {
+          "w": "de",
+          "f": 607
+        },
+        {
+          "w": "sa",
+          "f": 609
+        },
+        {
+          "w": "croissance.",
+          "f": 614
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Cory est déjà plus grand que 99,6% des personnes de son âge.",
+      "from": 631,
+      "duration": 149,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 631
+        },
+        {
+          "w": "Cory",
+          "f": 647
+        },
+        {
+          "w": "est",
+          "f": 664
+        },
+        {
+          "w": "déjà",
+          "f": 669
+        },
+        {
+          "w": "plus",
+          "f": 676
+        },
+        {
+          "w": "grand",
+          "f": 681
+        },
+        {
+          "w": "que",
+          "f": 686
+        },
+        {
+          "w": "99,6%",
+          "f": 693
+        },
+        {
+          "w": "des",
+          "f": 748
+        },
+        {
+          "w": "personnes",
+          "f": 753
+        },
+        {
+          "w": "de",
+          "f": 760
+        },
+        {
+          "w": "son",
+          "f": 765
+        },
+        {
+          "w": "âge.",
+          "f": 770
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et il a déjà terminé 91,2% de sa croissance.",
+      "from": 781,
+      "duration": 112,
+      "words": [
+        {
+          "w": "Et",
+          "f": 781
+        },
+        {
+          "w": "il",
+          "f": 785
+        },
+        {
+          "w": "a",
+          "f": 790
+        },
+        {
+          "w": "déjà",
+          "f": 795
+        },
+        {
+          "w": "terminé",
+          "f": 802
+        },
+        {
+          "w": "91,2%",
+          "f": 819
+        },
+        {
+          "w": "de",
+          "f": 869
+        },
+        {
+          "w": "sa",
+          "f": 872
+        },
+        {
+          "w": "croissance.",
+          "f": 877
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T'es vraiment pas foutu.",
+      "from": 893,
+      "duration": 42,
+      "words": [
+        {
+          "w": "T'es",
+          "f": 893
+        },
+        {
+          "w": "vraiment",
+          "f": 905
+        },
+        {
+          "w": "pas",
+          "f": 913
+        },
+        {
+          "w": "foutu.",
+          "f": 917
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille.",
+      "from": 937,
+      "duration": 58,
+      "words": [
+        {
+          "w": "Si",
+          "f": 937
+        },
+        {
+          "w": "tu",
+          "f": 941
+        },
+        {
+          "w": "veux",
+          "f": 946
+        },
+        {
+          "w": "connaître",
+          "f": 951
+        },
+        {
+          "w": "ton",
+          "f": 961
+        },
+        {
+          "w": "potentiel",
+          "f": 965
+        },
+        {
+          "w": "de",
+          "f": 977
+        },
+        {
+          "w": "taille.",
+          "f": 980
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "Écris ton âge, ta taille actuelle en commentaire sous cette vidéo,",
+      "from": 995,
+      "duration": 93,
+      "words": [
+        {
+          "w": "Écris",
+          "f": 995
+        },
+        {
+          "w": "ton",
+          "f": 1007
+        },
+        {
+          "w": "âge,",
+          "f": 1012
+        },
+        {
+          "w": "ta",
+          "f": 1022
+        },
+        {
+          "w": "taille",
+          "f": 1029
+        },
+        {
+          "w": "actuelle",
+          "f": 1036
+        },
+        {
+          "w": "en",
+          "f": 1048
+        },
+        {
+          "w": "commentaire",
+          "f": 1053
+        },
+        {
+          "w": "sous",
+          "f": 1065
+        },
+        {
+          "w": "cette",
+          "f": 1072
+        },
+        {
+          "w": "vidéo,",
+          "f": 1077
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "ou va directement sur grandimi.com pour tout avoir.",
+      "from": 1089,
+      "duration": 98,
+      "words": [
+        {
+          "w": "ou",
+          "f": 1089
+        },
+        {
+          "w": "va",
+          "f": 1096
+        },
+        {
+          "w": "directement",
+          "f": 1103
+        },
+        {
+          "w": "sur",
+          "f": 1115
+        },
+        {
+          "w": "grandimi.com",
+          "f": 1120
+        },
+        {
+          "w": "pour",
+          "f": 1159
+        },
+        {
+          "w": "tout",
+          "f": 1163
+        },
+        {
+          "w": "avoir.",
+          "f": 1171
+        }
+      ]
+    }
+  ]
+}
