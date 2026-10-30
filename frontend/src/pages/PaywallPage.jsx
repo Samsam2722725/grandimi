@@ -379,6 +379,7 @@ function PaywallPage({ onBackHome }) {
     capture('paiement_ferme_sans_payer', {
       etape: carteRefuseeRef.current ? 'apres_refus' : 'sans_essai',
       secondes: ouvertLeRef.current ? Math.round((Date.now() - ouvertLeRef.current) / 1000) : null,
+      formulaire_affiche: formulairePretRef.current,
     })
     setFeuilleOuverte(false)
   }
@@ -434,6 +435,36 @@ function PaywallPage({ onBackHome }) {
     }
     return () => { try { paiement?.destroy() } catch { /* déjà détruit */ } }
   }, [whopPret, planWhop, email, emailValide])
+
+  /* Le formulaire Whop met parfois plusieurs secondes à apparaître
+     (téléphone, réseau, offre qui vient de changer). Le panneau restait
+     vide : rien à toucher, rien à faire défiler, et 83 fermetures sur 118
+     arrivaient en moins de 4 s (29/10/2026). En attendant, on montre la
+     forme du formulaire et une barre qui avance vite ; on note quand il
+     est vraiment là. Prêt = l'iframe Whop a pris sa vraie hauteur. */
+  const [formulairePret, setFormulairePret] = useState(false)
+  const formulairePretRef = useRef(false)
+  formulairePretRef.current = formulairePret
+  const [attenteFormulaire, setAttenteFormulaire] = useState(false)
+  useEffect(() => {
+    setFormulairePret(false)
+    const minuteur = setInterval(() => {
+      const iframe = blocWhopRef.current?.querySelector('iframe')
+      if (!iframe || iframe.getBoundingClientRect().height < 250) return
+      clearInterval(minuteur)
+      setFormulairePret(true)
+      if (feuilleOuverteRef.current && ouvertLeRef.current) {
+        capture('whop_formulaire_affiche', { etape: planChoisi, attente_ms: Date.now() - ouvertLeRef.current })
+      }
+    }, 150)
+    return () => clearInterval(minuteur)
+  }, [planWhop]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setAttenteFormulaire(false)
+    if (!feuilleOuverte || formulairePret) return undefined
+    const t = setTimeout(() => setAttenteFormulaire(true), 2500)
+    return () => clearTimeout(t)
+  }, [feuilleOuverte, formulairePret])
 
   useEffect(() => {
     /* Le script Whop appelle cette fonction avec TROIS valeurs, dans cet
@@ -902,6 +933,20 @@ function PaywallPage({ onBackHome }) {
               </div>
             )}
             <div className="pw2-feuille-carte">
+              {!formulairePret && (
+                <div className="pw2-attente" role="status">
+                  <p className="pw2-attente-texte">
+                    <Spinner />
+                    {attenteFormulaire ? 'Encore une seconde…' : 'Ton paiement sécurisé s’ouvre…'}
+                  </p>
+                  {feuilleOuverte && <span className="pw2-attente-barre" aria-hidden="true"><span /></span>}
+                  <span className="pw2-attente-bloc pw2-attente-bloc--clair" aria-hidden="true" />
+                  <span className="pw2-attente-bloc pw2-attente-bloc--clair" aria-hidden="true" />
+                  <span className="pw2-attente-ligne" aria-hidden="true" />
+                  <span className="pw2-attente-bloc" aria-hidden="true" />
+                  <span className="pw2-attente-bloc pw2-attente-bloc--haut" aria-hidden="true" />
+                </div>
+              )}
               <div key={planWhop} ref={blocWhopRef} className="pw2-feuille-whop" />
             </div>
             <p className="pw2-feuille-securite">🔒 Paiement sécurisé, encaissé par Whop</p>

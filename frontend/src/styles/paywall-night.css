@@ -1295,3 +1295,19 @@
 html:has(.pw2-feuille.is-ouverte), html:has(.pw2-feuille.is-ouverte) body { overflow: hidden; }
 .pw2-feuille-panneau { overflow-x: hidden; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .pw2-feuille-whop iframe { max-width: 100%; }
+
+/* En attendant le formulaire Whop : sa forme (Apple Pay, Google Pay,
+   champs) et une barre qui avance vite, par-dessus le formulaire qui se
+   prépare dessous. Disparaît dès qu'il est là. */
+.pw2-feuille-carte { position: relative; }
+.pw2-attente { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; gap: 12px; padding: 16px 16px 0; background: #111; }
+.pw2-attente-texte { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 0 2px; color: #f4efe9; font-weight: 700; font-size: 15px; }
+.pw2-attente-barre { display: block; height: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+.pw2-attente-barre span { display: block; height: 100%; width: 92%; border-radius: inherit; background: #ff6a2b; transform-origin: left; animation: pw2-attente-barre 3.5s cubic-bezier(0.1, 0.8, 0.2, 1) both; }
+@keyframes pw2-attente-barre { from { transform: scaleX(0.08); } to { transform: scaleX(1); } }
+.pw2-attente-bloc { display: block; height: 52px; border-radius: 10px; background: linear-gradient(90deg, #1b1b1b 0%, #262626 50%, #1b1b1b 100%); background-size: 200% 100%; animation: pw2-attente-reflet 1.2s linear infinite; }
+.pw2-attente-bloc--clair { height: 56px; background-image: linear-gradient(90deg, #d9d9d9 0%, #f2f2f2 50%, #d9d9d9 100%); opacity: 0.9; }
+.pw2-attente-bloc--haut { height: 120px; }
+.pw2-attente-ligne { display: block; height: 1px; margin: 6px 0; background: rgba(255, 255, 255, 0.1); }
+@keyframes pw2-attente-reflet { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+@media (prefers-reduced-motion: reduce) { .pw2-attente-bloc, .pw2-attente-barre span { animation: none; } }
