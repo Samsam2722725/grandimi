@@ -925,10 +925,10 @@ function PaywallPage({ onBackHome }) {
           </section>
         )}
 
-        {/* Comme TrendSaaS : les offres reviennent en bas de page. */}
-        <h2 className="pw3-choisis">Reprends là où tu en étais</h2>
-        {blocOffres}
-        {blocAction}
+        {/* En bas de page, seulement le bouton : les offres répétées
+            rallongeaient la page d'un écran (30/10/2026). Il paie l'offre
+            choisie plus haut. */}
+        <div className="pw3-action-bas">{blocAction}</div>
 
         {lienParent && proposerLeParent && (
           <section className="paywall-parent" ref={blocParentRef}>
