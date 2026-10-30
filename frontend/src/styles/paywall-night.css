@@ -1311,3 +1311,5 @@ html:has(.pw2-feuille.is-ouverte), html:has(.pw2-feuille.is-ouverte) body { over
 .pw2-attente-ligne { display: block; height: 1px; margin: 6px 0; background: rgba(255, 255, 255, 0.1); }
 @keyframes pw2-attente-reflet { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 @media (prefers-reduced-motion: reduce) { .pw2-attente-bloc, .pw2-attente-barre span { animation: none; } }
+.pw2-attente-chiffre { display: inline-block; min-width: 1ch; color: #ff8a52; font-size: 18px; }
+.pw2-attente-aide { margin: -6px 0 2px; text-align: center; color: #a39d97; font-size: 13.5px; }

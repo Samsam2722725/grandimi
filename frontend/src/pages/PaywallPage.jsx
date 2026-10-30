@@ -449,7 +449,9 @@ function PaywallPage({ onBackHome }) {
   const [formulairePret, setFormulairePret] = useState(false)
   const formulairePretRef = useRef(false)
   formulairePretRef.current = formulairePret
-  const [attenteFormulaire, setAttenteFormulaire] = useState(false)
+  /* Décompte affiché pendant l'attente : dire clairement « 4 s », pour
+     qu'il attende au lieu de croire que c'est cassé (demande du 30/10). */
+  const [decompte, setDecompte] = useState(4)
   useEffect(() => {
     setFormulairePret(false)
     const minuteur = setInterval(() => {
@@ -466,14 +468,14 @@ function PaywallPage({ onBackHome }) {
     return () => clearInterval(minuteur)
   }, [planWhop]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
-    setAttenteFormulaire(false)
+    setDecompte(4)
     if (!feuilleOuverte || formulairePret) return undefined
-    const t = setTimeout(() => setAttenteFormulaire(true), 2500)
+    const t = setInterval(() => setDecompte((n) => Math.max(0, n - 1)), 1000)
     const limite = setTimeout(() => {
       capture('whop_attente_depassee', { etape: planChoisi })
       setFormulairePret(true)
     }, 6000)
-    return () => { clearTimeout(t); clearTimeout(limite) }
+    return () => { clearInterval(t); clearTimeout(limite) }
   }, [feuilleOuverte, formulairePret])
 
   useEffect(() => {
@@ -947,8 +949,9 @@ function PaywallPage({ onBackHome }) {
                 <div className="pw2-attente" role="status">
                   <p className="pw2-attente-texte">
                     <Spinner />
-                    {attenteFormulaire ? 'Encore une seconde…' : 'Ton paiement sécurisé s’ouvre…'}
+                    {decompte > 0 ? <>Ton paiement s’ouvre dans <strong className="pw2-attente-chiffre">{decompte}</strong> s</> : 'Encore une seconde…'}
                   </p>
+                  <p className="pw2-attente-aide">Ne ferme pas : ensuite tu peux payer.</p>
                   {feuilleOuverte && <span className="pw2-attente-barre" aria-hidden="true"><span /></span>}
                   <span className="pw2-attente-bloc pw2-attente-bloc--clair" aria-hidden="true" />
                   <span className="pw2-attente-bloc pw2-attente-bloc--clair" aria-hidden="true" />
