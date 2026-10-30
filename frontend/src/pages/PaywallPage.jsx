@@ -413,11 +413,44 @@ function PaywallPage({ onBackHome }) {
     return () => script.removeEventListener('load', pret)
   }, [])
 
+  /* Le formulaire Whop met parfois plusieurs secondes à apparaître
+     (téléphone, réseau, offre qui vient de changer). Le panneau restait
+     vide : rien à toucher, rien à faire défiler, et 83 fermetures sur 118
+     arrivaient en moins de 4 s (29/10/2026). En attendant, on montre la
+     forme du formulaire et un décompte ; on note quand il est vraiment là.
+
+     Prêt = Whop dit lui-même qu'il a fini de charger (isLoading). Mesurer
+     la hauteur de son iframe ne suffit pas : Whop la fixe AVANT d'avoir
+     rempli le formulaire, si bien que sur iPhone l'attente s'effaçait sur
+     un cadre encore vide (30/10/2026). Sans ce signal (version de Whop
+     qui changerait), on retombe sur la hauteur. Et quoi qu'il arrive,
+     l'attente s'efface au bout de 12 s. */
+  const [formulairePret, setFormulairePret] = useState(false)
+  const formulairePretRef = useRef(false)
+  formulairePretRef.current = formulairePret
+  /* Décompte affiché pendant l'attente : dire clairement « 4 s », pour
+     qu'il attende au lieu de croire que c'est cassé (demande du 30/10). */
+  const [decompte, setDecompte] = useState(4)
+
   // Le formulaire de paiement, monté dans le panneau dès que l'offre est connue.
   const blocWhopRef = useRef(null)
   useEffect(() => {
     if (!whopPret || !planWhop || !blocWhopRef.current) return undefined
+    setFormulairePret(false)
     let paiement
+    let minuteur
+    let fait = false
+    const pret = () => {
+      if (fait) return
+      fait = true
+      clearInterval(minuteur)
+      // Whop a fini de charger mais peint encore : on lui laisse 0,4 s
+      // pour ne pas découvrir un cadre vide.
+      setTimeout(() => setFormulairePret(true), 400)
+      if (feuilleOuverteRef.current && ouvertLeRef.current) {
+        capture('whop_formulaire_affiche', { etape: planChoisi, attente_ms: Date.now() - ouvertLeRef.current })
+      }
+    }
     try {
       /* Thème sombre : en clair, le résumé Whop (« Abonnez-vous à Grandimi »,
          prix) s'affichait en gris foncé sur le fond noir du panneau, illisible.
@@ -430,43 +463,27 @@ function PaywallPage({ onBackHome }) {
       paiement
         .create('checkout', { buyerEmail: emailValide ? email : '' })
         .mount(blocWhopRef.current)
+      if (typeof paiement.isLoading === 'function') {
+        const verifier = () => { if (!paiement.isLoading()) pret() }
+        if (typeof paiement.subscribeLoading === 'function') paiement.subscribeLoading(verifier)
+        minuteur = setInterval(verifier, 200)
+      } else {
+        const bloc = blocWhopRef.current
+        minuteur = setInterval(() => {
+          const grande = [...bloc.querySelectorAll('iframe')].some((f) => f.getBoundingClientRect().height > 150)
+          if (grande || bloc.getBoundingClientRect().height >= 460) pret()
+        }, 200)
+      }
     } catch (e) {
       capture('whop_erreur_paiement', { etape: String(e?.message || 'montage').slice(0, 80) })
     }
-    return () => { try { paiement?.destroy() } catch { /* déjà détruit */ } }
+    return () => {
+      fait = true
+      clearInterval(minuteur)
+      try { paiement?.destroy() } catch { /* déjà détruit */ }
+    }
   }, [whopPret, planWhop, email, emailValide])
 
-  /* Le formulaire Whop met parfois plusieurs secondes à apparaître
-     (téléphone, réseau, offre qui vient de changer). Le panneau restait
-     vide : rien à toucher, rien à faire défiler, et 83 fermetures sur 118
-     arrivaient en moins de 4 s (29/10/2026). En attendant, on montre la
-     forme du formulaire et une barre qui avance vite ; on note quand il
-     est vraiment là. Prêt = une des iframes Whop, ou le bloc entier, a
-     pris sa vraie hauteur. Sur iPhone, Whop ajoute d'abord une petite
-     iframe (Apple Pay) : ne regarder que la première laissait l'attente
-     affichée pour toujours, par-dessus le formulaire (30/10/2026). Et
-     quoi qu'il arrive, l'attente s'efface au bout de 6 s. */
-  const [formulairePret, setFormulairePret] = useState(false)
-  const formulairePretRef = useRef(false)
-  formulairePretRef.current = formulairePret
-  /* Décompte affiché pendant l'attente : dire clairement « 4 s », pour
-     qu'il attende au lieu de croire que c'est cassé (demande du 30/10). */
-  const [decompte, setDecompte] = useState(4)
-  useEffect(() => {
-    setFormulairePret(false)
-    const minuteur = setInterval(() => {
-      const bloc = blocWhopRef.current
-      if (!bloc) return
-      const grande = [...bloc.querySelectorAll('iframe')].some((f) => f.getBoundingClientRect().height > 150)
-      if (!grande && bloc.getBoundingClientRect().height < 460) return
-      clearInterval(minuteur)
-      setFormulairePret(true)
-      if (feuilleOuverteRef.current && ouvertLeRef.current) {
-        capture('whop_formulaire_affiche', { etape: planChoisi, attente_ms: Date.now() - ouvertLeRef.current })
-      }
-    }, 150)
-    return () => clearInterval(minuteur)
-  }, [planWhop]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     setDecompte(4)
     if (!feuilleOuverte || formulairePret) return undefined
@@ -474,7 +491,7 @@ function PaywallPage({ onBackHome }) {
     const limite = setTimeout(() => {
       capture('whop_attente_depassee', { etape: planChoisi })
       setFormulairePret(true)
-    }, 6000)
+    }, 12000)
     return () => { clearInterval(t); clearTimeout(limite) }
   }, [feuilleOuverte, formulairePret])
 
@@ -949,7 +966,7 @@ function PaywallPage({ onBackHome }) {
                 <div className="pw2-attente" role="status">
                   <p className="pw2-attente-texte">
                     <Spinner />
-                    {decompte > 0 ? <>Ton paiement s’ouvre dans <strong className="pw2-attente-chiffre">{decompte}</strong> s</> : 'Encore une seconde…'}
+                    {decompte > 0 ? <>Ton paiement s’ouvre dans <strong className="pw2-attente-chiffre">{decompte}</strong> s</> : 'Presque prêt…'}
                   </p>
                   <p className="pw2-attente-aide">Ne ferme pas : ensuite tu peux payer.</p>
                   {feuilleOuverte && <span className="pw2-attente-barre" aria-hidden="true"><span /></span>}
