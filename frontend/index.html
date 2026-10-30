@@ -5,7 +5,8 @@
     <script>
       // Sans HTTPS, l'origine http:// n'est pas autorisee par le CORS de l'API :
       // toutes les requetes echouent en NetworkError. Redirection avant tout rendu.
-      if (location.protocol === 'http:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+      // Les adresses du Wi-Fi (192.168…, 10…) servent aux tests sur téléphone.
+      if (location.protocol === 'http:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && !/^(192\.168|10)\./.test(location.hostname)) {
         location.replace('https://' + location.host + location.pathname + location.search + location.hash);
       }
     </script>

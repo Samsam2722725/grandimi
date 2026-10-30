@@ -431,22 +431,32 @@ function PaywallPage({ onBackHome }) {
   /* Décompte affiché pendant l'attente : dire clairement « 4 s », pour
      qu'il attende au lieu de croire que c'est cassé (demande du 30/10). */
   const [decompte, setDecompte] = useState(4)
+  /* Sur iPhone, le formulaire Whop s'affiche puis reste quelques secondes
+     sans répondre (il démarre) : on ne peut ni défiler ni toucher, et on
+     croit que c'est cassé (30/10/2026). L'attente reste donc affichée au
+     moins DEMARRAGE_WHOP_MS après son montage. Monté depuis longtemps
+     (offre gardée, page lue), il est prêt : pas d'attente du tout. */
+  const DEMARRAGE_WHOP_MS = 5000
+  const monteLeRef = useRef(0)
 
   // Le formulaire de paiement, monté dans le panneau dès que l'offre est connue.
   const blocWhopRef = useRef(null)
   useEffect(() => {
     if (!whopPret || !planWhop || !blocWhopRef.current) return undefined
     setFormulairePret(false)
+    monteLeRef.current = Date.now()
     let paiement
     let minuteur
+    let finAttente
     let fait = false
     const pret = () => {
       if (fait) return
       fait = true
       clearInterval(minuteur)
-      // Whop a fini de charger mais peint encore : on lui laisse 0,4 s
-      // pour ne pas découvrir un cadre vide.
-      setTimeout(() => setFormulairePret(true), 400)
+      // Chargé, mais il peint et démarre encore : au moins 0,4 s, et au
+      // moins DEMARRAGE_WHOP_MS depuis son montage.
+      const reste = Math.max(400, DEMARRAGE_WHOP_MS - (Date.now() - monteLeRef.current))
+      finAttente = setTimeout(() => setFormulairePret(true), reste)
       if (feuilleOuverteRef.current && ouvertLeRef.current) {
         capture('whop_formulaire_affiche', { etape: planChoisi, attente_ms: Date.now() - ouvertLeRef.current })
       }
@@ -480,12 +490,14 @@ function PaywallPage({ onBackHome }) {
     return () => {
       fait = true
       clearInterval(minuteur)
+      clearTimeout(finAttente)
       try { paiement?.destroy() } catch { /* déjà détruit */ }
     }
   }, [whopPret, planWhop, email, emailValide])
 
   useEffect(() => {
-    setDecompte(4)
+    // Le décompte part de ce qui reste vraiment à attendre (1 à 5 s).
+    setDecompte(Math.min(5, Math.max(1, Math.ceil((DEMARRAGE_WHOP_MS - (Date.now() - monteLeRef.current)) / 1000))))
     if (!feuilleOuverte || formulairePret) return undefined
     const t = setInterval(() => setDecompte((n) => Math.max(0, n - 1)), 1000)
     const limite = setTimeout(() => {
