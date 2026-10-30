@@ -3669,3 +3669,20 @@
   .funnel-choices { gap: 5px; }
   .choice-card { padding-top: 7px; padding-bottom: 7px; }
 }
+
+/* Questionnaire sur iPhone (signalé le 30/10/2026) : en tournant une
+   molette (date, taille…), c'était la page entière qui descendait, avec le
+   « tirer pour recharger » de Safari, au lieu des chiffres.
+   1. Le document derrière le questionnaire ne défile plus du tout (le
+      questionnaire défile dans son propre cadre, comme avant).
+   2. Le geste commencé sur une molette reste dans la molette, même arrivé
+      au bout de la liste. */
+html:has(.funnel, .interstitial, .analyse),
+html:has(.funnel, .interstitial, .analyse) body {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+.wheel-scroller {
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
