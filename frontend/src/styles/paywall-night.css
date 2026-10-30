@@ -1280,3 +1280,18 @@
 @media (max-width: 520px) {
   .pw2-feuille-carte { margin: 0 -12px; padding: 8px 0 0; border: 0; border-radius: 0; }
 }
+
+/* Défilement sur iPhone (signalé le 30/10/2026, captures à l'appui).
+   1. La page des prix défilait DANS une boîte fixe : sur iOS le geste
+      accrochait et tirait toute la page (« tirer pour recharger »).
+      Elle défile maintenant comme une page normale.
+   2. Le panneau de paiement pouvait glisser de côté (formulaire Whop plus
+      large d'une fraction de pixel) : un geste un peu en biais partait à
+      l'horizontale au lieu de descendre. Plus de défilement horizontal,
+      et le fond ne bouge plus tant que le panneau est ouvert. */
+.paywall:has(.pw3) { position: relative; inset: auto; height: auto; min-height: 100svh; }
+.paywall:has(.pw3) .paywall-scroll { flex: none; overflow: visible; overscroll-behavior: auto; }
+.paywall:has(.pw3) .pw2-top { position: sticky; top: 0; z-index: 10; background: var(--funnel-bg); padding-bottom: 6px; }
+html:has(.pw2-feuille.is-ouverte), html:has(.pw2-feuille.is-ouverte) body { overflow: hidden; }
+.pw2-feuille-panneau { overflow-x: hidden; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.pw2-feuille-whop iframe { max-width: 100%; }
