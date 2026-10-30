@@ -1,0 +1,17 @@
+/* Ses résultats, avant le prix : ce qui est bloqué porte un filigrane. */
+.night.apercu { min-height: 100svh; background: #0a0a0a; color: #f4efe9; }
+.apercu-top { display: flex; justify-content: center; align-items: center; min-height: 52px; }
+.apercu-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: #f4efe9; }
+.apercu-contenu { max-width: 480px; margin: 0 auto; padding: 4px 16px calc(110px + env(safe-area-inset-bottom)); }
+.apercu-pret { margin: 0 0 4px; color: #4ade80; font-weight: 700; font-size: 14px; text-align: center; }
+.apercu-titre { margin: 0 0 14px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.03em; text-align: center; color: #f4efe9; }
+
+/* Sous les deux tailles : ce qu'il peut optimiser, sous cadenas. */
+.apercu-optimiser { width: 100%; border: 1px solid rgba(255, 106, 43, 0.35); background: linear-gradient(160deg, rgba(255, 106, 43, 0.14), #141414 70%); color: #f4efe9; font: inherit; text-align: left; cursor: pointer; }
+.apercu-optimiser-tete { display: inline-flex; align-items: center; gap: 6px; color: #ff8a52; font-weight: 800; font-size: 15px; }
+.apercu-optimiser-ligne { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.apercu-optimiser-ligne .taille-libelle { color: #f4efe9; font-size: 15px; }
+.apercu-optimiser-sous { color: #a39d97; font-size: 13.5px; line-height: 1.4; }
+
+.apercu-pied { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: linear-gradient(to top, #0a0a0a 70%, rgba(10, 10, 10, 0)); }
+.apercu-pied .funnel-cta { display: block; width: 100%; max-width: 448px; margin: 0 auto; }

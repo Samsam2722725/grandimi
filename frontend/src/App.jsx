@@ -26,6 +26,7 @@ import HomePage from './pages/HomePage';
 const OnboardingFlow = lazy(() => import('./pages/OnboardingFlow'));
 const ResultsPage = lazy(() => import('./pages/ResultsPage'));
 const PaywallPage = lazy(() => import('./pages/PaywallPage'));
+const ApercuPage = lazy(() => import('./pages/ApercuPage'));
 const GrowthPlanPage = lazy(() => import('./pages/GrowthPlanPage'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
 const SetPasswordPage = lazy(() => import('./pages/SetPasswordPage'));
@@ -101,6 +102,7 @@ function pagePreviewDemandee(params) {
   const valeur = params.get('preview');
   const pages = {
     results: 'results',
+    apercu: 'apercu',
     paywall: 'paywall',
     plan: 'plan',
     reglage: 'plan-setup',
@@ -406,8 +408,8 @@ function App() {
       }
     }
 
-    // Pas d'écran de résultats sous cadenas : le paywall fait le diagnostic.
-    setCurrentPage('paywall');
+    // Ses résultats d'abord, ce qui est bloqué sous filigrane ; puis le prix.
+    setCurrentPage('apercu');
   };
 
   /* Le plan ne s’ouvre qu’une fois ses horaires connus.
@@ -558,7 +560,7 @@ function App() {
      rien ne s'affichait : une page crème vide, sans issue. On renvoie
      plutôt vers un écran qui peut s'afficher. */
   useEffect(() => {
-    if (['results', 'plan', 'paywall'].includes(currentPage) && !predictionData) {
+    if (['results', 'apercu', 'plan', 'paywall'].includes(currentPage) && !predictionData) {
       setCurrentPage(isAuthenticated ? 'account' : 'home');
     } else if (currentPage === 'plan' && !isPaid) {
       setCurrentPage('paywall');
@@ -897,6 +899,10 @@ function App() {
           onViewPlan={handleViewPlan}
           onBackHome={handleBackHome}
         />
+      )}
+
+      {currentPage === 'apercu' && predictionData && (
+        <ApercuPage predictionData={predictionData} onDebloquer={() => setCurrentPage('paywall')} />
       )}
 
       {/* Paywall (before plan access) */}

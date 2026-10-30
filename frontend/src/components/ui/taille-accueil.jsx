@@ -106,7 +106,9 @@ function Courbe({ age, actuelle, predite, sexe, verrouille }) {
   );
 }
 
-export function TailleAccueil({ predictionData: d, verrouille, nbPoints, onDebloquer, onVoirCourbe, onVoirPoints }) {
+/* `apresTailles` : un bloc glissé sous les deux tailles (écran des résultats
+   avant paiement). `sansBarres` : retire les barres sous les chiffres. */
+export function TailleAccueil({ predictionData: d, verrouille, nbPoints, onDebloquer, onVoirCourbe, onVoirPoints, apresTailles = null, sansBarres = false }) {
   const actuelle = Number(d.current_height_cm);
   const predite = Number(d.predicted_height_cm);
   const age = Number(d.age);
@@ -141,6 +143,8 @@ export function TailleAccueil({ predictionData: d, verrouille, nbPoints, onDeblo
         </div>
       </div>
 
+      {apresTailles}
+
       <div className="taille-case taille-case--courbe">
         <div className="taille-courbe-tete">
           <button type="button" className="taille-courbe-titre" onClick={onVoirCourbe}>
@@ -166,13 +170,13 @@ export function TailleAccueil({ predictionData: d, verrouille, nbPoints, onDeblo
           <div className="taille-case">
             <span className="taille-libelle">Chances d’atteindre {fr(Math.round(reve))} cm</span>
             {verrouille ? <Cadenas libelle="Chances d’atteindre ta taille souhaitée" /> : <strong className="taille-valeur taille-valeur--petite">{chances} %</strong>}
-            <span className={`taille-barre ${verrouille ? 'floue' : ''}`} aria-hidden="true"><span style={{ width: `${verrouille ? 60 : chances}%` }} /></span>
+            {!sansBarres && <span className={`taille-barre ${verrouille ? 'floue' : ''}`} aria-hidden="true"><span style={{ width: `${verrouille ? 60 : chances}%` }} /></span>}
           </div>
         )}
         <div className="taille-case">
           <span className="taille-libelle">Croissance finie</span>
           {verrouille ? <Cadenas libelle="Croissance finie" /> : <strong className="taille-valeur taille-valeur--petite">{fr(finie)} %</strong>}
-          <span className={`taille-barre ${verrouille ? 'floue' : ''}`} aria-hidden="true"><span style={{ width: `${verrouille ? 80 : finie}%` }} /></span>
+          {!sansBarres && <span className={`taille-barre ${verrouille ? 'floue' : ''}`} aria-hidden="true"><span style={{ width: `${verrouille ? 80 : finie}%` }} /></span>}
         </div>
       </div>
     </section>
