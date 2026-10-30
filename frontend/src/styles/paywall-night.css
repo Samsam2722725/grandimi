@@ -1180,7 +1180,7 @@
   font-size: 13px; line-height: 1.35; color: #d9d3cd;
 }
 .pw3 .pw3-offre-avantages span::before {
-  content: '✓'; position: absolute; left: 0; top: 0; color: #ff6a2b; font-weight: 800;
+  content: '+'; position: absolute; left: 0; top: 0; color: #ff6a2b; font-weight: 800;
 }
 .pw3 .pw3-offre.is-choisie .pw3-offre-avantages span { border: 0; color: #f4efe9; }
 .pw3 .pw3-offre-droite { align-self: flex-start; padding-top: 2px; }
@@ -1329,3 +1329,259 @@ html:has(.pw2-feuille.is-ouverte), html:has(.pw2-feuille.is-ouverte) body { over
 .pw2-sq-cadre-bas > div + div { border-left: 1px solid rgba(255, 255, 255, 0.1); }
 .pw2-sq .pw2-sq-carte .pw2-sq-champ { margin-bottom: 0; }
 @media (prefers-reduced-motion: reduce) { .pw2-sq-b { animation: none; } }
+
+.pw3-promesse { margin: 10px auto 0; max-width: 320px; text-align: center; font-size: 15px; line-height: 1.45; color: #b9b2ab; }
+.pw3-offre-atouts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+.pw3-offre-atouts span { padding: 4px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 700; line-height: 1.3; }
+.pw3-atout-eco { background: rgba(74, 222, 128, 0.12); color: #6ee7a0; }
+.pw3-atout-taille { background: rgba(255, 106, 43, 0.14); color: #ff9a62; }
+
+/* « Voici ce que tu obtiendras : » (components/ui/ce-que-tu-obtiens.jsx), façon Taller. */
+.cqo { margin-top: 22px; text-align: center; }
+.cqo-intro { margin: 0 0 12px; font-size: 16px; font-weight: 600; color: #a39d97; }
+.cqo-liste {
+  list-style: none; margin: 0; padding: 0; display: flex; overflow-x: auto;
+  scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: 26px;
+}
+.cqo-liste::-webkit-scrollbar { display: none; }
+.cqo-carte {
+  flex: 0 0 100%; scroll-snap-align: center; box-sizing: border-box; height: 440px; overflow: hidden;
+  padding: 24px 18px 0; border-radius: 26px; border: 1px solid #262321;
+  background: radial-gradient(120% 70% at 50% 100%, rgba(255, 106, 43, 0.16), transparent 60%), #121212;
+}
+.cqo-carte h3 { margin: 0; text-wrap: balance; font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; color: #fff; }
+.cqo-visuel { margin-top: 20px; }
+
+.cqo-points { display: flex; justify-content: center; gap: 7px; margin-top: 14px; }
+.cqo-points span { width: 7px; height: 7px; border-radius: 999px; background: #3a3633; transition: width 0.2s ease; }
+.cqo-points span.is-actif { width: 18px; background: #ff6a2b; }
+@media (prefers-reduced-motion: reduce) { .cqo-points span { transition: none; } }
+
+/* « Optimise-la » : quatre actions du jour, la première cochée. */
+.cqo-actions, .cqo-lecons { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 10px; text-align: left; }
+.cqo-actions li {
+  display: flex; align-items: center; gap: 14px; padding: 12px 16px;
+  border: 1px solid #2a2725; border-radius: 16px; background: #171513;
+  font-size: 15px; font-weight: 600; color: #f4efe9;
+}
+.cqo-actions li.is-faite { border-color: rgba(255, 106, 43, 0.6); background: rgba(255, 106, 43, 0.1); }
+.cqo-action { flex: 1; display: grid; gap: 8px; }
+.cqo-action strong { font-size: 15px; color: #f4efe9; }
+.cqo-actions li.is-faite .cqo-action strong { color: #ff8a55; }
+.cqo-action span { font-size: 13.5px; font-weight: 500; color: #a39d97; }
+.cqo-case {
+  flex: none; display: grid; place-items: center; width: 26px; height: 26px;
+  border: 1.5px solid #3a3633; border-radius: 8px; font-size: 15px; font-weight: 800; color: #fff;
+}
+.cqo-actions li.is-faite .cqo-case { border-color: #ff6a2b; background: #ff6a2b; }
+
+/* « Guide pour grandir » : la leçon 1 ouverte, les suivantes verrouillées. */
+.cqo-lecons li {
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+  border: 1px solid #2a2725; border-radius: 16px; background: #171513;
+}
+.cqo-lecons li.is-ouverte { border-color: rgba(255, 106, 43, 0.6); background: rgba(255, 106, 43, 0.1); }
+.cqo-pastille {
+  flex: none; display: grid; place-items: center; width: 44px; height: 44px;
+  border-radius: 999px; background: #241f1c; font-size: 20px;
+}
+.cqo-lecons li.is-ouverte .cqo-pastille { background: #ff6a2b; }
+.cqo-lecon { display: grid; gap: 3px; }
+.cqo-lecon strong { font-size: 16px; color: #fff; }
+.cqo-lecon span { font-size: 13.5px; color: #a39d97; }
+.cqo-lecons li:not(.is-ouverte) .cqo-lecon { opacity: 0.7; }
+
+
+/* « Programme optimal personnalisé » : le chemin de jours de Taller. */
+.cqo-chemin { margin-top: 18px; padding: 18px 16px; border: 1px solid #2a2725; border-radius: 18px; background: #171513; text-align: left; }
+.cqo-chemin-haut { display: flex; justify-content: space-between; align-items: baseline; }
+.cqo-chemin-haut strong { font-size: 17px; color: #fff; }
+.cqo-chemin-haut span { font-size: 13.5px; color: #a39d97; }
+.cqo-chemin-barre { display: block; height: 6px; margin: 12px 0 18px; border-radius: 999px; background: #2a2725; overflow: hidden; }
+.cqo-chemin-barre span { display: block; width: 14%; height: 100%; background: #ff6a2b; }
+.cqo-jours { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px 6px; }
+.cqo-jours li { display: grid; justify-items: center; gap: 6px; font-size: 12.5px; color: #8a847e; }
+.cqo-jour-rond {
+  display: grid; place-items: center; width: 50px; height: 50px; border-radius: 999px;
+  background: #241f1c; border: 1.5px solid #2f2a27; font-size: 17px; color: #fff;
+}
+.cqo-jours li.is-fait { color: #f4efe9; }
+.cqo-jours li.is-fait .cqo-jour-rond { background: #ff6a2b; border-color: #ff6a2b; font-weight: 800; }
+.cqo-jours li.is-en-cours { color: #ff8a55; }
+.cqo-jours li.is-en-cours .cqo-jour-rond { border: 2px dashed #ff6a2b; color: #ff6a2b; font-size: 14px; }
+.cqo-jours li.is-objectif { color: #f5c542; font-weight: 700; }
+.cqo-jours li.is-objectif .cqo-jour-rond { background: rgba(245, 197, 66, 0.14); border-color: rgba(245, 197, 66, 0.55); }
+
+/* La science derrière l'estimation, dite une fois, sans logo. */
+.cqo-science { margin: 16px auto 0; font-size: 14px; font-weight: 600; color: #d8d2cc; }
+
+/* « Programme optimal personnalisé » : les mois du programme. */
+.cqo-mois { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; }
+.cqo-mois li {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+  border: 1px solid #2a2725; border-radius: 14px; background: #1a1715;
+}
+.cqo-mois li.is-en-cours { border-color: rgba(255, 106, 43, 0.6); background: rgba(255, 106, 43, 0.1); }
+.cqo-mois-num { flex: none; width: 54px; font-size: 13px; font-weight: 700; color: #8a847e; }
+.cqo-mois li.is-en-cours .cqo-mois-num { color: #ff8a55; }
+.cqo-mois-theme { flex: 1; font-size: 15px; font-weight: 600; color: #f4efe9; }
+.cqo-mois-badge { flex: none; padding: 3px 8px; border-radius: 999px; background: #ff6a2b; font-size: 11.5px; font-weight: 700; color: #fff; }
+.cqo-mois li.cqo-mois-suite { justify-content: center; border-style: dashed; font-size: 13.5px; color: #a39d97; background: transparent; }
+
+/* Bandeau du minuteur : disposition du concurrent (30/10/2026), couleurs
+   de Grandimi — fond et contour des cartes d'offre, remise en orange,
+   phrase en gris chaud, minuteur en Syne blanc. */
+.pw3-minuteur:not(.is-fini) {
+  display: flex; align-items: center; gap: 14px;
+  margin: 4px 0 18px; padding: 16px 18px;
+  border: 1.5px solid rgba(244, 239, 233, 0.12); border-radius: 18px;
+  background: #121110; color: #a39d97; text-align: left;
+  font-size: 15px; font-weight: 500; box-shadow: none;
+}
+.pw3-minuteur-remise { flex: none; color: #ff6a2b; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.01em; }
+.pw3-minuteur-texte { flex: 1; min-width: 0; }
+.pw3-minuteur:not(.is-fini) strong { flex: none; color: #f4efe9; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 19px; font-variant-numeric: tabular-nums; letter-spacing: 0.01em; }
+@media (max-width: 380px) {
+  .pw3-minuteur:not(.is-fini) { gap: 10px; padding: 13px 14px; font-size: 13px; }
+  .pw3-minuteur-remise { font-size: 20px; }
+  .pw3-minuteur:not(.is-fini) strong { font-size: 16px; }
+}
+
+/* Carte « Optimise ta taille » sans les petites descriptions (30/10/2026) :
+   des lignes plus hautes et un titre plus gros pour remplir la carte. */
+.cqo-actions { gap: 12px; }
+.cqo-actions li { min-height: 64px; }
+.cqo-action strong { font-size: 17px; }
+
+/* Carte « Programme optimal » (30/10/2026) : le message de la carte de
+   Taller — un téléphone, « Routine quotidienne », un plan par niveaux —
+   dessiné aux couleurs de Grandimi avec l'écran « Ton plan » de l'app.
+   Le téléphone est coupé par le bas de la carte, comme chez eux. */
+.cqo-tel-zone { position: relative; margin-top: 4px; padding-top: 22px; }
+.cqo-tel-zone::before {
+  content: ''; position: absolute; inset: 0 -18px -40px; pointer-events: none;
+  background: radial-gradient(60% 45% at 50% 30%, rgba(255, 106, 43, 0.28), transparent 70%);
+}
+.cqo-tel-etiquette {
+  position: absolute; top: 4px; right: 2%; z-index: 2; transform: rotate(5deg);
+  padding: 8px 14px; border-radius: 999px; border: 2px solid #e9e4df;
+  background: #fff; color: #141210; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; white-space: nowrap;
+}
+.cqo-tel {
+  position: relative; width: min(82%, 270px); margin: 0 auto; box-sizing: border-box;
+  padding: 24px 14px 0; border: 3px solid #d9d2cb; border-bottom: 0; border-radius: 38px 38px 0 0;
+  background: #0d0c0b; text-align: left; color: #f4efe9;
+}
+.cqo-tel-tete { display: flex; align-items: center; justify-content: space-between; }
+.cqo-tel-tete strong { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 700; }
+.cqo-tel-reglages { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 999px; background: #1f1c1a; color: #d9d2cb; }
+.cqo-tel-onglets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 12px; padding: 3px; border-radius: 10px; background: #1a1816; }
+.cqo-tel-onglets span { padding: 5px 0; border-radius: 8px; text-align: center; font-size: 10.5px; font-weight: 600; color: #cfc8c1; }
+.cqo-tel-onglets span.is-actif { background: #ff6a2b; color: #fff; }
+.cqo-tel-bandeau {
+  position: relative; height: 60px; margin-top: 10px; border-radius: 14px; overflow: hidden;
+  background: radial-gradient(80% 120% at 75% 20%, #ffb07a, transparent 60%), linear-gradient(135deg, #ff6a2b, #9a3412);
+}
+.cqo-tel-bandeau-icone { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 36px; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3)); }
+.cqo-tel-jours { position: absolute; left: 10px; bottom: 10px; padding: 3px 9px; border-radius: 8px; background: rgba(255, 255, 255, 0.25); font-size: 11px; font-weight: 700; color: #fff; }
+.cqo-tel-niveau { display: flex; justify-content: space-between; margin-top: 10px; font-size: 13px; font-weight: 700; }
+.cqo-tel-niveau--suite { margin-top: 12px; }
+.cqo-tel-barre { display: block; height: 5px; margin-top: 8px; border-radius: 999px; background: #2a2725; overflow: hidden; }
+.cqo-tel-barre span { display: block; width: 14%; height: 100%; background: #ff6a2b; }
+.cqo-tel-chemin { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); row-gap: 10px; margin-top: 10px; justify-items: center; }
+.cqo-tel-chemin::before, .cqo-tel-chemin::after {
+  content: ''; position: absolute; left: 12.5%; right: 12.5%; height: 2px; background: #2a2725;
+}
+.cqo-tel-chemin::before { top: 18px; }
+.cqo-tel-chemin::after { top: 64px; }
+.cqo-tel-jour {
+  position: relative; z-index: 1; display: grid; place-items: center; width: 36px; height: 36px;
+  border-radius: 999px; background: #1f1c1a; font-size: 8.5px; font-weight: 600; color: #6f6a65;
+}
+.cqo-tel-jour:nth-child(4)::after {
+  content: ''; position: absolute; top: 36px; left: 17px; width: 2px; height: 10px; background: #2a2725;
+}
+.cqo-tel-jour.is-fait { border: 2.5px solid #ff6a2b; background: #1a1210; font-size: 15px; box-shadow: 0 0 14px rgba(255, 106, 43, 0.45); }
+.cqo-tel-jour.is-suivant { border: 2px dashed #ff6a2b; background: transparent; color: #ff8a55; }
+
+/* Bandeau « Vers ta taille maximale » (30/10/2026) : une jauge, le point
+   « Toi aujourd'hui » au début, le trophée au jour 112. Le reste du
+   téléphone est resserré pour que le Niveau 2 reste visible. */
+.cqo-tel-bandeau {
+  display: flex; flex-direction: column; justify-content: center; gap: 8px; height: 80px; margin-top: 8px; padding: 0 12px;
+  background: radial-gradient(80% 140% at 90% 50%, rgba(255, 106, 43, 0.3), transparent 70%), #17110e;
+  border: 1px solid rgba(255, 106, 43, 0.25);
+}
+.cqo-tel-jauge-titre { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #fff; }
+.cqo-tel-jauge {
+  position: relative; display: block; height: 8px; border-radius: 999px;
+  background: linear-gradient(90deg, #ff6a2b 0 10%, #2a2420 10% 100%);
+}
+.cqo-tel-jauge::after {
+  content: ''; position: absolute; right: -1px; top: 50%; width: 12px; height: 12px; transform: translateY(-50%);
+  border-radius: 999px; border: 2px dashed #ff8a55; background: #17110e;
+}
+.cqo-tel-jauge-point {
+  position: absolute; left: 10%; top: 50%; width: 14px; height: 14px; transform: translate(-50%, -50%);
+  border-radius: 999px; border: 2.5px solid #fff; background: #ff6a2b; box-shadow: 0 0 10px rgba(255, 106, 43, 0.8);
+}
+.cqo-tel-jauge-bornes { display: flex; justify-content: space-between; font-size: 9.5px; font-weight: 700; color: #a39d97; }
+.cqo-tel-jauge-fin { color: #ff8a55; }
+.cqo-tel-onglets { margin-top: 10px; }
+.cqo-tel-chemin { row-gap: 8px; }
+.cqo-tel-jour { width: 32px; height: 32px; font-size: 8px; }
+.cqo-tel-chemin::before { top: 16px; }
+.cqo-tel-chemin::after { top: 56px; }
+.cqo-tel-jour:nth-child(4)::after { top: 32px; left: 15px; height: 8px; }
+.cqo-tel-niveau--suite { margin-top: 8px; }
+
+/* Carte « Optimise ta taille » façon « Optimise-la » de Taller (30/10/2026) :
+   vraies actions, la première cochée et barrée. Lignes droites : penchées,
+   elles avaient l’air de travers sur iPhone (30/10/2026). */
+.cqo-actions { gap: 14px; margin-top: 22px; }
+.cqo-actions li { min-height: 60px; padding: 12px 16px; border-color: transparent; background: #1b1917; }
+.cqo-action strong { font-size: 16px; font-weight: 700; color: #f4efe9; }
+.cqo-actions li.is-faite { border-color: transparent; background: #1b1917; }
+.cqo-actions li.is-faite .cqo-action strong { color: #8a847e; text-decoration: line-through; text-decoration-color: #f4efe9; text-decoration-thickness: 2px; }
+.cqo-actions .cqo-case { border-radius: 8px; border-color: #2e2b28; background: #24211f; }
+/* Dernière ligne « + 7 autres actions » : même forme que les autres, en
+   pointillé, cadenas dans la case — on voit que la liste continue. */
+.cqo-actions { gap: 12px; }
+.cqo-actions li { min-height: 56px; gap: 12px; padding: 10px 14px; }
+.cqo-action strong { font-size: 15px; }
+.cqo-actions li.cqo-actions-suite { transform: none; border: 1.5px dashed #3a3633; background: transparent; }
+.cqo-actions li.cqo-actions-suite .cqo-case { border-color: transparent; background: #24211f; font-size: 12px; }
+.cqo-actions li.cqo-actions-suite .cqo-action strong { color: #a39d97; }
+
+/* Carte 1 personnalisée et preuve sociale (30/10/2026). */
+.cqo-perso {
+  display: inline-block; margin: 10px 0 0; padding: 4px 11px; border-radius: 999px;
+  background: rgba(255, 106, 43, 0.12); border: 1px solid rgba(255, 106, 43, 0.35);
+  font-size: 12.5px; font-weight: 700; color: #ff8a55;
+}
+.cqo-perso + .cqo-actions { margin-top: 14px; }
+.cqo-actions li { min-height: 52px; }
+.pw3-preuve {
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin: 22px 0 0;
+  font-size: 14px; font-weight: 700; color: #f4efe9;
+}
+.pw3-preuve { font-size: 13px; }
+
+/* « Ce qu'ils en disent » : disposition de TrendSaaS (avatar rond à
+   gauche, citation, prénom et étoiles), couleurs Grandimi (30/10/2026). */
+.pw3-avis { margin-top: 28px; text-align: left; }
+.pw3-avis h2 { margin: 0 0 12px; font-size: 20px; font-weight: 800; color: #f4efe9; }
+.pw3-avis-carte {
+  display: flex; align-items: center; gap: 16px; margin: 0 0 10px; padding: 18px 16px;
+  border: 1px solid rgba(244, 239, 233, 0.12); border-radius: 18px; background: #121110;
+}
+.pw3-avis-initiale {
+  flex: none; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 999px;
+  background: linear-gradient(135deg, #ff8a52, #c2410c); color: #fff;
+  font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800;
+}
+.pw3-avis blockquote { margin: 0; font-size: 15px; line-height: 1.5; color: #f4efe9; }
+.pw3-avis figcaption { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 14px; font-weight: 600; color: #f4efe9; }
+.pw3-avis-etoiles { color: #fbbf24; letter-spacing: 1px; }
+.pw3-avis .pw3-preuve { justify-content: flex-start; margin: -4px 0 14px; color: #a39d97; font-weight: 600; }

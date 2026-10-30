@@ -3,7 +3,8 @@ import { Check, CreditCard, ShieldCheck, Wallet, X } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
-import { OFFRES, finReduction, euros, contenuPlan } from '../lib/offres'
+import { OFFRES, finReduction, euros } from '../lib/offres'
+import { CeQueTuObtiens } from '@/components/ui/ce-que-tu-obtiens'
 import '../styles/funnel.css'
 /* Feuille dédiée, et non paywall.css : cette dernière habille encore
    ParentPage (page claire, destinée à un adulte arrivé par lien partagé) et
@@ -64,6 +65,16 @@ const DELAI_AVANT_MESSAGE_MS = 4000
    Lecture défensive de bout en bout : cette page s'affiche aussi pour
    quelqu'un arrivé d'une session antérieure, dont le stockage local ne
    contient pas encore ces champs. */
+/* Vrais avis de clients seulement (voir la section « Ce qu'ils en disent »).
+   Garder la trace de chaque avis (capture du message d'origine). */
+const AVIS = [
+  {
+    prenom: 'Lucas',
+    age: 17,
+    texte: 'Franchement incroyable, je voulais savoir combien j’allais mesurer adulte et Grandimi m’a donné une estimation et plein de conseils pour bien grandir. Super simple à utiliser !',
+  },
+]
+
 function lireLaPrediction() {
   try {
     const brut = JSON.parse(localStorage.getItem('predictionData') || '{}')
@@ -692,11 +703,23 @@ function PaywallPage({ onBackHome }) {
                 {reductionActive && <s>{euros(o.normal)}</s>} {euros(prixOffre(o))} {o.facture}
               </span>
               {o.jours && <span className="pw3-offre-renouv">Se renouvelle automatiquement</span>}
-              <span className="pw3-offre-avantages">
-                {o.avantages.map((a) => (
-                  <span key={a}>{a}</span>
-                ))}
-              </span>
+              {(o.duree === 'm3' || o.taille) && (
+                <span className="pw3-offre-atouts">
+                  {o.duree === 'm3' && (
+                    <span className="pw3-atout-eco">
+                      {Math.round((1 - prixOffre(o) / (3 * prixOffre(OFFRES[0]))) * 100)} % moins cher que le 1 mois
+                    </span>
+                  )}
+                  {o.taille && <span className="pw3-atout-taille">🔓 Ta taille prédite</span>}
+                </span>
+              )}
+              {o.avantages.length > 0 && (
+                <span className="pw3-offre-avantages">
+                  {o.avantages.map((a) => (
+                    <span key={a}>{a}</span>
+                  ))}
+                </span>
+              )}
             </span>
             <span className="pw3-offre-droite">
               <span className="pw3-offre-jour">{o.jours ? euros(prixOffre(o) / o.jours) : euros(prixOffre(o))}</span>
@@ -787,7 +810,14 @@ function PaywallPage({ onBackHome }) {
             Le minuteur est réel : à zéro, le prix normal s'applique. */}
         <div className={`pw3-minuteur ${reductionActive ? '' : 'is-fini'}`} role="timer">
           {reductionActive ? (
-            <>⚡ Ton offre est réservée <strong>{minuteur}</strong> — prix réduit</>
+            /* Disposition du concurrent (capture du 30/10/2026), couleurs de
+               Grandimi : la remise, la phrase, le minuteur. La remise est la
+               vraie (normal → réduit de l'offre choisie), jamais inventée. */
+            <>
+              <span className="pw3-minuteur-remise">-{Math.round((1 - offre.reduit / offre.normal) * 100)} %</span>
+              <span className="pw3-minuteur-texte">Ta réduction est réservée</span>
+              <strong>{minuteur}</strong>
+            </>
           ) : (
             <>Réduction expirée — tarif normal appliqué</>
           )}
@@ -823,10 +853,11 @@ function PaywallPage({ onBackHome }) {
           </div>
         )}
 
-        <p className="pw3-pret">Ton plan est prêt ✓</p>
         <h1 className="pw3-titre">
           Atteins ta <span>taille maximale</span>
         </h1>
+
+        <CeQueTuObtiens prediction={prediction} />
 
         <h2 className="pw3-choisis">Choisis ton plan.</h2>
         {blocOffres}
@@ -850,33 +881,15 @@ function PaywallPage({ onBackHome }) {
           </p>
         )}
 
-        {/* Comme Taller et TrendSaaS : ce que tu obtiens, juste après les prix.
-            Les titres seuls (15/10/2026) : les lignes d'explication en
-            dessous ont été retirées à la demande de l'utilisateur. */}
-        <section className="pw3-obtiens">
-          <h2>Ton plan contient — fait pour toi</h2>
-          <ul>
-            {contenuPlan(prediction).map(({ titre }) => (
-              <li key={titre}>
-                <span className="pw3-obtiens-coche" aria-hidden="true">
-                  <Check size={14} strokeWidth={3} />
-                </span>
-                <span>
-                  <strong>{titre}</strong>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
+        {/* « Ton plan contient » est remplacé par les cartes « Ce que tu
+            obtiendras » en haut de page (30/10/2026). */}
 
         {/* FAQ dans le style TrendSaaS : les objections, avec ses mots à lui. */}
         <section className="pw3-faq">
           <h2>Les questions qu’on nous pose</h2>
           {[
             ['J’ai 17 ans, ça peut encore marcher ?', 'Oui. Chez les garçons, la croissance continue souvent jusqu’à 18-21 ans. Et ta posture, elle, se travaille à tout âge.'],
-            ['En quoi c’est différent des conseils trouvés sur TikTok ?', 'Les vidéos donnent les mêmes conseils à tout le monde. Ton plan part de tes réponses et te dit quoi faire, chaque jour, dans le bon ordre.'],
-            ['Combien de temps avant de voir quelque chose ?', 'Ta posture, dès les premières semaines. Ta croissance, tu la suis sur ta courbe chaque semaine.'],
-            ['Comment je suis sûr d’avoir des résultats ?', 'Ton plan corrige précisément ce qui te freine. Tu te mesures chaque semaine : tu vois toi-même si ça avance.'],
+            ['En quoi c’est différent des conseils trouvés sur TikTok ?', 'TikTok, c’est pour tout le monde. Ton plan est fait pour toi, et basé sur la science.'],
             ['Je peux arrêter quand je veux ?', 'Oui. Tu résilies en un clic depuis ton compte, sans justification.'],
           ].map(([q, r]) => (
             <details key={q} className="pw3-faq-item">
@@ -885,6 +898,32 @@ function PaywallPage({ onBackHome }) {
             </details>
           ))}
         </section>
+
+        {/* Avis clients, disposition de TrendSaaS. UNIQUEMENT de vrais avis,
+            reçus de vrais clients (jamais inventés : pratique commerciale
+            trompeuse). Prénom et âge seulement, pas de photo de mineur :
+            l'initiale tient lieu d'avatar. Avis de Lucas transmis par
+            Samuel le 30/10/2026 comme venant d'un vrai client. */}
+        {AVIS.length > 0 && (
+          <section className="pw3-avis" aria-label="Avis de clients">
+            <h2>Ce qu’ils en disent</h2>
+            {/* Preuve sociale vraie : 5 259 comptes dans la base le 30/10/2026,
+                chacun avec son analyse. */}
+            <p className="pw3-preuve"><span aria-hidden="true">👥</span> Plus de 5 000 ados ont déjà fait leur analyse</p>
+            {AVIS.map(({ prenom, age, texte }) => (
+              <figure key={prenom + texte.slice(0, 12)} className="pw3-avis-carte">
+                <span className="pw3-avis-initiale" aria-hidden="true">{prenom[0]}</span>
+                <div>
+                  <blockquote>« {texte} »</blockquote>
+                  <figcaption>
+                    <span>{prenom}, {age} ans</span>
+                    <span className="pw3-avis-etoiles" aria-label="5 étoiles sur 5">★★★★★</span>
+                  </figcaption>
+                </div>
+              </figure>
+            ))}
+          </section>
+        )}
 
         {/* Comme TrendSaaS : les offres reviennent en bas de page. */}
         <h2 className="pw3-choisis">Reprends là où tu en étais</h2>

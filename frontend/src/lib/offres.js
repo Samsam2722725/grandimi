@@ -14,7 +14,10 @@ export const OFFRES = [
     reduit: 14.99,
     normal: 19.99,
     facture: 'par mois',
-    avantages: ['Ton diagnostic : ce qui te freine', 'Ton plan personnalisé : exercices, posture, sommeil, alimentation', 'Tes repas du jour, adaptés à toi'],
+    // Comme Taller : pas de liste dans la carte, la carte « Voici ce que tu
+    // obtiendras » montre le contenu. Seul ce que les autres offres ajoutent
+    // est écrit (18/10/2026).
+    avantages: [],
   },
   {
     duree: 'm3',
@@ -23,7 +26,9 @@ export const OFFRES = [
     reduit: 29.99,
     normal: 39.99,
     facture: 'tous les 3 mois',
-    avantages: ['Tout le 1 mois', 'Ta taille adulte estimée'],
+    // Une seule raison de monter en gamme, affichée seule dans la carte (20/10/2026).
+    taille: true,
+    avantages: [],
     populaire: true,
   },
   {
@@ -33,7 +38,8 @@ export const OFFRES = [
     reduit: 59.99,
     normal: 79.99,
     facture: 'une seule fois',
-    avantages: ['Tout le 3 mois', 'Paie une fois, garde tout pour toujours'],
+    taille: true,
+    avantages: [],
   },
 ]
 

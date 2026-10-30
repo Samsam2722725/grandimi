@@ -75,6 +75,7 @@ function estUnRetourDePaiement(params) {
    pour ce dépôt en développement. */
 const PREVIEW_DATA = {
   age: 14.2,
+  weight_kg: 55,
   sex: 'M',
   profil: 'ado',
   current_height_cm: 165,
