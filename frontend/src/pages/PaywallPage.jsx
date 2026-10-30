@@ -441,7 +441,11 @@ function PaywallPage({ onBackHome }) {
      vide : rien à toucher, rien à faire défiler, et 83 fermetures sur 118
      arrivaient en moins de 4 s (29/10/2026). En attendant, on montre la
      forme du formulaire et une barre qui avance vite ; on note quand il
-     est vraiment là. Prêt = l'iframe Whop a pris sa vraie hauteur. */
+     est vraiment là. Prêt = une des iframes Whop, ou le bloc entier, a
+     pris sa vraie hauteur. Sur iPhone, Whop ajoute d'abord une petite
+     iframe (Apple Pay) : ne regarder que la première laissait l'attente
+     affichée pour toujours, par-dessus le formulaire (30/10/2026). Et
+     quoi qu'il arrive, l'attente s'efface au bout de 6 s. */
   const [formulairePret, setFormulairePret] = useState(false)
   const formulairePretRef = useRef(false)
   formulairePretRef.current = formulairePret
@@ -449,8 +453,10 @@ function PaywallPage({ onBackHome }) {
   useEffect(() => {
     setFormulairePret(false)
     const minuteur = setInterval(() => {
-      const iframe = blocWhopRef.current?.querySelector('iframe')
-      if (!iframe || iframe.getBoundingClientRect().height < 250) return
+      const bloc = blocWhopRef.current
+      if (!bloc) return
+      const grande = [...bloc.querySelectorAll('iframe')].some((f) => f.getBoundingClientRect().height > 150)
+      if (!grande && bloc.getBoundingClientRect().height < 460) return
       clearInterval(minuteur)
       setFormulairePret(true)
       if (feuilleOuverteRef.current && ouvertLeRef.current) {
@@ -463,7 +469,11 @@ function PaywallPage({ onBackHome }) {
     setAttenteFormulaire(false)
     if (!feuilleOuverte || formulairePret) return undefined
     const t = setTimeout(() => setAttenteFormulaire(true), 2500)
-    return () => clearTimeout(t)
+    const limite = setTimeout(() => {
+      capture('whop_attente_depassee', { etape: planChoisi })
+      setFormulairePret(true)
+    }, 6000)
+    return () => { clearTimeout(t); clearTimeout(limite) }
   }, [feuilleOuverte, formulairePret])
 
   useEffect(() => {

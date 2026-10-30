@@ -1300,7 +1300,7 @@ html:has(.pw2-feuille.is-ouverte), html:has(.pw2-feuille.is-ouverte) body { over
    champs) et une barre qui avance vite, par-dessus le formulaire qui se
    prépare dessous. Disparaît dès qu'il est là. */
 .pw2-feuille-carte { position: relative; }
-.pw2-attente { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; gap: 12px; padding: 16px 16px 0; background: #111; }
+.pw2-attente { position: absolute; inset: 0; z-index: 2; pointer-events: none; display: flex; flex-direction: column; gap: 12px; padding: 16px 16px 0; background: #111; }
 .pw2-attente-texte { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 0 2px; color: #f4efe9; font-weight: 700; font-size: 15px; }
 .pw2-attente-barre { display: block; height: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
 .pw2-attente-barre span { display: block; height: 100%; width: 92%; border-radius: inherit; background: #ff6a2b; transform-origin: left; animation: pw2-attente-barre 3.5s cubic-bezier(0.1, 0.8, 0.2, 1) both; }
