@@ -36,7 +36,7 @@
     {
       "id": "optim",
       "pause": 0,
-      "text": "avec 4 cm de croissance supplémentaire grâce à l'optimisation de sa croissance."
+      "text": "avec 3 cm de croissance supplémentaire grâce à l'optimisation de sa croissance."
     },
     {
       "id": "pct",
@@ -166,7 +166,7 @@
         "donnees": {
           "actuelle": "183 cm",
           "predite": "189 cm",
-          "optimiser": "+4 cm",
+          "optimiser": "+3 cm",
           "bulle": "187 cm",
           "courbe": [
             183,
@@ -351,7 +351,7 @@
         "donnees": {
           "actuelle": "183 cm",
           "predite": "189 cm",
-          "optimiser": "+4 cm",
+          "optimiser": "+3 cm",
           "bulle": "187 cm",
           "courbe": [
             183,
@@ -389,7 +389,7 @@
         "pops": [
           {
             "ligne": "optimiser",
-            "a": "optim:4",
+            "a": "optim:3",
             "d": 20,
             "fin": "pct",
             "dFin": 14,
