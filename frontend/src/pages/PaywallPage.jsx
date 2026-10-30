@@ -428,9 +428,6 @@ function PaywallPage({ onBackHome }) {
   const [formulairePret, setFormulairePret] = useState(false)
   const formulairePretRef = useRef(false)
   formulairePretRef.current = formulairePret
-  /* Décompte affiché pendant l'attente : dire clairement « 4 s », pour
-     qu'il attende au lieu de croire que c'est cassé (demande du 30/10). */
-  const [decompte, setDecompte] = useState(4)
   /* Sur iPhone, le formulaire Whop s'affiche puis reste quelques secondes
      sans répondre (il démarre) : on ne peut ni défiler ni toucher, et on
      croit que c'est cassé (30/10/2026). L'attente reste donc affichée au
@@ -496,15 +493,12 @@ function PaywallPage({ onBackHome }) {
   }, [whopPret, planWhop, email, emailValide])
 
   useEffect(() => {
-    // Le décompte part de ce qui reste vraiment à attendre (1 à 5 s).
-    setDecompte(Math.min(5, Math.max(1, Math.ceil((DEMARRAGE_WHOP_MS - (Date.now() - monteLeRef.current)) / 1000))))
     if (!feuilleOuverte || formulairePret) return undefined
-    const t = setInterval(() => setDecompte((n) => Math.max(0, n - 1)), 1000)
     const limite = setTimeout(() => {
       capture('whop_attente_depassee', { etape: planChoisi })
       setFormulairePret(true)
     }, 12000)
-    return () => { clearInterval(t); clearTimeout(limite) }
+    return () => clearTimeout(limite)
   }, [feuilleOuverte, formulairePret])
 
   useEffect(() => {
@@ -975,18 +969,39 @@ function PaywallPage({ onBackHome }) {
             )}
             <div className="pw2-feuille-carte">
               {!formulairePret && (
-                <div className="pw2-attente" role="status">
-                  <p className="pw2-attente-texte">
-                    <Spinner />
-                    {decompte > 0 ? <>Ton paiement s’ouvre dans <strong className="pw2-attente-chiffre">{decompte}</strong> s</> : 'Presque prêt…'}
-                  </p>
-                  <p className="pw2-attente-aide">Ne ferme pas : ensuite tu peux payer.</p>
-                  {feuilleOuverte && <span className="pw2-attente-barre" aria-hidden="true"><span /></span>}
-                  <span className="pw2-attente-bloc pw2-attente-bloc--clair" aria-hidden="true" />
-                  <span className="pw2-attente-bloc pw2-attente-bloc--clair" aria-hidden="true" />
-                  <span className="pw2-attente-ligne" aria-hidden="true" />
-                  <span className="pw2-attente-bloc" aria-hidden="true" />
-                  <span className="pw2-attente-bloc pw2-attente-bloc--haut" aria-hidden="true" />
+                /* La silhouette du formulaire Whop, sans texte (comme TrendSaaS,
+                   30/10/2026) : on voit que le paiement arrive, on attend. */
+                <div className="pw2-attente" role="status" aria-label="Chargement du paiement">
+                  <div className="pw2-sq">
+                    <div className="pw2-sq-tete">
+                      <span className="pw2-sq-b pw2-sq-logo" />
+                      <span className="pw2-sq-b pw2-sq-nom" />
+                      <span className="pw2-sq-b pw2-sq-lien" />
+                    </div>
+                    <span className="pw2-sq-b pw2-sq-prix" />
+                    <span className="pw2-sq-b pw2-sq-sous-prix" />
+                    <div className="pw2-sq-bas">
+                      <span className="pw2-sq-b pw2-sq-etiquette" />
+                      <span className="pw2-sq-b pw2-sq-champ" />
+                      <div className="pw2-sq-carte">
+                        <div className="pw2-sq-ligne">
+                          <span className="pw2-sq-b pw2-sq-rond" />
+                          <span className="pw2-sq-b pw2-sq-petit" />
+                          <span className="pw2-sq-b pw2-sq-moyen" />
+                        </div>
+                        <span className="pw2-sq-b pw2-sq-etiquette pw2-sq-large" />
+                        <div className="pw2-sq-cadre">
+                          <div className="pw2-sq-cadre-haut"><span className="pw2-sq-b pw2-sq-large" /></div>
+                          <div className="pw2-sq-cadre-bas">
+                            <div><span className="pw2-sq-b pw2-sq-petit" /></div>
+                            <div><span className="pw2-sq-b pw2-sq-mini" /></div>
+                          </div>
+                        </div>
+                        <span className="pw2-sq-b pw2-sq-etiquette pw2-sq-large" />
+                        <span className="pw2-sq-b pw2-sq-champ" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
               <div key={planWhop} ref={blocWhopRef} className="pw2-feuille-whop" />

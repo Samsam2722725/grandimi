@@ -1300,16 +1300,32 @@ html:has(.pw2-feuille.is-ouverte), html:has(.pw2-feuille.is-ouverte) body { over
    champs) et une barre qui avance vite, par-dessus le formulaire qui se
    prépare dessous. Disparaît dès qu'il est là. */
 .pw2-feuille-carte { position: relative; }
-.pw2-attente { position: absolute; inset: 0; z-index: 2; pointer-events: none; display: flex; flex-direction: column; gap: 12px; padding: 16px 16px 0; background: #111; }
-.pw2-attente-texte { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 0 2px; color: #f4efe9; font-weight: 700; font-size: 15px; }
-.pw2-attente-barre { display: block; height: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
-.pw2-attente-barre span { display: block; height: 100%; width: 92%; border-radius: inherit; background: #ff6a2b; transform-origin: left; animation: pw2-attente-barre 3.5s cubic-bezier(0.1, 0.8, 0.2, 1) both; }
-@keyframes pw2-attente-barre { from { transform: scaleX(0.08); } to { transform: scaleX(1); } }
-.pw2-attente-bloc { display: block; height: 52px; border-radius: 10px; background: linear-gradient(90deg, #1b1b1b 0%, #262626 50%, #1b1b1b 100%); background-size: 200% 100%; animation: pw2-attente-reflet 1.2s linear infinite; }
-.pw2-attente-bloc--clair { height: 56px; background-image: linear-gradient(90deg, #d9d9d9 0%, #f2f2f2 50%, #d9d9d9 100%); opacity: 0.9; }
-.pw2-attente-bloc--haut { height: 120px; }
-.pw2-attente-ligne { display: block; height: 1px; margin: 6px 0; background: rgba(255, 255, 255, 0.1); }
-@keyframes pw2-attente-reflet { from { background-position: 100% 0; } to { background-position: -100% 0; } }
-@media (prefers-reduced-motion: reduce) { .pw2-attente-bloc, .pw2-attente-barre span { animation: none; } }
-.pw2-attente-chiffre { display: inline-block; min-width: 1ch; color: #ff8a52; font-size: 18px; }
-.pw2-attente-aide { margin: -6px 0 2px; text-align: center; color: #a39d97; font-size: 13.5px; }
+.pw2-attente { position: absolute; inset: 0; z-index: 2; pointer-events: none; padding: 4px 12px 0; background: #111; }
+/* Silhouette du formulaire Whop pendant qu'il charge (même disposition :
+   en-tête, prix, e-mail, cadre de la carte). Blocs gris qui respirent. */
+.pw2-sq { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; background: #151517; overflow: hidden; }
+.pw2-sq-b { display: block; border-radius: 6px; background: #232326; animation: pw2-sq-respire 1.4s ease-in-out infinite; }
+@keyframes pw2-sq-respire { 50% { opacity: 0.55; } }
+.pw2-sq-tete { display: flex; align-items: center; gap: 10px; padding: 18px 18px 0; }
+.pw2-sq-logo { width: 28px; height: 28px; border-radius: 7px; }
+.pw2-sq-nom { width: 96px; height: 22px; }
+.pw2-sq-lien { width: 96px; height: 16px; margin-left: auto; }
+.pw2-sq-prix { width: 128px; height: 44px; margin: 22px auto 6px; border-radius: 8px; }
+.pw2-sq-sous-prix { width: 188px; height: 18px; margin: 0 auto 26px; }
+.pw2-sq-bas { padding: 20px 18px 18px; background: #101012; }
+.pw2-sq-etiquette { width: 72px; height: 20px; margin-bottom: 8px; }
+.pw2-sq-champ { height: 52px; border-radius: 10px; margin-bottom: 22px; }
+.pw2-sq-carte { padding: 18px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; background: #19191b; }
+.pw2-sq-ligne { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+.pw2-sq-rond { width: 22px; height: 22px; border-radius: 999px; }
+.pw2-sq-petit { width: 36px; height: 20px; }
+.pw2-sq-moyen { width: 52px; height: 20px; }
+.pw2-sq-mini { width: 38px; height: 14px; }
+.pw2-sq-large { width: 130px; height: 16px; }
+.pw2-sq-cadre { margin: 0 0 18px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; }
+.pw2-sq-cadre-haut { padding: 16px 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.pw2-sq-cadre-bas { display: grid; grid-template-columns: 1fr 1fr; }
+.pw2-sq-cadre-bas > div { padding: 16px 14px; }
+.pw2-sq-cadre-bas > div + div { border-left: 1px solid rgba(255, 255, 255, 0.1); }
+.pw2-sq .pw2-sq-carte .pw2-sq-champ { margin-bottom: 0; }
+@media (prefers-reduced-motion: reduce) { .pw2-sq-b { animation: none; } }
