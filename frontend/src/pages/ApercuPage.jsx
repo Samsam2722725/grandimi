@@ -58,6 +58,7 @@ function ApercuPage({ predictionData: d, onDebloquer }) {
           predictionData={d}
           verrouille
           sansBarres
+          futurCache
           apresTailles={optimiser}
           nbPoints={faibles.length}
           onDebloquer={() => debloquer('cadenas')}

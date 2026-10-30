@@ -15,3 +15,10 @@
 
 .apercu-pied { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: linear-gradient(to top, #0a0a0a 70%, rgba(10, 10, 10, 0)); }
 .apercu-pied .funnel-cta { display: block; width: 100%; max-width: 448px; margin: 0 auto; }
+
+/* La suite de la courbe, fermée (écran des résultats). */
+.taille-courbe-futur { cursor: pointer; }
+.taille-courbe-futur > rect:first-child { fill: rgba(255, 106, 43, 0.07); stroke: rgba(255, 106, 43, 0.45); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.taille-courbe-cadenas { fill: #ff8a52; }
+.taille-courbe-anse { fill: none; stroke: #ff8a52; stroke-width: 2.4; stroke-linecap: round; }
+.taille-courbe-futur-texte { fill: #ff8a52; font-size: 12px; font-weight: 800; font-family: inherit; }

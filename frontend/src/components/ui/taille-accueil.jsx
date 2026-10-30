@@ -45,7 +45,11 @@ function partAdulte(a, sexe) {
 
 // Comme chez Taller : la courbe commence avant son âge, son point est au
 // milieu, avec un trait pointillé et une bulle au-dessus.
-function Courbe({ age, actuelle, predite, sexe, verrouille }) {
+/* `futurCache` (écran des résultats avant paiement) : la courbe s'arrête à
+   aujourd'hui et la suite est un cadre fermé. Dessinée, même sans chiffres,
+   elle montrait où il plafonne : c'était la réponse qu'il venait acheter.
+   L'échelle ne prend alors que le passé, pour ne rien trahir non plus. */
+function Courbe({ age, actuelle, predite, sexe, verrouille, futurCache, onDebloquer }) {
   const fin = 21;
   const debut = Math.max(6, Math.round(2 * age - fin));
   const L = 300;
@@ -62,7 +66,7 @@ function Courbe({ age, actuelle, predite, sexe, verrouille }) {
   };
   // Quelques âges seulement, reliés par une courbe lisse (Catmull-Rom).
   const ages = [...new Set([debut, ...PART_ADULTE[sexe === 'F' ? 'F' : 'M'].map(([a]) => a).filter((a) => a > debut && a < fin), age, fin])].sort((a, b) => a - b);
-  const points = ages;
+  const points = futurCache ? ages.filter((a) => a <= age) : ages;
   const hauteurs = points.map(taille);
   const bas = Math.min(...hauteurs) - 4;
   const haut = Math.max(...hauteurs) + 4;
@@ -92,11 +96,24 @@ function Courbe({ age, actuelle, predite, sexe, verrouille }) {
       {[0.25, 0.5, 0.75].map((k) => (
         <line key={k} x1="10" x2={L - 10} y1={36 + (H - 46) * k} y2={36 + (H - 46) * k} className="taille-courbe-grille" />
       ))}
-      <path d={`${trace} L${x(fin).toFixed(1)},${H - 10} L${x(debut).toFixed(1)},${H - 10} Z`} fill="url(#taille-degrade)" />
+      <path d={`${trace} L${x(points[points.length - 1]).toFixed(1)},${H - 10} L${x(debut).toFixed(1)},${H - 10} Z`} fill="url(#taille-degrade)" />
       <path d={trace} fill="none" stroke="#ff6a2b" strokeWidth="3" strokeLinecap="round" />
       <line x1={xToi} x2={xToi} y1="24" y2={H - 10} className="taille-courbe-pointilles" />
       <rect x={xToi - 30} y="2" width="60" height="22" rx="7" fill="#ff6a2b" />
       <text x={xToi} y="17" textAnchor="middle" className="taille-courbe-bulle">{`${Math.round(actuelle)} cm`}</text>
+      {futurCache && (() => {
+        const gauche = Math.min(xToi + 14, L - 70);
+        const cx = (gauche + L - 10) / 2;
+        const cy = (30 + H - 10) / 2;
+        return (
+          <g className="taille-courbe-futur" onClick={onDebloquer} role="button" aria-label="Débloquer ta courbe jusqu’à la fin de ta croissance">
+            <rect x={gauche} y="30" width={L - 10 - gauche} height={H - 40} rx="12" />
+            <rect x={cx - 9} y={cy - 6} width="18" height="14" rx="3" className="taille-courbe-cadenas" />
+            <path d={`M${cx - 5.5},${cy - 6} v-4 a5.5,5.5 0 0 1 11,0 v4`} className="taille-courbe-anse" />
+            <text x={cx} y={cy + 26} textAnchor="middle" className="taille-courbe-futur-texte">Ta suite</text>
+          </g>
+        );
+      })()}
       <circle cx={xToi} cy={yToi} r="9" fill="#ff6a2b" opacity="0.3" />
       <circle cx={xToi} cy={yToi} r="6" fill="#0b0b0c" stroke="#f4efe9" strokeWidth="3" />
       {graduations.map((a, i) => (
@@ -108,7 +125,7 @@ function Courbe({ age, actuelle, predite, sexe, verrouille }) {
 
 /* `apresTailles` : un bloc glissé sous les deux tailles (écran des résultats
    avant paiement). `sansBarres` : retire les barres sous les chiffres. */
-export function TailleAccueil({ predictionData: d, verrouille, nbPoints, onDebloquer, onVoirCourbe, onVoirPoints, apresTailles = null, sansBarres = false }) {
+export function TailleAccueil({ predictionData: d, verrouille, nbPoints, onDebloquer, onVoirCourbe, onVoirPoints, apresTailles = null, sansBarres = false, futurCache = false }) {
   const actuelle = Number(d.current_height_cm);
   const predite = Number(d.predicted_height_cm);
   const age = Number(d.age);
@@ -156,7 +173,7 @@ export function TailleAccueil({ predictionData: d, verrouille, nbPoints, onDeblo
             </button>
           )}
         </div>
-        <Courbe age={age} actuelle={actuelle} predite={predite} sexe={d.sex} verrouille={verrouille} />
+        <Courbe age={age} actuelle={actuelle} predite={predite} sexe={d.sex} verrouille={verrouille} futurCache={futurCache} onDebloquer={onDebloquer} />
       </div>
 
       {Number.isFinite(percentile) && percentile > 0 && (
