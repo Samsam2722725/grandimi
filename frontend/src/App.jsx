@@ -408,8 +408,10 @@ function App() {
       }
     }
 
-    // Ses résultats d'abord, ce qui est bloqué sous filigrane ; puis le prix.
-    setCurrentPage('apercu');
+    /* Directement le prix. L'écran « Tes résultats » (ApercuPage) est
+       retiré le 30/10/2026 : en ligne à 6 h 58, l'ouverture du paiement
+       est tombée de 16-25 % à 5-11 %. Le code reste pour un autre essai. */
+    setCurrentPage('paywall');
   };
 
   /* Le plan ne s’ouvre qu’une fois ses horaires connus.
