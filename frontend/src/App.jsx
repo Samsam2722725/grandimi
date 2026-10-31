@@ -888,7 +888,17 @@ function App() {
       {/* Paiement cadeau confirmé : le payeur n'est pas le bénéficiaire,
           aucun compte n'est créé ici. */}
       {currentPage === 'plan-setup' && (
-        <PlanSetupPage onTermine={() => setCurrentPage('plan')} />
+        <PlanSetupPage
+          onTermine={() => {
+            // Le réglage a ajouté ses habitudes à predictionData (stockage
+            // du téléphone) : on les relit pour que le plan s'adapte tout de suite.
+            try {
+              const d = JSON.parse(localStorage.getItem('predictionData') || 'null');
+              if (d) setPredictionData(d);
+            } catch { /* le plan garde les données déjà chargées */ }
+            setCurrentPage('plan');
+          }}
+        />
       )}
 
       {currentPage === 'gift-confirmed' && (

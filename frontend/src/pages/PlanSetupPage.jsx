@@ -3,13 +3,23 @@ import { useState } from 'react'
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { FunnelButton, FunnelShell } from '@/components/ui/funnel-shell'
 import { WheelPicker } from '@/components/ui/wheel-picker'
+import {
+  OPTIONS_ASSIS,
+  OPTIONS_LAITAGES,
+  OPTIONS_POSTURE,
+  OPTIONS_PROTEINES,
+  OPTIONS_TELEPHONE,
+  TEXTES_ETAPE,
+} from '@/onboarding/content'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
 import '../styles/funnel.css'
 
 /* ============================================================
-   RÉGLAGE DU PLAN — cinq questions, une seule fois, après le paiement
+   RÉGLAGE DU PLAN — dix questions, une seule fois, après le paiement
+   (cinq à l'origine, plus les cinq habitudes sorties du questionnaire
+   le 31/10/2026, voir ETAPES)
    ============================================================
 
    POURQUOI APRÈS LE PAIEMENT, ET PAS AVANT
@@ -37,7 +47,39 @@ import '../styles/funnel.css'
    donné l'impression d'un questionnaire — c'est ce qu'on veut éviter.
    ============================================================ */
 
-const ETAPES = ['coucher', 'lever', 'petit-dej', 'sport', 'difficulte']
+/* Les cinq questions d'habitudes sorties du questionnaire gratuit le
+   31/10/2026 (téléphone, assis, posture, protéines, laitages) sont posées
+   ici. Leurs réponses vont dans `predictionData.habitudes`, là où le
+   parcours (dos, sommeil) et les repas (collation) les lisaient déjà. */
+const ETAPES = ['coucher', 'lever', 'telephone', 'assis', 'posture', 'proteines', 'laitages', 'petit-dej', 'sport', 'difficulte']
+const ETAPES_HABITUDE = {
+  telephone: OPTIONS_TELEPHONE,
+  assis: OPTIONS_ASSIS,
+  posture: OPTIONS_POSTURE,
+  proteines: OPTIONS_PROTEINES,
+  laitages: OPTIONS_LAITAGES,
+}
+
+// Les tranches du questionnaire, à partir de l'heure du coucher choisie.
+function trancheCoucher(minutes) {
+  if (minutes < 22 * 60) return 'avant-22h'
+  if (minutes < 23 * 60) return '22h-23h'
+  if (minutes < 24 * 60) return '23h-minuit'
+  return 'apres-minuit'
+}
+
+/* Les réponses vont dans les données de prédiction du téléphone : le
+   plan les relit au prochain affichage. */
+function enregistrerHabitudes(habitudes) {
+  try {
+    const donnees = JSON.parse(localStorage.getItem('predictionData') || 'null')
+    if (!donnees) return
+    donnees.habitudes = { ...(donnees.habitudes || {}), ...habitudes }
+    localStorage.setItem('predictionData', JSON.stringify(donnees))
+  } catch {
+    /* stockage indisponible : le plan garde ses valeurs par défaut */
+  }
+}
 
 /* Minutes depuis minuit, comme en base : « 30 minutes plus tôt » est
    alors une soustraction et non une analyse de chaîne. */
@@ -101,6 +143,7 @@ function PlanSetupPage({ onTermine }) {
   const [petitDej, setPetitDej] = useState('')
   const [joursSport, setJoursSport] = useState([])
   const [difficulte, setDifficulte] = useState('')
+  const [habitudes, setHabitudes] = useState({})
   const [envoi, setEnvoi] = useState(false)
   const [erreur, setErreur] = useState(null)
 
@@ -120,6 +163,8 @@ function PlanSetupPage({ onTermine }) {
   const envoyer = async () => {
     setErreur(null)
     setEnvoi(true)
+    // Avant l'appel au serveur : même s'il échoue, le plan s'adapte.
+    enregistrerHabitudes({ ...habitudes, coucher: trancheCoucher(coucher) })
     try {
       await apiClient.savePreferences({
         // Le sélecteur du coucher va au-delà de minuit (jusqu'à 2 h).
@@ -144,12 +189,30 @@ function PlanSetupPage({ onTermine }) {
   }
 
   const peutAvancer = () => {
+    if (ETAPES_HABITUDE[etape]) return Boolean(habitudes[etape])
     if (etape === 'petit-dej') return Boolean(petitDej)
     if (etape === 'difficulte') return Boolean(difficulte)
     return true // les heures ont une valeur par défaut, le sport peut être vide
   }
 
   const contenu = () => {
+    if (ETAPES_HABITUDE[etape]) {
+      return (
+        <div className="funnel-choices" role="radiogroup" aria-label={TEXTES_ETAPE[etape]?.titre}>
+          {ETAPES_HABITUDE[etape].map((option) => (
+            <ChoiceCard
+              key={option.valeur}
+              title={option.label}
+              selected={habitudes[etape] === option.valeur}
+              onSelect={() => {
+                setHabitudes((p) => ({ ...p, [etape]: option.valeur }))
+                avancer()
+              }}
+            />
+          ))}
+        </div>
+      )
+    }
     switch (etape) {
       case 'coucher':
         return (
@@ -235,7 +298,7 @@ function PlanSetupPage({ onTermine }) {
     }
   }
 
-  const texte = TEXTES[etape] || {}
+  const texte = TEXTES[etape] || (TEXTES_ETAPE[etape] && { titre: TEXTES_ETAPE[etape].titre, sous: TEXTES_ETAPE[etape].sousTitre }) || {}
 
   return (
     <FunnelShell

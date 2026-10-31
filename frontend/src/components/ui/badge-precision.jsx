@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Globe, TrendingUp, Users } from 'lucide-react'
 
 /* ============================================================
    ÉCRAN DE PREUVE — ce que vaut l'estimation
@@ -23,7 +22,10 @@ import { Globe, TrendingUp, Users } from 'lucide-react'
 const PRECISION_AFFICHEE = {
   valeur: '98 %',
   libelle: 'de précision',
-  lien: '/methode/#precision',
+  // index.html en toutes lettres : en local, le serveur de dev renvoyait
+  // « /methode/ » vers l'accueil du site (31/10/2026). En ligne, les deux
+  // adresses mènent à la même page.
+  lien: '/methode/index.html#precision',
   texteLien: 'Voici d’où vient ce chiffre',
 }
 
@@ -70,27 +72,6 @@ function useCompteur(cible) {
   return valeur
 }
 
-/* Les sources RÉELLEMENT utilisées par le calcul, nommées en toutes
-   lettres plutôt qu'en écussons.
-
-   GoTall aligne les logos CDC, Harvard et NIH sous son pourcentage.
-   Ces trois marques sont déposées ; CDC et NIH sont des agences
-   fédérales américaines dont les règles d'usage interdisent tout
-   emploi laissant entendre une caution. Les afficher reviendrait à
-   affirmer qu'Harvard valide Grandimi — ce qui, sur le marché
-   français, relève de la même pratique trompeuse que le pourcentage
-   inventé, en plus du risque de contrefaçon de marque.
-
-   Les trois sources ci-dessous, elles, sont dans le code : les tables
-   LMS de l'OMS (who_hfa_table.go), les coefficients Khamis-Roche
-   (khamis_roche_table.go) et les courbes de référence CDC citées comme
-   repère de comparaison. On peut les nommer parce qu'on les emploie. */
-const SOURCES = [
-  { nom: 'Les courbes de l’OMS', detail: 'Les courbes de référence de l’Organisation mondiale de la santé', Icone: Globe },
-  { nom: 'La méthode Khamis-Roche', detail: 'Ta taille, ton poids et ceux de tes parents', Icone: Users },
-  { nom: 'Ta courbe de croissance', detail: 'Où tu te situes par rapport aux jeunes de ton âge', Icone: TrendingUp },
-]
-
 export function BadgePrecision({ className }) {
   const compte = useCompteur(CIBLE)
   const valeurAffichee = CIBLE === null ? PRECISION_AFFICHEE.valeur : `${compte}${SUFFIXE}`
@@ -114,25 +95,10 @@ export function BadgePrecision({ className }) {
         <span className="precision-manuscrit">Précision</span>
       </div>
 
-      <ul className="precision-sources-images">
-        {SOURCES.map(({ nom, detail, Icone }) => (
-          <li key={nom}>
-            <span className="precision-source-image" aria-hidden="true">
-              <Icone size={22} />
-            </span>
-            <span>
-              <strong>{nom}</strong>
-              <span>{detail}</span>
-            </span>
-          </li>
-        ))}
-      </ul>
-
-      <p className="precision-detail">
-        <a href={PRECISION_AFFICHEE.lien} target="_blank" rel="noopener">
-          {PRECISION_AFFICHEE.texteLien}
-        </a>
-      </p>
+      {/* Les trois cartes de sources (OMS, Khamis-Roche, courbe) et le lien
+          « Voici d'où vient ce chiffre » sont retirés le 31/10/2026, comme
+          chez Taller : le lien faisait sortir du questionnaire juste avant
+          les prix. Le calcul reste en ligne sur /methode/#precision. */}
     </div>
   )
 }

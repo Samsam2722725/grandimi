@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { User, Users } from 'lucide-react'
+import { BarChart3, Check, Dna, Hourglass, ListChecks, Mail, ShieldCheck, User, Users } from 'lucide-react'
 
 import { FunnelShell, FunnelButton } from '@/components/ui/funnel-shell'
 import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
@@ -43,6 +43,11 @@ import {
   MoletteTailleAvecInconnu,
   MolettePoidsKg,
   MolettePointure,
+  MoletteTailleReve,
+  tailleReveParDefaut,
+  pointureParDefaut,
+  MoletteTaillePoids,
+  MoletteParents,
   MoletteDateNaissance,
   MoletteSommeil,
   EcranModelePrediction,
@@ -59,10 +64,11 @@ import {
   EcranEtudesPubliees,
   EcranAvisUtilisateurs,
   EcranPlusQueGenes,
+  EcranCitationGenetique,
+  EcranDecouvrirPotentiel,
   EcranBonneNouvelle,
   EcranProfilCroissance,
   verdictAge,
-  verdictSommeil,
   OPTIONS_COUCHER,
   OPTIONS_TELEPHONE,
   OPTIONS_ASSIS,
@@ -123,7 +129,8 @@ function reponsesInitiales() {
     muscles: null,
     voix: null,
     croissanceLente: null,
-    tailleIdeale: 175,
+    // Vide tant que la question n'est pas posée : pas de faux objectif.
+    tailleIdeale: null,
   }
 }
 
@@ -159,12 +166,14 @@ function basculerDansListe(liste, valeur, exclusif) {
 
 const EMAIL_VALIDE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+/* Les mots de Taller (31/10/2026), sauf « Scan des données ADN » : on ne
+   lit aucun ADN, on part de la taille des parents. */
 const ETAPES_ANALYSE = [
-  { label: 'Ta taille adulte estimée', seuil: 20 },
-  { label: 'Ton sommeil', seuil: 40 },
-  { label: 'Ton sport et ta posture', seuil: 60 },
-  { label: 'Ton alimentation', seuil: 80 },
-  { label: 'Ton plan personnalisé', seuil: 100 },
+  { label: 'Analyse des facteurs', seuil: 20, Icone: BarChart3 },
+  { label: 'Analyse de ta génétique', seuil: 40, Icone: Dna },
+  { label: 'Fenêtre de croissance', seuil: 60, Icone: Hourglass },
+  { label: 'Construction du plan', seuil: 80, Icone: ListChecks },
+  { label: 'Création de routine', seuil: 100, Icone: ShieldCheck },
 ]
 
 const DUREE_MONTEE_MS = 11000
@@ -224,38 +233,62 @@ function useProgressionAnimee(actif, pretALivrer) {
   return [pourcentage, complet]
 }
 
-// L'anneau et les étapes tournent en continu derrière l'écran ; `children`
-// (le formulaire e-mail, puis le bouton d'erreur/retry) s'affiche par-dessus.
-function ProgressionAnalyse({ titre, pourcentage, steps, children }) {
+/* « Création de ton plan… », façon Taller (31/10/2026) : un disque orange
+   lumineux avec une silhouette qui grandit au fil de la progression, une
+   barre « progression » avec le pourcentage, puis les étapes avec leur
+   icône, cochées une à une. `children` (le formulaire e-mail, puis le
+   bouton d'erreur/retry) s'affiche par-dessus. */
+function ProgressionAnalyse({ titre, sousTitre, pourcentage, steps, children }) {
   const indexCourant = steps.findIndex((s) => pourcentage < s.seuil)
+  const p = Math.min(100, Math.max(0, pourcentage))
 
   return (
-    <div className="interstitial plan-creation">
-      <h1 className="interstitial-titre">{titre}</h1>
+    <div className="interstitial plan-creation creation">
+      <div className="creation-tete">
+        <h1 className="creation-titre">{titre}</h1>
+        {sousTitre && <p className="creation-sous-titre">{sousTitre}</p>}
+      </div>
 
-      <div className="plan-progress">
-        <div
-          className="progress-circle"
-          style={{ '--progression': `${pourcentage * 3.6}deg` }}
-        >
-          <div className="progress-value">{Math.round(pourcentage)}%</div>
+      <div className="creation-disque" aria-hidden="true">
+        <span className="creation-onde" />
+        <span className="creation-onde creation-onde--2" />
+        <div className="creation-coeur">
+          <svg viewBox="0 0 64 128" className="creation-silhouette" style={{ '--grandit': 0.8 + (p / 100) * 0.2 }}>
+            <circle cx="32" cy="13" r="11" />
+            <rect x="17" y="28" width="30" height="48" rx="9" />
+            <rect x="6" y="30" width="9" height="42" rx="4.5" />
+            <rect x="49" y="30" width="9" height="42" rx="4.5" />
+            <rect x="19" y="68" width="12" height="58" rx="6" />
+            <rect x="33" y="68" width="12" height="58" rx="6" />
+          </svg>
         </div>
       </div>
 
-      <div className="plan-steps">
-        {steps.map((step, idx) => {
-          const fait = pourcentage >= step.seuil
+      <div className="creation-barre" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(p)} aria-label="Progression">
+        <div className="creation-barre-ligne">
+          <span>progression</span>
+          <strong>{Math.round(p)}%</strong>
+        </div>
+        <div className="creation-barre-piste">
+          <span style={{ width: `${p}%` }} />
+        </div>
+      </div>
+
+      <ul className="creation-etapes">
+        {steps.map(({ label, seuil, Icone }, idx) => {
+          const fait = p >= seuil
+          const enCours = idx === indexCourant
           return (
-            <div
-              key={step.label}
-              className={`plan-step ${fait ? 'done' : ''} ${idx === indexCourant ? 'current' : ''}`}
-            >
-              <div className="step-check">{fait ? '✓' : ''}</div>
-              <span className="step-label">{step.label}</span>
-            </div>
+            <li key={label} className={`creation-etape${fait ? ' is-fait' : ''}${enCours ? ' is-en-cours' : ''}`}>
+              <span className="creation-etape-icone" aria-hidden="true"><Icone size={18} /></span>
+              <span className="creation-etape-label">{label}</span>
+              <span className="creation-etape-etat" aria-hidden="true">
+                {fait ? <Check size={14} strokeWidth={3} /> : enCours ? <span className="creation-spinner" /> : null}
+              </span>
+            </li>
           )
         })}
-      </div>
+      </ul>
 
       {children}
     </div>
@@ -385,6 +418,15 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     setReponses((p) => {
       if (etape === 'pere' && p.pere == null && !p.pereInconnu) return { ...p, pere: TAILLE_PERE_INCONNUE_CM }
       if (etape === 'mere' && p.mere == null && !p.mereInconnu) return { ...p, mere: TAILLE_MERE_INCONNUE_CM }
+      if (etape === 'taille-ideale' && p.tailleIdeale == null) return { ...p, tailleIdeale: tailleReveParDefaut(p.taille) }
+      if (etape === 'pointure' && p.pointure == null) return { ...p, pointure: pointureParDefaut(p.sexe) }
+      if (etape === 'parents') {
+        return {
+          ...p,
+          pere: p.pere == null && !p.pereInconnu ? TAILLE_PERE_INCONNUE_CM : p.pere,
+          mere: p.mere == null && !p.mereInconnu ? TAILLE_MERE_INCONNUE_CM : p.mere,
+        }
+      }
       return p
     })
     setIndex((precedent) => Math.min(etapes.length - 1, precedent + 1))
@@ -514,6 +556,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         return reponses.taille > 0
       case 'poids':
         return reponses.poids > 0
+      case 'taille-poids':
+        return reponses.taille > 0 && reponses.poids > 0
       case 'exercice-freq':
         return reponses.exerciceFreq != null
       case 'sommeil':
@@ -537,7 +581,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
       case 'regles':
         return true
       case 'taille-ideale':
-        return reponses.tailleIdeale > 0
+        return true
       case 'coucher':
       case 'telephone':
       case 'assis':
@@ -583,8 +627,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             valeur={reponses.sexe}
             onChoisir={(v) => choisirEtAvancer('sexe', v)}
             options={[
-              { valeur: 'M', label: 'Garçon', hint: 'Croissance souvent jusqu’à 18-21 ans' },
-              { valeur: 'F', label: 'Fille', hint: 'Croissance souvent jusqu’à 15-17 ans' },
+              { valeur: 'M', label: 'Garçon' },
+              { valeur: 'F', label: 'Fille' },
             ]}
           />
         )
@@ -620,14 +664,34 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             onChangeUnite={(u) => setUnites((p) => ({ ...p, poids: u }))}
           />
         )
+      case 'taille-poids':
+        return (
+          <MoletteTaillePoids
+            tailleCm={reponses.taille}
+            poidsKg={reponses.poids}
+            onTaille={(v) => definir('taille', v)}
+            onPoids={(v) => definir('poids', v)}
+          />
+        )
+      case 'parents':
+        return (
+          <MoletteParents
+            pere={reponses.pere}
+            mere={reponses.mere}
+            pereInconnu={reponses.pere == null && Boolean(reponses.pereInconnu)}
+            mereInconnu={reponses.mere == null && Boolean(reponses.mereInconnu)}
+            onPere={(v) => { definir('pereInconnu', false); definir('pere', v) }}
+            onMere={(v) => { definir('mereInconnu', false); definir('mere', v) }}
+            onPereInconnu={() => { definir('pereInconnu', true); definir('pere', null) }}
+            onMereInconnu={() => { definir('mereInconnu', true); definir('mere', null) }}
+          />
+        )
       case 'pointure':
         return (
           <MolettePointure
             valeurEu={reponses.pointure}
             onChange={(v) => definir('pointure', v)}
-            onInconnu={() => choisirEtAvancer('pointure', null)}
-            unite={unites.pointure}
-            onChangeUnite={(u) => setUnites((p) => ({ ...p, pointure: u }))}
+            sexe={reponses.sexe}
           />
         )
       case 'sports':
@@ -652,7 +716,6 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         return (
           <>
             <MoletteSommeil valeur={reponses.sommeil} onChange={(v) => definir('sommeil', v)} />
-            <p className="verdict-age">{verdictSommeil(reponses.sommeil)}</p>
           </>
         )
 
@@ -877,13 +940,9 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         return <EcranAvisUtilisateurs />
       case 'taille-ideale':
         return (
-          <MoletteTailleCm
-            valeurCm={reponses.tailleIdeale}
+          <MoletteTailleReve
+            valeurCm={reponses.tailleIdeale ?? tailleReveParDefaut(reponses.taille)}
             onChange={(v) => definir('tailleIdeale', v)}
-            unite={unites.tailleIdeale}
-            onChangeUnite={(u) => setUnites((p) => ({ ...p, tailleIdeale: u }))}
-            min={150}
-            max={220}
           />
         )
       default:
@@ -897,6 +956,14 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     return <EcranPlusQueGenes onContinue={avancer} />
   }
 
+  if (etape === 'citation-genetique') {
+    return <EcranCitationGenetique key={etape} onContinue={avancer} />
+  }
+
+  if (etape === 'decouvrir-potentiel') {
+    return <EcranDecouvrirPotentiel onContinue={avancer} />
+  }
+
   if (etape === 'resultats-la') {
     // L'anneau tourne dès l'affichage de l'écran (cf. useProgressionAnimee
     // plus haut) ; le formulaire e-mail s'affiche par-dessus, en overlay,
@@ -907,7 +974,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     // PaywallPage.jsx qui relit `localStorage.userEmail`).
     const emailPlausible = EMAIL_VALIDE.test(email.trim())
     return (
-      <ProgressionAnalyse titre={`On assemble ton plan à partir de tes ${etapes.filter((e) => TYPE_ETAPE[e] === 'question').length} réponses`} pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
+      <ProgressionAnalyse titre="Création de ton plan…" pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
         {!animationTerminee ? null : !emailEnvoye ? (
           <div className="resultats-overlay">
             {/* Un vrai formulaire : la touche « OK » du clavier du téléphone
@@ -921,9 +988,12 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
                 lancerAnalyse()
               }}
             >
-              <h2 className="resultats-overlay-titre">{texte.titre}</h2>
+              <span className="pret-badge" aria-hidden="true"><Check size={30} strokeWidth={3} /></span>
+              <h2 className="resultats-overlay-titre">Ton plan est prêt</h2>
               <p className="resultats-overlay-text">{texte.sousTitre}</p>
 
+              <label className="pret-champ">
+              <Mail size={18} aria-hidden="true" />
               <input
                 type="email"
                 inputMode="email"
@@ -936,7 +1006,9 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
                 placeholder="ton@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                aria-label="Ton e-mail"
               />
+              </label>
               <p className="funnel-help">C'est ce qui te permet de retrouver ton compte et ton plan.</p>
               {/* Les réponses sur la puberté sont des données de santé de
                   mineurs : on informe au moment où l'adresse est donnée. */}

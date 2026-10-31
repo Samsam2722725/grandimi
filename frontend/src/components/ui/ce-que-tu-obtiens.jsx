@@ -161,6 +161,12 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
   return (
     <section className="cqo" aria-label="Ce que tu obtiendras">
       <p className="cqo-intro">Ce que tu obtiendras :</p>
+      {/* Ce qu'on achète, en une phrase, comme la ligne de Taller
+          (31/10/2026). Ni « communauté » (on n'en a pas) ni « prédiction »
+          (seulement dans 3 mois et À vie). */}
+      <p className="cqo-acces">
+        Routine quotidienne, exercices et repas pour optimiser ta croissance, <em>adaptés à toi</em>.
+      </p>
       <ul
         ref={liste}
         className="cqo-liste"

@@ -15,7 +15,6 @@ import {
 } from 'lucide-react'
 
 import { ChoiceCard } from '@/components/ui/choice-card'
-import { SegmentedControl } from '@/components/ui/segmented-control'
 import { WheelPicker } from '@/components/ui/wheel-picker'
 import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ReseauNeurones } from '@/components/ui/reseau-neurones'
@@ -25,15 +24,7 @@ import { TailleFinaleChart } from '@/components/ui/taille-finale-chart'
 import { JaugePotentiel } from '@/components/ui/jauge-potentiel'
 import { Lecons, SuiviSemaines, TelephoneRoutine } from '@/components/ui/resultats-visuels'
 import { ActionsDuJour } from '@/components/ui/actions-du-jour'
-import {
-  cmVersPouceTotal,
-  euVersUs,
-  formatTailleImperiale,
-  kgVersLivres,
-  livresVersKg,
-  pouceTotalVersCm,
-  usVersEu,
-} from './payload'
+import { TAILLE_MERE_INCONNUE_CM, TAILLE_PERE_INCONNUE_CM } from './payload'
 
 /* ============================================================
    ORDRE DES 38 ÉCRANS
@@ -43,30 +34,35 @@ export const ORDRE_ETAPES = [
   'sexe',
   'age',
   'bonne-nouvelle',
-  'taille',
-  'taille-ideale',
-  'poids',
+  'taille-poids',
   // Famille
-  'pere',
-  'mere',
+  'parents',
+  'pointure',
+  // Courbe « Votre taille finale », comme Taller après la pointure (31/10/2026).
+  'resultats-long-terme',
+  // Puberté : l'ordre de Taller (31/10/2026), des questions qui servent à
+  // la prédiction. L'acné est demandée comme chez Taller, même si le calcul
+  // ne s'en sert pas.
   'vitesse-croissance',
   'regles',
   'voix',
-  // Sommeil
-  'sommeil',
-  'coucher',
-  'telephone',
-  // Sport
+  'pilosite-visage',
+  'pilosite-aisselles',
+  'acne',
+  // Habitudes
   'exercice-freq',
-  'sports',
-  'assis',
-  'posture',
-  // Alimentation
-  'proteines',
-  'laitages',
-  'verite-brutale',
+  'sommeil',
+  // Objectif, puis les écrans qui préparent le plan. Les questions
+  // d'habitudes (coucher, téléphone, sports, assis, posture, protéines,
+  // laitages) et « Ton profil de croissance » sont retirées du parcours le
+  // 31/10/2026 ; leurs écrans restent dans le code.
+  'taille-ideale',
   'pourquoi',
-  'profil-croissance',
+  'precision',
+  'verite-brutale',
+  'plus-que-genes',
+  'citation-genetique',
+  'decouvrir-potentiel',
   'resultats-la',
 ]
 
@@ -108,6 +104,8 @@ export const TYPE_ETAPE = {
   'etudes-publiees': 'affichage',
   'avis-utilisateurs': 'affichage',
   'taille-ideale': 'question',
+  'taille-poids': 'question',
+  parents: 'question',
   'bonne-nouvelle': 'affichage',
   genetique: 'affichage',
   coucher: 'question',
@@ -119,6 +117,8 @@ export const TYPE_ETAPE = {
   pourquoi: 'question',
   'profil-croissance': 'affichage',
   'plus-que-genes': 'interstitielle',
+  'citation-genetique': 'interstitielle',
+  'decouvrir-potentiel': 'interstitielle',
   'resultats-la': 'interstitielle',
 }
 
@@ -135,12 +135,12 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Tu peux choisir plusieurs',
   },
   sexe: {
-    titre: 'Tu es un garçon ou une fille ?',
-    sousTitre: 'Garçons et filles ne grandissent pas au même rythme',
+    titre: 'Sélectionne ton sexe',
+    sousTitre: 'Ceci sera utilisé pour prédire ton potentiel de taille et créer ton plan personnalisé.',
   },
   age: {
     titre: 'Quand es-tu né(e) ?',
-    sousTitre: 'Ton âge dit combien de temps de croissance il te reste',
+    sousTitre: 'Ceci sera utilisé pour prédire ton potentiel de taille et créer ton plan personnalisé.',
   },
   taille: {
     titre: 'Quelle est ta taille ?',
@@ -150,9 +150,19 @@ export const TEXTES_ETAPE = {
     titre: 'Quel est ton poids ?',
     sousTitre: 'Pour calculer ce que tu dois manger pour grandir',
   },
+  // Taille et poids sur un seul écran, puis les deux parents : comme
+  // Taller, deux molettes côte à côte (31/10/2026).
+  'taille-poids': {
+    titre: 'Taille et poids',
+    sousTitre: 'Ceci sera utilisé pour prédire ton potentiel de taille et créer ton plan personnalisé.',
+  },
+  parents: {
+    titre: 'Taille des parents',
+    sousTitre: 'Ceci sera utilisé pour prédire ton potentiel de taille et créer ton plan personnalisé.',
+  },
   pointure: {
-    titre: 'Quelle est ta pointure ?',
-    sousTitre: 'La taille des pieds montre où tu en es dans ta croissance',
+    titre: 'Pointure',
+    sousTitre: 'Ceci sera utilisé pour prédire ton potentiel de taille et créer ton plan personnalisé.',
   },
   sports: {
     titre: 'Quels sports pratiques-tu ?',
@@ -272,8 +282,8 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Ce que les utilisateurs obtiennent',
   },
   'taille-ideale': {
-    titre: 'Quelle est ta taille idéale ?',
-    sousTitre: 'Ton objectif. On va voir s’il est à ta portée',
+    titre: 'Quelle est ta taille de rêve ?',
+    sousTitre: 'En fonction de tes données, nous calculerons la probabilité d’atteindre cette taille.',
   },
   'resultats-la': {
     titre: 'Ton plan est prêt ✓',
@@ -380,48 +390,48 @@ export const OPTIONS_SPORTS = [
 ]
 
 export const OPTIONS_EXERCICE_FREQ = [
-  { valeur: '0-2', label: '0-2 heures', hint: 'Point faible' },
-  { valeur: '3-5', label: '3-5 heures', hint: 'À améliorer' },
-  { valeur: '6+', label: '6+ heures', hint: 'Point fort' },
+  { valeur: '0-2', label: '0-2 heures' },
+  { valeur: '3-5', label: '3-5 heures' },
+  { valeur: '6+', label: '6+ heures' },
 ]
 
 export const OPTIONS_COUCHER = [
-  { valeur: 'avant-22h', label: 'Avant 22 h', hint: 'Point fort' },
-  { valeur: '22h-23h', label: 'Entre 22 h et 23 h', hint: 'À améliorer' },
-  { valeur: '23h-minuit', label: 'Entre 23 h et minuit', hint: 'Point faible' },
-  { valeur: 'apres-minuit', label: 'Après minuit', hint: 'Point faible' },
+  { valeur: 'avant-22h', label: 'Avant 22 h' },
+  { valeur: '22h-23h', label: 'Entre 22 h et 23 h' },
+  { valeur: '23h-minuit', label: 'Entre 23 h et minuit' },
+  { valeur: 'apres-minuit', label: 'Après minuit' },
 ]
 
 export const OPTIONS_TELEPHONE = [
-  { valeur: 'jamais', label: 'Jamais', hint: 'Point fort' },
-  { valeur: 'parfois', label: 'Parfois', hint: 'À améliorer' },
-  { valeur: 'tous-les-soirs', label: 'Tous les soirs', hint: 'Point faible' },
+  { valeur: 'jamais', label: 'Jamais' },
+  { valeur: 'parfois', label: 'Parfois' },
+  { valeur: 'tous-les-soirs', label: 'Tous les soirs' },
 ]
 
 export const OPTIONS_ASSIS = [
-  { valeur: 'moins-4h', label: 'Moins de 4 heures', hint: 'Point fort' },
-  { valeur: '4h-8h', label: 'Entre 4 et 8 heures', hint: 'À améliorer' },
-  { valeur: 'plus-8h', label: 'Plus de 8 heures', hint: 'Point faible' },
+  { valeur: 'moins-4h', label: 'Moins de 4 heures' },
+  { valeur: '4h-8h', label: 'Entre 4 et 8 heures' },
+  { valeur: 'plus-8h', label: 'Plus de 8 heures' },
 ]
 
 export const OPTIONS_POSTURE = [
-  { valeur: 'droit', label: 'Bien droit', hint: 'Point fort' },
-  { valeur: 'un-peu-voute', label: 'Un peu voûté', hint: 'À améliorer' },
-  { valeur: 'voute', label: 'Souvent voûté', hint: 'Point faible' },
+  { valeur: 'droit', label: 'Bien droit' },
+  { valeur: 'un-peu-voute', label: 'Un peu voûté' },
+  { valeur: 'voute', label: 'Souvent voûté' },
   { valeur: 'ne-sais-pas', label: 'Je ne sais pas', hint: 'On le vérifie dans ton analyse' },
 ]
 
 export const OPTIONS_PROTEINES = [
-  { valeur: 'chaque-repas', label: 'Oui, à chaque repas', hint: 'Point fort' },
-  { valeur: 'un-repas', label: 'À un repas par jour', hint: 'À améliorer' },
-  { valeur: 'rarement', label: 'Rarement', hint: 'Point faible' },
+  { valeur: 'chaque-repas', label: 'Oui, à chaque repas' },
+  { valeur: 'un-repas', label: 'À un repas par jour' },
+  { valeur: 'rarement', label: 'Rarement' },
   { valeur: 'ne-sais-pas', label: 'Je ne sais pas', hint: 'On le vérifie dans ton analyse' },
 ]
 
 export const OPTIONS_LAITAGES = [
-  { valeur: '3-plus', label: '3 ou plus', hint: 'Point fort' },
-  { valeur: '1-2', label: '1 ou 2', hint: 'À améliorer' },
-  { valeur: 'aucun', label: 'Aucun', hint: 'Point faible' },
+  { valeur: '3-plus', label: '3 ou plus' },
+  { valeur: '1-2', label: '1 ou 2' },
+  { valeur: 'aucun', label: 'Aucun' },
 ]
 
 export const OPTIONS_POURQUOI = [
@@ -463,13 +473,12 @@ const ETAPES_GARCON = new Set(['pilosite-visage', 'voix', 'epaules', 'muscles'])
 /* Les quatre chapitres du parcours, affichés en tête d'écran (segments +
    libellé). Tout ce qui n'est ni « toi », ni « famille », ni « puberté »
    appartient au dernier chapitre, celui qui présente le plan. */
-export const CHAPITRES = ['Toi', 'Famille', 'Sommeil', 'Sport', 'Alimentation']
+export const CHAPITRES = ['Toi', 'Famille', 'Puberté', 'Habitudes', 'Objectif']
 const CHAPITRE_DE = {
-  sexe: 0, age: 0, 'bonne-nouvelle': 0, taille: 0, 'taille-ideale': 0, poids: 0,
-  pere: 1, mere: 1, genetique: 1, 'vitesse-croissance': 1, regles: 1, voix: 1,
-  sommeil: 2, coucher: 2, telephone: 2,
-  'exercice-freq': 3, sports: 3, assis: 3, posture: 3,
-  proteines: 4, laitages: 4, 'verite-brutale': 4, pourquoi: 4, 'profil-croissance': 4,
+  sexe: 0, age: 0, 'bonne-nouvelle': 0, 'taille-poids': 0,
+  parents: 1, pointure: 1, 'resultats-long-terme': 1, genetique: 1,
+  'vitesse-croissance': 2, regles: 2, voix: 2, 'pilosite-visage': 2, 'pilosite-aisselles': 2, acne: 2,
+  'exercice-freq': 3, sommeil: 3,
 }
 
 export function chapitreDe(etape) {
@@ -479,7 +488,7 @@ export function chapitreDe(etape) {
 export function etapesPour(reponses) {
   const fille = reponses?.sexe === 'F'
   return ORDRE_ETAPES.filter((etape) => {
-    if (etape === 'voix') return !fille
+    if (ETAPES_GARCON.has(etape)) return !fille
     if (etape === 'regles') return fille && reponses.age >= 15
     if (etape === 'bonne-nouvelle') return !fille && reponses.age >= 16
     return true
@@ -531,9 +540,9 @@ export const OPTIONS_MUSCLES = [
 ]
 
 export const OPTIONS_VOIX = [
-  { valeur: 'non', label: 'Pas de changement', hint: 'Ta grande poussée est sans doute devant toi' },
-  { valeur: 'un-peu', label: 'Un peu plus grave', hint: 'Tu es en pleine croissance' },
-  { valeur: 'complet', label: 'Complètement plus grave', hint: 'La dernière ligne droite : chaque centimètre compte' },
+  { valeur: 'non', label: 'Pas de changement' },
+  { valeur: 'un-peu', label: 'Un peu plus grave' },
+  { valeur: 'complet', label: 'Complètement plus grave' },
   { valeur: 'ne-sais-pas', label: 'Je ne sais pas', hint: 'Pas grave, on s’en sert pour affiner' },
 ]
 
@@ -546,11 +555,11 @@ export const OPTIONS_CROISSANCE_LENTE = [
 ]
 
 export const OPTIONS_VITESSE_CROISSANCE = [
-  { valeur: "moins-2cm", label: "Moins de 2 cm", hint: "Ça ralentit : chaque cm compte" },
-  { valeur: "2-5cm", label: "2 à 5 cm", hint: "Tu grandis encore" },
-  { valeur: "6-9cm", label: "6 à 9 cm", hint: "Tu es en pleine poussée" },
-  { valeur: "plus-10cm", label: "10 cm ou plus", hint: "Grosse poussée : c’est le moment" },
-  { valeur: "ne-sais-pas", label: "Je ne sais pas", hint: "On estime avec ton âge" },
+  { valeur: "moins-2cm", label: "Moins de 2 cm" },
+  { valeur: "2-5cm", label: "2 à 5 cm" },
+  { valeur: "6-9cm", label: "6 à 9 cm" },
+  { valeur: "plus-10cm", label: "10 cm ou plus" },
+  { valeur: "ne-sais-pas", label: "Je ne sais pas" },
 ]
 
 /* ============================================================
@@ -600,62 +609,38 @@ export function ListeChoixMultiple({ options, valeurs, onBasculer, label, exclus
 }
 
 /**
- * Molette de mesure avec bascule d'unité. La valeur stockée reste
- * toujours métrique (cm ou kg) ; seule la molette affichée change de
- * borne et de format selon l'unité choisie — jamais la donnée persistée.
+ * Molettes de mesure, en unités françaises seulement : cm, kg, pointure
+ * EU. Les bascules ft/in, lbs et US sont retirées le 31/10/2026 (« on
+ * n'est qu'en France »). Les props `unite` / `onChangeUnite` restent
+ * acceptées et ignorées, pour ne pas toucher aux appels.
  */
-export function MoletteTailleCm({ valeurCm, onChange, unite, onChangeUnite, min = 120, max = 220 }) {
+const formatCm = (v) => `${v % 1 === 0 ? v : v.toFixed(1).replace('.', ',')} cm`
+const formatKg = (v) => `${v % 1 === 0 ? v : v.toFixed(1).replace('.', ',')} kg`
+
+export function MoletteTailleCm({ valeurCm, onChange, min = 120, max = 220 }) {
   return (
     <div className="onb-mesure">
-      <SegmentedControl
-        label="Unité"
-        value={unite}
-        onChange={onChangeUnite}
-        options={[
-          { value: 'cm', label: 'cm' },
-          { value: 'ft', label: 'ft/in' },
-        ]}
+      <WheelPicker
+        label="Taille en centimètres"
+        value={valeurCm}
+        onChange={onChange}
+        min={min}
+        max={max}
+        step={0.5}
+        // Au demi-centimètre : « 172,30 cm » demandait une précision que
+        // personne n'a sous la toise et faisait hésiter.
+        format={formatCm}
       />
-      {unite === 'cm' ? (
-        <WheelPicker
-          label="Taille en centimètres"
-          value={valeurCm}
-          onChange={onChange}
-          min={min}
-          max={max}
-          step={0.5}
-          // Au demi-centimètre : « 172,30 cm » demandait une précision que
-          // personne n'a sous la toise et faisait hésiter.
-          format={(v) => `${v % 1 === 0 ? v : v.toFixed(1).replace('.', ',')} cm`}
-        />
-      ) : (
-        <WheelPicker
-          label="Taille en pieds et pouces"
-          value={cmVersPouceTotal(valeurCm)}
-          onChange={(pouceTotal) => onChange(pouceTotalVersCm(pouceTotal))}
-          min={Math.round(min / 2.54)}
-          max={Math.round(max / 2.54)}
-          step={1}
-          format={(v) => formatTailleImperiale(v)}
-        />
-      )}
     </div>
   )
 }
 
-export function MoletteTailleAvecInconnu({ valeurCm, onChange, onInconnu, unite, onChangeUnite, min, max, inconnuDefaut }) {
+export function MoletteTailleAvecInconnu({ valeurCm, onChange, onInconnu, min, max, inconnuDefaut }) {
   const [aChoisi, setAChoisi] = useState(false)
   const inconnu = valeurCm == null && aChoisi
   return (
     <div className="onb-mesure">
-      <MoletteTailleCm
-        valeurCm={valeurCm ?? inconnuDefaut}
-        onChange={onChange}
-        unite={unite}
-        onChangeUnite={onChangeUnite}
-        min={min}
-        max={max}
-      />
+      <MoletteTailleCm valeurCm={valeurCm ?? inconnuDefaut} onChange={onChange} min={min} max={max} />
       {/* Sans ce texte, choisir « Je ne sais pas » ne change rien à l'écran :
           la molette retombe sur une valeur moyenne qui a l'air d'un choix
           comme un autre, et le clic semble n'avoir rien fait. */}
@@ -677,107 +662,174 @@ export function MoletteTailleAvecInconnu({ valeurCm, onChange, onInconnu, unite,
   )
 }
 
-export function MolettePoidsKg({ valeurKg, onChange, unite, onChangeUnite }) {
+export function MolettePoidsKg({ valeurKg, onChange }) {
   return (
     <div className="onb-mesure">
-      <SegmentedControl
-        label="Unité"
-        value={unite}
-        onChange={onChangeUnite}
-        options={[
-          { value: 'kg', label: 'kg' },
-          { value: 'lbs', label: 'lbs' },
-        ]}
-      />
-      {unite === 'kg' ? (
-        <WheelPicker
-          label="Poids en kilogrammes"
-          value={valeurKg}
-          onChange={onChange}
-          min={30}
-          max={150}
-          step={0.5}
-          format={(v) => `${v.toFixed(1).replace('.', ',')} kg`}
-        />
-      ) : (
-        <WheelPicker
-          label="Poids en livres"
-          value={kgVersLivres(valeurKg)}
-          onChange={(lbs) => onChange(livresVersKg(lbs))}
-          min={66}
-          max={330}
-          step={1}
-          format={(v) => `${Math.round(v)} lbs`}
-        />
-      )}
+      <WheelPicker label="Poids en kilogrammes" value={valeurKg} onChange={onChange} min={30} max={150} step={0.5} format={formatKg} />
     </div>
   )
 }
 
-export function MolettePointure({ valeurEu, onChange, onInconnu, unite, onChangeUnite }) {
-  const [aChoisi, setAChoisi] = useState(false)
-  const inconnu = valeurEu == null && aChoisi
+/* Deux mesures sur un écran, comme Taller : un titre au-dessus de chaque
+   molette (31/10/2026). */
+function ColonneMolette({ titre, children }) {
+  return (
+    <div className="onb-colonne">
+      <span className="onb-colonne-titre">{titre}</span>
+      {children}
+    </div>
+  )
+}
+
+export function MoletteTaillePoids({ tailleCm, poidsKg, onTaille, onPoids }) {
   return (
     <div className="onb-mesure">
-      <SegmentedControl
-        label="Unité"
-        value={unite}
-        onChange={onChangeUnite}
-        options={[
-          { value: 'eu', label: 'EU' },
-          { value: 'us', label: 'US' },
-        ]}
-      />
-      {unite === 'eu' ? (
+      <div className="onb-wheel-row">
+        <ColonneMolette titre="Taille">
+          <WheelPicker label="Ta taille en centimètres" value={tailleCm} onChange={onTaille} min={120} max={209} step={0.5} format={formatCm} />
+        </ColonneMolette>
+        <ColonneMolette titre="Poids">
+          <WheelPicker label="Ton poids en kilogrammes" value={poidsKg} onChange={onPoids} min={30} max={150} step={0.5} format={formatKg} />
+        </ColonneMolette>
+      </div>
+    </div>
+  )
+}
+
+/* « Je ne sais pas » sous chaque parent : la taille moyenne est alors
+   utilisée, et toucher la molette annule ce choix. Plus d'avance
+   automatique, puisqu'il reste l'autre parent sur le même écran. */
+function ParentInconnu({ inconnu, onInconnu }) {
+  return (
+    <button
+      type="button"
+      className="onb-bouton-inconnu onb-bouton-inconnu--petit"
+      aria-pressed={inconnu}
+      onClick={onInconnu}
+    >
+      {inconnu ? '✓ Je ne sais pas' : 'Je ne sais pas'}
+    </button>
+  )
+}
+
+export function MoletteParents({ pere, mere, pereInconnu, mereInconnu, onPere, onMere, onPereInconnu, onMereInconnu }) {
+  return (
+    <div className="onb-mesure">
+      <div className="onb-wheel-row">
+        <ColonneMolette titre="Père">
+          <WheelPicker label="Taille de ton père en centimètres" value={pere ?? TAILLE_PERE_INCONNUE_CM} onChange={onPere} min={141} max={219} step={0.5} format={formatCm} />
+          <ParentInconnu inconnu={pereInconnu} onInconnu={onPereInconnu} />
+        </ColonneMolette>
+        <ColonneMolette titre="Mère">
+          <WheelPicker label="Taille de ta mère en centimètres" value={mere ?? TAILLE_MERE_INCONNUE_CM} onChange={onMere} min={141} max={209} step={0.5} format={formatCm} />
+          <ParentInconnu inconnu={mereInconnu} onInconnu={onMereInconnu} />
+        </ColonneMolette>
+      </div>
+    </div>
+  )
+}
+
+/* Pointure, comme Taller : « Sélectionne ta pointure » au-dessus d'une
+   seule molette, pointures françaises. Pas de « Je ne sais pas » : tout le
+   monde connaît sa pointure (31/10/2026). */
+export function pointureParDefaut(sexe) {
+  return sexe === 'F' ? 38 : 42
+}
+
+export function MolettePointure({ valeurEu, onChange, sexe }) {
+  return (
+    <div className="onb-mesure">
+      <ColonneMolette titre="Sélectionne ta pointure">
         <WheelPicker
-          label="Pointure européenne"
-          value={valeurEu ?? 40}
+          label="Pointure"
+          value={valeurEu ?? pointureParDefaut(sexe)}
           onChange={onChange}
           min={30}
           max={50}
-          step={1}
-          format={(v) => `Pointure ${v} (EU)`}
-        />
-      ) : (
-        <WheelPicker
-          label="Pointure américaine"
-          value={euVersUs(valeurEu ?? 40)}
-          onChange={(us) => onChange(usVersEu(us))}
-          min={0.5}
-          max={16}
           step={0.5}
-          format={(v) => `Size ${v} (US)`}
+          format={(v) => (v % 1 === 0 ? String(v) : v.toFixed(1).replace('.', ','))}
         />
-      )}
-      {inconnu && <p className="onb-inconnu-note">Valeur moyenne utilisée — fais glisser pour corriger.</p>}
-      <button
-        type="button"
-        className="onb-bouton-inconnu"
-        aria-pressed={inconnu}
-        onClick={() => {
-          setAChoisi(true)
-          // Répondre « je ne sais pas » passe à la question suivante.
-          if (onInconnu) onInconnu()
-          else onChange(null)
-        }}
-      >
-        {inconnu ? '✓ Je ne sais pas' : 'Je ne sais pas'}
-      </button>
+      </ColonneMolette>
     </div>
   )
 }
 
-export function MoletteSommeil({ valeur, onChange }) {
+/* Taille de rêve, comme Taller : « Taille de rêve » au-dessus d'une seule
+   molette. Elle part de la taille actuelle + 5 cm (31/10/2026). */
+export function tailleReveParDefaut(tailleCm) {
+  return Math.round(Number(tailleCm) || 170) + 5
+}
+
+export function MoletteTailleReve({ valeurCm, onChange }) {
   return (
-    <WheelPicker
-      label="Heures de sommeil par nuit"
-      value={valeur}
-      onChange={onChange}
-      min={4}
-      max={12}
-      step={0.5}
-      format={(v) => `${v % 1 === 0 ? v : v.toFixed(1).replace('.', ',')} heures par nuit`}
-    />
+    <div className="onb-mesure">
+      <ColonneMolette titre="Taille de rêve">
+        <WheelPicker label="Taille de rêve en centimètres" value={valeurCm} onChange={onChange} min={140} max={220} step={0.5} format={formatCm} />
+      </ColonneMolette>
+    </div>
+  )
+}
+
+/* Sommeil, comme Taller (31/10/2026) : un cadran de traits qui se remplit
+   dans le sens des aiguilles d'une montre, la durée au centre (« 7h30 »),
+   et un curseur dessous. Le cadran va de 0 à 12 h ; le curseur de 4 à
+   12 h, par demi-heure, comme l'ancienne molette. */
+const SOMMEIL_MIN = 4
+const SOMMEIL_MAX = 12
+const TRAITS_CADRAN = 40
+
+const formatDuree = (h) => `${Math.floor(h)}h${h % 1 === 0 ? '' : '30'}`
+
+// Orange Grandimi vers ambre clair, le long des traits allumés.
+function couleurTrait(t) {
+  const de = [255, 90, 31]
+  const a = [255, 196, 107]
+  const c = de.map((v, i) => Math.round(v + (a[i] - v) * t))
+  return `rgb(${c.join(',')})`
+}
+
+export function MoletteSommeil({ valeur, onChange }) {
+  const heures = valeur ?? 8
+  const allumes = Math.round((heures / SOMMEIL_MAX) * TRAITS_CADRAN)
+  const pourcent = ((heures - SOMMEIL_MIN) / (SOMMEIL_MAX - SOMMEIL_MIN)) * 100
+  return (
+    <div className="onb-sommeil">
+      <div className="onb-sommeil-cadran">
+        <svg viewBox="0 0 220 220" aria-hidden="true">
+          {Array.from({ length: TRAITS_CADRAN }, (_, i) => {
+            const angle = (i / TRAITS_CADRAN) * 2 * Math.PI - Math.PI / 2
+            const cos = Math.cos(angle)
+            const sin = Math.sin(angle)
+            const allume = i < allumes
+            return (
+              <line
+                key={i}
+                x1={110 + cos * 78}
+                y1={110 + sin * 78}
+                x2={110 + cos * 100}
+                y2={110 + sin * 100}
+                stroke={allume ? couleurTrait(allumes > 1 ? i / (allumes - 1) : 0) : 'rgba(244, 239, 233, 0.12)'}
+                strokeWidth="7"
+                strokeLinecap="round"
+              />
+            )
+          })}
+        </svg>
+        <span className="onb-sommeil-duree">{formatDuree(heures)}</span>
+      </div>
+      <input
+        type="range"
+        className="onb-sommeil-curseur"
+        min={SOMMEIL_MIN}
+        max={SOMMEIL_MAX}
+        step={0.5}
+        value={heures}
+        onChange={(e) => onChange(Number(e.target.value))}
+        aria-label="Heures de sommeil par nuit"
+        aria-valuetext={`${formatDuree(heures)} par nuit`}
+        style={{ '--pourcent': `${pourcent}%` }}
+      />
+    </div>
   )
 }
 
@@ -1054,6 +1106,63 @@ export function EcranPlusQueGenes({ onContinue }) {
 
 
 
+/* Deux écrans de Taller avant l'analyse (31/10/2026).
+
+   La phrase seule, au centre, qui passe d'elle-même après quelques
+   secondes (un toucher la fait passer tout de suite). */
+const DUREE_CITATION_MS = 4200
+const PAS_MOT_S = 0.09
+
+/* Les mots arrivent un par un, flous puis nets, comme chez Taller. Rend
+   aussi le délai total, pour caler ce qui vient après (le bouton). */
+function MotsAnimes({ lignes }) {
+  let i = 0
+  return (
+    <p className="citation-texte" aria-label={lignes.join(' ')}>
+      {lignes.map((ligne) => (
+        <span key={ligne} className="citation-ligne" aria-hidden="true">
+          {ligne.split(' ').map((mot, j) => {
+            const delai = 0.2 + (i++) * PAS_MOT_S
+            return (
+              <span key={j} className="citation-mot" style={{ animationDelay: `${delai}s` }}>
+                {mot}{' '}
+              </span>
+            )
+          })}
+        </span>
+      ))}
+    </p>
+  )
+}
+
+export function EcranCitationGenetique({ onContinue }) {
+  useEffect(() => {
+    const id = setTimeout(onContinue, DUREE_CITATION_MS)
+    return () => clearTimeout(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  return (
+    <button type="button" className="interstitial citation" onClick={onContinue}>
+      <span className="citation-halo" aria-hidden="true" />
+      <MotsAnimes lignes={['Tu n’as pas choisi ta génétique.', 'Mais tu peux choisir ce que tu en fais.']} />
+    </button>
+  )
+}
+
+export function EcranDecouvrirPotentiel({ onContinue }) {
+  return (
+    <div className="interstitial citation">
+      <span className="citation-halo" aria-hidden="true" />
+      <MotsAnimes lignes={['Il est maintenant temps de découvrir ce que Grandimi dit sur ton potentiel de croissance.']} />
+      <div className="interstitial-action is-ready citation-action">
+        <button type="button" className="funnel-cta" onClick={onContinue}>
+          Analyser mes réponses
+        </button>
+      </div>
+    </div>
+  )
+}
+
 /* ============================================================
    ÉCRANS AJOUTÉS (questionnaire « comment grandir »)
    ============================================================ */
@@ -1091,7 +1200,7 @@ export function EcranProfilCroissance({ reponses }) {
   const lignes = [
     ['Âge', `${Math.floor(reponses.age)} ans`],
     ['Taille actuelle', `${reponses.taille} cm`],
-    ['Objectif', `${reponses.tailleIdeale} cm`],
+    ...(reponses.tailleIdeale != null ? [['Objectif', `${reponses.tailleIdeale} cm`]] : []),
     ['Sommeil', `${reponses.sommeil} h par nuit${reponses.coucher ? ' · ' + LIBELLES_COUCHER[reponses.coucher] : ''}`],
     ['Sport', reponses.exerciceFreq ? `${reponses.exerciceFreq} h par semaine` : '—'],
   ]
@@ -1119,10 +1228,3 @@ export function verdictAge(age, sexe) {
     : 'Chez les garçons, ça peut encore bouger. Et ta posture se travaille'
 }
 
-/** Ligne de verdict sous la molette du sommeil. */
-export function verdictSommeil(heures) {
-  if (heures == null) return null
-  if (heures < 7) return 'Point faible'
-  if (heures < 9) return 'À améliorer'
-  return 'Point fort'
-}
