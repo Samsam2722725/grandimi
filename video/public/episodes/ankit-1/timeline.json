@@ -1,0 +1,423 @@
+{
+  "fps": 30,
+  "totalFrames": 853,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "1m60 et 13 ans.",
+      "from": 0,
+      "duration": 52,
+      "words": [
+        {
+          "w": "1m60",
+          "f": 0
+        },
+        {
+          "w": "et",
+          "f": 29
+        },
+        {
+          "w": "13",
+          "f": 34
+        },
+        {
+          "w": "ans.",
+          "f": 43
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Mec, c'est fini pour toi.",
+      "from": 53,
+      "duration": 47,
+      "words": [
+        {
+          "w": "Mec,",
+          "f": 53
+        },
+        {
+          "w": "c'est",
+          "f": 65
+        },
+        {
+          "w": "fini",
+          "f": 72
+        },
+        {
+          "w": "pour",
+          "f": 82
+        },
+        {
+          "w": "toi.",
+          "f": 86
+        }
+      ]
+    },
+    {
+      "id": "blague",
+      "text": "Bien sûr que c'était une blague.",
+      "from": 101,
+      "duration": 40,
+      "words": [
+        {
+          "w": "Bien",
+          "f": 101
+        },
+        {
+          "w": "sûr",
+          "f": 108
+        },
+        {
+          "w": "que",
+          "f": 113
+        },
+        {
+          "w": "c'était",
+          "f": 118
+        },
+        {
+          "w": "une",
+          "f": 127
+        },
+        {
+          "w": "blague.",
+          "f": 130
+        }
+      ]
+    },
+    {
+      "id": "predire",
+      "text": "On va prédire ta taille avec le site Grandimi.",
+      "from": 142,
+      "duration": 64,
+      "words": [
+        {
+          "w": "On",
+          "f": 142
+        },
+        {
+          "w": "va",
+          "f": 144
+        },
+        {
+          "w": "prédire",
+          "f": 149
+        },
+        {
+          "w": "ta",
+          "f": 161
+        },
+        {
+          "w": "taille",
+          "f": 166
+        },
+        {
+          "w": "avec",
+          "f": 173
+        },
+        {
+          "w": "le",
+          "f": 175
+        },
+        {
+          "w": "site",
+          "f": 178
+        },
+        {
+          "w": "Grandimi.",
+          "f": 185
+        }
+      ]
+    },
+    {
+      "id": "saisie",
+      "text": "Pendant que je saisis tes infos, n'hésite pas à commenter ton âge, ta taille, la taille de tes deux parents, ton poids et tes sports.",
+      "from": 206,
+      "duration": 186,
+      "words": [
+        {
+          "w": "Pendant",
+          "f": 206
+        },
+        {
+          "w": "que",
+          "f": 211
+        },
+        {
+          "w": "je",
+          "f": 216
+        },
+        {
+          "w": "saisis",
+          "f": 218
+        },
+        {
+          "w": "tes",
+          "f": 230
+        },
+        {
+          "w": "infos,",
+          "f": 235
+        },
+        {
+          "w": "n'hésite",
+          "f": 245
+        },
+        {
+          "w": "pas",
+          "f": 257
+        },
+        {
+          "w": "à",
+          "f": 262
+        },
+        {
+          "w": "commenter",
+          "f": 264
+        },
+        {
+          "w": "ton",
+          "f": 274
+        },
+        {
+          "w": "âge,",
+          "f": 278
+        },
+        {
+          "w": "ta",
+          "f": 293
+        },
+        {
+          "w": "taille,",
+          "f": 300
+        },
+        {
+          "w": "la",
+          "f": 314
+        },
+        {
+          "w": "taille",
+          "f": 317
+        },
+        {
+          "w": "de",
+          "f": 324
+        },
+        {
+          "w": "tes",
+          "f": 326
+        },
+        {
+          "w": "deux",
+          "f": 334
+        },
+        {
+          "w": "parents,",
+          "f": 338
+        },
+        {
+          "w": "ton",
+          "f": 353
+        },
+        {
+          "w": "poids",
+          "f": 358
+        },
+        {
+          "w": "et",
+          "f": 370
+        },
+        {
+          "w": "tes",
+          "f": 374
+        },
+        {
+          "w": "sports.",
+          "f": 379
+        }
+      ]
+    },
+    {
+      "id": "chaud",
+      "text": "Oh mec, t'es chaud! Félicitations!",
+      "from": 394,
+      "duration": 61,
+      "words": [
+        {
+          "w": "Oh",
+          "f": 394
+        },
+        {
+          "w": "mec,",
+          "f": 401
+        },
+        {
+          "w": "t'es",
+          "f": 410
+        },
+        {
+          "w": "chaud!",
+          "f": 418
+        },
+        {
+          "w": "Félicitations!",
+          "f": 430
+        }
+      ]
+    },
+    {
+      "id": "resultat",
+      "text": "Normalement, si tout se passe bien, tu feras 1m80.",
+      "from": 456,
+      "duration": 84,
+      "words": [
+        {
+          "w": "Normalement,",
+          "f": 456
+        },
+        {
+          "w": "si",
+          "f": 473
+        },
+        {
+          "w": "tout",
+          "f": 478
+        },
+        {
+          "w": "se",
+          "f": 482
+        },
+        {
+          "w": "passe",
+          "f": 485
+        },
+        {
+          "w": "bien,",
+          "f": 492
+        },
+        {
+          "w": "tu",
+          "f": 502
+        },
+        {
+          "w": "feras",
+          "f": 506
+        },
+        {
+          "w": "1m80.",
+          "f": 514
+        }
+      ]
+    },
+    {
+      "id": "conseils",
+      "text": "Et en suivant les conseils personnalisés du site Grandimi, tu peux optimiser ta croissance jusqu'à 1,5 cm supplémentaires.",
+      "from": 541,
+      "duration": 203,
+      "words": [
+        {
+          "w": "Et",
+          "f": 541
+        },
+        {
+          "w": "en",
+          "f": 545
+        },
+        {
+          "w": "suivant",
+          "f": 548
+        },
+        {
+          "w": "les",
+          "f": 557
+        },
+        {
+          "w": "conseils",
+          "f": 562
+        },
+        {
+          "w": "personnalisés",
+          "f": 572
+        },
+        {
+          "w": "du",
+          "f": 589
+        },
+        {
+          "w": "site",
+          "f": 591
+        },
+        {
+          "w": "Grandimi,",
+          "f": 601
+        },
+        {
+          "w": "tu",
+          "f": 627
+        },
+        {
+          "w": "peux",
+          "f": 629
+        },
+        {
+          "w": "optimiser",
+          "f": 634
+        },
+        {
+          "w": "ta",
+          "f": 649
+        },
+        {
+          "w": "croissance",
+          "f": 653
+        },
+        {
+          "w": "jusqu'à",
+          "f": 670
+        },
+        {
+          "w": "1,5",
+          "f": 680
+        },
+        {
+          "w": "cm",
+          "f": 704
+        },
+        {
+          "w": "supplémentaires.",
+          "f": 721
+        }
+      ]
+    },
+    {
+      "id": "enorme",
+      "text": "Du coup, c'est carrément énorme!",
+      "from": 745,
+      "duration": 106,
+      "words": [
+        {
+          "w": "Du",
+          "f": 745
+        },
+        {
+          "w": "coup,",
+          "f": 749
+        },
+        {
+          "w": "c'est",
+          "f": 759
+        },
+        {
+          "w": "carrément",
+          "f": 766
+        },
+        {
+          "w": "énorme!",
+          "f": 781
+        }
+      ]
+    }
+  ]
+}
