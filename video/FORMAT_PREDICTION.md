@@ -57,13 +57,13 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
 ## Ce qui est réglé et ne doit pas bouger (validé par l'utilisateur)
 
 - Depuis le 31/10 (vendre le site ; corrigé le jour même après une capture Instagram) :
-  - **écrans de l'appli en mode téléphone** (`"telephone": true` sur le plan) : page réduite qui finit à y 1520,
-    barre Safari « grandimi.com » **en bas**, onglets de l'appli juste au-dessus. Plus bas, la légende et le pseudo
-    TikTok / Instagram cachent tout ; la colonne d'icônes couvre x > 900. Plus de barre d'adresse en haut.
-    `python scripts/telephone.py <id>` convertit un épisode fait avec l'ancien modèle (parties 19 à 22).
+  - **écrans de l'appli cadrés comme Taller** (`"telephone": {...}` sur le plan) : écran ×0,86 sur fond noir, à
+    175 px du haut ; **en haut de l'écran** la barre Safari « grandimi.com » puis les onglets du site. Pas de barre
+    en bas : tout en bas, la légende et le pseudo TikTok / Instagram la cachent (essai du 31/10 : écran rétréci jugé
+    moche). `python scripts/telephone.py <id>` convertit un épisode fait avec l'ancien modèle (parties 19 à 22).
   - **plus de pastille « lien en bio » en haut** (jugée « nulle » au début de la vidéo) ;
-  - onglets « Rapport · Programme · Exercices · Routine » sur le dashboard, « Programme · Exercices · Routine » sur
-    la routine (on montre que ça existe, pas leur contenu) ;
+  - onglets « Rapport · Programme · Exercices · Routine » (dashboard, « Rapport » actif) et « Programme · Exercices ·
+    Routine » (routine, « Routine » actif), sous la barre d'adresse : on montre que ça existe, pas leur contenu ;
   - routine **comme Taller** (« Routine quotidienne », mêmes habitudes traduites : routine physique, lait + miel,
     moringa 4 g, zinc 13 mg, dormir +8 h, oméga 3, soleil), nette, sans 🤫 ;
   - vraies captures du site (`site_accueil`, `site_sexe`, `site_poids`, pleine largeur dans la page), doigt qui

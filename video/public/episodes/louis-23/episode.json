@@ -229,12 +229,7 @@
           "fin": "age:16+30",
           "chute": true
         },
-        "onglets": [
-          "Rapport",
-          "Programme",
-          "Exercices",
-          "Routine"
-        ]
+        "onglets": []
       },
       "elements": [],
       "sons": [
@@ -264,7 +259,16 @@
           "volume": 0.28
         }
       ],
-      "telephone": true
+      "telephone": {
+        "onglets": [
+          "Rapport",
+          "Programme",
+          "Exercices",
+          "Routine"
+        ],
+        "actif": "Rapport",
+        "coupeHaut": 60
+      }
     },
     {
       "nom": "routine",
@@ -275,12 +279,7 @@
         {
           "type": "routine",
           "a": 0,
-          "flou": 0,
-          "onglets": [
-            "Programme",
-            "Exercices",
-            "Routine"
-          ]
+          "flou": 0
         }
       ],
       "sons": [
@@ -290,7 +289,14 @@
           "volume": 0.22
         }
       ],
-      "telephone": true
+      "telephone": {
+        "onglets": [
+          "Programme",
+          "Exercices",
+          "Routine"
+        ],
+        "actif": "Routine"
+      }
     },
     {
       "nom": "chiffre",
@@ -415,12 +421,7 @@
             "dFin": 16
           }
         ],
-        "onglets": [
-          "Rapport",
-          "Programme",
-          "Exercices",
-          "Routine"
-        ]
+        "onglets": []
       },
       "effets": [
         {
@@ -467,7 +468,16 @@
           "volume": 0.28
         }
       ],
-      "telephone": true
+      "telephone": {
+        "onglets": [
+          "Rapport",
+          "Programme",
+          "Exercices",
+          "Routine"
+        ],
+        "actif": "Rapport",
+        "coupeHaut": 60
+      }
     },
     {
       "nom": "verdict",
@@ -620,7 +630,10 @@
           "volume": 0.3
         }
       ],
-      "telephone": true
+      "telephone": {
+        "coupeHaut": 130,
+        "basCache": 0
+      }
     },
     {
       "nom": "resultat",
@@ -655,12 +668,6 @@
           "chancesCm": "185 cm",
           "croissance": "96 %"
         },
-        "onglets": [
-          "Rapport",
-          "Programme",
-          "Exercices",
-          "Routine"
-        ],
         "cams": [
           {
             "a": "rentre:prédiction",
@@ -672,7 +679,8 @@
           }
         ],
         "pops": [],
-        "fleches": []
+        "fleches": [],
+        "onglets": []
       },
       "sons": [
         {
@@ -686,7 +694,16 @@
           "volume": 0.28
         }
       ],
-      "telephone": true
+      "telephone": {
+        "onglets": [
+          "Rapport",
+          "Programme",
+          "Exercices",
+          "Routine"
+        ],
+        "actif": "Rapport",
+        "coupeHaut": 60
+      }
     },
     {
       "nom": "fin-site",

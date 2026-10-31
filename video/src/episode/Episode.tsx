@@ -25,7 +25,7 @@ import {SceneFamille} from './SceneFamille';
 import {RoutineGrandimi} from './RoutineGrandimi';
 import {Explicatif} from './Explicatif';
 import {HookCommentaires} from './HookCommentaires';
-import {DashboardGrandimi} from './Dashboard';
+import {BarreSafari, DashboardGrandimi} from './Dashboard';
 import {HookTaille} from './HookTaille';
 import {EntreeGlitch, EntreeJauneGlisse, FlashOrangeJaune, SortieGlitch, SortieJaune, SortieRadial, SortieZoomFlou} from './TransitionsSteve';
 import {TopoAnime} from './TopoAnime';
@@ -864,6 +864,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					url={plan.dashboard.url}
 					entete={plan.dashboard.entete}
 					onglets={plan.dashboard.onglets}
+					sansBarreEtat={Boolean(plan.telephone)}
 					ballon={
 						plan.dashboard.ballon
 							? {src: file(plan.dashboard.ballon.fichier), a: loc(plan.dashboard.ballon.a), fin: loc(plan.dashboard.ballon.fin), chute: plan.dashboard.ballon.chute}
@@ -1171,55 +1172,67 @@ const TitreFixe: React.FC<{texte: string; de: number; a: number; y: number; tail
 };
 
 /**
- * Écran de téléphone : la page (1080 × 1920, conçue plein écran) + la barre Safari du bas (150 px), réduites ensemble
- * pour finir à y 1520. Sur TikTok et Instagram, tout ce qui est plus bas est caché par la légende et le pseudo
- * (mesuré sur une capture Instagram du 31/10), et la colonne d'icônes couvre x > 900.
+ * Écran de téléphone cadré comme Taller (capture du 31/10) : écran ×0,86, centré, à 175 px du haut, sur fond noir.
+ * En haut de l'écran : barre Safari « grandimi.com » puis les onglets du site ; dessous, la page (sans sa barre d'état
+ * ni ses onglets du bas). L'adresse et les onglets restent ainsi dans la zone que l'interface TikTok / Instagram ne
+ * couvre pas (sous l'en-tête de l'appli, au-dessus de la légende).
  */
-const TELEPHONE = {haut: 1520, page: 1920 + 150};
-const Telephone: React.FC<{children: React.ReactNode}> = ({children}) => {
-	const s = TELEPHONE.haut / TELEPHONE.page;
+const ECRAN = {echelle: 0.86, haut: 175, safari: 172, onglets: 118, bas: 215};
+const Telephone: React.FC<{reglage: Exclude<Plan['telephone'], undefined | false>; children: React.ReactNode}> = ({reglage, children}) => {
+	const r = reglage === true ? {} : reglage;
+	const coupe = r.coupeHaut ?? 0;
+	const hautOnglets = r.onglets?.length ? ECRAN.onglets : 0;
+	const debutPage = ECRAN.safari + hautOnglets;
+	const hPage = 1920 - coupe - (r.basCache ?? ECRAN.bas);
+	const s = ECRAN.echelle;
 	return (
 		<AbsoluteFill style={{background: '#000'}}>
-			<div style={{position: 'absolute', left: (1080 - 1080 * s) / 2, top: 0, width: 1080, height: TELEPHONE.page, transform: `scale(${s})`, transformOrigin: '0 0', overflow: 'hidden', background: '#0b0b0b'}}>
-				<div style={{position: 'absolute', left: 0, top: 0, width: 1080, height: 1920, overflow: 'hidden'}}>{children}</div>
-				<BarreSafariBas />
+			<div
+				style={{
+					position: 'absolute',
+					left: (1080 - 1080 * s) / 2,
+					top: ECRAN.haut,
+					width: 1080,
+					height: debutPage + hPage,
+					transform: `scale(${s})`,
+					transformOrigin: '0 0',
+					overflow: 'hidden',
+					borderRadius: 40,
+					background: '#0b0b0b',
+				}}
+			>
+				<div style={{position: 'absolute', left: 0, top: debutPage, width: 1080, height: hPage, overflow: 'hidden'}}>
+					<div style={{position: 'absolute', left: 0, top: -coupe, width: 1080, height: 1920}}>{children}</div>
+				</div>
+				<BarreSafari url="grandimi.com" />
+				{r.onglets?.length ? <OngletsHaut onglets={r.onglets} actif={r.actif ?? r.onglets[0]} /> : null}
 			</div>
 		</AbsoluteFill>
 	);
 };
 
-/** Barre Safari du bas d'iPhone (retour · « grandimi.com » · onglets), recopiée des captures du site du 31/10. */
-const BarreSafariBas: React.FC = () => {
-	const rond = {position: 'absolute' as const, top: 14, width: 124, height: 124, borderRadius: 62, background: 'rgba(120,120,128,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 54};
-	return (
-		<div style={{position: 'absolute', left: 0, top: 1920, width: 1080, height: 150, background: '#0b0b0b', fontFamily: FONT}}>
-			<div style={{...rond, left: 92}}>‹</div>
+/** Onglets du site sous la barre d'adresse (Rapport, Programme, Exercices, Routine), l'actif souligné en orange. */
+const OngletsHaut: React.FC<{onglets: string[]; actif: string}> = ({onglets, actif}) => (
+	<div style={{position: 'absolute', left: 0, top: ECRAN.safari, width: 1080, height: ECRAN.onglets, background: '#0b0b0b', borderBottom: '2px solid #222', display: 'flex', fontFamily: `${FONT}, 'Noto Color Emoji'`}}>
+		{onglets.map((o) => (
 			<div
+				key={o}
 				style={{
-					position: 'absolute',
-					left: 248,
-					top: 14,
-					width: 584,
-					height: 124,
-					borderRadius: 62,
-					background: '#1c1c1e',
-					border: '2px solid #3a3a3c',
-					boxSizing: 'border-box',
+					flex: 1,
 					display: 'flex',
 					alignItems: 'center',
-					justifyContent: 'space-between',
-					padding: '0 40px',
-					color: '#fff',
+					justifyContent: 'center',
+					fontSize: 36,
+					fontWeight: 700,
+					color: o === actif ? '#ff6a2b' : '#9a9aa0',
+					borderBottom: o === actif ? '6px solid #ff6a2b' : '6px solid transparent',
 				}}
 			>
-				<span style={{fontSize: 44, lineHeight: 1}}>☰</span>
-				<span style={{fontSize: 46, fontWeight: 500}}>grandimi.com</span>
-				<span style={{fontSize: 44, lineHeight: 1}}>↻</span>
+				{o}
 			</div>
-			<div style={{...rond, left: 864, fontSize: 46}}>⧉</div>
-		</div>
-	);
-};
+		))}
+	</div>
+);
 
 /** Pastille du lien, fixe, au-dessus de tout ; cachée pendant les plans `caches` ([début, fin[ en images). */
 const LienFixe: React.FC<{texte: string; y: number; de: number; a: number; caches: [number, number][]}> = ({texte, y, de, a, caches}) => {
@@ -1295,7 +1308,7 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 					return (
 						<Sequence key={p.nom} name={p.nom} from={starts[i]} durationInFrames={to - starts[i]}>
 							{p.telephone ? (
-								<Telephone>
+								<Telephone reglage={p.telephone}>
 									<PlanView plan={p} start={starts[i]} end={to} ep={data} id={episode} resolve={resolve} />
 								</Telephone>
 							) : (

@@ -223,7 +223,10 @@ export const DashboardGrandimi: React.FC<{
 	entete?: 'logo' | 'aucun';
 	/** Onglets du bas (le premier est l'onglet actif) ; sans eux : taille / croissance / quotidien. */
 	onglets?: string[];
-}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets}) => {
+	/** Sans la barre d'état de la page (écran de téléphone : la barre Safari du dessus a déjà la sienne). */
+	sansBarreEtat?: boolean;
+}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, sansBarreEtat}) => {
+	const cacheEtat = Boolean(url || entete || sansBarreEtat);
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
 	const sx = (l: Ligne) => echelleLigne(pops, l, f);
@@ -250,8 +253,8 @@ export const DashboardGrandimi: React.FC<{
 				}}
 			>
 				{/* Barre d'état (visible dans les zooms, comme sur l'enregistrement d'écran de l'original). */}
-				<div style={{position: 'absolute', left: 140, top: 18, fontSize: 30, fontWeight: 700, opacity: url || entete ? 0 : 1}}>15:35</div>
-				<div style={{position: 'absolute', right: 140, top: 22, display: url || entete ? 'none' : 'flex', gap: 10, alignItems: 'flex-end'}}>
+				<div style={{position: 'absolute', left: 140, top: 18, fontSize: 30, fontWeight: 700, opacity: cacheEtat ? 0 : 1}}>15:35</div>
+				<div style={{position: 'absolute', right: 140, top: 22, display: cacheEtat ? 'none' : 'flex', gap: 10, alignItems: 'flex-end'}}>
 					{[10, 15, 20, 25].map((h, i) => (
 						<div key={i} style={{width: 6, height: h, borderRadius: 2, background: i < 3 ? '#fff' : '#666'}} />
 					))}
@@ -410,7 +413,7 @@ export const DashboardGrandimi: React.FC<{
 				))}
 			</div>
 			{/* Onglets fixes en bas de l'écran (hors du zoom), comme une vraie appli */}
-			{onglets ? <BarreOnglets onglets={onglets} actif={0} /> : null}
+			{onglets?.length ? <BarreOnglets onglets={onglets} actif={0} /> : null}
 			{url ? <BarreSafari url={url} /> : null}
 		</AbsoluteFill>
 	);

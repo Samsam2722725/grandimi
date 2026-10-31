@@ -1,7 +1,6 @@
-"""Passe un épisode du format prédiction en « écran de téléphone » (demande du 31/10, capture Instagram à l'appui) :
-les écrans de l'appli (dashboard, routine, site) sont réduits et finissent à y 1520, avec la barre Safari
-« grandimi.com » en bas et les onglets de l'appli juste au-dessus, au lieu d'une barre d'adresse en haut cachée par
-l'heure et d'onglets cachés par la légende TikTok / Instagram. Retire aussi la pastille « lien en bio » du haut.
+"""Passe un épisode du format prédiction en « écran de téléphone » cadré comme Taller (31/10) : écran ×0,86 sur fond
+noir, barre Safari « grandimi.com » et onglets du site en haut de l'écran (zone que TikTok / Instagram ne couvre
+pas), page sans sa barre d'état ni ses onglets du bas. Retire aussi la pastille « lien en bio » du haut.
 
 Usage : python scripts/telephone.py EPISODE_ID
 """
@@ -16,7 +15,7 @@ ONGLETS = ['Rapport', 'Programme', 'Exercices', 'Routine']
 for pl in ep['plans']:
     d = pl.get('dashboard')
     if d:
-        pl['telephone'] = True
+        pl['telephone'] = {'onglets': ONGLETS, 'actif': 'Rapport', 'coupeHaut': 60}
         if d.pop('url', None):  # sans barre du haut, la page n'est plus décalée de 150 px
             for c in d.get('cams', []):
                 if c.get('z', 1) > 1:
@@ -24,16 +23,18 @@ for pl in ep['plans']:
             for e in pl.get('elements', []):
                 if e.get('fichier') == 'curseur.png':
                     e['y'] -= 150
-        d['onglets'] = ONGLETS
+        d['onglets'] = []  # pas d'onglets dans la page : ils sont en haut de l'écran
     for e in pl.get('elements', []):
         if e.get('type') == 'routine':
-            pl['telephone'] = True
+            pl['telephone'] = {'onglets': ['Programme', 'Exercices', 'Routine'], 'actif': 'Routine'}
             e.pop('url', None)
             e.pop('chut', None)
+            e.pop('onglets', None)
             e['flou'] = 0
-            e['onglets'] = ['Programme', 'Exercices', 'Routine']
     if pl['nom'] == 'routine':
         pl['sons'] = [s for s in pl.get('sons', []) if s.get('son') != 'pop']
+    if pl['nom'] == 'site':  # captures du vrai site : on coupe leur barre d'état, leur barre Safari est déjà hors cadre
+        pl['telephone'] = {'coupeHaut': 130, 'basCache': 0}
 ep.pop('lien', None)
 p.write_text(json.dumps(ep, ensure_ascii=False, indent=2) + '\n')
 print('téléphone :', [pl['nom'] for pl in ep['plans'] if pl.get('telephone')])
