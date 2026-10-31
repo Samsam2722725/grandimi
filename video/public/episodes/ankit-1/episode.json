@@ -145,131 +145,29 @@
       "debut": "predire-2",
       "transition": "jaune-glisse",
       "telephone": {
-        "coupeHaut": 130,
-        "basCache": 0
+        "coupeHaut": 0,
+        "basCache": 204
       },
       "elements": [
         {
-          "type": "image",
-          "ecran": true,
-          "fichier": "site_accueil.png",
+          "type": "video",
+          "fichier": "site.mp4",
           "a": 0,
-          "x": 0,
+          "x": 108,
           "y": 0,
-          "w": 1080,
-          "h": 2338,
-          "fin": "saisie:saisis"
+          "w": 864,
+          "h": 1716
         },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "curseur.png",
-          "a": "predire:grandimi",
-          "x": 468,
-          "y": 1510,
-          "w": 192,
-          "h": 204,
-          "depuis": {
-            "y": 90,
-            "d": 4
-          },
-          "fin": "saisie:saisis"
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "site_sexe.png",
-          "a": "saisie:saisis",
-          "x": 0,
-          "y": 0,
-          "w": 1080,
-          "h": 2338,
-          "fin": "saisie:parents"
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "curseur.png",
-          "a": "saisie:tes",
-          "x": 468,
-          "y": 885,
-          "w": 192,
-          "h": 204,
-          "depuis": {
-            "y": 90,
-            "d": 4
-          },
-          "fin": "saisie:parents"
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "site_poids.png",
-          "a": "saisie:parents",
-          "x": 0,
-          "y": 0,
-          "w": 1080,
-          "h": 2338
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "curseur.png",
-          "a": "saisie:poids-4",
-          "x": 468,
-          "y": 1250,
-          "w": 192,
-          "h": 204,
-          "depuis": {
-            "y": 170,
-            "d": 12
-          }
-        }
-      ],
-      "sons": [
-        {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.22
-        },
-        {
-          "a": "predire:grandimi+4",
-          "son": "tick",
-          "volume": 0.3
-        },
-        {
-          "a": "saisie:tes+3",
-          "son": "tick",
-          "volume": 0.3
-        },
-        {
-          "a": "saisie:poids+4",
-          "son": "tick",
-          "volume": 0.3
-        }
-      ]
-    },
-    {
-      "nom": "chaud",
-      "debut": "chaud-2",
-      "transition": "radial",
-      "fond": "topo",
-      "topo": {
-        "zoomDe": 0.6,
-        "d": 18
-      },
-      "elements": [
         {
           "type": "tape",
           "texte": "T'ES CHAUD",
-          "a": 2,
-          "y": 330,
-          "taille": 140,
+          "a": "chaud:t'es",
+          "y": 1200,
+          "taille": 120,
           "couleur": "#fff200",
           "police": "Montserrat",
           "poids": 900,
           "contour": 9,
-          "curseur": true,
           "parLettre": 1,
           "son": "tick",
           "volume": 0.3
@@ -279,10 +177,10 @@
           "ecran": true,
           "fichier": "feu.png",
           "a": "chaud:chaud",
-          "x": 370,
-          "y": 620,
-          "w": 340,
-          "h": 340,
+          "x": 250,
+          "y": 1380,
+          "w": 260,
+          "h": 260,
           "effet": "pop-balance",
           "son": "pop",
           "volume": 0.3
@@ -292,10 +190,10 @@
           "ecran": true,
           "fichier": "fete.png",
           "a": "chaud:félicitations",
-          "x": 400,
-          "y": 1060,
-          "w": 280,
-          "h": 280,
+          "x": 570,
+          "y": 1380,
+          "w": 260,
+          "h": 260,
           "effet": "pop-balance",
           "son": "pop",
           "volume": 0.25
@@ -306,6 +204,16 @@
           "a": 0,
           "son": "whoosh",
           "volume": 0.22
+        },
+        {
+          "a": "predire:grandimi+18",
+          "son": "tick",
+          "volume": 0.3
+        },
+        {
+          "a": "saisie:pendant+20",
+          "son": "tick",
+          "volume": 0.3
         }
       ]
     },
@@ -616,28 +524,12 @@
           "parLettre": 1,
           "son": "tick",
           "volume": 0.2
-        }
-      ],
-      "sons": [
-        {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.22
-        }
-      ]
-    },
-    {
-      "nom": "appel",
-      "debut": "enorme:énorme+14",
-      "transition": "radial",
-      "fond": "topo",
-      "sortie": "radial-fin",
-      "elements": [
+        },
         {
           "type": "texte",
           "texte": "🔗 grandimi.com",
-          "a": 0,
-          "y": 820,
+          "a": "enorme:carrément+6",
+          "y": 1180,
           "taille": 96,
           "couleur": "#fff",
           "fond": "#ff5a1f",

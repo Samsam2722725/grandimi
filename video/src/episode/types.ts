@@ -48,6 +48,8 @@ export type Element =
 	| (Base & {type: 'jauge'; x: number; y0: number; y1: number; de: number; vers: number; d: number; fin?: Ancre})
 	/** Fausse pause (« PAUSE ❚❚ » + symbole en bas). */
 	| (Base & {type: 'pause'; icone?: 'pause' | 'lecture'})
+	/** Clip vidéo muet (enregistrement d'écran du site déjà monté), lu à partir de `a`. */
+	| (Base & {type: 'video'; fichier: string; x: number; y: number; w: number; h: number})
 	/** Écran « Ma routine » flouté façon Taller (src/episode/RoutineGrandimi.tsx) ; 🤫 à `chut`. */
 	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre; onglets?: string[]; taller?: boolean})
 	/** Écran « Création de ton plan… » qui glisse depuis la droite ; chaque étape se coche à son ancre, 100 % à `fin`

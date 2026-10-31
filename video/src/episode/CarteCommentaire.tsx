@@ -39,7 +39,20 @@ export const CarteCommentaire: React.FC<{
 						<div style={{position: 'absolute', left: 18, top: 84, width: 100, height: 70, borderRadius: 50, background: '#9a9a9a'}} />
 					</div>
 				)}
-				<div style={{position: 'absolute', left: 257, right: 24, top: reponse.h / 2 - 66, fontSize: 31, fontWeight: 700, color: '#8a8a8a', whiteSpace: 'nowrap', letterSpacing: -0.3}}>
+				<div
+					style={{
+						position: 'absolute',
+						left: 257,
+						right: 24,
+						top: reponse.h / 2 - 66,
+						// pseudo long : la ligne rétrécit pour tenir dans la carte au lieu de dépasser
+						fontSize: Math.min(31, ((w ?? 905) - 281) / (0.56 * `Réponse au commentaire de ${nom}`.length)),
+						fontWeight: 700,
+						color: '#8a8a8a',
+						whiteSpace: 'nowrap',
+						letterSpacing: -0.3,
+					}}
+				>
 					Réponse au commentaire de {nom}
 				</div>
 				<div style={{position: 'absolute', left: 257, right: 24, top: reponse.h / 2 - 14, fontSize: 34, fontWeight: 800, color: '#141414', lineHeight: 1.18, letterSpacing: -0.3}}>

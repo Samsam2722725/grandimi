@@ -593,28 +593,13 @@
       "transition": "jaune-glisse",
       "elements": [
         {
-          "type": "image",
-          "ecran": true,
-          "fichier": "site_accueil.png",
+          "type": "video",
+          "fichier": "site.mp4",
           "a": 0,
-          "x": 0,
+          "x": 108,
           "y": 0,
-          "w": 1080,
-          "h": 2338
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "curseur.png",
-          "a": "site:grandimi.com+6",
-          "x": 468,
-          "y": 1510,
-          "w": 192,
-          "h": 204,
-          "depuis": {
-            "y": 90,
-            "d": 4
-          }
+          "w": 864,
+          "h": 1716
         }
       ],
       "sons": [
@@ -624,14 +609,14 @@
           "volume": 0.22
         },
         {
-          "a": "site:grandimi.com+10",
+          "a": "site:grandimi.com+12",
           "son": "tick",
           "volume": 0.3
         }
       ],
       "telephone": {
-        "coupeHaut": 130,
-        "basCache": 0
+        "coupeHaut": 0,
+        "basCache": 204
       }
     },
     {
@@ -718,34 +703,6 @@
           "a": 0,
           "flou": 0,
           "taller": true
-        }
-      ],
-      "sons": [
-        {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.22
-        }
-      ]
-    },
-    {
-      "nom": "appel",
-      "debut": "site:toi+8",
-      "transition": "radial",
-      "fond": "topo",
-      "sortie": "radial-fin",
-      "elements": [
-        {
-          "type": "texte",
-          "texte": "🔗 grandimi.com",
-          "a": 0,
-          "y": 820,
-          "taille": 110,
-          "couleur": "#fff",
-          "fond": "#ff5a1f",
-          "amorti": 8,
-          "son": "ding",
-          "volume": 0.25
         }
       ],
       "sons": [

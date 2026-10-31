@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "totalFrames": 853,
+  "totalFrames": 811,
   "audio": "voice/voix.wav",
   "lines": [
     {
@@ -375,7 +375,7 @@
         },
         {
           "w": "jusqu'à",
-          "f": 670
+          "f": 668
         },
         {
           "w": "1,5",
@@ -387,7 +387,7 @@
         },
         {
           "w": "supplémentaires.",
-          "f": 721
+          "f": 723
         }
       ]
     },
@@ -395,7 +395,7 @@
       "id": "enorme",
       "text": "Du coup, c'est carrément énorme!",
       "from": 745,
-      "duration": 106,
+      "duration": 64,
       "words": [
         {
           "w": "Du",

@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "totalFrames": 1136,
+  "totalFrames": 1094,
   "audio": "voice/voix.wav",
   "lines": [
     {
@@ -475,7 +475,7 @@
       "id": "site",
       "text": "Va sur grandimi.com, et suis le programme fait pour toi.",
       "from": 987,
-      "duration": 146,
+      "duration": 104,
       "words": [
         {
           "w": "Va",
@@ -503,7 +503,7 @@
         },
         {
           "w": "programme",
-          "f": 1049
+          "f": 1047
         },
         {
           "w": "fait",
@@ -511,11 +511,11 @@
         },
         {
           "w": "pour",
-          "f": 1071
+          "f": 1069
         },
         {
           "w": "toi.",
-          "f": 1078
+          "f": 1073
         }
       ]
     }
