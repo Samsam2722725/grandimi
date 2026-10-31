@@ -280,7 +280,8 @@
             "Programme",
             "Exercices",
             "Routine"
-          ]
+          ],
+          "taller": true
         }
       ],
       "sons": [

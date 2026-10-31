@@ -11,7 +11,8 @@ import {BarreOnglets, BarreSafari} from './Dashboard';
  */
 const OR = '#ff5a1f';
 const CARTE = '#161616';
-const JOURS = ['3', '4', '5', '6', '7', '8', '9'];
+const JOURS = ['7', '8', '9', '10', '11', '12', '13'];
+const JOURS_TALLER = ['3', '4', '5', '6', '7', '8', '9'];
 const HABITUDES = [
 	'Routine physique Grandimi 🏋️',
 	'1 verre de lait + miel 🍯🥛',
@@ -22,7 +23,16 @@ const HABITUDES = [
 	'15 min de soleil ☀️',
 ];
 
-export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number; chut?: number; onglets?: string[]}> = ({at, url, flou = 13, chut, onglets}) => {
+/** taller : titre « Routine quotidienne », jours 3-9 nov, « 0/9 » comme l'écran de Taller (nouveau style, louis-23) ;
+ *  sans : « Ma routine », 7-13 févr, « 0/10 » (style des parties 19 à 22). */
+export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number; chut?: number; onglets?: string[]; taller?: boolean}> = ({
+	at,
+	url,
+	flou = 13,
+	chut,
+	onglets,
+	taller,
+}) => {
 	const f = useCurrentFrame();
 	if (f < at) return null;
 	const haut = url ? 172 : 0;
@@ -31,10 +41,10 @@ export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number;
 	return (
 		<AbsoluteFill style={{background: '#000', fontFamily: FONT, color: '#fff'}}>
 			<div style={{position: 'absolute', left: 0, top: haut, width: 1080, height: 1920 - haut}}>
-				<div style={{position: 'absolute', left: 90, top: 40, fontSize: 60, fontWeight: 800}}>Routine quotidienne</div>
+				<div style={{position: 'absolute', left: 90, top: 40, fontSize: 60, fontWeight: 800}}>{taller ? 'Routine quotidienne' : 'Ma routine'}</div>
 				<div style={{position: 'absolute', right: 90, top: 46, width: 64, height: 64, borderRadius: 32, background: '#1d1d1d'}} />
 				<div style={{position: 'absolute', left: 90, right: 90, top: 150, display: 'flex', justifyContent: 'space-between'}}>
-					{JOURS.map((j, i) => (
+					{(taller ? JOURS_TALLER : JOURS).map((j, i) => (
 						<div
 							key={j}
 							style={{
@@ -51,7 +61,7 @@ export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number;
 							}}
 						>
 							{j}
-							<span style={{fontSize: 22, fontWeight: 500, marginTop: 4}}>nov</span>
+							<span style={{fontSize: 22, fontWeight: 500, marginTop: 4}}>{taller ? 'nov' : 'févr'}</span>
 						</div>
 					))}
 				</div>
@@ -62,7 +72,7 @@ export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number;
 						<div style={{position: 'absolute', right: 20, top: 18, width: 200, height: 84, borderRadius: 22, background: OR, textAlign: 'center', lineHeight: '84px', fontSize: 42, fontWeight: 800}}>0</div>
 					</div>
 					<div style={{position: 'absolute', left: 90, top: 190, fontSize: 38, fontWeight: 600}}>En cours</div>
-					<div style={{position: 'absolute', right: 90, top: 190, fontSize: 38, fontWeight: 600}}>0/9</div>
+					<div style={{position: 'absolute', right: 90, top: 190, fontSize: 38, fontWeight: 600}}>{taller ? '0/9' : '0/10'}</div>
 					<div style={{position: 'absolute', left: 90, right: 90, top: 262, height: 14, borderRadius: 7, background: '#222'}} />
 					{HABITUDES.map((h, i) => (
 						<div key={h} style={{position: 'absolute', left: 90, right: 90, top: 330 + i * 168, height: 138, borderRadius: 26, background: CARTE}}>

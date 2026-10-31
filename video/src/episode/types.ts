@@ -49,7 +49,7 @@ export type Element =
 	/** Fausse pause (« PAUSE ❚❚ » + symbole en bas). */
 	| (Base & {type: 'pause'; icone?: 'pause' | 'lecture'})
 	/** Écran « Ma routine » flouté façon Taller (src/episode/RoutineGrandimi.tsx) ; 🤫 à `chut`. */
-	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre; onglets?: string[]})
+	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre; onglets?: string[]; taller?: boolean})
 	/** Écran « Création de ton plan… » qui glisse depuis la droite ; chaque étape se coche à son ancre, 100 % à `fin`
 	    (référence rayan.taller, src/episode/ChargementPlan.tsx). */
 	| (Base & {type: 'chargement'; fin: Ancre; etapes: {texte: string; a: Ancre}[]; x?: number; y?: number; w?: number; h?: number; titre?: string})

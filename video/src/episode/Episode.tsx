@@ -800,7 +800,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 		if (el.type === 'dm') return <DM key={i} el={el} at={loc(el.a)} />;
 		if (el.type === 'jauge') return <Jauge key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} />;
 		if (el.type === 'routine')
-			return <RoutineGrandimi key={i} at={loc(el.a)} url={el.url} flou={el.flou} chut={el.chut !== undefined ? loc(el.chut) : undefined} onglets={el.onglets} />;
+			return <RoutineGrandimi key={i} at={loc(el.a)} url={el.url} flou={el.flou} chut={el.chut !== undefined ? loc(el.chut) : undefined} onglets={el.onglets} taller={el.taller} />;
 		if (el.type === 'pause') return <PauseFactice key={i} icone={el.icone ?? 'pause'} at={loc(el.a)} />;
 		if (el.type === 'chargement')
 			return (
