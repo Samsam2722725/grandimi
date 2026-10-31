@@ -8,9 +8,8 @@ le nom, l'âge, les chiffres, la photo, l'avatar, le ballon de l'âge.
 ## Ce que l'utilisateur envoie (dans un seul message si possible)
 
 1. Le texte (script) : on le recopie **mot pour mot** dans `lines`. On ne l'améliore pas ; on signale une erreur
-   une seule fois. Fin conseillée (31/10, le site d'abord, pas « gratuit » : le site est payant) :
-   « Tu veux connaître ta taille adulte et ton programme pour grandir au max ? Lien en bio, grandimi.com.
-   Et dis ton âge en commentaire, je ferai peut-être ta prédiction. » (ids `cta`, `site`, `com`).
+   une seule fois. Positionnement (31/10) : Grandimi sert surtout à savoir **comment grandir**, avec un **programme
+   personnalisé** ; la prédiction n'est pas « juste âge + taille + parents ». Pas de « gratuit » (le site est payant).
 2. La voix ElevenLabs (mp3).
 3. La photo de la personne (accroche) et la photo « verdict » (fin), plus l'avatar du commentaire si différent.
 4. Le commentaire affiché sur la carte (pseudo + texte), et les chiffres : âge, taille actuelle, taille prédite,
@@ -70,8 +69,8 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
     appuie sur « Je commence », « Garçon », puis glisse sur le poids. À placer **quand la voix parle du site**
     (louis-23 : « va sur grandimi.com. Tu rentres ton âge, ta taille… »), puis le plan `resultat` (zoom sur la
     taille prédite) ;
-  - fin `fin-site` : « grandimi.com » en gros, capture du site, « Lien en bio 👉 » ; pas de sous-titres dessus.
-  - Si le script ne dit pas « pas foutu », garder quand même la photo verdict + « PAS FOUTU ✅ » (elle répond au
+  - fin **comme l'original** (la fin « grandimi.com en gros + capture + Lien en bio » a été jugée affreuse le
+    31/10) : topo, « 🔗 grandimi.com » en pastille orange, 🧓 sur « âge », « ANALYSÉ » + ordinateur, règle.
     commentaire « suis-je foutu ? »), sans sous-titres par-dessus.
   Si le site change, refaire les captures sur le téléphone (barre Safari en bas) et remplacer `site_*.png`.
 

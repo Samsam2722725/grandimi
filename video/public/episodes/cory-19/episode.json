@@ -758,61 +758,18 @@
             "d": 40
           },
           "fin": "site"
-        }
-      ],
-      "sons": [
-        {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.22
-        }
-      ]
-    },
-    {
-      "nom": "fin-site",
-      "debut": "site",
-      "transition": "radial",
-      "elements": [
-        {
-          "type": "texte",
-          "texte": "grandimi.com",
-          "a": 0,
-          "y": 250,
-          "taille": 120,
-          "couleur": "#ff7a3d",
-          "contour": 2,
-          "poids": 800,
-          "police": "Montserrat",
-          "effet": "pop",
-          "son": "ding",
-          "volume": 0.25,
-          "contourCouleur": "#ff7a3d"
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "site_accueil.png",
-          "a": 2,
-          "x": 300,
-          "y": 440,
-          "w": 480,
-          "h": 1039,
-          "effet": "pop"
         },
         {
           "type": "texte",
-          "texte": "Lien en bio 👉",
-          "a": 8,
-          "y": 1530,
-          "taille": 76,
+          "texte": "🔗 grandimi.com",
+          "a": "site:grandimi.com",
+          "y": 400,
+          "taille": 96,
           "couleur": "#fff",
-          "fond": "#e95a2e",
-          "contour": 0,
-          "poids": 800,
-          "police": "Montserrat",
-          "effet": "pop",
-          "son": "pop",
-          "volume": 0.3
+          "fond": "#ff5a1f",
+          "amorti": 8,
+          "son": "ding",
+          "volume": 0.25
         }
       ],
       "sons": [
@@ -844,7 +801,7 @@
       },
       {
         "de": "cta",
-        "a": "site",
+        "a": "fin",
         "y": 822,
         "taille": 86,
         "motsMax": 4,
