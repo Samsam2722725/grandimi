@@ -190,7 +190,7 @@
           {
             "a": "age:mesure",
             "cx": 0.38,
-            "cy": 0.3085,
+            "cy": 0.26,
             "z": 1.61,
             "d": 11,
             "courbe": "avant"
@@ -206,7 +206,7 @@
           {
             "a": "predit:taille",
             "cx": 0.646,
-            "cy": 0.3301,
+            "cy": 0.286,
             "z": 1.77,
             "d": 11,
             "courbe": "avant"
@@ -215,7 +215,7 @@
         "pops": [
           {
             "ligne": "rang",
-            "a": "norme:petit+6",
+            "a": "norme:petit",
             "d": 12,
             "fin": "predit",
             "dFin": 10,
@@ -229,7 +229,12 @@
           "fin": "age:16+30",
           "chute": true
         },
-        "url": "grandimi.com"
+        "onglets": [
+          "Rapport",
+          "Programme",
+          "Exercices",
+          "Routine"
+        ]
       },
       "elements": [],
       "sons": [
@@ -258,7 +263,8 @@
           "son": "whoosh",
           "volume": 0.28
         }
-      ]
+      ],
+      "telephone": true
     },
     {
       "nom": "routine",
@@ -269,9 +275,12 @@
         {
           "type": "routine",
           "a": 0,
-          "url": "grandimi.com",
-          "flou": 13,
-          "chut": "habitudes:bonnes"
+          "flou": 0,
+          "onglets": [
+            "Programme",
+            "Exercices",
+            "Routine"
+          ]
         }
       ],
       "sons": [
@@ -279,13 +288,9 @@
           "a": 0,
           "son": "whoosh",
           "volume": 0.22
-        },
-        {
-          "a": "habitudes:bonnes",
-          "son": "pop",
-          "volume": 0.3
         }
-      ]
+      ],
+      "telephone": true
     },
     {
       "nom": "chiffre",
@@ -375,7 +380,7 @@
           {
             "a": "fini:terminé",
             "cx": 0.7,
-            "cy": 0.8291,
+            "cy": 0.79,
             "z": 2.0,
             "d": 12,
             "courbe": "avant"
@@ -410,7 +415,12 @@
             "dFin": 16
           }
         ],
-        "url": "grandimi.com"
+        "onglets": [
+          "Rapport",
+          "Programme",
+          "Exercices",
+          "Routine"
+        ]
       },
       "effets": [
         {
@@ -426,7 +436,7 @@
           "fichier": "curseur.png",
           "a": "pct:plus",
           "x": 404,
-          "y": 1442,
+          "y": 1292,
           "w": 192,
           "h": 204,
           "depuis": {
@@ -456,11 +466,12 @@
           "son": "whoosh",
           "volume": 0.28
         }
-      ]
+      ],
+      "telephone": true
     },
     {
       "nom": "verdict",
-      "debut": "fini:sa",
+      "debut": "fini:croissance",
       "transition": "glitch",
       "sortie": "zoom-flou",
       "image": "verdict",
@@ -485,7 +496,7 @@
         {
           "type": "tape",
           "texte": "PAS FOUTU ✅",
-          "a": 2,
+          "a": "fini:croissance+4",
           "y": 800,
           "taille": 100,
           "couleur": "#24ef3c",
@@ -510,7 +521,6 @@
       "debut": "cta",
       "transition": "radial",
       "fond": "topo",
-      "sortie": "radial-fin",
       "elements": [
         {
           "type": "texte",
@@ -566,18 +576,61 @@
             "d": 40
           },
           "fin": "site"
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "fin-site",
+      "debut": "site",
+      "transition": "radial",
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "grandimi.com",
+          "a": 0,
+          "y": 250,
+          "taille": 120,
+          "couleur": "#ff7a3d",
+          "contour": 2,
+          "poids": 800,
+          "police": "Montserrat",
+          "effet": "pop",
+          "son": "ding",
+          "volume": 0.25,
+          "contourCouleur": "#ff7a3d"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "site_accueil.png",
+          "a": 2,
+          "x": 300,
+          "y": 440,
+          "w": 480,
+          "h": 1039,
+          "effet": "pop"
         },
         {
           "type": "texte",
-          "texte": "🔗 grandimi.com",
-          "a": "site:grandimi.com",
-          "y": 400,
-          "taille": 96,
+          "texte": "Lien en bio 👉",
+          "a": 8,
+          "y": 1530,
+          "taille": 76,
           "couleur": "#fff",
-          "fond": "#ff5a1f",
-          "amorti": 8,
-          "son": "ding",
-          "volume": 0.25
+          "fond": "#e95a2e",
+          "contour": 0,
+          "poids": 800,
+          "police": "Montserrat",
+          "effet": "pop",
+          "son": "pop",
+          "volume": 0.3
         }
       ],
       "sons": [
@@ -609,7 +662,7 @@
       },
       {
         "de": "cta",
-        "a": "fin",
+        "a": "site",
         "y": 822,
         "taille": 86,
         "motsMax": 4,
@@ -624,7 +677,7 @@
       }
     ]
   },
-  "voix": "Enregistrement ElevenLabs de l'utilisateur (voix ElevenLabs), blancs ramenés à 0,08 s, vitesse d'origine.",
+  "voix": "Enregistrement ElevenLabs de l'utilisateur (Lucas), blancs ramenés à 0,08 s, vitesse d'origine.",
   "reference": "references/p12-steve",
   "deriveCamera": false,
   "sonsMouvements": false,
