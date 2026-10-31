@@ -86,6 +86,8 @@ import {
 } from '../onboarding/payload'
 
 const STOCKAGE = 'grandimi:onboarding-v2'
+// Change à chaque fois que l'ordre des écrans change (cf. index sauvegardé).
+const ORDRE_VERSION = 'taller-2026-10-31'
 
 function anneeParDefaut() {
   return new Date().getFullYear() - 18
@@ -327,7 +329,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   const [index, setIndex] = useState(
     () =>
       indexEtapePreview(reponses) ??
-      etatSauvegarde?.index ??
+      /* Un questionnaire commencé avant le nouvel ordre (31/10/2026) n'a pas
+         `ordre` : son numéro d'écran pointerait ailleurs. Il reprend au
+         début, ses réponses déjà remplies. */
+      (etatSauvegarde?.ordre === ORDRE_VERSION ? etatSauvegarde.index : null) ??
       (sexeDepart ? etapesPour(reponses).indexOf('sexe') + 1 : 0),
   )
   const [unites, setUnites] = useState(etatSauvegarde?.unites ?? unitesInitiales())
@@ -370,7 +375,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   )
 
   useEffect(() => {
-    localStorage.setItem(STOCKAGE, JSON.stringify({ index, reponses, unites }))
+    localStorage.setItem(STOCKAGE, JSON.stringify({ ordre: ORDRE_VERSION, index, reponses, unites }))
   }, [index, reponses, unites])
 
   useEffect(() => {
