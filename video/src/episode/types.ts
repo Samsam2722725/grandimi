@@ -69,7 +69,7 @@ export type Plan = {
 	/** Écran de téléphone cadré comme Taller (×0,86, à 175 px du haut) avec, en haut de l'écran, la barre Safari
 	    « grandimi.com » et les onglets du site (`onglets`, `actif`) ; `coupeHaut` / `basCache` : bandes de la page
 	    à ne pas montrer (barre d'état, onglets du bas ; 0 et 215 par défaut). */
-	telephone?: boolean | {onglets?: string[]; actif?: string; coupeHaut?: number; basCache?: number};
+	telephone?: boolean | {onglets?: string[]; actif?: string; coupeHaut?: number; basCache?: number; tap?: {onglet: string; a: Ancre}};
 	/** Entrée du plan. glisse / rebond / secousse : mouvements mesurés sur la référence 7436214342510513439 ;
 	    bascule : entrée inclinée qui se redresse (référence 7444371749753408810). */
 	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule' | 'etire' | 'radial' | 'lumiere-rouge' | 'jaune-glisse' | 'glitch';

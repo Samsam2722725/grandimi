@@ -49,19 +49,19 @@
       "text": "Et il a déjà terminé 96 % de sa croissance."
     },
     {
-      "id": "cta",
+      "id": "fin",
       "pause": 0,
-      "text": "Si tu veux connaître ta taille adulte, va sur {grandimi.com|grandini.com}."
+      "text": "Louis, il a encore 2 cm à aller chercher."
     },
     {
-      "id": "rentre",
+      "id": "toi",
       "pause": 0,
-      "text": "Tu rentres ton âge, ta taille et celle de tes parents, et tu as ta prédiction."
+      "text": "Toi aussi, t'en as probablement."
     },
     {
-      "id": "com",
+      "id": "site",
       "pause": 0,
-      "text": "Et écris ton âge en commentaire, je ferai peut-être la tienne."
+      "text": "Va sur {grandimi.com|grandtimie.com}, et suis le programme fait pour toi."
     }
   ],
   "musique": {
@@ -507,6 +507,21 @@
           "type": "tape",
           "texte": "PAS FOUTU ✅",
           "a": "fini:croissance+4",
+          "fin": "fin:2",
+          "y": 800,
+          "taille": 100,
+          "couleur": "#24ef3c",
+          "contour": 0,
+          "police": "Montserrat",
+          "poids": 800,
+          "parLettre": 1,
+          "son": "tick",
+          "volume": 0.2
+        },
+        {
+          "type": "tape",
+          "texte": "ENCORE +2 CM",
+          "a": "fin:2",
           "y": 800,
           "taille": 100,
           "couleur": "#24ef3c",
@@ -527,8 +542,53 @@
       ]
     },
     {
+      "nom": "toi",
+      "debut": "toi-2",
+      "transition": "radial",
+      "fond": "topo",
+      "topo": {
+        "zoomDe": 0.6,
+        "d": 18
+      },
+      "elements": [
+        {
+          "type": "tape",
+          "texte": "TOI AUSSI ?",
+          "a": 2,
+          "y": 560,
+          "taille": 130,
+          "couleur": "#fff200",
+          "police": "Montserrat",
+          "poids": 900,
+          "contour": 9,
+          "curseur": true,
+          "parLettre": 1,
+          "son": "tick",
+          "volume": 0.3
+        },
+        {
+          "type": "texte",
+          "texte": "🫵",
+          "a": "toi:t'en",
+          "y": 820,
+          "taille": 330,
+          "contour": 0,
+          "effet": "pop",
+          "son": "pop",
+          "volume": 0.3
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
       "nom": "site",
-      "debut": "cta:va-2",
+      "debut": "site-2",
       "transition": "jaune-glisse",
       "elements": [
         {
@@ -539,14 +599,13 @@
           "x": 0,
           "y": 0,
           "w": 1080,
-          "h": 2338,
-          "fin": "rentre:âge"
+          "h": 2338
         },
         {
           "type": "image",
           "ecran": true,
           "fichier": "curseur.png",
-          "a": "rentre:rentres",
+          "a": "site:grandimi.com+6",
           "x": 468,
           "y": 1510,
           "w": 192,
@@ -554,57 +613,6 @@
           "depuis": {
             "y": 90,
             "d": 4
-          },
-          "fin": "rentre:âge"
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "site_sexe.png",
-          "a": "rentre:âge",
-          "x": 0,
-          "y": 0,
-          "w": 1080,
-          "h": 2338,
-          "fin": "rentre:taille"
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "curseur.png",
-          "a": "rentre:âge+4",
-          "x": 468,
-          "y": 885,
-          "w": 192,
-          "h": 204,
-          "depuis": {
-            "y": 90,
-            "d": 4
-          },
-          "fin": "rentre:taille"
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "site_poids.png",
-          "a": "rentre:taille",
-          "x": 0,
-          "y": 0,
-          "w": 1080,
-          "h": 2338
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "curseur.png",
-          "a": "rentre:taille+4",
-          "x": 468,
-          "y": 1250,
-          "w": 192,
-          "h": 204,
-          "depuis": {
-            "y": 170,
-            "d": 12
           }
         }
       ],
@@ -615,17 +623,7 @@
           "volume": 0.22
         },
         {
-          "a": "rentre:rentres+3",
-          "son": "tick",
-          "volume": 0.3
-        },
-        {
-          "a": "rentre:âge+7",
-          "son": "tick",
-          "volume": 0.3
-        },
-        {
-          "a": "rentre:taille+8",
+          "a": "site:grandimi.com+10",
           "son": "tick",
           "volume": 0.3
         }
@@ -636,9 +634,23 @@
       }
     },
     {
-      "nom": "resultat",
-      "debut": "rentre:et#2",
+      "nom": "programme",
+      "debut": "site:et-1",
       "transition": "glitch",
+      "telephone": {
+        "onglets": [
+          "Rapport",
+          "Programme",
+          "Exercices",
+          "Routine"
+        ],
+        "actif": "Rapport",
+        "coupeHaut": 60,
+        "tap": {
+          "onglet": "Programme",
+          "a": "site:programme"
+        }
+      },
       "dashboard": {
         "donnees": {
           "actuelle": "175 cm",
@@ -668,19 +680,10 @@
           "chancesCm": "185 cm",
           "croissance": "96 %"
         },
-        "cams": [
-          {
-            "a": "rentre:prédiction",
-            "cx": 0.646,
-            "cy": 0.286,
-            "z": 1.77,
-            "d": 11,
-            "courbe": "avant"
-          }
-        ],
+        "onglets": [],
+        "cams": [],
         "pops": [],
-        "fleches": [],
-        "onglets": []
+        "fleches": []
       },
       "sons": [
         {
@@ -689,11 +692,16 @@
           "volume": 0.2
         },
         {
-          "a": "rentre:prédiction",
-          "son": "whoosh",
-          "volume": 0.28
+          "a": "site:programme",
+          "son": "tick",
+          "volume": 0.3
         }
-      ],
+      ]
+    },
+    {
+      "nom": "programme2",
+      "debut": "site:fait",
+      "transition": "jaune-glisse",
       "telephone": {
         "onglets": [
           "Rapport",
@@ -701,13 +709,26 @@
           "Exercices",
           "Routine"
         ],
-        "actif": "Rapport",
-        "coupeHaut": 60
-      }
+        "actif": "Programme"
+      },
+      "elements": [
+        {
+          "type": "routine",
+          "a": 0,
+          "flou": 0
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
     },
     {
       "nom": "appel",
-      "debut": "com",
+      "debut": "site:toi+8",
       "transition": "radial",
       "fond": "topo",
       "sortie": "radial-fin",
@@ -716,51 +737,13 @@
           "type": "texte",
           "texte": "🔗 grandimi.com",
           "a": 0,
-          "y": 300,
-          "taille": 96,
+          "y": 820,
+          "taille": 110,
           "couleur": "#fff",
           "fond": "#ff5a1f",
           "amorti": 8,
           "son": "ding",
           "volume": 0.25
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "papy.png",
-          "a": "com:âge",
-          "x": 440,
-          "y": 1310,
-          "w": 200,
-          "h": 200,
-          "effet": "pop",
-          "fin": "com:ferai",
-          "son": "pop",
-          "volume": 0.25
-        },
-        {
-          "type": "texte",
-          "texte": "ANALYSÉ",
-          "a": "com:ferai",
-          "y": 520,
-          "taille": 110,
-          "couleur": "#fff200",
-          "contour": 7,
-          "poids": 800,
-          "police": "Montserrat"
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "ordi.png",
-          "a": "com:ferai",
-          "x": 350,
-          "y": 700,
-          "w": 380,
-          "h": 380,
-          "effet": "pop",
-          "son": "pop",
-          "volume": 0.3
         }
       ],
       "sons": [
@@ -792,7 +775,7 @@
       }
     ]
   },
-  "voix": "Enregistrement ElevenLabs de l'utilisateur (Lucas), blancs ramenés à 0,08 s, vitesse d'origine.",
+  "voix": "Enregistrement ElevenLabs de l'utilisateur (Lucas ; fin « Louis, il a encore 2 cm… » : Nicolas), blancs ramenés à 0,08 s.",
   "reference": "references/p12-steve",
   "deriveCamera": false,
   "sonsMouvements": false,

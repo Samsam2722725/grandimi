@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "totalFrames": 1176,
+  "totalFrames": 1136,
   "audio": "voice/voix.wav",
   "lines": [
     {
@@ -391,183 +391,131 @@
         },
         {
           "w": "sa",
-          "f": 850
+          "f": 848
         },
         {
           "w": "croissance.",
-          "f": 855
+          "f": 853
         }
       ]
     },
     {
-      "id": "cta",
-      "text": "Si tu veux connaître ta taille adulte, va sur grandimi.com.",
+      "id": "fin",
+      "text": "Louis, il a encore 2 cm à aller chercher.",
       "from": 872,
-      "duration": 97,
+      "duration": 71,
       "words": [
         {
-          "w": "Si",
+          "w": "Louis,",
           "f": 872
         },
         {
-          "w": "tu",
-          "f": 877
+          "w": "il",
+          "f": 886
         },
         {
-          "w": "veux",
-          "f": 879
+          "w": "a",
+          "f": 891
         },
         {
-          "w": "connaître",
-          "f": 884
-        },
-        {
-          "w": "ta",
+          "w": "encore",
           "f": 893
         },
         {
-          "w": "taille",
+          "w": "2",
           "f": 901
         },
         {
-          "w": "adulte,",
-          "f": 910
+          "w": "cm",
+          "f": 908
         },
         {
-          "w": "va",
-          "f": 925
+          "w": "à",
+          "f": 922
         },
         {
-          "w": "sur",
-          "f": 929
+          "w": "aller",
+          "f": 927
         },
         {
-          "w": "grandimi.com.",
-          "f": 934
+          "w": "chercher.",
+          "f": 932
         }
       ]
     },
     {
-      "id": "rentre",
-      "text": "Tu rentres ton âge, ta taille et celle de tes parents, et tu as ta prédiction.",
-      "from": 970,
-      "duration": 108,
+      "id": "toi",
+      "text": "Toi aussi, t'en as probablement.",
+      "from": 944,
+      "duration": 42,
       "words": [
         {
-          "w": "Tu",
-          "f": 970
+          "w": "Toi",
+          "f": 944
         },
         {
-          "w": "rentres",
-          "f": 975
+          "w": "aussi,",
+          "f": 949
         },
         {
-          "w": "ton",
-          "f": 985
-        },
-        {
-          "w": "âge,",
-          "f": 989
-        },
-        {
-          "w": "ta",
-          "f": 1002
-        },
-        {
-          "w": "taille",
-          "f": 1009
-        },
-        {
-          "w": "et",
-          "f": 1019
-        },
-        {
-          "w": "celle",
-          "f": 1024
-        },
-        {
-          "w": "de",
-          "f": 1028
-        },
-        {
-          "w": "tes",
-          "f": 1031
-        },
-        {
-          "w": "parents,",
-          "f": 1036
-        },
-        {
-          "w": "et",
-          "f": 1045
-        },
-        {
-          "w": "tu",
-          "f": 1050
+          "w": "t'en",
+          "f": 958
         },
         {
           "w": "as",
-          "f": 1055
+          "f": 965
         },
         {
-          "w": "ta",
-          "f": 1060
-        },
-        {
-          "w": "prédiction.",
-          "f": 1064
+          "w": "probablement.",
+          "f": 970
         }
       ]
     },
     {
-      "id": "com",
-      "text": "Et écris ton âge en commentaire, je ferai peut-être la tienne.",
-      "from": 1079,
-      "duration": 94,
+      "id": "site",
+      "text": "Va sur grandimi.com, et suis le programme fait pour toi.",
+      "from": 987,
+      "duration": 146,
       "words": [
         {
-          "w": "Et",
-          "f": 1079
+          "w": "Va",
+          "f": 987
         },
         {
-          "w": "écris",
-          "f": 1084
+          "w": "sur",
+          "f": 992
         },
         {
-          "w": "ton",
-          "f": 1093
+          "w": "grandimi.com,",
+          "f": 997
         },
         {
-          "w": "âge",
-          "f": 1098
+          "w": "et",
+          "f": 1033
         },
         {
-          "w": "en",
-          "f": 1105
+          "w": "suis",
+          "f": 1035
         },
         {
-          "w": "commentaire,",
-          "f": 1108
+          "w": "le",
+          "f": 1045
         },
         {
-          "w": "je",
-          "f": 1122
+          "w": "programme",
+          "f": 1049
         },
         {
-          "w": "ferai",
-          "f": 1127
+          "w": "fait",
+          "f": 1059
         },
         {
-          "w": "peut-être",
-          "f": 1136
+          "w": "pour",
+          "f": 1071
         },
         {
-          "w": "la",
-          "f": 1146
-        },
-        {
-          "w": "tienne.",
-          "f": 1151
+          "w": "toi.",
+          "f": 1078
         }
       ]
     }

@@ -1178,8 +1178,17 @@ const TitreFixe: React.FC<{texte: string; de: number; a: number; y: number; tail
  * couvre pas (sous l'en-tête de l'appli, au-dessus de la légende).
  */
 const ECRAN = {echelle: 0.86, haut: 175, safari: 172, onglets: 118, bas: 215};
-const Telephone: React.FC<{reglage: Exclude<Plan['telephone'], undefined | false>; children: React.ReactNode}> = ({reglage, children}) => {
+const Telephone: React.FC<{reglage: Exclude<Plan['telephone'], undefined | false>; tapA?: number; doigt?: string; children: React.ReactNode}> = ({
+	reglage,
+	tapA,
+	doigt,
+	children,
+}) => {
+	const f = useCurrentFrame();
 	const r = reglage === true ? {} : reglage;
+	// Doigt qui appuie sur un onglet (`tap`) : il monte 8 images avant, l'onglet devient actif à `tapA`.
+	const tapIndex = r.tap && r.onglets ? r.onglets.indexOf(r.tap.onglet) : -1;
+	const actif = r.tap && tapA !== undefined && f >= tapA ? r.tap.onglet : r.actif;
 	const coupe = r.coupeHaut ?? 0;
 	const hautOnglets = r.onglets?.length ? ECRAN.onglets : 0;
 	const debutPage = ECRAN.safari + hautOnglets;
@@ -1205,7 +1214,19 @@ const Telephone: React.FC<{reglage: Exclude<Plan['telephone'], undefined | false
 					<div style={{position: 'absolute', left: 0, top: -coupe, width: 1080, height: 1920}}>{children}</div>
 				</div>
 				<BarreSafari url="grandimi.com" />
-				{r.onglets?.length ? <OngletsHaut onglets={r.onglets} actif={r.actif ?? r.onglets[0]} /> : null}
+				{r.onglets?.length ? <OngletsHaut onglets={r.onglets} actif={actif ?? r.onglets[0]} /> : null}
+				{tapIndex >= 0 && tapA !== undefined && doigt && f >= tapA - 8 && f < tapA + 14 ? (
+					<Img
+						src={doigt}
+						style={{
+							position: 'absolute',
+							left: ((tapIndex + 0.5) / (r.onglets?.length ?? 1)) * 1080 - 72,
+							top: ECRAN.safari + ECRAN.onglets / 2 + interpolate(f, [tapA - 8, tapA - 2], [110, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}),
+							width: 192,
+							height: 204,
+						}}
+					/>
+				) : null}
 			</div>
 		</AbsoluteFill>
 	);
@@ -1308,7 +1329,11 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 					return (
 						<Sequence key={p.nom} name={p.nom} from={starts[i]} durationInFrames={to - starts[i]}>
 							{p.telephone ? (
-								<Telephone reglage={p.telephone}>
+								<Telephone
+									reglage={p.telephone}
+									tapA={typeof p.telephone === 'object' && p.telephone.tap ? resolve(p.telephone.tap.a) - starts[i] : undefined}
+									doigt={staticFile(`episodes/${episode}/images/curseur.png`)}
+								>
 									<PlanView plan={p} start={starts[i]} end={to} ep={data} id={episode} resolve={resolve} />
 								</Telephone>
 							) : (
