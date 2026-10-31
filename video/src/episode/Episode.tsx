@@ -799,7 +799,8 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			return <Compteur key={i} el={el} at={loc(el.a)} arrivee={loc(el.arrivee)} fin={el.fin !== undefined ? loc(el.fin) : undefined} />;
 		if (el.type === 'dm') return <DM key={i} el={el} at={loc(el.a)} />;
 		if (el.type === 'jauge') return <Jauge key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} />;
-		if (el.type === 'routine') return <RoutineGrandimi key={i} at={loc(el.a)} url={el.url} flou={el.flou} chut={el.chut !== undefined ? loc(el.chut) : undefined} />;
+		if (el.type === 'routine')
+			return <RoutineGrandimi key={i} at={loc(el.a)} url={el.url} flou={el.flou} chut={el.chut !== undefined ? loc(el.chut) : undefined} onglets={el.onglets} />;
 		if (el.type === 'pause') return <PauseFactice key={i} icone={el.icone ?? 'pause'} at={loc(el.a)} />;
 		if (el.type === 'chargement')
 			return (
@@ -862,6 +863,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					revele={plan.dashboard.revele !== undefined ? loc(plan.dashboard.revele) : undefined}
 					url={plan.dashboard.url}
 					entete={plan.dashboard.entete}
+					onglets={plan.dashboard.onglets}
 					ballon={
 						plan.dashboard.ballon
 							? {src: file(plan.dashboard.ballon.fichier), a: loc(plan.dashboard.ballon.a), fin: loc(plan.dashboard.ballon.fin), chute: plan.dashboard.ballon.chute}
@@ -1168,6 +1170,32 @@ const TitreFixe: React.FC<{texte: string; de: number; a: number; y: number; tail
 	);
 };
 
+/** Pastille du lien, fixe, au-dessus de tout ; cachée pendant les plans `caches` ([début, fin[ en images). */
+const LienFixe: React.FC<{texte: string; y: number; de: number; a: number; caches: [number, number][]}> = ({texte, y, de, a, caches}) => {
+	const f = useCurrentFrame();
+	if (f < de || f >= a || caches.some(([d0, d1]) => f >= d0 && f < d1)) return null;
+	return (
+		<div style={{position: 'absolute', left: 0, right: 0, top: y, display: 'flex', justifyContent: 'center'}}>
+			<div
+				style={{
+					background: 'linear-gradient(90deg, #f0843e, #e95a2e)',
+					color: '#fff',
+					fontFamily: `${FONT}, 'Noto Color Emoji'`,
+					fontWeight: 800,
+					fontSize: 38,
+					lineHeight: 1,
+					padding: '16px 32px',
+					borderRadius: 40,
+					boxShadow: '0 6px 18px rgba(0,0,0,0.35)',
+					whiteSpace: 'nowrap',
+				}}
+			>
+				{texte}
+			</div>
+		</div>
+	);
+};
+
 /* ───────── Composition ───────── */
 export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTitres = true, voix = true, musique = true, bruitages = true}) => {
 	usePolices();
@@ -1244,6 +1272,18 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 						a={data.titre.a !== undefined ? resolve(data.titre.a) : END}
 						y={data.titre.y ?? 300}
 						taille={data.titre.taille ?? 92}
+					/>
+				) : null}
+				{data.lien ? (
+					<LienFixe
+						texte={data.lien.texte ?? '🔗 grandimi.com · lien en bio'}
+						y={data.lien.y ?? 250}
+						de={data.lien.de !== undefined ? resolve(data.lien.de) : 0}
+						a={data.lien.a !== undefined ? resolve(data.lien.a) : END}
+						caches={data.plans
+							.map((p, i): [string, number, number] => [p.nom, starts[i], i + 1 < starts.length ? starts[i + 1] : END])
+							.filter(([nom]) => (data.lien?.masque ?? []).includes(nom))
+							.map(([, d0, d1]) => [d0, d1])}
 					/>
 				) : null}
 				{sousTitres ? <Captions windows={windows} /> : null}

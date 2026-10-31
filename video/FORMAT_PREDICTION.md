@@ -8,7 +8,9 @@ le nom, l'âge, les chiffres, la photo, l'avatar, le ballon de l'âge.
 ## Ce que l'utilisateur envoie (dans un seul message si possible)
 
 1. Le texte (script) : on le recopie **mot pour mot** dans `lines`. On ne l'améliore pas ; on signale une erreur
-   une seule fois.
+   une seule fois. Fin conseillée (31/10, le site d'abord, pas « gratuit » : le site est payant) :
+   « Tu veux connaître ta taille adulte et ton programme pour grandir au max ? Lien en bio, grandimi.com.
+   Et dis ton âge en commentaire, je ferai peut-être ta prédiction. » (ids `cta`, `site`, `com`).
 2. La voix ElevenLabs (mp3).
 3. La photo de la personne (accroche) et la photo « verdict » (fin), plus l'avatar du commentaire si différent.
 4. Le commentaire affiché sur la carte (pseudo + texte), et les chiffres : âge, taille actuelle, taille prédite,
@@ -21,7 +23,7 @@ le nom, l'âge, les chiffres, la photo, l'avatar, le ballon de l'âge.
 S=<dossier temporaire>; cd video
 # outils (une fois par session) : voir .claude/skills/video/SKILL.md « Démarrage » (venv, Parakeet, npm install)
 python scripts/nouvel_episode.py prenom-N --depuis cory-19
-cp public/episodes/cory-19/images/{alien.png,curseur.png,ordi.png,papy.png,regle.png,papier*.jpg} public/episodes/prenom-N/images/
+cp public/episodes/cory-19/images/{alien.png,curseur.png,ordi.png,papy.png,regle.png,papier*.jpg,site_*.png} public/episodes/prenom-N/images/
 #   (silhouette violette : prendre silhouette.png dans sam-39 et l'élément image du plan « chiffre » de sam-39)
 python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent   # âge de la personne
 ```
@@ -54,14 +56,27 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
 
 ## Ce qui est réglé et ne doit pas bouger (validé par l'utilisateur)
 
+- Depuis le 31/10 (vendre le site) :
+  - pastille « 🔗 grandimi.com · lien en bio » en haut (y 250) toute la vidéo, cachée sur les écrans de l'appli
+    qui montrent déjà l'adresse et sur le chiffre tapé (`lien.masque`) ;
+  - « Selon le site Grandimi » : vraies captures du site (`site_accueil`, `site_sexe`, `site_poids`), doigt qui
+    appuie sur « Je commence », « Garçon », « Continuer » (plan `site`, de `predit` à `predit:adulte`), puis le
+    résultat (plan `resultat`, zoom sur la taille prédite) ;
+  - onglets du bas « Rapport · Programme · Exercices · Routine » sur le dashboard, « Programme · Exercices ·
+    Routine » sur la routine (on montre que ça existe, pas leur contenu) ;
+  - routine **nette**, sans flou ni 🤫 ; habitudes sommeil / activité / nutrition, jamais de compléments ni de doses ;
+  - fin `fin-site` dès la ligne `site` : « grandimi.com » en gros, capture du site, « Lien en bio 👉 » ; les
+    sous-titres s'arrêtent à `site`.
+  Si le site change, refaire les captures sur le téléphone (barre Safari en bas) et remplacer `site_*.png`.
+
 - Accroche : dézoom lent constant ×1,13 → ×1 ; carte commentaire au format Taller (x 88, y 1045, l 905), jamais
   sur la tête, jusqu'à « 13 ans ».
 - « PARTIE N » tapé en jaune sur papier froissé.
 - Dashboard avec barre d'adresse Safari « grandimi.com », ballon de l'âge qui tombe du haut, zoom taille actuelle
   puis taille prédite.
-- « Avec les bonnes habitudes » : écran « Ma routine » de Taller en français, flouté, 🤫.
+- « Avec les bonnes habitudes » : écran « Ma routine » en français, net, onglets du site en bas.
 - Topo + silhouette (ou extraterrestre) qui grandit, chiffre tapé sur fond violet.
 - Flèche vers « +5 cm », curseur main sur le rang, zoom centré sur « Croissance accomplie ».
-- Photo verdict + « PAS FOUTU ✅ » ; fin topo « ANALYSÉ », 🧓, règle, « 🔗 grandimi.com ».
+- Photo verdict + « PAS FOUTU ✅ » ; topo « ANALYSÉ », 🧓, règle, puis la fin dédiée au site.
 - Sons : whoosh à chaque zoom avant, son sur la première flèche, rien sur la deuxième flèche ni sur le flash.
 - Sous-titres jaunes Montserrat 600, 86 px, y 822.

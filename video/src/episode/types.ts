@@ -49,7 +49,7 @@ export type Element =
 	/** Fausse pause (« PAUSE ❚❚ » + symbole en bas). */
 	| (Base & {type: 'pause'; icone?: 'pause' | 'lecture'})
 	/** Écran « Ma routine » flouté façon Taller (src/episode/RoutineGrandimi.tsx) ; 🤫 à `chut`. */
-	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre})
+	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre; onglets?: string[]})
 	/** Écran « Création de ton plan… » qui glisse depuis la droite ; chaque étape se coche à son ancre, 100 % à `fin`
 	    (référence rayan.taller, src/episode/ChargementPlan.tsx). */
 	| (Base & {type: 'chargement'; fin: Ancre; etapes: {texte: string; a: Ancre}[]; x?: number; y?: number; w?: number; h?: number; titre?: string})
@@ -107,6 +107,8 @@ export type Plan = {
 		url?: string;
 		/** logo : en-tête « GRANDIMI » + icône, sans barre d'état (diapos format Taller). */
 		entete?: 'logo' | 'aucun';
+		/** Onglets du bas de l'appli (Rapport, Programme, Exercices, Routine) ; le premier est actif. */
+		onglets?: string[];
 	};
 	/** Vidéo explicative (référence p25-ref, src/episode/Explicatif.tsx) : phrases mot par mot, moments et valeurs. */
 	explicatif?: {phrases: {titre: string; de: number; a: number; mots: {w: string; f: number; gras?: boolean}[]}[]; t: Record<string, number>; v: Record<string, string>; fin?: number};
@@ -134,6 +136,9 @@ export type Episode = {
 	/** Carte « Réponse au commentaire de … » affichée par-dessus les plans (src/episode/CarteCommentaire.tsx). */
 	/** Titre fixe en haut de l'écran, style texte TikTok (référence rayan.taller : « 1m60 à 13 ans 🙊💊 »). */
 	titre?: {texte: string; de?: Ancre; a?: Ancre; y?: number; taille?: number};
+	/** Pastille « 🔗 grandimi.com · lien en bio » visible toute la vidéo, sauf sur les plans `masque`
+	    (écrans de l'appli qui montrent déjà l'adresse). */
+	lien?: {texte?: string; y?: number; de?: Ancre; a?: Ancre; masque?: string[]};
 	/** ligne : ligne de commentaire TikTok pleine largeur (référence rayan.taller). */
 	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre; haut?: boolean; x?: number; y?: number; ligne?: boolean; w?: number;
 		/** Carte « Réponse au commentaire » penchée des vidéos Taller : hauteur et rotation (degrés). */

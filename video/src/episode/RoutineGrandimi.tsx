@@ -1,27 +1,28 @@
 import React from 'react';
 import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
 import {FONT} from '../theme';
-import {BarreSafari} from './Dashboard';
+import {BarreOnglets, BarreSafari} from './Dashboard';
 
 /*
  * Écran « Ma routine » recopié de l'écran « Daily routine » de la référence p22-ref (14-16,6 s) : bandeau des jours,
- * « Séries 🔥 », « En cours 0/10 », liste d'habitudes à cocher, barre du bas. La liste est floutée (on ne donne pas
- * le contenu : il faut aller sur grandimi.com) et un 🤫 apparaît par-dessus.
+ * « Séries 🔥 », « En cours 0/10 », liste d'habitudes à cocher, barre du bas. La liste peut être floutée avec un 🤫
+ * par-dessus (`flou`, `chut`) ; depuis le 31/10 elle est nette, avec les onglets du site en bas (`onglets`).
+ * Habitudes : sommeil, activité, nutrition, comme le programme du site (pas de compléments ni de doses).
  */
 const OR = '#ff5a1f';
 const CARTE = '#161616';
 const JOURS = ['7', '8', '9', '10', '11', '12', '13'];
 const HABITUDES = [
-	'Routine physique Grandimi 🏋️',
-	'1 verre de lait + miel 🍯🥛',
-	'4 g de poudre de moringa 🌿',
-	'13 mg de zinc 💊',
-	'Dormir +8 heures 😴',
-	'Oméga 3 💊',
+	'Étirements + posture 🧘',
+	'Sport 45 min 🏀',
+	'Protéines à chaque repas 🍗',
+	'2 verres de lait 🥛',
+	'Dormir 9 heures 😴',
 	'15 min de soleil ☀️',
+	'Boire 2 L d’eau 💧',
 ];
 
-export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number; chut?: number}> = ({at, url, flou = 13, chut}) => {
+export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number; chut?: number; onglets?: string[]}> = ({at, url, flou = 13, chut, onglets}) => {
 	const f = useCurrentFrame();
 	if (f < at) return null;
 	const haut = url ? 172 : 0;
@@ -54,8 +55,8 @@ export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number;
 						</div>
 					))}
 				</div>
-				{/* Tout le contenu de la routine est flouté. */}
-				<div style={{position: 'absolute', left: 0, top: 300, width: 1080, height: 1500, filter: `blur(${flou}px)`}}>
+				{/* Contenu de la routine (flouté si `flou`). */}
+				<div style={{position: 'absolute', left: 0, top: 300, width: 1080, height: 1500, filter: flou ? `blur(${flou}px)` : undefined}}>
 					<div style={{position: 'absolute', left: 90, right: 90, top: 0, height: 120, borderRadius: 26, background: CARTE}}>
 						<div style={{position: 'absolute', left: 50, top: 32, fontSize: 46, fontWeight: 800}}>Séries 🔥</div>
 						<div style={{position: 'absolute', right: 20, top: 18, width: 200, height: 84, borderRadius: 22, background: OR, textAlign: 'center', lineHeight: '84px', fontSize: 42, fontWeight: 800}}>0</div>
@@ -71,6 +72,7 @@ export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number;
 					))}
 				</div>
 			</div>
+			{onglets ? <BarreOnglets onglets={onglets} actif={Math.max(0, onglets.indexOf('Routine'))} /> : null}
 			{chut !== undefined && f >= chut ? (
 				<div style={{position: 'absolute', left: 0, right: 0, top: 640, textAlign: 'center', fontSize: 420, lineHeight: 1, opacity: s, transform: `scale(${rebond})`}}>🤫</div>
 			) : null}

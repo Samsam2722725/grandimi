@@ -221,7 +221,9 @@ export const DashboardGrandimi: React.FC<{
 	url?: string;
 	/** logo : en-tête « GRANDIMI » + icône ; aucun : ni titre ni boutons (diapos format Taller). */
 	entete?: 'logo' | 'aucun';
-}> = ({d, cams, pops, fleches, ballon, revele, url, entete}) => {
+	/** Onglets du bas (le premier est l'onglet actif) ; sans eux : taille / croissance / quotidien. */
+	onglets?: string[];
+}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets}) => {
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
 	const sx = (l: Ligne) => echelleLigne(pops, l, f);
@@ -372,19 +374,21 @@ export const DashboardGrandimi: React.FC<{
 					<Jauge pct={parseFloat(d.croissance.replace(',', '.'))} />
 				</Bloc>
 				{/* Barre de navigation */}
-				{[
-					['taille', 0.21, true],
-					['croissance', 0.5, false],
-					['quotidien', 0.79, false],
-				].map(([nom, x, actif]) => (
-					<div
-						key={nom as string}
-						style={{position: 'absolute', left: (x as number) * W - 90, top: 1735, width: 180, textAlign: 'center', color: actif ? OR : '#8a8a8f'}}
-					>
-						<div style={{fontSize: 46, lineHeight: 1}}>{nom === 'taille' ? '📏' : nom === 'croissance' ? '📈' : '📅'}</div>
-						<div style={{fontSize: 22, fontWeight: 600, marginTop: 10}}>{nom as string}</div>
-					</div>
-				))}
+				{onglets ? null : (
+					[
+						['taille', 0.21, true],
+						['croissance', 0.5, false],
+						['quotidien', 0.79, false],
+					].map(([nom, x, actif]) => (
+						<div
+							key={nom as string}
+							style={{position: 'absolute', left: (x as number) * W - 90, top: 1735, width: 180, textAlign: 'center', color: actif ? OR : '#8a8a8f'}}
+						>
+							<div style={{fontSize: 46, lineHeight: 1}}>{nom === 'taille' ? '📏' : nom === 'croissance' ? '📈' : '📅'}</div>
+							<div style={{fontSize: 22, fontWeight: 600, marginTop: 10}}>{nom as string}</div>
+						</div>
+					))
+				)}
 				<div style={{position: 'absolute', left: W / 2 - 130, top: 1880, width: 260, height: 10, borderRadius: 5, background: '#fff'}} />
 				{b ? (
 					<Img
@@ -405,10 +409,27 @@ export const DashboardGrandimi: React.FC<{
 					<Fleche key={i} fl={fl} f={f} />
 				))}
 			</div>
+			{/* Onglets fixes en bas de l'écran (hors du zoom), comme une vraie appli */}
+			{onglets ? <BarreOnglets onglets={onglets} actif={0} /> : null}
 			{url ? <BarreSafari url={url} /> : null}
 		</AbsoluteFill>
 	);
 };
+
+const ICONES_ONGLETS: Record<string, string> = {Rapport: '📊', Programme: '📋', Exercices: '🏋️', Routine: '✅', Nutrition: '🥗'};
+
+/** Barre d'onglets du bas de l'appli (Rapport, Programme, Exercices, Routine…) : montre ce que contient le site. */
+export const BarreOnglets: React.FC<{onglets: string[]; actif: number}> = ({onglets, actif}) => (
+	<div style={{position: 'absolute', left: 0, top: 1705, width: W, height: 215, background: '#0b0b0b', borderTop: '2px solid #1f1f1f', fontFamily: FONT}}>
+		{onglets.map((nom, i) => (
+			<div key={nom} style={{position: 'absolute', left: ((i + 0.5) / onglets.length) * W - 120, top: 28, width: 240, textAlign: 'center', color: i === actif ? OR : '#9a9aa0'}}>
+				<div style={{fontSize: 50, lineHeight: 1}}>{ICONES_ONGLETS[nom] ?? '•'}</div>
+				<div style={{fontSize: 28, fontWeight: 700, marginTop: 12}}>{nom}</div>
+			</div>
+		))}
+		<div style={{position: 'absolute', left: W / 2 - 130, top: 178, width: 260, height: 10, borderRadius: 5, background: '#fff'}} />
+	</div>
+);
 
 /** Barre d'état + barre d'adresse Safari (« comme si on était sur le site »), 1080 × 172 px en haut de l'écran. */
 export const BarreSafari: React.FC<{url: string}> = ({url}) => (
