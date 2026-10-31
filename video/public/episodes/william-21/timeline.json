@@ -1,0 +1,603 @@
+{
+  "fps": 30,
+  "totalFrames": 1203,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 21.",
+      "from": 0,
+      "duration": 71,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 14
+        },
+        {
+          "w": "tailles",
+          "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 29
+        },
+        {
+          "w": "partie",
+          "f": 46
+        },
+        {
+          "w": "21.",
+          "f": 55
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on découvre le potentiel de William.",
+      "from": 72,
+      "duration": 69,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 72
+        },
+        {
+          "w": "on",
+          "f": 84
+        },
+        {
+          "w": "découvre",
+          "f": 89
+        },
+        {
+          "w": "le",
+          "f": 103
+        },
+        {
+          "w": "potentiel",
+          "f": 108
+        },
+        {
+          "w": "de",
+          "f": 120
+        },
+        {
+          "w": "William.",
+          "f": 125
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 15 ans, William mesure actuellement 1m83,",
+      "from": 142,
+      "duration": 88,
+      "words": [
+        {
+          "w": "À",
+          "f": 142
+        },
+        {
+          "w": "15",
+          "f": 146
+        },
+        {
+          "w": "ans,",
+          "f": 154
+        },
+        {
+          "w": "William",
+          "f": 161
+        },
+        {
+          "w": "mesure",
+          "f": 175
+        },
+        {
+          "w": "actuellement",
+          "f": 185
+        },
+        {
+          "w": "1m83,",
+          "f": 197
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est vraiment grand pour son âge.",
+      "from": 231,
+      "duration": 47,
+      "words": [
+        {
+          "w": "ce",
+          "f": 231
+        },
+        {
+          "w": "qui",
+          "f": 238
+        },
+        {
+          "w": "est",
+          "f": 243
+        },
+        {
+          "w": "vraiment",
+          "f": 248
+        },
+        {
+          "w": "grand",
+          "f": 255
+        },
+        {
+          "w": "pour",
+          "f": 262
+        },
+        {
+          "w": "son",
+          "f": 265
+        },
+        {
+          "w": "âge.",
+          "f": 269
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prévue est de 1m89.",
+      "from": 279,
+      "duration": 114,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 279
+        },
+        {
+          "w": "le",
+          "f": 286
+        },
+        {
+          "w": "site",
+          "f": 289
+        },
+        {
+          "w": "Grandimi,",
+          "f": 296
+        },
+        {
+          "w": "sa",
+          "f": 317
+        },
+        {
+          "w": "taille",
+          "f": 322
+        },
+        {
+          "w": "adulte",
+          "f": 329
+        },
+        {
+          "w": "prévue",
+          "f": 341
+        },
+        {
+          "w": "est",
+          "f": 353
+        },
+        {
+          "w": "de",
+          "f": 356
+        },
+        {
+          "w": "1m89.",
+          "f": 361
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, William pourrait atteindre 1m92,",
+      "from": 394,
+      "duration": 105,
+      "words": [
+        {
+          "w": "Et",
+          "f": 394
+        },
+        {
+          "w": "avec",
+          "f": 399
+        },
+        {
+          "w": "les",
+          "f": 404
+        },
+        {
+          "w": "bonnes",
+          "f": 406
+        },
+        {
+          "w": "habitudes,",
+          "f": 413
+        },
+        {
+          "w": "William",
+          "f": 428
+        },
+        {
+          "w": "pourrait",
+          "f": 440
+        },
+        {
+          "w": "atteindre",
+          "f": 447
+        },
+        {
+          "w": "1m92,",
+          "f": 464
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "avec 3 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 500,
+      "duration": 119,
+      "words": [
+        {
+          "w": "avec",
+          "f": 500
+        },
+        {
+          "w": "3",
+          "f": 507
+        },
+        {
+          "w": "cm",
+          "f": 514
+        },
+        {
+          "w": "de",
+          "f": 531
+        },
+        {
+          "w": "croissance",
+          "f": 536
+        },
+        {
+          "w": "supplémentaire",
+          "f": 548
+        },
+        {
+          "w": "grâce",
+          "f": 567
+        },
+        {
+          "w": "à",
+          "f": 574
+        },
+        {
+          "w": "l'optimisation",
+          "f": 577
+        },
+        {
+          "w": "de",
+          "f": 581
+        },
+        {
+          "w": "sa",
+          "f": 598
+        },
+        {
+          "w": "croissance.",
+          "f": 605
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, William est plus grand qu'environ 96% des garçons de son âge.",
+      "from": 620,
+      "duration": 115,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 620
+        },
+        {
+          "w": "William",
+          "f": 637
+        },
+        {
+          "w": "est",
+          "f": 653
+        },
+        {
+          "w": "plus",
+          "f": 656
+        },
+        {
+          "w": "grand",
+          "f": 658
+        },
+        {
+          "w": "qu'environ",
+          "f": 665
+        },
+        {
+          "w": "96%",
+          "f": 682
+        },
+        {
+          "w": "des",
+          "f": 706
+        },
+        {
+          "w": "garçons",
+          "f": 706
+        },
+        {
+          "w": "de",
+          "f": 723
+        },
+        {
+          "w": "son",
+          "f": 723
+        },
+        {
+          "w": "âge.",
+          "f": 728
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et il a déjà terminé 96,3% de sa croissance estimée.",
+      "from": 736,
+      "duration": 109,
+      "words": [
+        {
+          "w": "Et",
+          "f": 736
+        },
+        {
+          "w": "il",
+          "f": 740
+        },
+        {
+          "w": "a",
+          "f": 745
+        },
+        {
+          "w": "déjà",
+          "f": 748
+        },
+        {
+          "w": "terminé",
+          "f": 755
+        },
+        {
+          "w": "96,3%",
+          "f": 769
+        },
+        {
+          "w": "de",
+          "f": 812
+        },
+        {
+          "w": "sa",
+          "f": 815
+        },
+        {
+          "w": "croissance",
+          "f": 820
+        },
+        {
+          "w": "estimée.",
+          "f": 832
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T'es vraiment pas foutu!",
+      "from": 846,
+      "duration": 37,
+      "words": [
+        {
+          "w": "T'es",
+          "f": 846
+        },
+        {
+          "w": "vraiment",
+          "f": 856
+        },
+        {
+          "w": "pas",
+          "f": 863
+        },
+        {
+          "w": "foutu!",
+          "f": 868
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 884,
+      "duration": 49,
+      "words": [
+        {
+          "w": "Si",
+          "f": 884
+        },
+        {
+          "w": "tu",
+          "f": 887
+        },
+        {
+          "w": "veux",
+          "f": 889
+        },
+        {
+          "w": "connaître",
+          "f": 894
+        },
+        {
+          "w": "ton",
+          "f": 904
+        },
+        {
+          "w": "potentiel",
+          "f": 908
+        },
+        {
+          "w": "de",
+          "f": 920
+        },
+        {
+          "w": "taille,",
+          "f": 925
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écris ton âge, ta taille et celle de tes parents en commentaire sous cette vidéo",
+      "from": 935,
+      "duration": 106,
+      "words": [
+        {
+          "w": "écris",
+          "f": 935
+        },
+        {
+          "w": "ton",
+          "f": 947
+        },
+        {
+          "w": "âge,",
+          "f": 952
+        },
+        {
+          "w": "ta",
+          "f": 963
+        },
+        {
+          "w": "taille",
+          "f": 973
+        },
+        {
+          "w": "et",
+          "f": 980
+        },
+        {
+          "w": "celle",
+          "f": 982
+        },
+        {
+          "w": "de",
+          "f": 989
+        },
+        {
+          "w": "tes",
+          "f": 992
+        },
+        {
+          "w": "parents",
+          "f": 997
+        },
+        {
+          "w": "en",
+          "f": 1006
+        },
+        {
+          "w": "commentaire",
+          "f": 1011
+        },
+        {
+          "w": "sous",
+          "f": 1023
+        },
+        {
+          "w": "cette",
+          "f": 1028
+        },
+        {
+          "w": "vidéo",
+          "f": 1033
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "ou va directement sur grandimi.com pour prédire et découvrir comment optimiser ta croissance.",
+      "from": 1042,
+      "duration": 157,
+      "words": [
+        {
+          "w": "ou",
+          "f": 1042
+        },
+        {
+          "w": "va",
+          "f": 1049
+        },
+        {
+          "w": "directement",
+          "f": 1054
+        },
+        {
+          "w": "sur",
+          "f": 1064
+        },
+        {
+          "w": "grandimi.com",
+          "f": 1069
+        },
+        {
+          "w": "pour",
+          "f": 1107
+        },
+        {
+          "w": "prédire",
+          "f": 1112
+        },
+        {
+          "w": "et",
+          "f": 1124
+        },
+        {
+          "w": "découvrir",
+          "f": 1129
+        },
+        {
+          "w": "comment",
+          "f": 1143
+        },
+        {
+          "w": "optimiser",
+          "f": 1153
+        },
+        {
+          "w": "ta",
+          "f": 1169
+        },
+        {
+          "w": "croissance.",
+          "f": 1174
+        }
+      ]
+    }
+  ]
+}
