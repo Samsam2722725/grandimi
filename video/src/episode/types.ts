@@ -66,6 +66,9 @@ export type Famille = {
 export type Plan = {
 	nom: string;
 	debut: Ancre;
+	/** Écran de téléphone réduit (×0,734, centré en haut) avec la barre Safari « grandimi.com » en bas, juste au-dessus
+	    de la zone couverte par l'interface TikTok / Instagram (bas de l'écran à y 1520) : adresse et onglets visibles. */
+	telephone?: boolean;
 	/** Entrée du plan. glisse / rebond / secousse : mouvements mesurés sur la référence 7436214342510513439 ;
 	    bascule : entrée inclinée qui se redresse (référence 7444371749753408810). */
 	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule' | 'etire' | 'radial' | 'lumiere-rouge' | 'jaune-glisse' | 'glitch';

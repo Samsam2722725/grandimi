@@ -22,8 +22,8 @@ le nom, l'âge, les chiffres, la photo, l'avatar, le ballon de l'âge.
 ```bash
 S=<dossier temporaire>; cd video
 # outils (une fois par session) : voir .claude/skills/video/SKILL.md « Démarrage » (venv, Parakeet, npm install)
-python scripts/nouvel_episode.py prenom-N --depuis cory-19
-cp public/episodes/cory-19/images/{alien.png,curseur.png,ordi.png,papy.png,regle.png,papier*.jpg,site_*.png} public/episodes/prenom-N/images/
+python scripts/nouvel_episode.py prenom-N --depuis louis-23
+cp public/episodes/louis-23/images/{alien.png,curseur.png,ordi.png,papy.png,regle.png,papier*.jpg,site_*.png} public/episodes/prenom-N/images/
 #   (silhouette violette : prendre silhouette.png dans sam-39 et l'élément image du plan « chiffre » de sam-39)
 python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent   # âge de la personne
 ```
@@ -56,17 +56,23 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
 
 ## Ce qui est réglé et ne doit pas bouger (validé par l'utilisateur)
 
-- Depuis le 31/10 (vendre le site) :
-  - pastille « 🔗 grandimi.com · lien en bio » en haut (y 250) toute la vidéo, cachée sur les écrans de l'appli
-    qui montrent déjà l'adresse et sur le chiffre tapé (`lien.masque`) ;
-  - « Selon le site Grandimi » : vraies captures du site (`site_accueil`, `site_sexe`, `site_poids`), doigt qui
-    appuie sur « Je commence », « Garçon », « Continuer » (plan `site`, de `predit` à `predit:adulte`), puis le
-    résultat (plan `resultat`, zoom sur la taille prédite) ;
-  - onglets du bas « Rapport · Programme · Exercices · Routine » sur le dashboard, « Programme · Exercices ·
-    Routine » sur la routine (on montre que ça existe, pas leur contenu) ;
-  - routine **nette**, sans flou ni 🤫 ; habitudes sommeil / activité / nutrition, jamais de compléments ni de doses ;
-  - fin `fin-site` dès la ligne `site` : « grandimi.com » en gros, capture du site, « Lien en bio 👉 » ; les
-    sous-titres s'arrêtent à `site`.
+- Depuis le 31/10 (vendre le site ; corrigé le jour même après une capture Instagram) :
+  - **écrans de l'appli en mode téléphone** (`"telephone": true` sur le plan) : page réduite qui finit à y 1520,
+    barre Safari « grandimi.com » **en bas**, onglets de l'appli juste au-dessus. Plus bas, la légende et le pseudo
+    TikTok / Instagram cachent tout ; la colonne d'icônes couvre x > 900. Plus de barre d'adresse en haut.
+    `python scripts/telephone.py <id>` convertit un épisode fait avec l'ancien modèle (parties 19 à 22).
+  - **plus de pastille « lien en bio » en haut** (jugée « nulle » au début de la vidéo) ;
+  - onglets « Rapport · Programme · Exercices · Routine » sur le dashboard, « Programme · Exercices · Routine » sur
+    la routine (on montre que ça existe, pas leur contenu) ;
+  - routine **comme Taller** (« Routine quotidienne », mêmes habitudes traduites : routine physique, lait + miel,
+    moringa 4 g, zinc 13 mg, dormir +8 h, oméga 3, soleil), nette, sans 🤫 ;
+  - vraies captures du site (`site_accueil`, `site_sexe`, `site_poids`, pleine largeur dans la page), doigt qui
+    appuie sur « Je commence », « Garçon », puis glisse sur le poids. À placer **quand la voix parle du site**
+    (louis-23 : « va sur grandimi.com. Tu rentres ton âge, ta taille… »), puis le plan `resultat` (zoom sur la
+    taille prédite) ;
+  - fin `fin-site` : « grandimi.com » en gros, capture du site, « Lien en bio 👉 » ; pas de sous-titres dessus.
+  - Si le script ne dit pas « pas foutu », garder quand même la photo verdict + « PAS FOUTU ✅ » (elle répond au
+    commentaire « suis-je foutu ? »), sans sous-titres par-dessus.
   Si le site change, refaire les captures sur le téléphone (barre Safari en bas) et remplacer `site_*.png`.
 
 - Accroche : dézoom lent constant ×1,13 → ×1 ; carte commentaire au format Taller (x 88, y 1045, l 905), jamais

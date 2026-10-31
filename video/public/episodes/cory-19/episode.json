@@ -195,7 +195,7 @@
           {
             "a": "age:actuellement",
             "cx": 0.38,
-            "cy": 0.3085,
+            "cy": 0.26,
             "z": 1.61,
             "d": 11,
             "courbe": "avant"
@@ -226,7 +226,6 @@
           "fin": "age:13+30",
           "chute": true
         },
-        "url": "grandimi.com",
         "onglets": [
           "Rapport",
           "Programme",
@@ -256,7 +255,8 @@
           "son": "whoosh",
           "volume": 0.2
         }
-      ]
+      ],
+      "telephone": true
     },
     {
       "nom": "site",
@@ -268,75 +268,75 @@
           "ecran": true,
           "fichier": "site_accueil.png",
           "a": 0,
-          "fin": 16,
-          "x": 96,
+          "x": 0,
           "y": 0,
-          "w": 887,
-          "h": 1920
+          "w": 1080,
+          "h": 2338,
+          "fin": 16
         },
         {
           "type": "image",
           "ecran": true,
           "fichier": "curseur.png",
           "a": 3,
-          "fin": 16,
           "x": 468,
-          "y": 1240,
+          "y": 1510,
           "w": 192,
           "h": 204,
           "depuis": {
             "y": 90,
             "d": 4
-          }
+          },
+          "fin": 16
         },
         {
           "type": "image",
           "ecran": true,
           "fichier": "site_sexe.png",
           "a": 16,
-          "fin": 32,
-          "x": 96,
+          "x": 0,
           "y": 0,
-          "w": 887,
-          "h": 1920
+          "w": 1080,
+          "h": 2338,
+          "fin": 32
         },
         {
           "type": "image",
           "ecran": true,
           "fichier": "curseur.png",
           "a": 19,
-          "fin": 32,
           "x": 468,
-          "y": 727,
+          "y": 885,
           "w": 192,
           "h": 204,
           "depuis": {
             "y": 90,
             "d": 4
-          }
+          },
+          "fin": 32
         },
         {
           "type": "image",
           "ecran": true,
           "fichier": "site_poids.png",
           "a": 32,
-          "x": 96,
+          "x": 0,
           "y": 0,
-          "w": 887,
-          "h": 1920
+          "w": 1080,
+          "h": 2338
         },
         {
           "type": "image",
           "ecran": true,
           "fichier": "curseur.png",
-          "a": 37,
+          "a": 36,
           "x": 468,
-          "y": 1601,
+          "y": 1250,
           "w": 192,
           "h": 204,
           "depuis": {
-            "y": 90,
-            "d": 4
+            "y": 170,
+            "d": 12
           }
         }
       ],
@@ -361,7 +361,8 @@
           "son": "tick",
           "volume": 0.3
         }
-      ]
+      ],
+      "telephone": true
     },
     {
       "nom": "resultat",
@@ -396,7 +397,6 @@
           "chancesCm": "200 cm",
           "croissance": "91,2 %"
         },
-        "url": "grandimi.com",
         "onglets": [
           "Rapport",
           "Programme",
@@ -407,7 +407,7 @@
           {
             "a": "predit:adulte+3",
             "cx": 0.646,
-            "cy": 0.3301,
+            "cy": 0.286,
             "z": 1.77,
             "d": 11,
             "courbe": "avant"
@@ -427,7 +427,8 @@
           "son": "whoosh",
           "volume": 0.28
         }
-      ]
+      ],
+      "telephone": true
     },
     {
       "nom": "routine",
@@ -438,7 +439,6 @@
         {
           "type": "routine",
           "a": 0,
-          "url": "grandimi.com",
           "flou": 0,
           "onglets": [
             "Programme",
@@ -453,7 +453,8 @@
           "son": "whoosh",
           "volume": 0.22
         }
-      ]
+      ],
+      "telephone": true
     },
     {
       "nom": "chiffre",
@@ -543,7 +544,7 @@
           {
             "a": "fini:terminé",
             "cx": 0.7,
-            "cy": 0.8291,
+            "cy": 0.79,
             "z": 2.0,
             "d": 12,
             "courbe": "avant"
@@ -578,7 +579,6 @@
             "dFin": 16
           }
         ],
-        "url": "grandimi.com",
         "onglets": [
           "Rapport",
           "Programme",
@@ -600,7 +600,7 @@
           "fichier": "curseur.png",
           "a": "pct:plus",
           "x": 404,
-          "y": 1442,
+          "y": 1292,
           "w": 192,
           "h": 204,
           "depuis": {
@@ -630,7 +630,8 @@
           "son": "whoosh",
           "volume": 0.28
         }
-      ]
+      ],
+      "telephone": true
     },
     {
       "nom": "verdict",
@@ -859,17 +860,5 @@
       "h": 230,
       "rotation": 0
     }
-  },
-  "lien": {
-    "y": 250,
-    "masque": [
-      "ecran",
-      "site",
-      "resultat",
-      "routine",
-      "ecran2",
-      "chiffre",
-      "fin-site"
-    ]
   }
 }

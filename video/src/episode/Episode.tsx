@@ -1170,6 +1170,57 @@ const TitreFixe: React.FC<{texte: string; de: number; a: number; y: number; tail
 	);
 };
 
+/**
+ * Écran de téléphone : la page (1080 × 1920, conçue plein écran) + la barre Safari du bas (150 px), réduites ensemble
+ * pour finir à y 1520. Sur TikTok et Instagram, tout ce qui est plus bas est caché par la légende et le pseudo
+ * (mesuré sur une capture Instagram du 31/10), et la colonne d'icônes couvre x > 900.
+ */
+const TELEPHONE = {haut: 1520, page: 1920 + 150};
+const Telephone: React.FC<{children: React.ReactNode}> = ({children}) => {
+	const s = TELEPHONE.haut / TELEPHONE.page;
+	return (
+		<AbsoluteFill style={{background: '#000'}}>
+			<div style={{position: 'absolute', left: (1080 - 1080 * s) / 2, top: 0, width: 1080, height: TELEPHONE.page, transform: `scale(${s})`, transformOrigin: '0 0', overflow: 'hidden', background: '#0b0b0b'}}>
+				<div style={{position: 'absolute', left: 0, top: 0, width: 1080, height: 1920, overflow: 'hidden'}}>{children}</div>
+				<BarreSafariBas />
+			</div>
+		</AbsoluteFill>
+	);
+};
+
+/** Barre Safari du bas d'iPhone (retour · « grandimi.com » · onglets), recopiée des captures du site du 31/10. */
+const BarreSafariBas: React.FC = () => {
+	const rond = {position: 'absolute' as const, top: 14, width: 124, height: 124, borderRadius: 62, background: 'rgba(120,120,128,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 54};
+	return (
+		<div style={{position: 'absolute', left: 0, top: 1920, width: 1080, height: 150, background: '#0b0b0b', fontFamily: FONT}}>
+			<div style={{...rond, left: 92}}>‹</div>
+			<div
+				style={{
+					position: 'absolute',
+					left: 248,
+					top: 14,
+					width: 584,
+					height: 124,
+					borderRadius: 62,
+					background: '#1c1c1e',
+					border: '2px solid #3a3a3c',
+					boxSizing: 'border-box',
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					padding: '0 40px',
+					color: '#fff',
+				}}
+			>
+				<span style={{fontSize: 44, lineHeight: 1}}>☰</span>
+				<span style={{fontSize: 46, fontWeight: 500}}>grandimi.com</span>
+				<span style={{fontSize: 44, lineHeight: 1}}>↻</span>
+			</div>
+			<div style={{...rond, left: 864, fontSize: 46}}>⧉</div>
+		</div>
+	);
+};
+
 /** Pastille du lien, fixe, au-dessus de tout ; cachée pendant les plans `caches` ([début, fin[ en images). */
 const LienFixe: React.FC<{texte: string; y: number; de: number; a: number; caches: [number, number][]}> = ({texte, y, de, a, caches}) => {
 	const f = useCurrentFrame();
@@ -1243,7 +1294,13 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 					const to = i + 1 < starts.length ? starts[i + 1] : END;
 					return (
 						<Sequence key={p.nom} name={p.nom} from={starts[i]} durationInFrames={to - starts[i]}>
-							<PlanView plan={p} start={starts[i]} end={to} ep={data} id={episode} resolve={resolve} />
+							{p.telephone ? (
+								<Telephone>
+									<PlanView plan={p} start={starts[i]} end={to} ep={data} id={episode} resolve={resolve} />
+								</Telephone>
+							) : (
+								<PlanView plan={p} start={starts[i]} end={to} ep={data} id={episode} resolve={resolve} />
+							)}
 						</Sequence>
 					);
 				})}

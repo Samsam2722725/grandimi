@@ -7,19 +7,19 @@ import {BarreOnglets, BarreSafari} from './Dashboard';
  * Écran « Ma routine » recopié de l'écran « Daily routine » de la référence p22-ref (14-16,6 s) : bandeau des jours,
  * « Séries 🔥 », « En cours 0/10 », liste d'habitudes à cocher, barre du bas. La liste peut être floutée avec un 🤫
  * par-dessus (`flou`, `chut`) ; depuis le 31/10 elle est nette, avec les onglets du site en bas (`onglets`).
- * Habitudes : sommeil, activité, nutrition, comme le programme du site (pas de compléments ni de doses).
+ * Habitudes : celles de Taller, traduites (demande de l'utilisateur du 31/10 : « dit la même chose que lui »).
  */
 const OR = '#ff5a1f';
 const CARTE = '#161616';
-const JOURS = ['7', '8', '9', '10', '11', '12', '13'];
+const JOURS = ['3', '4', '5', '6', '7', '8', '9'];
 const HABITUDES = [
-	'Étirements + posture 🧘',
-	'Sport 45 min 🏀',
-	'Protéines à chaque repas 🍗',
-	'2 verres de lait 🥛',
-	'Dormir 9 heures 😴',
+	'Routine physique Grandimi 🏋️',
+	'1 verre de lait + miel 🍯🥛',
+	'4 g de poudre de moringa 🌿',
+	'13 mg de zinc 💊',
+	'Dormir +8 heures 😴',
+	'Oméga 3 💊',
 	'15 min de soleil ☀️',
-	'Boire 2 L d’eau 💧',
 ];
 
 export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number; chut?: number; onglets?: string[]}> = ({at, url, flou = 13, chut, onglets}) => {
@@ -31,7 +31,7 @@ export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number;
 	return (
 		<AbsoluteFill style={{background: '#000', fontFamily: FONT, color: '#fff'}}>
 			<div style={{position: 'absolute', left: 0, top: haut, width: 1080, height: 1920 - haut}}>
-				<div style={{position: 'absolute', left: 90, top: 40, fontSize: 60, fontWeight: 800}}>Ma routine</div>
+				<div style={{position: 'absolute', left: 90, top: 40, fontSize: 60, fontWeight: 800}}>Routine quotidienne</div>
 				<div style={{position: 'absolute', right: 90, top: 46, width: 64, height: 64, borderRadius: 32, background: '#1d1d1d'}} />
 				<div style={{position: 'absolute', left: 90, right: 90, top: 150, display: 'flex', justifyContent: 'space-between'}}>
 					{JOURS.map((j, i) => (
@@ -51,7 +51,7 @@ export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number;
 							}}
 						>
 							{j}
-							<span style={{fontSize: 22, fontWeight: 500, marginTop: 4}}>févr</span>
+							<span style={{fontSize: 22, fontWeight: 500, marginTop: 4}}>nov</span>
 						</div>
 					))}
 				</div>
@@ -62,7 +62,7 @@ export const RoutineGrandimi: React.FC<{at: number; url?: string; flou?: number;
 						<div style={{position: 'absolute', right: 20, top: 18, width: 200, height: 84, borderRadius: 22, background: OR, textAlign: 'center', lineHeight: '84px', fontSize: 42, fontWeight: 800}}>0</div>
 					</div>
 					<div style={{position: 'absolute', left: 90, top: 190, fontSize: 38, fontWeight: 600}}>En cours</div>
-					<div style={{position: 'absolute', right: 90, top: 190, fontSize: 38, fontWeight: 600}}>0/10</div>
+					<div style={{position: 'absolute', right: 90, top: 190, fontSize: 38, fontWeight: 600}}>0/9</div>
 					<div style={{position: 'absolute', left: 90, right: 90, top: 262, height: 14, borderRadius: 7, background: '#222'}} />
 					{HABITUDES.map((h, i) => (
 						<div key={h} style={{position: 'absolute', left: 90, right: 90, top: 330 + i * 168, height: 138, borderRadius: 26, background: CARTE}}>
