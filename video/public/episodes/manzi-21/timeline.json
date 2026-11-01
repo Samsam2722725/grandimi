@@ -1,0 +1,611 @@
+{
+  "fps": 30,
+  "totalFrames": 1153,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 21.",
+      "from": 0,
+      "duration": 66,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 14
+        },
+        {
+          "w": "tailles",
+          "f": 19
+        },
+        {
+          "w": "maximales,",
+          "f": 29
+        },
+        {
+          "w": "partie",
+          "f": 43
+        },
+        {
+          "w": "21.",
+          "f": 53
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Manzi.",
+      "from": 67,
+      "duration": 54,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 67
+        },
+        {
+          "w": "on",
+          "f": 79
+        },
+        {
+          "w": "regarde",
+          "f": 84
+        },
+        {
+          "w": "les",
+          "f": 94
+        },
+        {
+          "w": "infos",
+          "f": 96
+        },
+        {
+          "w": "de",
+          "f": 103
+        },
+        {
+          "w": "Manzi.",
+          "f": 106
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 16 ans, Manzi mesure 1m63,",
+      "from": 122,
+      "duration": 64,
+      "words": [
+        {
+          "w": "À",
+          "f": 122
+        },
+        {
+          "w": "16",
+          "f": 127
+        },
+        {
+          "w": "ans,",
+          "f": 132
+        },
+        {
+          "w": "Manzi",
+          "f": 137
+        },
+        {
+          "w": "mesure",
+          "f": 151
+        },
+        {
+          "w": "1m63,",
+          "f": 158
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est vraiment en dessous de la moyenne pour son âge.",
+      "from": 187,
+      "duration": 57,
+      "words": [
+        {
+          "w": "ce",
+          "f": 187
+        },
+        {
+          "w": "qui",
+          "f": 190
+        },
+        {
+          "w": "est",
+          "f": 194
+        },
+        {
+          "w": "vraiment",
+          "f": 197
+        },
+        {
+          "w": "en",
+          "f": 204
+        },
+        {
+          "w": "dessous",
+          "f": 209
+        },
+        {
+          "w": "de",
+          "f": 216
+        },
+        {
+          "w": "la",
+          "f": 218
+        },
+        {
+          "w": "moyenne",
+          "f": 221
+        },
+        {
+          "w": "pour",
+          "f": 230
+        },
+        {
+          "w": "son",
+          "f": 233
+        },
+        {
+          "w": "âge.",
+          "f": 238
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille prédite est de 1m69.",
+      "from": 245,
+      "duration": 94,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 245
+        },
+        {
+          "w": "le",
+          "f": 252
+        },
+        {
+          "w": "site",
+          "f": 254
+        },
+        {
+          "w": "Grandimi,",
+          "f": 259
+        },
+        {
+          "w": "sa",
+          "f": 278
+        },
+        {
+          "w": "taille",
+          "f": 289
+        },
+        {
+          "w": "prédite",
+          "f": 296
+        },
+        {
+          "w": "est",
+          "f": 308
+        },
+        {
+          "w": "de",
+          "f": 311
+        },
+        {
+          "w": "1m69.",
+          "f": 313
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec son programme d'optimisation de la croissance, Manzi découvre exactement quoi faire pour atteindre son plein potentiel, grâce aux exercices, à l'alimentation et aux routines.",
+      "from": 340,
+      "duration": 241,
+      "words": [
+        {
+          "w": "Et",
+          "f": 340
+        },
+        {
+          "w": "avec",
+          "f": 344
+        },
+        {
+          "w": "son",
+          "f": 349
+        },
+        {
+          "w": "programme",
+          "f": 354
+        },
+        {
+          "w": "d'optimisation",
+          "f": 361
+        },
+        {
+          "w": "de",
+          "f": 380
+        },
+        {
+          "w": "la",
+          "f": 383
+        },
+        {
+          "w": "croissance,",
+          "f": 385
+        },
+        {
+          "w": "Manzi",
+          "f": 400
+        },
+        {
+          "w": "découvre",
+          "f": 416
+        },
+        {
+          "w": "exactement",
+          "f": 431
+        },
+        {
+          "w": "quoi",
+          "f": 443
+        },
+        {
+          "w": "faire",
+          "f": 452
+        },
+        {
+          "w": "pour",
+          "f": 457
+        },
+        {
+          "w": "atteindre",
+          "f": 462
+        },
+        {
+          "w": "son",
+          "f": 474
+        },
+        {
+          "w": "plein",
+          "f": 479
+        },
+        {
+          "w": "potentiel,",
+          "f": 486
+        },
+        {
+          "w": "grâce",
+          "f": 505
+        },
+        {
+          "w": "aux",
+          "f": 512
+        },
+        {
+          "w": "exercices,",
+          "f": 520
+        },
+        {
+          "w": "à",
+          "f": 534
+        },
+        {
+          "w": "l'alimentation",
+          "f": 539
+        },
+        {
+          "w": "et",
+          "f": 562
+        },
+        {
+          "w": "aux",
+          "f": 565
+        },
+        {
+          "w": "routines.",
+          "f": 569
+        }
+      ]
+    },
+    {
+      "id": "atteint",
+      "text": "Manzi pourrait atteindre 1m73,",
+      "from": 581,
+      "duration": 59,
+      "words": [
+        {
+          "w": "Manzi",
+          "f": 581
+        },
+        {
+          "w": "pourrait",
+          "f": 593
+        },
+        {
+          "w": "atteindre",
+          "f": 601
+        },
+        {
+          "w": "1m73,",
+          "f": 610
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "donc 3 cm de croissance supplémentaire.",
+      "from": 641,
+      "duration": 61,
+      "words": [
+        {
+          "w": "donc",
+          "f": 641
+        },
+        {
+          "w": "3",
+          "f": 649
+        },
+        {
+          "w": "cm",
+          "f": 658
+        },
+        {
+          "w": "de",
+          "f": 673
+        },
+        {
+          "w": "croissance",
+          "f": 675
+        },
+        {
+          "w": "supplémentaire.",
+          "f": 687
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Manzi est plus grand que seulement 8,4% des personnes de son âge.",
+      "from": 704,
+      "duration": 112,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 704
+        },
+        {
+          "w": "Manzi",
+          "f": 716
+        },
+        {
+          "w": "est",
+          "f": 733
+        },
+        {
+          "w": "plus",
+          "f": 735
+        },
+        {
+          "w": "grand",
+          "f": 737
+        },
+        {
+          "w": "que",
+          "f": 745
+        },
+        {
+          "w": "seulement",
+          "f": 749
+        },
+        {
+          "w": "8,4%",
+          "f": 759
+        },
+        {
+          "w": "des",
+          "f": 790
+        },
+        {
+          "w": "personnes",
+          "f": 795
+        },
+        {
+          "w": "de",
+          "f": 800
+        },
+        {
+          "w": "son",
+          "f": 805
+        },
+        {
+          "w": "âge.",
+          "f": 809
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et selon cette prédiction, Manzi pourrait encore grandir de près de 7 cm avant d'atteindre sa taille adulte.",
+      "from": 817,
+      "duration": 148,
+      "words": [
+        {
+          "w": "Et",
+          "f": 817
+        },
+        {
+          "w": "selon",
+          "f": 822
+        },
+        {
+          "w": "cette",
+          "f": 827
+        },
+        {
+          "w": "prédiction,",
+          "f": 832
+        },
+        {
+          "w": "Manzi",
+          "f": 846
+        },
+        {
+          "w": "pourrait",
+          "f": 863
+        },
+        {
+          "w": "encore",
+          "f": 870
+        },
+        {
+          "w": "grandir",
+          "f": 877
+        },
+        {
+          "w": "de",
+          "f": 887
+        },
+        {
+          "w": "près",
+          "f": 892
+        },
+        {
+          "w": "de",
+          "f": 896
+        },
+        {
+          "w": "7",
+          "f": 899
+        },
+        {
+          "w": "cm",
+          "f": 908
+        },
+        {
+          "w": "avant",
+          "f": 925
+        },
+        {
+          "w": "d'atteindre",
+          "f": 930
+        },
+        {
+          "w": "sa",
+          "f": 942
+        },
+        {
+          "w": "taille",
+          "f": 947
+        },
+        {
+          "w": "adulte.",
+          "f": 954
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille et découvrir ton propre programme d'optimisation,",
+      "from": 966,
+      "duration": 117,
+      "words": [
+        {
+          "w": "Si",
+          "f": 966
+        },
+        {
+          "w": "tu",
+          "f": 971
+        },
+        {
+          "w": "veux",
+          "f": 973
+        },
+        {
+          "w": "connaître",
+          "f": 978
+        },
+        {
+          "w": "ton",
+          "f": 988
+        },
+        {
+          "w": "potentiel",
+          "f": 992
+        },
+        {
+          "w": "de",
+          "f": 1004
+        },
+        {
+          "w": "taille",
+          "f": 1007
+        },
+        {
+          "w": "et",
+          "f": 1016
+        },
+        {
+          "w": "découvrir",
+          "f": 1021
+        },
+        {
+          "w": "ton",
+          "f": 1036
+        },
+        {
+          "w": "propre",
+          "f": 1040
+        },
+        {
+          "w": "programme",
+          "f": 1048
+        },
+        {
+          "w": "d'optimisation,",
+          "f": 1055
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "va directement sur grandimi.com.",
+      "from": 1084,
+      "duration": 66,
+      "words": [
+        {
+          "w": "va",
+          "f": 1084
+        },
+        {
+          "w": "directement",
+          "f": 1091
+        },
+        {
+          "w": "sur",
+          "f": 1100
+        },
+        {
+          "w": "grandimi.com.",
+          "f": 1105
+        }
+      ]
+    }
+  ]
+}
