@@ -3003,157 +3003,120 @@
   fill: var(--funnel-muted);
 }
 
-/* ---------- Colonne génétique / habitudes ----------
-   Une colonne de 100 % : 80 % de génétique en bloc sombre, 20 %
-   d'habitudes en orange lumineux au sommet. Les blocs montent depuis le
-   bas quand `.is-rempli` est posé (une frame après le montage). */
-.genes {
-  display: grid;
-  grid-template-columns: 44px 120px auto;
-  justify-content: center;
-  gap: 14px;
-  height: 250px;
-  margin: 12px 0 4px;
-}
-
-.genes-axe {
-  position: relative;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--funnel-muted);
-}
-
-.genes-axe span {
-  position: absolute;
-  right: 0;
-  transform: translateY(-50%);
-  white-space: nowrap;
-}
-
-.genes-axe-100 { top: 0; }
-.genes-axe-0 { top: 100%; }
-
-.genes-axe-80 {
-  top: 20%;
-  color: var(--funnel-accent-display);
-  font-weight: 800;
-}
-
-/* Le pointillé qui marque la frontière 80 %, de l'axe à la colonne. */
-.genes-axe-80::after {
-  content: '';
-  position: absolute;
-  left: calc(100% + 4px);
-  top: 50%;
-  width: 134px;
-  border-top: 2px dashed rgba(238, 74, 14, 0.55);
-}
-
-.genes-colonne {
+/* ---------- « Tu perds peut-être déjà des centimètres » ----------
+   Copié de l'écran de Taller (01/11/2026) : une carte, deux colonnes
+   côte à côte, « Mode de vie » en gris et « Impact génétique » en
+   couleur. Le remplissage monte depuis le bas quand `.is-rempli` est
+   posé (une frame après le montage). */
+.ppc {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 22px;
+  margin-top: 4px;
 }
 
-.genes-bloc {
+.ppc-carte {
+  padding: 26px 20px 20px;
+  border-radius: 28px;
+  background: var(--funnel-surface);
+}
+
+.ppc-colonnes {
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 6px;
-  border-radius: 16px;
+  gap: 40px;
+  /* Ce qui reste de l’écran une fois le titre, la phrase et le bouton
+     posés : la phrase reste visible sans défiler, même sur iPhone SE. */
+  height: clamp(150px, calc(100vh - 500px), 232px);
+  height: clamp(150px, calc(100dvh - 500px), 232px);
+}
+
+.ppc-colonne {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 128px;
+  border-radius: 22px;
+  background: var(--funnel-surface-high);
+  overflow: hidden;
+}
+
+.ppc-nom {
+  position: absolute;
+  top: 14px;
+  left: 8px;
+  right: 8px;
+  z-index: 1;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--funnel-text);
+}
+
+.ppc-remplissage {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  /* Sa part de la colonne, sous la place gardée pour le nom (deux lignes),
+     comme chez Taller où la barre commence sous « Impact Génétique ». */
+  height: calc((100% - 60px) * var(--part));
+  min-height: 62px;
+  padding-bottom: 18px;
+  border-radius: 22px;
+  border: 1px solid var(--funnel-line);
+  background: #262626;
   transform-origin: bottom;
   transform: scaleY(0);
-  transition: transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.genes-bloc--genetique {
-  flex: 80;
-  background: #17110d;
-  border: 1px solid #3a2a20;
-  color: #6b5f55;
+.ppc-colonne--forte .ppc-remplissage {
+  border: 0;
+  background: var(--funnel-accent);
+  transition-delay: 0.25s;
 }
 
-.genes-bloc--habitudes {
-  flex: 20;
-  background: linear-gradient(180deg, #ffb020, #ff5a1f);
-  color: rgba(23, 18, 14, 0.75);
-  box-shadow: 0 0 34px -2px rgba(255, 90, 31, 0.75);
-  transition-delay: 0.8s;
-}
-
-.genes.is-rempli .genes-bloc {
+.ppc-carte.is-rempli .ppc-remplissage {
   transform: scaleY(1);
 }
 
-.genes.is-rempli .genes-bloc--habitudes svg {
-  animation: genes-monte 1.6s ease-in-out 1.6s infinite;
-}
-
-.genes-bloc--habitudes svg:nth-child(2) {
-  animation-delay: 1.8s !important;
-}
-
-.genes-bloc--habitudes svg:nth-child(3) {
-  animation-delay: 2s !important;
-}
-
-@keyframes genes-monte {
-  0%, 100% { transform: translateY(2px); }
-  50% { transform: translateY(-4px); }
-}
-
-.genes-legendes {
-  position: relative;
-  min-width: 110px;
-}
-
-.genes-legende {
-  position: absolute;
-  left: 0;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--funnel-muted);
-  opacity: 0;
-  transition: opacity 0.5s ease-out;
-}
-
-.genes-legende strong {
-  font-size: 22px;
+.ppc-part {
+  font-size: 20px;
   font-weight: 800;
   color: var(--funnel-text);
 }
 
-.genes-legende--habitudes {
-  top: 10%;
+.ppc-colonne--forte .ppc-part {
+  color: var(--funnel-on-accent);
+}
+
+.ppc-texte {
+  margin: 18px 0 0;
+  font-size: 15px;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--funnel-muted);
+}
+
+.ppc-phrase {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--funnel-text);
+}
+
+.ppc-phrase em {
+  font-style: normal;
+  font-weight: 800;
   color: var(--funnel-accent-display);
-  transition-delay: 1.4s;
-}
-
-.genes-legende--habitudes strong {
-  color: var(--funnel-accent-display);
-}
-
-.genes-legende--genetique {
-  top: 60%;
-  transition-delay: 0.7s;
-}
-
-.genes.is-rempli .genes-legende {
-  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .genes-bloc,
-  .genes-legende {
+  .ppc-remplissage {
     transition: none;
-  }
-
-  .genes.is-rempli .genes-bloc--habitudes svg {
-    animation: none;
   }
 }
 
@@ -4107,4 +4070,57 @@ div.interstitial.citation { cursor: default; }
 .citation-action { position: relative; animation-delay: 1.6s; }
 @media (prefers-reduced-motion: reduce) {
   .citation-halo, .citation-texte .citation-mot { animation: none; opacity: 1; }
+}
+/* Plus calme, comme chez Taller (01/11/2026) : police moins grasse et plus
+   petite, lignes larges (« Tu n'as pas choisi ta génétique. » tient sur une
+   ligne), halo surtout gris avec juste un peu d'orange. */
+.citation-texte {
+  max-width: 34ch;
+  font-size: clamp(19px, 5.4vw, 22px);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+.interstitial.citation {
+  background: #0a0a0a;
+}
+.citation-halo {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(244, 239, 233, 0.08) 0%,
+    rgba(255, 90, 31, 0.05) 18%,
+    transparent 42%
+  );
+}
+
+/* ---------- Taille et placement façon Taller (01/11/2026) ----------
+   Comparé à l'écran « Sélectionne ton sexe » de Taller sur iPhone : des
+   cartes plus hautes (≈ 60 px) sans bordure, sur un gris un peu plus clair,
+   un texte moins gras, un rond plus grand, plus d'espace entre elles, et
+   le groupe de réponses centré dans la place libre au lieu d'être collé
+   sous la question. Placé en fin de fichier pour passer après les
+   resserrements « Tout tenir dans l'écran » plus haut. */
+.funnel-title { font-size: clamp(26px, 7.4vw, 30px); }
+.funnel-subtitle { font-size: 16px; line-height: 1.45; margin-top: 12px; }
+.funnel-content:has(> .funnel-choices) { justify-content: safe center; }
+.funnel-choices { gap: 12px; }
+.choice-card {
+  min-height: 60px;
+  padding: 12px 20px;
+  border-radius: 20px;
+  border-color: transparent;
+  background: var(--funnel-surface-high);
+}
+.choice-card:hover { border-color: transparent; }
+.choice-card.is-selected { border-color: var(--funnel-accent); }
+.choice-card-title { font-size: 17px; font-weight: 500; }
+.choice-card-radio { width: 24px; height: 24px; border-color: #4a4a4a; }
+.choice-card.is-selected .choice-card-radio { box-shadow: inset 0 0 0 6px var(--funnel-accent); }
+@media (max-height: 700px) {
+  .funnel-choices { gap: 9px; }
+  .choice-card { min-height: 52px; padding-top: 9px; padding-bottom: 9px; }
+}
+@media (max-height: 660px) {
+  .funnel-choices { gap: 7px; }
+  .choice-card { min-height: 48px; padding-top: 7px; padding-bottom: 7px; }
 }

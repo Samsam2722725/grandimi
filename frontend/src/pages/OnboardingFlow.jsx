@@ -939,6 +939,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         return <EcranHeightTracker />
       case 'verite-brutale':
         return <EcranVeriteBrutale sexe={reponses.sexe} />
+      case 'plus-que-genes':
+        return <EcranPlusQueGenes />
       case 'etudes-publiees':
         return <EcranEtudesPubliees />
       case 'avis-utilisateurs':
@@ -956,10 +958,6 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   }
 
   // ---------- Rendu global ----------
-
-  if (etape === 'plus-que-genes') {
-    return <EcranPlusQueGenes onContinue={avancer} />
-  }
 
   if (etape === 'citation-genetique') {
     return <EcranCitationGenetique key={etape} onContinue={avancer} />

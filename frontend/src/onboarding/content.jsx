@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
-  ArrowUp,
   BookOpen,
-  Dna,
   CheckCircle2,
   Circle,
   Dumbbell,
@@ -116,7 +114,7 @@ export const TYPE_ETAPE = {
   laitages: 'question',
   pourquoi: 'question',
   'profil-croissance': 'affichage',
-  'plus-que-genes': 'interstitielle',
+  'plus-que-genes': 'affichage',
   'citation-genetique': 'interstitielle',
   'decouvrir-potentiel': 'interstitielle',
   'resultats-la': 'interstitielle',
@@ -268,6 +266,10 @@ export const TEXTES_ETAPE = {
   'height-tracker': {
     titre: 'Suis ta taille chaque semaine',
     sousTitre: 'Saisis ta taille chaque semaine. Plus on a de données, plus la prédiction est précise',
+  },
+  // Titre de Taller, au même endroit (01/11/2026).
+  'plus-que-genes': {
+    titre: 'Tu perds peut-être déjà des centimètres',
   },
   'verite-brutale': {
     titre: 'Le coût d’être petit',
@@ -1044,12 +1046,20 @@ export function EcranAvisUtilisateurs() {
   return <Avis />
 }
 
-export function EcranPlusQueGenes({ onContinue }) {
-  // Démarre à 0 et se remplit après le montage : le script demande une
-  // « Animation "génétique vs environnement" », pas une figure figée. La
-  // transition CSS est sur `width` (cf. .onb-genes-remplissage) ; ce
-  // composant ne fait que retarder le passage de 0 % à la valeur finale
-  // d'une frame, pour que le navigateur ait quelque chose à animer.
+/* « Tu perds peut-être déjà des centimètres », copié de l'écran de Taller
+   (01/11/2026) : deux colonnes dans une carte, « Mode de vie » 20 % et
+   « Impact génétique » 80 % en couleur, une phrase dans la carte, une
+   phrase dessous. Leur « Jusqu'à 20 % de ta taille finale est déterminée
+   par tes habitudes » est faux (20 % de 175 cm, ce serait 35 cm) : les
+   80/20 sont la part des DIFFÉRENCES de taille entre les gens. */
+const PARTS_TAILLE = [
+  { nom: 'Mode de vie', part: 20 },
+  { nom: 'Impact génétique', part: 80, forte: true },
+]
+
+export function EcranPlusQueGenes() {
+  // Les colonnes partent de 0 et montent une frame après le montage, pour
+  // que le navigateur ait quelque chose à animer.
   const [rempli, setRempli] = useState(false)
   useEffect(() => {
     const id = requestAnimationFrame(() => setRempli(true))
@@ -1057,49 +1067,29 @@ export function EcranPlusQueGenes({ onContinue }) {
   }, [])
 
   return (
-    <div className="interstitial">
-      <h1 className="interstitial-titre">Tu es plus que tes gènes</h1>
-      <p className="interstitial-text">
-        Tu n’as pas choisi ta génétique, mais tu peux choisir ce que tu fais.
-      </p>
-      {/* Une seule colonne de 100 % : les gènes en fond sombre, les
-          habitudes en haut, en orange — la part sur laquelle on agit.
-          Inspiré de la colonne « poussée de croissance » que le client a
-          montrée, remise aux couleurs de Grandimi. */}
+    <div className="ppc">
       <div
-        className={`genes ${rempli ? 'is-rempli' : ''}`}
+        className={`ppc-carte ${rempli ? 'is-rempli' : ''}`}
         role="img"
-        aria-label="Environ 80 % de ta taille vient de ta génétique, 20 % de tes habitudes"
+        aria-label="Environ 20 % des différences de taille viennent du mode de vie, 80 % de la génétique"
       >
-        <div className="genes-axe" aria-hidden="true">
-          <span className="genes-axe-100">100 %</span>
-          <span className="genes-axe-80">80 %</span>
-          <span className="genes-axe-0">0 %</span>
+        <div className="ppc-colonnes" aria-hidden="true">
+          {PARTS_TAILLE.map(({ nom, part, forte }) => (
+            <div key={nom} className={`ppc-colonne ${forte ? 'ppc-colonne--forte' : ''}`}>
+              <span className="ppc-nom">{nom}</span>
+              <span className="ppc-remplissage" style={{ '--part': part / 100 }}>
+                <span className="ppc-part">{part}%</span>
+              </span>
+            </div>
+          ))}
         </div>
-        <div className="genes-colonne" aria-hidden="true">
-          <div className="genes-bloc genes-bloc--habitudes">
-            <ArrowUp size={18} />
-            <ArrowUp size={22} />
-            <ArrowUp size={18} />
-          </div>
-          <div className="genes-bloc genes-bloc--genetique">
-            <Dna size={30} />
-          </div>
-        </div>
-        <div className="genes-legendes" aria-hidden="true">
-          <span className="genes-legende genes-legende--habitudes">
-            <strong>20 %</strong> Tes habitudes
-          </span>
-          <span className="genes-legende genes-legende--genetique">
-            <strong>80 %</strong> Ta génétique
-          </span>
-        </div>
+        <p className="ppc-texte">
+          Grandimi t’aide à maximiser ton potentiel de taille en combinant génétique et bonnes habitudes.
+        </p>
       </div>
-      <div className="interstitial-action is-ready">
-        <button type="button" className="funnel-cta" onClick={onContinue}>
-          Continuer
-        </button>
-      </div>
+      <p className="ppc-phrase">
+        Jusqu’à <em>20 %</em> des différences de taille viennent des habitudes.
+      </p>
     </div>
   )
 }
