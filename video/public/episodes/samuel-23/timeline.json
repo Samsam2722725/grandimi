@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "totalFrames": 1058,
+  "totalFrames": 1057,
   "audio": "voice/voix.wav",
   "lines": [
     {
@@ -307,7 +307,7 @@
       "id": "pct",
       "text": "Actuellement, Samuel est plus grand que 77,2% des personnes de son âge.",
       "from": 599,
-      "duration": 124,
+      "duration": 126,
       "words": [
         {
           "w": "Actuellement,",
@@ -319,7 +319,7 @@
         },
         {
           "w": "est",
-          "f": 631
+          "f": 633
         },
         {
           "w": "plus",
@@ -362,44 +362,44 @@
     {
       "id": "fini",
       "text": "Et il a déjà terminé 80% de sa croissance.",
-      "from": 724,
-      "duration": 80,
+      "from": 727,
+      "duration": 77,
       "words": [
         {
           "w": "Et",
-          "f": 724
+          "f": 727
         },
         {
           "w": "il",
-          "f": 729
-        },
-        {
-          "w": "a",
           "f": 731
         },
         {
-          "w": "déjà",
+          "w": "a",
           "f": 736
         },
         {
+          "w": "déjà",
+          "f": 739
+        },
+        {
           "w": "terminé",
-          "f": 741
+          "f": 746
         },
         {
           "w": "80%",
-          "f": 762
+          "f": 760
         },
         {
           "w": "de",
-          "f": 784
+          "f": 782
         },
         {
           "w": "sa",
-          "f": 786
+          "f": 784
         },
         {
           "w": "croissance.",
-          "f": 791
+          "f": 789
         }
       ]
     },
@@ -415,15 +415,15 @@
         },
         {
           "w": "tu",
-          "f": 810
-        },
-        {
-          "w": "veux",
           "f": 812
         },
         {
+          "w": "veux",
+          "f": 814
+        },
+        {
           "w": "connaître",
-          "f": 817
+          "f": 819
         },
         {
           "w": "ton",
@@ -431,107 +431,115 @@
         },
         {
           "w": "potentiel",
-          "f": 834
+          "f": 833
         },
         {
           "w": "de",
-          "f": 846
+          "f": 845
         },
         {
           "w": "taille,",
-          "f": 848
+          "f": 850
         }
       ]
     },
     {
       "id": "com",
-      "text": "écrivez votre âge, votre taille actuelle en commentaire sous cette vidéo,",
+      "text": "écris ton âge, ta taille en commentaire,",
       "from": 860,
-      "duration": 100,
+      "duration": 49,
       "words": [
         {
-          "w": "écrivez",
+          "w": "écris",
           "f": 860
         },
         {
-          "w": "votre",
-          "f": 875
+          "w": "ton",
+          "f": 872
         },
         {
           "w": "âge,",
-          "f": 880
+          "f": 877
         },
         {
-          "w": "votre",
-          "f": 892
+          "w": "ta",
+          "f": 886
         },
         {
           "w": "taille",
-          "f": 899
-        },
-        {
-          "w": "actuelle",
-          "f": 908
+          "f": 891
         },
         {
           "w": "en",
-          "f": 920
+          "f": 898
         },
         {
-          "w": "commentaire",
-          "f": 925
-        },
-        {
-          "w": "sous",
-          "f": 937
-        },
-        {
-          "w": "cette",
-          "f": 944
-        },
-        {
-          "w": "vidéo,",
-          "f": 949
+          "w": "commentaire,",
+          "f": 901
         }
       ]
     },
     {
       "id": "site",
-      "text": "ou va directement sur grandimi.com pour tout avoir.",
-      "from": 961,
-      "duration": 94,
+      "text": "ou va sur grandimi.com pour découvrir ta taille maximale et ton programme pour l'atteindre.",
+      "from": 910,
+      "duration": 144,
       "words": [
         {
           "w": "ou",
-          "f": 961
+          "f": 910
         },
         {
           "w": "va",
-          "f": 966
-        },
-        {
-          "w": "directement",
-          "f": 973
+          "f": 915
         },
         {
           "w": "sur",
-          "f": 983
+          "f": 920
         },
         {
           "w": "grandimi.com",
-          "f": 990
+          "f": 925
         },
         {
           "w": "pour",
-          "f": 1024
+          "f": 958
         },
         {
-          "w": "tout",
-          "f": 1026
+          "w": "découvrir",
+          "f": 963
         },
         {
-          "w": "avoir.",
-          "f": 1033
+          "w": "ta",
+          "f": 975
+        },
+        {
+          "w": "taille",
+          "f": 982
+        },
+        {
+          "w": "maximale",
+          "f": 989
+        },
+        {
+          "w": "et",
+          "f": 1004
+        },
+        {
+          "w": "ton",
+          "f": 1009
+        },
+        {
+          "w": "programme",
+          "f": 1013
+        },
+        {
+          "w": "pour",
+          "f": 1023
+        },
+        {
+          "w": "l'atteindre.",
+          "f": 1028
         }
       ]
     }

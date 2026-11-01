@@ -56,12 +56,12 @@
     {
       "id": "com",
       "pause": 0,
-      "text": "écrivez votre âge, votre taille actuelle en commentaire sous cette vidéo,"
+      "text": "écris ton âge, ta taille en commentaire,"
     },
     {
       "id": "site",
       "pause": 0,
-      "text": "ou va directement sur {grandimi.com|grandini.com} pour tout avoir."
+      "text": "ou va sur grandimi.com pour découvrir ta taille maximale et ton programme pour l'atteindre."
     }
   ],
   "musique": {
