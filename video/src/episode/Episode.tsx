@@ -811,6 +811,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 						muted
 						style={{position: 'absolute', left: el.x, top: el.y, width: el.w, height: el.h, objectFit: 'cover'}}
 					/>
+					{el.url ? <BarreSafari url={el.url} /> : null}
 				</Sequence>
 			);
 		if (el.type === 'chargement')

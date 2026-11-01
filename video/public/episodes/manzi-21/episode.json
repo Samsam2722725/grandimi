@@ -71,13 +71,13 @@
   "images": {
     "accroche": {
       "fichier": "accroche.jpg",
-      "w": 1040,
-      "h": 2272
+      "w": 336,
+      "h": 737
     },
     "verdict": {
       "fichier": "verdict.jpg",
-      "w": 1040,
-      "h": 2272
+      "w": 337,
+      "h": 735
     }
   },
   "zones": {},
@@ -88,15 +88,15 @@
       "image": "accroche",
       "camera": [
         {
-          "x": 600,
-          "y": 760,
+          "x": 168,
+          "y": 368,
           "z": 1.13,
           "duree": 1
         },
         {
           "a": 1,
-          "x": 600,
-          "y": 760,
+          "x": 168,
+          "y": 368,
           "z": 1.0,
           "duree": "fin",
           "lineaire": true,
@@ -264,14 +264,13 @@
       "nom": "routine",
       "debut": "habitudes-2",
       "transition": "jaune-glisse",
-      "sortie": "glitch",
       "elements": [
         {
           "type": "routine",
           "a": 0,
           "url": "grandimi.com",
           "flou": 13,
-          "chut": "habitudes:programme"
+          "chut": "habitudes:exactement"
         }
       ],
       "sons": [
@@ -281,9 +280,34 @@
           "volume": 0.22
         },
         {
-          "a": "habitudes:programme",
+          "a": "habitudes:exactement",
           "son": "pop",
           "volume": 0.3
+        }
+      ]
+    },
+    {
+      "nom": "calcul",
+      "debut": "habitudes:grâce-2",
+      "transition": "glitch",
+      "sortie": "glitch",
+      "elements": [
+        {
+          "type": "video",
+          "fichier": "calcul.mp4",
+          "a": 0,
+          "x": 0,
+          "y": 172,
+          "w": 1080,
+          "h": 1748,
+          "url": "grandimi.com"
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
         }
       ]
     },
@@ -466,15 +490,15 @@
       "image": "verdict",
       "camera": [
         {
-          "x": 520,
-          "y": 1000,
+          "x": 168,
+          "y": 400,
           "z": 1.0,
           "duree": 1
         },
         {
           "a": 1,
-          "x": 520,
-          "y": 1000,
+          "x": 168,
+          "y": 400,
           "z": 1.05,
           "duree": "fin",
           "lineaire": true,
