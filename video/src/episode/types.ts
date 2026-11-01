@@ -51,7 +51,10 @@ export type Element =
 	/** Clip vidéo muet (enregistrement d'écran du site déjà monté), lu à partir de `a`. */
 	| (Base & {type: 'video'; fichier: string; x: number; y: number; w: number; h: number; url?: string})
 	/** Écran « Ma routine » flouté façon Taller (src/episode/RoutineGrandimi.tsx) ; 🤫 à `chut`. */
-	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre; onglets?: string[]; taller?: boolean})
+	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre; onglets?: string[]; taller?: boolean; coche?: {de: Ancre; a: Ancre}})
+	/** Écran de calcul du site redessiné (anneau qui se remplit, étapes cochées une à une) entre `a` et `fin`
+	    (src/episode/CalculGrandimi.tsx). */
+	| (Base & {type: 'calcul'; fin: Ancre; url?: string})
 	/** Écran « Création de ton plan… » qui glisse depuis la droite ; chaque étape se coche à son ancre, 100 % à `fin`
 	    (référence rayan.taller, src/episode/ChargementPlan.tsx). */
 	| (Base & {type: 'chargement'; fin: Ancre; etapes: {texte: string; a: Ancre}[]; x?: number; y?: number; w?: number; h?: number; titre?: string})

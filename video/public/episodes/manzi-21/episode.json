@@ -269,8 +269,11 @@
           "type": "routine",
           "a": 0,
           "url": "grandimi.com",
-          "flou": 13,
-          "chut": "habitudes:exactement"
+          "flou": 0,
+          "coche": {
+            "de": "habitudes:programme",
+            "a": "habitudes:découvre-8"
+          }
         }
       ],
       "sons": [
@@ -280,26 +283,32 @@
           "volume": 0.22
         },
         {
-          "a": "habitudes:exactement",
-          "son": "pop",
-          "volume": 0.3
+          "a": "habitudes:programme",
+          "son": "tick",
+          "volume": 0.18
+        },
+        {
+          "a": "habitudes:croissance",
+          "son": "tick",
+          "volume": 0.18
+        },
+        {
+          "a": "habitudes:manzi",
+          "son": "tick",
+          "volume": 0.18
         }
       ]
     },
     {
       "nom": "calcul",
-      "debut": "habitudes:grâce-2",
+      "debut": "habitudes:découvre-2",
       "transition": "glitch",
       "sortie": "glitch",
       "elements": [
         {
-          "type": "video",
-          "fichier": "calcul.mp4",
+          "type": "calcul",
           "a": 0,
-          "x": 0,
-          "y": 172,
-          "w": 1080,
-          "h": 1748,
+          "fin": "atteint:1m73-3",
           "url": "grandimi.com"
         }
       ],
@@ -308,6 +317,21 @@
           "a": 0,
           "son": "whoosh",
           "volume": 0.22
+        },
+        {
+          "a": "habitudes:exercices",
+          "son": "tick",
+          "volume": 0.2
+        },
+        {
+          "a": "habitudes:l'alimentation",
+          "son": "tick",
+          "volume": 0.2
+        },
+        {
+          "a": "habitudes:routines",
+          "son": "tick",
+          "volume": 0.2
         }
       ]
     },
