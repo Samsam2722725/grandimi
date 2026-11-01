@@ -1,0 +1,619 @@
+{
+  "fps": 30,
+  "totalFrames": 1396,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 22.",
+      "from": 0,
+      "duration": 78,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 17
+        },
+        {
+          "w": "tailles",
+          "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 31
+        },
+        {
+          "w": "partie",
+          "f": 50
+        },
+        {
+          "w": "22.",
+          "f": 60
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Paul.",
+      "from": 79,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 79
+        },
+        {
+          "w": "on",
+          "f": 91
+        },
+        {
+          "w": "regarde",
+          "f": 96
+        },
+        {
+          "w": "les",
+          "f": 108
+        },
+        {
+          "w": "infos",
+          "f": 113
+        },
+        {
+          "w": "de",
+          "f": 120
+        },
+        {
+          "w": "Paul.",
+          "f": 122
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 16 ans, Paul mesure 1m91.",
+      "from": 137,
+      "duration": 80,
+      "words": [
+        {
+          "w": "À",
+          "f": 137
+        },
+        {
+          "w": "16",
+          "f": 142
+        },
+        {
+          "w": "ans,",
+          "f": 151
+        },
+        {
+          "w": "Paul",
+          "f": 158
+        },
+        {
+          "w": "mesure",
+          "f": 170
+        },
+        {
+          "w": "1m91.",
+          "f": 180
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "Ce qui est vraiment grand pour son âge.",
+      "from": 218,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Ce",
+          "f": 218
+        },
+        {
+          "w": "qui",
+          "f": 225
+        },
+        {
+          "w": "est",
+          "f": 232
+        },
+        {
+          "w": "vraiment",
+          "f": 237
+        },
+        {
+          "w": "grand",
+          "f": 244
+        },
+        {
+          "w": "pour",
+          "f": 254
+        },
+        {
+          "w": "son",
+          "f": 259
+        },
+        {
+          "w": "âge.",
+          "f": 263
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 1m94.",
+      "from": 275,
+      "duration": 131,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 275
+        },
+        {
+          "w": "le",
+          "f": 283
+        },
+        {
+          "w": "site",
+          "f": 285
+        },
+        {
+          "w": "Grandimi,",
+          "f": 292
+        },
+        {
+          "w": "sa",
+          "f": 319
+        },
+        {
+          "w": "taille",
+          "f": 323
+        },
+        {
+          "w": "adulte",
+          "f": 331
+        },
+        {
+          "w": "prédite",
+          "f": 343
+        },
+        {
+          "w": "est",
+          "f": 359
+        },
+        {
+          "w": "de",
+          "f": 364
+        },
+        {
+          "w": "1m94.",
+          "f": 367
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec son programme personnalisé sur Grandimi, Paul découvre les habitudes à adopter pour accompagner sa croissance, grâce aux conseils sur les exercices, l'alimentation et les routines.",
+      "from": 407,
+      "duration": 288,
+      "words": [
+        {
+          "w": "Et",
+          "f": 407
+        },
+        {
+          "w": "avec",
+          "f": 412
+        },
+        {
+          "w": "son",
+          "f": 419
+        },
+        {
+          "w": "programme",
+          "f": 424
+        },
+        {
+          "w": "personnalisé",
+          "f": 436
+        },
+        {
+          "w": "sur",
+          "f": 453
+        },
+        {
+          "w": "Grandimi,",
+          "f": 458
+        },
+        {
+          "w": "Paul",
+          "f": 484
+        },
+        {
+          "w": "découvre",
+          "f": 494
+        },
+        {
+          "w": "les",
+          "f": 506
+        },
+        {
+          "w": "habitudes",
+          "f": 511
+        },
+        {
+          "w": "à",
+          "f": 523
+        },
+        {
+          "w": "adopter",
+          "f": 527
+        },
+        {
+          "w": "pour",
+          "f": 542
+        },
+        {
+          "w": "accompagner",
+          "f": 547
+        },
+        {
+          "w": "sa",
+          "f": 563
+        },
+        {
+          "w": "croissance,",
+          "f": 568
+        },
+        {
+          "w": "grâce",
+          "f": 585
+        },
+        {
+          "w": "aux",
+          "f": 592
+        },
+        {
+          "w": "conseils",
+          "f": 597
+        },
+        {
+          "w": "sur",
+          "f": 611
+        },
+        {
+          "w": "les",
+          "f": 616
+        },
+        {
+          "w": "exercices,",
+          "f": 623
+        },
+        {
+          "w": "l'alimentation",
+          "f": 645
+        },
+        {
+          "w": "et",
+          "f": 671
+        },
+        {
+          "w": "les",
+          "f": 676
+        },
+        {
+          "w": "routines.",
+          "f": 681
+        }
+      ]
+    },
+    {
+      "id": "atteint",
+      "text": "Il pourrait atteindre 1m98,",
+      "from": 696,
+      "duration": 71,
+      "words": [
+        {
+          "w": "Il",
+          "f": 696
+        },
+        {
+          "w": "pourrait",
+          "f": 703
+        },
+        {
+          "w": "atteindre",
+          "f": 713
+        },
+        {
+          "w": "1m98,",
+          "f": 725
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "soit 4 cm de plus que sa taille initialement prédite, même si ce résultat n'est pas garanti.",
+      "from": 768,
+      "duration": 152,
+      "words": [
+        {
+          "w": "soit",
+          "f": 768
+        },
+        {
+          "w": "4",
+          "f": 778
+        },
+        {
+          "w": "cm",
+          "f": 785
+        },
+        {
+          "w": "de",
+          "f": 804
+        },
+        {
+          "w": "plus",
+          "f": 806
+        },
+        {
+          "w": "que",
+          "f": 814
+        },
+        {
+          "w": "sa",
+          "f": 818
+        },
+        {
+          "w": "taille",
+          "f": 826
+        },
+        {
+          "w": "initialement",
+          "f": 838
+        },
+        {
+          "w": "prédite,",
+          "f": 852
+        },
+        {
+          "w": "même",
+          "f": 871
+        },
+        {
+          "w": "si",
+          "f": 876
+        },
+        {
+          "w": "ce",
+          "f": 881
+        },
+        {
+          "w": "résultat",
+          "f": 886
+        },
+        {
+          "w": "n'est",
+          "f": 895
+        },
+        {
+          "w": "pas",
+          "f": 902
+        },
+        {
+          "w": "garanti.",
+          "f": 905
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Paul est plus grand que 98,5% des personnes de son âge selon cette simulation.",
+      "from": 921,
+      "duration": 179,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 921
+        },
+        {
+          "w": "Paul",
+          "f": 940
+        },
+        {
+          "w": "est",
+          "f": 955
+        },
+        {
+          "w": "plus",
+          "f": 959
+        },
+        {
+          "w": "grand",
+          "f": 964
+        },
+        {
+          "w": "que",
+          "f": 971
+        },
+        {
+          "w": "98,5%",
+          "f": 979
+        },
+        {
+          "w": "des",
+          "f": 1031
+        },
+        {
+          "w": "personnes",
+          "f": 1036
+        },
+        {
+          "w": "de",
+          "f": 1043
+        },
+        {
+          "w": "son",
+          "f": 1048
+        },
+        {
+          "w": "âge",
+          "f": 1055
+        },
+        {
+          "w": "selon",
+          "f": 1065
+        },
+        {
+          "w": "cette",
+          "f": 1075
+        },
+        {
+          "w": "simulation.",
+          "f": 1082
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si toi aussi tu veux découvrir ta taille adulte prédite.",
+      "from": 1101,
+      "duration": 79,
+      "words": [
+        {
+          "w": "Si",
+          "f": 1101
+        },
+        {
+          "w": "toi",
+          "f": 1106
+        },
+        {
+          "w": "aussi",
+          "f": 1111
+        },
+        {
+          "w": "tu",
+          "f": 1118
+        },
+        {
+          "w": "veux",
+          "f": 1123
+        },
+        {
+          "w": "découvrir",
+          "f": 1127
+        },
+        {
+          "w": "ta",
+          "f": 1139
+        },
+        {
+          "w": "taille",
+          "f": 1144
+        },
+        {
+          "w": "adulte",
+          "f": 1154
+        },
+        {
+          "w": "prédite.",
+          "f": 1163
+        }
+      ]
+    },
+    {
+      "id": "cta2",
+      "text": "Et obtenir ton propre programme personnalisé pour accompagner ta croissance,",
+      "from": 1181,
+      "duration": 114,
+      "words": [
+        {
+          "w": "Et",
+          "f": 1181
+        },
+        {
+          "w": "obtenir",
+          "f": 1189
+        },
+        {
+          "w": "ton",
+          "f": 1203
+        },
+        {
+          "w": "propre",
+          "f": 1208
+        },
+        {
+          "w": "programme",
+          "f": 1217
+        },
+        {
+          "w": "personnalisé",
+          "f": 1232
+        },
+        {
+          "w": "pour",
+          "f": 1251
+        },
+        {
+          "w": "accompagner",
+          "f": 1256
+        },
+        {
+          "w": "ta",
+          "f": 1273
+        },
+        {
+          "w": "croissance,",
+          "f": 1277
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "va directement sur grandimi.com, lien en bio.",
+      "from": 1297,
+      "duration": 96,
+      "words": [
+        {
+          "w": "va",
+          "f": 1297
+        },
+        {
+          "w": "directement",
+          "f": 1304
+        },
+        {
+          "w": "sur",
+          "f": 1318
+        },
+        {
+          "w": "grandimi.com,",
+          "f": 1325
+        },
+        {
+          "w": "lien",
+          "f": 1366
+        },
+        {
+          "w": "en",
+          "f": 1376
+        },
+        {
+          "w": "bio.",
+          "f": 1378
+        }
+      ]
+    }
+  ]
+}
