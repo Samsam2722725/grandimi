@@ -1,0 +1,575 @@
+{
+  "fps": 30,
+  "totalFrames": 1127,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 23.",
+      "from": 0,
+      "duration": 69,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 14
+        },
+        {
+          "w": "tailles",
+          "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 29
+        },
+        {
+          "w": "partie",
+          "f": 43
+        },
+        {
+          "w": "23.",
+          "f": 53
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Cheyenne.",
+      "from": 70,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 70
+        },
+        {
+          "w": "on",
+          "f": 82
+        },
+        {
+          "w": "regarde",
+          "f": 86
+        },
+        {
+          "w": "les",
+          "f": 96
+        },
+        {
+          "w": "infos",
+          "f": 98
+        },
+        {
+          "w": "de",
+          "f": 106
+        },
+        {
+          "w": "Cheyenne.",
+          "f": 108
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 13 ans, Cheyenne mesure 1m85,",
+      "from": 127,
+      "duration": 76,
+      "words": [
+        {
+          "w": "À",
+          "f": 127
+        },
+        {
+          "w": "13",
+          "f": 132
+        },
+        {
+          "w": "ans,",
+          "f": 137
+        },
+        {
+          "w": "Cheyenne",
+          "f": 144
+        },
+        {
+          "w": "mesure",
+          "f": 161
+        },
+        {
+          "w": "1m85,",
+          "f": 170
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est vraiment grand pour son âge.",
+      "from": 204,
+      "duration": 40,
+      "words": [
+        {
+          "w": "ce",
+          "f": 204
+        },
+        {
+          "w": "qui",
+          "f": 209
+        },
+        {
+          "w": "est",
+          "f": 214
+        },
+        {
+          "w": "vraiment",
+          "f": 216
+        },
+        {
+          "w": "grand",
+          "f": 223
+        },
+        {
+          "w": "pour",
+          "f": 230
+        },
+        {
+          "w": "son",
+          "f": 233
+        },
+        {
+          "w": "âge.",
+          "f": 238
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 2m.",
+      "from": 245,
+      "duration": 100,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 245
+        },
+        {
+          "w": "le",
+          "f": 252
+        },
+        {
+          "w": "site",
+          "f": 254
+        },
+        {
+          "w": "Grandimi,",
+          "f": 262
+        },
+        {
+          "w": "sa",
+          "f": 283
+        },
+        {
+          "w": "taille",
+          "f": 288
+        },
+        {
+          "w": "adulte",
+          "f": 295
+        },
+        {
+          "w": "prédite",
+          "f": 307
+        },
+        {
+          "w": "est",
+          "f": 324
+        },
+        {
+          "w": "de",
+          "f": 326
+        },
+        {
+          "w": "2m.",
+          "f": 329
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Cheyenne pourrait optimiser sa croissance",
+      "from": 346,
+      "duration": 88,
+      "words": [
+        {
+          "w": "Et",
+          "f": 346
+        },
+        {
+          "w": "avec",
+          "f": 348
+        },
+        {
+          "w": "les",
+          "f": 353
+        },
+        {
+          "w": "bonnes",
+          "f": 358
+        },
+        {
+          "w": "habitudes,",
+          "f": 362
+        },
+        {
+          "w": "Cheyenne",
+          "f": 377
+        },
+        {
+          "w": "pourrait",
+          "f": 396
+        },
+        {
+          "w": "optimiser",
+          "f": 403
+        },
+        {
+          "w": "sa",
+          "f": 418
+        },
+        {
+          "w": "croissance",
+          "f": 422
+        }
+      ]
+    },
+    {
+      "id": "atteint",
+      "text": "et atteindre jusqu'à 2m05,",
+      "from": 434,
+      "duration": 57,
+      "words": [
+        {
+          "w": "et",
+          "f": 434
+        },
+        {
+          "w": "atteindre",
+          "f": 439
+        },
+        {
+          "w": "jusqu'à",
+          "f": 454
+        },
+        {
+          "w": "2m05,",
+          "f": 463
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "donc 5 cm supplémentaires grâce à l'optimisation de sa croissance.",
+      "from": 492,
+      "duration": 105,
+      "words": [
+        {
+          "w": "donc",
+          "f": 492
+        },
+        {
+          "w": "5",
+          "f": 499
+        },
+        {
+          "w": "cm",
+          "f": 509
+        },
+        {
+          "w": "supplémentaires",
+          "f": 526
+        },
+        {
+          "w": "grâce",
+          "f": 542
+        },
+        {
+          "w": "à",
+          "f": 547
+        },
+        {
+          "w": "l'optimisation",
+          "f": 550
+        },
+        {
+          "w": "de",
+          "f": 566
+        },
+        {
+          "w": "sa",
+          "f": 571
+        },
+        {
+          "w": "croissance.",
+          "f": 586
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Cheyenne est plus grand que 99,6% des personnes de son âge.",
+      "from": 598,
+      "duration": 129,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 598
+        },
+        {
+          "w": "Cheyenne",
+          "f": 610
+        },
+        {
+          "w": "est",
+          "f": 629
+        },
+        {
+          "w": "plus",
+          "f": 634
+        },
+        {
+          "w": "grand",
+          "f": 639
+        },
+        {
+          "w": "que",
+          "f": 646
+        },
+        {
+          "w": "99,6%",
+          "f": 651
+        },
+        {
+          "w": "des",
+          "f": 699
+        },
+        {
+          "w": "personnes",
+          "f": 704
+        },
+        {
+          "w": "de",
+          "f": 711
+        },
+        {
+          "w": "son",
+          "f": 713
+        },
+        {
+          "w": "âge.",
+          "f": 718
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et il a déjà terminé 85% de sa croissance.",
+      "from": 728,
+      "duration": 81,
+      "words": [
+        {
+          "w": "Et",
+          "f": 728
+        },
+        {
+          "w": "il",
+          "f": 733
+        },
+        {
+          "w": "a",
+          "f": 737
+        },
+        {
+          "w": "déjà",
+          "f": 740
+        },
+        {
+          "w": "terminé",
+          "f": 747
+        },
+        {
+          "w": "85%",
+          "f": 761
+        },
+        {
+          "w": "de",
+          "f": 788
+        },
+        {
+          "w": "sa",
+          "f": 793
+        },
+        {
+          "w": "croissance.",
+          "f": 795
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T'es vraiment pas foutu, tu devrais rejoindre la NBA.",
+      "from": 810,
+      "duration": 76,
+      "words": [
+        {
+          "w": "T'es",
+          "f": 810
+        },
+        {
+          "w": "vraiment",
+          "f": 820
+        },
+        {
+          "w": "pas",
+          "f": 827
+        },
+        {
+          "w": "foutu,",
+          "f": 832
+        },
+        {
+          "w": "tu",
+          "f": 848
+        },
+        {
+          "w": "devrais",
+          "f": 851
+        },
+        {
+          "w": "rejoindre",
+          "f": 858
+        },
+        {
+          "w": "la",
+          "f": 868
+        },
+        {
+          "w": "NBA.",
+          "f": 872
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si toi aussi tu veux découvrir ta taille adulte prédite et obtenir un programme personnalisé pour optimiser ta croissance,",
+      "from": 887,
+      "duration": 162,
+      "words": [
+        {
+          "w": "Si",
+          "f": 887
+        },
+        {
+          "w": "toi",
+          "f": 892
+        },
+        {
+          "w": "aussi",
+          "f": 896
+        },
+        {
+          "w": "tu",
+          "f": 901
+        },
+        {
+          "w": "veux",
+          "f": 904
+        },
+        {
+          "w": "découvrir",
+          "f": 908
+        },
+        {
+          "w": "ta",
+          "f": 918
+        },
+        {
+          "w": "taille",
+          "f": 923
+        },
+        {
+          "w": "adulte",
+          "f": 932
+        },
+        {
+          "w": "prédite",
+          "f": 944
+        },
+        {
+          "w": "et",
+          "f": 959
+        },
+        {
+          "w": "obtenir",
+          "f": 964
+        },
+        {
+          "w": "un",
+          "f": 976
+        },
+        {
+          "w": "programme",
+          "f": 978
+        },
+        {
+          "w": "personnalisé",
+          "f": 988
+        },
+        {
+          "w": "pour",
+          "f": 1009
+        },
+        {
+          "w": "optimiser",
+          "f": 1014
+        },
+        {
+          "w": "ta",
+          "f": 1028
+        },
+        {
+          "w": "croissance,",
+          "f": 1033
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "va directement sur grandimi.com.",
+      "from": 1050,
+      "duration": 74,
+      "words": [
+        {
+          "w": "va",
+          "f": 1050
+        },
+        {
+          "w": "directement",
+          "f": 1057
+        },
+        {
+          "w": "sur",
+          "f": 1069
+        },
+        {
+          "w": "grandimi.com.",
+          "f": 1076
+        }
+      ]
+    }
+  ]
+}

@@ -99,7 +99,7 @@ export const RoutineGrandimi: React.FC<{
 						<div style={{width: `${(100 * faites) / total}%`, height: '100%', background: OR, borderRadius: 7}} />
 					</div>
 					{HABITUDES.map((h, i) => {
-						const k = interpolate(f, [cocheA(i), cocheA(i) + 5], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+						const k = coche ? interpolate(f, [cocheA(i), cocheA(i) + 5], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 0; // sans coche : cocheA = Infinity
 						const rebond = 1 + 0.25 * Math.sin(Math.PI * k) * (k < 1 ? 1 : 0);
 						return (
 							<div key={h} style={{position: 'absolute', left: 90, right: 90, top: 330 + i * 168, height: 138, borderRadius: 26, background: CARTE}}>

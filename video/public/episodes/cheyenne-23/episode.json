@@ -1,0 +1,689 @@
+{
+  "partie": 23,
+  "voice": "ff_siwis",
+  "speed": 1.2,
+  "lines": [
+    {
+      "id": "hook",
+      "pause": 0,
+      "text": "Je prédis vos tailles maximales, partie 23."
+    },
+    {
+      "id": "stats",
+      "pause": 0,
+      "text": "Aujourd'hui, on regarde les infos de Cheyenne."
+    },
+    {
+      "id": "age",
+      "pause": 0,
+      "text": "À 13 ans, Cheyenne mesure {1m85|un mètre quatre-vingt-cinq},"
+    },
+    {
+      "id": "norme",
+      "pause": 0,
+      "text": "ce qui est vraiment grand pour son âge."
+    },
+    {
+      "id": "predit",
+      "pause": 0,
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de {2m|2 mètres}."
+    },
+    {
+      "id": "habitudes",
+      "pause": 0,
+      "text": "Et avec les bonnes habitudes, Cheyenne pourrait optimiser sa croissance"
+    },
+    {
+      "id": "atteint",
+      "pause": 0,
+      "text": "et atteindre jusqu'à {2m05|2 mètres 5},"
+    },
+    {
+      "id": "optim",
+      "pause": 0,
+      "text": "donc 5 cm supplémentaires grâce à l'optimisation de sa croissance."
+    },
+    {
+      "id": "pct",
+      "pause": 0,
+      "text": "Actuellement, Cheyenne est plus grand que 99,6 % des personnes de son âge."
+    },
+    {
+      "id": "fini",
+      "pause": 0,
+      "text": "Et il a déjà terminé 85 % de sa croissance."
+    },
+    {
+      "id": "foutu",
+      "pause": 0,
+      "text": "T'es vraiment pas foutu, tu devrais rejoindre la NBA."
+    },
+    {
+      "id": "cta",
+      "pause": 0,
+      "text": "Si toi aussi tu veux découvrir ta taille adulte prédite et obtenir un programme personnalisé pour optimiser ta croissance,"
+    },
+    {
+      "id": "site",
+      "pause": 0,
+      "text": "va directement sur grandimi.com."
+    }
+  ],
+  "musique": {
+    "fichier": "sfx/music.wav",
+    "volume": 0.08
+  },
+  "images": {
+    "accroche": {
+      "fichier": "accroche.jpg",
+      "w": 1152,
+      "h": 2048
+    },
+    "verdict": {
+      "fichier": "verdict.jpg",
+      "w": 1152,
+      "h": 2048
+    },
+    "nba": {
+      "fichier": "nba.jpg",
+      "w": 1152,
+      "h": 2048
+    }
+  },
+  "zones": {},
+  "plans": [
+    {
+      "nom": "accroche",
+      "debut": 0,
+      "image": "accroche",
+      "camera": [
+        {
+          "x": 576,
+          "y": 1024,
+          "z": 1.13,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 576,
+          "y": 1024,
+          "z": 1.0,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        }
+      ]
+    },
+    {
+      "nom": "partie",
+      "debut": "hook:partie-1",
+      "fond": "papier",
+      "sortie": "jaune",
+      "papiers": [
+        "papier1.jpg",
+        "papier2.jpg",
+        "papier3.jpg",
+        "papier4.jpg"
+      ],
+      "elements": [
+        {
+          "type": "tape",
+          "texte": "PARTIE {partie}",
+          "a": 1,
+          "y": 700,
+          "taille": 140,
+          "couleur": "#fff200",
+          "police": "Montserrat",
+          "poids": 900,
+          "contour": 9,
+          "curseur": true,
+          "parLettre": 1,
+          "son": "tick",
+          "volume": 0.3
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": 3,
+          "son": "papier",
+          "volume": 0.35
+        }
+      ]
+    },
+    {
+      "nom": "ecran",
+      "debut": "stats-2",
+      "transition": "jaune-glisse",
+      "dashboard": {
+        "donnees": {
+          "actuelle": "185 cm",
+          "predite": "200 cm",
+          "optimiser": "+5 cm",
+          "bulle": "194 cm",
+          "courbe": [
+            185,
+            190.3,
+            193.8,
+            196.9,
+            198.7,
+            199.6,
+            200
+          ],
+          "ages": [
+            "13",
+            "14,3",
+            "15,7",
+            "17",
+            "18,3",
+            "19,7",
+            "21"
+          ],
+          "rang": "99,6 %",
+          "chances": "35 %",
+          "chancesCm": "205 cm",
+          "croissance": "85 %"
+        },
+        "cams": [
+          {
+            "a": "age:mesure",
+            "cx": 0.38,
+            "cy": 0.3085,
+            "z": 1.61,
+            "d": 11,
+            "courbe": "avant"
+          },
+          {
+            "a": "norme:grand",
+            "cx": 0.5,
+            "cy": 0.5,
+            "z": 1,
+            "d": 15,
+            "courbe": "arriere"
+          },
+          {
+            "a": "predit:taille",
+            "cx": 0.646,
+            "cy": 0.3301,
+            "z": 1.77,
+            "d": 11,
+            "courbe": "avant"
+          }
+        ],
+        "pops": [
+          {
+            "ligne": "rang",
+            "a": "norme:grand+6",
+            "d": 12,
+            "fin": "predit",
+            "dFin": 10,
+            "echelle": 1.1
+          }
+        ],
+        "fleches": [],
+        "ballon": {
+          "fichier": "ballon_13.png",
+          "a": "age:13",
+          "fin": "age:13+30",
+          "chute": true
+        },
+        "url": "grandimi.com"
+      },
+      "elements": [],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "age:13",
+          "son": "pop",
+          "volume": 0.3
+        },
+        {
+          "a": "age:mesure",
+          "son": "whoosh",
+          "volume": 0.28
+        },
+        {
+          "a": "norme:grand",
+          "son": "whoosh",
+          "volume": 0.2
+        },
+        {
+          "a": "predit:taille",
+          "son": "whoosh",
+          "volume": 0.28
+        }
+      ]
+    },
+    {
+      "nom": "routine",
+      "debut": "habitudes-2",
+      "transition": "jaune-glisse",
+      "sortie": "glitch",
+      "elements": [
+        {
+          "type": "routine",
+          "a": 0,
+          "url": "grandimi.com",
+          "flou": 13,
+          "chut": "habitudes:bonnes"
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "habitudes:bonnes",
+          "son": "pop",
+          "volume": 0.3
+        }
+      ]
+    },
+    {
+      "nom": "chiffre",
+      "debut": "atteint:2m05-3",
+      "transition": "radial",
+      "fond": "topo",
+      "topo": {
+        "zoomDe": 0.6,
+        "d": 18
+      },
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "alien.png",
+          "a": 0,
+          "x": 302,
+          "y": 520,
+          "w": 476,
+          "h": 975,
+          "grandit": {
+            "de": 0.4,
+            "d": 40
+          }
+        },
+        {
+          "type": "tape",
+          "texte": "2m05",
+          "a": 3,
+          "y": 290,
+          "taille": 130,
+          "couleur": "#fff",
+          "contour": 0,
+          "police": "Montserrat",
+          "poids": 800,
+          "curseur": true,
+          "fond": "#8100fe",
+          "parLettre": 2,
+          "son": "tick",
+          "volume": 0.25
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "ecran2",
+      "debut": "optim-2",
+      "transition": "glitch",
+      "sortie": "glitch",
+      "pousse": 0.04,
+      "dashboard": {
+        "donnees": {
+          "actuelle": "185 cm",
+          "predite": "200 cm",
+          "optimiser": "+5 cm",
+          "bulle": "194 cm",
+          "courbe": [
+            185,
+            190.3,
+            193.8,
+            196.9,
+            198.7,
+            199.6,
+            200
+          ],
+          "ages": [
+            "13",
+            "14,3",
+            "15,7",
+            "17",
+            "18,3",
+            "19,7",
+            "21"
+          ],
+          "rang": "99,6 %",
+          "chances": "35 %",
+          "chancesCm": "205 cm",
+          "croissance": "85 %"
+        },
+        "cams": [
+          {
+            "a": "fini:terminé",
+            "cx": 0.7,
+            "cy": 0.8291,
+            "z": 2.0,
+            "d": 12,
+            "courbe": "avant"
+          }
+        ],
+        "pops": [
+          {
+            "ligne": "optimiser",
+            "a": "optim:5",
+            "d": 20,
+            "fin": "pct",
+            "dFin": 14,
+            "echelle": 1.14
+          },
+          {
+            "ligne": "rang",
+            "a": "pct:plus",
+            "d": 30,
+            "fin": "pct:âge+6",
+            "dFin": 8,
+            "echelle": 1.12
+          }
+        ],
+        "fleches": [
+          {
+            "sens": "bas",
+            "x": 0.5,
+            "pointe": 0.2,
+            "a": "optim",
+            "d": 12,
+            "fin": "optim:croissance",
+            "dFin": 16
+          }
+        ],
+        "url": "grandimi.com"
+      },
+      "effets": [
+        {
+          "type": "flash",
+          "a": "pct:99,6+10",
+          "couleur": "orange-jaune"
+        }
+      ],
+      "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "curseur.png",
+          "a": "pct:plus",
+          "x": 404,
+          "y": 1442,
+          "w": 192,
+          "h": 204,
+          "depuis": {
+            "y": 520
+          },
+          "ressort": true,
+          "fin": "fini:et",
+          "sortie": {
+            "y": 700,
+            "d": 6
+          }
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        },
+        {
+          "a": "optim",
+          "son": "pop",
+          "volume": 0.38
+        },
+        {
+          "a": "fini:terminé",
+          "son": "whoosh",
+          "volume": 0.28
+        }
+      ]
+    },
+    {
+      "nom": "verdict",
+      "debut": "foutu-2",
+      "transition": "glitch",
+      "image": "verdict",
+      "camera": [
+        {
+          "x": 576,
+          "y": 1024,
+          "z": 1.0,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 576,
+          "y": 1024,
+          "z": 1.05,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "tape",
+          "texte": "PAS FOUTU ✅",
+          "a": "foutu:pas",
+          "y": 800,
+          "taille": 100,
+          "couleur": "#24ef3c",
+          "contour": 0,
+          "police": "Montserrat",
+          "poids": 800,
+          "parLettre": 1,
+          "son": "tick",
+          "volume": 0.2
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ],
+      "sortie": "glitch"
+    },
+    {
+      "nom": "nba",
+      "debut": "foutu:tu-2",
+      "transition": "glitch",
+      "sortie": "zoom-flou",
+      "image": "nba",
+      "camera": [
+        {
+          "x": 576,
+          "y": 1024,
+          "z": 1.0,
+          "duree": 1
+        },
+        {
+          "a": 1,
+          "x": 576,
+          "y": 1024,
+          "z": 1.05,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
+        {
+          "type": "tape",
+          "texte": "NBA 🏀",
+          "a": "foutu:rejoindre",
+          "y": 800,
+          "taille": 100,
+          "couleur": "#ff8a00",
+          "contour": 0,
+          "police": "Montserrat",
+          "poids": 800,
+          "parLettre": 1,
+          "son": "tick",
+          "volume": 0.2
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    },
+    {
+      "nom": "appel",
+      "debut": "cta",
+      "transition": "radial",
+      "fond": "topo",
+      "sortie": "radial-fin",
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "ANALYSÉ",
+          "a": "cta+6",
+          "y": 330,
+          "taille": 110,
+          "couleur": "#fff200",
+          "contour": 7,
+          "poids": 800,
+          "police": "Montserrat",
+          "fin": "cta:taille"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "ordi.png",
+          "a": "cta+6",
+          "x": 350,
+          "y": 540,
+          "w": 380,
+          "h": 380,
+          "effet": "pop",
+          "fin": "cta:taille",
+          "son": "pop",
+          "volume": 0.3
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "regle.png",
+          "a": "cta:taille",
+          "x": 880,
+          "y": 960,
+          "w": 150,
+          "h": 960,
+          "grandit": {
+            "de": 0.1,
+            "d": 40
+          },
+          "fin": "site"
+        },
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": "site:grandimi.com",
+          "y": 400,
+          "taille": 96,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 8,
+          "son": "ding",
+          "volume": 0.25
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
+    }
+  ],
+  "sousTitres": {
+    "motsCles": [],
+    "fenetres": [
+      {
+        "de": 0,
+        "a": "hook:partie-1",
+        "y": 822,
+        "taille": 86,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 3,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#fff200"
+      },
+      {
+        "de": "cta",
+        "a": "fin",
+        "y": 822,
+        "taille": 86,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 3,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#fff200"
+      }
+    ]
+  },
+  "voix": "Enregistrement ElevenLabs de l'utilisateur (voix ElevenLabs), blancs ramenés à 0,08 s, vitesse d'origine.",
+  "reference": "references/p12-steve",
+  "deriveCamera": false,
+  "sonsMouvements": false,
+  "carteCommentaire": {
+    "nom": "shxyxn.7",
+    "texte": "J’ai 13 ans et je mesure 1m85, jusqu’à quelle taille puis-je grandir ?",
+    "de": 0,
+    "a": "age:13",
+    "x": 88,
+    "y": 290,
+    "w": 905,
+    "photo": "avatar.png",
+    "reponse": {
+      "modele": "taller",
+      "h": 230,
+      "rotation": 0
+    }
+  }
+}
