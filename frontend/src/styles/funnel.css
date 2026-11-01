@@ -3061,9 +3061,9 @@
   justify-content: center;
   /* Sa part de la colonne, sous la place gardée pour le nom (deux lignes),
      comme chez Taller où la barre commence sous « Impact Génétique ». */
-  height: calc((100% - 60px) * var(--part));
-  min-height: 62px;
-  padding-bottom: 18px;
+  height: calc((100% - 52px) * var(--part));
+  min-height: 44px;
+  padding-bottom: 12px;
   border-radius: 22px;
   border: 1px solid var(--funnel-line);
   background: #262626;
