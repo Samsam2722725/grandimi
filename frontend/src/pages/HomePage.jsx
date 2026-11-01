@@ -42,9 +42,19 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
      disent rien : on sait combien de gens démarrent, pas ce qui les a décidés,
      donc pas quelle section mérite d'exister. Chaque bouton déclare son
      emplacement avant de déléguer. */
-  const demarrer = (emplacement, sexe) => {
-    tunnelDemarre(emplacement)
-    onStartQuestionnaire(sexe)
+  /* Le bouton enfoncé se peint d'abord, le questionnaire se construit
+     ensuite : sinon le toucher attendait tout l'écran suivant (INP Google,
+     01/11/2026). */
+  const demarrer = (emplacement, sexe, evenement) => {
+    // Le bouton s'enfonce tout de suite : c'est ce que le téléphone peint
+    // en réponse au toucher.
+    evenement?.currentTarget?.style.setProperty('transform', 'scale(0.97)')
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        tunnelDemarre(emplacement)
+        onStartQuestionnaire(sexe)
+      }, 0)
+    })
   }
 
 
@@ -103,7 +113,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             {/* Le bouton qui suit le visiteur : l'en-tête reste collé en haut. */}
             <button
               type="button"
-              onClick={() => demarrer('en-tete')}
+              onClick={(e) => demarrer('en-tete', undefined, e)}
               className="inline-flex min-h-11 shrink-0 items-center rounded-full bg-gradient-to-r from-[#ff7a2e] to-[#ff4d1a] px-3.5 text-[13px] sm:text-sm font-bold whitespace-nowrap text-white shadow-[0_0_18px_rgba(255,90,31,0.4)] sm:px-6"
             >
               Commencer
@@ -165,7 +175,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
 
             <button
               type="button"
-              onClick={() => demarrer('hero')}
+              onClick={(e) => demarrer('hero', undefined, e)}
               className="rise mt-8 inline-flex min-h-14 w-full max-w-md items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#ff7a2e] to-[#ff4d1a] px-8 text-[17px] font-bold text-white shadow-[0_0_28px_rgba(255,90,31,0.45)] transition-transform active:scale-[0.97]"
               style={{ animationDelay: '180ms' }}
             >
@@ -267,7 +277,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
           <div className="mx-auto flex w-full max-w-md justify-center">
             <button
               type="button"
-              onClick={() => demarrer('bas-de-page')}
+              onClick={(e) => demarrer('bas-de-page', undefined, e)}
               className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#ff7a2e] to-[#ff4d1a] px-8 text-[17px] font-bold text-white shadow-[0_0_28px_rgba(255,90,31,0.45)] transition-transform active:scale-[0.97]"
             >
               Je commence →

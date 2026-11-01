@@ -437,6 +437,29 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     setIndex((precedent) => Math.min(etapes.length - 1, precedent + 1))
   }
 
+  /* « Continuer » : le téléphone peint d'abord le bouton enfoncé, puis
+     construit l'écran suivant. Construit dans le même geste, l'écran
+     suivant retardait la réaction au toucher (INP Google de 338 ms sur
+     mobile, mesuré le 01/11/2026). Un second toucher pendant l'attente est
+     ignoré, pour ne pas sauter une question. */
+  const avanceEnAttente = useRef(null)
+  useEffect(() => () => cancelAnimationFrame(avanceEnAttente.current), [])
+
+  function continuer(evenement) {
+    if (avanceEnAttente.current) return
+    // Le bouton change tout de suite d'aspect : c'est ce changement que le
+    // téléphone peint en réponse au toucher, avant le gros travail.
+    const bouton = evenement?.currentTarget
+    bouton?.classList.add('is-appuye')
+    avanceEnAttente.current = requestAnimationFrame(() => {
+      setTimeout(() => {
+        avanceEnAttente.current = null
+        bouton?.classList.remove('is-appuye')
+        avancer()
+      }, 0)
+    })
+  }
+
   function reculer() {
     clearTimeout(minuterieAvance.current)
     if (index === 0) {
@@ -1064,7 +1087,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
       subtitle={texte.sousTitre}
       footer={
         estChoixUnique ? null : (
-          <FunnelButton disabled={!estAffichage && !peutContinuer} onClick={avancer}>
+          <FunnelButton disabled={!estAffichage && !peutContinuer} onClick={continuer}>
             Continuer
           </FunnelButton>
         )

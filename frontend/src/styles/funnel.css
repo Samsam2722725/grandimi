@@ -375,7 +375,8 @@
     opacity 0.15s ease;
 }
 
-.funnel-cta:active:not(:disabled) {
+.funnel-cta:active:not(:disabled),
+.funnel-cta.is-appuye {
   transform: scale(0.985);
 }
 
