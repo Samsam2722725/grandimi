@@ -258,7 +258,8 @@
           "son": "whoosh",
           "volume": 0.28
         }
-      ]
+      ],
+      "pousse": 0.04
     },
     {
       "nom": "routine",
@@ -658,7 +659,7 @@
       }
     ]
   },
-  "voix": "Enregistrement ElevenLabs de l'utilisateur (voix ElevenLabs), blancs ramenés à 0,08 s, vitesse d'origine.",
+  "voix": "Enregistrement ElevenLabs de l'utilisateur (voix ElevenLabs), blancs ramenés à 0,08 s, ×1,1.",
   "reference": "references/p12-steve",
   "deriveCamera": false,
   "sonsMouvements": false,

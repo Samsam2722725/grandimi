@@ -258,7 +258,8 @@
           "son": "whoosh",
           "volume": 0.28
         }
-      ]
+      ],
+      "pousse": 0.04
     },
     {
       "nom": "routine",
@@ -431,9 +432,17 @@
           {
             "a": "optim:même",
             "cx": 0.5,
+            "cy": 0.52,
+            "z": 1.35,
+            "d": 16,
+            "courbe": "avant"
+          },
+          {
+            "a": "pct-6",
+            "cx": 0.5,
             "cy": 0.5,
             "z": 1,
-            "d": 14,
+            "d": 12,
             "courbe": "arriere"
           }
         ],
@@ -511,6 +520,11 @@
           "a": "optim:4",
           "son": "whoosh",
           "volume": 0.26
+        },
+        {
+          "a": "optim:même",
+          "son": "whoosh",
+          "volume": 0.2
         }
       ]
     },
@@ -731,7 +745,7 @@
       }
     ]
   },
-  "voix": "Enregistrement ElevenLabs de l'utilisateur (voix ElevenLabs), blancs ramenés à 0,08 s, vitesse d'origine.",
+  "voix": "Enregistrement ElevenLabs de l'utilisateur (voix ElevenLabs), blancs ramenés à 0,08 s, ×1,1.",
   "reference": "references/p12-steve",
   "deriveCamera": false,
   "sonsMouvements": false,
