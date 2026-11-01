@@ -4116,11 +4116,14 @@ div.interstitial.citation { cursor: default; }
 .choice-card-title { font-size: 17px; font-weight: 500; }
 .choice-card-radio { width: 24px; height: 24px; border-color: #4a4a4a; }
 .choice-card.is-selected .choice-card-radio { box-shadow: inset 0 0 0 6px var(--funnel-accent); }
+/* Sur iPhone, la barre de Safari laisse ~660 px : on ne resserre que les
+   questions à 5 réponses ou plus, pour qu elles tiennent sans défiler. Les
+   autres gardent la taille de Taller. */
 @media (max-height: 700px) {
-  .funnel-choices { gap: 9px; }
-  .choice-card { min-height: 52px; padding-top: 9px; padding-bottom: 9px; }
+  .funnel-choices:has(> :nth-child(5)) { gap: 9px; }
+  .funnel-choices:has(> :nth-child(5)) .choice-card { min-height: 52px; padding-top: 9px; padding-bottom: 9px; }
 }
 @media (max-height: 660px) {
-  .funnel-choices { gap: 7px; }
-  .choice-card { min-height: 48px; padding-top: 7px; padding-bottom: 7px; }
+  .funnel-choices:has(> :nth-child(5)) { gap: 7px; }
+  .funnel-choices:has(> :nth-child(5)) .choice-card { min-height: 48px; padding-top: 7px; padding-bottom: 7px; }
 }
