@@ -123,12 +123,12 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             className="pointer-events-none absolute -top-48 left-1/2 size-[640px] -translate-x-1/2 rounded-full bg-[#ff5a1f] opacity-[0.14] blur-[150px]"
           />
           <div className="relative mx-auto flex w-full max-w-2xl flex-col items-center text-center">
-            <p className="rise mb-2.5 flex items-center justify-center gap-3 whitespace-nowrap font-['Spline_Sans_Mono',monospace] text-[11px] font-medium tracking-[0.2em] text-[#ff7a45] uppercase">
+            <p className="mb-2.5 flex items-center justify-center gap-3 whitespace-nowrap font-['Spline_Sans_Mono',monospace] text-[11px] font-medium tracking-[0.2em] text-[#ff7a45] uppercase">
               <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
               Méthode basée sur la science
               <span aria-hidden="true" className="h-px w-8 bg-[#ff7a45]/50" />
             </p>
-            <p className="rise inline-flex items-center gap-2 rounded-full border border-[#ff6a2b]/40 bg-[#ff6a2b]/[0.1] px-4 py-2 text-[14px] font-bold text-[#ff7a45]">
+            <p className="inline-flex items-center gap-2 rounded-full border border-[#ff6a2b]/40 bg-[#ff6a2b]/[0.1] px-4 py-2 text-[14px] font-bold text-[#ff7a45]">
               <span aria-hidden="true" className="relative flex size-2">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#ff6a2b] opacity-70" />
                 <span className="relative inline-flex size-2 rounded-full bg-[#ff6a2b]" />
@@ -137,9 +137,10 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             </p>
 
             <h1
-              className="rise mt-5 font-['Syne',sans-serif] text-[clamp(36px,10vw,84px)] leading-[1] font-bold tracking-[-0.04em] text-[#f4efe9]"
-              style={{ animationDelay: '60ms' }}
+              className="mt-5 font-['Syne',sans-serif] text-[clamp(36px,10vw,84px)] leading-[1] font-bold tracking-[-0.04em] text-[#f4efe9]"
             >
+              {/* Titre et phrase sans fondu : Google compte leur apparition
+                  comme le chargement de la page (LCP, 01/11/2026). */}
               {/* Les mots du paywall (01/11/2026) : la même promesse du
                   premier écran jusqu'au prix. */}
               Atteins ta
@@ -150,8 +151,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             </h1>
 
             <p
-              className="rise mt-5 max-w-md text-[16px] leading-[1.6] text-[#a39d97]"
-              style={{ animationDelay: '120ms' }}
+              className="mt-5 max-w-md text-[16px] leading-[1.6] text-[#a39d97]"
             >
               {/* Mélange de la ligne de Taller (« You can't control genetics,
                   but you can optimize growth ») et de la phrase du paywall
