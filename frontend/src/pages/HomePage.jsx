@@ -140,7 +140,10 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               className="mt-5 font-['Syne',sans-serif] text-[clamp(36px,10vw,84px)] leading-[1] font-bold tracking-[-0.04em] text-[#f4efe9]"
             >
               {/* Titre et phrase sans fondu : Google compte leur apparition
-                  comme le chargement de la page (LCP, 01/11/2026). */}
+                  comme le chargement de la page (LCP, 01/11/2026).
+                  COPIE FIGÉE dans frontend/index.html (« coquille du hero ») :
+                  tout changement du titre ou de la phrase doit y être
+                  reporté, sinon l'ancienne version s'affiche d'abord. */}
               {/* Les mots du paywall (01/11/2026) : la même promesse du
                   premier écran jusqu'au prix. */}
               Atteins ta
