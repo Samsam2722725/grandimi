@@ -65,3 +65,9 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
 - Photo verdict + « PAS FOUTU ✅ » ; fin topo « ANALYSÉ », 🧓, règle, « 🔗 grandimi.com ».
 - Sons : whoosh à chaque zoom avant, son sur la première flèche, rien sur la deuxième flèche ni sur le flash.
 - Sous-titres jaunes Montserrat 600, 86 px, y 822.
+
+## Retours du 01/11 (partie 23, Samuel) — à appliquer aux prochaines parties
+- Fin (plan `appel`) **sans émojis** : pas d'`ordi.png`, `papy.png`, `regle.png`, et « grandimi.com » sans 🔗 ; « ANALYSÉ » reste jusqu'à `site`.
+- Fond topo de la fin **plus lent** : `"topo": {"vitesse": 0.35}` sur le plan `appel` (1 = vitesse d'origine).
+- Ballon de l'âge : ballon doré de l'utilisateur détouré (fond magenta) si fourni, sinon `ballon.py … dore`.
+- Voix : blancs à 0,05 s puis `atempo=1.08`.

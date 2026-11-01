@@ -526,54 +526,11 @@
           "contour": 7,
           "poids": 800,
           "police": "Montserrat",
-          "fin": "com"
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "ordi.png",
-          "a": "cta:potentiel",
-          "x": 350,
-          "y": 540,
-          "w": 380,
-          "h": 380,
-          "effet": "pop",
-          "fin": "com",
-          "son": "pop",
-          "volume": 0.3
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "papy.png",
-          "a": "com:âge",
-          "x": 440,
-          "y": 1310,
-          "w": 200,
-          "h": 200,
-          "effet": "pop",
-          "fin": "com:taille",
-          "son": "pop",
-          "volume": 0.25
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "regle.png",
-          "a": "com:taille",
-          "x": 880,
-          "y": 960,
-          "w": 150,
-          "h": 960,
-          "grandit": {
-            "de": 0.1,
-            "d": 40
-          },
           "fin": "site"
         },
         {
           "type": "texte",
-          "texte": "🔗 grandimi.com",
+          "texte": "grandimi.com",
           "a": "site:grandimi.com",
           "y": 400,
           "taille": 96,
@@ -590,7 +547,10 @@
           "son": "whoosh",
           "volume": 0.22
         }
-      ]
+      ],
+      "topo": {
+        "vitesse": 0.35
+      }
     }
   ],
   "sousTitres": {

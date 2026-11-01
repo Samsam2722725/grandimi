@@ -90,7 +90,7 @@ export type Plan = {
 	/** papier : photos de papier froissé ; topo : courbes de niveau animées (src/episode/TopoAnime.tsx). */
 	fond?: 'papier' | 'topo';
 	/** Fond topo : zoom de départ (la caméra arrive à 1 en `d` frames) et coup de zoom flou à `coup`. */
-	topo?: {zoomDe?: number; d?: number; coup?: Ancre};
+	topo?: {zoomDe?: number; d?: number; coup?: Ancre; vitesse?: number};
 	/** Photos de papier qui alternent (sinon papier généré). */
 	papiers?: string[];
 	image?: string;

@@ -910,7 +910,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			) : null}
 			{plan.fond === 'topo' ? (
 				<CoupFlou at={plan.topo?.coup !== undefined ? loc(plan.topo.coup) : undefined} vitesse={vite}>
-					<TopoAnime zoomDe={plan.topo?.zoomDe} d={plan.topo?.d} />
+					<TopoAnime zoomDe={plan.topo?.zoomDe} d={plan.topo?.d} vitesse={plan.topo?.vitesse} />
 				</CoupFlou>
 			) : null}
 			{(plan.effets ?? [])
