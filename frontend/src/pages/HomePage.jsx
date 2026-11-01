@@ -6,6 +6,7 @@ const FaqSection = lazy(() => import('@/components/ui/faq-section').then(m => ({
 import '../styles/theme-night.css'
 
 import { tunnelDemarre } from '../lib/analytics'
+import { AVIS } from '../lib/avis-clients'
 
 /* Les vraies objections d'un ado avant de commencer. */
 const FAQ = [
@@ -139,10 +140,12 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               className="rise mt-5 font-['Syne',sans-serif] text-[clamp(36px,10vw,84px)] leading-[1] font-bold tracking-[-0.04em] text-[#f4efe9]"
               style={{ animationDelay: '60ms' }}
             >
-              Plus grand.
+              {/* Les mots du paywall (01/11/2026) : la même promesse du
+                  premier écran jusqu'au prix. */}
+              Atteins ta
               <br />
               <span className="bg-gradient-to-r from-[#ff8a3d] to-[#ff4d1a] bg-clip-text text-transparent [filter:drop-shadow(0_0_24px_rgba(255,90,31,0.35))]">
-                Plus confiant.
+                taille maximale
               </span>
             </h1>
 
@@ -150,8 +153,11 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               className="rise mt-5 max-w-md text-[16px] leading-[1.6] text-[#a39d97]"
               style={{ animationDelay: '120ms' }}
             >
-              Ton programme pour grandir au maximum, fait pour toi. Chaque nuit, chaque
-              repas, chaque exercice compte.
+              {/* Mélange de la ligne de Taller (« You can't control genetics,
+                  but you can optimize growth ») et de la phrase du paywall
+                  (01/11/2026). */}
+              Tu ne choisis pas ta génétique, mais tu peux optimiser ta croissance : un
+              programme optimal <em className="font-bold text-[#ff6a2b] not-italic">adapté à toi</em>.
             </p>
 
             <button
@@ -175,18 +181,12 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               <SilhouetteRedresse />
             </div>
 
-            {/* Rangée de chiffres, comme heightfuel — uniquement du vrai. */}
-            <div className="rise mt-10 grid w-full max-w-md grid-cols-3 border-y border-white/10" style={{ animationDelay: '280ms' }}>
-              {[
-                ['200+', 'analyses faites'],
-                ['2 min', 'pour commencer'],
-                ['100 %', 'fait pour toi'],
-              ].map(([chiffre, texte], i) => (
-                <div key={texte} className={`py-5 ${i > 0 ? 'border-l border-white/10' : ''}`}>
-                  <p className="font-['Syne',sans-serif] text-[20px] leading-none font-bold text-[#ff6a2b]">{chiffre}</p>
-                  <p className="mt-2 font-['Spline_Sans_Mono',monospace] text-[11px] tracking-[0.08em] text-[#8a847e] uppercase">{texte}</p>
-                </div>
-              ))}
+            {/* Un seul chiffre, et du vrai : 6 140 prédictions en base au
+                01/11/2026. « 2 min » et « 100 % fait pour toi » retirés à la
+                demande de Samuel (01/11/2026). */}
+            <div className="rise mt-10 w-full max-w-md border-y border-white/10 py-5" style={{ animationDelay: '280ms' }}>
+              <p className="font-['Syne',sans-serif] text-[20px] leading-none font-bold text-[#ff6a2b]">6 000+</p>
+              <p className="mt-2 font-['Spline_Sans_Mono',monospace] text-[11px] tracking-[0.08em] text-[#8a847e] uppercase">analyses faites</p>
             </div>
 
           </div>
@@ -199,9 +199,6 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
             <h2 className="mt-3 text-center font-['Syne',sans-serif] text-[clamp(32px,8vw,52px)] leading-[1.02] font-bold tracking-[-0.035em] text-[#f4efe9]">
               Deviens le plus <span className="text-[#ff6a2b]">grand possible</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-md text-center text-[16px] leading-[1.6] text-[#a39d97]">
-              Sommeil, sport, alimentation, posture : tout ce qui fait grandir, réuni dans un seul programme.
-            </p>
 
             {/* Grille à la TrendSaaS : ce qu'on reçoit, en chiffres vrais. */}
             <div className="mt-8 grid grid-cols-1 border-t border-white/10 sm:grid-cols-2">
@@ -223,12 +220,57 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
           </div>
         </section>
 
+        {/* AVIS — le même vrai avis que sur le paywall (lib/avis-clients),
+            vers la fin de la page, avant les questions (01/11/2026). */}
+        {AVIS.length > 0 && (
+          <section className="px-5 pt-10 pb-4 sm:px-8" aria-label="Avis de clients">
+            <div className="mx-auto w-full max-w-2xl">
+              <p className="text-center font-['Spline_Sans_Mono',monospace] text-[11px] tracking-[0.2em] text-[#8a847e] uppercase">Ce qu’ils en disent</p>
+              {AVIS.map(({ prenom, age, texte }) => (
+                <figure
+                  key={prenom + texte.slice(0, 12)}
+                  className="mt-5 flex gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-left"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#ff6a2b]/15 font-bold text-[#ff6a2b]"
+                  >
+                    {prenom[0]}
+                  </span>
+                  <div>
+                    <blockquote className="text-[15px] leading-[1.55] text-[#f4efe9]">{/* Espaces insécables du français : « ! » et « » » ne partent pas seuls à la ligne. */}
+                      {`« ${texte.replace(/ ([!?:;])/g, ' $1')} »`}</blockquote>
+                    <figcaption className="mt-3 flex items-center gap-2.5 text-[14px] font-semibold text-[#f4efe9]">
+                      <span>{prenom}, {age} ans</span>
+                      <span className="tracking-[1px] text-[#fbbf24]" aria-label="5 étoiles sur 5">★★★★★</span>
+                    </figcaption>
+                  </div>
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* FAQ */}
         <div id="faq" className="scroll-mt-24">
           <Suspense fallback={<div className="h-96" />}>
             <FaqSection title="Les questions qu’on nous pose souvent" description="" items={FAQ} />
           </Suspense>
         </div>
+
+        {/* Le bouton du bas (« CTA pot de colle » : haut, barre collée, bas),
+            pour celui qui a tout lu (01/11/2026). Mesuré à part : 'bas-de-page'. */}
+        <section className="px-5 pt-2 pb-14 sm:px-8">
+          <div className="mx-auto flex w-full max-w-md justify-center">
+            <button
+              type="button"
+              onClick={() => demarrer('bas-de-page')}
+              className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#ff7a2e] to-[#ff4d1a] px-8 text-[17px] font-bold text-white shadow-[0_0_28px_rgba(255,90,31,0.45)] transition-transform active:scale-[0.97]"
+            >
+              Je commence →
+            </button>
+          </div>
+        </section>
 
       </main>
 

@@ -4,6 +4,7 @@ import { Check, CreditCard, ShieldCheck, Wallet, X } from 'lucide-react'
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
 import { OFFRES, finReduction, euros } from '../lib/offres'
+import { AVIS } from '../lib/avis-clients'
 import { CeQueTuObtiens } from '@/components/ui/ce-que-tu-obtiens'
 import '../styles/funnel.css'
 /* Feuille dédiée, et non paywall.css : cette dernière habille encore
@@ -65,15 +66,6 @@ const DELAI_AVANT_MESSAGE_MS = 4000
    Lecture défensive de bout en bout : cette page s'affiche aussi pour
    quelqu'un arrivé d'une session antérieure, dont le stockage local ne
    contient pas encore ces champs. */
-/* Vrais avis de clients seulement (voir la section « Ce qu'ils en disent »).
-   Garder la trace de chaque avis (capture du message d'origine). */
-const AVIS = [
-  {
-    prenom: 'Lucas',
-    age: 17,
-    texte: 'Franchement incroyable, je voulais savoir combien j’allais mesurer adulte et Grandimi m’a donné une estimation et plein de conseils pour bien grandir. Super simple à utiliser !',
-  },
-]
 
 function lireLaPrediction() {
   try {
