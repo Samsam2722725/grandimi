@@ -8,34 +8,142 @@ import '../styles/theme-night.css'
 import { tunnelDemarre } from '../lib/analytics'
 import { AVIS } from '../lib/avis-clients'
 
-/* Les vraies objections d'un ado avant de commencer. */
+/* Les questions que les ados tapent dans Google, avec des réponses vraies
+   qui donnent envie de commencer (01/11/2026). Retirées : « J'ai pas de
+   carte bancaire » (promettait le paiement par un parent, éteint) et la
+   taille estimée « en bonus » (seulement dans 3 mois et À vie).
+   COPIE dans frontend/index.html (données FAQPage pour Google) : tout
+   changement ici doit y être reporté. */
 const FAQ = [
   {
     question: 'Est-ce que je peux encore grandir ?',
     answer:
-      'Oui, même à 21 ans. Chez les garçons, la croissance continue souvent jusqu’à 18-21 ans, beaucoup plus longtemps qu’on le croit. Chez les filles, elle s’arrête plus tôt, souvent vers 15-17 ans. Ton analyse te dit où tu en es.',
+      'Oui, tant que tes cartilages de croissance ne sont pas fermés. Chez les garçons, la croissance continue souvent jusqu’à 18-21 ans, bien plus longtemps qu’on le croit. Chez les filles, la grosse poussée arrive plus tôt. Ton analyse estime où tu en es, en 2 minutes.',
+  },
+  {
+    question: 'Comment grandir au maximum ?',
+    answer:
+      'Ta génétique fixe la plus grosse part, mais le reste dépend de toi : bien dormir, manger assez de protéines et de calcium, bouger chaque jour et te tenir droit. Grandimi te dit chaque jour quoi faire, adapté à ton âge et à ton profil.',
   },
   {
     question: 'Qu’est-ce que je reçois ?',
     answer:
-      'Ton programme pour grandir : ta routine du jour, ta posture, ton heure de coucher, quoi manger, ton suivi chaque semaine. Et en bonus, ta taille adulte estimée.',
-  },
-  {
-    question: 'Quand je vois des résultats ?',
-    answer:
-      'La posture, dès les premières semaines : tu parais plus grand. Ta croissance, tu la vois sur ta courbe chaque semaine.',
+      'Un programme fait pour toi, jour après jour sur 16 niveaux : ta routine, tes exercices (posture, étirements, sport), quoi manger et à quelle heure te coucher. Avec les offres 3 mois et À vie, tu as aussi ta taille adulte estimée.',
   },
   {
     question: 'Pourquoi pas juste des vidéos TikTok ?',
     answer:
-      'Les vidéos donnent les mêmes conseils à tout le monde. Ton programme part de TES réponses et te dit quoi faire chaque jour.',
+      'Les vidéos donnent les mêmes conseils à tout le monde. Ton programme part de TES réponses et te dit quoi faire chaque jour, dans le bon ordre.',
   },
   {
-    question: 'J’ai pas de carte bancaire',
+    question: 'Je peux arrêter quand je veux ?',
     answer:
-      'Envoie le lien de paiement à un parent : il paie, et ton programme s’ouvre chez toi.',
+      'Oui, sans engagement : tu résilies depuis ton compte quand tu veux. Et si ça ne te plaît pas, tu as 14 jours pour être remboursé.',
   },
 ]
+
+/* Un bloc de tallerapp.xyz : titre à gauche, texte gris, puis un visuel
+   dans une carte sombre arrondie. */
+function BlocTaller({ titre, texte, children }) {
+  return (
+    <div className="mt-14 text-left">
+      <h3 className="font-sans text-[28px] leading-[1.15] font-bold tracking-[-0.02em] text-[#f4efe9]">{titre}</h3>
+      <p className="mt-4 text-[16px] leading-[1.6] text-[#8a847e]">{texte}</p>
+      <div className="mt-7 rounded-[28px] border border-white/[0.06] bg-white/[0.03] px-5 py-8">{children}</div>
+    </div>
+  )
+}
+
+/* Le chemin du programme, comme l'écran « Ton plan » de l'app
+   (parcours.jsx) : un niveau de 7 jours en serpentin, le jour 1 fait, le
+   jour 2 « aujourd'hui », le trophée au bout ; 16 niveaux en tout. */
+const JOURS_DU_CHEMIN = [
+  { jour: 1, x: 40, y: 50 },
+  { jour: 2, x: 113, y: 50 },
+  { jour: 3, x: 186, y: 50 },
+  { jour: 4, x: 260, y: 50 },
+  { jour: 5, x: 260, y: 140 },
+  { jour: 6, x: 186, y: 140 },
+  { jour: 7, x: 113, y: 140 },
+]
+
+function CheminProgramme() {
+  return (
+    <div>
+      <div className="flex items-center justify-between text-[14px] font-bold text-[#f4efe9]">
+        <span>Niveau 1 🌶️</span>
+        <span className="text-[#8a847e]">1/7</span>
+      </div>
+      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
+        <div className="h-full w-[14%] rounded-full bg-[#ff6a2b]" />
+      </div>
+      <svg viewBox="0 0 300 180" className="mt-4 w-full" role="img" aria-label="Le chemin du niveau 1 : 7 jours, le premier fait">
+        <path d="M40,50 H260 C305,50 305,140 260,140 H113" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="4" strokeDasharray="2 9" strokeLinecap="round" />
+        <path d="M40,50 H113" stroke="#ff6a2b" strokeWidth="4" strokeLinecap="round" />
+        <rect x="70" y="2" width="86" height="22" rx="7" fill="#ff6a2b" />
+        <text x="113" y="17.5" textAnchor="middle" fontSize="12" fontWeight="700" fill="#fff">Aujourd’hui</text>
+        {JOURS_DU_CHEMIN.map(({ jour, x, y }) => {
+          const fait = jour === 1
+          const actuel = jour === 2
+          const trophee = jour === 7
+          return (
+            <g key={jour}>
+              {actuel && <circle cx={x} cy={y} r="27" fill="#ff6a2b" opacity="0.22" />}
+              <circle
+                cx={x}
+                cy={y}
+                r="21"
+                fill={fait ? '#ff6a2b' : '#1f1f1f'}
+                stroke={actuel ? '#ff6a2b' : fait ? 'none' : 'rgba(255,255,255,0.12)'}
+                strokeWidth={actuel ? 3 : 1.5}
+              />
+              <text x={x} y={y + 5.5} textAnchor="middle" fontSize={trophee ? 18 : 15} fontWeight="700" fill={fait ? '#fff' : actuel ? '#f4efe9' : '#8a847e'}>
+                {fait ? '✓' : trophee ? '🏆' : jour}
+              </text>
+            </g>
+          )
+        })}
+      </svg>
+      <div className="mt-3 flex items-center justify-between border-t border-white/[0.06] pt-3 text-[13px] font-semibold text-[#8a847e]">
+        <span>Niveau 2 🌶️🌶️</span>
+        <span>16 niveaux · 112 jours</span>
+      </div>
+    </div>
+  )
+}
+
+/* La courbe de Taller (« Predict your future height ») : la taille qui
+   monte de 15 à 21 ans et se tasse, un point à 18 ans. Une illustration,
+   pas la taille de quelqu'un : le chiffre est un exemple. */
+function CourbeTaille() {
+  const ages = [15, 16, 17, 18, 19, 20, 21]
+  const x = (age) => 20 + ((age - 15) / 6) * 280
+  const courbe = 'M20,150 C90,104 150,72 180,63 S260,40 300,36'
+  return (
+    <div>
+      <svg viewBox="0 0 320 170" className="w-full" role="img" aria-label="Exemple de courbe de taille de 15 à 21 ans">
+        <defs>
+          <linearGradient id="courbe-aire" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#ff6a2b" stopOpacity="0.32" />
+            <stop offset="1" stopColor="#ff6a2b" stopOpacity="0.04" />
+          </linearGradient>
+        </defs>
+        {[36, 74, 112, 150].map((y) => (
+          <line key={y} x1="20" x2="300" y1={y} y2={y} stroke="rgba(255,255,255,0.08)" strokeDasharray="3 4" />
+        ))}
+        <path d={`${courbe} L300,150 L20,150 Z`} fill="url(#courbe-aire)" />
+        <path d={courbe} fill="none" stroke="#ff6a2b" strokeWidth="3" strokeLinecap="round" />
+        <line x1={x(18)} x2={x(18)} y1="30" y2="150" stroke="rgba(255,255,255,0.18)" strokeDasharray="3 4" />
+        <circle cx={x(18)} cy="63" r="9" fill="#ff6a2b" stroke="#f4efe9" strokeWidth="4" />
+        <rect x={x(18) - 32} y="2" width="64" height="24" rx="7" fill="#ff6a2b" />
+        <text x={x(18)} y="18.5" textAnchor="middle" fontSize="13" fontWeight="700" fill="#fff">178 cm</text>
+      </svg>
+      <div className="mt-2 flex justify-between px-[4%] text-[13px] text-[#8a847e]">
+        {ages.map((age) => <span key={age}>{age}</span>)}
+      </div>
+    </div>
+  )
+}
 
 function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, abonne }) {
   /* Les boutons de la page mènent tous au même questionnaire. Agrégés, ils ne
@@ -213,23 +321,29 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
               Deviens le plus <span className="text-[#ff6a2b]">grand possible</span>
             </h2>
 
-            {/* Grille à la TrendSaaS : ce qu'on reçoit, en chiffres vrais. */}
-            <div className="mt-8 grid grid-cols-1 border-t border-white/10 sm:grid-cols-2">
-              {[
-                ['Aucun centimètre perdu', 'Ton diagnostic : ce qui bloque ta croissance. Et on le règle.'],
-                ['Ton plan personnalisé', 'Chaque jour, quoi faire : exercices, posture, sommeil, alimentation.'],
-                ['Plus grand, tout de suite', 'Ta posture te vole des centimètres. On te les rend.'],
-                ['Ta taille future', 'Découvre jusqu’où tu peux monter.'],
-              ].map(([chiffre, texte], i) => (
-                <div
-                  key={texte}
-                  className={`border-b border-white/10 py-5 sm:py-7 ${i % 2 === 0 ? 'sm:border-r sm:pr-4' : 'sm:pl-5'}`}
-                >
-                  <p className="font-sans text-[22px] leading-[1.1] font-bold tracking-[-0.02em] text-[#f4efe9]">{chiffre}</p>
-                  <p className="mt-3 text-[14px] leading-snug text-[#8a847e]">{texte}</p>
-                </div>
-              ))}
-            </div>
+            {/* Comme tallerapp.xyz (01/11/2026) : leur phrase sous le titre
+                (« We analyze your growth potential and give you a custom plan
+                to make sure you reach it »), sans le « make sure » : on ne
+                garantit rien. Puis leurs blocs dans leur ordre, la prédiction
+                en dernier. Remplace les 4 cases (dont « On te les rend », qui
+                promettait des centimètres). */}
+            <p className="mx-auto mt-4 max-w-md text-center text-[16px] leading-[1.6] text-[#a39d97]">
+              On analyse ton potentiel de croissance et on te donne un plan sur mesure pour l’atteindre.
+            </p>
+
+            <BlocTaller
+              titre="Programme optimal"
+              texte="Des exercices de posture à l’alimentation, chaque habitude est adaptée à toi. Reste régulier, prends de meilleures habitudes et donne-toi toutes les chances d’atteindre ton plein potentiel."
+            >
+              <CheminProgramme />
+            </BlocTaller>
+
+            <BlocTaller
+              titre="Prédis ta taille adulte"
+              texte="Ton estimation de taille adulte, calculée avec ta taille, ton âge, la taille de tes parents et tes signes de puberté, sur les courbes de croissance de référence."
+            >
+              <CourbeTaille />
+            </BlocTaller>
           </div>
         </section>
 

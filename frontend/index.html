@@ -158,6 +158,45 @@
         "description": "Éditeur de Grandimi, outil d’estimation de la taille adulte et de plan de croissance quotidien pour les 10-22 ans."
       }
     </script>
+
+    <!-- La FAQ de la page d'accueil, pour Google (01/11/2026). COPIE
+         EXACTE de la constante FAQ de src/pages/HomePage.jsx : la page la
+         dessine avec React, ce bloc la donne à Google sans JavaScript. Tout
+         changement de la FAQ doit être reporté des deux côtés. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "inLanguage": "fr-FR",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Est-ce que je peux encore grandir ?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Oui, tant que tes cartilages de croissance ne sont pas fermés. Chez les garçons, la croissance continue souvent jusqu’à 18-21 ans, bien plus longtemps qu’on le croit. Chez les filles, la grosse poussée arrive plus tôt. Ton analyse estime où tu en es, en 2 minutes." }
+          },
+          {
+            "@type": "Question",
+            "name": "Comment grandir au maximum ?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Ta génétique fixe la plus grosse part, mais le reste dépend de toi : bien dormir, manger assez de protéines et de calcium, bouger chaque jour et te tenir droit. Grandimi te dit chaque jour quoi faire, adapté à ton âge et à ton profil." }
+          },
+          {
+            "@type": "Question",
+            "name": "Qu’est-ce que je reçois ?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Un programme fait pour toi, jour après jour sur 16 niveaux : ta routine, tes exercices (posture, étirements, sport), quoi manger et à quelle heure te coucher. Avec les offres 3 mois et À vie, tu as aussi ta taille adulte estimée." }
+          },
+          {
+            "@type": "Question",
+            "name": "Pourquoi pas juste des vidéos TikTok ?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Les vidéos donnent les mêmes conseils à tout le monde. Ton programme part de TES réponses et te dit quoi faire chaque jour, dans le bon ordre." }
+          },
+          {
+            "@type": "Question",
+            "name": "Je peux arrêter quand je veux ?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Oui, sans engagement : tu résilies depuis ton compte quand tu veux. Et si ça ne te plaît pas, tu as 14 jours pour être remboursé." }
+          }
+        ]
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.bunny.net" />
     <!-- CDN plus rapide : fonts.bunny.net (clone libre de Google Fonts).
          Sur mobile 4G lente, évite 500ms de latence vs googleapis.com.
