@@ -19,9 +19,12 @@ export const CarteCommentaire: React.FC<{
 	reponse?: {h: number; rotation: number; modele?: 'parsa' | 'taller'; avatar?: string};
 	/** Photo de profil ronde (variante haut). */
 	photo?: string;
-}> = ({nom, texte, de, a, haut, x, y, ligne, w, reponse, photo}) => {
+	/** Carte fournie par l'utilisateur en image (détourée) : affichée telle quelle à x, y, largeur w. */
+	image?: string;
+}> = ({nom, texte, de, a, haut, x, y, ligne, w, reponse, photo, image}) => {
 	const f = useCurrentFrame();
 	if (f < de || f >= a) return null;
+	if (image) return <Img src={image} style={{position: 'absolute', left: x ?? 88, top: y ?? 1045, width: w ?? 905}} />;
 	if (reponse?.modele === 'taller') {
 		// Carte de la référence p22-ref, mesurée à 1,0 s : x 88-993, y 1045-1275, rayon 34, queue en bas à gauche,
 		// avatar rond (centre 137, 128 ; rayon 72), en-tête gris et commentaire en gras sur une ligne chacun.

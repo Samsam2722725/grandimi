@@ -1392,6 +1392,7 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 								w={c.w}
 								reponse={c.reponse}
 								photo={c.photo ? staticFile(`episodes/${episode}/images/${c.photo}`) : undefined}
+								image={c.image ? staticFile(`episodes/${episode}/images/${c.image}`) : undefined}
 							/>
 						))
 					: null}

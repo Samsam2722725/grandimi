@@ -158,7 +158,9 @@ export type Episode = {
 		/** Deuxième passage de la même carte (appel à commenter de la fin). */
 		retour?: {de: Ancre; a: Ancre};
 		/** Photo de profil (fichier de images/) pour la variante haut. */
-		photo?: string};
+		photo?: string;
+		/** Carte fournie en image (fichier de images/), affichée telle quelle. */
+		image?: string};
 	/** sec : transitions deux fois plus courtes et flou de mouvement sur les mouvements de caméra (demande du 20/10). */
 	rythme?: 'sec';
 	/** false : pas de légère poussée de caméra entre les mouvements (défaut : true). */
