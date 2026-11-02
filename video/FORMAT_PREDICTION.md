@@ -68,6 +68,7 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
 
 ## Retours du 01/11 (partie 23, Samuel) — à appliquer aux prochaines parties
 - Fin (plan `appel`) **sans émojis** : pas d'`ordi.png`, `papy.png`, `regle.png`, et « grandimi.com » sans 🔗 ; « ANALYSÉ » reste jusqu'à `site`.
-- Fond topo de la fin **plus lent** : `"topo": {"vitesse": 0.35}` sur le plan `appel` (1 = vitesse d'origine).
+- Fond topo (noir et blanc) **vraiment lent** : `"topo": {"vitesse": 0.15}` sur les plans `chiffre` et `appel` (1 = vitesse d'origine ; 0,35 jugé encore trop animé le 02/11).
+- Routine **nette, sans 🤫** : `"flou": 0`, pas de `chut`, habitudes qui se cochent (`coche`, modèle manzi-21 / donald-24).
 - Ballon de l'âge : ballon doré de l'utilisateur détouré (fond magenta) si fourni, sinon `ballon.py … dore`.
 - Voix : blancs à 0,05 s puis `atempo=1.08`.
