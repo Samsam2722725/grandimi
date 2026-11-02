@@ -442,16 +442,7 @@ export const BarreOnglets: React.FC<{onglets: string[]; actif: number}> = ({ongl
 /** Barre d'état + barre d'adresse Safari (« comme si on était sur le site »), 1080 × 172 px en haut de l'écran. */
 export const BarreSafari: React.FC<{url: string}> = ({url}) => (
 	<div style={{position: 'absolute', left: 0, top: 0, width: W, height: 172, background: '#000', fontFamily: FONT, color: '#fff'}}>
-			<div style={{position: 'absolute', left: 70, top: 14, fontSize: 32, fontWeight: 700}}>15:35</div>
-			<div style={{position: 'absolute', right: 70, top: 20, display: 'flex', gap: 8, alignItems: 'flex-end'}}>
-				{[10, 15, 20, 25].map((h, i) => (
-					<div key={i} style={{width: 6, height: h, borderRadius: 2, background: '#fff'}} />
-				))}
-				<div style={{fontSize: 24, fontWeight: 700, marginLeft: 8}}>5G</div>
-				<div style={{width: 46, height: 22, borderRadius: 6, border: '3px solid #bbb', marginLeft: 6}}>
-					<div style={{width: '75%', height: '100%', background: '#fff', borderRadius: 2}} />
-				</div>
-			</div>
+			{/* Pas d'heure, de réseau ni de batterie (demande du 02/11) : seulement la barre d'adresse. */}
 			<div
 				style={{
 					position: 'absolute',

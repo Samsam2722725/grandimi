@@ -103,3 +103,12 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
   Curseur du rang à `y` 1442 (page non décalée).
 - Ordre libre selon le script : si le chiffre optimisé est dit avant la phrase sur le site, `chiffre` → `ecran2` (flèche
   +N cm) → `routine` (coches dès le début de la phrase) → `calcul` → `ecran3` (rang + croissance) → verdict → appel → fin.
+
+## Textes et barre d'état calés sur Taller (02/11, mesurés sur references/son-taller en 1080 × 1920)
+- **Pas d'heure, de réseau ni de batterie** en haut des écrans de l'appli (BarreSafari : seulement la barre d'adresse).
+- **Sous-titres** : `y` 838, `taille` 72, `poids` 500, `contour` 9, couleur `#ebf91f`, `pop: false` (apparition sèche,
+  sans animation, comme l'original) → lettres de y 848 à 900, centrées.
+- **« PARTIE N »** (plan `partie`, élément `tape`) : `y` 702, `taille` 168, `poids` 500, `contour` 28 (14 px dehors,
+  angles arrondis), couleur `#ebf91f`, `parLettre` 2, `curseur: false`, `sansPop: true`, `son: "frappe"`, `volume` 0,6 →
+  lettres de y 730 à 851 (original 732-852), une lettre toutes les 2 images.
+- Bruit de frappe : `public/sfx/frappe.wav`, clic prélevé dans l'original (2,42 s).

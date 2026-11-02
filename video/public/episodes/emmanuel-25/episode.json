@@ -127,16 +127,17 @@
           "type": "tape",
           "texte": "PARTIE {partie}",
           "a": 1,
-          "y": 700,
-          "taille": 140,
-          "couleur": "#fff200",
+          "y": 702.0,
+          "taille": 168.0,
+          "couleur": "#ebf91f",
           "police": "Montserrat",
-          "poids": 900,
-          "contour": 9,
-          "curseur": true,
-          "parLettre": 1,
-          "son": "tick",
-          "volume": 0.6
+          "poids": 500,
+          "contour": 28,
+          "curseur": false,
+          "parLettre": 2,
+          "son": "frappe",
+          "volume": 0.6,
+          "sansPop": true
         }
       ],
       "sons": [
@@ -764,32 +765,32 @@
       {
         "de": 0,
         "a": "hook:partie-1",
-        "y": 822,
-        "taille": 86,
+        "y": 838.0,
+        "taille": 72.0,
         "motsMax": 4,
         "carMax": 17,
-        "poids": 600,
-        "contour": 3,
+        "poids": 500,
+        "contour": 9,
         "motsCles": false,
         "pop": false,
         "majuscules": true,
         "police": "Montserrat",
-        "couleur": "#fff200"
+        "couleur": "#ebf91f"
       },
       {
         "de": "cta",
         "a": "site",
-        "y": 822,
-        "taille": 86,
+        "y": 838.0,
+        "taille": 72.0,
         "motsMax": 4,
         "carMax": 17,
-        "poids": 600,
-        "contour": 3,
+        "poids": 500,
+        "contour": 9,
         "motsCles": false,
         "pop": false,
         "majuscules": true,
         "police": "Montserrat",
-        "couleur": "#fff200"
+        "couleur": "#ebf91f"
       }
     ]
   },

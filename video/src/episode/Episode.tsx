@@ -863,6 +863,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 						fond={el.fond}
 						police={el.police}
 						poids={el.poids}
+						sansPop={el.sansPop}
 					/>
 				</Sequence>
 			);
@@ -1165,7 +1166,7 @@ const usePolices = () => {
 			new FontFace('Caveat', `url(${staticFile('fonts/caveat-latin-500-normal.woff2')})`, {weight: '500'}),
 			new FontFace('Noto Serif', `url(${staticFile('fonts/noto-serif-latin-600-normal.woff2')})`, {weight: '600'}),
 			new FontFace('Anton', `url(${staticFile('fonts/anton-latin-400-normal.woff2')})`, {weight: '400'}),
-			...[600, 700, 800, 900].map(
+			...[500, 600, 700, 800, 900].map(
 				(w) => new FontFace('Montserrat', `url(${staticFile(`fonts/montserrat-latin-${w}-normal.woff2`)})`, {weight: String(w)}),
 			),
 		];

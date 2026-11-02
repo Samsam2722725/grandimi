@@ -28,6 +28,20 @@ export const Paper: React.FC<{saccade?: number}> = ({saccade = 7}) => {
 };
 
 /** Texte tapé lettre par lettre, style sous-titres jaunes à contour noir. */
+/** Contour noir extérieur à angles arrondis (comme Taller / CapCut), fait d'ombres disposées en cercles :
+ *  WebkitTextStroke donne des pointes sur les angles (A, R, 2). */
+export const contourRond = (r: number) => {
+	const out: string[] = [];
+	for (const k of [1, 0.66, 0.33]) {
+		const n = Math.max(12, Math.round(r * k * 2.2));
+		for (let i = 0; i < n; i++) {
+			const t = (2 * Math.PI * i) / n;
+			out.push(`${(r * k * Math.cos(t)).toFixed(1)}px ${(r * k * Math.sin(t)).toFixed(1)}px 0 #000`);
+		}
+	}
+	return out.join(', ');
+};
+
 export const Typed: React.FC<{
 	text: string;
 	at: number;
@@ -42,10 +56,12 @@ export const Typed: React.FC<{
 	fond?: string;
 	police?: string;
 	poids?: number;
-}> = ({text, at, perLetter = 2, y, size, color, stroke, curseur, fond, police, poids}) => {
+	/** Sans l'agrandissement d'entrée (×0,9 → ×1) : le texte apparaît net, comme Taller. */
+	sansPop?: boolean;
+}> = ({text, at, perLetter = 2, y, size, color, stroke, curseur, fond, police, poids, sansPop}) => {
 	const f = useCurrentFrame();
 	const n = Math.max(0, Math.min(text.length, Math.floor((f - at) / perLetter) + 1));
-	const s = 0.9 + 0.1 * pop(f, at);
+	const s = sansPop ? 1 : 0.9 + 0.1 * pop(f, at);
 	if (f < at) return null; // ni pastille vide ni curseur seul avant le début de la frappe
 	return (
 		<div
@@ -62,6 +78,7 @@ export const Typed: React.FC<{
 				WebkitTextStroke: `${stroke ?? size * 0.07}px #000`,
 				...(police ? {fontFamily: `'${police}', sans-serif`, fontWeight: poids ?? 800} : {}),
 				...(fond ? {textShadow: 'none'} : {}),
+				...(sansPop ? {letterSpacing: 0, WebkitTextStroke: '0px', textShadow: contourRond((stroke ?? size * 0.07) / 2)} : {}),
 			}}
 		>
 			{fond ? (
