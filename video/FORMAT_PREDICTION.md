@@ -72,3 +72,8 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
 - Routine **nette, sans 🤫** : `"flou": 0`, pas de `chut`, habitudes qui se cochent (`coche`, modèle manzi-21 / donald-24).
 - Ballon de l'âge : ballon doré de l'utilisateur détouré (fond magenta) si fourni, sinon `ballon.py … dore`.
 - Voix : blancs à 0,05 s puis `atempo=1.08`.
+- **Son comme Taller** (mesuré le 02/11 sur `references/son-taller`) : rendre **sans musique**
+  (`--props='{"episode":"ID","musique":false}'` → `out/ID-sansmusique.mp4`) puis
+  `python scripts/mix_son.py out/ID-sansmusique.mp4 public/sfx/music.wav rendu/grandimi-partieN-prenom.mp4`
+  (musique grave large toujours audible, voix adoucie, master −12,6 LUFS limité à −0,3 dB). Remplace l'étape `loudnorm`.
+  Version pour ajouter « 7AM – Slowed + Reverb » dans TikTok : même commande avec `--musique-db -100`.
