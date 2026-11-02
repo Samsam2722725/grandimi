@@ -77,3 +77,18 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
   `python scripts/mix_son.py out/ID-sansmusique.mp4 public/sfx/music.wav rendu/grandimi-partieN-prenom.mp4`
   (musique grave large toujours audible, voix adoucie, master −12,6 LUFS limité à −0,3 dB). Remplace l'étape `loudnorm`.
   Version pour ajouter « 7AM – Slowed + Reverb » dans TikTok : même commande avec `--musique-db -100`.
+
+## Version du 02/11 (donald-24 = nouveau modèle à copier)
+- **Transitions** fortes et fluides (`src/episode/TransitionsTendance.tsx`), en alternance : `zoom` (plongée ×1,7 + flou,
+  arrivée avec léger rebond, éclair bref) et `whip-h` (balayage horizontal avec flou de mouvement, bord à bord).
+  Mettre la même valeur en `sortie` du plan précédent et en `transition` du plan suivant.
+- **Zooms comme Taller** (mesurés sur references/son-taller) : zoom avant **sur le chiffre prononcé** (`"age:1m70-3"`,
+  `"predit:1m85-3"`, `"fini:80-3"`), `d` 7 images (sec) ; retour `d` 14 (doux). Zoom lent ×1,14 sur la ligne « +5 cm »
+  pendant `optim`, retour à `pct` avant le curseur (sinon le curseur ne tombe plus sur le rang).
+- **Barre du bas façon Taller** : `"barre": ["Taille","Programme","Exercices","Routine"]` dans `dashboard` (icônes au trait,
+  fixe en bas de l'écran) : montre que le site contient plus.
+- **Routine** : habitudes formulées sans tout donner (`habitudes`) + carte verrouillée `verrou`
+  (« +7 habitudes clés — les plus importantes pour ta taille ») ; les 4 habitudes se cochent entre `programme` et `la`,
+  le plan `calcul` commence à `exactement` pour que la carte reste ~1 s à l'écran.
+- **Fin** `fin-site` sur la dernière phrase : fond topo lent, « grandimi.com » (y 190), capture du site (y 400),
+  « Lien en bio » (y 1500), sans émoji ni sous-titres.

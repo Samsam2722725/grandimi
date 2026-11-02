@@ -13,7 +13,7 @@ const OR = '#ff5a1f';
 const CARTE = '#161616';
 const JOURS = ['7', '8', '9', '10', '11', '12', '13'];
 const JOURS_TALLER = ['3', '4', '5', '6', '7', '8', '9'];
-const HABITUDES = [
+const HABITUDES_TALLER = [
 	'Routine physique Grandimi 🏋️',
 	'1 verre de lait + miel 🍯🥛',
 	'4 g de poudre de moringa 🌿',
@@ -35,10 +35,15 @@ export const RoutineGrandimi: React.FC<{
 	onglets?: string[];
 	taller?: boolean;
 	coche?: {de: number; a: number};
-}> = ({at, url, flou = 13, chut, onglets, taller, coche}) => {
+	/** Liste d'habitudes à la place de celle de Taller (02/11 : formulations qui disent quoi faire sans tout donner). */
+	habitudes?: string[];
+	/** Carte verrouillée sous la liste (« +7 habitudes clés… ») : montre que le site en contient plus. */
+	verrou?: {titre: string; sous: string; nombre: number};
+}> = ({at, url, flou = 13, chut, onglets, taller, coche, habitudes, verrou}) => {
 	const f = useCurrentFrame();
 	if (f < at) return null;
-	const total = taller ? 9 : 10;
+	const HABITUDES = habitudes ?? HABITUDES_TALLER;
+	const total = verrou ? HABITUDES.length + verrou.nombre : taller ? 9 : 10;
 	const pas = coche ? (coche.a - coche.de) / Math.max(1, HABITUDES.length - 1) : 0;
 	const cocheA = (i: number) => (coche ? coche.de + i * pas : Infinity);
 	const faites = coche ? HABITUDES.filter((_, i) => f >= cocheA(i)).length : 0;
@@ -128,6 +133,15 @@ export const RoutineGrandimi: React.FC<{
 							</div>
 						);
 					})}
+					{verrou ? (
+						<Verrou
+							top={330 + HABITUDES.length * 168}
+							k={interpolate(f, [coche ? coche.a + 4 : at + 8, (coche ? coche.a + 4 : at + 8) + 9], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}
+							titre={verrou.titre}
+							sous={verrou.sous}
+							f={f}
+						/>
+					) : null}
 				</div>
 			</div>
 			{onglets ? <BarreOnglets onglets={onglets} actif={Math.max(0, onglets.indexOf('Routine'))} /> : null}
@@ -136,5 +150,44 @@ export const RoutineGrandimi: React.FC<{
 			) : null}
 			{url ? <BarreSafari url={url} /> : null}
 		</AbsoluteFill>
+	);
+};
+
+/** Carte « +N habitudes clés » : verrouillée, bord orange qui pulse, lignes fantômes floutées derrière. */
+const Verrou: React.FC<{top: number; k: number; titre: string; sous: string; f: number}> = ({top, k, titre, sous, f}) => {
+	if (k <= 0) return null;
+	const rebond = 1 + 0.08 * Math.sin(Math.PI * Math.min(1, k * 1.2)) * (k < 1 ? 1 : 0);
+	const pulse = 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(f / 6));
+	return (
+		<div style={{position: 'absolute', left: 90, right: 90, top, height: 250, opacity: k, transform: `translateY(${(1 - k) * 60}px) scale(${rebond})`}}>
+			{/* lignes fantômes : il y a d'autres habitudes, illisibles */}
+			{[0, 1].map((j) => (
+				<div key={j} style={{position: 'absolute', left: 0, right: 0, top: j * 70, height: 120, borderRadius: 26, background: '#161616', filter: 'blur(5px)', opacity: 0.6 - j * 0.2}}>
+					<div style={{position: 'absolute', left: 130, top: 44, width: 420 - j * 90, height: 30, borderRadius: 15, background: '#3a3a3a'}} />
+				</div>
+			))}
+			<div
+				style={{
+					position: 'absolute',
+					left: 0,
+					right: 0,
+					top: 40,
+					height: 200,
+					borderRadius: 30,
+					background: 'linear-gradient(135deg, rgba(255,90,31,0.22), rgba(255,90,31,0.08))',
+					border: `3px solid rgba(255,90,31,${pulse})`,
+					boxShadow: `0 0 ${30 * pulse}px rgba(255,90,31,${0.45 * pulse})`,
+					backdropFilter: 'blur(6px)',
+				}}
+			>
+				<svg width={70} height={80} viewBox="0 0 70 80" style={{position: 'absolute', left: 44, top: 58}}>
+					<rect x={6} y={34} width={58} height={42} rx={9} fill="#ff5a1f" />
+					<path d="M18 34 V24 a17 17 0 0 1 34 0 V34" fill="none" stroke="#ff5a1f" strokeWidth={8} strokeLinecap="round" />
+					<circle cx={35} cy={54} r={6} fill="#000" />
+				</svg>
+				<div style={{position: 'absolute', left: 140, top: 46, fontSize: 50, fontWeight: 800, color: '#fff'}}>{titre}</div>
+				<div style={{position: 'absolute', left: 140, top: 112, fontSize: 34, fontWeight: 600, color: '#ffb08f'}}>{sous}</div>
+			</div>
+		</div>
 	);
 };

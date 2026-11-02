@@ -51,7 +51,7 @@ export type Element =
 	/** Clip vidéo muet (enregistrement d'écran du site déjà monté), lu à partir de `a`. */
 	| (Base & {type: 'video'; fichier: string; x: number; y: number; w: number; h: number; url?: string})
 	/** Écran « Ma routine » flouté façon Taller (src/episode/RoutineGrandimi.tsx) ; 🤫 à `chut`. */
-	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre; onglets?: string[]; taller?: boolean; coche?: {de: Ancre; a: Ancre}})
+	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre; onglets?: string[]; taller?: boolean; coche?: {de: Ancre; a: Ancre}; habitudes?: string[]; verrou?: {titre: string; sous: string; nombre: number}})
 	/** Écran de calcul du site redessiné (anneau qui se remplit, étapes cochées une à une) entre `a` et `fin`
 	    (src/episode/CalculGrandimi.tsx). */
 	| (Base & {type: 'calcul'; fin: Ancre; url?: string})
@@ -77,11 +77,11 @@ export type Plan = {
 	telephone?: boolean | {onglets?: string[]; actif?: string; coupeHaut?: number; basCache?: number; tap?: {onglet: string; a: Ancre}};
 	/** Entrée du plan. glisse / rebond / secousse : mouvements mesurés sur la référence 7436214342510513439 ;
 	    bascule : entrée inclinée qui se redresse (référence 7444371749753408810). */
-	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule' | 'etire' | 'radial' | 'lumiere-rouge' | 'jaune-glisse' | 'glitch';
+	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule' | 'etire' | 'radial' | 'lumiere-rouge' | 'jaune-glisse' | 'glitch' | 'zoom' | 'whip-h';
 	/** Sortie du plan : lumiere = lumière jaune qui envahit l'image sur les dernières frames ;
 	    blanc = fondu au blanc sur les 4 dernières frames (la fin s'enchaîne avec l'accroche dessinée quand la vidéo reboucle). */
 	/** jaune / glitch / zoom-flou / radial-fin : sorties mesurées sur la référence « Steve » (src/episode/TransitionsSteve.tsx). */
-	sortie?: 'lumiere' | 'lumiere-forte' | 'blanc' | 'noir' | 'jaune' | 'glitch' | 'zoom-flou' | 'radial-fin';
+	sortie?: 'lumiere' | 'lumiere-forte' | 'blanc' | 'noir' | 'jaune' | 'glitch' | 'zoom-flou' | 'radial-fin' | 'zoom' | 'whip-h';
 	/** Effets ponctuels sur tout le plan (secousse gauche-droite). */
 	effets?: {type: 'secousse' | 'flash'; a: Ancre; couleur?: string}[];
 	famille?: Famille;
@@ -118,6 +118,8 @@ export type Plan = {
 		entete?: 'logo' | 'aucun';
 		/** Onglets du bas de l'appli (Rapport, Programme, Exercices, Routine) ; le premier est actif. */
 		onglets?: string[];
+		/** Barre du bas au trait façon Taller (Taille, Programme, Exercices, Routine), dans la page (zoomée avec elle). */
+		barre?: string[];
 	};
 	/** Vidéo explicative (référence p25-ref, src/episode/Explicatif.tsx) : phrases mot par mot, moments et valeurs. */
 	explicatif?: {phrases: {titre: string; de: number; a: number; mots: {w: string; f: number; gras?: boolean}[]}[]; t: Record<string, number>; v: Record<string, string>; fin?: number};

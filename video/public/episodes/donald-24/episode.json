@@ -116,7 +116,7 @@
       "nom": "partie",
       "debut": "hook:partie-1",
       "fond": "papier",
-      "sortie": "jaune",
+      "sortie": "zoom",
       "papiers": [
         "papier1.jpg",
         "papier2.jpg",
@@ -156,7 +156,7 @@
     {
       "nom": "ecran",
       "debut": "stats-2",
-      "transition": "jaune-glisse",
+      "transition": "zoom",
       "dashboard": {
         "donnees": {
           "actuelle": "170 cm",
@@ -188,11 +188,11 @@
         },
         "cams": [
           {
-            "a": "age:mesure",
+            "a": "age:1m70-3",
             "cx": 0.38,
             "cy": 0.3085,
             "z": 1.61,
-            "d": 11,
+            "d": 7,
             "courbe": "avant"
           },
           {
@@ -200,15 +200,15 @@
             "cx": 0.5,
             "cy": 0.5,
             "z": 1,
-            "d": 15,
+            "d": 14,
             "courbe": "arriere"
           },
           {
-            "a": "predit:taille",
+            "a": "predit:1m85-3",
             "cx": 0.646,
             "cy": 0.3301,
             "z": 1.77,
-            "d": 11,
+            "d": 7,
             "courbe": "avant"
           }
         ],
@@ -229,7 +229,13 @@
           "fin": "age:17+30",
           "chute": true
         },
-        "url": "grandimi.com"
+        "url": "grandimi.com",
+        "barre": [
+          "Taille",
+          "Programme",
+          "Exercices",
+          "Routine"
+        ]
       },
       "elements": [],
       "sons": [
@@ -244,7 +250,7 @@
           "volume": 0.3
         },
         {
-          "a": "age:mesure",
+          "a": "age:1m70-3",
           "son": "whoosh",
           "volume": 0.28
         },
@@ -254,17 +260,18 @@
           "volume": 0.2
         },
         {
-          "a": "predit:taille",
+          "a": "predit:1m85-3",
           "son": "whoosh",
           "volume": 0.28
         }
       ],
-      "pousse": 0.04
+      "pousse": 0.04,
+      "sortie": "whip-h"
     },
     {
       "nom": "routine",
       "debut": "habitudes-2",
-      "transition": "jaune-glisse",
+      "transition": "whip-h",
       "elements": [
         {
           "type": "routine",
@@ -273,7 +280,18 @@
           "flou": 0,
           "coche": {
             "de": "habitudes:programme",
-            "a": "habitudes:découvre-8"
+            "a": "habitudes:la"
+          },
+          "habitudes": [
+            "Routine physique Grandimi 🏋️",
+            "Programme sommeil 😴",
+            "Alimentation croissance 🥛",
+            "Exercices de posture 🧘"
+          ],
+          "verrou": {
+            "titre": "+7 habitudes clés",
+            "sous": "les plus importantes pour ta taille",
+            "nombre": 7
           }
         }
       ],
@@ -298,13 +316,14 @@
           "son": "tick",
           "volume": 0.18
         }
-      ]
+      ],
+      "sortie": "zoom"
     },
     {
       "nom": "calcul",
-      "debut": "habitudes:découvre-2",
-      "transition": "glitch",
-      "sortie": "glitch",
+      "debut": "habitudes:exactement-2",
+      "transition": "zoom",
+      "sortie": "whip-h",
       "elements": [
         {
           "type": "calcul",
@@ -339,7 +358,7 @@
     {
       "nom": "chiffre",
       "debut": "atteint:1m90-3",
-      "transition": "radial",
+      "transition": "whip-h",
       "fond": "topo",
       "topo": {
         "zoomDe": 0.6,
@@ -384,13 +403,14 @@
           "son": "whoosh",
           "volume": 0.22
         }
-      ]
+      ],
+      "sortie": "zoom"
     },
     {
       "nom": "ecran2",
       "debut": "optim-2",
-      "transition": "glitch",
-      "sortie": "glitch",
+      "transition": "zoom",
+      "sortie": "whip-h",
       "pousse": 0.04,
       "dashboard": {
         "donnees": {
@@ -423,11 +443,27 @@
         },
         "cams": [
           {
-            "a": "fini:terminé",
+            "a": "optim:5",
+            "cx": 0.5,
+            "cy": 0.3,
+            "z": 1.14,
+            "d": 24,
+            "courbe": "avant"
+          },
+          {
+            "a": "pct",
+            "cx": 0.5,
+            "cy": 0.5,
+            "z": 1,
+            "d": 12,
+            "courbe": "arriere"
+          },
+          {
+            "a": "fini:80-3",
             "cx": 0.7,
             "cy": 0.8291,
             "z": 2.0,
-            "d": 12,
+            "d": 7,
             "courbe": "avant"
           }
         ],
@@ -460,7 +496,13 @@
             "dFin": 16
           }
         ],
-        "url": "grandimi.com"
+        "url": "grandimi.com",
+        "barre": [
+          "Taille",
+          "Programme",
+          "Exercices",
+          "Routine"
+        ]
       },
       "effets": [
         {
@@ -502,7 +544,7 @@
           "volume": 0.38
         },
         {
-          "a": "fini:terminé",
+          "a": "fini:80-3",
           "son": "whoosh",
           "volume": 0.28
         }
@@ -511,8 +553,8 @@
     {
       "nom": "verdict",
       "debut": "fini:sa",
-      "transition": "glitch",
-      "sortie": "zoom-flou",
+      "transition": "whip-h",
+      "sortie": "zoom",
       "image": "verdict",
       "camera": [
         {
@@ -558,9 +600,9 @@
     {
       "nom": "appel",
       "debut": "cta",
-      "transition": "radial",
+      "transition": "zoom",
       "fond": "topo",
-      "sortie": "radial-fin",
+      "sortie": "zoom",
       "elements": [
         {
           "type": "texte",
@@ -573,18 +615,6 @@
           "poids": 800,
           "police": "Montserrat",
           "fin": "site"
-        },
-        {
-          "type": "texte",
-          "texte": "grandimi.com",
-          "a": "site:grandimi.com",
-          "y": 400,
-          "taille": 96,
-          "couleur": "#fff",
-          "fond": "#ff5a1f",
-          "amorti": 8,
-          "son": "ding",
-          "volume": 0.25
         }
       ],
       "sons": [
@@ -597,6 +627,65 @@
       "topo": {
         "vitesse": 0.15
       }
+    },
+    {
+      "nom": "fin-site",
+      "debut": "site",
+      "transition": "zoom",
+      "fond": "topo",
+      "topo": {
+        "vitesse": 0.15
+      },
+      "elements": [
+        {
+          "type": "texte",
+          "texte": "grandimi.com",
+          "a": 0,
+          "y": 190,
+          "taille": 120,
+          "couleur": "#ff7a3d",
+          "contour": 2,
+          "poids": 800,
+          "police": "Montserrat",
+          "effet": "pop",
+          "son": "ding",
+          "volume": 0.25,
+          "contourCouleur": "#ff7a3d"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "site_accueil.png",
+          "a": 2,
+          "x": 300,
+          "y": 400,
+          "w": 480,
+          "h": 1039,
+          "effet": "pop"
+        },
+        {
+          "type": "texte",
+          "texte": "Lien en bio",
+          "a": 8,
+          "y": 1500,
+          "taille": 76,
+          "couleur": "#fff",
+          "fond": "#e95a2e",
+          "contour": 0,
+          "poids": 800,
+          "police": "Montserrat",
+          "effet": "pop",
+          "son": "pop",
+          "volume": 0.3
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
+        }
+      ]
     }
   ],
   "sousTitres": {
@@ -619,7 +708,7 @@
       },
       {
         "de": "cta",
-        "a": "fin",
+        "a": "site",
         "y": 822,
         "taille": 86,
         "motsMax": 4,

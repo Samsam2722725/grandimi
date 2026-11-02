@@ -223,9 +223,11 @@ export const DashboardGrandimi: React.FC<{
 	entete?: 'logo' | 'aucun';
 	/** Onglets du bas (le premier est l'onglet actif) ; sans eux : taille / croissance / quotidien. */
 	onglets?: string[];
+	/** Barre du bas façon Taller (02/11) : icônes au trait + libellés, le premier actif (ex. Taille, Programme, Exercices, Routine). */
+	barre?: string[];
 	/** Sans la barre d'état de la page (écran de téléphone : la barre Safari du dessus a déjà la sienne). */
 	sansBarreEtat?: boolean;
-}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, sansBarreEtat}) => {
+}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, sansBarreEtat}) => {
 	const cacheEtat = Boolean(url || entete || sansBarreEtat);
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
@@ -377,7 +379,7 @@ export const DashboardGrandimi: React.FC<{
 					<Jauge pct={parseFloat(d.croissance.replace(',', '.'))} />
 				</Bloc>
 				{/* Barre de navigation */}
-				{onglets ? null : (
+				{onglets || barre?.length ? null : (
 					[
 						['taille', 0.21, true],
 						['croissance', 0.5, false],
@@ -414,6 +416,7 @@ export const DashboardGrandimi: React.FC<{
 			</div>
 			{/* Onglets fixes en bas de l'écran (hors du zoom), comme une vraie appli */}
 			{onglets?.length ? <BarreOnglets onglets={onglets} actif={0} /> : null}
+			{barre?.length ? <BarreTraits noms={barre} /> : null}
 			{url ? <BarreSafari url={url} /> : null}
 		</AbsoluteFill>
 	);
@@ -475,4 +478,54 @@ export const BarreSafari: React.FC<{url: string}> = ({url}) => (
 				</svg>
 			</div>
 		</div>
+);
+
+/** Icônes au trait (style de la barre de Taller : pousse en pot, courbe, calendrier). */
+const ICONE_TRAIT: Record<string, React.ReactNode> = {
+	Taille: (
+		<g>
+			<path d="M30 52 V30" />
+			<path d="M30 34 C18 34 12 26 12 16 C22 16 30 22 30 34 Z" />
+			<path d="M30 30 C30 18 38 12 48 12 C48 22 42 30 30 30 Z" />
+			<rect x={18} y={40} width={24} height={16} rx={3} />
+		</g>
+	),
+	Programme: (
+		<g>
+			<rect x={14} y={10} width={32} height={44} rx={5} />
+			<path d="M22 10 V6 H38 V10" />
+			<path d="M21 24 H39 M21 33 H39 M21 42 H32" />
+		</g>
+	),
+	Exercices: (
+		<g>
+			<path d="M8 32 H52" />
+			<rect x={12} y={22} width={8} height={20} rx={2} />
+			<rect x={40} y={22} width={8} height={20} rx={2} />
+			<path d="M6 27 V37 M54 27 V37" />
+		</g>
+	),
+	Routine: (
+		<g>
+			<rect x={10} y={14} width={40} height={38} rx={6} />
+			<path d="M10 24 H50 M20 8 V18 M40 8 V18" />
+			<path d="M21 37 L28 44 L40 31" />
+		</g>
+	),
+};
+
+export const BarreTraits: React.FC<{noms: string[]}> = ({noms}) => (
+	<div style={{position: 'absolute', left: 0, top: 1790, width: W, height: 130, background: 'rgba(10,10,10,0.97)', borderTop: '2px solid #222', fontFamily: FONT}}>
+		{noms.map((nom, i) => {
+			const c = i === 0 ? OR : '#a3a3a8';
+			return (
+				<div key={nom} style={{position: 'absolute', left: ((i + 0.5) / noms.length) * W - 120, top: 14, width: 240, textAlign: 'center', color: c}}>
+					<svg width={50} height={50} viewBox="0 0 60 60" style={{display: 'block', margin: '0 auto'}} fill="none" stroke={c} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round">
+						{ICONE_TRAIT[nom] ?? <circle cx={30} cy={30} r={14} />}
+					</svg>
+					<div style={{fontSize: 26, fontWeight: 700, marginTop: 6}}>{nom}</div>
+				</div>
+			);
+		})}
+	</div>
 );

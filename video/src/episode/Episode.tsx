@@ -30,6 +30,7 @@ import {HookCommentaires} from './HookCommentaires';
 import {BarreSafari, DashboardGrandimi} from './Dashboard';
 import {HookTaille} from './HookTaille';
 import {EntreeGlitch, EntreeJauneGlisse, FlashOrangeJaune, SortieGlitch, SortieJaune, SortieRadial, SortieZoomFlou} from './TransitionsSteve';
+import {EntreeWhip, EntreeZoom, SortieWhip, SortieZoom} from './TransitionsTendance';
 import {TopoAnime} from './TopoAnime';
 import {Cam, Shot} from './Shot';
 import {FONT} from '../theme';
@@ -812,6 +813,8 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					onglets={el.onglets}
 					taller={el.taller}
 					coche={el.coche ? {de: loc(el.coche.de), a: loc(el.coche.a)} : undefined}
+					habitudes={el.habitudes}
+					verrou={el.verrou}
 				/>
 			);
 		if (el.type === 'calcul') return <CalculGrandimi key={i} at={loc(el.a)} fin={loc(el.fin)} url={el.url} />;
@@ -889,6 +892,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					url={plan.dashboard.url}
 					entete={plan.dashboard.entete}
 					onglets={plan.dashboard.onglets}
+					barre={plan.dashboard.barre}
 					sansBarreEtat={Boolean(plan.telephone)}
 					ballon={
 						plan.dashboard.ballon
@@ -977,6 +981,10 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 	if (plan.pousse) out = <Pousse dur={dur} de={plan.pousse}>{out}</Pousse>;
 	if (plan.sortie === 'zoom-flou') out = <SortieZoomFlou dur={dur}>{out}</SortieZoomFlou>;
 	if (plan.sortie === 'radial-fin') out = <SortieRadial dur={dur}>{out}</SortieRadial>;
+	if (plan.sortie === 'zoom') out = <SortieZoom dur={dur}>{out}</SortieZoom>;
+	if (plan.sortie === 'whip-h') out = <SortieWhip id={plan.nom} dur={dur}>{out}</SortieWhip>;
+	if (plan.transition === 'zoom') return <EntreeZoom>{out}</EntreeZoom>;
+	if (plan.transition === 'whip-h') return <EntreeWhip id={plan.nom}>{out}</EntreeWhip>;
 	if (plan.transition === 'jaune-glisse') return <EntreeJauneGlisse>{out}</EntreeJauneGlisse>;
 	if (plan.transition === 'glitch') return <EntreeGlitch>{out}</EntreeGlitch>;
 	if (plan.transition === 'whip') return <Whip vitesse={vite}>{out}</Whip>;
