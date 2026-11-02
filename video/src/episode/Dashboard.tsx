@@ -223,7 +223,7 @@ export const DashboardGrandimi: React.FC<{
 	entete?: 'logo' | 'aucun';
 	/** Onglets du bas (le premier est l'onglet actif) ; sans eux : taille / croissance / quotidien. */
 	onglets?: string[];
-	/** Barre du bas façon Taller (02/11) : icônes au trait + libellés, le premier actif (ex. Taille, Programme, Exercices, Routine). */
+	/** Onglets au trait façon Taller (02/11) sous la barre d'adresse : icônes + libellés, le premier actif. */
 	barre?: string[];
 	/** Sans la barre d'état de la page (écran de téléphone : la barre Safari du dessus a déjà la sienne). */
 	sansBarreEtat?: boolean;
@@ -249,7 +249,7 @@ export const DashboardGrandimi: React.FC<{
 					width: W,
 					height: H,
 					transformOrigin: '0 0',
-					transform: `translateY(${url ? 150 : 0}px) translate(${W / 2}px, ${H / 2}px) scale(${c.z}) translate(${-c.cx * W}px, ${-c.cy * H}px)`,
+					transform: `translateY(${(url ? 150 : 0) + (barre?.length ? HAUT_BARRE : 0)}px) translate(${W / 2}px, ${H / 2}px) scale(${c.z}) translate(${-c.cx * W}px, ${-c.cy * H}px)`,
 					fontFamily: FONT,
 					color: '#fff',
 				}}
@@ -416,7 +416,7 @@ export const DashboardGrandimi: React.FC<{
 			</div>
 			{/* Onglets fixes en bas de l'écran (hors du zoom), comme une vraie appli */}
 			{onglets?.length ? <BarreOnglets onglets={onglets} actif={0} /> : null}
-			{barre?.length ? <BarreTraits noms={barre} /> : null}
+			{barre?.length ? <BarreTraits noms={barre} top={url ? 172 : 0} /> : null}
 			{url ? <BarreSafari url={url} /> : null}
 		</AbsoluteFill>
 	);
@@ -514,16 +514,19 @@ const ICONE_TRAIT: Record<string, React.ReactNode> = {
 	),
 };
 
-export const BarreTraits: React.FC<{noms: string[]}> = ({noms}) => (
-	<div style={{position: 'absolute', left: 0, top: 1790, width: W, height: 130, background: 'rgba(10,10,10,0.97)', borderTop: '2px solid #222', fontFamily: FONT}}>
+/** Hauteur de la barre d'onglets au trait, placée sous la barre d'adresse : en bas, l'interface TikTok la cachait. */
+const HAUT_BARRE = 118;
+export const BarreTraits: React.FC<{noms: string[]; top: number}> = ({noms, top}) => (
+	<div style={{position: 'absolute', left: 0, top, width: W, height: HAUT_BARRE, background: '#0b0b0b', borderBottom: '2px solid #222', fontFamily: FONT}}>
 		{noms.map((nom, i) => {
 			const c = i === 0 ? OR : '#a3a3a8';
 			return (
-				<div key={nom} style={{position: 'absolute', left: ((i + 0.5) / noms.length) * W - 120, top: 14, width: 240, textAlign: 'center', color: c}}>
-					<svg width={50} height={50} viewBox="0 0 60 60" style={{display: 'block', margin: '0 auto'}} fill="none" stroke={c} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round">
+				<div key={nom} style={{position: 'absolute', left: ((i + 0.5) / noms.length) * W - 120, top: 10, width: 240, textAlign: 'center', color: c}}>
+					<svg width={52} height={52} viewBox="0 0 60 60" style={{display: 'block', margin: '0 auto'}} fill="none" stroke={c} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round">
 						{ICONE_TRAIT[nom] ?? <circle cx={30} cy={30} r={14} />}
 					</svg>
-					<div style={{fontSize: 26, fontWeight: 700, marginTop: 6}}>{nom}</div>
+					<div style={{fontSize: 26, fontWeight: 700, marginTop: 4}}>{nom}</div>
+					{i === 0 ? <div style={{position: 'absolute', left: 70, right: 70, top: 98, height: 5, borderRadius: 3, background: OR}} /> : null}
 				</div>
 			);
 		})}

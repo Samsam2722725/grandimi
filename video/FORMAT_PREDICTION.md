@@ -85,8 +85,11 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
 - **Zooms comme Taller** (mesurés sur references/son-taller) : zoom avant **sur le chiffre prononcé** (`"age:1m70-3"`,
   `"predit:1m85-3"`, `"fini:80-3"`), `d` 7 images (sec) ; retour `d` 14 (doux). Zoom lent ×1,14 sur la ligne « +5 cm »
   pendant `optim`, retour à `pct` avant le curseur (sinon le curseur ne tombe plus sur le rang).
-- **Barre du bas façon Taller** : `"barre": ["Taille","Programme","Exercices","Routine"]` dans `dashboard` (icônes au trait,
-  fixe en bas de l'écran) : montre que le site contient plus.
+- **Onglets façon Taller** : `"barre": ["Taille","Programme","Exercices","Routine"]` dans `dashboard` (icônes au trait),
+  **sous la barre d'adresse** : en bas (y > 1520) l'interface TikTok les cachait. La page descend de 118 px : curseur
+  `y` 1442 → **1560** pour rester sur le rang.
+- **Whoosh synchronisé** : pour une transition `zoom` / `whip-h`, le whoosh est dans le plan précédent, 7 images avant
+  la coupe (`"stats-9"` si le plan suivant commence à `"stats-2"`) : son pic (0,24 s) tombe sur la coupe.
 - **Routine** : habitudes formulées sans tout donner (`habitudes`) + carte verrouillée `verrou`
   (« +7 habitudes clés — les plus importantes pour ta taille ») ; les 4 habitudes se cochent entre `programme` et `la`,
   le plan `calcul` commence à `exactement` pour que la carte reste ~1 s à l'écran.

@@ -5,10 +5,10 @@ import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
  * Transitions « tendance » (demande du 02/11 : plus visibles, fortes, mais absolument fluides).
  * Chaque transition est une paire sortie + entrée : le mouvement continue d'un plan à l'autre (même sens, même
  * vitesse au moment de la coupe), ce qui donne l'impression d'un seul geste.
- *   zoom : le plan sortant plonge en avant (×1 → ×1,7) avec flou et éclair blanc sur 7 images ; le plan entrant
- *          arrive de très près (×1,7) et se pose avec un léger rebond (×0,985) en 10 images.
+ *   zoom : le plan sortant plonge en avant (×1 → ×1,7) avec flou sur 7 images ; le plan entrant arrive de très près
+ *          (×1,7), éclair blanc bref (0,4 → 0 en 3 images), et se pose avec un léger rebond (×0,985) en 10 images.
  *   whip : balayage horizontal : le plan sortant file à gauche (−520 px) en 6 images, le plan entrant arrive de la
- *          droite (+520 px, bord à bord, jamais d'image noire) avec un flou de mouvement, dépasse un peu puis se cale.
+ *          droite (+520 px, bord à bord ; sur deux écrans sombres l'image de coupe reste sombre) avec un flou de mouvement, dépasse un peu puis se cale.
  */
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;

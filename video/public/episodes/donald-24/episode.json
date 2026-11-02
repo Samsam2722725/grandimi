@@ -150,6 +150,11 @@
           "a": 3,
           "son": "papier",
           "volume": 0.35
+        },
+        {
+          "a": "stats-9",
+          "son": "whoosh",
+          "volume": 0.22
         }
       ]
     },
@@ -240,11 +245,6 @@
       "elements": [],
       "sons": [
         {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.22
-        },
-        {
           "a": "age:17",
           "son": "pop",
           "volume": 0.3
@@ -263,6 +263,11 @@
           "a": "predit:1m85-3",
           "son": "whoosh",
           "volume": 0.28
+        },
+        {
+          "a": "habitudes-9",
+          "son": "whoosh",
+          "volume": 0.22
         }
       ],
       "pousse": 0.04,
@@ -297,11 +302,6 @@
       ],
       "sons": [
         {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.22
-        },
-        {
           "a": "habitudes:programme",
           "son": "tick",
           "volume": 0.18
@@ -315,6 +315,11 @@
           "a": "habitudes:donald",
           "son": "tick",
           "volume": 0.18
+        },
+        {
+          "a": "habitudes:exactement-9",
+          "son": "whoosh",
+          "volume": 0.22
         }
       ],
       "sortie": "zoom"
@@ -334,11 +339,6 @@
       ],
       "sons": [
         {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.22
-        },
-        {
           "a": "habitudes:exercices",
           "son": "tick",
           "volume": 0.2
@@ -352,6 +352,11 @@
           "a": "habitudes:routines",
           "son": "tick",
           "volume": 0.2
+        },
+        {
+          "a": "atteint:1m90-10",
+          "son": "whoosh",
+          "volume": 0.22
         }
       ]
     },
@@ -399,7 +404,7 @@
       ],
       "sons": [
         {
-          "a": 0,
+          "a": "optim-9",
           "son": "whoosh",
           "volume": 0.22
         }
@@ -518,7 +523,7 @@
           "fichier": "curseur.png",
           "a": "pct:plus",
           "x": 404,
-          "y": 1442,
+          "y": 1560,
           "w": 192,
           "h": 204,
           "depuis": {
@@ -534,11 +539,6 @@
       ],
       "sons": [
         {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.22
-        },
-        {
           "a": "optim",
           "son": "pop",
           "volume": 0.38
@@ -547,6 +547,11 @@
           "a": "fini:80-3",
           "son": "whoosh",
           "volume": 0.28
+        },
+        {
+          "a": "fini:sa-7",
+          "son": "whoosh",
+          "volume": 0.22
         }
       ]
     },
@@ -591,7 +596,7 @@
       ],
       "sons": [
         {
-          "a": 0,
+          "a": "cta-7",
           "son": "whoosh",
           "volume": 0.22
         }
@@ -619,7 +624,7 @@
       ],
       "sons": [
         {
-          "a": 0,
+          "a": "site-7",
           "son": "whoosh",
           "volume": 0.22
         }
@@ -679,13 +684,7 @@
           "volume": 0.3
         }
       ],
-      "sons": [
-        {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.22
-        }
-      ]
+      "sons": []
     }
   ],
   "sousTitres": {
