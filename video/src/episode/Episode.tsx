@@ -893,6 +893,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					entete={plan.dashboard.entete}
 					onglets={plan.dashboard.onglets}
 					barre={plan.dashboard.barre}
+					barreBas={plan.dashboard.barreBas}
 					sansBarreEtat={Boolean(plan.telephone)}
 					ballon={
 						plan.dashboard.ballon

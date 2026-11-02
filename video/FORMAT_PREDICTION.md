@@ -95,3 +95,11 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
   le plan `calcul` commence à `exactement` pour que la carte reste ~1 s à l'écran.
 - **Fin** `fin-site` sur la dernière phrase : fond topo lent, « grandimi.com » (y 190), capture du site (y 400),
   « Lien en bio » (y 1500), sans émoji ni sous-titres.
+
+## Choix du 02/11 après-midi (emmanuel-25 = modèle à copier)
+- **Pas de musique** : rendu `"musique":false`, puis `mix_son.py … --musique-db -100 --voix-aigus -3`. Bruitages **×2**
+  (volumes 0,36-0,6 au lieu de 0,18-0,3) pour qu'on les entende bien.
+- **Onglets en bas** : `"barreBas": true` avec `"barre"` (choix de l'utilisateur ; la légende TikTok peut les couvrir en partie).
+  Curseur du rang à `y` 1442 (page non décalée).
+- Ordre libre selon le script : si le chiffre optimisé est dit avant la phrase sur le site, `chiffre` → `ecran2` (flèche
+  +N cm) → `routine` (coches dès le début de la phrase) → `calcul` → `ecran3` (rang + croissance) → verdict → appel → fin.

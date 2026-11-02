@@ -225,9 +225,11 @@ export const DashboardGrandimi: React.FC<{
 	onglets?: string[];
 	/** Onglets au trait façon Taller (02/11) sous la barre d'adresse : icônes + libellés, le premier actif. */
 	barre?: string[];
+	/** Onglets en bas de l'écran (02/11, choix de l'utilisateur) au lieu de sous la barre d'adresse. */
+	barreBas?: boolean;
 	/** Sans la barre d'état de la page (écran de téléphone : la barre Safari du dessus a déjà la sienne). */
 	sansBarreEtat?: boolean;
-}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, sansBarreEtat}) => {
+}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, barreBas, sansBarreEtat}) => {
 	const cacheEtat = Boolean(url || entete || sansBarreEtat);
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
@@ -249,7 +251,7 @@ export const DashboardGrandimi: React.FC<{
 					width: W,
 					height: H,
 					transformOrigin: '0 0',
-					transform: `translateY(${(url ? 150 : 0) + (barre?.length ? HAUT_BARRE : 0)}px) translate(${W / 2}px, ${H / 2}px) scale(${c.z}) translate(${-c.cx * W}px, ${-c.cy * H}px)`,
+					transform: `translateY(${(url ? 150 : 0) + (barre?.length && !barreBas ? HAUT_BARRE : 0)}px) translate(${W / 2}px, ${H / 2}px) scale(${c.z}) translate(${-c.cx * W}px, ${-c.cy * H}px)`,
 					fontFamily: FONT,
 					color: '#fff',
 				}}
@@ -416,7 +418,7 @@ export const DashboardGrandimi: React.FC<{
 			</div>
 			{/* Onglets fixes en bas de l'écran (hors du zoom), comme une vraie appli */}
 			{onglets?.length ? <BarreOnglets onglets={onglets} actif={0} /> : null}
-			{barre?.length ? <BarreTraits noms={barre} top={url ? 172 : 0} /> : null}
+			{barre?.length ? <BarreTraits noms={barre} top={barreBas ? 1920 - HAUT_BARRE - 10 : url ? 172 : 0} bas={barreBas} /> : null}
 			{url ? <BarreSafari url={url} /> : null}
 		</AbsoluteFill>
 	);
@@ -516,8 +518,8 @@ const ICONE_TRAIT: Record<string, React.ReactNode> = {
 
 /** Hauteur de la barre d'onglets au trait, placée sous la barre d'adresse : en bas, l'interface TikTok la cachait. */
 const HAUT_BARRE = 118;
-export const BarreTraits: React.FC<{noms: string[]; top: number}> = ({noms, top}) => (
-	<div style={{position: 'absolute', left: 0, top, width: W, height: HAUT_BARRE, background: '#0b0b0b', borderBottom: '2px solid #222', fontFamily: FONT}}>
+export const BarreTraits: React.FC<{noms: string[]; top: number; bas?: boolean}> = ({noms, top, bas}) => (
+	<div style={{position: 'absolute', left: 0, top, width: W, height: HAUT_BARRE + (bas ? 10 : 0), background: '#0b0b0b', ...(bas ? {borderTop: '2px solid #222'} : {borderBottom: '2px solid #222'}), fontFamily: FONT}}>
 		{noms.map((nom, i) => {
 			const c = i === 0 ? OR : '#a3a3a8';
 			return (

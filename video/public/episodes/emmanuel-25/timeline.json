@@ -1,0 +1,555 @@
+{
+  "fps": 30,
+  "totalFrames": 1141,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 25.",
+      "from": 0,
+      "duration": 71,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 14
+        },
+        {
+          "w": "tailles",
+          "f": 19
+        },
+        {
+          "w": "maximales,",
+          "f": 29
+        },
+        {
+          "w": "partie",
+          "f": 43
+        },
+        {
+          "w": "25.",
+          "f": 55
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos d'Emmanuel.",
+      "from": 72,
+      "duration": 64,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 72
+        },
+        {
+          "w": "on",
+          "f": 86
+        },
+        {
+          "w": "regarde",
+          "f": 91
+        },
+        {
+          "w": "les",
+          "f": 101
+        },
+        {
+          "w": "infos",
+          "f": 106
+        },
+        {
+          "w": "d'Emmanuel.",
+          "f": 113
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 16 ans, Emmanuel mesure 1m80,",
+      "from": 137,
+      "duration": 65,
+      "words": [
+        {
+          "w": "À",
+          "f": 137
+        },
+        {
+          "w": "16",
+          "f": 142
+        },
+        {
+          "w": "ans,",
+          "f": 146
+        },
+        {
+          "w": "Emmanuel",
+          "f": 154
+        },
+        {
+          "w": "mesure",
+          "f": 170
+        },
+        {
+          "w": "1m80,",
+          "f": 180
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est un peu grand pour son âge.",
+      "from": 203,
+      "duration": 48,
+      "words": [
+        {
+          "w": "ce",
+          "f": 203
+        },
+        {
+          "w": "qui",
+          "f": 203
+        },
+        {
+          "w": "est",
+          "f": 203
+        },
+        {
+          "w": "un",
+          "f": 226
+        },
+        {
+          "w": "peu",
+          "f": 228
+        },
+        {
+          "w": "grand",
+          "f": 233
+        },
+        {
+          "w": "pour",
+          "f": 238
+        },
+        {
+          "w": "son",
+          "f": 240
+        },
+        {
+          "w": "âge.",
+          "f": 245
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Sa taille adulte prédite est de 1m84.",
+      "from": 252,
+      "duration": 81,
+      "words": [
+        {
+          "w": "Sa",
+          "f": 252
+        },
+        {
+          "w": "taille",
+          "f": 257
+        },
+        {
+          "w": "adulte",
+          "f": 264
+        },
+        {
+          "w": "prédite",
+          "f": 276
+        },
+        {
+          "w": "est",
+          "f": 290
+        },
+        {
+          "w": "de",
+          "f": 293
+        },
+        {
+          "w": "1m84.",
+          "f": 298
+        }
+      ]
+    },
+    {
+      "id": "atteint",
+      "text": "Puis, avec son programme ultime pour grandir, il pourrait atteindre 1m88.",
+      "from": 334,
+      "duration": 140,
+      "words": [
+        {
+          "w": "Puis,",
+          "f": 334
+        },
+        {
+          "w": "avec",
+          "f": 343
+        },
+        {
+          "w": "son",
+          "f": 350
+        },
+        {
+          "w": "programme",
+          "f": 355
+        },
+        {
+          "w": "ultime",
+          "f": 367
+        },
+        {
+          "w": "pour",
+          "f": 384
+        },
+        {
+          "w": "grandir,",
+          "f": 389
+        },
+        {
+          "w": "il",
+          "f": 403
+        },
+        {
+          "w": "pourrait",
+          "f": 408
+        },
+        {
+          "w": "atteindre",
+          "f": 415
+        },
+        {
+          "w": "1m88.",
+          "f": 425
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "4 cm de croissance supplémentaire.",
+      "from": 475,
+      "duration": 54,
+      "words": [
+        {
+          "w": "4",
+          "f": 475
+        },
+        {
+          "w": "cm",
+          "f": 482
+        },
+        {
+          "w": "de",
+          "f": 499
+        },
+        {
+          "w": "croissance",
+          "f": 501
+        },
+        {
+          "w": "supplémentaire.",
+          "f": 513
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Sur le site web Grandimi, Emmanuel découvre exactement quoi faire pour atteindre son plein potentiel, grâce aux exercices, à l'alimentation et aux routines.",
+      "from": 530,
+      "duration": 228,
+      "words": [
+        {
+          "w": "Sur",
+          "f": 530
+        },
+        {
+          "w": "le",
+          "f": 535
+        },
+        {
+          "w": "site",
+          "f": 537
+        },
+        {
+          "w": "web",
+          "f": 542
+        },
+        {
+          "w": "Grandimi,",
+          "f": 549
+        },
+        {
+          "w": "Emmanuel",
+          "f": 573
+        },
+        {
+          "w": "découvre",
+          "f": 587
+        },
+        {
+          "w": "exactement",
+          "f": 602
+        },
+        {
+          "w": "quoi",
+          "f": 602
+        },
+        {
+          "w": "faire",
+          "f": 614
+        },
+        {
+          "w": "pour",
+          "f": 628
+        },
+        {
+          "w": "atteindre",
+          "f": 633
+        },
+        {
+          "w": "son",
+          "f": 647
+        },
+        {
+          "w": "plein",
+          "f": 652
+        },
+        {
+          "w": "potentiel,",
+          "f": 662
+        },
+        {
+          "w": "grâce",
+          "f": 679
+        },
+        {
+          "w": "aux",
+          "f": 679
+        },
+        {
+          "w": "exercices,",
+          "f": 679
+        },
+        {
+          "w": "à",
+          "f": 717
+        },
+        {
+          "w": "l'alimentation",
+          "f": 717
+        },
+        {
+          "w": "et",
+          "f": 737
+        },
+        {
+          "w": "aux",
+          "f": 742
+        },
+        {
+          "w": "routines.",
+          "f": 747
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Emmanuel est plus grand que 80% des gens de son âge,",
+      "from": 759,
+      "duration": 97,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 759
+        },
+        {
+          "w": "Emmanuel",
+          "f": 773
+        },
+        {
+          "w": "est",
+          "f": 790
+        },
+        {
+          "w": "plus",
+          "f": 795
+        },
+        {
+          "w": "grand",
+          "f": 797
+        },
+        {
+          "w": "que",
+          "f": 805
+        },
+        {
+          "w": "80%",
+          "f": 809
+        },
+        {
+          "w": "des",
+          "f": 831
+        },
+        {
+          "w": "gens",
+          "f": 836
+        },
+        {
+          "w": "de",
+          "f": 841
+        },
+        {
+          "w": "son",
+          "f": 843
+        },
+        {
+          "w": "âge,",
+          "f": 848
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a déjà terminé 80% de sa croissance.",
+      "from": 857,
+      "duration": 78,
+      "words": [
+        {
+          "w": "et",
+          "f": 857
+        },
+        {
+          "w": "il",
+          "f": 862
+        },
+        {
+          "w": "a",
+          "f": 867
+        },
+        {
+          "w": "déjà",
+          "f": 869
+        },
+        {
+          "w": "terminé",
+          "f": 877
+        },
+        {
+          "w": "80%",
+          "f": 891
+        },
+        {
+          "w": "de",
+          "f": 913
+        },
+        {
+          "w": "sa",
+          "f": 915
+        },
+        {
+          "w": "croissance.",
+          "f": 920
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille et découvrir ton propre programme d'optimisation,",
+      "from": 937,
+      "duration": 126,
+      "words": [
+        {
+          "w": "Si",
+          "f": 937
+        },
+        {
+          "w": "tu",
+          "f": 941
+        },
+        {
+          "w": "veux",
+          "f": 946
+        },
+        {
+          "w": "connaître",
+          "f": 951
+        },
+        {
+          "w": "ton",
+          "f": 961
+        },
+        {
+          "w": "potentiel",
+          "f": 965
+        },
+        {
+          "w": "de",
+          "f": 977
+        },
+        {
+          "w": "taille",
+          "f": 980
+        },
+        {
+          "w": "et",
+          "f": 989
+        },
+        {
+          "w": "découvrir",
+          "f": 992
+        },
+        {
+          "w": "ton",
+          "f": 1001
+        },
+        {
+          "w": "propre",
+          "f": 1021
+        },
+        {
+          "w": "programme",
+          "f": 1033
+        },
+        {
+          "w": "d'optimisation,",
+          "f": 1040
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "va directement sur grandimi.com.",
+      "from": 1064,
+      "duration": 74,
+      "words": [
+        {
+          "w": "va",
+          "f": 1064
+        },
+        {
+          "w": "directement",
+          "f": 1069
+        },
+        {
+          "w": "sur",
+          "f": 1083
+        },
+        {
+          "w": "grandimi.com.",
+          "f": 1088
+        }
+      ]
+    }
+  ]
+}

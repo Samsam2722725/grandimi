@@ -120,6 +120,7 @@ export type Plan = {
 		onglets?: string[];
 		/** Barre du bas au trait façon Taller (Taille, Programme, Exercices, Routine), dans la page (zoomée avec elle). */
 		barre?: string[];
+		barreBas?: boolean;
 	};
 	/** Vidéo explicative (référence p25-ref, src/episode/Explicatif.tsx) : phrases mot par mot, moments et valeurs. */
 	explicatif?: {phrases: {titre: string; de: number; a: number; mots: {w: string; f: number; gras?: boolean}[]}[]; t: Record<string, number>; v: Record<string, string>; fin?: number};
