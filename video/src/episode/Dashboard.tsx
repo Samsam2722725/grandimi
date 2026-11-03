@@ -45,7 +45,8 @@ export const LIGNES = {
 } as const;
 export type Ligne = keyof typeof LIGNES;
 
-export type DashCam = {f: number; cx: number; cy: number; z: number; d: number; courbe: 'avant' | 'arriere'};
+/** lineaire : rampe à vitesse constante, comme les zooms de Taller (mesurés le 03/11 sur references/zooms-1). */
+export type DashCam = {f: number; cx: number; cy: number; z: number; d: number; courbe: 'avant' | 'arriere' | 'lineaire'};
 export type DashPop = {ligne: Ligne; a: number; d: number; fin: number; dFin: number; echelle: number};
 export type DashFleche = {sens: 'bas' | 'haut'; x: number; pointe: number; a: number; d: number; fin: number; dFin: number};
 
@@ -57,6 +58,10 @@ const camera = (cams: DashCam[], f: number) => {
 	for (const k of cams) {
 		if (f < k.f) break;
 		const t = Math.min(1, (f - k.f) / k.d);
+		if (k.courbe === 'lineaire') {
+			c = {cx: c.cx + (k.cx - c.cx) * t, cy: c.cy + (k.cy - c.cy) * t, z: c.z + (k.z - c.z) * t};
+			continue;
+		}
 		const p = profil(t, k.courbe === 'avant' ? 0.6 : 1.65);
 		c = {cx: c.cx + (k.cx - c.cx) * p, cy: c.cy + (k.cy - c.cy) * p, z: c.z * Math.pow(k.z / c.z, p)};
 	}

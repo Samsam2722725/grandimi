@@ -106,7 +106,7 @@ export type Plan = {
 	/** Écran de résultats Grandimi animé (src/episode/Dashboard.tsx) : caméra, lignes qui s'élargissent, flèches, ballon. */
 	dashboard?: {
 		donnees: import('./Dashboard').DashData;
-		cams: {a: Ancre; cx: number; cy: number; z: number; d: number; courbe: 'avant' | 'arriere'}[];
+		cams: {a: Ancre; cx: number; cy: number; z: number; d: number; courbe: 'avant' | 'arriere' | 'lineaire'}[];
 		pops: {ligne: import('./Dashboard').Ligne; a: Ancre; d: number; fin: Ancre; dFin: number; echelle: number}[];
 		fleches: {sens: 'bas' | 'haut'; x: number; pointe: number; a: Ancre; d: number; fin: Ancre; dFin: number}[];
 		ballon?: {fichier: string; a: Ancre; fin: Ancre; chute?: boolean};

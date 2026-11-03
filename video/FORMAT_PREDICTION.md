@@ -112,3 +112,13 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
   angles arrondis), couleur `#ebf91f`, `parLettre` 2, `curseur: false`, `sansPop: true`, `son: "frappe"`, `volume` 0,6 →
   lettres de y 730 à 851 (original 732-852), une lettre toutes les 2 images.
 - Bruit de frappe : `public/sfx/frappe.wav`, clic prélevé dans l'original (2,42 s).
+
+## Zooms comme Taller partie 53 (mesurés le 03/11 sur references/zooms-1 par recalage image par image) — modèle turi-27
+- Trois zooms seulement, **×2,0**, rampe **linéaire** (`"courbe": "lineaire"`), centrés sur la carte, maintien fixe :
+  - taille actuelle : `"a": "age:<chiffre>+6"`, `cx` 0,298, `cy` 0,201, `d` 4 ; retour `"norme:<mot-clé>+5"`, `cx` 0,5,
+    `cy` 0,5, `z` 1, `d` 13 ;
+  - taille prédite : `"predit:<chiffre>+6"`, `cx` 0,702, `cy` 0,201, `d` 4, pas de retour (coupe sur le plan suivant) ;
+  - croissance accomplie : `"fini:<pct>+4"`, `cx` 0,701, `cy` 0,749, `d` 8, pas de retour.
+  (Le zoom démarre ~0,2 s **après** le début du chiffre prononcé, comme l'original.) Whoosh 2 images avant le zoom.
+- Pas de zoom sur « +N cm » (`ecran2` sans `cams`), pas de flash orange-jaune sur le rang (absent de l'original, à-coup).
+- Éclair blanc de la transition `zoom` ramené à 0,15 (0,4 faisait un saut de luminosité sur fond sombre).

@@ -187,28 +187,28 @@
         },
         "cams": [
           {
-            "a": "age:1m80-3",
-            "cx": 0.38,
-            "cy": 0.3085,
-            "z": 1.61,
-            "d": 7,
-            "courbe": "avant"
+            "a": "age:1m80+6",
+            "cx": 0.298,
+            "cy": 0.201,
+            "z": 2.0,
+            "d": 4,
+            "courbe": "lineaire"
           },
           {
-            "a": "norme:grand",
+            "a": "norme:grand+5",
             "cx": 0.5,
             "cy": 0.5,
             "z": 1,
-            "d": 14,
-            "courbe": "arriere"
+            "d": 13,
+            "courbe": "lineaire"
           },
           {
-            "a": "predit:1m90-3",
-            "cx": 0.646,
-            "cy": 0.3301,
-            "z": 1.77,
-            "d": 7,
-            "courbe": "avant"
+            "a": "predit:1m90+6",
+            "cx": 0.702,
+            "cy": 0.201,
+            "z": 2.0,
+            "d": 4,
+            "courbe": "lineaire"
           }
         ],
         "pops": [
@@ -245,22 +245,17 @@
           "volume": 0.6
         },
         {
-          "a": "age:1m80-3",
-          "son": "whoosh",
-          "volume": 0.56
-        },
-        {
-          "a": "norme:grand",
-          "son": "whoosh",
-          "volume": 0.4
-        },
-        {
-          "a": "predit:1m90-3",
-          "son": "whoosh",
-          "volume": 0.56
-        },
-        {
           "a": "habitudes-9",
+          "son": "whoosh",
+          "volume": 0.44
+        },
+        {
+          "a": "age:1m80+4",
+          "son": "whoosh",
+          "volume": 0.44
+        },
+        {
+          "a": "predit:1m90+4",
           "son": "whoosh",
           "volume": 0.44
         }
@@ -409,16 +404,7 @@
           "chancesCm": "195 cm",
           "croissance": "75 %"
         },
-        "cams": [
-          {
-            "a": "optim:cm",
-            "cx": 0.5,
-            "cy": 0.3,
-            "z": 1.14,
-            "d": 24,
-            "courbe": "avant"
-          }
-        ],
+        "cams": [],
         "pops": [
           {
             "ligne": "optimiser",
@@ -509,12 +495,12 @@
         },
         "cams": [
           {
-            "a": "fini:75-3",
-            "cx": 0.7,
-            "cy": 0.8291,
+            "a": "fini:75+4",
+            "cx": 0.701,
+            "cy": 0.749,
             "z": 2.0,
-            "d": 7,
-            "courbe": "avant"
+            "d": 8,
+            "courbe": "lineaire"
           }
         ],
         "pops": [
@@ -537,13 +523,7 @@
         ],
         "barreBas": true
       },
-      "effets": [
-        {
-          "type": "flash",
-          "a": "pct:95,4+10",
-          "couleur": "orange-jaune"
-        }
-      ],
+      "effets": [],
       "elements": [
         {
           "type": "image",
@@ -567,12 +547,12 @@
       ],
       "sons": [
         {
-          "a": "fini:75-3",
+          "a": "fini:sa-7",
           "son": "whoosh",
-          "volume": 0.56
+          "volume": 0.44
         },
         {
-          "a": "fini:sa-7",
+          "a": "fini:75+2",
           "son": "whoosh",
           "volume": 0.44
         }

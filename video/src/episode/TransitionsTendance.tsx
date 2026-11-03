@@ -6,7 +6,7 @@ import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
  * Chaque transition est une paire sortie + entrée : le mouvement continue d'un plan à l'autre (même sens, même
  * vitesse au moment de la coupe), ce qui donne l'impression d'un seul geste.
  *   zoom : le plan sortant plonge en avant (×1 → ×1,7) avec flou sur 7 images ; le plan entrant arrive de très près
- *          (×1,7), éclair blanc bref (0,4 → 0 en 3 images), et se pose avec un léger rebond (×0,985) en 10 images.
+ *          (×1,7), éclair blanc léger (0,15 → 0 en 3 images), et se pose avec un léger rebond (×0,985) en 10 images.
  *   whip : balayage horizontal : le plan sortant file à gauche (−520 px) en 6 images, le plan entrant arrive de la
  *          droite (+520 px, bord à bord ; sur deux écrans sombres l'image de coupe reste sombre) avec un flou de mouvement, dépasse un peu puis se cale.
  */
@@ -25,7 +25,7 @@ export const EntreeZoom: React.FC<{children: React.ReactNode}> = ({children}) =>
 	const f = useCurrentFrame();
 	const z = interpolate(f, [0, 3, 6, 10], [1.7, 1.12, 0.985, 1], {...clamp, easing: Easing.out(Easing.cubic)});
 	const flou = interpolate(f, [0, 4, 7], [16, 4, 0], clamp);
-	const blanc = interpolate(f, [0, 1, 3], [0.4, 0.15, 0], clamp);
+	const blanc = interpolate(f, [0, 1, 3], [0.15, 0.06, 0], clamp); // 0,4 donnait un à-coup sur fond sombre (audit 03/11)
 	return (
 		<AbsoluteFill>
 			<AbsoluteFill style={{transform: `scale(${z})`, filter: flou > 0.3 ? `blur(${flou}px)` : undefined}}>{children}</AbsoluteFill>
