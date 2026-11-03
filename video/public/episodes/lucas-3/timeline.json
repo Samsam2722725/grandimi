@@ -1,0 +1,599 @@
+{
+  "fps": 30,
+  "totalFrames": 1199,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles, partie 3.",
+      "from": 0,
+      "duration": 69,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 14
+        },
+        {
+          "w": "tailles,",
+          "f": 22
+        },
+        {
+          "w": "partie",
+          "f": 48
+        },
+        {
+          "w": "3.",
+          "f": 58
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les statistiques de Lucas.",
+      "from": 70,
+      "duration": 61,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 70
+        },
+        {
+          "w": "on",
+          "f": 82
+        },
+        {
+          "w": "regarde",
+          "f": 86
+        },
+        {
+          "w": "les",
+          "f": 96
+        },
+        {
+          "w": "statistiques",
+          "f": 101
+        },
+        {
+          "w": "de",
+          "f": 113
+        },
+        {
+          "w": "Lucas.",
+          "f": 118
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 16 ans, Lucas mesure 1m63,",
+      "from": 132,
+      "duration": 73,
+      "words": [
+        {
+          "w": "À",
+          "f": 132
+        },
+        {
+          "w": "16",
+          "f": 137
+        },
+        {
+          "w": "ans,",
+          "f": 144
+        },
+        {
+          "w": "Lucas",
+          "f": 151
+        },
+        {
+          "w": "mesure",
+          "f": 166
+        },
+        {
+          "w": "1m63,",
+          "f": 175
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est vachement bas pour son âge.",
+      "from": 206,
+      "duration": 42,
+      "words": [
+        {
+          "w": "ce",
+          "f": 206
+        },
+        {
+          "w": "qui",
+          "f": 211
+        },
+        {
+          "w": "est",
+          "f": 216
+        },
+        {
+          "w": "vachement",
+          "f": 221
+        },
+        {
+          "w": "bas",
+          "f": 230
+        },
+        {
+          "w": "pour",
+          "f": 235
+        },
+        {
+          "w": "son",
+          "f": 238
+        },
+        {
+          "w": "âge.",
+          "f": 242
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "D'après Grandimi, sa taille adulte prédite est de 1m75.",
+      "from": 250,
+      "duration": 118,
+      "words": [
+        {
+          "w": "D'après",
+          "f": 250
+        },
+        {
+          "w": "Grandimi,",
+          "f": 264
+        },
+        {
+          "w": "sa",
+          "f": 287
+        },
+        {
+          "w": "taille",
+          "f": 292
+        },
+        {
+          "w": "adulte",
+          "f": 302
+        },
+        {
+          "w": "prédite",
+          "f": 314
+        },
+        {
+          "w": "est",
+          "f": 328
+        },
+        {
+          "w": "de",
+          "f": 331
+        },
+        {
+          "w": "1m75.",
+          "f": 335
+        }
+      ]
+    },
+    {
+      "id": "atteint",
+      "text": "Mais Lucas pourrait atteindre 1m79.",
+      "from": 369,
+      "duration": 76,
+      "words": [
+        {
+          "w": "Mais",
+          "f": 369
+        },
+        {
+          "w": "Lucas",
+          "f": 376
+        },
+        {
+          "w": "pourrait",
+          "f": 391
+        },
+        {
+          "w": "atteindre",
+          "f": 400
+        },
+        {
+          "w": "1m79.",
+          "f": 410
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Grâce à son programme d'optimisation de la croissance, Lucas découvre exactement quoi faire pour favoriser son plein potentiel, grâce aux exercices, à l'alimentation et aux routines.",
+      "from": 446,
+      "duration": 255,
+      "words": [
+        {
+          "w": "Grâce",
+          "f": 446
+        },
+        {
+          "w": "à",
+          "f": 455
+        },
+        {
+          "w": "son",
+          "f": 458
+        },
+        {
+          "w": "programme",
+          "f": 463
+        },
+        {
+          "w": "d'optimisation",
+          "f": 470
+        },
+        {
+          "w": "de",
+          "f": 491
+        },
+        {
+          "w": "la",
+          "f": 496
+        },
+        {
+          "w": "croissance,",
+          "f": 499
+        },
+        {
+          "w": "Lucas",
+          "f": 511
+        },
+        {
+          "w": "découvre",
+          "f": 523
+        },
+        {
+          "w": "exactement",
+          "f": 543
+        },
+        {
+          "w": "quoi",
+          "f": 560
+        },
+        {
+          "w": "faire",
+          "f": 567
+        },
+        {
+          "w": "pour",
+          "f": 574
+        },
+        {
+          "w": "favoriser",
+          "f": 579
+        },
+        {
+          "w": "son",
+          "f": 593
+        },
+        {
+          "w": "plein",
+          "f": 601
+        },
+        {
+          "w": "potentiel,",
+          "f": 610
+        },
+        {
+          "w": "grâce",
+          "f": 625
+        },
+        {
+          "w": "aux",
+          "f": 632
+        },
+        {
+          "w": "exercices,",
+          "f": 639
+        },
+        {
+          "w": "à",
+          "f": 656
+        },
+        {
+          "w": "l'alimentation",
+          "f": 658
+        },
+        {
+          "w": "et",
+          "f": 677
+        },
+        {
+          "w": "aux",
+          "f": 682
+        },
+        {
+          "w": "routines.",
+          "f": 687
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "Soit 4 cm de plus que sa taille initialement prédite.",
+      "from": 701,
+      "duration": 91,
+      "words": [
+        {
+          "w": "Soit",
+          "f": 701
+        },
+        {
+          "w": "4",
+          "f": 711
+        },
+        {
+          "w": "cm",
+          "f": 721
+        },
+        {
+          "w": "de",
+          "f": 737
+        },
+        {
+          "w": "plus",
+          "f": 740
+        },
+        {
+          "w": "que",
+          "f": 747
+        },
+        {
+          "w": "sa",
+          "f": 752
+        },
+        {
+          "w": "taille",
+          "f": 757
+        },
+        {
+          "w": "initialement",
+          "f": 766
+        },
+        {
+          "w": "prédite.",
+          "f": 781
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Lucas est plus grand que seulement 8,4% des personnes de son âge,",
+      "from": 794,
+      "duration": 129,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 794
+        },
+        {
+          "w": "Lucas",
+          "f": 811
+        },
+        {
+          "w": "est",
+          "f": 825
+        },
+        {
+          "w": "plus",
+          "f": 830
+        },
+        {
+          "w": "grand",
+          "f": 832
+        },
+        {
+          "w": "que",
+          "f": 839
+        },
+        {
+          "w": "seulement",
+          "f": 844
+        },
+        {
+          "w": "8,4%",
+          "f": 854
+        },
+        {
+          "w": "des",
+          "f": 892
+        },
+        {
+          "w": "personnes",
+          "f": 899
+        },
+        {
+          "w": "de",
+          "f": 907
+        },
+        {
+          "w": "son",
+          "f": 909
+        },
+        {
+          "w": "âge,",
+          "f": 914
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a fait 80% de sa croissance.",
+      "from": 923,
+      "duration": 59,
+      "words": [
+        {
+          "w": "et",
+          "f": 923
+        },
+        {
+          "w": "il",
+          "f": 928
+        },
+        {
+          "w": "a",
+          "f": 933
+        },
+        {
+          "w": "fait",
+          "f": 935
+        },
+        {
+          "w": "80%",
+          "f": 943
+        },
+        {
+          "w": "de",
+          "f": 962
+        },
+        {
+          "w": "sa",
+          "f": 964
+        },
+        {
+          "w": "croissance.",
+          "f": 969
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "Commente ta taille et ton âge si tu veux passer dans la prochaine vidéo.",
+      "from": 983,
+      "duration": 83,
+      "words": [
+        {
+          "w": "Commente",
+          "f": 983
+        },
+        {
+          "w": "ta",
+          "f": 995
+        },
+        {
+          "w": "taille",
+          "f": 1000
+        },
+        {
+          "w": "et",
+          "f": 1007
+        },
+        {
+          "w": "ton",
+          "f": 1010
+        },
+        {
+          "w": "âge",
+          "f": 1015
+        },
+        {
+          "w": "si",
+          "f": 1022
+        },
+        {
+          "w": "tu",
+          "f": 1027
+        },
+        {
+          "w": "veux",
+          "f": 1029
+        },
+        {
+          "w": "passer",
+          "f": 1034
+        },
+        {
+          "w": "dans",
+          "f": 1041
+        },
+        {
+          "w": "la",
+          "f": 1046
+        },
+        {
+          "w": "prochaine",
+          "f": 1048
+        },
+        {
+          "w": "vidéo.",
+          "f": 1055
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "Ou si tu veux vraiment maximiser ta croissance, va directement sur grandimi.com.",
+      "from": 1067,
+      "duration": 129,
+      "words": [
+        {
+          "w": "Ou",
+          "f": 1067
+        },
+        {
+          "w": "si",
+          "f": 1072
+        },
+        {
+          "w": "tu",
+          "f": 1077
+        },
+        {
+          "w": "veux",
+          "f": 1079
+        },
+        {
+          "w": "vraiment",
+          "f": 1087
+        },
+        {
+          "w": "maximiser",
+          "f": 1094
+        },
+        {
+          "w": "ta",
+          "f": 1111
+        },
+        {
+          "w": "croissance,",
+          "f": 1115
+        },
+        {
+          "w": "va",
+          "f": 1132
+        },
+        {
+          "w": "directement",
+          "f": 1137
+        },
+        {
+          "w": "sur",
+          "f": 1147
+        },
+        {
+          "w": "grandimi.com.",
+          "f": 1154
+        }
+      ]
+    }
+  ]
+}
