@@ -1,0 +1,531 @@
+{
+  "fps": 30,
+  "totalFrames": 1019,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 27.",
+      "from": 0,
+      "duration": 71,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 14
+        },
+        {
+          "w": "tailles",
+          "f": 19
+        },
+        {
+          "w": "maximales,",
+          "f": 29
+        },
+        {
+          "w": "partie",
+          "f": 46
+        },
+        {
+          "w": "27.",
+          "f": 55
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Turi.",
+      "from": 72,
+      "duration": 59,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 72
+        },
+        {
+          "w": "on",
+          "f": 86
+        },
+        {
+          "w": "regarde",
+          "f": 91
+        },
+        {
+          "w": "les",
+          "f": 101
+        },
+        {
+          "w": "infos",
+          "f": 106
+        },
+        {
+          "w": "de",
+          "f": 113
+        },
+        {
+          "w": "Turi.",
+          "f": 115
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 13 ans, Turi mesure 1m80,",
+      "from": 132,
+      "duration": 69,
+      "words": [
+        {
+          "w": "À",
+          "f": 132
+        },
+        {
+          "w": "13",
+          "f": 137
+        },
+        {
+          "w": "ans,",
+          "f": 142
+        },
+        {
+          "w": "Turi",
+          "f": 149
+        },
+        {
+          "w": "mesure",
+          "f": 163
+        },
+        {
+          "w": "1m80,",
+          "f": 173
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est grand pour son âge.",
+      "from": 202,
+      "duration": 34,
+      "words": [
+        {
+          "w": "ce",
+          "f": 202
+        },
+        {
+          "w": "qui",
+          "f": 206
+        },
+        {
+          "w": "est",
+          "f": 211
+        },
+        {
+          "w": "grand",
+          "f": 214
+        },
+        {
+          "w": "pour",
+          "f": 221
+        },
+        {
+          "w": "son",
+          "f": 223
+        },
+        {
+          "w": "âge.",
+          "f": 228
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site web Grandimi, sa taille adulte prédite est de 1m90.",
+      "from": 236,
+      "duration": 121,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 236
+        },
+        {
+          "w": "le",
+          "f": 244
+        },
+        {
+          "w": "site",
+          "f": 246
+        },
+        {
+          "w": "web",
+          "f": 251
+        },
+        {
+          "w": "Grandimi,",
+          "f": 258
+        },
+        {
+          "w": "sa",
+          "f": 282
+        },
+        {
+          "w": "taille",
+          "f": 287
+        },
+        {
+          "w": "adulte",
+          "f": 294
+        },
+        {
+          "w": "prédite",
+          "f": 306
+        },
+        {
+          "w": "est",
+          "f": 320
+        },
+        {
+          "w": "de",
+          "f": 323
+        },
+        {
+          "w": "1m90.",
+          "f": 325
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes,",
+      "from": 359,
+      "duration": 35,
+      "words": [
+        {
+          "w": "Et",
+          "f": 359
+        },
+        {
+          "w": "avec",
+          "f": 364
+        },
+        {
+          "w": "les",
+          "f": 368
+        },
+        {
+          "w": "bonnes",
+          "f": 373
+        },
+        {
+          "w": "habitudes,",
+          "f": 380
+        }
+      ]
+    },
+    {
+      "id": "atteint",
+      "text": "Turi pourrait atteindre 1m95.",
+      "from": 395,
+      "duration": 66,
+      "words": [
+        {
+          "w": "Turi",
+          "f": 395
+        },
+        {
+          "w": "pourrait",
+          "f": 412
+        },
+        {
+          "w": "atteindre",
+          "f": 419
+        },
+        {
+          "w": "1m95.",
+          "f": 428
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "Avec 5 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 461,
+      "duration": 131,
+      "words": [
+        {
+          "w": "Avec",
+          "f": 461
+        },
+        {
+          "w": "5",
+          "f": 473
+        },
+        {
+          "w": "cm",
+          "f": 483
+        },
+        {
+          "w": "de",
+          "f": 500
+        },
+        {
+          "w": "croissance",
+          "f": 502
+        },
+        {
+          "w": "supplémentaire",
+          "f": 517
+        },
+        {
+          "w": "grâce",
+          "f": 538
+        },
+        {
+          "w": "à",
+          "f": 545
+        },
+        {
+          "w": "l'optimisation",
+          "f": 548
+        },
+        {
+          "w": "de",
+          "f": 569
+        },
+        {
+          "w": "sa",
+          "f": 574
+        },
+        {
+          "w": "croissance.",
+          "f": 579
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Turi est plus grand que 95,4% des personnes de son âge.",
+      "from": 593,
+      "duration": 129,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 593
+        },
+        {
+          "w": "Turi",
+          "f": 608
+        },
+        {
+          "w": "est",
+          "f": 627
+        },
+        {
+          "w": "plus",
+          "f": 632
+        },
+        {
+          "w": "grand",
+          "f": 634
+        },
+        {
+          "w": "que",
+          "f": 639
+        },
+        {
+          "w": "95,4%",
+          "f": 644
+        },
+        {
+          "w": "des",
+          "f": 697
+        },
+        {
+          "w": "personnes",
+          "f": 701
+        },
+        {
+          "w": "de",
+          "f": 706
+        },
+        {
+          "w": "son",
+          "f": 709
+        },
+        {
+          "w": "âge.",
+          "f": 713
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et il a déjà terminé 75% de sa croissance.",
+      "from": 723,
+      "duration": 88,
+      "words": [
+        {
+          "w": "Et",
+          "f": 723
+        },
+        {
+          "w": "il",
+          "f": 723
+        },
+        {
+          "w": "a",
+          "f": 723
+        },
+        {
+          "w": "déjà",
+          "f": 723
+        },
+        {
+          "w": "terminé",
+          "f": 728
+        },
+        {
+          "w": "75%",
+          "f": 728
+        },
+        {
+          "w": "de",
+          "f": 728
+        },
+        {
+          "w": "sa",
+          "f": 790
+        },
+        {
+          "w": "croissance.",
+          "f": 795
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "Tu n'es clairement pas foutu.",
+      "from": 812,
+      "duration": 40,
+      "words": [
+        {
+          "w": "Tu",
+          "f": 812
+        },
+        {
+          "w": "n'es",
+          "f": 817
+        },
+        {
+          "w": "clairement",
+          "f": 824
+        },
+        {
+          "w": "pas",
+          "f": 831
+        },
+        {
+          "w": "foutu.",
+          "f": 836
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si quelqu'un d'autre veut connaître son potentiel de croissance,",
+      "from": 853,
+      "duration": 66,
+      "words": [
+        {
+          "w": "Si",
+          "f": 853
+        },
+        {
+          "w": "quelqu'un",
+          "f": 857
+        },
+        {
+          "w": "d'autre",
+          "f": 865
+        },
+        {
+          "w": "veut",
+          "f": 874
+        },
+        {
+          "w": "connaître",
+          "f": 879
+        },
+        {
+          "w": "son",
+          "f": 889
+        },
+        {
+          "w": "potentiel",
+          "f": 893
+        },
+        {
+          "w": "de",
+          "f": 905
+        },
+        {
+          "w": "croissance,",
+          "f": 908
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "commente ton âge et ta taille actuelle sous cette vidéo.",
+      "from": 920,
+      "duration": 96,
+      "words": [
+        {
+          "w": "commente",
+          "f": 920
+        },
+        {
+          "w": "ton",
+          "f": 940
+        },
+        {
+          "w": "âge",
+          "f": 947
+        },
+        {
+          "w": "et",
+          "f": 955
+        },
+        {
+          "w": "ta",
+          "f": 959
+        },
+        {
+          "w": "taille",
+          "f": 964
+        },
+        {
+          "w": "actuelle",
+          "f": 971
+        },
+        {
+          "w": "sous",
+          "f": 983
+        },
+        {
+          "w": "cette",
+          "f": 991
+        },
+        {
+          "w": "vidéo.",
+          "f": 995
+        }
+      ]
+    }
+  ]
+}
