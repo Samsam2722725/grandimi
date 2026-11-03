@@ -796,6 +796,9 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 	const onScreen = (plan.elements ?? []).map((el, i) => {
 		if (el.type === 'image' && el.ecran)
 			return <ImageEl key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} src={file(el.fichier)} />;
+		/* Trait sur un plan sans image (dashboard animé) : coordonnées de l'écran 1080 × 1920. */
+		if (el.type === 'trait' && !img)
+			return <Trait key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} w={1080} h={1920} />;
 		if (el.type === 'texte')
 			return <TexteEl key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} partie={ep.partie} />;
 		if (el.type === 'compteur')
