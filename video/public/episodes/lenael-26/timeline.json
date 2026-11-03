@@ -1,0 +1,503 @@
+{
+  "fps": 30,
+  "totalFrames": 1015,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 26.",
+      "from": 0,
+      "duration": 73,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 17
+        },
+        {
+          "w": "tailles",
+          "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 29
+        },
+        {
+          "w": "partie",
+          "f": 46
+        },
+        {
+          "w": "26.",
+          "f": 58
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Lénaël.",
+      "from": 74,
+      "duration": 61,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 74
+        },
+        {
+          "w": "on",
+          "f": 89
+        },
+        {
+          "w": "regarde",
+          "f": 94
+        },
+        {
+          "w": "les",
+          "f": 101
+        },
+        {
+          "w": "infos",
+          "f": 106
+        },
+        {
+          "w": "de",
+          "f": 110
+        },
+        {
+          "w": "Lénaël.",
+          "f": 115
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 15 ans, Lénaël mesure 1m70,",
+      "from": 137,
+      "duration": 75,
+      "words": [
+        {
+          "w": "À",
+          "f": 137
+        },
+        {
+          "w": "15",
+          "f": 139
+        },
+        {
+          "w": "ans,",
+          "f": 146
+        },
+        {
+          "w": "Lénaël",
+          "f": 151
+        },
+        {
+          "w": "mesure",
+          "f": 170
+        },
+        {
+          "w": "1m70,",
+          "f": 180
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est normal pour son âge.",
+      "from": 213,
+      "duration": 37,
+      "words": [
+        {
+          "w": "ce",
+          "f": 213
+        },
+        {
+          "w": "qui",
+          "f": 220
+        },
+        {
+          "w": "est",
+          "f": 225
+        },
+        {
+          "w": "normal",
+          "f": 227
+        },
+        {
+          "w": "pour",
+          "f": 235
+        },
+        {
+          "w": "son",
+          "f": 237
+        },
+        {
+          "w": "âge.",
+          "f": 242
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 1m78,",
+      "from": 251,
+      "duration": 121,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 251
+        },
+        {
+          "w": "le",
+          "f": 259
+        },
+        {
+          "w": "site",
+          "f": 261
+        },
+        {
+          "w": "Grandimi,",
+          "f": 268
+        },
+        {
+          "w": "sa",
+          "f": 292
+        },
+        {
+          "w": "taille",
+          "f": 295
+        },
+        {
+          "w": "adulte",
+          "f": 302
+        },
+        {
+          "w": "prédite",
+          "f": 314
+        },
+        {
+          "w": "est",
+          "f": 331
+        },
+        {
+          "w": "de",
+          "f": 333
+        },
+        {
+          "w": "1m78,",
+          "f": 338
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "et avec les bonnes habitudes,",
+      "from": 374,
+      "duration": 33,
+      "words": [
+        {
+          "w": "et",
+          "f": 374
+        },
+        {
+          "w": "avec",
+          "f": 379
+        },
+        {
+          "w": "les",
+          "f": 383
+        },
+        {
+          "w": "bonnes",
+          "f": 388
+        },
+        {
+          "w": "habitudes,",
+          "f": 395
+        }
+      ]
+    },
+    {
+      "id": "atteint",
+      "text": "Lénaël pourrait atteindre 1m85,",
+      "from": 407,
+      "duration": 84,
+      "words": [
+        {
+          "w": "Lénaël",
+          "f": 407
+        },
+        {
+          "w": "pourrait",
+          "f": 429
+        },
+        {
+          "w": "atteindre",
+          "f": 436
+        },
+        {
+          "w": "1m85,",
+          "f": 448
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "donc 7 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 492,
+      "duration": 136,
+      "words": [
+        {
+          "w": "donc",
+          "f": 492
+        },
+        {
+          "w": "7",
+          "f": 502
+        },
+        {
+          "w": "cm",
+          "f": 511
+        },
+        {
+          "w": "de",
+          "f": 530
+        },
+        {
+          "w": "croissance",
+          "f": 533
+        },
+        {
+          "w": "supplémentaire",
+          "f": 547
+        },
+        {
+          "w": "grâce",
+          "f": 569
+        },
+        {
+          "w": "à",
+          "f": 576
+        },
+        {
+          "w": "l'optimisation",
+          "f": 581
+        },
+        {
+          "w": "de",
+          "f": 602
+        },
+        {
+          "w": "sa",
+          "f": 607
+        },
+        {
+          "w": "croissance.",
+          "f": 612
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Lénaël est plus grand que 55,7% des personnes de son âge,",
+      "from": 629,
+      "duration": 135,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 629
+        },
+        {
+          "w": "Lénaël",
+          "f": 629
+        },
+        {
+          "w": "est",
+          "f": 629
+        },
+        {
+          "w": "plus",
+          "f": 629
+        },
+        {
+          "w": "grand",
+          "f": 629
+        },
+        {
+          "w": "que",
+          "f": 629
+        },
+        {
+          "w": "55,7%",
+          "f": 629
+        },
+        {
+          "w": "des",
+          "f": 736
+        },
+        {
+          "w": "personnes",
+          "f": 740
+        },
+        {
+          "w": "de",
+          "f": 748
+        },
+        {
+          "w": "son",
+          "f": 750
+        },
+        {
+          "w": "âge,",
+          "f": 755
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a déjà terminé 80% de sa croissance.",
+      "from": 764,
+      "duration": 83,
+      "words": [
+        {
+          "w": "et",
+          "f": 764
+        },
+        {
+          "w": "il",
+          "f": 769
+        },
+        {
+          "w": "a",
+          "f": 774
+        },
+        {
+          "w": "déjà",
+          "f": 779
+        },
+        {
+          "w": "terminé",
+          "f": 786
+        },
+        {
+          "w": "80%",
+          "f": 800
+        },
+        {
+          "w": "de",
+          "f": 820
+        },
+        {
+          "w": "sa",
+          "f": 822
+        },
+        {
+          "w": "croissance.",
+          "f": 827
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 848,
+      "duration": 52,
+      "words": [
+        {
+          "w": "Si",
+          "f": 848
+        },
+        {
+          "w": "tu",
+          "f": 853
+        },
+        {
+          "w": "veux",
+          "f": 856
+        },
+        {
+          "w": "connaître",
+          "f": 860
+        },
+        {
+          "w": "ton",
+          "f": 870
+        },
+        {
+          "w": "potentiel",
+          "f": 877
+        },
+        {
+          "w": "de",
+          "f": 887
+        },
+        {
+          "w": "taille,",
+          "f": 892
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écrivez votre âge et votre taille actuelle en commentaire sous cette vidéo.",
+      "from": 901,
+      "duration": 110,
+      "words": [
+        {
+          "w": "écrivez",
+          "f": 901
+        },
+        {
+          "w": "votre",
+          "f": 918
+        },
+        {
+          "w": "âge",
+          "f": 923
+        },
+        {
+          "w": "et",
+          "f": 930
+        },
+        {
+          "w": "votre",
+          "f": 935
+        },
+        {
+          "w": "taille",
+          "f": 940
+        },
+        {
+          "w": "actuelle",
+          "f": 949
+        },
+        {
+          "w": "en",
+          "f": 961
+        },
+        {
+          "w": "commentaire",
+          "f": 966
+        },
+        {
+          "w": "sous",
+          "f": 978
+        },
+        {
+          "w": "cette",
+          "f": 983
+        },
+        {
+          "w": "vidéo.",
+          "f": 988
+        }
+      ]
+    }
+  ]
+}
