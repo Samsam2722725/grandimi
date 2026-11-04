@@ -1,0 +1,479 @@
+{
+  "fps": 30,
+  "totalFrames": 794,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Taille maximale prédite à partir de nos commentaires, partie 29.",
+      "from": 0,
+      "duration": 88,
+      "words": [
+        {
+          "w": "Taille",
+          "f": 0
+        },
+        {
+          "w": "maximale",
+          "f": 10
+        },
+        {
+          "w": "prédite",
+          "f": 19
+        },
+        {
+          "w": "à",
+          "f": 34
+        },
+        {
+          "w": "partir",
+          "f": 36
+        },
+        {
+          "w": "de",
+          "f": 43
+        },
+        {
+          "w": "nos",
+          "f": 46
+        },
+        {
+          "w": "commentaires,",
+          "f": 50
+        },
+        {
+          "w": "partie",
+          "f": 65
+        },
+        {
+          "w": "29.",
+          "f": 74
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les stats de Miguel.",
+      "from": 89,
+      "duration": 52,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 89
+        },
+        {
+          "w": "on",
+          "f": 98
+        },
+        {
+          "w": "regarde",
+          "f": 103
+        },
+        {
+          "w": "les",
+          "f": 110
+        },
+        {
+          "w": "stats",
+          "f": 115
+        },
+        {
+          "w": "de",
+          "f": 122
+        },
+        {
+          "w": "Miguel.",
+          "f": 125
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 18 ans, et pour le moment 1m77,",
+      "from": 142,
+      "duration": 74,
+      "words": [
+        {
+          "w": "À",
+          "f": 142
+        },
+        {
+          "w": "18",
+          "f": 146
+        },
+        {
+          "w": "ans,",
+          "f": 156
+        },
+        {
+          "w": "et",
+          "f": 161
+        },
+        {
+          "w": "pour",
+          "f": 168
+        },
+        {
+          "w": "le",
+          "f": 170
+        },
+        {
+          "w": "moment",
+          "f": 173
+        },
+        {
+          "w": "1m77,",
+          "f": 180
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "Miguel fait la taille moyenne en France.",
+      "from": 217,
+      "duration": 45,
+      "words": [
+        {
+          "w": "Miguel",
+          "f": 217
+        },
+        {
+          "w": "fait",
+          "f": 231
+        },
+        {
+          "w": "la",
+          "f": 236
+        },
+        {
+          "w": "taille",
+          "f": 238
+        },
+        {
+          "w": "moyenne",
+          "f": 243
+        },
+        {
+          "w": "en",
+          "f": 253
+        },
+        {
+          "w": "France.",
+          "f": 255
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "D'après grandimi.com, sa taille adulte est 1m84.",
+      "from": 262,
+      "duration": 93,
+      "words": [
+        {
+          "w": "D'après",
+          "f": 262
+        },
+        {
+          "w": "grandimi.com,",
+          "f": 262
+        },
+        {
+          "w": "sa",
+          "f": 303
+        },
+        {
+          "w": "taille",
+          "f": 305
+        },
+        {
+          "w": "adulte",
+          "f": 313
+        },
+        {
+          "w": "est",
+          "f": 322
+        },
+        {
+          "w": "1m84.",
+          "f": 325
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Avec son programme personnalisé,",
+      "from": 356,
+      "duration": 37,
+      "words": [
+        {
+          "w": "Avec",
+          "f": 356
+        },
+        {
+          "w": "son",
+          "f": 361
+        },
+        {
+          "w": "programme",
+          "f": 365
+        },
+        {
+          "w": "personnalisé,",
+          "f": 373
+        }
+      ]
+    },
+    {
+      "id": "atteint",
+      "text": "Miguel pourrait atteindre 1m89",
+      "from": 394,
+      "duration": 61,
+      "words": [
+        {
+          "w": "Miguel",
+          "f": 394
+        },
+        {
+          "w": "pourrait",
+          "f": 406
+        },
+        {
+          "w": "atteindre",
+          "f": 416
+        },
+        {
+          "w": "1m89",
+          "f": 425
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "en gagnant 5 centimètres supplémentaires.",
+      "from": 456,
+      "duration": 52,
+      "words": [
+        {
+          "w": "en",
+          "f": 456
+        },
+        {
+          "w": "gagnant",
+          "f": 461
+        },
+        {
+          "w": "5",
+          "f": 461
+        },
+        {
+          "w": "centimètres",
+          "f": 461
+        },
+        {
+          "w": "supplémentaires.",
+          "f": 492
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "En ce moment, Miguel est plus grand que 60% des 17 ans.",
+      "from": 509,
+      "duration": 85,
+      "words": [
+        {
+          "w": "En",
+          "f": 509
+        },
+        {
+          "w": "ce",
+          "f": 514
+        },
+        {
+          "w": "moment,",
+          "f": 516
+        },
+        {
+          "w": "Miguel",
+          "f": 523
+        },
+        {
+          "w": "est",
+          "f": 540
+        },
+        {
+          "w": "plus",
+          "f": 542
+        },
+        {
+          "w": "grand",
+          "f": 545
+        },
+        {
+          "w": "que",
+          "f": 552
+        },
+        {
+          "w": "60%",
+          "f": 557
+        },
+        {
+          "w": "des",
+          "f": 574
+        },
+        {
+          "w": "17",
+          "f": 581
+        },
+        {
+          "w": "ans.",
+          "f": 590
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et il a fini 80% de sa croissance.",
+      "from": 595,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Et",
+          "f": 595
+        },
+        {
+          "w": "il",
+          "f": 598
+        },
+        {
+          "w": "a",
+          "f": 602
+        },
+        {
+          "w": "fini",
+          "f": 605
+        },
+        {
+          "w": "80%",
+          "f": 614
+        },
+        {
+          "w": "de",
+          "f": 634
+        },
+        {
+          "w": "sa",
+          "f": 636
+        },
+        {
+          "w": "croissance.",
+          "f": 638
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "Tu es pas foutu.",
+      "from": 653,
+      "duration": 25,
+      "words": [
+        {
+          "w": "Tu",
+          "f": 653
+        },
+        {
+          "w": "es",
+          "f": 658
+        },
+        {
+          "w": "pas",
+          "f": 662
+        },
+        {
+          "w": "foutu.",
+          "f": 665
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux passer dans la prochaine vidéo,",
+      "from": 679,
+      "duration": 43,
+      "words": [
+        {
+          "w": "Si",
+          "f": 679
+        },
+        {
+          "w": "tu",
+          "f": 684
+        },
+        {
+          "w": "veux",
+          "f": 686
+        },
+        {
+          "w": "passer",
+          "f": 691
+        },
+        {
+          "w": "dans",
+          "f": 698
+        },
+        {
+          "w": "la",
+          "f": 701
+        },
+        {
+          "w": "prochaine",
+          "f": 703
+        },
+        {
+          "w": "vidéo,",
+          "f": 710
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "commente ta taille et taille dans cette vidéo.",
+      "from": 724,
+      "duration": 67,
+      "words": [
+        {
+          "w": "commente",
+          "f": 724
+        },
+        {
+          "w": "ta",
+          "f": 733
+        },
+        {
+          "w": "taille",
+          "f": 738
+        },
+        {
+          "w": "et",
+          "f": 748
+        },
+        {
+          "w": "taille",
+          "f": 752
+        },
+        {
+          "w": "dans",
+          "f": 762
+        },
+        {
+          "w": "cette",
+          "f": 767
+        },
+        {
+          "w": "vidéo.",
+          "f": 772
+        }
+      ]
+    }
+  ]
+}
