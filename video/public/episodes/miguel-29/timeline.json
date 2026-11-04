@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "totalFrames": 779,
+  "totalFrames": 890,
   "audio": "voice/voix.wav",
   "lines": [
     {
@@ -439,7 +439,7 @@
       "id": "com",
       "text": "commente ta taille et ton âge.",
       "from": 725,
-      "duration": 51,
+      "duration": 162,
       "words": [
         {
           "w": "commente",

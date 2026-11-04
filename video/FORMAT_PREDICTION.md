@@ -122,3 +122,16 @@ python scripts/ballon.py 13 public/episodes/prenom-N/images/ballon_13.png argent
   (Le zoom démarre ~0,2 s **après** le début du chiffre prononcé, comme l'original.) Whoosh 2 images avant le zoom.
 - Pas de zoom sur « +N cm » (`ecran2` sans `cams`), pas de flash orange-jaune sur le rang (absent de l'original, à-coup).
 - Éclair blanc de la transition `zoom` ramené à 0,15 (0,4 faisait un saut de luminosité sur fond sombre).
+
+## Copie exacte de Taller partie 30 (04/11, references/taller-ref3) — modèle miguel-29 à copier
+Structure et transitions de cory-19 (identiques à l'original) : papier « PARTIE N » → `jaune-glisse` → dashboard
+(carte commentaire par-dessus jusqu'au ballon, pop du rang sur l'âge) → `bascule` → routine (sans 🤫, 0/9, +7 habitudes
+verrouillées) dès le prénom de la phrase « pourrait atteindre » → `radial` → silhouette violette + chiffre tapé sur le
+chiffre prononcé → `glitch` → dashboard 2 sur le dernier mot de la phrase « +N cm » (flèche rouge, curseur de « des » à
+« fini:<pct>+10 », pas de pop ni de flash) → `glitch` → verdict sur la phrase « pas foutu » (texte au centre, y 900)
+→ `radial` → appel (ANALYSÉ + ordi, 👵 sur « âge », règle sur « taille », sous-titres y +83) → fin : topo assombri
+(`"sombre": 0.62`), icône Grandimi + « grandimi.com », ~3 s après la voix (voix `apad=pad_dur=4.2`).
+Zooms mesurés : rampe linéaire ; actuelle `+12` images après le chiffre, ×1,85 en 12 ; retour sur le 2ᵉ mot de `norme`
+en 15 ; prédite `+8`, ×1,87 en 13 ; croissance `fini:<pct>+14`, ×1,81 en 11. Avec `urlDecale` 60 : cx/cy
+0,339/0,345 ; 0,662/0,343 ; 0,633/0,605. Barre grandimi.com descendue de 60 px (`urlDecale`), barre de navigation au
+trait fixe en bas (`navTraits`), curseur y 1502.

@@ -818,6 +818,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					coche={el.coche ? {de: loc(el.coche.de), a: loc(el.coche.a)} : undefined}
 					habitudes={el.habitudes}
 					verrou={el.verrou}
+					urlDecale={el.urlDecale}
 				/>
 			);
 		if (el.type === 'calcul') return <CalculGrandimi key={i} at={loc(el.a)} fin={loc(el.fin)} url={el.url} />;
@@ -898,6 +899,8 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					onglets={plan.dashboard.onglets}
 					barre={plan.dashboard.barre}
 					barreBas={plan.dashboard.barreBas}
+					urlDecale={plan.dashboard.urlDecale}
+					navTraits={plan.dashboard.navTraits}
 					sansBarreEtat={Boolean(plan.telephone)}
 					ballon={
 						plan.dashboard.ballon
@@ -920,6 +923,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			{plan.fond === 'topo' ? (
 				<CoupFlou at={plan.topo?.coup !== undefined ? loc(plan.topo.coup) : undefined} vitesse={vite}>
 					<TopoAnime zoomDe={plan.topo?.zoomDe} d={plan.topo?.d} vitesse={plan.topo?.vitesse} />
+					{plan.topo?.sombre ? <AbsoluteFill style={{background: '#000', opacity: plan.topo.sombre}} /> : null}
 				</CoupFlou>
 			) : null}
 			{(plan.effets ?? [])

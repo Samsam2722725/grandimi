@@ -232,9 +232,13 @@ export const DashboardGrandimi: React.FC<{
 	barre?: string[];
 	/** Onglets en bas de l'écran (02/11, choix de l'utilisateur) au lieu de sous la barre d'adresse. */
 	barreBas?: boolean;
+	/** Barre d'adresse et page descendues de N px. */
+	urlDecale?: number;
+	/** Barre de navigation de la page en icônes au trait (Taille, Croissance, Quotidien) comme Taller partie 30. */
+	navTraits?: boolean;
 	/** Sans la barre d'état de la page (écran de téléphone : la barre Safari du dessus a déjà la sienne). */
 	sansBarreEtat?: boolean;
-}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, barreBas, sansBarreEtat}) => {
+}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, barreBas, urlDecale = 0, navTraits, sansBarreEtat}) => {
 	const cacheEtat = Boolean(url || entete || sansBarreEtat);
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
@@ -256,7 +260,7 @@ export const DashboardGrandimi: React.FC<{
 					width: W,
 					height: H,
 					transformOrigin: '0 0',
-					transform: `translateY(${(url ? 150 : 0) + (barre?.length && !barreBas ? HAUT_BARRE : 0)}px) translate(${W / 2}px, ${H / 2}px) scale(${c.z}) translate(${-c.cx * W}px, ${-c.cy * H}px)`,
+					transform: `translateY(${(url ? 150 + urlDecale : 0) + (barre?.length && !barreBas ? HAUT_BARRE : 0)}px) translate(${W / 2}px, ${H / 2}px) scale(${c.z}) translate(${-c.cx * W}px, ${-c.cy * H}px)`,
 					fontFamily: FONT,
 					color: '#fff',
 				}}
@@ -386,7 +390,7 @@ export const DashboardGrandimi: React.FC<{
 					<Jauge pct={parseFloat(d.croissance.replace(',', '.'))} />
 				</Bloc>
 				{/* Barre de navigation */}
-				{onglets || barre?.length ? null : (
+				{onglets || barre?.length || navTraits ? null : (
 					[
 						['taille', 0.21, true],
 						['croissance', 0.5, false],
@@ -424,7 +428,13 @@ export const DashboardGrandimi: React.FC<{
 			{/* Onglets fixes en bas de l'écran (hors du zoom), comme une vraie appli */}
 			{onglets?.length ? <BarreOnglets onglets={onglets} actif={0} /> : null}
 			{barre?.length ? <BarreTraits noms={barre} top={barreBas ? 1920 - HAUT_BARRE - 10 : url ? 172 : 0} bas={barreBas} /> : null}
-			{url ? <BarreSafari url={url} /> : null}
+			{navTraits && !onglets && !barre?.length ? <NavTraits /> : null}
+			{url ? (
+				<>
+					{urlDecale ? <div style={{position: 'absolute', left: 0, top: 0, width: W, height: urlDecale, background: '#000'}} /> : null}
+					<BarreSafari url={url} decale={urlDecale} />
+				</>
+			) : null}
 		</AbsoluteFill>
 	);
 };
@@ -445,8 +455,9 @@ export const BarreOnglets: React.FC<{onglets: string[]; actif: number}> = ({ongl
 );
 
 /** Barre d'état + barre d'adresse Safari (« comme si on était sur le site »), 1080 × 172 px en haut de l'écran. */
-export const BarreSafari: React.FC<{url: string}> = ({url}) => (
-	<div style={{position: 'absolute', left: 0, top: 0, width: W, height: 172, background: '#000', fontFamily: FONT, color: '#fff'}}>
+/** decale : la barre descend de N px (03/11 : « grandimi.com un peu plus bas », hors de l'en-tête TikTok). */
+export const BarreSafari: React.FC<{url: string; decale?: number}> = ({url, decale = 0}) => (
+	<div style={{position: 'absolute', left: 0, top: decale, width: W, height: 172, background: '#000', fontFamily: FONT, color: '#fff'}}>
 			{/* Pas d'heure, de réseau ni de batterie (demande du 02/11) : seulement la barre d'adresse. */}
 			<div
 				style={{
@@ -503,6 +514,12 @@ const ICONE_TRAIT: Record<string, React.ReactNode> = {
 			<path d="M6 27 V37 M54 27 V37" />
 		</g>
 	),
+	Croissance: (
+		<g>
+			<path d="M8 46 L22 32 L32 40 L52 18" />
+			<path d="M42 18 H52 V28" />
+		</g>
+	),
 	Routine: (
 		<g>
 			<rect x={10} y={14} width={40} height={38} rx={6} />
@@ -529,4 +546,22 @@ export const BarreTraits: React.FC<{noms: string[]; top: number; bas?: boolean}>
 			);
 		})}
 	</div>
+);
+
+/** Barre de navigation fixe en bas, icônes au trait comme Taller : Taille active, Croissance, Quotidien. */
+const NavTraits: React.FC = () => (
+	<>
+		<div style={{position: 'absolute', left: 0, top: 1812, width: W, height: 108, background: '#0b0b0b', borderTop: '2px solid #1f1f1f'}} />
+		{(['Taille', 'Croissance', 'Routine'] as const).map((nom, i) => {
+			const c = i === 0 ? OR : '#8a8a8f';
+			return (
+				<div key={nom} style={{position: 'absolute', left: [0.21, 0.5, 0.79][i] * W - 90, top: 1826, width: 180, textAlign: 'center', color: c, fontFamily: FONT}}>
+					<svg width={52} height={52} viewBox="0 0 60 60" style={{display: 'block', margin: '0 auto'}} fill="none" stroke={c} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round">
+						{ICONE_TRAIT[nom]}
+					</svg>
+					<div style={{fontSize: 22, fontWeight: 600, marginTop: 6}}>{['taille', 'croissance', 'quotidien'][i]}</div>
+				</div>
+			);
+		})}
+	</>
 );

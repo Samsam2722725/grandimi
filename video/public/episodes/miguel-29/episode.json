@@ -109,12 +109,19 @@
         }
       ],
       "elements": [],
-      "sons": []
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.4
+        }
+      ]
     },
     {
       "nom": "partie",
       "debut": "hook:partie-1",
       "fond": "papier",
+      "sortie": "jaune",
       "papiers": [
         "papier1.jpg",
         "papier2.jpg",
@@ -141,21 +148,21 @@
       ],
       "sons": [
         {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.4
+        },
+        {
           "a": 3,
           "son": "papier",
           "volume": 0.6
-        },
-        {
-          "a": "stats-9",
-          "son": "whoosh",
-          "volume": 0.44
         }
-      ],
-      "sortie": "zoom"
+      ]
     },
     {
       "nom": "ecran",
       "debut": "stats-2",
+      "transition": "jaune-glisse",
       "dashboard": {
         "donnees": {
           "actuelle": "177 cm",
@@ -187,37 +194,37 @@
         },
         "cams": [
           {
-            "a": "age:1m77+6",
-            "cx": 0.298,
-            "cy": 0.201,
-            "z": 2.0,
-            "d": 4,
+            "a": "age:1m77+12",
+            "cx": 0.339,
+            "cy": 0.345,
+            "z": 1.85,
+            "d": 12,
             "courbe": "lineaire"
           },
           {
-            "a": "norme:moyenne+5",
+            "a": "norme:fait",
             "cx": 0.5,
             "cy": 0.5,
             "z": 1,
-            "d": 13,
+            "d": 15,
             "courbe": "lineaire"
           },
           {
-            "a": "predit:1m84+6",
-            "cx": 0.702,
-            "cy": 0.201,
-            "z": 2.0,
-            "d": 4,
+            "a": "predit:1m84+8",
+            "cx": 0.662,
+            "cy": 0.343,
+            "z": 1.87,
+            "d": 13,
             "courbe": "lineaire"
           }
         ],
         "pops": [
           {
             "ligne": "rang",
-            "a": "norme:moyenne+6",
-            "d": 12,
-            "fin": "predit",
-            "dFin": 10,
+            "a": "age:18",
+            "d": 8,
+            "fin": "age:1m77",
+            "dFin": 8,
             "echelle": 1.1
           }
         ],
@@ -229,54 +236,45 @@
           "chute": true
         },
         "url": "grandimi.com",
-        "barre": [
-          "Taille",
-          "Programme",
-          "Exercices",
-          "Routine"
-        ],
-        "barreBas": true
+        "urlDecale": 60,
+        "navTraits": true
       },
       "elements": [],
       "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.44
+        },
         {
           "a": "age:18",
           "son": "pop",
           "volume": 0.6
         },
         {
-          "a": "habitudes-9",
+          "a": "age:1m77+10",
           "son": "whoosh",
-          "volume": 0.44
+          "volume": 0.56
         },
         {
-          "a": "age:1m77+4",
+          "a": "predit:1m84+6",
           "son": "whoosh",
-          "volume": 0.44
-        },
-        {
-          "a": "predit:1m84+4",
-          "son": "whoosh",
-          "volume": 0.44
+          "volume": 0.56
         }
-      ],
-      "pousse": 0.04,
-      "transition": "zoom",
-      "sortie": "whip-h"
+      ]
     },
     {
       "nom": "routine",
-      "debut": "habitudes-2",
+      "debut": "atteint-5",
+      "transition": "bascule",
       "elements": [
         {
           "type": "routine",
           "a": 0,
           "url": "grandimi.com",
+          "urlDecale": 60,
           "flou": 0,
-          "coche": {
-            "de": "habitudes:avec",
-            "a": "habitudes:programme"
-          },
+          "taller": true,
           "habitudes": [
             "Routine physique Grandimi 🏋️",
             "Programme sommeil 😴",
@@ -286,59 +284,37 @@
           "verrou": {
             "titre": "+7 habitudes clés",
             "sous": "les plus importantes pour ta taille",
-            "nombre": 7
+            "nombre": 5
           }
         }
       ],
       "sons": [
         {
-          "a": "habitudes:avec",
-          "son": "tick",
-          "volume": 0.36
-        },
-        {
-          "a": "habitudes:avec",
-          "son": "tick",
-          "volume": 0.36
-        },
-        {
-          "a": "habitudes:son",
-          "son": "tick",
-          "volume": 0.36
-        },
-        {
-          "a": "habitudes:programme",
-          "son": "tick",
-          "volume": 0.36
-        },
-        {
-          "a": "atteint:pourrait-7",
+          "a": 0,
           "son": "whoosh",
           "volume": 0.44
         }
-      ],
-      "transition": "whip-h",
-      "sortie": "zoom"
+      ]
     },
     {
       "nom": "chiffre",
-      "debut": "atteint:pourrait",
+      "debut": "atteint:1m89",
+      "transition": "radial",
       "fond": "topo",
       "topo": {
         "zoomDe": 0.6,
-        "d": 18,
-        "vitesse": 0.15
+        "d": 18
       },
       "elements": [
         {
           "type": "image",
           "ecran": true,
-          "fichier": "alien.png",
+          "fichier": "silhouette.png",
           "a": 0,
-          "x": 302,
-          "y": 520,
-          "w": 476,
-          "h": 975,
+          "x": 324,
+          "y": 760,
+          "w": 432,
+          "h": 1170,
           "grandit": {
             "de": 0.4,
             "d": 40
@@ -363,107 +339,17 @@
       ],
       "sons": [
         {
-          "a": "optim-9",
+          "a": 0,
           "son": "whoosh",
           "volume": 0.44
         }
-      ],
-      "transition": "zoom",
-      "sortie": "whip-h"
+      ]
     },
     {
       "nom": "ecran2",
-      "debut": "optim-2",
-      "pousse": 0.04,
-      "dashboard": {
-        "donnees": {
-          "actuelle": "177 cm",
-          "predite": "184 cm",
-          "optimiser": "+5 cm",
-          "bulle": "181 cm",
-          "courbe": [
-            177,
-            180,
-            181.9,
-            182.9,
-            183.5,
-            183.8,
-            184
-          ],
-          "ages": [
-            "18",
-            "18,5",
-            "19",
-            "19,5",
-            "20",
-            "20,5",
-            "21"
-          ],
-          "rang": "60 %",
-          "chances": "20 %",
-          "chancesCm": "189 cm",
-          "croissance": "80 %"
-        },
-        "cams": [],
-        "pops": [
-          {
-            "ligne": "optimiser",
-            "a": "optim:centimètres",
-            "d": 20,
-            "fin": "pct",
-            "dFin": 14,
-            "echelle": 1.14
-          },
-          {
-            "ligne": "rang",
-            "a": "pct:plus",
-            "d": 30,
-            "fin": "pct:ans+6",
-            "dFin": 8,
-            "echelle": 1.12
-          }
-        ],
-        "fleches": [
-          {
-            "sens": "bas",
-            "x": 0.5,
-            "pointe": 0.2,
-            "a": "optim:centimètres",
-            "d": 12,
-            "fin": "optim:supplémentaires",
-            "dFin": 16
-          }
-        ],
-        "url": "grandimi.com",
-        "barre": [
-          "Taille",
-          "Programme",
-          "Exercices",
-          "Routine"
-        ],
-        "barreBas": true
-      },
-      "effets": [],
-      "elements": [],
-      "sons": [
-        {
-          "a": "optim:centimètres",
-          "son": "pop",
-          "volume": 0.6
-        },
-        {
-          "a": "pct-9",
-          "son": "whoosh",
-          "volume": 0.44
-        }
-      ],
-      "transition": "whip-h",
-      "sortie": "zoom"
-    },
-    {
-      "nom": "ecran3",
-      "debut": "pct-2",
-      "pousse": 0.06,
+      "debut": "optim:supplémentaires",
+      "transition": "glitch",
+      "sortie": "glitch",
       "dashboard": {
         "donnees": {
           "actuelle": "177 cm",
@@ -495,33 +381,29 @@
         },
         "cams": [
           {
-            "a": "fini:80+4",
-            "cx": 0.701,
-            "cy": 0.749,
-            "z": 2.0,
-            "d": 8,
+            "a": "fini:80+14",
+            "cx": 0.633,
+            "cy": 0.605,
+            "z": 1.81,
+            "d": 11,
             "courbe": "lineaire"
           }
         ],
-        "pops": [
+        "pops": [],
+        "fleches": [
           {
-            "ligne": "rang",
-            "a": "pct:plus",
-            "d": 30,
-            "fin": "pct:ans+6",
-            "dFin": 8,
-            "echelle": 1.12
+            "sens": "bas",
+            "x": 0.5,
+            "pointe": 0.2,
+            "a": "optim:supplémentaires+8",
+            "d": 12,
+            "fin": "pct",
+            "dFin": 12
           }
         ],
-        "fleches": [],
         "url": "grandimi.com",
-        "barre": [
-          "Taille",
-          "Programme",
-          "Exercices",
-          "Routine"
-        ],
-        "barreBas": true
+        "urlDecale": 60,
+        "navTraits": true
       },
       "effets": [],
       "elements": [
@@ -529,16 +411,16 @@
           "type": "image",
           "ecran": true,
           "fichier": "curseur.png",
-          "a": "pct:plus",
+          "a": "pct:des",
           "x": 404,
-          "y": 1442,
+          "y": 1502,
           "w": 192,
           "h": 204,
           "depuis": {
             "y": 520
           },
           "ressort": true,
-          "fin": "fini:il",
+          "fin": "fini:80+10",
           "sortie": {
             "y": 700,
             "d": 6
@@ -547,22 +429,27 @@
       ],
       "sons": [
         {
-          "a": "fini:80+2",
+          "a": 0,
           "son": "whoosh",
           "volume": 0.44
         },
         {
-          "a": "foutu-9",
+          "a": "optim:supplémentaires+8",
+          "son": "pop",
+          "volume": 0.6
+        },
+        {
+          "a": "fini:80+12",
           "son": "whoosh",
-          "volume": 0.44
+          "volume": 0.56
         }
-      ],
-      "transition": "zoom",
-      "sortie": "whip-h"
+      ]
     },
     {
       "nom": "verdict",
       "debut": "foutu-2",
+      "transition": "glitch",
+      "sortie": "zoom-flou",
       "image": "verdict",
       "camera": [
         {
@@ -586,7 +473,7 @@
           "type": "tape",
           "texte": "PAS FOUTU ✅",
           "a": "foutu:pas",
-          "y": 640,
+          "y": 900,
           "taille": 100,
           "couleur": "#24ef3c",
           "contour": 0,
@@ -599,71 +486,116 @@
       ],
       "sons": [
         {
-          "a": "cta:passer-7",
+          "a": 0,
           "son": "whoosh",
           "volume": 0.44
         }
-      ],
-      "transition": "whip-h",
-      "sortie": "zoom"
+      ]
     },
     {
       "nom": "appel",
       "debut": "cta:passer",
+      "transition": "radial",
       "fond": "topo",
+      "sortie": "radial-fin",
       "elements": [
         {
           "type": "texte",
           "texte": "ANALYSÉ",
-          "a": "cta+6",
+          "a": "cta:prochaine",
           "y": 330,
           "taille": 110,
           "couleur": "#fff200",
           "contour": 7,
           "poids": 800,
           "police": "Montserrat",
-          "fin": "com"
+          "fin": "com:taille"
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "ordi.png",
+          "a": "cta:prochaine",
+          "x": 350,
+          "y": 540,
+          "w": 380,
+          "h": 380,
+          "effet": "pop",
+          "fin": "com:taille",
+          "son": "pop",
+          "volume": 0.6
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "papy.png",
+          "a": "com:âge",
+          "x": 440,
+          "y": 1310,
+          "w": 200,
+          "h": 200,
+          "effet": "pop",
+          "fin": "fin",
+          "son": "pop",
+          "volume": 0.5
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "regle.png",
+          "a": "com:taille",
+          "x": 880,
+          "y": 960,
+          "w": 150,
+          "h": 960,
+          "grandit": {
+            "de": 0.1,
+            "d": 40
+          },
+          "fin": "fin"
         }
       ],
       "sons": [
         {
-          "a": "com-9",
+          "a": 0,
           "son": "whoosh",
           "volume": 0.44
         }
-      ],
-      "topo": {
-        "vitesse": 0.15
-      },
-      "transition": "zoom",
-      "sortie": "whip-h"
+      ]
     },
     {
-      "nom": "fin-com",
-      "debut": "com-2",
+      "nom": "fin",
+      "debut": "com:âge+18",
+      "transition": "radial",
       "fond": "topo",
       "topo": {
-        "vitesse": 0.15
+        "vitesse": 0.15,
+        "sombre": 0.62
       },
       "elements": [
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "icone.png",
+          "a": 0,
+          "x": 478,
+          "y": 950,
+          "w": 124,
+          "h": 124
+        },
         {
           "type": "texte",
           "texte": "grandimi.com",
           "a": 0,
-          "y": 250,
-          "taille": 120,
-          "couleur": "#ff7a3d",
-          "contour": 2,
-          "poids": 800,
-          "police": "Montserrat",
-          "effet": "pop",
-          "son": "ding",
-          "volume": 0.5,
-          "contourCouleur": "#ff7a3d"
+          "y": 1092,
+          "taille": 34,
+          "couleur": "#fff",
+          "contour": 0,
+          "poids": 700,
+          "police": "Montserrat"
         }
       ],
-      "sons": [],
-      "transition": "whip-h"
+      "sons": []
     }
   ],
   "sousTitres": {
@@ -685,9 +617,9 @@
         "couleur": "#ebf91f"
       },
       {
-        "de": "cta",
-        "a": "fin",
-        "y": 838.0,
+        "de": "cta:passer",
+        "a": "com:âge+18",
+        "y": 921.0,
         "taille": 72.0,
         "motsMax": 4,
         "carMax": 17,
@@ -701,7 +633,7 @@
       }
     ]
   },
-  "voix": "Enregistrement ElevenLabs de l'utilisateur (voix ElevenLabs), blancs ramenés à 0,08 s, ×1,1.",
+  "voix": "Enregistrement ElevenLabs de l'utilisateur (voix ElevenLabs), blancs ramenés à 0,08 s, vitesse d'origine.",
   "reference": "references/p12-steve",
   "deriveCamera": false,
   "sonsMouvements": false,
@@ -718,10 +650,6 @@
       "modele": "taller",
       "h": 230,
       "rotation": 0
-    },
-    "retour": {
-      "de": "com-2",
-      "a": "fin"
     }
   }
 }

@@ -39,7 +39,8 @@ export const RoutineGrandimi: React.FC<{
 	habitudes?: string[];
 	/** Carte verrouillée sous la liste (« +7 habitudes clés… ») : montre que le site en contient plus. */
 	verrou?: {titre: string; sous: string; nombre: number};
-}> = ({at, url, flou = 13, chut, onglets, taller, coche, habitudes, verrou}) => {
+	urlDecale?: number;
+}> = ({at, url, flou = 13, chut, onglets, taller, coche, habitudes, verrou, urlDecale = 0}) => {
 	const f = useCurrentFrame();
 	if (f < at) return null;
 	const HABITUDES = habitudes ?? HABITUDES_TALLER;
@@ -49,7 +50,7 @@ export const RoutineGrandimi: React.FC<{
 	const faites = coche ? HABITUDES.filter((_, i) => f >= cocheA(i)).length : 0;
 	const flouEntree = coche ? interpolate(f, [at, at + 6], [14, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 0;
 	const avance = coche ? interpolate(f, [at, coche.a + 20], [1, 1.05], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 1;
-	const haut = url ? 172 : 0;
+	const haut = url ? 172 + urlDecale : 0;
 	const s = chut !== undefined ? interpolate(f, [chut, chut + 6], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 0;
 	const rebond = chut !== undefined && f >= chut ? 1 + 0.18 * Math.max(0, 1 - (f - chut) / 6) * Math.sin(((f - chut) / 6) * Math.PI) : 1;
 	return (
@@ -148,7 +149,7 @@ export const RoutineGrandimi: React.FC<{
 			{chut !== undefined && f >= chut ? (
 				<div style={{position: 'absolute', left: 0, right: 0, top: 640, textAlign: 'center', fontSize: 420, lineHeight: 1, opacity: s, transform: `scale(${rebond})`}}>🤫</div>
 			) : null}
-			{url ? <BarreSafari url={url} /> : null}
+			{url ? <BarreSafari url={url} decale={urlDecale} /> : null}
 		</AbsoluteFill>
 	);
 };
