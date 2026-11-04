@@ -1,0 +1,495 @@
+{
+  "fps": 30,
+  "totalFrames": 1099,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles, partie 4.",
+      "from": 0,
+      "duration": 66,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 17
+        },
+        {
+          "w": "tailles,",
+          "f": 22
+        },
+        {
+          "w": "partie",
+          "f": 46
+        },
+        {
+          "w": "4.",
+          "f": 58
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Matisse.",
+      "from": 67,
+      "duration": 59,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 67
+        },
+        {
+          "w": "on",
+          "f": 82
+        },
+        {
+          "w": "regarde",
+          "f": 86
+        },
+        {
+          "w": "les",
+          "f": 96
+        },
+        {
+          "w": "infos",
+          "f": 98
+        },
+        {
+          "w": "de",
+          "f": 106
+        },
+        {
+          "w": "Matisse.",
+          "f": 110
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 14 ans, Matisse mesure 1m78,",
+      "from": 127,
+      "duration": 83,
+      "words": [
+        {
+          "w": "À",
+          "f": 127
+        },
+        {
+          "w": "14",
+          "f": 132
+        },
+        {
+          "w": "ans,",
+          "f": 142
+        },
+        {
+          "w": "Matisse",
+          "f": 149
+        },
+        {
+          "w": "mesure",
+          "f": 163
+        },
+        {
+          "w": "1m78,",
+          "f": 173
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est grand pour son âge.",
+      "from": 211,
+      "duration": 33,
+      "words": [
+        {
+          "w": "ce",
+          "f": 211
+        },
+        {
+          "w": "qui",
+          "f": 216
+        },
+        {
+          "w": "est",
+          "f": 221
+        },
+        {
+          "w": "grand",
+          "f": 223
+        },
+        {
+          "w": "pour",
+          "f": 230
+        },
+        {
+          "w": "son",
+          "f": 233
+        },
+        {
+          "w": "âge.",
+          "f": 238
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 1m83,",
+      "from": 245,
+      "duration": 118,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 245
+        },
+        {
+          "w": "le",
+          "f": 252
+        },
+        {
+          "w": "site",
+          "f": 254
+        },
+        {
+          "w": "Grandimi,",
+          "f": 262
+        },
+        {
+          "w": "sa",
+          "f": 284
+        },
+        {
+          "w": "taille",
+          "f": 289
+        },
+        {
+          "w": "adulte",
+          "f": 296
+        },
+        {
+          "w": "prédite",
+          "f": 311
+        },
+        {
+          "w": "est",
+          "f": 325
+        },
+        {
+          "w": "de",
+          "f": 328
+        },
+        {
+          "w": "1m83,",
+          "f": 332
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "et avec les bonnes habitudes,",
+      "from": 364,
+      "duration": 35,
+      "words": [
+        {
+          "w": "et",
+          "f": 364
+        },
+        {
+          "w": "avec",
+          "f": 368
+        },
+        {
+          "w": "les",
+          "f": 373
+        },
+        {
+          "w": "bonnes",
+          "f": 378
+        },
+        {
+          "w": "habitudes,",
+          "f": 385
+        }
+      ]
+    },
+    {
+      "id": "atteint",
+      "text": "Matisse pourrait atteindre 1m90.",
+      "from": 400,
+      "duration": 71,
+      "words": [
+        {
+          "w": "Matisse",
+          "f": 400
+        },
+        {
+          "w": "pourrait",
+          "f": 416
+        },
+        {
+          "w": "atteindre",
+          "f": 424
+        },
+        {
+          "w": "1m90.",
+          "f": 436
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "Donc 7 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 472,
+      "duration": 122,
+      "words": [
+        {
+          "w": "Donc",
+          "f": 472
+        },
+        {
+          "w": "7",
+          "f": 479
+        },
+        {
+          "w": "cm",
+          "f": 486
+        },
+        {
+          "w": "de",
+          "f": 503
+        },
+        {
+          "w": "croissance",
+          "f": 505
+        },
+        {
+          "w": "supplémentaire",
+          "f": 520
+        },
+        {
+          "w": "grâce",
+          "f": 539
+        },
+        {
+          "w": "à",
+          "f": 549
+        },
+        {
+          "w": "l'optimisation",
+          "f": 551
+        },
+        {
+          "w": "de",
+          "f": 571
+        },
+        {
+          "w": "sa",
+          "f": 575
+        },
+        {
+          "w": "croissance.",
+          "f": 580
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Matisse est plus grand que 96,5% des personnes de son âge.",
+      "from": 595,
+      "duration": 133,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 595
+        },
+        {
+          "w": "Matisse",
+          "f": 609
+        },
+        {
+          "w": "est",
+          "f": 631
+        },
+        {
+          "w": "plus",
+          "f": 633
+        },
+        {
+          "w": "grand",
+          "f": 638
+        },
+        {
+          "w": "que",
+          "f": 645
+        },
+        {
+          "w": "96,5%",
+          "f": 650
+        },
+        {
+          "w": "des",
+          "f": 698
+        },
+        {
+          "w": "personnes",
+          "f": 703
+        },
+        {
+          "w": "de",
+          "f": 710
+        },
+        {
+          "w": "son",
+          "f": 712
+        },
+        {
+          "w": "âge.",
+          "f": 719
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et il a déjà terminé 75% de sa croissance.",
+      "from": 729,
+      "duration": 89,
+      "words": [
+        {
+          "w": "Et",
+          "f": 729
+        },
+        {
+          "w": "il",
+          "f": 734
+        },
+        {
+          "w": "a",
+          "f": 739
+        },
+        {
+          "w": "déjà",
+          "f": 741
+        },
+        {
+          "w": "terminé",
+          "f": 748
+        },
+        {
+          "w": "75%",
+          "f": 760
+        },
+        {
+          "w": "de",
+          "f": 797
+        },
+        {
+          "w": "sa",
+          "f": 800
+        },
+        {
+          "w": "croissance.",
+          "f": 805
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 819,
+      "duration": 54,
+      "words": [
+        {
+          "w": "Si",
+          "f": 819
+        },
+        {
+          "w": "tu",
+          "f": 824
+        },
+        {
+          "w": "veux",
+          "f": 826
+        },
+        {
+          "w": "connaître",
+          "f": 831
+        },
+        {
+          "w": "ton",
+          "f": 841
+        },
+        {
+          "w": "potentiel",
+          "f": 845
+        },
+        {
+          "w": "de",
+          "f": 857
+        },
+        {
+          "w": "taille,",
+          "f": 862
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écrivez votre âge, votre taille actuelle en commentaire sous cette vidéo.",
+      "from": 874,
+      "duration": 222,
+      "words": [
+        {
+          "w": "écrivez",
+          "f": 874
+        },
+        {
+          "w": "votre",
+          "f": 886
+        },
+        {
+          "w": "âge,",
+          "f": 893
+        },
+        {
+          "w": "votre",
+          "f": 903
+        },
+        {
+          "w": "taille",
+          "f": 910
+        },
+        {
+          "w": "actuelle",
+          "f": 920
+        },
+        {
+          "w": "en",
+          "f": 932
+        },
+        {
+          "w": "commentaire",
+          "f": 937
+        },
+        {
+          "w": "sous",
+          "f": 951
+        },
+        {
+          "w": "cette",
+          "f": 958
+        },
+        {
+          "w": "vidéo.",
+          "f": 965
+        }
+      ]
+    }
+  ]
+}
