@@ -136,5 +136,5 @@ chiffre prononcé → `glitch` → dashboard 2 sur le dernier mot de la phrase �
 (`"sombre": 0.62`), icône Grandimi + « grandimi.com », ~3 s après la voix (voix `apad=pad_dur=4.2`).
 Zooms mesurés : rampe linéaire ; actuelle `+12` images après le chiffre, ×1,85 en 12 ; retour sur le 2ᵉ mot de `norme`
 en 15 ; prédite `+8`, ×1,87 en 13 ; croissance `fini:<pct>+14`, ×1,81 en 11. Avec `urlDecale` 60 : cx/cy
-0,339/0,345 ; 0,662/0,343 ; 0,633/0,605. Barre grandimi.com descendue de 60 px (`urlDecale`), barre de navigation au
+0,339/0,345 ; 0,662/0,343 ; 0,633/0,668 (carte croissance au repos à 0,883 de la hauteur). Barre grandimi.com descendue de 60 px (`urlDecale`), barre de navigation au
 trait fixe en bas (`navTraits`), curseur y 1502.

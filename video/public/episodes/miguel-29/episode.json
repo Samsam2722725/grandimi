@@ -156,6 +156,11 @@
           "a": 3,
           "son": "papier",
           "volume": 0.6
+        },
+        {
+          "a": "stats-9",
+          "son": "whoosh",
+          "volume": 0.44
         }
       ]
     },
@@ -242,24 +247,24 @@
       "elements": [],
       "sons": [
         {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.44
-        },
-        {
           "a": "age:18",
           "son": "pop",
           "volume": 0.6
         },
         {
-          "a": "age:1m77+10",
+          "a": "age:1m77+5",
           "son": "whoosh",
           "volume": 0.56
         },
         {
-          "a": "predit:1m84+6",
+          "a": "predit:1m84+1",
           "son": "whoosh",
           "volume": 0.56
+        },
+        {
+          "a": "atteint-12",
+          "son": "whoosh",
+          "volume": 0.44
         }
       ]
     },
@@ -284,13 +289,13 @@
           "verrou": {
             "titre": "+7 habitudes clés",
             "sous": "les plus importantes pour ta taille",
-            "nombre": 5
+            "nombre": 7
           }
         }
       ],
       "sons": [
         {
-          "a": 0,
+          "a": "atteint:1m89-7",
           "son": "whoosh",
           "volume": 0.44
         }
@@ -339,7 +344,7 @@
       ],
       "sons": [
         {
-          "a": 0,
+          "a": "optim:supplémentaires-7",
           "son": "whoosh",
           "volume": 0.44
         }
@@ -383,7 +388,7 @@
           {
             "a": "fini:80+14",
             "cx": 0.633,
-            "cy": 0.605,
+            "cy": 0.668,
             "z": 1.81,
             "d": 11,
             "courbe": "lineaire"
@@ -429,19 +434,19 @@
       ],
       "sons": [
         {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.44
-        },
-        {
           "a": "optim:supplémentaires+8",
           "son": "pop",
           "volume": 0.6
         },
         {
-          "a": "fini:80+12",
+          "a": "fini:80+7",
           "son": "whoosh",
           "volume": 0.56
+        },
+        {
+          "a": "foutu-9",
+          "son": "whoosh",
+          "volume": 0.44
         }
       ]
     },
@@ -472,7 +477,7 @@
         {
           "type": "tape",
           "texte": "PAS FOUTU ✅",
-          "a": "foutu:pas",
+          "a": "foutu",
           "y": 900,
           "taille": 100,
           "couleur": "#24ef3c",
@@ -486,7 +491,7 @@
       ],
       "sons": [
         {
-          "a": 0,
+          "a": "cta:dans-7",
           "son": "whoosh",
           "volume": 0.44
         }
@@ -494,7 +499,7 @@
     },
     {
       "nom": "appel",
-      "debut": "cta:passer",
+      "debut": "cta:dans",
       "transition": "radial",
       "fond": "topo",
       "sortie": "radial-fin",
@@ -555,13 +560,7 @@
           "fin": "fin"
         }
       ],
-      "sons": [
-        {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.44
-        }
-      ]
+      "sons": []
     },
     {
       "nom": "fin",
@@ -617,7 +616,7 @@
         "couleur": "#ebf91f"
       },
       {
-        "de": "cta:passer",
+        "de": "cta:dans",
         "a": "com:âge+18",
         "y": 921.0,
         "taille": 72.0,
