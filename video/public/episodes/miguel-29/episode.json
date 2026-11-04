@@ -46,12 +46,12 @@
     {
       "id": "pct",
       "pause": 0,
-      "text": "En ce moment, Miguel est plus grand que 60 % des 17 ans."
+      "text": "En ce moment, Miguel est plus grand que 60 % des 18 ans,"
     },
     {
       "id": "fini",
       "pause": 0,
-      "text": "Et il a fini 80 % de sa croissance."
+      "text": "et il a fini 80 % de sa croissance."
     },
     {
       "id": "foutu",
@@ -66,7 +66,7 @@
     {
       "id": "com",
       "pause": 0,
-      "text": "commente ta taille et taille dans cette vidéo."
+      "text": "commente ta taille et ton âge."
     }
   ],
   "musique": {
@@ -538,7 +538,7 @@
             "y": 520
           },
           "ressort": true,
-          "fin": "fini:et",
+          "fin": "fini:il",
           "sortie": {
             "y": 700,
             "d": 6
