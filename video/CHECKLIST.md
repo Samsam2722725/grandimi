@@ -18,7 +18,9 @@ En cas de conflit entre deux demandes, la plus récente gagne ; les points « À
 
 ## 2. Son
 - [ ] Blancs ramenés à **0,05 s** (`blancs.py … 0.05`), puis `atempo=1.08` (max 1,12).
-- [ ] **Pas de musique** ; bruitages **×2** (whoosh, pop, tick, ding audibles).
+- [ ] **Pas de musique** ; bruitages **discrets comme l'original** (04/11 : volumes 0,2-0,3 de cory-19, plus de ×2).
+- [ ] Sons de l'original recréés : `bug` (bips numériques) 2 images avant le glitch vers le dashboard 2, `verdict`
+      (grésillement + notes qui montent) 5 images avant le verdict, volume 0,6.
 - [ ] Bruit de **frappe** (`sfx/frappe.wav`) sur chaque lettre de « PARTIE N ».
 - [ ] Whoosh calé : pic sur la coupe / au début du zoom.
 - [ ] Mix : rendu `"musique":false` puis `mix_son.py … --musique-db -100 --voix-aigus -3` → −12,6 LUFS, crête −0,3 dB.

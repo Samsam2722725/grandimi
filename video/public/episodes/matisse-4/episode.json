@@ -108,7 +108,7 @@
         {
           "a": 0,
           "son": "whoosh",
-          "volume": 0.4
+          "volume": 0.2
         }
       ]
     },
@@ -137,7 +137,7 @@
           "curseur": false,
           "parLettre": 2,
           "son": "frappe",
-          "volume": 0.6,
+          "volume": 0.3,
           "sansPop": true
         }
       ],
@@ -145,17 +145,17 @@
         {
           "a": 0,
           "son": "whoosh",
-          "volume": 0.4
+          "volume": 0.2
         },
         {
           "a": 3,
           "son": "papier",
-          "volume": 0.6
+          "volume": 0.3
         },
         {
           "a": "stats-9",
           "son": "whoosh",
-          "volume": 0.44
+          "volume": 0.22
         }
       ]
     },
@@ -244,22 +244,22 @@
         {
           "a": "age:14",
           "son": "pop",
-          "volume": 0.6
+          "volume": 0.3
         },
         {
           "a": "age:1m78+5",
           "son": "whoosh",
-          "volume": 0.56
+          "volume": 0.28
         },
         {
           "a": "predit:1m83+1",
           "son": "whoosh",
-          "volume": 0.56
+          "volume": 0.28
         },
         {
           "a": "atteint-12",
           "son": "whoosh",
-          "volume": 0.44
+          "volume": 0.22
         }
       ]
     },
@@ -292,7 +292,7 @@
         {
           "a": "atteint:1m90-7",
           "son": "whoosh",
-          "volume": 0.44
+          "volume": 0.22
         }
       ]
     },
@@ -334,14 +334,14 @@
           "fond": "#8100fe",
           "parLettre": 2,
           "son": "tick",
-          "volume": 0.5
+          "volume": 0.25
         }
       ],
       "sons": [
         {
-          "a": "optim:grâce-7",
-          "son": "whoosh",
-          "volume": 0.44
+          "a": "optim:grâce-2",
+          "son": "bug",
+          "volume": 0.6
         }
       ]
     },
@@ -431,17 +431,17 @@
         {
           "a": "optim:grâce+8",
           "son": "pop",
-          "volume": 0.6
+          "volume": 0.3
         },
         {
           "a": "fini:75+7",
           "son": "whoosh",
-          "volume": 0.56
+          "volume": 0.28
         },
         {
-          "a": "fini:croissance-7",
-          "son": "whoosh",
-          "volume": 0.44
+          "a": "fini:croissance-5",
+          "son": "verdict",
+          "volume": 0.6
         }
       ]
     },
@@ -481,14 +481,14 @@
           "poids": 800,
           "parLettre": 1,
           "son": "tick",
-          "volume": 0.4
+          "volume": 0.2
         }
       ],
       "sons": [
         {
           "a": "cta:potentiel-7",
           "son": "whoosh",
-          "volume": 0.44
+          "volume": 0.22
         }
       ]
     },
@@ -522,7 +522,7 @@
           "effet": "pop",
           "fin": "com:âge",
           "son": "pop",
-          "volume": 0.6
+          "volume": 0.3
         },
         {
           "type": "image",
@@ -535,7 +535,7 @@
           "h": 200,
           "effet": "pop",
           "son": "pop",
-          "volume": 0.5,
+          "volume": 0.25,
           "fin": "com:taille"
         },
         {

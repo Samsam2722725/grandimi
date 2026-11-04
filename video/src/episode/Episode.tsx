@@ -798,13 +798,16 @@ const FamillePlan: React.FC<{fam: Famille; aOpt: number; aGain: number}> = ({fam
 };
 
 /* ───────── Plan ───────── */
-const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeData; id: string; resolve: (a: Ancre, s?: number) => number}> = ({
+/** sons : 'seuls' = uniquement les bruitages (rendus hors de la séquence du plan pour qu'un son lancé juste avant la
+ *  coupe ne soit pas tronqué, bug corrigé le 04/11) ; 'sans' = le plan sans ses bruitages. */
+const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeData; id: string; resolve: (a: Ancre, s?: number) => number; sons?: 'seuls' | 'sans'}> = ({
 	plan,
 	start,
 	end,
 	ep,
 	id,
 	resolve,
+	sons: modeSons,
 }) => {
 	const loc = (a: Ancre) => resolve(a, start) - start;
 	const vite = ep.rythme === 'sec' ? 2 : 1;
@@ -838,6 +841,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			return [{at: loc(el.a), son: el.son, volume: el.volume ?? 0.5}];
 		}),
 	];
+	if (modeSons === 'seuls') return <>{sons.map((x, k) => <Sfx key={k} at={x.at} name={x.son as never} volume={x.volume} />)}</>;
 
 	const inImage = (plan.elements ?? []).map((el, i) => {
 		if (el.type === 'image' && !el.ecran)
@@ -1028,9 +1032,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			{plan.sortie === 'blanc' ? <FonduBlanc from={dur - 4} to={dur - 1} /> : null}
 			{plan.sortie === 'jaune' ? <SortieJaune dur={dur} /> : null}
 			{plan.sortie === 'glitch' ? <SortieGlitch dur={dur} /> : null}
-			{sons.map((s, i) => (
-				<Sfx key={i} at={s.at} name={s.son as never} volume={s.volume} />
-			))}
+			{modeSons === 'sans' ? null : sons.map((s, i) => <Sfx key={i} at={s.at} name={s.son as never} volume={s.volume} />)}
 		</AbsoluteFill>
 	);
 	let out = content;
@@ -1430,11 +1432,19 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 									tapA={typeof p.telephone === 'object' && p.telephone.tap ? resolve(p.telephone.tap.a) - starts[i] : undefined}
 									doigt={staticFile(`episodes/${episode}/images/curseur.png`)}
 								>
-									<PlanView plan={p} start={starts[i]} end={to} ep={data} id={episode} resolve={resolve} />
+									<PlanView plan={p} start={starts[i]} end={to} ep={data} id={episode} resolve={resolve} sons="sans" />
 								</Telephone>
 							) : (
-								<PlanView plan={p} start={starts[i]} end={to} ep={data} id={episode} resolve={resolve} />
+								<PlanView plan={p} start={starts[i]} end={to} ep={data} id={episode} resolve={resolve} sons="sans" />
 							)}
+						</Sequence>
+					);
+				})}
+				{data.plans.map((p, i) => {
+					const to = i + 1 < starts.length ? starts[i + 1] : END;
+					return (
+						<Sequence key={`sons-${p.nom}`} from={starts[i]} durationInFrames={Math.max(1, Math.min(END, to + 45) - starts[i])} layout="none">
+							<PlanView plan={p} start={starts[i]} end={to} ep={data} id={episode} resolve={resolve} sons="seuls" />
 						</Sequence>
 					);
 				})}
