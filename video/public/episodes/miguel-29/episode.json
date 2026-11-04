@@ -502,7 +502,6 @@
       "debut": "cta:dans",
       "transition": "radial",
       "fond": "topo",
-      "sortie": "radial-fin",
       "elements": [
         {
           "type": "texte",
@@ -535,63 +534,33 @@
           "ecran": true,
           "fichier": "papy.png",
           "a": "com:âge",
-          "x": 440,
+          "x": 300,
           "y": 1310,
           "w": 200,
           "h": 200,
           "effet": "pop",
-          "fin": "fin",
           "son": "pop",
-          "volume": 0.5
+          "volume": 0.5,
+          "fin": "com:âge+18"
         },
         {
           "type": "image",
           "ecran": true,
           "fichier": "regle.png",
           "a": "com:taille",
-          "x": 880,
+          "x": 508,
           "y": 960,
           "w": 150,
           "h": 960,
           "grandit": {
             "de": 0.1,
             "d": 40
-          },
-          "fin": "fin"
-        }
-      ],
-      "sons": []
-    },
-    {
-      "nom": "fin",
-      "debut": "com:âge+18",
-      "transition": "radial",
-      "fond": "topo",
-      "topo": {
-        "vitesse": 0.15,
-        "sombre": 0.62
-      },
-      "elements": [
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "icone.png",
-          "a": 0,
-          "x": 478,
-          "y": 950,
-          "w": 124,
-          "h": 124
+          }
         },
         {
-          "type": "texte",
-          "texte": "grandimi.com",
-          "a": 0,
-          "y": 1092,
-          "taille": 34,
-          "couleur": "#fff",
-          "contour": 0,
-          "poids": 700,
-          "police": "Montserrat"
+          "type": "finLien",
+          "texte": "GRANDIMI.COM",
+          "a": "com:âge+18"
         }
       ],
       "sons": []

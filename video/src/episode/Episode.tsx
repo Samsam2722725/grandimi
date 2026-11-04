@@ -330,6 +330,59 @@ const Trait: React.FC<{el: Extract<Element, {type: 'trait'}>; at: number; fin?: 
 	);
 };
 
+/** Fin « suis-nous » mesurée sur Taller partie 30 (31,9-36 s) : voile noir 0 → 0,72 en 4 images, icône blanche
+ *  (≈ 15 % de la largeur, centre y 914) qui passe aux couleurs de la marque puis revient au blanc, texte en capitales
+ *  condensées dessous (centre y 1107). */
+const FinLien: React.FC<{texte: string; at: number}> = ({texte, at}) => {
+	const f = useCurrentFrame();
+	if (f < at) return null;
+	const k = f - at;
+	const voile = interpolate(k, [0, 4], [0, 0.72], {extrapolateRight: 'clamp'});
+	const couleur = interpolate(k, [10, 22, 80, 96], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	const entree = interpolate(k, [0, 5], [0, 1], {extrapolateRight: 'clamp'});
+	const S = 158;
+	const icone = (stroke: string) => (
+		<svg width={S} height={S} viewBox="0 0 100 100" style={{position: 'absolute', left: 0, top: 0}} fill="none" stroke={stroke} strokeWidth={8} strokeLinecap="round" strokeLinejoin="round">
+			<defs>
+				<linearGradient id="fin-grad" x1="0" y1="1" x2="1" y2="0">
+					<stop offset="0" stopColor="#ffb21e" />
+					<stop offset="0.5" stopColor="#ff5a1f" />
+					<stop offset="1" stopColor="#e8336f" />
+				</linearGradient>
+			</defs>
+			<rect x={8} y={8} width={84} height={84} rx={24} />
+			<circle cx={50} cy={50} r={20} />
+			<path d="M30 50 H70 M50 30 C40 40 40 60 50 70 M50 30 C60 40 60 60 50 70" strokeWidth={5} />
+		</svg>
+	);
+	return (
+		<>
+			<AbsoluteFill style={{background: '#000', opacity: voile}} />
+			<div style={{position: 'absolute', left: 540 - S / 2, top: 914 - S / 2, width: S, height: S, opacity: entree}}>
+				{icone('#fff')}
+				<div style={{position: 'absolute', inset: 0, opacity: couleur}}>{icone('url(#fin-grad)')}</div>
+			</div>
+			<div
+				style={{
+					position: 'absolute',
+					left: 0,
+					right: 0,
+					top: 1107 - 26,
+					textAlign: 'center',
+					fontFamily: "'Barlow Condensed', sans-serif",
+					fontWeight: 800,
+					fontSize: 46,
+					letterSpacing: 1,
+					color: '#fff',
+					opacity: entree,
+				}}
+			>
+				{texte}
+			</div>
+		</>
+	);
+};
+
 const ImageEl: React.FC<{el: Extract<Element, {type: 'image'}>; at: number; fin?: number; src: string; src2?: string}> = ({
 	el,
 	at,
@@ -794,6 +847,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 		return null;
 	});
 	const onScreen = (plan.elements ?? []).map((el, i) => {
+		if (el.type === 'finLien') return <FinLien key={i} texte={el.texte} at={loc(el.a)} />;
 		if (el.type === 'image' && el.ecran)
 			return <ImageEl key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} src={file(el.fichier)} />;
 		/* Trait sur un plan sans image (dashboard animé) : coordonnées de l'écran 1080 × 1920. */

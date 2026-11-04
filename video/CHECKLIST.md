@@ -44,7 +44,9 @@ En cas de conflit entre deux demandes, la plus récente gagne ; les points « À
       (sur « des … ans » jusqu'au pourcentage de croissance), **zoom croissance accomplie** ; pas de flash, pas de pop.
 - [ ] Verdict sur la phrase « pas foutu » : « PAS FOUTU ✅ » vert au centre (y 900), lisible ≥ 1 s.
 - [ ] Appel : fond topo, ANALYSÉ, 👵 sur « âge », règle sur « taille », sous-titres de fin (y +83 px).
-- [ ] Fin ~3 s après la voix : topo assombri, icône Grandimi + « grandimi.com ».
+- [ ] Fin ~3 s après la voix, **dans le même plan que l'appel** (pas de coupe) : la scène s'assombrit (élément `finLien`),
+      icône blanche qui passe aux couleurs puis revient au blanc, « GRANDIMI.COM » lisible dessous ; la règle reste,
+      centrée (x 508) et atténuée ; 👵 disparaît à la fin (comme l'original).
 
 ## 5. Zooms (mesurés sur l'original)
 - [ ] Vitesse **constante** (`"courbe": "lineaire"`), départ **après** le chiffre prononcé :

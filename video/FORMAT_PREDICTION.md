@@ -132,8 +132,9 @@ Structure et transitions de cory-19 (identiques à l'original) : papier « PARTI
 verrouillées) dès le prénom de la phrase « pourrait atteindre » → `radial` → silhouette violette + chiffre tapé sur le
 chiffre prononcé → `glitch` → dashboard 2 sur le dernier mot de la phrase « +N cm » (flèche rouge, curseur de « des » à
 « fini:<pct>+10 », pas de pop ni de flash) → `glitch` → verdict sur la phrase « pas foutu » (texte au centre, y 900)
-→ `radial` → appel (ANALYSÉ + ordi, 👵 sur « âge », règle sur « taille », sous-titres y +83) → fin : topo assombri
-(`"sombre": 0.62`), icône Grandimi + « grandimi.com », ~3 s après la voix (voix `apad=pad_dur=4.2`).
+→ `radial` → appel (ANALYSÉ + ordi, 👵 sur « âge » x 300, règle centrée x 508 sur « taille », sous-titres y +83), qui
+continue jusqu'au bout : élément `finLien` (« GRANDIMI.COM ») à `com:<dernier mot>+18` — voile noir, icône qui passe aux
+couleurs, règle atténuée derrière (voix `apad=pad_dur=4.2`).
 Zooms mesurés : rampe linéaire ; actuelle `+12` images après le chiffre, ×1,85 en 12 ; retour sur le 2ᵉ mot de `norme`
 en 15 ; prédite `+8`, ×1,87 en 13 ; croissance `fini:<pct>+14`, ×1,81 en 11. Avec `urlDecale` 60 : cx/cy
 0,339/0,345 ; 0,662/0,343 ; 0,633/0,668 (carte croissance au repos à 0,883 de la hauteur). Barre grandimi.com descendue de 60 px (`urlDecale`), barre de navigation au

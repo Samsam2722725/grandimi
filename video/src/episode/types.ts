@@ -18,6 +18,8 @@ export type Camera = {a?: Ancre; zone?: string; x?: number; y?: number; z?: numb
 
 type Base = {a: Ancre; son?: string; volume?: number};
 export type Element =
+	/** Fin comme Taller partie 30 : la scène s'assombrit, icône du site qui passe du blanc aux couleurs et revient, texte dessous. */
+	| (Base & {type: 'finLien'; texte: string})
 	| (Base & {type: 'image'; fichier: string; x: number; y: number; w: number; h: number; fin?: Ancre; effet?: 'pop' | 'pop-balance' | 'revele-bas' | 'change'; rebond?: boolean; ecran?: boolean;
 		/** Entrée glissée : part de (x, y) pixels de décalage et rejoint sa place en d frames, en fondu. */
 		depuis?: {x?: number; y?: number; d?: number};
