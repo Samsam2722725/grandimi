@@ -46,7 +46,7 @@ En cas de conflit entre deux demandes, la plus récente gagne ; les points « À
 - [ ] Appel : fond topo, ANALYSÉ, 👵 sur « âge », règle sur « taille », sous-titres de fin (y +83 px).
 - [ ] Fin ~3 s après la voix, **dans le même plan que l'appel** (pas de coupe) : la scène s'assombrit (élément `finLien`),
       icône blanche qui passe aux couleurs puis revient au blanc, « GRANDIMI.COM » lisible dessous ; la règle reste,
-      centrée (x 508) et atténuée ; 👵 disparaît à la fin (comme l'original).
+      centrée (x 508, y 1345, h 575 : sous le texte) et atténuée ; 👵 disparaît à la fin (comme l'original).
 
 ## 5. Zooms (mesurés sur l'original)
 - [ ] Vitesse **constante** (`"courbe": "lineaire"`), départ **après** le chiffre prononcé :

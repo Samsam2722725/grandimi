@@ -549,9 +549,9 @@
           "fichier": "regle.png",
           "a": "com:taille",
           "x": 508,
-          "y": 960,
+          "y": 1345,
           "w": 150,
-          "h": 960,
+          "h": 575,
           "grandit": {
             "de": 0.1,
             "d": 40
