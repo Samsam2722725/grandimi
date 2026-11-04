@@ -1,5 +1,8 @@
 # Format « Je prédis vos tailles, partie N » (copie de Taller, partie 39)
 
+> **Avant de livrer : cocher `video/CHECKLIST.md` en entier.**
+
+
 Recette pour refaire une partie dans ce format **sans rien remesurer** : tout le montage est déjà réglé dans
 `public/episodes/cory-19/episode.json` (dernière version validée, 29/10 ; `sam-39` = même format avec la
 silhouette violette au lieu de l'extraterrestre). On copie cet épisode et on change seulement : la voix, le texte,

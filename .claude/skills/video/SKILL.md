@@ -9,6 +9,8 @@ Tout le savoir est dans `video/` : lis d'abord `video/CLAUDE.md`, `video/PROCESS
 et `video/README.md`. Réponds en français, directement, sans flatterie. Ne modifie jamais le texte de
 l'utilisateur : signale un problème une seule fois, puis applique son choix.
 
+**Pour chaque vidéo du format prédiction : suivre et cocher `video/CHECKLIST.md` (toutes les demandes de l'utilisateur) avant de livrer.**
+
 ## Démarrage (outils absents d'une nouvelle session)
 
 Dans un venv du dossier temporaire (scratchpad) :
