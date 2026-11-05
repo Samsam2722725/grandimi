@@ -194,7 +194,7 @@
             "courbe": "lineaire"
           },
           {
-            "a": "norme:est",
+            "a": "norme:moyenne",
             "cx": 0.5,
             "cy": 0.5,
             "z": 1,
@@ -360,7 +360,7 @@
         },
         "cams": [
           {
-            "a": "fini:97,1+14",
+            "a": "fini+41",
             "cx": 0.639,
             "cy": 0.599,
             "z": 1.81,
@@ -401,7 +401,7 @@
             "y": 520
           },
           "ressort": true,
-          "fin": "fini:97,1+10",
+          "fin": "fini+37",
           "sortie": {
             "y": 700,
             "d": 6
