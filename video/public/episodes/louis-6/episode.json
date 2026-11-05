@@ -435,7 +435,7 @@
       ],
       "sons": [
         {
-          "a": "cta-7",
+          "a": "cta:potentiel-7",
           "son": "whoosh",
           "volume": 0.04
         }
@@ -443,7 +443,7 @@
     },
     {
       "nom": "appel",
-      "debut": "cta",
+      "debut": "cta:potentiel",
       "transition": "radial",
       "fond": "topo",
       "elements": [
@@ -521,7 +521,7 @@
         "couleur": "#ebf91f"
       },
       {
-        "de": "cta",
+        "de": "cta:potentiel",
         "a": "fin",
         "y": 921,
         "taille": 76,
