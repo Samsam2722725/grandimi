@@ -1,0 +1,511 @@
+{
+  "fps": 30,
+  "totalFrames": 1049,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis jusqu'à quelle taille tu vas grandir, partie 31.",
+      "from": 0,
+      "duration": 88,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "jusqu'à",
+          "f": 17
+        },
+        {
+          "w": "quelle",
+          "f": 26
+        },
+        {
+          "w": "taille",
+          "f": 31
+        },
+        {
+          "w": "tu",
+          "f": 41
+        },
+        {
+          "w": "vas",
+          "f": 43
+        },
+        {
+          "w": "grandir,",
+          "f": 48
+        },
+        {
+          "w": "partie",
+          "f": 62
+        },
+        {
+          "w": "31.",
+          "f": 72
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, c'est au tour d'Adrien.",
+      "from": 89,
+      "duration": 47,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 89
+        },
+        {
+          "w": "c'est",
+          "f": 101
+        },
+        {
+          "w": "au",
+          "f": 108
+        },
+        {
+          "w": "tour",
+          "f": 110
+        },
+        {
+          "w": "d'Adrien.",
+          "f": 118
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "Il a 14 ans et mesure 1m73.",
+      "from": 137,
+      "duration": 73,
+      "words": [
+        {
+          "w": "Il",
+          "f": 137
+        },
+        {
+          "w": "a",
+          "f": 142
+        },
+        {
+          "w": "14",
+          "f": 146
+        },
+        {
+          "w": "ans",
+          "f": 156
+        },
+        {
+          "w": "et",
+          "f": 161
+        },
+        {
+          "w": "mesure",
+          "f": 166
+        },
+        {
+          "w": "1m73.",
+          "f": 175
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "Il est grand pour son âge.",
+      "from": 211,
+      "duration": 25,
+      "words": [
+        {
+          "w": "Il",
+          "f": 211
+        },
+        {
+          "w": "est",
+          "f": 215
+        },
+        {
+          "w": "grand",
+          "f": 218
+        },
+        {
+          "w": "pour",
+          "f": 225
+        },
+        {
+          "w": "son",
+          "f": 227
+        },
+        {
+          "w": "âge.",
+          "f": 230
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Grandimi prédit qu'Adrien mesurera 1m82.",
+      "from": 237,
+      "duration": 88,
+      "words": [
+        {
+          "w": "Grandimi",
+          "f": 237
+        },
+        {
+          "w": "prédit",
+          "f": 256
+        },
+        {
+          "w": "qu'Adrien",
+          "f": 266
+        },
+        {
+          "w": "mesurera",
+          "f": 283
+        },
+        {
+          "w": "1m82.",
+          "f": 297
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Mais il pourrait gagner jusqu'à 5 cm supplémentaires grâce à un programme personnalisé créé spécialement pour lui sur le site grandimi.com.",
+      "from": 326,
+      "duration": 214,
+      "words": [
+        {
+          "w": "Mais",
+          "f": 326
+        },
+        {
+          "w": "il",
+          "f": 331
+        },
+        {
+          "w": "pourrait",
+          "f": 335
+        },
+        {
+          "w": "gagner",
+          "f": 343
+        },
+        {
+          "w": "jusqu'à",
+          "f": 352
+        },
+        {
+          "w": "5",
+          "f": 362
+        },
+        {
+          "w": "cm",
+          "f": 369
+        },
+        {
+          "w": "supplémentaires",
+          "f": 386
+        },
+        {
+          "w": "grâce",
+          "f": 405
+        },
+        {
+          "w": "à",
+          "f": 412
+        },
+        {
+          "w": "un",
+          "f": 417
+        },
+        {
+          "w": "programme",
+          "f": 419
+        },
+        {
+          "w": "personnalisé",
+          "f": 440
+        },
+        {
+          "w": "créé",
+          "f": 459
+        },
+        {
+          "w": "spécialement",
+          "f": 471
+        },
+        {
+          "w": "pour",
+          "f": 483
+        },
+        {
+          "w": "lui",
+          "f": 485
+        },
+        {
+          "w": "sur",
+          "f": 493
+        },
+        {
+          "w": "le",
+          "f": 495
+        },
+        {
+          "w": "site",
+          "f": 497
+        },
+        {
+          "w": "grandimi.com.",
+          "f": 505
+        }
+      ]
+    },
+    {
+      "id": "atteint",
+      "text": "Adrien pourrait ainsi atteindre 1m87.",
+      "from": 541,
+      "duration": 69,
+      "words": [
+        {
+          "w": "Adrien",
+          "f": 541
+        },
+        {
+          "w": "pourrait",
+          "f": 553
+        },
+        {
+          "w": "ainsi",
+          "f": 560
+        },
+        {
+          "w": "atteindre",
+          "f": 567
+        },
+        {
+          "w": "1m87.",
+          "f": 579
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Adrien est déjà plus grand que 9 garçons sur 10 de son âge.",
+      "from": 610,
+      "duration": 89,
+      "words": [
+        {
+          "w": "Adrien",
+          "f": 610
+        },
+        {
+          "w": "est",
+          "f": 625
+        },
+        {
+          "w": "déjà",
+          "f": 629
+        },
+        {
+          "w": "plus",
+          "f": 634
+        },
+        {
+          "w": "grand",
+          "f": 639
+        },
+        {
+          "w": "que",
+          "f": 646
+        },
+        {
+          "w": "9",
+          "f": 651
+        },
+        {
+          "w": "garçons",
+          "f": 658
+        },
+        {
+          "w": "sur",
+          "f": 670
+        },
+        {
+          "w": "10",
+          "f": 675
+        },
+        {
+          "w": "de",
+          "f": 685
+        },
+        {
+          "w": "son",
+          "f": 687
+        },
+        {
+          "w": "âge.",
+          "f": 692
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et il a déjà accompli 80% de sa croissance.",
+      "from": 700,
+      "duration": 76,
+      "words": [
+        {
+          "w": "Et",
+          "f": 700
+        },
+        {
+          "w": "il",
+          "f": 703
+        },
+        {
+          "w": "a",
+          "f": 707
+        },
+        {
+          "w": "déjà",
+          "f": 712
+        },
+        {
+          "w": "accompli",
+          "f": 717
+        },
+        {
+          "w": "80%",
+          "f": 731
+        },
+        {
+          "w": "de",
+          "f": 753
+        },
+        {
+          "w": "sa",
+          "f": 755
+        },
+        {
+          "w": "croissance.",
+          "f": 760
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "Alors non, t'es pas foutu!",
+      "from": 777,
+      "duration": 45,
+      "words": [
+        {
+          "w": "Alors",
+          "f": 777
+        },
+        {
+          "w": "non,",
+          "f": 784
+        },
+        {
+          "w": "t'es",
+          "f": 794
+        },
+        {
+          "w": "pas",
+          "f": 801
+        },
+        {
+          "w": "foutu!",
+          "f": 806
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux être dans la prochaine vidéo,",
+      "from": 823,
+      "duration": 45,
+      "words": [
+        {
+          "w": "Si",
+          "f": 823
+        },
+        {
+          "w": "tu",
+          "f": 827
+        },
+        {
+          "w": "veux",
+          "f": 832
+        },
+        {
+          "w": "être",
+          "f": 837
+        },
+        {
+          "w": "dans",
+          "f": 842
+        },
+        {
+          "w": "la",
+          "f": 844
+        },
+        {
+          "w": "prochaine",
+          "f": 849
+        },
+        {
+          "w": "vidéo,",
+          "f": 856
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écris ton âge et ta taille en commentaire.",
+      "from": 868,
+      "duration": 178,
+      "words": [
+        {
+          "w": "écris",
+          "f": 868
+        },
+        {
+          "w": "ton",
+          "f": 878
+        },
+        {
+          "w": "âge",
+          "f": 883
+        },
+        {
+          "w": "et",
+          "f": 889
+        },
+        {
+          "w": "ta",
+          "f": 895
+        },
+        {
+          "w": "taille",
+          "f": 899
+        },
+        {
+          "w": "en",
+          "f": 909
+        },
+        {
+          "w": "commentaire.",
+          "f": 911
+        }
+      ]
+    }
+  ]
+}
