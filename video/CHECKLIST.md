@@ -108,7 +108,7 @@ En cas de conflit entre deux demandes, la plus récente gagne ; les points « À
       ⚠ À trancher : noah-30 (même jour) a une routine statique `taller30` et un zoom d'accroche ×1,08.
 - [ ] Accroche : zoom avant lent sur la personne (adrien-31 : ×1 → ×1,4 centré sur le visage, visage au-dessus de la carte).
 - [ ] **Bruitages (05/11, remplace les réglages précédents)** : seulement ceux de l'original — frappe sur « PARTIE »
-      (0,25), whoosh sur les changements de plan (0,08 ; 0,04 vers l'appel), `bug` au glitch (0,05), `verdict` (0,04).
+      (0,25), whoosh sur les changements de plan (0,08 ; 0,04 vers l'appel), **aucun** son `bug` ni `verdict` (« gros bips » absents de l'original, retirés le 05/11).
       Aucun pop, tick, papier, ni whoosh sur les zooms ou l'accroche.
 - [ ] **Zoom de l'accroche** (mesuré le 05/11 en masquant carte et sous-titres) : continu, centré, +6 % par seconde
       (×1 → ×1,11 en 1,8 s). Toujours mesurer un zoom en masquant les textes fixes.

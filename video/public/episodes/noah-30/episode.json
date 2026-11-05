@@ -315,13 +315,7 @@
           "parLettre": 2
         }
       ],
-      "sons": [
-        {
-          "a": "optim:grâce-2",
-          "son": "bug",
-          "volume": 0.05
-        }
-      ],
+      "sons": [],
       "sortie": "onde"
     },
     {
@@ -408,13 +402,7 @@
           }
         }
       ],
-      "sons": [
-        {
-          "a": "foutu-7",
-          "son": "verdict",
-          "volume": 0.04
-        }
-      ]
+      "sons": []
     },
     {
       "nom": "verdict",
