@@ -112,3 +112,6 @@ En cas de conflit entre deux demandes, la plus récente gagne ; les points « À
       Aucun pop, tick, papier, ni whoosh sur les zooms ou l'accroche.
 - [ ] **Zoom de l'accroche** (mesuré le 05/11 en masquant carte et sous-titres) : continu, centré, +6 % par seconde
       (×1 → ×1,11 en 1,8 s). Toujours mesurer un zoom en masquant les textes fixes.
+- [ ] **Ne jamais flouter** de visage ni de photo sans que l'utilisateur le demande (05/11).
+- [ ] **grandimi.com plus bas** (05/11 soir, visible une fois posté) : `urlDecale` 80 et page décalée `pageY` 140,
+      curseur y 1432 ; zooms inchangés (même cadrage que l'original sous la barre).

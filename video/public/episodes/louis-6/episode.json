@@ -233,9 +233,9 @@
           ]
         },
         "url": "grandimi.com",
-        "urlDecale": -75,
+        "urlDecale": 80,
         "navTraits": true,
-        "pageY": 0
+        "pageY": 140
       },
       "elements": [],
       "sons": [
@@ -256,7 +256,7 @@
           "a": 0,
           "taller30": true,
           "url": "grandimi.com",
-          "urlDecale": -75,
+          "urlDecale": 80,
           "total": 9,
           "habitudes": [
             "Routine physique Grandimi 🏋️",
@@ -375,9 +375,9 @@
           }
         ],
         "url": "grandimi.com",
-        "urlDecale": -75,
+        "urlDecale": 80,
         "navTraits": true,
-        "pageY": 0
+        "pageY": 140
       },
       "effets": [],
       "elements": [
@@ -387,7 +387,7 @@
           "fichier": "curseur.png",
           "a": "pct:des",
           "x": 404,
-          "y": 1292,
+          "y": 1432,
           "w": 192,
           "h": 204,
           "depuis": {
