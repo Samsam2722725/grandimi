@@ -1,0 +1,535 @@
+{
+  "fps": 30,
+  "totalFrames": 1049,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Prédiction du potentiel de taille à partir des commentaires, partie 30.",
+      "from": 0,
+      "duration": 93,
+      "words": [
+        {
+          "w": "Prédiction",
+          "f": 0
+        },
+        {
+          "w": "du",
+          "f": 14
+        },
+        {
+          "w": "potentiel",
+          "f": 19
+        },
+        {
+          "w": "de",
+          "f": 29
+        },
+        {
+          "w": "taille",
+          "f": 34
+        },
+        {
+          "w": "à",
+          "f": 43
+        },
+        {
+          "w": "partir",
+          "f": 46
+        },
+        {
+          "w": "des",
+          "f": 50
+        },
+        {
+          "w": "commentaires,",
+          "f": 53
+        },
+        {
+          "w": "partie",
+          "f": 74
+        },
+        {
+          "w": "30.",
+          "f": 84
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, nous examinons les stats de Noah,",
+      "from": 94,
+      "duration": 54,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 94
+        },
+        {
+          "w": "nous",
+          "f": 106
+        },
+        {
+          "w": "examinons",
+          "f": 110
+        },
+        {
+          "w": "les",
+          "f": 122
+        },
+        {
+          "w": "stats",
+          "f": 125
+        },
+        {
+          "w": "de",
+          "f": 132
+        },
+        {
+          "w": "Noah,",
+          "f": 134
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "à 16 ans et mesurant actuellement 1m75.",
+      "from": 149,
+      "duration": 67,
+      "words": [
+        {
+          "w": "à",
+          "f": 149
+        },
+        {
+          "w": "16",
+          "f": 154
+        },
+        {
+          "w": "ans",
+          "f": 158
+        },
+        {
+          "w": "et",
+          "f": 163
+        },
+        {
+          "w": "mesurant",
+          "f": 168
+        },
+        {
+          "w": "actuellement",
+          "f": 180
+        },
+        {
+          "w": "1m75.",
+          "f": 190
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "Noah est au-dessus de la moyenne.",
+      "from": 217,
+      "duration": 37,
+      "words": [
+        {
+          "w": "Noah",
+          "f": 217
+        },
+        {
+          "w": "est",
+          "f": 229
+        },
+        {
+          "w": "au-dessus",
+          "f": 234
+        },
+        {
+          "w": "de",
+          "f": 241
+        },
+        {
+          "w": "la",
+          "f": 244
+        },
+        {
+          "w": "moyenne.",
+          "f": 246
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon grandimi.com, sa taille adulte prédite est de 1m81.",
+      "from": 256,
+      "duration": 100,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 256
+        },
+        {
+          "w": "grandimi.com,",
+          "f": 263
+        },
+        {
+          "w": "sa",
+          "f": 292
+        },
+        {
+          "w": "taille",
+          "f": 294
+        },
+        {
+          "w": "adulte",
+          "f": 301
+        },
+        {
+          "w": "prédite",
+          "f": 313
+        },
+        {
+          "w": "est",
+          "f": 325
+        },
+        {
+          "w": "de",
+          "f": 328
+        },
+        {
+          "w": "1m81.",
+          "f": 330
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec la bonne routine,",
+      "from": 356,
+      "duration": 28,
+      "words": [
+        {
+          "w": "Et",
+          "f": 356
+        },
+        {
+          "w": "avec",
+          "f": 361
+        },
+        {
+          "w": "la",
+          "f": 366
+        },
+        {
+          "w": "bonne",
+          "f": 368
+        },
+        {
+          "w": "routine,",
+          "f": 373
+        }
+      ]
+    },
+    {
+      "id": "atteint",
+      "text": "Noah pourrait atteindre 1m85.",
+      "from": 385,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Noah",
+          "f": 385
+        },
+        {
+          "w": "pourrait",
+          "f": 397
+        },
+        {
+          "w": "atteindre",
+          "f": 404
+        },
+        {
+          "w": "1m85.",
+          "f": 414
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "Soit 4 centimètres supplémentaires grâce à l'optimisation de sa croissance.",
+      "from": 443,
+      "duration": 100,
+      "words": [
+        {
+          "w": "Soit",
+          "f": 443
+        },
+        {
+          "w": "4",
+          "f": 450
+        },
+        {
+          "w": "centimètres",
+          "f": 457
+        },
+        {
+          "w": "supplémentaires",
+          "f": 472
+        },
+        {
+          "w": "grâce",
+          "f": 494
+        },
+        {
+          "w": "à",
+          "f": 501
+        },
+        {
+          "w": "l'optimisation",
+          "f": 503
+        },
+        {
+          "w": "de",
+          "f": 523
+        },
+        {
+          "w": "sa",
+          "f": 525
+        },
+        {
+          "w": "croissance.",
+          "f": 530
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Noah est plus grand que 77,2% des personnes de son âge,",
+      "from": 544,
+      "duration": 112,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 544
+        },
+        {
+          "w": "Noah",
+          "f": 556
+        },
+        {
+          "w": "est",
+          "f": 571
+        },
+        {
+          "w": "plus",
+          "f": 575
+        },
+        {
+          "w": "grand",
+          "f": 578
+        },
+        {
+          "w": "que",
+          "f": 585
+        },
+        {
+          "w": "77,2%",
+          "f": 590
+        },
+        {
+          "w": "des",
+          "f": 631
+        },
+        {
+          "w": "personnes",
+          "f": 635
+        },
+        {
+          "w": "de",
+          "f": 643
+        },
+        {
+          "w": "son",
+          "f": 645
+        },
+        {
+          "w": "âge,",
+          "f": 650
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a déjà terminé 97,1% de sa croissance.",
+      "from": 657,
+      "duration": 86,
+      "words": [
+        {
+          "w": "et",
+          "f": 657
+        },
+        {
+          "w": "il",
+          "f": 657
+        },
+        {
+          "w": "a",
+          "f": 662
+        },
+        {
+          "w": "déjà",
+          "f": 662
+        },
+        {
+          "w": "terminé",
+          "f": 715
+        },
+        {
+          "w": "97,1%",
+          "f": 715
+        },
+        {
+          "w": "de",
+          "f": 730
+        },
+        {
+          "w": "sa",
+          "f": 732
+        },
+        {
+          "w": "croissance.",
+          "f": 734
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "Tu es cuit, en quelque sorte.",
+      "from": 744,
+      "duration": 33,
+      "words": [
+        {
+          "w": "Tu",
+          "f": 744
+        },
+        {
+          "w": "es",
+          "f": 751
+        },
+        {
+          "w": "cuit,",
+          "f": 754
+        },
+        {
+          "w": "en",
+          "f": 763
+        },
+        {
+          "w": "quelque",
+          "f": 766
+        },
+        {
+          "w": "sorte.",
+          "f": 773
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si quelqu'un d'autre veut que son potentiel de taille soit analysé,",
+      "from": 778,
+      "duration": 73,
+      "words": [
+        {
+          "w": "Si",
+          "f": 778
+        },
+        {
+          "w": "quelqu'un",
+          "f": 782
+        },
+        {
+          "w": "d'autre",
+          "f": 790
+        },
+        {
+          "w": "veut",
+          "f": 797
+        },
+        {
+          "w": "que",
+          "f": 802
+        },
+        {
+          "w": "son",
+          "f": 806
+        },
+        {
+          "w": "potentiel",
+          "f": 809
+        },
+        {
+          "w": "de",
+          "f": 821
+        },
+        {
+          "w": "taille",
+          "f": 823
+        },
+        {
+          "w": "soit",
+          "f": 830
+        },
+        {
+          "w": "analysé,",
+          "f": 835
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "commentez votre âge, votre taille actuelle sous cette vidéo.",
+      "from": 852,
+      "duration": 194,
+      "words": [
+        {
+          "w": "commentez",
+          "f": 852
+        },
+        {
+          "w": "votre",
+          "f": 864
+        },
+        {
+          "w": "âge,",
+          "f": 869
+        },
+        {
+          "w": "votre",
+          "f": 878
+        },
+        {
+          "w": "taille",
+          "f": 886
+        },
+        {
+          "w": "actuelle",
+          "f": 893
+        },
+        {
+          "w": "sous",
+          "f": 902
+        },
+        {
+          "w": "cette",
+          "f": 907
+        },
+        {
+          "w": "vidéo.",
+          "f": 912
+        }
+      ]
+    }
+  ]
+}
