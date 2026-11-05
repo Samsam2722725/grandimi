@@ -96,9 +96,37 @@ func arreterAvecReprises(membershipID string) error {
 // pas un echec. En cas de doute (lecture impossible), on repond non : mieux
 // vaut une alerte de trop qu un client preleve deux fois.
 func dejaArreteChezWhop(membershipID string) bool {
+	switch statutChezWhop(membershipID) {
+	case "canceled", "expired", "completed":
+		return true
+	}
+	return false
+}
+
+/* offresConfirmeesParWhop : les offres actives d apres Whop, pas d apres la
+   base. Le 05/11/2026, 10 lignes « active » sur 29 etaient arretees chez
+   Whop (tests de septembre) : sans ce controle, ces comptes se voyaient
+   refuser un achat. « completed » reste compte : c est le statut Whop d un
+   achat A vie, qui n est pas termine pour autant. Lecture impossible : la
+   ligne compte aussi, on refuse plutot que de faire payer deux fois. */
+func offresConfirmeesParWhop(actifs []db.AbonnementActif) []string {
+	offres := make([]string, 0, len(actifs))
+	for _, a := range actifs {
+		switch statutChezWhop(a.WhopID) {
+		case "canceled", "expired":
+			continue
+		}
+		offres = append(offres, a.PlanType)
+	}
+	return offres
+}
+
+// statutChezWhop lit le statut d un abonnement chez Whop ; "" si la lecture
+// echoue.
+func statutChezWhop(membershipID string) string {
 	apiKey := os.Getenv("WHOP_API_KEY")
 	if apiKey == "" {
-		return false
+		return ""
 	}
 	requete, err := http.NewRequest(
 		http.MethodGet,
@@ -106,29 +134,25 @@ func dejaArreteChezWhop(membershipID string) bool {
 		nil,
 	)
 	if err != nil {
-		return false
+		return ""
 	}
 	requete.Header.Set("Authorization", "Bearer "+apiKey)
 
 	reponse, err := clientWhop.Do(requete)
 	if err != nil {
-		return false
+		return ""
 	}
 	defer reponse.Body.Close()
 	if reponse.StatusCode != http.StatusOK {
-		return false
+		return ""
 	}
 	var abonnement struct {
 		Status string `json:"status"`
 	}
 	if err := json.NewDecoder(reponse.Body).Decode(&abonnement); err != nil {
-		return false
+		return ""
 	}
-	switch abonnement.Status {
-	case "canceled", "expired", "completed":
-		return true
-	}
-	return false
+	return abonnement.Status
 }
 
 func alerterArretImpossible(userID, nouvelAbonnement, aArreter string, cause error) {

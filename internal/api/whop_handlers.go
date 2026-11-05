@@ -302,7 +302,7 @@ func GetCheckout(c *gin.Context) {
 		for _, a := range actifs {
 			offres = append(offres, a.PlanType)
 		}
-		if !billing.PeutAcheter(cleOffre, offres) {
+		if !billing.PeutAcheter(cleOffre, offres) && !billing.PeutAcheter(cleOffre, offresConfirmeesParWhop(actifs)) {
 			c.JSON(http.StatusConflict, gin.H{
 				"error": "Tu as déjà cette offre ou une offre supérieure. Connecte-toi pour ouvrir ton plan.",
 			})
