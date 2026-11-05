@@ -30,7 +30,7 @@ import {HookCommentaires} from './HookCommentaires';
 import {BarreSafari, DashboardGrandimi} from './Dashboard';
 import {HookTaille} from './HookTaille';
 import {EntreeGlitch, EntreeJauneGlisse, FlashOrangeJaune, SortieGlitch, SortieJaune, SortieRadial, SortieZoomFlou} from './TransitionsSteve';
-import {EntreeWhip, EntreeZoom, SortieWhip, SortieZoom} from './TransitionsTendance';
+import {EntreeGlitchBlocs, EntreeWhip, EntreeZoom, SortieOnde, SortieWhip, SortieZoom} from './TransitionsTendance';
 import {TopoAnime} from './TopoAnime';
 import {Cam, Shot} from './Shot';
 import {FONT} from '../theme';
@@ -1059,6 +1059,9 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					perso={plan.hookTaille.perso ? staticFile(plan.hookTaille.perso) : undefined}
 				/>
 			) : null}
+			{img && plan.fondFlou ? (
+				<Img src={staticFile(`episodes/${id}/images/${img.fichier}`)} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(30px) brightness(0.8)', transform: 'scale(1.1)'}} />
+			) : null}
 			{img ? (
 				<Shot
 					src={`episodes/${id}/images/${img.fichier}`}
@@ -1100,6 +1103,8 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 	if (plan.sortie === 'radial-fin') out = <SortieRadial dur={dur}>{out}</SortieRadial>;
 	if (plan.sortie === 'zoom') out = <SortieZoom dur={dur}>{out}</SortieZoom>;
 	if (plan.sortie === 'whip-h') out = <SortieWhip id={plan.nom} dur={dur}>{out}</SortieWhip>;
+	if (plan.sortie === 'onde') out = <SortieOnde id={plan.nom} dur={dur}>{out}</SortieOnde>;
+	if (plan.transition === 'glitch-blocs') return <EntreeGlitchBlocs id={plan.nom}>{out}</EntreeGlitchBlocs>;
 	if (plan.transition === 'zoom') return <EntreeZoom>{out}</EntreeZoom>;
 	if (plan.transition === 'whip-h') return <EntreeWhip id={plan.nom}>{out}</EntreeWhip>;
 	if (plan.transition === 'jaune-glisse') return <EntreeJauneGlisse>{out}</EntreeJauneGlisse>;

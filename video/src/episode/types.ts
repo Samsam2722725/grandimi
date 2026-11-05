@@ -81,11 +81,13 @@ export type Plan = {
 	telephone?: boolean | {onglets?: string[]; actif?: string; coupeHaut?: number; basCache?: number; tap?: {onglet: string; a: Ancre}};
 	/** Entrée du plan. glisse / rebond / secousse : mouvements mesurés sur la référence 7436214342510513439 ;
 	    bascule : entrée inclinée qui se redresse (référence 7444371749753408810). */
-	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule' | 'etire' | 'radial' | 'lumiere-rouge' | 'jaune-glisse' | 'glitch' | 'zoom' | 'whip-h';
+	/** Fond flou de la même image derrière (cadrage plus large que l'écran, ex. accroche recalée sur l'original). */
+	fondFlou?: boolean;
+	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule' | 'etire' | 'radial' | 'lumiere-rouge' | 'jaune-glisse' | 'glitch' | 'zoom' | 'whip-h' | 'glitch-blocs';
 	/** Sortie du plan : lumiere = lumière jaune qui envahit l'image sur les dernières frames ;
 	    blanc = fondu au blanc sur les 4 dernières frames (la fin s'enchaîne avec l'accroche dessinée quand la vidéo reboucle). */
 	/** jaune / glitch / zoom-flou / radial-fin : sorties mesurées sur la référence « Steve » (src/episode/TransitionsSteve.tsx). */
-	sortie?: 'lumiere' | 'lumiere-forte' | 'blanc' | 'noir' | 'jaune' | 'glitch' | 'zoom-flou' | 'radial-fin' | 'zoom' | 'whip-h';
+	sortie?: 'lumiere' | 'lumiere-forte' | 'blanc' | 'noir' | 'jaune' | 'glitch' | 'zoom-flou' | 'radial-fin' | 'zoom' | 'whip-h' | 'onde';
 	/** Effets ponctuels sur tout le plan (secousse gauche-droite). */
 	effets?: {type: 'secousse' | 'flash'; a: Ancre; couleur?: string}[];
 	famille?: Famille;
@@ -112,7 +114,7 @@ export type Plan = {
 		donnees: import('./Dashboard').DashData;
 		cams: {a: Ancre; cx: number; cy: number; z: number; d: number; courbe: 'avant' | 'arriere' | 'lineaire' | 'doux'}[];
 		pops: {ligne: import('./Dashboard').Ligne; a: Ancre; d: number; fin: Ancre; dFin: number; echelle: number}[];
-		fleches: {sens: 'bas' | 'haut'; x: number; pointe: number; a: Ancre; d: number; fin: Ancre; dFin: number}[];
+		fleches: {sens: 'bas' | 'haut'; x: number; pointe: number; a: Ancre; d: number; fin: Ancre; dFin: number; pop?: boolean}[];
 		ballon?: {fichier: string; a: Ancre; fin: Ancre; chute?: boolean; boite?: number[]};
 		/** Décalage vertical de la page (px) ; 0 = page à la place exacte de Taller partie 30 (barre d'adresse par-dessus). */
 		pageY?: number;
@@ -162,7 +164,7 @@ export type Episode = {
 	/** ligne : ligne de commentaire TikTok pleine largeur (référence rayan.taller). */
 	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre; haut?: boolean; x?: number; y?: number; ligne?: boolean; w?: number;
 		/** Carte « Réponse au commentaire » penchée des vidéos Taller : hauteur et rotation (degrés). */
-		reponse?: {h: number; rotation: number; modele?: 'parsa' | 'taller'; avatar?: string};
+		reponse?: {h: number; rotation: number; modele?: 'parsa' | 'taller' | 'taller30'; avatar?: string};
 		/** Deuxième passage de la même carte (appel à commenter de la fin). */
 		retour?: {de: Ancre; a: Ancre};
 		/** Photo de profil (fichier de images/) pour la variante haut. */

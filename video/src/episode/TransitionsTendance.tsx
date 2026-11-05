@@ -69,3 +69,76 @@ export const SortieWhip: React.FC<{id: string; dur: number; children: React.Reac
 		</AbsoluteFill>
 	);
 };
+
+/*
+ * Glitch de Taller partie 30 (17,77-18,2 s, relevé image par image le 05/11) :
+ *   sortie « onde »  : les 3 dernières images du plan se déforment en vagues (déplacement par bruit).
+ *   entrée « blocs » : 2 images de bandes du nouvel écran décalées en tous sens avec traînées verticales, 1 image de
+ *                      l'écran décalé vers le haut, puis arrivée zoomée (×1,39 → ×1) avec flou vertical qui s'efface (8 images).
+ */
+export const SortieOnde: React.FC<{id: string; dur: number; children: React.ReactNode}> = ({id, dur, children}) => {
+	const f = useCurrentFrame();
+	const t = interpolate(f, [dur - 4, dur - 1], [0, 1], clamp);
+	if (t <= 0) return <AbsoluteFill>{children}</AbsoluteFill>;
+	return (
+		<AbsoluteFill>
+			<svg width={0} height={0} style={{position: 'absolute'}}>
+				<filter id={`onde-${id}`} x="-10%" y="-10%" width="120%" height="120%">
+					<feTurbulence type="fractalNoise" baseFrequency="0.004 0.02" numOctaves={2} seed={f} result="b" />
+					<feDisplacementMap in="SourceGraphic" in2="b" scale={70 * t} xChannelSelector="R" yChannelSelector="G" />
+				</filter>
+			</svg>
+			<AbsoluteFill style={{filter: `url(#onde-${id})`}}>{children}</AbsoluteFill>
+		</AbsoluteFill>
+	);
+};
+
+const BANDES = [
+	[0, 0.14, -180, -40],
+	[0.14, 0.31, 120, 260],
+	[0.31, 0.46, -60, -330],
+	[0.46, 0.63, 220, 90],
+	[0.63, 0.8, -140, -220],
+	[0.8, 1, 60, 300],
+];
+
+export const EntreeGlitchBlocs: React.FC<{id: string; couleur?: string; children: React.ReactNode}> = ({id, couleur = '#ff5a1f', children}) => {
+	const f = useCurrentFrame();
+	const flouV = (px: number) => (
+		<svg width={0} height={0} style={{position: 'absolute'}}>
+			<filter id={`bv-${id}-${f}`} x="0" y="-20%" width="100%" height="140%">
+				<feGaussianBlur stdDeviation={`0 ${px}`} />
+			</filter>
+		</svg>
+	);
+	if (f < 2) {
+		return (
+			<AbsoluteFill style={{background: '#000', overflow: 'hidden'}}>
+				{flouV(22)}
+				{BANDES.map(([a, b, dx, dy], i) => (
+					<AbsoluteFill key={i} style={{clipPath: `inset(${a * 100}% 0 ${(1 - b) * 100}% 0)`}}>
+						<AbsoluteFill style={{transform: `translate(${f ? -dx : dx}px, ${f ? dy * 0.6 : dy}px)`, filter: `url(#bv-${id}-${f})`}}>{children}</AbsoluteFill>
+						{i % 2 === f ? <AbsoluteFill style={{background: couleur, opacity: 0.55, mixBlendMode: 'screen'}} /> : null}
+					</AbsoluteFill>
+				))}
+			</AbsoluteFill>
+		);
+	}
+	if (f < 3) {
+		return (
+			<AbsoluteFill style={{background: '#000'}}>
+				{flouV(14)}
+				<AbsoluteFill style={{transform: 'translateY(-55%) scale(1.15)', filter: `url(#bv-${id}-${f})`}}>{children}</AbsoluteFill>
+			</AbsoluteFill>
+		);
+	}
+	const k = f - 3;
+	const z = interpolate(k, [0, 8], [1.39, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+	const flou = interpolate(k, [0, 6], [12, 0], clamp);
+	return (
+		<AbsoluteFill>
+			{flou > 0.4 ? flouV(flou) : null}
+			<AbsoluteFill style={{transform: `scale(${z})`, filter: flou > 0.4 ? `url(#bv-${id}-${f})` : undefined}}>{children}</AbsoluteFill>
+		</AbsoluteFill>
+	);
+};

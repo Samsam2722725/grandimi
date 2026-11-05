@@ -48,7 +48,9 @@ export type Ligne = keyof typeof LIGNES;
 /** lineaire : rampe à vitesse constante, comme les zooms de Taller (mesurés le 03/11 sur references/zooms-1). */
 export type DashCam = {f: number; cx: number; cy: number; z: number; d: number; courbe: 'avant' | 'arriere' | 'lineaire' | 'doux'};
 export type DashPop = {ligne: Ligne; a: number; d: number; fin: number; dFin: number; echelle: number};
-export type DashFleche = {sens: 'bas' | 'haut'; x: number; pointe: number; a: number; d: number; fin: number; dFin: number};
+/** pop : flèche de Taller partie 30 (mesurée le 05/11) : apparaît sur place en grossissant (6 images, léger dépassement),
+ *  reste immobile, disparaît d'un coup à `fin`. Rouge #e80b10, 180 px, pointe ouverte de 96 px. */
+export type DashFleche = {sens: 'bas' | 'haut'; x: number; pointe: number; a: number; d: number; fin: number; dFin: number; pop?: boolean};
 
 /** Avancement 0 → 1 avec une vitesse qui passe de 1 à r (r < 1 : ralentit ; r > 1 : accélère), arrêt net. */
 const profil = (t: number, r: number) => (t + ((r - 1) * t * t) / 2) / (1 + (r - 1) / 2);
@@ -183,6 +185,21 @@ const IconeRonde: React.FC<{x: number; children: React.ReactNode}> = ({x, childr
 );
 
 const Fleche: React.FC<{fl: DashFleche; f: number}> = ({fl, f}) => {
+	if (fl.pop) {
+		if (f < fl.a || f >= fl.fin) return null;
+		const k = interpolate(f - fl.a, [0, 6, 9], [0.15, 1.08, 1], {extrapolateRight: 'clamp', easing: Easing.out(Easing.quad)});
+		const px = fl.x * W;
+		const tip = fl.pointe * H;
+		const cy = tip - 90;
+		return (
+			<svg width={W} height={H} style={{position: 'absolute', inset: 0, overflow: 'visible'}}>
+				<g transform={`translate(${px} ${cy}) scale(${k}) translate(${-px} ${-cy})`} fill="#e80b10" stroke="#e80b10" strokeLinecap="round" strokeLinejoin="round">
+					<polygon points={`${px - 4},${tip - 180} ${px + 4},${tip - 180} ${px + 6.5},${tip - 8} ${px - 6.5},${tip - 8}`} strokeWidth={2} />
+					<polyline points={`${px - 47},${tip - 52} ${px},${tip} ${px + 47},${tip - 52}`} fill="none" strokeWidth={13} />
+				</g>
+			</svg>
+		);
+	}
 	if (f < fl.a || f > fl.fin + fl.dFin) return null;
 	const L = 200;
 	const bas = fl.sens === 'bas';

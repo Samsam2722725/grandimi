@@ -91,3 +91,7 @@ En cas de conflit entre deux demandes, la plus récente gagne ; les points « À
       la vidéo s'arrête 0,6 s après la voix (`apad=pad_dur=0.6`), pas de `finLien`.
 - [ ] Dashboard à la place exacte de Taller (`pageY` 0), barre grandimi.com par-dessus (`urlDecale` −75, fond transparent).
 - [ ] Carte commentaire et sous-titres à la position de l'original (sous-titres y 921, taille 76) ; photo de profil non floutée.
+- [ ] Accroche **recalée sur l'original** (même cadrage, z 0,909 → 0,918, fond flou derrière, `libre`).
+- [ ] Carte commentaire `reponse.modele: "taller30"` (texte noir gras 48 px, en-tête gris 42 px, avatar 156 px).
+- [ ] Flèche `pop: true` (apparaît sur place en 6 images, immobile, disparaît d'un coup), x 0,501, pointe 0,2755.
+- [ ] Glitch vers le dashboard 2 : `sortie: "onde"` sur la silhouette + `transition: "glitch-blocs"`.

@@ -93,16 +93,16 @@
       "image": "accroche",
       "camera": [
         {
-          "x": 584,
-          "y": 1056,
-          "z": 1.0,
+          "x": 615,
+          "y": 1046,
+          "z": 0.909,
           "duree": 1
         },
         {
           "a": 1,
-          "x": 584,
-          "y": 1056,
-          "z": 1.08,
+          "x": 615,
+          "y": 1046,
+          "z": 0.918,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -115,7 +115,10 @@
           "son": "whoosh",
           "volume": 0.2
         }
-      ]
+      ],
+      "libre": true,
+      "fondFlou": true,
+      "fondCouleur": "transparent"
     },
     {
       "nom": "partie",
@@ -351,12 +354,13 @@
           "son": "bug",
           "volume": 0.6
         }
-      ]
+      ],
+      "sortie": "onde"
     },
     {
       "nom": "ecran2",
       "debut": "optim:grâce",
-      "transition": "glitch",
+      "transition": "glitch-blocs",
       "sortie": "glitch",
       "dashboard": {
         "donnees": {
@@ -401,12 +405,13 @@
         "fleches": [
           {
             "sens": "bas",
-            "x": 0.5,
-            "pointe": 0.2,
-            "a": "optim:grâce+8",
-            "d": 12,
-            "fin": "pct",
-            "dFin": 12
+            "x": 0.501,
+            "pointe": 0.2755,
+            "a": "optim:grâce+13",
+            "d": 6,
+            "fin": "pct:noah+7",
+            "dFin": 0,
+            "pop": true
           }
         ],
         "url": "grandimi.com",
@@ -438,7 +443,7 @@
       ],
       "sons": [
         {
-          "a": "optim:grâce+8",
+          "a": "optim:grâce+13",
           "son": "pop",
           "volume": 0.3
         },
@@ -601,14 +606,14 @@
     "texte": "16 ans, 1m75, c'est quoi ma taille max ?",
     "de": 0,
     "a": "age:16",
-    "x": 31,
-    "y": 1157,
-    "w": 1008,
     "reponse": {
-      "modele": "taller",
-      "h": 230,
+      "modele": "taller30",
+      "h": 235,
       "rotation": 0
     },
-    "image": "carte.png"
+    "photo": "avatar.png",
+    "x": 60,
+    "y": 1205,
+    "w": 950
   }
 }

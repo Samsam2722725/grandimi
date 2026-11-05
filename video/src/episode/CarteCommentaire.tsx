@@ -16,7 +16,7 @@ export const CarteCommentaire: React.FC<{
 	y?: number;
 	ligne?: boolean;
 	w?: number;
-	reponse?: {h: number; rotation: number; modele?: 'parsa' | 'taller'; avatar?: string};
+	reponse?: {h: number; rotation: number; modele?: 'parsa' | 'taller' | 'taller30'; avatar?: string};
 	/** Photo de profil ronde (variante haut). */
 	photo?: string;
 	/** Carte fournie par l'utilisateur en image (détourée) : affichée telle quelle à x, y, largeur w. */
@@ -25,6 +25,25 @@ export const CarteCommentaire: React.FC<{
 	const f = useCurrentFrame();
 	if (f < de || f >= a) return null;
 	if (image) return <Img src={image} style={{position: 'absolute', left: x ?? 88, top: y ?? 1045, width: w ?? 905}} />;
+	if (reponse?.modele === 'taller30') {
+		// Carte de Taller partie 30 mesurée en 1080 × 1920 (05/11) : x 60-1010, haut 1205, rayon 40, avatar rond centre
+		// (178, 1340) rayon 78, en-tête gris 42 px semi-gras (haut des capitales 1262), commentaire noir 48 px gras (1328).
+		const L = x ?? 60;
+		const T = y ?? 1205;
+		const Wc = w ?? 950;
+		return (
+			<div style={{position: 'absolute', left: L, top: T, width: Wc, fontFamily: FONT}}>
+				<div style={{position: 'relative', background: '#fff', borderRadius: 40, minHeight: 235, padding: '45px 40px 48px 238px', boxSizing: 'border-box'}}>
+					{photo ? (
+						<Img src={photo} style={{position: 'absolute', left: 40, top: 135 - 78, width: 156, height: 156, borderRadius: 78, objectFit: 'cover'}} />
+					) : null}
+					<div style={{fontSize: 42, fontWeight: 600, color: '#a2a2a2', lineHeight: 1.2, whiteSpace: 'nowrap'}}>Réponse au commentaire de {nom}</div>
+					<div style={{fontSize: 48, fontWeight: 800, color: '#141414', lineHeight: 1.18, marginTop: 14, letterSpacing: -0.3}}>{texte}</div>
+				</div>
+				<div style={{position: 'absolute', left: 0, bottom: -36, width: 0, height: 0, borderLeft: '6px solid #fff', borderRight: '46px solid transparent', borderTop: '40px solid #fff'}} />
+			</div>
+		);
+	}
 	if (reponse?.modele === 'taller') {
 		// Carte de la référence p22-ref, mesurée à 1,0 s : x 88-993, y 1045-1275, rayon 34, queue en bas à gauche,
 		// avatar rond (centre 137, 128 ; rayon 72), en-tête gris et commentaire en gras sur une ligne chacun.
