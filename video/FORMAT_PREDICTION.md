@@ -134,7 +134,8 @@ chiffre prononcé → `glitch` → dashboard 2 sur le dernier mot de la phrase �
 « fini:<pct>+10 », pas de pop ni de flash) → `glitch` → verdict sur la phrase « pas foutu » (texte au centre, y 900)
 → `radial` → appel (ANALYSÉ + ordi, 👵 sur « âge » x 300, règle centrée x 508 sur « taille », sous-titres y +83), qui
 continue jusqu'au bout : élément `finLien` (« GRANDIMI.COM ») à `com:<dernier mot>+18` — voile noir, icône qui passe aux
-couleurs, règle atténuée derrière (voix `apad=pad_dur=4.2`).
+couleurs, règle atténuée derrière (voix `apad=pad_dur=4.2`). **Supprimé le 05/11 : plus de `finLien`, la vidéo
+finit 0,6 s après « … en commentaire » (voir CHECKLIST.md, retours du 05/11).**
 Zooms mesurés : rampe linéaire ; actuelle `+12` images après le chiffre, ×1,85 en 12 ; retour sur le 2ᵉ mot de `norme`
 en 15 ; prédite `+8`, ×1,87 en 13 ; croissance `fini:<pct>+14`, ×1,81 en 11. Avec `urlDecale` 60 : cx/cy
 0,339/0,345 ; 0,662/0,343 ; 0,633/0,668 (carte croissance au repos à 0,883 de la hauteur). Barre grandimi.com descendue de 60 px (`urlDecale`), barre de navigation au

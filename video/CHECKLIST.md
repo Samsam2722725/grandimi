@@ -46,7 +46,7 @@ En cas de conflit entre deux demandes, la plus récente gagne ; les points « À
       (sur « des … ans » jusqu'au pourcentage de croissance), **zoom croissance accomplie** ; pas de flash, pas de pop.
 - [ ] Verdict sur la phrase « pas foutu » : « PAS FOUTU ✅ » vert au centre (y 900), lisible ≥ 1 s.
 - [ ] Appel : fond topo, ANALYSÉ, 👵 sur « âge », règle sur « taille », sous-titres de fin (y +83 px).
-- [ ] Fin ~3 s après la voix, **dans le même plan que l'appel** (pas de coupe) : la scène s'assombrit (élément `finLien`),
+- [ ] ~~Fin ~3 s après la voix~~ **remplacé le 05/11 : pas de fin animée, voir « Retours du 05/11 »**. (Ancien : **dans le même plan que l'appel** (pas de coupe) : la scène s'assombrit (élément `finLien`),
       icône blanche qui passe aux couleurs puis revient au blanc, « GRANDIMI.COM » lisible dessous ; la règle reste,
       centrée (x 508, y 1345, h 575 : sous le texte) et atténuée ; 👵 disparaît à la fin (comme l'original).
 
@@ -70,7 +70,7 @@ En cas de conflit entre deux demandes, la plus récente gagne ; les points « À
 - [ ] `statique.py` : aucun passage figé > 2 s qui n'existe pas dans l'original.
 - [ ] Aucun à-coup isolé (saut de luminosité, image noire) absent de l'original.
 - [ ] Toutes les ancres trouvées (`voix_fichier.py` sans « mot introuvable »), aucun plan < 1 s.
-- [ ] Durée totale ≈ celle de la voix + 3 s de fin.
+- [ ] Durée totale ≈ celle de la voix + 0,6 s (pas de fin « GRANDIMI.COM » + logo, confirmé le 05/11).
 
 ## 8. Livraison
 - [ ] Livrer **la vidéo seule** (+ planche de comparaison si demandée).
@@ -95,3 +95,15 @@ En cas de conflit entre deux demandes, la plus récente gagne ; les points « À
 - [ ] Carte commentaire `reponse.modele: "taller30"` (texte noir gras 48 px, en-tête gris 42 px, avatar 156 px).
 - [ ] Flèche `pop: true` (apparaît sur place en 6 images, immobile, disparaît d'un coup), x 0,501, pointe 0,2755.
 - [ ] Glitch vers le dashboard 2 : `sortie: "onde"` sur la silhouette + `transition: "glitch-blocs"`.
+
+## Retours du 05/11 (adrien-31)
+- [ ] Vidéo **finie juste après « … en commentaire »** : pas de `finLien` (« GRANDIMI.COM » + logo façon Instagram pendant 3 s),
+      pas d'élément `finLien` dans `appel`, fin des sous-titres au dernier mot (`apad=pad_dur=0.6`).
+- [ ] **Pas de sons « bug » ni « verdict »** (jugés forts et bizarres) ; bruitages **graves** : `"sfxDossier": "sfx-grave"`.
+- [ ] **Ballon de l'âge plus gros** : `"boite": [0.03, 0.25, 0.94, 0.44]`.
+- [ ] **Flèche rouge au moment où la voix dit « +N cm »** (dans le plan où la phrase est dite, dézoom doux avant) ;
+      main-curseur sur le rang quand il est prononcé.
+- [ ] **Montage fluide** : zooms du dashboard `"courbe": "doux"`, `d` 18, départ +4 images après le chiffre ;
+      routine avec coches + `"avanceZ": 1.1` (pas d'écran figé > 2,5 s).
+      ⚠ À trancher : noah-30 (même jour) a une routine statique `taller30` et un zoom d'accroche ×1,08.
+- [ ] Accroche : zoom avant lent sur la personne (adrien-31 : ×1 → ×1,4 centré sur le visage, visage au-dessus de la carte).
