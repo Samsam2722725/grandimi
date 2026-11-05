@@ -194,28 +194,36 @@
         },
         "cams": [
           {
-            "a": "age:1m73+12",
+            "a": "age:1m73+4",
             "cx": 0.339,
             "cy": 0.345,
             "z": 1.85,
-            "d": 12,
-            "courbe": "lineaire"
+            "d": 18,
+            "courbe": "doux"
           },
           {
             "a": "norme:est",
             "cx": 0.5,
             "cy": 0.5,
             "z": 1,
-            "d": 15,
-            "courbe": "lineaire"
+            "d": 18,
+            "courbe": "doux"
           },
           {
-            "a": "predit:1m82+8",
+            "a": "predit:1m82+4",
             "cx": 0.662,
             "cy": 0.343,
             "z": 1.87,
-            "d": 13,
-            "courbe": "lineaire"
+            "d": 18,
+            "courbe": "doux"
+          },
+          {
+            "a": "habitudes:mais",
+            "cx": 0.5,
+            "cy": 0.5,
+            "z": 1,
+            "d": 16,
+            "courbe": "doux"
           }
         ],
         "pops": [
@@ -228,12 +236,28 @@
             "echelle": 1.1
           }
         ],
-        "fleches": [],
+        "fleches": [
+          {
+            "sens": "bas",
+            "x": 0.5,
+            "pointe": 0.2,
+            "a": "habitudes:5",
+            "d": 12,
+            "fin": "habitudes:programme-6",
+            "dFin": 12
+          }
+        ],
         "ballon": {
           "fichier": "ballon_14.png",
           "a": "age:14",
           "fin": "age:14+30",
-          "chute": true
+          "chute": true,
+          "boite": [
+            0.03,
+            0.25,
+            0.94,
+            0.44
+          ]
         },
         "url": "grandimi.com",
         "urlDecale": 60,
@@ -247,12 +271,12 @@
           "volume": 0.3
         },
         {
-          "a": "age:1m73+5",
+          "a": "age:1m73+1",
           "son": "whoosh",
           "volume": 0.28
         },
         {
-          "a": "predit:1m82+1",
+          "a": "predit:1m82",
           "son": "whoosh",
           "volume": 0.28
         },
@@ -260,6 +284,11 @@
           "a": "habitudes:programme-12",
           "son": "whoosh",
           "volume": 0.22
+        },
+        {
+          "a": "habitudes:5",
+          "son": "pop",
+          "volume": 0.25
         }
       ]
     },
@@ -281,11 +310,6 @@
             "Alimentation croissance 🥛",
             "Exercices de posture 🧘"
           ],
-          "verrou": {
-            "titre": "+7 habitudes clés",
-            "sous": "les plus importantes pour ta taille",
-            "nombre": 7
-          },
           "coche": {
             "de": "habitudes:personnalisé",
             "a": "habitudes:site"
@@ -341,13 +365,7 @@
           "volume": 0.25
         }
       ],
-      "sons": [
-        {
-          "a": "pct-2",
-          "son": "bug",
-          "volume": 0.6
-        }
-      ]
+      "sons": []
     },
     {
       "nom": "ecran2",
@@ -385,26 +403,16 @@
         },
         "cams": [
           {
-            "a": "fini:80+14",
+            "a": "fini:80+4",
             "cx": 0.633,
             "cy": 0.668,
             "z": 1.81,
-            "d": 11,
-            "courbe": "lineaire"
+            "d": 18,
+            "courbe": "doux"
           }
         ],
         "pops": [],
-        "fleches": [
-          {
-            "sens": "bas",
-            "x": 0.5,
-            "pointe": 0.2,
-            "a": "pct+8",
-            "d": 12,
-            "fin": "pct:9",
-            "dFin": 12
-          }
-        ],
+        "fleches": [],
         "url": "grandimi.com",
         "urlDecale": 60,
         "navTraits": true
@@ -433,19 +441,9 @@
       ],
       "sons": [
         {
-          "a": "pct+8",
-          "son": "pop",
-          "volume": 0.3
-        },
-        {
-          "a": "fini:80+7",
+          "a": "fini:80+1",
           "son": "whoosh",
           "volume": 0.28
-        },
-        {
-          "a": "foutu-7",
-          "son": "verdict",
-          "volume": 0.6
         }
       ]
     },
@@ -618,5 +616,6 @@
       "h": 230,
       "rotation": 0
     }
-  }
+  },
+  "sfxDossier": "sfx-grave"
 }

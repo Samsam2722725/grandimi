@@ -16,7 +16,7 @@ import {
 	useCurrentFrame,
 } from 'remotion';
 import {ease, pop} from '../anim';
-import {Sfx, SfxOn} from '../components/Sfx';
+import {Sfx, SfxDossier, SfxOn} from '../components/Sfx';
 import {makeTiming, Timeline} from '../timing';
 import {Paper, Typed} from './Paper';
 import {CarteCommentaire} from './CarteCommentaire';
@@ -1458,6 +1458,7 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 	const vol = data.musique?.volume ?? 0.08;
 	return (
 		<SfxOn.Provider value={bruitages}>
+			<SfxDossier.Provider value={data.sfxDossier ?? 'sfx'}>
 			<AbsoluteFill style={{background: '#000'}}>
 				{musique && data.musique ? (
 					<Audio
@@ -1541,6 +1542,7 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 				) : null}
 				{sousTitres ? <Captions windows={windows} /> : null}
 			</AbsoluteFill>
+		</SfxDossier.Provider>
 		</SfxOn.Provider>
 	);
 };

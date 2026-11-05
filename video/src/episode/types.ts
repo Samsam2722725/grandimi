@@ -110,7 +110,7 @@ export type Plan = {
 	/** Écran de résultats Grandimi animé (src/episode/Dashboard.tsx) : caméra, lignes qui s'élargissent, flèches, ballon. */
 	dashboard?: {
 		donnees: import('./Dashboard').DashData;
-		cams: {a: Ancre; cx: number; cy: number; z: number; d: number; courbe: 'avant' | 'arriere' | 'lineaire'}[];
+		cams: {a: Ancre; cx: number; cy: number; z: number; d: number; courbe: 'avant' | 'arriere' | 'lineaire' | 'doux'}[];
 		pops: {ligne: import('./Dashboard').Ligne; a: Ancre; d: number; fin: Ancre; dFin: number; echelle: number}[];
 		fleches: {sens: 'bas' | 'haut'; x: number; pointe: number; a: Ancre; d: number; fin: Ancre; dFin: number}[];
 		ballon?: {fichier: string; a: Ancre; fin: Ancre; chute?: boolean; boite?: number[]};
@@ -175,6 +175,8 @@ export type Episode = {
 	deriveCamera?: boolean;
 	/** false : pas de whoosh automatique sur les mouvements de caméra et les secousses (préférence 17/10). */
 	sonsMouvements?: boolean;
+	/** Dossier des bruitages dans public/ (défaut « sfx » ; « sfx-grave » = versions basses). */
+	sfxDossier?: string;
 	voice: string;
 	speed: number;
 	lines: {id: string; pause: number; text: string}[];
