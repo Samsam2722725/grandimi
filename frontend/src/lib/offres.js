@@ -119,3 +119,26 @@ export function contenuPlan(prediction) {
     { titre: 'Ta taille adulte estimée, 98 % de précision', texte: '' },
   ]
 }
+
+/* Changer d'offre : ce qu'un client peut encore prendre. On monte, on ne
+   redescend jamais, et l'ancien annuel est déjà payé pour plus de 3 mois. */
+export function offresAuDessus(planKey) {
+  switch (planKey) {
+    case 'm1':
+    case 'm1_normal':
+    case 'monthly':
+      return ['m3', 'vie'];
+    case 'm3':
+    case 'm3_normal':
+    case 'annual':
+      return ['vie'];
+    default:
+      return [];
+  }
+}
+
+export function nomOffre(planKey) {
+  if (planKey === 'monthly') return 'mensuel';
+  if (planKey === 'annual') return 'annuel';
+  return OFFRES.find((o) => o.duree === String(planKey).replace('_normal', ''))?.nom ?? '';
+}

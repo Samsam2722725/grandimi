@@ -288,6 +288,28 @@ func GetCheckout(c *gin.Context) {
 		checkoutURL += "&metadata[child_user_id]=" + url.QueryEscape(req.ChildUserID)
 	}
 
+	/* On ne vend pas une offre égale ou inférieure à celle déjà active : le
+	   client paierait deux fois pour le même accès. Si la lecture échoue, on
+	   laisse passer : une panne de lecture ne doit pas bloquer une vente. */
+	beneficiaire := user.ID
+	if req.ChildUserID != "" {
+		beneficiaire = req.ChildUserID
+	}
+	if actifs, err := db.AbonnementsActifs(beneficiaire); err != nil {
+		fmt.Printf("[checkout] AbonnementsActifs(%s): %v\n", beneficiaire, err)
+	} else {
+		offres := make([]string, 0, len(actifs))
+		for _, a := range actifs {
+			offres = append(offres, a.PlanType)
+		}
+		if !billing.PeutAcheter(cleOffre, offres) && !billing.PeutAcheter(cleOffre, offresConfirmeesParWhop(actifs)) {
+			c.JSON(http.StatusConflict, gin.H{
+				"error": "Tu as déjà cette offre ou une offre supérieure. Connecte-toi pour ouvrir ton plan.",
+			})
+			return
+		}
+	}
+
 	c.JSON(http.StatusOK, CheckoutResponse{
 		CheckoutURL: checkoutURL,
 		Message:     fmt.Sprintf("Checkout for user %s", user.ID),
@@ -381,10 +403,11 @@ func WhopWebhook(c *gin.Context) {
 			fmt.Printf("[whop] UpdateSubscriptionFromWebhook(%s): %v\n", payload.Data.ID, err)
 		}
 
-		// Montée en gamme : 3 mois ou À vie pris par un client 1 mois,
-		// son 1 mois s'arrête (voir montee_en_gamme.go).
+		// Changement d'offre : l'offre remplacée s'arrête (voir
+		// montee_en_gamme.go). En tâche de fond : les reprises prennent
+		// quelques secondes et Whop attend la réponse à ce webhook.
 		if estOffreSuperieure(typePlan) {
-			arreterAnciensMensuels(user.ID, payload.Data.ID)
+			go arreterOffresRemplacees(user.ID, payload.Data.ID, typePlan)
 		}
 
 		c.JSON(http.StatusOK, gin.H{

@@ -72,7 +72,7 @@ func ReclamerPaiement(c *gin.Context) {
 		   fond : un appel Whop lent ne doit pas retenir le client sur
 		   l'écran « on prépare ton accès ». */
 		if resultat.AbonnementDeplace != "" && estOffreSuperieure(resultat.PlanAbonnement) {
-			go arreterAnciensMensuels(req.UserID, resultat.AbonnementDeplace)
+			go arreterOffresRemplacees(req.UserID, resultat.AbonnementDeplace, resultat.PlanAbonnement)
 		}
 		c.JSON(http.StatusOK, gin.H{"status": "granted"})
 		return

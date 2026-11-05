@@ -178,34 +178,35 @@ func RevoquerSiPlusAucunAbonnement(userID, whopSubscriptionID string) (bool, err
 	return revoque, nil
 }
 
-/* AbonnementsMensuelsActifs : les abonnements 1 mois encore actifs d un
-   compte, sauf celui qu on vient d activer. Sert a la montee en gamme :
-   quand un client 1 mois prend l offre 3 mois ou A vie, son 1 mois est
-   arrete pour qu il ne paie pas les deux. */
-func AbonnementsMensuelsActifs(userID, saufWhopID string) ([]string, error) {
+/* AbonnementActif : un abonnement en cours d un compte et son offre. */
+type AbonnementActif struct {
+	WhopID   string
+	PlanType string
+}
+
+/* AbonnementsActifs : sert au changement d offre, pour savoir ce qu un
+   client peut encore acheter et ce qu il faut arreter apres son paiement. */
+func AbonnementsActifs(userID string) ([]AbonnementActif, error) {
 	lignes, err := DB.QueryContext(context.Background(),
-		`SELECT whop_subscription_id
+		`SELECT COALESCE(whop_subscription_id, ''), COALESCE(plan_type, '')
 		   FROM subscriptions
 		  WHERE user_id = $1
-		    AND status = 'active'
-		    AND plan_type IN ('m1', 'm1_normal')
-		    AND whop_subscription_id <> $2
-		    AND whop_subscription_id <> ''`,
-		userID, saufWhopID)
+		    AND status = 'active'`,
+		userID)
 	if err != nil {
 		return nil, err
 	}
 	defer lignes.Close()
 
-	ids := []string{}
+	actifs := []AbonnementActif{}
 	for lignes.Next() {
-		var id string
-		if err := lignes.Scan(&id); err != nil {
+		var a AbonnementActif
+		if err := lignes.Scan(&a.WhopID, &a.PlanType); err != nil {
 			return nil, err
 		}
-		ids = append(ids, id)
+		actifs = append(actifs, a)
 	}
-	return ids, lignes.Err()
+	return actifs, lignes.Err()
 }
 
 /* AbonnementRecent : pour vérifier d'un coup d'œil ce qui s'est passé

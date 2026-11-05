@@ -178,3 +178,6 @@
 .night .account-empty p { margin: 0 0 10px; line-height: 1.5; }
 .night .account-empty .btn-secondary { margin-top: 4px; }
 .night .account-deconnexion { width: 100%; min-height: 48px; color: #f4efe9; }
+
+.account-changer-btn { width: 100%; min-height: 48px; margin-top: 12px; }
+.night .account-changer-btn { background: #ff5a1f; color: #17120e; border: 0; font-weight: 700; }

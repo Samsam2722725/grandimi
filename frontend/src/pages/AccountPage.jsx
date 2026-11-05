@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import Spinner from '../components/Spinner';
 import apiClient from '../lib/api';
 import '../styles/account-page.css';
-import { resiliationDemandee } from '../lib/analytics';
+import { capture, resiliationDemandee } from '../lib/analytics';
+import { offresAuDessus } from '../lib/offres';
+import { MonteeEnGamme } from '@/components/ui/montee-en-gamme';
 
 function formatDate(iso) {
   if (!iso) return '';
@@ -51,6 +53,7 @@ function AccountPage({ onBackHome, retourVersPlan = false, onLogout }) {
   const [erreur, setErreur] = useState(null);
   const [abonnement, setAbonnement] = useState(null);
 
+  const [monteeOuverte, setMonteeOuverte] = useState(false);
   const [confirmationOuverte, setConfirmationOuverte] = useState(false);
   const [resiliationEnCours, setResiliationEnCours] = useState(false);
   const [resiliationErreur, setResiliationErreur] = useState(null);
@@ -178,6 +181,19 @@ function AccountPage({ onBackHome, retourVersPlan = false, onLogout }) {
               </span>
             </div>
 
+            {offresAuDessus(abonnement.plan_key).length > 0 && (
+              <button
+                type="button"
+                className="btn-primary account-changer-btn"
+                onClick={() => {
+                  capture('montee_ouverte', { etape: abonnement.plan_key });
+                  setMonteeOuverte(true);
+                }}
+              >
+                Changer d’offre
+              </button>
+            )}
+
             {abonnement.cancel_at_period_end ? (
               <div className="alert alert-info">
                 <div>
@@ -196,6 +212,14 @@ function AccountPage({ onBackHome, retourVersPlan = false, onLogout }) {
               </button>
             )}
             </>
+            )}
+
+            {monteeOuverte && (
+              <MonteeEnGamme
+                planKey={abonnement.plan_key}
+                resilie={abonnement.cancel_at_period_end || abonnement.status === 'canceled'}
+                onFermer={() => setMonteeOuverte(false)}
+              />
             )}
 
             {/* Sortie de secours permanente. Elle ouvre la page Whop de CET
