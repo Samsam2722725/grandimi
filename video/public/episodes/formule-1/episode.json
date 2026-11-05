@@ -1,0 +1,373 @@
+{
+ "partie": 0,
+ "voice": "ff_siwis",
+ "speed": 1.2,
+ "lines": [
+  {
+   "id": "hook",
+   "pause": 0,
+   "text": "{1m83|1m83}, c'est la taille moyenne en France."
+  },
+  {
+   "id": "hook2",
+   "pause": 0,
+   "text": "Et voici comment calculer ton potentiel de taille finale."
+  },
+  {
+   "id": "calcul",
+   "pause": 0,
+   "text": "Il va falloir que tu prennes la taille de ta mère et que tu additionnes à celle de ton père."
+  },
+  {
+   "id": "calcul2",
+   "pause": 0,
+   "text": "Ensuite, ajoute 13 et tu divises par 2."
+  },
+  {
+   "id": "nuance",
+   "pause": 0,
+   "text": "Cependant, ce calcul reste une simple estimation scientifique."
+  },
+  {
+   "id": "fin",
+   "pause": 0,
+   "text": "Alors, si tu veux connaître ta taille adulte maximale potentielle,"
+  },
+  {
+   "id": "site",
+   "pause": 0,
+   "text": "rends-toi sur le site {grandimi.com|grandini.com}."
+  }
+ ],
+ "musique": {
+  "fichier": "sfx/music.wav",
+  "volume": 0
+ },
+ "images": {},
+ "zones": {},
+ "plans": [
+  {
+   "nom": "accroche",
+   "debut": 0,
+   "hookTaille": {
+    "cm": 183,
+    "carte": "hook:c-2",
+    "moyenne": "hook:moyenne+3",
+    "france": "hook:france",
+    "regle": "hook2:et",
+    "potentiel": "hook2:potentiel",
+    "finale": "hook2:taille",
+    "perso": "dessins/bonhomme-glowup.png"
+   },
+   "sons": [
+    {
+     "a": 0,
+     "son": "whoosh",
+     "volume": 0.4
+    },
+    {
+     "a": 5,
+     "son": "tick",
+     "volume": 0.24
+    },
+    {
+     "a": 8,
+     "son": "tick",
+     "volume": 0.24
+    },
+    {
+     "a": 11,
+     "son": "tick",
+     "volume": 0.24
+    },
+    {
+     "a": 14,
+     "son": "tick",
+     "volume": 0.24
+    },
+    {
+     "a": 16,
+     "son": "ding",
+     "volume": 0.44
+    },
+    {
+     "a": "hook:c-2",
+     "son": "whoosh",
+     "volume": 0.4
+    },
+    {
+     "a": "hook:c+5",
+     "son": "pop",
+     "volume": 0.5
+    },
+    {
+     "a": "hook:moyenne+12",
+     "son": "pop",
+     "volume": 0.4
+    },
+    {
+     "a": "hook2:et",
+     "son": "whoosh",
+     "volume": 0.44
+    },
+    {
+     "a": "hook2:potentiel+8",
+     "son": "sparkle",
+     "volume": 0.5
+    },
+    {
+     "a": "hook2:taille",
+     "son": "whoosh",
+     "volume": 0.5
+    }
+   ]
+  },
+  {
+   "nom": "formule",
+   "debut": "calcul-2",
+   "transition": "radial",
+   "fond": "topo",
+   "topo": {
+    "zoomDe": 0.6,
+    "d": 18,
+    "vitesse": 0.15
+   },
+   "elements": [
+    {
+     "type": "texte",
+     "texte": "TAILLE DE TA MÈRE",
+     "a": "calcul:taille",
+     "y": 640,
+     "taille": 80,
+     "couleur": "#fff",
+     "contour": 10,
+     "contourCouleur": "#000",
+     "poids": 900,
+     "police": "Montserrat",
+     "effet": "pop",
+     "son": "pop",
+     "volume": 0.6
+    },
+    {
+     "type": "texte",
+     "texte": "+ TAILLE DE TON PÈRE",
+     "a": "calcul:père-3",
+     "y": 790,
+     "taille": 80,
+     "couleur": "#fff",
+     "contour": 10,
+     "contourCouleur": "#000",
+     "poids": 900,
+     "police": "Montserrat",
+     "effet": "pop",
+     "son": "pop",
+     "volume": 0.6
+    },
+    {
+     "type": "texte",
+     "texte": "+ 13",
+     "a": "calcul2:13-2",
+     "y": 980,
+     "taille": 170,
+     "couleur": "#ff7a3d",
+     "contour": 10,
+     "contourCouleur": "#000",
+     "poids": 900,
+     "police": "Montserrat",
+     "effet": "pop",
+     "son": "pop",
+     "volume": 0.6
+    },
+    {
+     "type": "texte",
+     "texte": "÷ 2",
+     "a": "calcul2:divises",
+     "y": 1180,
+     "taille": 170,
+     "couleur": "#ff7a3d",
+     "contour": 10,
+     "contourCouleur": "#000",
+     "poids": 900,
+     "police": "Montserrat",
+     "effet": "pop",
+     "son": "pop",
+     "volume": 0.6
+    },
+    {
+     "type": "texte",
+     "texte": "SIMPLE ESTIMATION",
+     "a": "nuance:estimation-2",
+     "y": 1440,
+     "taille": 104,
+     "couleur": "#e22221",
+     "contour": 12,
+     "contourCouleur": "#fff",
+     "poids": 900,
+     "police": "Montserrat",
+     "effet": "pop",
+     "son": "slam",
+     "volume": 0.6
+    }
+   ],
+   "sons": [
+    {
+     "a": 0,
+     "son": "whoosh",
+     "volume": 0.44
+    }
+   ]
+  },
+  {
+   "nom": "rapport",
+   "debut": "fin-2",
+   "transition": "rebond",
+   "pousse": 0.04,
+   "dashboard": {
+    "donnees": {
+     "actuelle": "188 cm",
+     "predite": "201 cm",
+     "optimiser": "+5 cm",
+     "bulle": "197 cm",
+     "courbe": [
+      188,
+      193,
+      196.5,
+      198.8,
+      200,
+      200.6,
+      201
+     ],
+     "ages": [
+      "14",
+      "15,2",
+      "16,3",
+      "17,5",
+      "18,7",
+      "19,8",
+      "21"
+     ],
+     "rang": "99 %",
+     "chances": "90 %",
+     "chancesCm": "206 cm",
+     "croissance": "93,5 %"
+    },
+    "cams": [
+     {
+      "a": "fin:maximale-4",
+      "cx": 0.68,
+      "cy": 0.24,
+      "z": 1.83,
+      "d": 9,
+      "courbe": "avant"
+     }
+    ],
+    "pops": [],
+    "fleches": [],
+    "url": "grandimi.com",
+    "barre": [
+     "Taille",
+     "Programme",
+     "Exercices",
+     "Routine"
+    ],
+    "barreBas": true,
+    "revele": "site:grandimi.com+600"
+   },
+   "effets": [],
+   "elements": [],
+   "sons": [
+    {
+     "a": 0,
+     "son": "whoosh",
+     "volume": 0.44
+    },
+    {
+     "a": "fin:maximale-6",
+     "son": "whoosh",
+     "volume": 0.44
+    }
+   ]
+  },
+  {
+   "nom": "fin-site",
+   "debut": "site-2",
+   "transition": "whip-h",
+   "fond": "topo",
+   "topo": {
+    "vitesse": 0.15
+   },
+   "elements": [
+    {
+     "type": "texte",
+     "texte": "grandimi.com",
+     "a": 0,
+     "y": 190,
+     "taille": 120,
+     "couleur": "#ff7a3d",
+     "contour": 2,
+     "poids": 800,
+     "police": "Montserrat",
+     "effet": "pop",
+     "son": "ding",
+     "volume": 0.5,
+     "contourCouleur": "#ff7a3d"
+    },
+    {
+     "type": "image",
+     "ecran": true,
+     "fichier": "site_accueil.png",
+     "a": 2,
+     "x": 300,
+     "y": 400,
+     "w": 480,
+     "h": 1039,
+     "effet": "pop"
+    },
+    {
+     "type": "texte",
+     "texte": "Lien en bio",
+     "a": 8,
+     "y": 1500,
+     "taille": 76,
+     "couleur": "#fff",
+     "fond": "#e95a2e",
+     "contour": 0,
+     "poids": 800,
+     "police": "Montserrat",
+     "effet": "pop",
+     "son": "pop",
+     "volume": 0.6
+    }
+   ],
+   "sons": [
+    {
+     "a": 0,
+     "son": "whoosh",
+     "volume": 0.44
+    }
+   ]
+  }
+ ],
+ "sousTitres": {
+  "motsCles": [],
+  "fenetres": [
+   {
+    "de": 0,
+    "a": "calcul-2",
+    "y": 1110,
+    "taille": 115,
+    "motsMax": 2,
+    "carMax": 16,
+    "style": "condense",
+    "contour": 5,
+    "poids": 600,
+    "motsCles": false,
+    "pop": false
+   }
+  ]
+ },
+ "voix": "Enregistrement ElevenLabs de l'utilisateur (Anthony Sirius, 05/11), blancs ramenés à 0,05 s, ×1,08.",
+ "reference": "public/episodes/paul-16 (accroche) + theo-1 (suite)",
+ "deriveCamera": false,
+ "sonsMouvements": false
+}

@@ -1,0 +1,331 @@
+{
+  "fps": 30,
+  "totalFrames": 523,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "1m83, c'est la taille moyenne en France.",
+      "from": 0,
+      "duration": 61,
+      "words": [
+        {
+          "w": "1m83,",
+          "f": 0
+        },
+        {
+          "w": "c'est",
+          "f": 29
+        },
+        {
+          "w": "la",
+          "f": 34
+        },
+        {
+          "w": "taille",
+          "f": 36
+        },
+        {
+          "w": "moyenne",
+          "f": 43
+        },
+        {
+          "w": "en",
+          "f": 53
+        },
+        {
+          "w": "France.",
+          "f": 55
+        }
+      ]
+    },
+    {
+      "id": "hook2",
+      "text": "Et voici comment calculer ton potentiel de taille finale.",
+      "from": 62,
+      "duration": 66,
+      "words": [
+        {
+          "w": "Et",
+          "f": 62
+        },
+        {
+          "w": "voici",
+          "f": 67
+        },
+        {
+          "w": "comment",
+          "f": 74
+        },
+        {
+          "w": "calculer",
+          "f": 82
+        },
+        {
+          "w": "ton",
+          "f": 94
+        },
+        {
+          "w": "potentiel",
+          "f": 96
+        },
+        {
+          "w": "de",
+          "f": 108
+        },
+        {
+          "w": "taille",
+          "f": 110
+        },
+        {
+          "w": "finale.",
+          "f": 118
+        }
+      ]
+    },
+    {
+      "id": "calcul",
+      "text": "Il va falloir que tu prennes la taille de ta mère et que tu additionnes à celle de ton père.",
+      "from": 130,
+      "duration": 97,
+      "words": [
+        {
+          "w": "Il",
+          "f": 130
+        },
+        {
+          "w": "va",
+          "f": 134
+        },
+        {
+          "w": "falloir",
+          "f": 137
+        },
+        {
+          "w": "que",
+          "f": 144
+        },
+        {
+          "w": "tu",
+          "f": 146
+        },
+        {
+          "w": "prennes",
+          "f": 151
+        },
+        {
+          "w": "la",
+          "f": 158
+        },
+        {
+          "w": "taille",
+          "f": 161
+        },
+        {
+          "w": "de",
+          "f": 166
+        },
+        {
+          "w": "ta",
+          "f": 168
+        },
+        {
+          "w": "mère",
+          "f": 173
+        },
+        {
+          "w": "et",
+          "f": 180
+        },
+        {
+          "w": "que",
+          "f": 185
+        },
+        {
+          "w": "tu",
+          "f": 187
+        },
+        {
+          "w": "additionnes",
+          "f": 192
+        },
+        {
+          "w": "à",
+          "f": 206
+        },
+        {
+          "w": "celle",
+          "f": 209
+        },
+        {
+          "w": "de",
+          "f": 214
+        },
+        {
+          "w": "ton",
+          "f": 216
+        },
+        {
+          "w": "père.",
+          "f": 221
+        }
+      ]
+    },
+    {
+      "id": "calcul2",
+      "text": "Ensuite, ajoute 13 et tu divises par 2.",
+      "from": 228,
+      "duration": 60,
+      "words": [
+        {
+          "w": "Ensuite,",
+          "f": 228
+        },
+        {
+          "w": "ajoute",
+          "f": 238
+        },
+        {
+          "w": "13",
+          "f": 247
+        },
+        {
+          "w": "et",
+          "f": 254
+        },
+        {
+          "w": "tu",
+          "f": 259
+        },
+        {
+          "w": "divises",
+          "f": 262
+        },
+        {
+          "w": "par",
+          "f": 275
+        },
+        {
+          "w": "2.",
+          "f": 275
+        }
+      ]
+    },
+    {
+      "id": "nuance",
+      "text": "Cependant, ce calcul reste une simple estimation scientifique.",
+      "from": 289,
+      "duration": 76,
+      "words": [
+        {
+          "w": "Cependant,",
+          "f": 289
+        },
+        {
+          "w": "ce",
+          "f": 301
+        },
+        {
+          "w": "calcul",
+          "f": 306
+        },
+        {
+          "w": "reste",
+          "f": 318
+        },
+        {
+          "w": "une",
+          "f": 325
+        },
+        {
+          "w": "simple",
+          "f": 330
+        },
+        {
+          "w": "estimation",
+          "f": 337
+        },
+        {
+          "w": "scientifique.",
+          "f": 352
+        }
+      ]
+    },
+    {
+      "id": "fin",
+      "text": "Alors, si tu veux connaître ta taille adulte maximale potentielle,",
+      "from": 366,
+      "duration": 83,
+      "words": [
+        {
+          "w": "Alors,",
+          "f": 366
+        },
+        {
+          "w": "si",
+          "f": 373
+        },
+        {
+          "w": "tu",
+          "f": 378
+        },
+        {
+          "w": "veux",
+          "f": 380
+        },
+        {
+          "w": "connaître",
+          "f": 385
+        },
+        {
+          "w": "ta",
+          "f": 392
+        },
+        {
+          "w": "taille",
+          "f": 400
+        },
+        {
+          "w": "adulte",
+          "f": 407
+        },
+        {
+          "w": "maximale",
+          "f": 421
+        },
+        {
+          "w": "potentielle,",
+          "f": 436
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "rends-toi sur le site grandimi.com.",
+      "from": 450,
+      "duration": 70,
+      "words": [
+        {
+          "w": "rends-toi",
+          "f": 450
+        },
+        {
+          "w": "sur",
+          "f": 464
+        },
+        {
+          "w": "le",
+          "f": 467
+        },
+        {
+          "w": "site",
+          "f": 469
+        },
+        {
+          "w": "grandimi.com.",
+          "f": 476
+        }
+      ]
+    }
+  ]
+}
