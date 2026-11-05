@@ -355,7 +355,7 @@
           {
             "a": "fini:93,4+14",
             "cx": 0.639,
-            "cy": 0.599,
+            "cy": 0.6393,
             "z": 1.81,
             "d": 11,
             "courbe": "lineaire"
@@ -546,9 +546,14 @@
     "texte": "15 ans, 1m70, c'est quoi ma taille max ?",
     "de": 0,
     "a": "age:15",
-    "x": 54,
-    "y": 1199,
-    "w": 961,
-    "image": "carte.png"
+    "photo": "avatar.png",
+    "reponse": {
+      "modele": "taller30",
+      "h": 235,
+      "rotation": 0
+    },
+    "x": 60,
+    "y": 1205,
+    "w": 950
   }
 }
