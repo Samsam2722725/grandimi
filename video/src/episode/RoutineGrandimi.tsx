@@ -39,8 +39,10 @@ export const RoutineGrandimi: React.FC<{
 	habitudes?: string[];
 	/** Carte verrouillée sous la liste (« +7 habitudes clés… ») : montre que le site en contient plus. */
 	verrou?: {titre: string; sous: string; nombre: number};
+	/** Zoom lent pendant les coches (défaut 1,05). */
+	avanceZ?: number;
 	urlDecale?: number;
-}> = ({at, url, flou = 13, chut, onglets, taller, coche, habitudes, verrou, urlDecale = 0}) => {
+}> = ({at, url, flou = 13, chut, onglets, taller, coche, habitudes, verrou, urlDecale = 0, avanceZ = 1.05}) => {
 	const f = useCurrentFrame();
 	if (f < at) return null;
 	const HABITUDES = habitudes ?? HABITUDES_TALLER;
@@ -49,7 +51,7 @@ export const RoutineGrandimi: React.FC<{
 	const cocheA = (i: number) => (coche ? coche.de + i * pas : Infinity);
 	const faites = coche ? HABITUDES.filter((_, i) => f >= cocheA(i)).length : 0;
 	const flouEntree = coche ? interpolate(f, [at, at + 6], [14, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 0;
-	const avance = coche ? interpolate(f, [at, coche.a + 20], [1, 1.05], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 1;
+	const avance = coche ? interpolate(f, [at, coche.a + 20], [1, avanceZ], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 1;
 	const haut = url ? 172 + urlDecale : 0;
 	const s = chut !== undefined ? interpolate(f, [chut, chut + 6], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 0;
 	const rebond = chut !== undefined && f >= chut ? 1 + 0.18 * Math.max(0, 1 - (f - chut) / 6) * Math.sin(((f - chut) / 6) * Math.PI) : 1;

@@ -926,6 +926,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					coche={el.coche ? {de: loc(el.coche.de), a: loc(el.coche.a)} : undefined}
 					habitudes={el.habitudes}
 					verrou={el.verrou}
+					avanceZ={el.avanceZ}
 					urlDecale={el.urlDecale}
 				/>
 			);
