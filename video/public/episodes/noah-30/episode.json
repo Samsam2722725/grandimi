@@ -109,13 +109,7 @@
         }
       ],
       "elements": [],
-      "sons": [
-        {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.2
-        }
-      ],
+      "sons": [],
       "libre": true,
       "fondFlou": true,
       "fondCouleur": "transparent"
@@ -145,25 +139,15 @@
           "curseur": false,
           "parLettre": 2,
           "son": "frappe",
-          "volume": 0.3,
+          "volume": 0.25,
           "sansPop": true
         }
       ],
       "sons": [
         {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.2
-        },
-        {
-          "a": 3,
-          "son": "papier",
-          "volume": 0.3
-        },
-        {
           "a": "stats-9",
           "son": "whoosh",
-          "volume": 0.22
+          "volume": 0.08
         }
       ]
     },
@@ -257,24 +241,9 @@
       "elements": [],
       "sons": [
         {
-          "a": "age:16",
-          "son": "pop",
-          "volume": 0.3
-        },
-        {
-          "a": "age:1m75+5",
-          "son": "whoosh",
-          "volume": 0.28
-        },
-        {
-          "a": "predit:1m81+1",
-          "son": "whoosh",
-          "volume": 0.28
-        },
-        {
           "a": "atteint-12",
           "son": "whoosh",
-          "volume": 0.22
+          "volume": 0.08
         }
       ]
     },
@@ -303,7 +272,7 @@
         {
           "a": "atteint:1m85-7",
           "son": "whoosh",
-          "volume": 0.22
+          "volume": 0.08
         }
       ]
     },
@@ -343,16 +312,14 @@
           "poids": 800,
           "curseur": true,
           "fond": "#8100fe",
-          "parLettre": 2,
-          "son": "tick",
-          "volume": 0.25
+          "parLettre": 2
         }
       ],
       "sons": [
         {
           "a": "optim:grâce-2",
           "son": "bug",
-          "volume": 0.6
+          "volume": 0.05
         }
       ],
       "sortie": "onde"
@@ -443,19 +410,9 @@
       ],
       "sons": [
         {
-          "a": "optim:grâce+13",
-          "son": "pop",
-          "volume": 0.3
-        },
-        {
-          "a": "fini:97,1+7",
-          "son": "whoosh",
-          "volume": 0.28
-        },
-        {
           "a": "foutu-7",
           "son": "verdict",
-          "volume": 0.6
+          "volume": 0.04
         }
       ]
     },
@@ -493,7 +450,7 @@
         {
           "a": "cta-7",
           "son": "whoosh",
-          "volume": 0.22
+          "volume": 0.04
         }
       ]
     },
@@ -525,9 +482,7 @@
           "w": 380,
           "h": 380,
           "effet": "pop",
-          "fin": "com:âge",
-          "son": "pop",
-          "volume": 0.3
+          "fin": "com:âge"
         },
         {
           "type": "image",
@@ -539,8 +494,6 @@
           "w": 200,
           "h": 200,
           "effet": "pop",
-          "son": "pop",
-          "volume": 0.25,
           "fin": "com:taille"
         },
         {
