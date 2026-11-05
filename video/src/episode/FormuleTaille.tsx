@@ -288,7 +288,7 @@ const Particules: React.FC<{cx: number; cy: number; f: number; at: number; coule
 
 /* ───────── Composant principal ───────── */
 
-export const FormuleTaille: React.FC<{t: FormuleT; mere?: number; pere?: number; ajout?: number}> = ({t, mere = 157, pere = 170, ajout = 13}) => {
+export const FormuleTaille: React.FC<{t: FormuleT; mere?: number; pere?: number; ajout?: number; site?: string}> = ({t, mere = 157, pere = 170, ajout = 13, site}) => {
 	const f = useCurrentFrame();
 	const somme = mere + pere;
 	const total = somme + ajout;
@@ -706,7 +706,6 @@ export const FormuleTaille: React.FC<{t: FormuleT; mere?: number; pere?: number;
 	const e = entree(g, 5, 1.2);
 	const carte = ressort(g, 0, 12, 170);
 	const barre = ressort(g, 4, 13, 120);
-	const tel = ressort(f, t.telephone, 10, 220);
 	const ok = ease(f, t.valide, 6);
 	const pousse = 1 + g * 0.0012;
 	const SOL = 1588;
@@ -722,58 +721,26 @@ export const FormuleTaille: React.FC<{t: FormuleT; mere?: number; pere?: number;
 					<line x1={420} x2={1040} y1={SOL} y2={SOL} stroke="#555" strokeWidth={5} />
 					<rect x={491} y={SOL - (SOL - TOPB) * barre} width={162} height={Math.max(0, (SOL - TOPB) * barre)} fill={BLEU} />
 					{ticks}
-					<Gars x={216} cy={869} r={121} f={f} hanches={1} tel={tel} telOk={ok} regard={[0.3, 0.4]} />
+					<Gars x={216} cy={869} r={121} f={f} hanches={1} regard={[0.3, 0.4]} />
 					<g transform={`translate(0 ${(1 - Math.min(1, carte)) * -760})`}>
-						<rect x={92} y={199} width={918} height={575} rx={10} fill="#000" opacity={0.18} />
-						<rect x={86} y={189} width={918} height={575} rx={10} fill="#0b0b0c" />
-						<text x={130} y={258} fontFamily={FONT} fontWeight={500} fontSize={38} fill="#3d8bff">
-							‹ grandimi.com
+						<rect x={92} y={199} width={918} height={575} rx={26} fill="#000" opacity={0.18} />
+						<rect x={86} y={189} width={918} height={575} rx={26} fill="#fff" stroke="#c9c9c9" strokeWidth={4} />
+						<rect x={86} y={189} width={918} height={96} rx={26} fill="#ececec" />
+						<rect x={86} y={250} width={918} height={35} fill="#ececec" />
+						<circle cx={132} cy={237} r={11} fill="#ff5f57" />
+						<circle cx={170} cy={237} r={11} fill="#febc2e" />
+						<circle cx={208} cy={237} r={11} fill="#28c840" />
+						<rect x={262} y={209} width={700} height={56} rx={28} fill="#fff" />
+						<text x={612} y={247} textAnchor="middle" fontFamily={FONT} fontWeight={600} fontSize={36} fill="#222">
+							grandimi.com
 						</text>
-						<defs>
-							<linearGradient id="icone" x1="0" y1="0" x2="1" y2="1">
-								<stop offset="0" stopColor="#ff9a3c" />
-								<stop offset="1" stopColor="#e55a12" />
-							</linearGradient>
-						</defs>
-						<rect x={124} y={290} width={240} height={240} rx={54} fill="url(#icone)" />
-						<g fill="#fff" stroke="none">
-							<circle cx={226} cy={350} r={24} />
-							<path d="M196,384 L256,384 Q266,384 266,394 L266,452 L252,452 L252,500 L234,500 L234,456 L218,456 L218,500 L200,500 L200,452 L186,452 L186,394 Q186,384 196,384 Z" />
-							<path d="M300,330 L300,470" stroke="#fff" strokeWidth={14} strokeLinecap="round" />
-							<path d="M276,358 L300,326 L324,358" stroke="#fff" strokeWidth={14} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+						<clipPath id="siteClip">
+							<rect x={86} y={285} width={918} height={479} rx={0} />
+						</clipPath>
+						<g clipPath="url(#siteClip)">
+							<image href={site} x={296} y={285} width={498} height={1078} preserveAspectRatio="xMidYMin slice" />
 						</g>
-						<text x={400} y={338} fontFamily={FONT} fontWeight={700} fontSize={50} fill="#fff">
-							Grandimi – Maximise
-						</text>
-						<text x={400} y={398} fontFamily={FONT} fontWeight={700} fontSize={50} fill="#fff">
-							ta taille
-						</text>
-						<text x={400} y={448} fontFamily={FONT} fontWeight={500} fontSize={32} fill="#9a9a9a">
-							Atteins ta taille max !
-						</text>
-						<rect x={400} y={472} width={190} height={62} rx={31} fill={ORANGE} transform={`translate(495 503) scale(${1 + 0.08 * bosse(f, t.valide, 8)}) translate(-495 -503)`} />
-						<text x={495} y={515} textAnchor="middle" fontFamily={FONT} fontWeight={700} fontSize={32} fill="#fff">
-							Ouvrir
-						</text>
-						<line x1={130} x2={960} y1={576} y2={576} stroke="#2a2a2a" strokeWidth={3} />
-						{[
-							['PLAN', 'Perso', ''],
-							['ÂGE', '13-21', 'ans'],
-							['CONTENU', 'Sommeil', 'Sport · Repas'],
-							['SITE', 'grandimi', '.com'],
-						].map(([a, b, c], i) => (
-							<g key={i}>
-								<text x={200 + i * 225} y={620} textAnchor="middle" fontFamily={FONT} fontWeight={600} fontSize={24} fill="#7a7a7a">
-									{a}
-								</text>
-								<text x={200 + i * 225} y={680} textAnchor="middle" fontFamily={FONT} fontWeight={700} fontSize={44} fill="#cfcfcf">
-									{b}
-								</text>
-								<text x={200 + i * 225} y={722} textAnchor="middle" fontFamily={FONT} fontWeight={500} fontSize={26} fill="#7a7a7a">
-									{c}
-								</text>
-							</g>
-						))}
+						<rect x={86} y={189} width={918} height={575} rx={26} fill="none" stroke="#c9c9c9" strokeWidth={4} />
 					</g>
 				</svg>
 			</AbsoluteFill>

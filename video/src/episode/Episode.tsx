@@ -1052,6 +1052,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					mere={plan.formuleTaille.mere}
 					pere={plan.formuleTaille.pere}
 					ajout={plan.formuleTaille.ajout}
+					site={staticFile(`episodes/${id}/images/site_accueil.png`)}
 				/>
 			) : null}
 			{plan.hookTaille ? (

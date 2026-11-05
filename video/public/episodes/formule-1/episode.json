@@ -151,7 +151,7 @@
      "pense": "fin:maximale-3",
      "site": "site-2",
      "telephone": "site:site-3",
-     "valide": "site:grandimi.com"
+     "valide": "site:grandimi.com-3"
     },
     "mere": 157,
     "pere": 170,
@@ -317,11 +317,6 @@
     {
      "a": "site-2",
      "son": "whoosh",
-     "volume": 0.5
-    },
-    {
-     "a": "site:site-3",
-     "son": "pop",
      "volume": 0.5
     },
     {
