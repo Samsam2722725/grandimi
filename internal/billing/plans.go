@@ -66,6 +66,35 @@ var plans = map[PlanKey]Plan{
 	AVieNormal:  {Key: AVieNormal, Label: "À vie", PriceEUR: 79.99, Interval: "lifetime", WhopPlanIDEnv: "WHOP_PLAN_ID_VIE_NORMAL"},
 }
 
+/* Rang classe les offres pour le changement d'offre : on ne monte que
+   vers un rang plus haut. L'ancien annuel passe au-dessus du 3 mois (il
+   est déjà payé pour plus longtemps). 0 : offre inconnue. */
+func Rang(key string) int {
+	switch PlanKey(key) {
+	case Monthly, Mois1, Mois1Normal:
+		return 1
+	case Mois3, Mois3Normal:
+		return 2
+	case Annual:
+		return 3
+	case AVie, AVieNormal:
+		return 4
+	}
+	return 0
+}
+
+// PeutAcheter refuse une offre égale ou inférieure à une offre déjà active :
+// le client paierait deux fois pour le même accès.
+func PeutAcheter(key string, offresActives []string) bool {
+	rang := Rang(key)
+	for _, active := range offresActives {
+		if Rang(active) >= rang {
+			return false
+		}
+	}
+	return true
+}
+
 // ParIDWhop retrouve l'offre à partir de l'id de plan Whop reçu par le
 // webhook. ok est false si l'id ne correspond à aucune offre configurée.
 func ParIDWhop(whopPlanID string, lireEnv func(string) string) (Plan, bool) {

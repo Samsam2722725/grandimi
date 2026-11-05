@@ -141,12 +141,16 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   /* L'offre du client : la taille estimée est réservée aux offres 3 mois
      et À vie. Tant qu'on ne sait pas (erreur, ancienne offre), on montre :
      mieux vaut donner trop que bloquer quelqu'un qui a payé. */
+  const [resilie, setResilie] = useState(false);
   const [planKey, setPlanKey] = useState(() =>
     APERCU_PLAN && new URLSearchParams(window.location.search).get('offre') ? new URLSearchParams(window.location.search).get('offre') : null,
   );
   useEffect(() => {
     if (APERCU_PLAN) return;
-    apiClient.getSubscription().then((s) => setPlanKey(s?.plan_key || null)).catch(() => {});
+    apiClient.getSubscription().then((s) => {
+      setPlanKey(s?.plan_key || null);
+      setResilie(!!s?.cancel_at_period_end || s?.status === 'canceled');
+    }).catch(() => {});
   }, []);
   const tailleVerrouillee = planKey === 'm1' || planKey === 'm1_normal';
   const [monteeOuverte, setMonteeOuverte] = useState(false);
@@ -849,7 +853,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
         />
       )}
 
-      {monteeOuverte && <MonteeEnGamme predictionData={predictionData} onFermer={() => setMonteeOuverte(false)} />}
+      {monteeOuverte && <MonteeEnGamme planKey={planKey} resilie={resilie} titre="Débloque ta taille adulte estimée" predictionData={predictionData} onFermer={() => setMonteeOuverte(false)} />}
 
       {/* Barre du bas, au pouce, comme une appli. */}
       <nav className="app-nav" aria-label="Navigation">
