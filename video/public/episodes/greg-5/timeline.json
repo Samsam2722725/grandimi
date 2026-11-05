@@ -1,0 +1,475 @@
+{
+  "fps": 30,
+  "totalFrames": 979,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Prédiction du potentiel de taille à partir de nos commentaires, partie 5.",
+      "from": 2,
+      "duration": 107,
+      "words": [
+        {
+          "w": "Prédiction",
+          "f": 2
+        },
+        {
+          "w": "du",
+          "f": 17
+        },
+        {
+          "w": "potentiel",
+          "f": 22
+        },
+        {
+          "w": "de",
+          "f": 34
+        },
+        {
+          "w": "taille",
+          "f": 38
+        },
+        {
+          "w": "à",
+          "f": 50
+        },
+        {
+          "w": "partir",
+          "f": 55
+        },
+        {
+          "w": "de",
+          "f": 62
+        },
+        {
+          "w": "nos",
+          "f": 65
+        },
+        {
+          "w": "commentaires,",
+          "f": 72
+        },
+        {
+          "w": "partie",
+          "f": 89
+        },
+        {
+          "w": "5.",
+          "f": 98
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, nous examinons les statistiques de Greg.",
+      "from": 110,
+      "duration": 73,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 110
+        },
+        {
+          "w": "nous",
+          "f": 127
+        },
+        {
+          "w": "examinons",
+          "f": 132
+        },
+        {
+          "w": "les",
+          "f": 149
+        },
+        {
+          "w": "statistiques",
+          "f": 151
+        },
+        {
+          "w": "de",
+          "f": 163
+        },
+        {
+          "w": "Greg.",
+          "f": 168
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 12 ans et mesurant actuellement 1m52,",
+      "from": 185,
+      "duration": 79,
+      "words": [
+        {
+          "w": "À",
+          "f": 185
+        },
+        {
+          "w": "12",
+          "f": 190
+        },
+        {
+          "w": "ans",
+          "f": 197
+        },
+        {
+          "w": "et",
+          "f": 202
+        },
+        {
+          "w": "mesurant",
+          "f": 206
+        },
+        {
+          "w": "actuellement",
+          "f": 221
+        },
+        {
+          "w": "1m52,",
+          "f": 230
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "Greg est au-dessus de la moyenne.",
+      "from": 265,
+      "duration": 47,
+      "words": [
+        {
+          "w": "Greg",
+          "f": 265
+        },
+        {
+          "w": "est",
+          "f": 279
+        },
+        {
+          "w": "au-dessus",
+          "f": 284
+        },
+        {
+          "w": "de",
+          "f": 296
+        },
+        {
+          "w": "la",
+          "f": 298
+        },
+        {
+          "w": "moyenne.",
+          "f": 301
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon grandimi.com, sa taille adulte prédite est de 1m79,",
+      "from": 313,
+      "duration": 126,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 313
+        },
+        {
+          "w": "grandimi.com,",
+          "f": 320
+        },
+        {
+          "w": "sa",
+          "f": 356
+        },
+        {
+          "w": "taille",
+          "f": 361
+        },
+        {
+          "w": "adulte",
+          "f": 368
+        },
+        {
+          "w": "prédite",
+          "f": 380
+        },
+        {
+          "w": "est",
+          "f": 394
+        },
+        {
+          "w": "de",
+          "f": 397
+        },
+        {
+          "w": "1m79,",
+          "f": 401
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "et avec la bonne routine,",
+      "from": 440,
+      "duration": 33,
+      "words": [
+        {
+          "w": "et",
+          "f": 440
+        },
+        {
+          "w": "avec",
+          "f": 445
+        },
+        {
+          "w": "la",
+          "f": 452
+        },
+        {
+          "w": "bonne",
+          "f": 454
+        },
+        {
+          "w": "routine,",
+          "f": 459
+        }
+      ]
+    },
+    {
+      "id": "atteint",
+      "text": "Greg pourrait atteindre 1m85,",
+      "from": 473,
+      "duration": 68,
+      "words": [
+        {
+          "w": "Greg",
+          "f": 473
+        },
+        {
+          "w": "pourrait",
+          "f": 483
+        },
+        {
+          "w": "atteindre",
+          "f": 493
+        },
+        {
+          "w": "1m85,",
+          "f": 511
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "soit 6 centimètres supplémentaires grâce à l'optimisation de sa croissance.",
+      "from": 542,
+      "duration": 126,
+      "words": [
+        {
+          "w": "soit",
+          "f": 542
+        },
+        {
+          "w": "6",
+          "f": 562
+        },
+        {
+          "w": "centimètres",
+          "f": 569
+        },
+        {
+          "w": "supplémentaires",
+          "f": 588
+        },
+        {
+          "w": "grâce",
+          "f": 610
+        },
+        {
+          "w": "à",
+          "f": 617
+        },
+        {
+          "w": "l'optimisation",
+          "f": 619
+        },
+        {
+          "w": "de",
+          "f": 624
+        },
+        {
+          "w": "sa",
+          "f": 643
+        },
+        {
+          "w": "croissance.",
+          "f": 650
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Il a déjà terminé 75,9% de sa croissance.",
+      "from": 670,
+      "duration": 105,
+      "words": [
+        {
+          "w": "Il",
+          "f": 670
+        },
+        {
+          "w": "a",
+          "f": 670
+        },
+        {
+          "w": "déjà",
+          "f": 674
+        },
+        {
+          "w": "terminé",
+          "f": 686
+        },
+        {
+          "w": "75,9%",
+          "f": 703
+        },
+        {
+          "w": "de",
+          "f": 754
+        },
+        {
+          "w": "sa",
+          "f": 756
+        },
+        {
+          "w": "croissance.",
+          "f": 761
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "Tu es pas cuit.",
+      "from": 776,
+      "duration": 23,
+      "words": [
+        {
+          "w": "Tu",
+          "f": 776
+        },
+        {
+          "w": "es",
+          "f": 781
+        },
+        {
+          "w": "pas",
+          "f": 785
+        },
+        {
+          "w": "cuit.",
+          "f": 788
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si quelqu'un d'autre veut que son potentiel de taille soit analysé,",
+      "from": 800,
+      "duration": 81,
+      "words": [
+        {
+          "w": "Si",
+          "f": 800
+        },
+        {
+          "w": "quelqu'un",
+          "f": 805
+        },
+        {
+          "w": "d'autre",
+          "f": 812
+        },
+        {
+          "w": "veut",
+          "f": 819
+        },
+        {
+          "w": "que",
+          "f": 824
+        },
+        {
+          "w": "son",
+          "f": 829
+        },
+        {
+          "w": "potentiel",
+          "f": 833
+        },
+        {
+          "w": "de",
+          "f": 845
+        },
+        {
+          "w": "taille",
+          "f": 848
+        },
+        {
+          "w": "soit",
+          "f": 857
+        },
+        {
+          "w": "analysé,",
+          "f": 865
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "commentez votre âge et votre taille actuelle sous cette vidéo.",
+      "from": 881,
+      "duration": 95,
+      "words": [
+        {
+          "w": "commentez",
+          "f": 881
+        },
+        {
+          "w": "votre",
+          "f": 893
+        },
+        {
+          "w": "âge",
+          "f": 898
+        },
+        {
+          "w": "et",
+          "f": 904
+        },
+        {
+          "w": "votre",
+          "f": 910
+        },
+        {
+          "w": "taille",
+          "f": 917
+        },
+        {
+          "w": "actuelle",
+          "f": 927
+        },
+        {
+          "w": "sous",
+          "f": 939
+        },
+        {
+          "w": "cette",
+          "f": 946
+        },
+        {
+          "w": "vidéo.",
+          "f": 951
+        }
+      ]
+    }
+  ]
+}
