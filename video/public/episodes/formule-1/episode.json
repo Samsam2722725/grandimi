@@ -125,155 +125,38 @@
   {
    "nom": "formule",
    "debut": "calcul-2",
-   "transition": "radial",
-   "fond": "topo",
-   "topo": {
-    "zoomDe": 0.6,
-    "d": 18,
-    "vitesse": 0.15
+   "formuleTaille": {
+    "t": {
+     "nombres": "calcul:prennes",
+     "carte": "calcul:et-2",
+     "ajout170": "calcul:additionnes",
+     "ajout13": "calcul:celle",
+     "somme": "calcul:père",
+     "vert": "calcul2:ensuite",
+     "fusion": "calcul2:13-2",
+     "divise": "calcul2:13+4",
+     "resultat": "calcul2:et-2",
+     "calc": "calcul2:divises+2",
+     "tapeDe": "calcul2:divises+3",
+     "tapeA": "calcul2:2+6",
+     "egal": "nuance:cependant-3",
+     "chute": "nuance:cependant+6",
+     "zoom": "nuance:reste+2",
+     "fiole": "nuance:simple",
+     "bulle": "nuance:estimation",
+     "question": "nuance:scientifique",
+     "fiche": "fin-4",
+     "morphDe": "fin:connaître",
+     "morphA": "fin:adulte+6",
+     "pense": "fin:maximale-3",
+     "site": "site-2",
+     "telephone": "site:site-3",
+     "valide": "site:grandimi.com"
+    },
+    "mere": 157,
+    "pere": 170,
+    "ajout": 13
    },
-   "elements": [
-    {
-     "type": "texte",
-     "texte": "TAILLE DE TA MÈRE",
-     "a": "calcul:taille",
-     "y": 640,
-     "taille": 80,
-     "couleur": "#fff",
-     "contour": 10,
-     "contourCouleur": "#000",
-     "poids": 900,
-     "police": "Montserrat",
-     "effet": "pop",
-     "son": "pop",
-     "volume": 0.6
-    },
-    {
-     "type": "texte",
-     "texte": "+ TAILLE DE TON PÈRE",
-     "a": "calcul:père-3",
-     "y": 790,
-     "taille": 80,
-     "couleur": "#fff",
-     "contour": 10,
-     "contourCouleur": "#000",
-     "poids": 900,
-     "police": "Montserrat",
-     "effet": "pop",
-     "son": "pop",
-     "volume": 0.6
-    },
-    {
-     "type": "texte",
-     "texte": "+ 13",
-     "a": "calcul2:13-2",
-     "y": 980,
-     "taille": 170,
-     "couleur": "#ff7a3d",
-     "contour": 10,
-     "contourCouleur": "#000",
-     "poids": 900,
-     "police": "Montserrat",
-     "effet": "pop",
-     "son": "pop",
-     "volume": 0.6
-    },
-    {
-     "type": "texte",
-     "texte": "÷ 2",
-     "a": "calcul2:divises",
-     "y": 1180,
-     "taille": 170,
-     "couleur": "#ff7a3d",
-     "contour": 10,
-     "contourCouleur": "#000",
-     "poids": 900,
-     "police": "Montserrat",
-     "effet": "pop",
-     "son": "pop",
-     "volume": 0.6
-    },
-    {
-     "type": "texte",
-     "texte": "SIMPLE ESTIMATION",
-     "a": "nuance:estimation-2",
-     "y": 1440,
-     "taille": 104,
-     "couleur": "#e22221",
-     "contour": 12,
-     "contourCouleur": "#fff",
-     "poids": 900,
-     "police": "Montserrat",
-     "effet": "pop",
-     "son": "slam",
-     "volume": 0.6
-    }
-   ],
-   "sons": [
-    {
-     "a": 0,
-     "son": "whoosh",
-     "volume": 0.44
-    }
-   ]
-  },
-  {
-   "nom": "rapport",
-   "debut": "fin-2",
-   "transition": "rebond",
-   "pousse": 0.04,
-   "dashboard": {
-    "donnees": {
-     "actuelle": "188 cm",
-     "predite": "201 cm",
-     "optimiser": "+5 cm",
-     "bulle": "197 cm",
-     "courbe": [
-      188,
-      193,
-      196.5,
-      198.8,
-      200,
-      200.6,
-      201
-     ],
-     "ages": [
-      "14",
-      "15,2",
-      "16,3",
-      "17,5",
-      "18,7",
-      "19,8",
-      "21"
-     ],
-     "rang": "99 %",
-     "chances": "90 %",
-     "chancesCm": "206 cm",
-     "croissance": "93,5 %"
-    },
-    "cams": [
-     {
-      "a": "fin:maximale-4",
-      "cx": 0.68,
-      "cy": 0.24,
-      "z": 1.83,
-      "d": 9,
-      "courbe": "avant"
-     }
-    ],
-    "pops": [],
-    "fleches": [],
-    "url": "grandimi.com",
-    "barre": [
-     "Taille",
-     "Programme",
-     "Exercices",
-     "Routine"
-    ],
-    "barreBas": true,
-    "revele": "site:grandimi.com+600"
-   },
-   "effets": [],
    "elements": [],
    "sons": [
     {
@@ -282,68 +165,169 @@
      "volume": 0.44
     },
     {
-     "a": "fin:maximale-6",
-     "son": "whoosh",
-     "volume": 0.44
-    }
-   ]
-  },
-  {
-   "nom": "fin-site",
-   "debut": "site-2",
-   "transition": "whip-h",
-   "fond": "topo",
-   "topo": {
-    "vitesse": 0.15
-   },
-   "elements": [
-    {
-     "type": "texte",
-     "texte": "grandimi.com",
-     "a": 0,
-     "y": 190,
-     "taille": 120,
-     "couleur": "#ff7a3d",
-     "contour": 2,
-     "poids": 800,
-     "police": "Montserrat",
-     "effet": "pop",
-     "son": "ding",
-     "volume": 0.5,
-     "contourCouleur": "#ff7a3d"
-    },
-    {
-     "type": "image",
-     "ecran": true,
-     "fichier": "site_accueil.png",
-     "a": 2,
-     "x": 300,
-     "y": 400,
-     "w": 480,
-     "h": 1039,
-     "effet": "pop"
-    },
-    {
-     "type": "texte",
-     "texte": "Lien en bio",
-     "a": 8,
-     "y": 1500,
-     "taille": 76,
-     "couleur": "#fff",
-     "fond": "#e95a2e",
-     "contour": 0,
-     "poids": 800,
-     "police": "Montserrat",
-     "effet": "pop",
+     "a": "calcul:prennes",
      "son": "pop",
-     "volume": 0.6
-    }
-   ],
-   "sons": [
+     "volume": 0.5
+    },
     {
-     "a": 0,
+     "a": "calcul:prennes+5",
+     "son": "pop",
+     "volume": 0.4
+    },
+    {
+     "a": "calcul:et-2",
      "son": "whoosh",
      "volume": 0.44
+    },
+    {
+     "a": "calcul:additionnes",
+     "son": "pop",
+     "volume": 0.5
+    },
+    {
+     "a": "calcul:celle",
+     "son": "pop",
+     "volume": 0.5
+    },
+    {
+     "a": "calcul:père",
+     "son": "slam",
+     "volume": 0.5
+    },
+    {
+     "a": "calcul2:ensuite",
+     "son": "whoosh",
+     "volume": 0.36
+    },
+    {
+     "a": "calcul2:13-2",
+     "son": "sparkle",
+     "volume": 0.5
+    },
+    {
+     "a": "calcul2:13+6",
+     "son": "pop",
+     "volume": 0.4
+    },
+    {
+     "a": "calcul2:et-2",
+     "son": "ding",
+     "volume": 0.5
+    },
+    {
+     "a": "calcul2:divises+2",
+     "son": "whoosh",
+     "volume": 0.44
+    },
+    {
+     "a": "calcul2:divises+0",
+     "son": "tick",
+     "volume": 0.3
+    },
+    {
+     "a": "calcul2:divises+3",
+     "son": "tick",
+     "volume": 0.3
+    },
+    {
+     "a": "calcul2:divises+6",
+     "son": "tick",
+     "volume": 0.3
+    },
+    {
+     "a": "calcul2:divises+9",
+     "son": "tick",
+     "volume": 0.3
+    },
+    {
+     "a": "calcul2:divises+12",
+     "son": "tick",
+     "volume": 0.3
+    },
+    {
+     "a": "calcul2:divises+15",
+     "son": "tick",
+     "volume": 0.3
+    },
+    {
+     "a": "calcul2:divises+18",
+     "son": "tick",
+     "volume": 0.3
+    },
+    {
+     "a": "nuance:cependant-3",
+     "son": "ding",
+     "volume": 0.44
+    },
+    {
+     "a": "nuance:cependant+6",
+     "son": "whoosh",
+     "volume": 0.44
+    },
+    {
+     "a": "nuance:reste+2",
+     "son": "whoosh",
+     "volume": 0.5
+    },
+    {
+     "a": "nuance:simple",
+     "son": "pop",
+     "volume": 0.5
+    },
+    {
+     "a": "nuance:estimation",
+     "son": "pop",
+     "volume": 0.5
+    },
+    {
+     "a": "nuance:scientifique",
+     "son": "pop",
+     "volume": 0.4
+    },
+    {
+     "a": "fin-4",
+     "son": "whoosh",
+     "volume": 0.5
+    },
+    {
+     "a": "fin:connaître",
+     "son": "whoosh",
+     "volume": 0.3
+    },
+    {
+     "a": "fin:maximale-3",
+     "son": "whoosh",
+     "volume": 0.5
+    },
+    {
+     "a": "fin:maximale+5",
+     "son": "sparkle",
+     "volume": 0.4
+    },
+    {
+     "a": "fin:maximale+8",
+     "son": "pop",
+     "volume": 0.5
+    },
+    {
+     "a": "site-8",
+     "son": "whoosh",
+     "volume": 0.44
+    },
+    {
+     "a": "site-2",
+     "son": "whoosh",
+     "volume": 0.5
+    },
+    {
+     "a": "site:site-3",
+     "son": "pop",
+     "volume": 0.5
+    },
+    {
+     "a": "site:grandimi.com",
+     "son": "ding",
+     "volume": 0.5
     }
    ]
   }
@@ -353,7 +337,7 @@
   "fenetres": [
    {
     "de": 0,
-    "a": "calcul-2",
+    "a": "site:grandimi.com+30",
     "y": 1110,
     "taille": 115,
     "motsMax": 2,
@@ -367,7 +351,7 @@
   ]
  },
  "voix": "Enregistrement ElevenLabs de l'utilisateur (Anthony Sirius, 05/11), blancs ramenés à 0,05 s, ×1,08.",
- "reference": "public/episodes/paul-16 (accroche) + theo-1 (suite)",
+ "reference": "references/7593430123248979222",
  "deriveCamera": false,
  "sonsMouvements": false
 }

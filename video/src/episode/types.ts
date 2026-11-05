@@ -107,6 +107,8 @@ export type Plan = {
 		regle?: Ancre; potentiel?: Ancre; finale?: Ancre;
 		/** Image du bonhomme du plan 1 (chemin dans public/). */
 		perso?: string};
+	/** Suite dessinée de la formule (src/episode/FormuleTaille.tsx) : une ancre par événement. */
+	formuleTaille?: {t: Record<keyof import('./FormuleTaille').FormuleT, Ancre>; mere?: number; pere?: number; ajout?: number};
 	/** Accroche dessinée « on prédit votre potentiel… à partir de vos commentaires » (src/episode/HookCommentaires.tsx). */
 	hookCommentaires?: {actuelle: number; cible: number; potentiel: Ancre; commentaires: Ancre; bulles: {nom: string; texte: string; couleur: string}[]};
 	/** Écran de résultats Grandimi animé (src/episode/Dashboard.tsx) : caméra, lignes qui s'élargissent, flèches, ballon. */

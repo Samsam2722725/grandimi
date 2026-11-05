@@ -1,3 +1,4 @@
+import {FormuleTaille, type FormuleT} from './FormuleTaille';
 import React, {useEffect, useState} from 'react';
 import {
 	AbsoluteFill,
@@ -1045,6 +1046,14 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 				))}
 			{plan.sortie === 'noir' ? <FonduNoir from={dur - 4} to={dur - 2} /> : null}
 			{plan.sequence?.length ? <Sequence_ files={plan.sequence.map(file)} /> : null}
+			{plan.formuleTaille ? (
+				<FormuleTaille
+					t={Object.fromEntries(Object.entries(plan.formuleTaille.t).map(([k, v]) => [k, loc(v)])) as unknown as FormuleT}
+					mere={plan.formuleTaille.mere}
+					pere={plan.formuleTaille.pere}
+					ajout={plan.formuleTaille.ajout}
+				/>
+			) : null}
 			{plan.hookTaille ? (
 				<HookTaille
 					cm={plan.hookTaille.cm}
