@@ -458,7 +458,7 @@ export const BarreOnglets: React.FC<{onglets: string[]; actif: number}> = ({ongl
 /** Barre d'état + barre d'adresse Safari (« comme si on était sur le site »), 1080 × 172 px en haut de l'écran. */
 /** decale : la barre descend de N px (03/11 : « grandimi.com un peu plus bas », hors de l'en-tête TikTok). */
 export const BarreSafari: React.FC<{url: string; decale?: number}> = ({url, decale = 0}) => (
-	<div style={{position: 'absolute', left: 0, top: decale, width: W, height: 172, background: '#000', fontFamily: FONT, color: '#fff'}}>
+	<div style={{position: 'absolute', left: 0, top: decale, width: W, height: 172, background: decale < 0 ? 'transparent' : '#000', fontFamily: FONT, color: '#fff'}}>
 			{/* Pas d'heure, de réseau ni de batterie (demande du 02/11) : seulement la barre d'adresse. */}
 			<div
 				style={{

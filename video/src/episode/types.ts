@@ -55,7 +55,7 @@ export type Element =
 	/** Clip vidéo muet (enregistrement d'écran du site déjà monté), lu à partir de `a`. */
 	| (Base & {type: 'video'; fichier: string; x: number; y: number; w: number; h: number; url?: string})
 	/** Écran « Ma routine » flouté façon Taller (src/episode/RoutineGrandimi.tsx) ; 🤫 à `chut`. */
-	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre; onglets?: string[]; taller?: boolean; coche?: {de: Ancre; a: Ancre}; habitudes?: string[]; verrou?: {titre: string; sous: string; nombre: number}; urlDecale?: number})
+	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre; onglets?: string[]; taller?: boolean; coche?: {de: Ancre; a: Ancre}; habitudes?: string[]; verrou?: {titre: string; sous: string; nombre: number}; urlDecale?: number; taller30?: boolean; total?: number})
 	/** Écran de calcul du site redessiné (anneau qui se remplit, étapes cochées une à une) entre `a` et `fin`
 	    (src/episode/CalculGrandimi.tsx). */
 	| (Base & {type: 'calcul'; fin: Ancre; url?: string})

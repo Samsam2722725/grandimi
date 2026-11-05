@@ -76,8 +76,8 @@
   "images": {
     "accroche": {
       "fichier": "accroche.jpg",
-      "w": 1040,
-      "h": 2272
+      "w": 1168,
+      "h": 2112
     },
     "verdict": {
       "fichier": "verdict.jpg",
@@ -93,16 +93,16 @@
       "image": "accroche",
       "camera": [
         {
-          "x": 520,
-          "y": 1136,
+          "x": 584,
+          "y": 1056,
           "z": 1.0,
           "duree": 1
         },
         {
           "a": 1,
-          "x": 520,
-          "y": 1136,
-          "z": 1.02,
+          "x": 584,
+          "y": 1056,
+          "z": 1.08,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -247,7 +247,7 @@
           ]
         },
         "url": "grandimi.com",
-        "urlDecale": -70,
+        "urlDecale": -75,
         "navTraits": true,
         "pageY": 0
       },
@@ -283,21 +283,17 @@
         {
           "type": "routine",
           "a": 0,
+          "taller30": true,
           "url": "grandimi.com",
-          "urlDecale": 60,
-          "flou": 0,
-          "taller": true,
+          "urlDecale": -75,
+          "total": 9,
           "habitudes": [
             "Routine physique Grandimi 🏋️",
+            "1 verre de lait + miel 🍯🥛",
             "Programme sommeil 😴",
-            "Alimentation croissance 🥛",
+            "Alimentation croissance 🥗",
             "Exercices de posture 🧘"
-          ],
-          "verrou": {
-            "titre": "+7 habitudes clés",
-            "sous": "les plus importantes pour ta taille",
-            "nombre": 7
-          }
+          ]
         }
       ],
       "sons": [
@@ -414,7 +410,7 @@
           }
         ],
         "url": "grandimi.com",
-        "urlDecale": -70,
+        "urlDecale": -75,
         "navTraits": true,
         "pageY": 0
       },
@@ -555,18 +551,10 @@
             "de": 0.1,
             "d": 40
           }
-        },
-        {
-          "type": "finLien",
-          "texte": "GRANDIMI.COM",
-          "a": "com:vidéo+18",
-          "fixe": true
         }
       ],
       "sons": [],
-      "topo": {
-        "fige": "com:vidéo+18"
-      }
+      "topo": {}
     }
   ],
   "sousTitres": {
@@ -589,7 +577,7 @@
       },
       {
         "de": "cta",
-        "a": "com:vidéo+18",
+        "a": "fin",
         "y": 921,
         "taille": 76,
         "motsMax": 4,

@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "totalFrames": 1049,
+  "totalFrames": 941,
   "audio": "voice/voix.wav",
   "lines": [
     {
@@ -375,31 +375,31 @@
         },
         {
           "w": "a",
-          "f": 662
+          "f": 657
         },
         {
           "w": "déjà",
-          "f": 662
+          "f": 657
         },
         {
           "w": "terminé",
-          "f": 715
+          "f": 657
         },
         {
           "w": "97,1%",
-          "f": 715
+          "f": 662
         },
         {
           "w": "de",
-          "f": 730
+          "f": 662
         },
         {
           "w": "sa",
-          "f": 732
+          "f": 662
         },
         {
           "w": "croissance.",
-          "f": 734
+          "f": 662
         }
       ]
     },
@@ -491,7 +491,7 @@
       "id": "com",
       "text": "commentez votre âge, votre taille actuelle sous cette vidéo.",
       "from": 852,
-      "duration": 194,
+      "duration": 86,
       "words": [
         {
           "w": "commentez",
@@ -507,11 +507,11 @@
         },
         {
           "w": "votre",
-          "f": 878
+          "f": 881
         },
         {
           "w": "taille",
-          "f": 886
+          "f": 881
         },
         {
           "w": "actuelle",
@@ -519,15 +519,15 @@
         },
         {
           "w": "sous",
-          "f": 902
+          "f": 905
         },
         {
           "w": "cette",
-          "f": 907
+          "f": 910
         },
         {
           "w": "vidéo.",
-          "f": 912
+          "f": 914
         }
       ]
     }

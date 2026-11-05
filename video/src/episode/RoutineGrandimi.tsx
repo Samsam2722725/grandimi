@@ -192,3 +192,40 @@ const Verrou: React.FC<{top: number; k: number; titre: string; sous: string; f: 
 		</div>
 	);
 };
+
+/** « Daily routine » de Taller partie 30 recopiée à la même taille (mesurée le 05/11 sur references/taller-ref3,
+ *  1080 × 1920) : titre y 80-161, jours y 226, carte Séries y 448-614, « En cours » + barre y 824-850, habitudes de
+ *  160 px tous les 200 px dès y 921, x 52-1027. Statique (rien ne se coche), couleurs Grandimi. */
+export const RoutineTaller30: React.FC<{at: number; url?: string; urlDecale?: number; habitudes: string[]; total: number}> = ({at, url, urlDecale = 0, habitudes, total}) => {
+	const f = useCurrentFrame();
+	if (f < at) return null;
+	const CARTE30 = '#17171a';
+	return (
+		<AbsoluteFill style={{background: '#000', fontFamily: FONT, color: '#fff'}}>
+			<div style={{position: 'absolute', left: 56, top: 70, fontSize: 78, fontWeight: 800, letterSpacing: -1}}>Routine quotidienne</div>
+			<div style={{position: 'absolute', right: 56, top: 82, width: 70, height: 70, borderRadius: 35, background: '#1d1d20'}} />
+			<div style={{position: 'absolute', left: 52, right: 53, top: 226, display: 'flex', justifyContent: 'space-between'}}>
+				{['3', '4', '5', '6', '7', '8', '9'].map((j, i) => (
+					<div key={j} style={{width: 120, height: 150, borderRadius: 24, background: i === 3 ? OR : CARTE30, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontSize: 42, fontWeight: 700}}>
+						{j}
+						<span style={{fontSize: 28, fontWeight: 500, marginTop: 6}}>nov</span>
+					</div>
+				))}
+			</div>
+			<div style={{position: 'absolute', left: 52, right: 53, top: 448, height: 166, borderRadius: 34, background: CARTE30}}>
+				<div style={{position: 'absolute', left: 70, top: 52, fontSize: 56, fontWeight: 800}}>Séries 🔥</div>
+				<div style={{position: 'absolute', right: 26, top: 32, width: 260, height: 104, borderRadius: 26, background: OR, textAlign: 'center', lineHeight: '104px', fontSize: 52, fontWeight: 800}}>0</div>
+			</div>
+			<div style={{position: 'absolute', left: 52, top: 735, fontSize: 46, fontWeight: 600}}>En cours</div>
+			<div style={{position: 'absolute', right: 53, top: 735, fontSize: 46, fontWeight: 600}}>0/{total}</div>
+			<div style={{position: 'absolute', left: 52, right: 53, top: 824, height: 26, borderRadius: 13, background: '#222'}} />
+			{habitudes.map((h, i) => (
+				<div key={h} style={{position: 'absolute', left: 52, right: 53, top: 921 + i * 200, height: 160, borderRadius: 34, background: CARTE30}}>
+					<div style={{position: 'absolute', left: 44, top: 52, width: 56, height: 56, borderRadius: 12, background: '#2a2a2e'}} />
+					<div style={{position: 'absolute', left: 150, top: 52, fontSize: 50, fontWeight: 600}}>{h}</div>
+				</div>
+			))}
+			{url ? <BarreSafari url={url} decale={urlDecale} /> : null}
+		</AbsoluteFill>
+	);
+};

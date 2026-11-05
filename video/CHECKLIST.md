@@ -82,3 +82,12 @@ En cas de conflit entre deux demandes, la plus récente gagne ; les points « À
       silhouette et appel, lent sur la fin).
 - [ ] **Émojis de fin** : « enlève les émojis » (01/11) **ou** 👵 + ordinateur comme l'original (04/11) ? (miguel-29 : comme l'original).
 - [ ] **Musique** : aucune (02/11) **ou** comme l'original ? (miguel-29 : aucune).
+
+## Retours du 05/11 (noah-30 = modèle à copier)
+- [ ] Accroche : photo entière (cadrage large comme l'original), **zoom avant lent tout au long** (×1 → ×1,08).
+- [ ] Routine **comme Taller** : `"taller30": true` (même taille et mise en page, 0/9, statique), **sans carte « +7 »**,
+      habitudes Grandimi (routine physique, lait + miel, programme sommeil, alimentation, posture).
+- [ ] **Pas de fin animée** (l'icône + @TALLER.APP de l'original est la fin ajoutée par Instagram au téléchargement) :
+      la vidéo s'arrête 0,6 s après la voix (`apad=pad_dur=0.6`), pas de `finLien`.
+- [ ] Dashboard à la place exacte de Taller (`pageY` 0), barre grandimi.com par-dessus (`urlDecale` −75, fond transparent).
+- [ ] Carte commentaire et sous-titres à la position de l'original (sous-titres y 921, taille 76) ; photo de profil non floutée.

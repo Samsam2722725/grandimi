@@ -24,7 +24,7 @@ import {ChargementPlan} from './ChargementPlan';
 import {FormulaireGrandimi} from './FormulaireGrandimi';
 import {SceneFamille} from './SceneFamille';
 import {CalculGrandimi} from './CalculGrandimi';
-import {RoutineGrandimi} from './RoutineGrandimi';
+import {RoutineGrandimi, RoutineTaller30} from './RoutineGrandimi';
 import {Explicatif} from './Explicatif';
 import {HookCommentaires} from './HookCommentaires';
 import {BarreSafari, DashboardGrandimi} from './Dashboard';
@@ -911,6 +911,8 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			return <Compteur key={i} el={el} at={loc(el.a)} arrivee={loc(el.arrivee)} fin={el.fin !== undefined ? loc(el.fin) : undefined} />;
 		if (el.type === 'dm') return <DM key={i} el={el} at={loc(el.a)} />;
 		if (el.type === 'jauge') return <Jauge key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} />;
+		if (el.type === 'routine' && el.taller30)
+			return <RoutineTaller30 key={i} at={loc(el.a)} url={el.url} urlDecale={el.urlDecale} habitudes={el.habitudes ?? []} total={el.total ?? 9} />;
 		if (el.type === 'routine')
 			return (
 				<RoutineGrandimi
