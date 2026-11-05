@@ -19,7 +19,9 @@ export type Camera = {a?: Ancre; zone?: string; x?: number; y?: number; z?: numb
 type Base = {a: Ancre; son?: string; volume?: number};
 export type Element =
 	/** Fin comme Taller partie 30 : la scène s'assombrit, icône du site qui passe du blanc aux couleurs et revient, texte dessous. */
-	| (Base & {type: 'finLien'; texte: string})
+	| (Base & {type: 'finLien'; texte: string; fixe?: boolean})
+	/** Réaction « Cooked » de Taller (barre glitch puis mot rose lumineux). */
+	| (Base & {type: 'cuit'; texte: string})
 	| (Base & {type: 'image'; fichier: string; x: number; y: number; w: number; h: number; fin?: Ancre; effet?: 'pop' | 'pop-balance' | 'revele-bas' | 'change'; rebond?: boolean; ecran?: boolean;
 		/** Entrée glissée : part de (x, y) pixels de décalage et rejoint sa place en d frames, en fondu. */
 		depuis?: {x?: number; y?: number; d?: number};
@@ -92,7 +94,7 @@ export type Plan = {
 	/** papier : photos de papier froissé ; topo : courbes de niveau animées (src/episode/TopoAnime.tsx). */
 	fond?: 'papier' | 'topo';
 	/** Fond topo : zoom de départ (la caméra arrive à 1 en `d` frames) et coup de zoom flou à `coup`. */
-	topo?: {zoomDe?: number; d?: number; coup?: Ancre; vitesse?: number; sombre?: number};
+	topo?: {zoomDe?: number; d?: number; coup?: Ancre; vitesse?: number; sombre?: number; fige?: Ancre};
 	/** Photos de papier qui alternent (sinon papier généré). */
 	papiers?: string[];
 	image?: string;
@@ -111,7 +113,9 @@ export type Plan = {
 		cams: {a: Ancre; cx: number; cy: number; z: number; d: number; courbe: 'avant' | 'arriere' | 'lineaire'}[];
 		pops: {ligne: import('./Dashboard').Ligne; a: Ancre; d: number; fin: Ancre; dFin: number; echelle: number}[];
 		fleches: {sens: 'bas' | 'haut'; x: number; pointe: number; a: Ancre; d: number; fin: Ancre; dFin: number}[];
-		ballon?: {fichier: string; a: Ancre; fin: Ancre; chute?: boolean};
+		ballon?: {fichier: string; a: Ancre; fin: Ancre; chute?: boolean; boite?: number[]};
+		/** Décalage vertical de la page (px) ; 0 = page à la place exacte de Taller partie 30 (barre d'adresse par-dessus). */
+		pageY?: number;
 		/** La taille prédite reste cachée (« ??? cm ») jusqu'à cette ancre. */
 		revele?: Ancre;
 		/** Page vue dans Safari : barre d'adresse avec ce lien en haut (diapos pub). */

@@ -95,14 +95,14 @@
         {
           "x": 520,
           "y": 1136,
-          "z": 1.13,
+          "z": 1.0,
           "duree": 1
         },
         {
           "a": 1,
           "x": 520,
           "y": 1136,
-          "z": 1.0,
+          "z": 1.02,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -200,8 +200,8 @@
         "cams": [
           {
             "a": "age:1m75+12",
-            "cx": 0.339,
-            "cy": 0.345,
+            "cx": 0.341,
+            "cy": 0.363,
             "z": 1.85,
             "d": 12,
             "courbe": "lineaire"
@@ -216,8 +216,8 @@
           },
           {
             "a": "predit:1m81+8",
-            "cx": 0.662,
-            "cy": 0.343,
+            "cx": 0.661,
+            "cy": 0.365,
             "z": 1.87,
             "d": 13,
             "courbe": "lineaire"
@@ -238,11 +238,18 @@
           "fichier": "ballon_16.png",
           "a": "age:16",
           "fin": "age:16+30",
-          "chute": true
+          "chute": true,
+          "boite": [
+            0.108,
+            0.348,
+            0.779,
+            0.384
+          ]
         },
         "url": "grandimi.com",
-        "urlDecale": 60,
-        "navTraits": true
+        "urlDecale": -70,
+        "navTraits": true,
+        "pageY": 0
       },
       "elements": [],
       "sons": [
@@ -387,8 +394,8 @@
         "cams": [
           {
             "a": "fini:97,1+14",
-            "cx": 0.633,
-            "cy": 0.668,
+            "cx": 0.639,
+            "cy": 0.599,
             "z": 1.81,
             "d": 11,
             "courbe": "lineaire"
@@ -407,8 +414,9 @@
           }
         ],
         "url": "grandimi.com",
-        "urlDecale": 60,
-        "navTraits": true
+        "urlDecale": -70,
+        "navTraits": true,
+        "pageY": 0
       },
       "effets": [],
       "elements": [
@@ -418,7 +426,7 @@
           "fichier": "curseur.png",
           "a": "pct:des",
           "x": 404,
-          "y": 1502,
+          "y": 1292,
           "w": 192,
           "h": 204,
           "depuis": {
@@ -475,18 +483,9 @@
       ],
       "elements": [
         {
-          "type": "tape",
+          "type": "cuit",
           "texte": "Cuit",
-          "a": "foutu:cuit",
-          "y": 890,
-          "taille": 110,
-          "couleur": "#ffffff",
-          "contour": 0,
-          "police": "Montserrat",
-          "poids": 500,
-          "parLettre": 1,
-          "son": "tick",
-          "volume": 0.2
+          "a": "foutu+3"
         }
       ],
       "sons": [
@@ -560,10 +559,14 @@
         {
           "type": "finLien",
           "texte": "GRANDIMI.COM",
-          "a": "com:vidéo+18"
+          "a": "com:vidéo+18",
+          "fixe": true
         }
       ],
-      "sons": []
+      "sons": [],
+      "topo": {
+        "fige": "com:vidéo+18"
+      }
     }
   ],
   "sousTitres": {
@@ -572,8 +575,8 @@
       {
         "de": 0,
         "a": "hook:partie-1",
-        "y": 838.0,
-        "taille": 72.0,
+        "y": 921,
+        "taille": 76,
         "motsMax": 4,
         "carMax": 17,
         "poids": 500,
@@ -587,8 +590,8 @@
       {
         "de": "cta",
         "a": "com:vidéo+18",
-        "y": 921.0,
-        "taille": 72.0,
+        "y": 921,
+        "taille": 76,
         "motsMax": 4,
         "carMax": 17,
         "poids": 500,
@@ -610,9 +613,9 @@
     "texte": "16 ans, 1m75, c'est quoi ma taille max ?",
     "de": 0,
     "a": "age:16",
-    "x": 60,
-    "y": 998,
-    "w": 962,
+    "x": 31,
+    "y": 1157,
+    "w": 1008,
     "reponse": {
       "modele": "taller",
       "h": 230,

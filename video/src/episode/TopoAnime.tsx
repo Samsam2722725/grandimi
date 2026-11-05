@@ -155,8 +155,8 @@ const courbes = (t: number, zoom: number) => {
 	return {fins: fins.join(''), gras: gras.join('')};
 };
 
-export const TopoAnime: React.FC<{zoomDe?: number; d?: number; vitesse?: number}> = ({zoomDe = 1, d = 18, vitesse = 1}) => {
-	const f = useCurrentFrame();
+export const TopoAnime: React.FC<{zoomDe?: number; d?: number; vitesse?: number; fige?: number}> = ({zoomDe = 1, d = 18, vitesse = 1, fige}) => {
+	const f = fige !== undefined ? Math.min(useCurrentFrame(), fige) : useCurrentFrame();
 	const zoom = interpolate(f, [0, d], [zoomDe, 1], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)}) * (1 + f * 0.0008);
 	const {fins, gras} = useMemo(() => courbes(f * 0.018 * vitesse, zoom), [f, zoom, vitesse]);
 	return (

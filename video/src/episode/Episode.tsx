@@ -333,12 +333,59 @@ const Trait: React.FC<{el: Extract<Element, {type: 'trait'}>; at: number; fin?: 
 /** Fin « suis-nous » mesurée sur Taller partie 30 (31,9-36 s) : voile noir 0 → 0,72 en 4 images, icône blanche
  *  (≈ 15 % de la largeur, centre y 914) qui passe aux couleurs de la marque puis revient au blanc, texte en capitales
  *  condensées dessous (centre y 1107). */
-const FinLien: React.FC<{texte: string; at: number}> = ({texte, at}) => {
+/** Réaction « Cooked » de Taller partie 30 (25,97-26,6 s) : barre blanche qui saute avec bords rouge / cyan
+ *  (aberration chromatique) pendant ~14 images, puis le mot blanc avec une lueur rose, centré vers y 945. */
+const Cuit: React.FC<{texte: string; at: number}> = ({texte, at}) => {
+	const f = useCurrentFrame();
+	const k = f - at;
+	if (k < 0) return null;
+	if (k < 14) {
+		const dx = [-70, 30, -20, 55, -40, 10, -60, 40, 0, -25, 35, -10, 20, 0][k];
+		const w = [620, 700, 560, 760, 640, 720, 600, 680, 740, 580, 700, 660, 720, 690][k];
+		return (
+			<div
+				style={{
+					position: 'absolute',
+					left: 540 - w / 2 + dx,
+					top: 945 - 34,
+					width: w,
+					height: 68,
+					borderRadius: 34,
+					background: '#fff',
+					boxShadow: '-14px 0 0 #ff2a55, 14px 0 0 #36e8ff, 0 0 40px rgba(255,60,120,0.6)',
+				}}
+			/>
+		);
+	}
+	const g = k - 14;
+	const ab = g < 3 ? (3 - g) * 6 : 0;
+	return (
+		<div
+			style={{
+				position: 'absolute',
+				left: 0,
+				right: 0,
+				top: 945 - 75,
+				textAlign: 'center',
+				fontFamily: "'Montserrat', sans-serif",
+				fontWeight: 500,
+				fontSize: 150,
+				lineHeight: '150px',
+				color: '#fff',
+				textShadow: `${-ab}px 0 0 #ff2a55, ${ab}px 0 0 #36e8ff, 0 0 30px #ff3d7f, 0 0 60px #ff3d7f`,
+			}}
+		>
+			{texte}
+		</div>
+	);
+};
+
+const FinLien: React.FC<{texte: string; at: number; fixe?: boolean}> = ({texte, at, fixe}) => {
 	const f = useCurrentFrame();
 	if (f < at) return null;
 	const k = f - at;
 	const voile = interpolate(k, [0, 4], [0, 0.72], {extrapolateRight: 'clamp'});
-	const couleur = interpolate(k, [10, 22, 80, 96], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+	const couleur = fixe ? 1 : interpolate(k, [10, 22, 80, 96], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 	const entree = interpolate(k, [0, 5], [0, 1], {extrapolateRight: 'clamp'});
 	const S = 158;
 	const icone = (stroke: string) => (
@@ -851,7 +898,8 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 		return null;
 	});
 	const onScreen = (plan.elements ?? []).map((el, i) => {
-		if (el.type === 'finLien') return <FinLien key={i} texte={el.texte} at={loc(el.a)} />;
+		if (el.type === 'finLien') return <FinLien key={i} texte={el.texte} at={loc(el.a)} fixe={el.fixe} />;
+		if (el.type === 'cuit') return <Cuit key={i} texte={el.texte} at={loc(el.a)} />;
 		if (el.type === 'image' && el.ecran)
 			return <ImageEl key={i} el={el} at={loc(el.a)} fin={el.fin !== undefined ? loc(el.fin) : undefined} src={file(el.fichier)} />;
 		/* Trait sur un plan sans image (dashboard animé) : coordonnées de l'écran 1080 × 1920. */
@@ -959,10 +1007,11 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					barreBas={plan.dashboard.barreBas}
 					urlDecale={plan.dashboard.urlDecale}
 					navTraits={plan.dashboard.navTraits}
+					pageY={plan.dashboard.pageY}
 					sansBarreEtat={Boolean(plan.telephone)}
 					ballon={
 						plan.dashboard.ballon
-							? {src: file(plan.dashboard.ballon.fichier), a: loc(plan.dashboard.ballon.a), fin: loc(plan.dashboard.ballon.fin), chute: plan.dashboard.ballon.chute}
+							? {src: file(plan.dashboard.ballon.fichier), a: loc(plan.dashboard.ballon.a), fin: loc(plan.dashboard.ballon.fin), chute: plan.dashboard.ballon.chute, boite: plan.dashboard.ballon.boite}
 							: undefined
 					}
 				/>
@@ -980,7 +1029,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			) : null}
 			{plan.fond === 'topo' ? (
 				<CoupFlou at={plan.topo?.coup !== undefined ? loc(plan.topo.coup) : undefined} vitesse={vite}>
-					<TopoAnime zoomDe={plan.topo?.zoomDe} d={plan.topo?.d} vitesse={plan.topo?.vitesse} />
+					<TopoAnime zoomDe={plan.topo?.zoomDe} d={plan.topo?.d} vitesse={plan.topo?.vitesse} fige={plan.topo?.fige !== undefined ? loc(plan.topo.fige) : undefined} />
 					{plan.topo?.sombre ? <AbsoluteFill style={{background: '#000', opacity: plan.topo.sombre}} /> : null}
 				</CoupFlou>
 			) : null}

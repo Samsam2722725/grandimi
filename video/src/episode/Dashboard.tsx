@@ -220,7 +220,7 @@ export const DashboardGrandimi: React.FC<{
 	cams: DashCam[];
 	pops: DashPop[];
 	fleches: DashFleche[];
-	ballon?: {src: string; a: number; fin: number; chute?: boolean};
+	ballon?: {src: string; a: number; fin: number; chute?: boolean; boite?: number[]};
 	revele?: number;
 	/** Page ouverte dans Safari : barre d'état et barre d'adresse fixes en haut, page décalée dessous. */
 	url?: string;
@@ -236,9 +236,10 @@ export const DashboardGrandimi: React.FC<{
 	urlDecale?: number;
 	/** Barre de navigation de la page en icônes au trait (Taille, Croissance, Quotidien) comme Taller partie 30. */
 	navTraits?: boolean;
+	pageY?: number;
 	/** Sans la barre d'état de la page (écran de téléphone : la barre Safari du dessus a déjà la sienne). */
 	sansBarreEtat?: boolean;
-}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, barreBas, urlDecale = 0, navTraits, sansBarreEtat}) => {
+}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, barreBas, urlDecale = 0, navTraits, pageY, sansBarreEtat}) => {
 	const cacheEtat = Boolean(url || entete || sansBarreEtat);
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
@@ -260,7 +261,7 @@ export const DashboardGrandimi: React.FC<{
 					width: W,
 					height: H,
 					transformOrigin: '0 0',
-					transform: `translateY(${(url ? 150 + urlDecale : 0) + (barre?.length && !barreBas ? HAUT_BARRE : 0)}px) translate(${W / 2}px, ${H / 2}px) scale(${c.z}) translate(${-c.cx * W}px, ${-c.cy * H}px)`,
+					transform: `translateY(${pageY ?? (url ? 150 + urlDecale : 0) + (barre?.length && !barreBas ? HAUT_BARRE : 0)}px) translate(${W / 2}px, ${H / 2}px) scale(${c.z}) translate(${-c.cx * W}px, ${-c.cy * H}px)`,
 					fontFamily: FONT,
 					color: '#fff',
 				}}
@@ -411,10 +412,10 @@ export const DashboardGrandimi: React.FC<{
 						src={b.src}
 						style={{
 							position: 'absolute',
-							left: 0.14 * W,
-							top: 0.36 * H,
-							width: 0.69 * W,
-							height: 0.26 * H,
+							left: (b.boite?.[0] ?? 0.14) * W,
+							top: (b.boite?.[1] ?? 0.36) * H,
+							width: (b.boite?.[2] ?? 0.69) * W,
+							height: (b.boite?.[3] ?? 0.26) * H,
 							objectFit: 'contain',
 							transform: b.chute ? `translateY(${chuteY}px)` : `scale(${bs})`,
 							filter: chuteFlou ? `blur(${chuteFlou}px)` : undefined,
@@ -431,7 +432,7 @@ export const DashboardGrandimi: React.FC<{
 			{navTraits && !onglets && !barre?.length ? <NavTraits /> : null}
 			{url ? (
 				<>
-					{urlDecale ? <div style={{position: 'absolute', left: 0, top: 0, width: W, height: urlDecale, background: '#000'}} /> : null}
+					{urlDecale > 0 ? <div style={{position: 'absolute', left: 0, top: 0, width: W, height: urlDecale, background: '#000'}} /> : null}
 					<BarreSafari url={url} decale={urlDecale} />
 				</>
 			) : null}
