@@ -1,0 +1,503 @@
+{
+  "fps": 30,
+  "totalFrames": 1086,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 34.",
+      "from": 0,
+      "duration": 81,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 17
+        },
+        {
+          "w": "tailles",
+          "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 36
+        },
+        {
+          "w": "partie",
+          "f": 50
+        },
+        {
+          "w": "34.",
+          "f": 62
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Davio.",
+      "from": 82,
+      "duration": 71,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 82
+        },
+        {
+          "w": "on",
+          "f": 98
+        },
+        {
+          "w": "regarde",
+          "f": 106
+        },
+        {
+          "w": "les",
+          "f": 118
+        },
+        {
+          "w": "infos",
+          "f": 122
+        },
+        {
+          "w": "de",
+          "f": 130
+        },
+        {
+          "w": "Davio.",
+          "f": 134
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 15 ans, Davio mesure 1m65,",
+      "from": 154,
+      "duration": 94,
+      "words": [
+        {
+          "w": "À",
+          "f": 154
+        },
+        {
+          "w": "15",
+          "f": 158
+        },
+        {
+          "w": "ans,",
+          "f": 166
+        },
+        {
+          "w": "Davio",
+          "f": 173
+        },
+        {
+          "w": "mesure",
+          "f": 192
+        },
+        {
+          "w": "1m65,",
+          "f": 202
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est un peu petit pour son âge.",
+      "from": 249,
+      "duration": 46,
+      "words": [
+        {
+          "w": "ce",
+          "f": 249
+        },
+        {
+          "w": "qui",
+          "f": 249
+        },
+        {
+          "w": "est",
+          "f": 249
+        },
+        {
+          "w": "un",
+          "f": 249
+        },
+        {
+          "w": "peu",
+          "f": 249
+        },
+        {
+          "w": "petit",
+          "f": 249
+        },
+        {
+          "w": "pour",
+          "f": 249
+        },
+        {
+          "w": "son",
+          "f": 249
+        },
+        {
+          "w": "âge.",
+          "f": 249
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 1m83,",
+      "from": 296,
+      "duration": 131,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 296
+        },
+        {
+          "w": "le",
+          "f": 304
+        },
+        {
+          "w": "site",
+          "f": 306
+        },
+        {
+          "w": "Grandimi,",
+          "f": 316
+        },
+        {
+          "w": "sa",
+          "f": 342
+        },
+        {
+          "w": "taille",
+          "f": 347
+        },
+        {
+          "w": "adulte",
+          "f": 354
+        },
+        {
+          "w": "prédite",
+          "f": 366
+        },
+        {
+          "w": "est",
+          "f": 383
+        },
+        {
+          "w": "de",
+          "f": 388
+        },
+        {
+          "w": "1m83,",
+          "f": 390
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "et avec les bonnes habitudes, Davio pourrait atteindre 1m89,",
+      "from": 428,
+      "duration": 94,
+      "words": [
+        {
+          "w": "et",
+          "f": 428
+        },
+        {
+          "w": "avec",
+          "f": 433
+        },
+        {
+          "w": "les",
+          "f": 440
+        },
+        {
+          "w": "bonnes",
+          "f": 443
+        },
+        {
+          "w": "habitudes,",
+          "f": 450
+        },
+        {
+          "w": "Davio",
+          "f": 467
+        },
+        {
+          "w": "pourrait",
+          "f": 484
+        },
+        {
+          "w": "atteindre",
+          "f": 491
+        },
+        {
+          "w": "1m89,",
+          "f": 509
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "donc 6 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 524,
+      "duration": 167,
+      "words": [
+        {
+          "w": "donc",
+          "f": 524
+        },
+        {
+          "w": "6",
+          "f": 538
+        },
+        {
+          "w": "cm",
+          "f": 557
+        },
+        {
+          "w": "de",
+          "f": 567
+        },
+        {
+          "w": "croissance",
+          "f": 589
+        },
+        {
+          "w": "supplémentaire",
+          "f": 605
+        },
+        {
+          "w": "grâce",
+          "f": 605
+        },
+        {
+          "w": "à",
+          "f": 627
+        },
+        {
+          "w": "l'optimisation",
+          "f": 644
+        },
+        {
+          "w": "de",
+          "f": 663
+        },
+        {
+          "w": "sa",
+          "f": 668
+        },
+        {
+          "w": "croissance.",
+          "f": 673
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Davio est plus grand que 20% des personnes de son âge.",
+      "from": 692,
+      "duration": 113,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 692
+        },
+        {
+          "w": "Davio",
+          "f": 709
+        },
+        {
+          "w": "est",
+          "f": 730
+        },
+        {
+          "w": "plus",
+          "f": 735
+        },
+        {
+          "w": "grand",
+          "f": 740
+        },
+        {
+          "w": "que",
+          "f": 745
+        },
+        {
+          "w": "20%",
+          "f": 752
+        },
+        {
+          "w": "des",
+          "f": 769
+        },
+        {
+          "w": "personnes",
+          "f": 769
+        },
+        {
+          "w": "de",
+          "f": 785
+        },
+        {
+          "w": "son",
+          "f": 785
+        },
+        {
+          "w": "âge.",
+          "f": 793
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et il a déjà terminé 85% de sa croissance.",
+      "from": 806,
+      "duration": 100,
+      "words": [
+        {
+          "w": "Et",
+          "f": 806
+        },
+        {
+          "w": "il",
+          "f": 813
+        },
+        {
+          "w": "a",
+          "f": 818
+        },
+        {
+          "w": "déjà",
+          "f": 823
+        },
+        {
+          "w": "terminé",
+          "f": 832
+        },
+        {
+          "w": "85%",
+          "f": 849
+        },
+        {
+          "w": "de",
+          "f": 878
+        },
+        {
+          "w": "sa",
+          "f": 883
+        },
+        {
+          "w": "croissance.",
+          "f": 887
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 907,
+      "duration": 59,
+      "words": [
+        {
+          "w": "Si",
+          "f": 907
+        },
+        {
+          "w": "tu",
+          "f": 911
+        },
+        {
+          "w": "veux",
+          "f": 916
+        },
+        {
+          "w": "connaître",
+          "f": 921
+        },
+        {
+          "w": "ton",
+          "f": 931
+        },
+        {
+          "w": "potentiel",
+          "f": 938
+        },
+        {
+          "w": "de",
+          "f": 950
+        },
+        {
+          "w": "taille,",
+          "f": 955
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écris ton âge et ta taille actuelle en commentaire sous cette vidéo.",
+      "from": 967,
+      "duration": 116,
+      "words": [
+        {
+          "w": "écris",
+          "f": 967
+        },
+        {
+          "w": "ton",
+          "f": 979
+        },
+        {
+          "w": "âge",
+          "f": 983
+        },
+        {
+          "w": "et",
+          "f": 989
+        },
+        {
+          "w": "ta",
+          "f": 995
+        },
+        {
+          "w": "taille",
+          "f": 1000
+        },
+        {
+          "w": "actuelle",
+          "f": 1010
+        },
+        {
+          "w": "en",
+          "f": 1027
+        },
+        {
+          "w": "commentaire",
+          "f": 1031
+        },
+        {
+          "w": "sous",
+          "f": 1046
+        },
+        {
+          "w": "cette",
+          "f": 1053
+        },
+        {
+          "w": "vidéo.",
+          "f": 1058
+        }
+      ]
+    }
+  ]
+}
