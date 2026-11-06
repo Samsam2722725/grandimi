@@ -1,0 +1,495 @@
+{
+  "fps": 30,
+  "totalFrames": 1138,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles, partie 7.",
+      "from": 0,
+      "duration": 73,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 17
+        },
+        {
+          "w": "tailles,",
+          "f": 22
+        },
+        {
+          "w": "partie",
+          "f": 48
+        },
+        {
+          "w": "7.",
+          "f": 60
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Jonathan.",
+      "from": 74,
+      "duration": 66,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 74
+        },
+        {
+          "w": "on",
+          "f": 89
+        },
+        {
+          "w": "regarde",
+          "f": 94
+        },
+        {
+          "w": "les",
+          "f": 106
+        },
+        {
+          "w": "infos",
+          "f": 108
+        },
+        {
+          "w": "de",
+          "f": 118
+        },
+        {
+          "w": "Jonathan.",
+          "f": 120
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 14 ans, Jonathan mesure 1m88,",
+      "from": 142,
+      "duration": 93,
+      "words": [
+        {
+          "w": "À",
+          "f": 142
+        },
+        {
+          "w": "14",
+          "f": 146
+        },
+        {
+          "w": "ans,",
+          "f": 154
+        },
+        {
+          "w": "Jonathan",
+          "f": 163
+        },
+        {
+          "w": "mesure",
+          "f": 182
+        },
+        {
+          "w": "1m88,",
+          "f": 194
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est très grand pour son âge.",
+      "from": 235,
+      "duration": 49,
+      "words": [
+        {
+          "w": "ce",
+          "f": 235
+        },
+        {
+          "w": "qui",
+          "f": 240
+        },
+        {
+          "w": "est",
+          "f": 247
+        },
+        {
+          "w": "très",
+          "f": 252
+        },
+        {
+          "w": "grand",
+          "f": 257
+        },
+        {
+          "w": "pour",
+          "f": 264
+        },
+        {
+          "w": "son",
+          "f": 269
+        },
+        {
+          "w": "âge.",
+          "f": 276
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 1m97,",
+      "from": 286,
+      "duration": 136,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 286
+        },
+        {
+          "w": "le",
+          "f": 293
+        },
+        {
+          "w": "site",
+          "f": 295
+        },
+        {
+          "w": "Grandimi,",
+          "f": 305
+        },
+        {
+          "w": "sa",
+          "f": 331
+        },
+        {
+          "w": "taille",
+          "f": 336
+        },
+        {
+          "w": "adulte",
+          "f": 343
+        },
+        {
+          "w": "prédite",
+          "f": 355
+        },
+        {
+          "w": "est",
+          "f": 372
+        },
+        {
+          "w": "de",
+          "f": 377
+        },
+        {
+          "w": "1m97,",
+          "f": 379
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "et avec les bonnes habitudes, Jonathan pourrait atteindre 2m02,",
+      "from": 422,
+      "duration": 108,
+      "words": [
+        {
+          "w": "et",
+          "f": 422
+        },
+        {
+          "w": "avec",
+          "f": 427
+        },
+        {
+          "w": "les",
+          "f": 432
+        },
+        {
+          "w": "bonnes",
+          "f": 437
+        },
+        {
+          "w": "habitudes,",
+          "f": 444
+        },
+        {
+          "w": "Jonathan",
+          "f": 461
+        },
+        {
+          "w": "pourrait",
+          "f": 482
+        },
+        {
+          "w": "atteindre",
+          "f": 492
+        },
+        {
+          "w": "2m02,",
+          "f": 504
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "donc 5 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 531,
+      "duration": 145,
+      "words": [
+        {
+          "w": "donc",
+          "f": 531
+        },
+        {
+          "w": "5",
+          "f": 541
+        },
+        {
+          "w": "cm",
+          "f": 550
+        },
+        {
+          "w": "de",
+          "f": 569
+        },
+        {
+          "w": "croissance",
+          "f": 572
+        },
+        {
+          "w": "supplémentaire",
+          "f": 586
+        },
+        {
+          "w": "grâce",
+          "f": 613
+        },
+        {
+          "w": "à",
+          "f": 622
+        },
+        {
+          "w": "l'optimisation",
+          "f": 625
+        },
+        {
+          "w": "de",
+          "f": 649
+        },
+        {
+          "w": "sa",
+          "f": 653
+        },
+        {
+          "w": "croissance.",
+          "f": 658
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Jonathan est plus grand que 99,6% des personnes de son âge.",
+      "from": 677,
+      "duration": 155,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 677
+        },
+        {
+          "w": "Jonathan",
+          "f": 694
+        },
+        {
+          "w": "est",
+          "f": 716
+        },
+        {
+          "w": "plus",
+          "f": 721
+        },
+        {
+          "w": "grand",
+          "f": 725
+        },
+        {
+          "w": "que",
+          "f": 733
+        },
+        {
+          "w": "99,6%",
+          "f": 740
+        },
+        {
+          "w": "des",
+          "f": 800
+        },
+        {
+          "w": "personnes",
+          "f": 805
+        },
+        {
+          "w": "de",
+          "f": 812
+        },
+        {
+          "w": "son",
+          "f": 814
+        },
+        {
+          "w": "âge.",
+          "f": 821
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et il a déjà terminé 95,2% de sa croissance.",
+      "from": 833,
+      "duration": 114,
+      "words": [
+        {
+          "w": "Et",
+          "f": 833
+        },
+        {
+          "w": "il",
+          "f": 838
+        },
+        {
+          "w": "a",
+          "f": 843
+        },
+        {
+          "w": "déjà",
+          "f": 848
+        },
+        {
+          "w": "terminé",
+          "f": 855
+        },
+        {
+          "w": "95,2%",
+          "f": 872
+        },
+        {
+          "w": "de",
+          "f": 922
+        },
+        {
+          "w": "sa",
+          "f": 925
+        },
+        {
+          "w": "croissance.",
+          "f": 929
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 949,
+      "duration": 59,
+      "words": [
+        {
+          "w": "Si",
+          "f": 949
+        },
+        {
+          "w": "tu",
+          "f": 953
+        },
+        {
+          "w": "veux",
+          "f": 956
+        },
+        {
+          "w": "connaître",
+          "f": 963
+        },
+        {
+          "w": "ton",
+          "f": 973
+        },
+        {
+          "w": "potentiel",
+          "f": 977
+        },
+        {
+          "w": "de",
+          "f": 989
+        },
+        {
+          "w": "taille,",
+          "f": 994
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écrivez votre âge et votre taille actuelle en commentaire sous cette vidéo.",
+      "from": 1009,
+      "duration": 126,
+      "words": [
+        {
+          "w": "écrivez",
+          "f": 1009
+        },
+        {
+          "w": "votre",
+          "f": 1025
+        },
+        {
+          "w": "âge",
+          "f": 1030
+        },
+        {
+          "w": "et",
+          "f": 1040
+        },
+        {
+          "w": "votre",
+          "f": 1042
+        },
+        {
+          "w": "taille",
+          "f": 1052
+        },
+        {
+          "w": "actuelle",
+          "f": 1061
+        },
+        {
+          "w": "en",
+          "f": 1076
+        },
+        {
+          "w": "commentaire",
+          "f": 1083
+        },
+        {
+          "w": "sous",
+          "f": 1097
+        },
+        {
+          "w": "cette",
+          "f": 1105
+        },
+        {
+          "w": "vidéo.",
+          "f": 1112
+        }
+      ]
+    }
+  ]
+}
