@@ -83,9 +83,9 @@
       "image": "accroche",
       "camera": [
         {
-          "x": 400,
-          "y": 600,
-          "z": 1.4,
+          "x": 440,
+          "y": 735,
+          "z": 1.15,
           "duree": 1
         },
         {
@@ -230,9 +230,7 @@
             0.2455
           ]
         },
-        "url": "grandimi.com",
-        "entete": "aucun",
-        "pageY": -36
+        "url": "grandimi.com"
       },
       "elements": [],
       "sons": [
@@ -420,9 +418,7 @@
             "dFin": 16
           }
         ],
-        "url": "grandimi.com",
-        "entete": "aucun",
-        "pageY": -36
+        "url": "grandimi.com"
       },
       "effets": [
         {
@@ -597,8 +593,8 @@
         "a": "hook:partie-1",
         "y": 822,
         "taille": 86,
-        "motsMax": 4,
-        "carMax": 17,
+        "motsMax": 6,
+        "carMax": 30,
         "poids": 600,
         "contour": 3,
         "motsCles": false,
