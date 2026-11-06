@@ -67,7 +67,7 @@
     "accroche": {
       "fichier": "accroche.jpg",
       "w": 853,
-      "h": 1515
+      "h": 1844
     },
     "verdict": {
       "fichier": "verdict.jpg",
@@ -83,15 +83,15 @@
       "image": "accroche",
       "camera": [
         {
-          "x": 426,
-          "y": 757,
-          "z": 1.13,
+          "x": 405,
+          "y": 775,
+          "z": 1.4,
           "duree": 1
         },
         {
           "a": 1,
           "x": 426,
-          "y": 757,
+          "y": 775,
           "z": 1.0,
           "duree": "fin",
           "lineaire": true,
@@ -222,9 +222,17 @@
           "fichier": "ballon_15.png",
           "a": "age:15",
           "fin": "age:15+30",
-          "chute": true
+          "chute": true,
+          "boite": [
+            0.2222,
+            0.3833,
+            0.5556,
+            0.2677
+          ]
         },
-        "url": "grandimi.com"
+        "url": "grandimi.com",
+        "entete": "aucun",
+        "pageY": -36
       },
       "elements": [],
       "sons": [
@@ -281,6 +289,11 @@
           "a": 0,
           "son": "whoosh",
           "volume": 0.22
+        },
+        {
+          "a": "habitudes:bonnes",
+          "son": "pop",
+          "volume": 0.3
         }
       ]
     },
@@ -407,7 +420,9 @@
             "dFin": 16
           }
         ],
-        "url": "grandimi.com"
+        "url": "grandimi.com",
+        "entete": "aucun",
+        "pageY": -36
       },
       "effets": [
         {
