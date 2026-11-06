@@ -67,7 +67,7 @@
     "accroche": {
       "fichier": "accroche.jpg",
       "w": 853,
-      "h": 1844
+      "h": 1515
     },
     "verdict": {
       "fichier": "verdict.jpg",
@@ -83,15 +83,15 @@
       "image": "accroche",
       "camera": [
         {
-          "x": 440,
-          "y": 760,
+          "x": 426,
+          "y": 757,
           "z": 1.13,
           "duree": 1
         },
         {
           "a": 1,
-          "x": 440,
-          "y": 760,
+          "x": 426,
+          "y": 757,
           "z": 1.0,
           "duree": "fin",
           "lineaire": true,
