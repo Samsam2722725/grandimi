@@ -10,6 +10,7 @@ et `video/README.md`. Réponds en français, directement, sans flatterie. Ne mod
 l'utilisateur : signale un problème une seule fois, puis applique son choix.
 
 **Pour chaque vidéo du format prédiction : suivre et cocher `video/CHECKLIST.md` (toutes les demandes de l'utilisateur) avant de livrer.**
+**Depuis le 06/11 : modèle = `louis-20` (style Louis partie 20 / cory-19), pas louis-6.**
 
 ## Démarrage (outils absents d'une nouvelle session)
 

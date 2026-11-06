@@ -1,5 +1,12 @@
 # Checklist vidéo « Je prédis vos tailles » — à cocher pour CHAQUE vidéo
 
+> **06/11 — RETOUR AU STYLE LOUIS PARTIE 20** (demande de l'utilisateur). Modèle à copier : `public/episodes/louis-20`
+> (= copie de cory-19, recette du début de `FORMAT_PREDICTION.md`, rendu direct avec sa musique 0,08 et ses bruitages,
+> sans `mix_son.py`). Vérifié le 06/11 : louis-20 rendu avec le code actuel = image par image identique à la livraison
+> du 30/10. Les sections « Taller partie 30 », « Retours du 05/11 » et « louis-6 / noah-30 » sont **suspendues**.
+> Restent valables : recopie mot pour mot du script, vérification des chiffres et du numéro de partie,
+> prononciation « Grandimi », tu/vous, **ne jamais flouter sans demande**.
+
 Rassemble toutes les demandes de l'utilisateur (30/10 → 04/11). Modèle à copier : `public/episodes/miguel-29`
 (recopie exacte de Taller partie 30, `references/taller-ref3`). Ne rien livrer tant qu'une case n'est pas cochée.
 En cas de conflit entre deux demandes, la plus récente gagne ; les points « À trancher » attendent sa réponse.
