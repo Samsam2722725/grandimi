@@ -257,7 +257,9 @@ export const DashboardGrandimi: React.FC<{
 	pageY?: number;
 	/** Sans la barre d'état de la page (écran de téléphone : la barre Safari du dessus a déjà la sienne). */
 	sansBarreEtat?: boolean;
-}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, barreBas, urlDecale = 0, navTraits, pageY, sansBarreEtat}) => {
+	/** Capture d'écran du dashboard (724×1517) affichée à la place du dashboard dessiné. */
+	image?: string;
+}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, barreBas, urlDecale = 0, navTraits, pageY, sansBarreEtat, image}) => {
 	const cacheEtat = Boolean(url || entete || sansBarreEtat);
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
@@ -425,6 +427,11 @@ export const DashboardGrandimi: React.FC<{
 					))
 				)}
 				<div style={{position: 'absolute', left: W / 2 - 130, top: 1880, width: 260, height: 10, borderRadius: 5, background: '#fff'}} />
+				{image ? (
+					<div style={{position: 'absolute', left: 0, top: 0, width: W, height: H, background: '#000'}}>
+						<Img src={image} style={{position: 'absolute', left: (W - (724 * H) / 1517) / 2, top: 0, width: (724 * H) / 1517, height: H}} />
+					</div>
+				) : null}
 				{b ? (
 					<Img
 						src={b.src}

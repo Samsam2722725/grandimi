@@ -192,8 +192,8 @@
         "cams": [
           {
             "a": "age:mesure",
-            "cx": 0.38,
-            "cy": 0.3085,
+            "cx": 0.31,
+            "cy": 0.31,
             "z": 1.61,
             "d": 11,
             "courbe": "avant"
@@ -208,23 +208,14 @@
           },
           {
             "a": "predit:taille",
-            "cx": 0.646,
-            "cy": 0.3301,
+            "cx": 0.698,
+            "cy": 0.282,
             "z": 1.77,
             "d": 11,
             "courbe": "avant"
           }
         ],
-        "pops": [
-          {
-            "ligne": "rang",
-            "a": "norme:petit+6",
-            "d": 12,
-            "fin": "predit",
-            "dFin": 10,
-            "echelle": 1.1
-          }
-        ],
+        "pops": [],
         "fleches": [],
         "ballon": {
           "fichier": "ballon_15.png",
@@ -232,7 +223,8 @@
           "fin": "age:15+30",
           "chute": true
         },
-        "url": "grandimi.com"
+        "image": "dashboard.png",
+        "pageY": 0
       },
       "elements": [],
       "sons": [
@@ -397,42 +389,26 @@
           {
             "a": "fini:terminé",
             "cx": 0.7,
-            "cy": 0.8291,
+            "cy": 0.75,
             "z": 2.0,
             "d": 12,
             "courbe": "avant"
           }
         ],
-        "pops": [
-          {
-            "ligne": "optimiser",
-            "a": "optim:4",
-            "d": 20,
-            "fin": "pct",
-            "dFin": 14,
-            "echelle": 1.14
-          },
-          {
-            "ligne": "rang",
-            "a": "pct:plus",
-            "d": 30,
-            "fin": "pct:âge+6",
-            "dFin": 8,
-            "echelle": 1.12
-          }
-        ],
+        "pops": [],
         "fleches": [
           {
             "sens": "bas",
             "x": 0.5,
-            "pointe": 0.2,
+            "pointe": 0.26,
             "a": "optim",
             "d": 12,
             "fin": "optim:croissance",
             "dFin": 16
           }
         ],
-        "url": "grandimi.com"
+        "image": "dashboard.png",
+        "pageY": 0
       },
       "effets": [
         {

@@ -1012,6 +1012,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					urlDecale={plan.dashboard.urlDecale}
 					navTraits={plan.dashboard.navTraits}
 					pageY={plan.dashboard.pageY}
+					image={plan.dashboard.image ? file(plan.dashboard.image) : undefined}
 					sansBarreEtat={Boolean(plan.telephone)}
 					ballon={
 						plan.dashboard.ballon
