@@ -1,0 +1,495 @@
+{
+  "fps": 30,
+  "totalFrames": 944,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je calcule ton potentiel de taille finale, partie 36.",
+      "from": 0,
+      "duration": 83,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "calcule",
+          "f": 5
+        },
+        {
+          "w": "ton",
+          "f": 17
+        },
+        {
+          "w": "potentiel",
+          "f": 22
+        },
+        {
+          "w": "de",
+          "f": 31
+        },
+        {
+          "w": "taille",
+          "f": 34
+        },
+        {
+          "w": "finale,",
+          "f": 43
+        },
+        {
+          "w": "partie",
+          "f": 55
+        },
+        {
+          "w": "36.",
+          "f": 65
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Noé.",
+      "from": 84,
+      "duration": 52,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 84
+        },
+        {
+          "w": "on",
+          "f": 96
+        },
+        {
+          "w": "regarde",
+          "f": 101
+        },
+        {
+          "w": "les",
+          "f": 108
+        },
+        {
+          "w": "infos",
+          "f": 113
+        },
+        {
+          "w": "de",
+          "f": 118
+        },
+        {
+          "w": "Noé.",
+          "f": 122
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 14 ans, Noé mesure 1m85,",
+      "from": 137,
+      "duration": 71,
+      "words": [
+        {
+          "w": "À",
+          "f": 137
+        },
+        {
+          "w": "14",
+          "f": 142
+        },
+        {
+          "w": "ans,",
+          "f": 149
+        },
+        {
+          "w": "Noé",
+          "f": 156
+        },
+        {
+          "w": "mesure",
+          "f": 170
+        },
+        {
+          "w": "1m85,",
+          "f": 180
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est très grand pour son âge.",
+      "from": 209,
+      "duration": 47,
+      "words": [
+        {
+          "w": "ce",
+          "f": 209
+        },
+        {
+          "w": "qui",
+          "f": 214
+        },
+        {
+          "w": "est",
+          "f": 216
+        },
+        {
+          "w": "très",
+          "f": 230
+        },
+        {
+          "w": "grand",
+          "f": 235
+        },
+        {
+          "w": "pour",
+          "f": 242
+        },
+        {
+          "w": "son",
+          "f": 245
+        },
+        {
+          "w": "âge.",
+          "f": 250
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 1m98.",
+      "from": 257,
+      "duration": 109,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 257
+        },
+        {
+          "w": "le",
+          "f": 262
+        },
+        {
+          "w": "site",
+          "f": 266
+        },
+        {
+          "w": "Grandimi,",
+          "f": 274
+        },
+        {
+          "w": "sa",
+          "f": 295
+        },
+        {
+          "w": "taille",
+          "f": 298
+        },
+        {
+          "w": "adulte",
+          "f": 305
+        },
+        {
+          "w": "prédite",
+          "f": 317
+        },
+        {
+          "w": "est",
+          "f": 329
+        },
+        {
+          "w": "de",
+          "f": 331
+        },
+        {
+          "w": "1m98.",
+          "f": 336
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Noé pourrait atteindre 2m05,",
+      "from": 367,
+      "duration": 91,
+      "words": [
+        {
+          "w": "Et",
+          "f": 367
+        },
+        {
+          "w": "avec",
+          "f": 372
+        },
+        {
+          "w": "les",
+          "f": 377
+        },
+        {
+          "w": "bonnes",
+          "f": 379
+        },
+        {
+          "w": "habitudes,",
+          "f": 386
+        },
+        {
+          "w": "Noé",
+          "f": 401
+        },
+        {
+          "w": "pourrait",
+          "f": 415
+        },
+        {
+          "w": "atteindre",
+          "f": 422
+        },
+        {
+          "w": "2m05,",
+          "f": 434
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "donc 7 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 459,
+      "duration": 121,
+      "words": [
+        {
+          "w": "donc",
+          "f": 459
+        },
+        {
+          "w": "7",
+          "f": 469
+        },
+        {
+          "w": "cm",
+          "f": 478
+        },
+        {
+          "w": "de",
+          "f": 495
+        },
+        {
+          "w": "croissance",
+          "f": 497
+        },
+        {
+          "w": "supplémentaire",
+          "f": 509
+        },
+        {
+          "w": "grâce",
+          "f": 531
+        },
+        {
+          "w": "à",
+          "f": 536
+        },
+        {
+          "w": "l'optimisation",
+          "f": 541
+        },
+        {
+          "w": "de",
+          "f": 560
+        },
+        {
+          "w": "sa",
+          "f": 562
+        },
+        {
+          "w": "croissance.",
+          "f": 567
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Noé est plus grand que 99,6% des personnes de son âge",
+      "from": 581,
+      "duration": 121,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 581
+        },
+        {
+          "w": "Noé",
+          "f": 598
+        },
+        {
+          "w": "est",
+          "f": 615
+        },
+        {
+          "w": "plus",
+          "f": 620
+        },
+        {
+          "w": "grand",
+          "f": 622
+        },
+        {
+          "w": "que",
+          "f": 629
+        },
+        {
+          "w": "99,6%",
+          "f": 634
+        },
+        {
+          "w": "des",
+          "f": 680
+        },
+        {
+          "w": "personnes",
+          "f": 682
+        },
+        {
+          "w": "de",
+          "f": 689
+        },
+        {
+          "w": "son",
+          "f": 692
+        },
+        {
+          "w": "âge",
+          "f": 697
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a déjà terminé 76,1% de sa croissance.",
+      "from": 704,
+      "duration": 102,
+      "words": [
+        {
+          "w": "et",
+          "f": 704
+        },
+        {
+          "w": "il",
+          "f": 706
+        },
+        {
+          "w": "a",
+          "f": 711
+        },
+        {
+          "w": "déjà",
+          "f": 713
+        },
+        {
+          "w": "terminé",
+          "f": 729
+        },
+        {
+          "w": "76,1%",
+          "f": 745
+        },
+        {
+          "w": "de",
+          "f": 785
+        },
+        {
+          "w": "sa",
+          "f": 788
+        },
+        {
+          "w": "croissance.",
+          "f": 793
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 807,
+      "duration": 49,
+      "words": [
+        {
+          "w": "Si",
+          "f": 807
+        },
+        {
+          "w": "tu",
+          "f": 812
+        },
+        {
+          "w": "veux",
+          "f": 814
+        },
+        {
+          "w": "connaître",
+          "f": 819
+        },
+        {
+          "w": "ton",
+          "f": 829
+        },
+        {
+          "w": "potentiel",
+          "f": 833
+        },
+        {
+          "w": "de",
+          "f": 843
+        },
+        {
+          "w": "taille,",
+          "f": 848
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écris ton âge et ta taille actuelle en commentaire.",
+      "from": 857,
+      "duration": 83,
+      "words": [
+        {
+          "w": "écris",
+          "f": 857
+        },
+        {
+          "w": "ton",
+          "f": 867
+        },
+        {
+          "w": "âge",
+          "f": 872
+        },
+        {
+          "w": "et",
+          "f": 878
+        },
+        {
+          "w": "ta",
+          "f": 884
+        },
+        {
+          "w": "taille",
+          "f": 889
+        },
+        {
+          "w": "actuelle",
+          "f": 896
+        },
+        {
+          "w": "en",
+          "f": 905
+        },
+        {
+          "w": "commentaire.",
+          "f": 910
+        }
+      ]
+    }
+  ]
+}
