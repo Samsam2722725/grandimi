@@ -37,10 +37,12 @@ export const CarteCommentaire: React.FC<{
 					{photo ? (
 						<Img src={photo} style={{position: 'absolute', left: 40, top: 135 - 78, width: 156, height: 156, borderRadius: 78, objectFit: 'cover'}} />
 					) : null}
-					<div style={{fontSize: 42, fontWeight: 600, color: '#a2a2a2', lineHeight: 1.2, whiteSpace: 'nowrap'}}>Réponse au commentaire de {nom}</div>
+					<div style={{fontSize: Math.min(42, (Wc - 278) / (0.6 * `Réponse au commentaire de ${nom}`.length)), fontWeight: 600, color: '#a2a2a2', lineHeight: 1.2, whiteSpace: 'nowrap'}}>Réponse au commentaire de {nom}</div>
 					<div style={{fontSize: 48, fontWeight: 800, color: '#141414', lineHeight: 1.18, marginTop: 14, letterSpacing: -0.3}}>{texte}</div>
 				</div>
-				<div style={{position: 'absolute', left: 0, bottom: -36, width: 0, height: 0, borderLeft: '6px solid #fff', borderRight: '46px solid transparent', borderTop: '40px solid #fff'}} />
+				<svg width={80} height={58} viewBox="0 0 80 58" style={{position: 'absolute', left: 0, top: '100%', marginTop: -1}}>
+						<path d="M0 0 L80 0 L0 58 Z" fill="#fff" />
+					</svg>
 			</div>
 		);
 	}

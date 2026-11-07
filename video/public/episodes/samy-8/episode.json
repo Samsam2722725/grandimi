@@ -114,7 +114,7 @@
     },
     {
       "nom": "partie",
-      "debut": "hook:partie-1",
+      "debut": "hook:partie-10",
       "fond": "papier",
       "sortie": "jaune",
       "papiers": [
@@ -127,7 +127,7 @@
         {
           "type": "tape",
           "texte": "PARTIE {partie}",
-          "a": 1,
+          "a": 0,
           "y": 869,
           "taille": 160,
           "couleur": "#ebf91f",
@@ -135,7 +135,7 @@
           "poids": 800,
           "contour": 26,
           "curseur": true,
-          "parLettre": 3,
+          "parLettre": 2,
           "son": "frappe",
           "volume": 0.25,
           "sansPop": true
