@@ -67,7 +67,7 @@
     "accroche": {
       "fichier": "accroche.jpg",
       "w": 1080,
-      "h": 2335
+      "h": 1920
     },
     "verdict": {
       "fichier": "verdict.jpg",
@@ -84,15 +84,15 @@
       "camera": [
         {
           "x": 540,
-          "y": 1053,
-          "z": 0.893,
+          "y": 960,
+          "z": 1.0,
           "duree": 1
         },
         {
           "a": 1,
           "x": 540,
-          "y": 1053,
-          "z": 0.956,
+          "y": 960,
+          "z": 1.2,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -110,10 +110,7 @@
           "son": "impact-taller",
           "volume": 0.41
         }
-      ],
-      "libre": true,
-      "fondFlou": true,
-      "fondCouleur": "transparent"
+      ]
     },
     {
       "nom": "partie",
@@ -131,8 +128,8 @@
           "type": "tape",
           "texte": "PARTIE {partie}",
           "a": 1,
-          "y": 851,
-          "taille": 187,
+          "y": 867,
+          "taille": 155,
           "couleur": "#fff200",
           "police": "Montserrat",
           "poids": 900,
@@ -165,7 +162,7 @@
           "actuelle": "185 cm",
           "predite": "198 cm",
           "optimiser": "+7 cm",
-          "bulle": "190 cm",
+          "bulle": "192 cm",
           "courbe": [
             185,
             189,
@@ -176,13 +173,13 @@
             199
           ],
           "ages": [
+            "14",
             "15",
             "16",
             "17",
             "18",
             "19",
-            "20",
-            "21"
+            "20"
           ],
           "rang": "99,6 %",
           "chances": "100 %",
@@ -192,8 +189,8 @@
         "cams": [
           {
             "a": "age:mesure",
-            "cx": 0.31,
-            "cy": 0.31,
+            "cx": 0.38,
+            "cy": 0.3085,
             "z": 1.61,
             "d": 11,
             "courbe": "avant"
@@ -208,23 +205,37 @@
           },
           {
             "a": "predit:taille",
-            "cx": 0.698,
-            "cy": 0.282,
+            "cx": 0.646,
+            "cy": 0.3301,
             "z": 1.77,
             "d": 11,
             "courbe": "avant"
           }
         ],
-        "pops": [],
+        "pops": [
+          {
+            "ligne": "rang",
+            "a": "norme:grand+6",
+            "d": 12,
+            "fin": "predit",
+            "dFin": 10,
+            "echelle": 1.1
+          }
+        ],
         "fleches": [],
         "ballon": {
           "fichier": "ballon_14.png",
           "a": "age:14",
           "fin": "age:14+30",
-          "chute": true
+          "chute": true,
+          "boite": [
+            0.02,
+            0.22,
+            0.96,
+            0.5
+          ]
         },
-        "image": "dashboard.png",
-        "pageY": 0
+        "url": "grandimi.com"
       },
       "elements": [],
       "sons": [
@@ -361,7 +372,7 @@
           "actuelle": "185 cm",
           "predite": "198 cm",
           "optimiser": "+7 cm",
-          "bulle": "190 cm",
+          "bulle": "192 cm",
           "courbe": [
             185,
             189,
@@ -372,13 +383,13 @@
             199
           ],
           "ages": [
+            "14",
             "15",
             "16",
             "17",
             "18",
             "19",
-            "20",
-            "21"
+            "20"
           ],
           "rang": "99,6 %",
           "chances": "100 %",
@@ -389,26 +400,42 @@
           {
             "a": "fini:terminé",
             "cx": 0.7,
-            "cy": 0.75,
+            "cy": 0.8291,
             "z": 2.0,
             "d": 12,
             "courbe": "avant"
           }
         ],
-        "pops": [],
+        "pops": [
+          {
+            "ligne": "optimiser",
+            "a": "optim:7",
+            "d": 20,
+            "fin": "pct",
+            "dFin": 14,
+            "echelle": 1.14
+          },
+          {
+            "ligne": "rang",
+            "a": "pct:plus",
+            "d": 30,
+            "fin": "pct:âge+6",
+            "dFin": 8,
+            "echelle": 1.12
+          }
+        ],
         "fleches": [
           {
             "sens": "bas",
             "x": 0.5,
-            "pointe": 0.26,
+            "pointe": 0.2,
             "a": "optim",
             "d": 12,
             "fin": "optim:croissance",
             "dFin": 16
           }
         ],
-        "image": "dashboard.png",
-        "pageY": 0
+        "url": "grandimi.com"
       },
       "effets": [
         {
@@ -423,8 +450,8 @@
           "ecran": true,
           "fichier": "curseur.png",
           "a": "pct:plus",
-          "x": 530,
-          "y": 1305,
+          "x": 404,
+          "y": 1442,
           "w": 192,
           "h": 204,
           "depuis": {
@@ -573,18 +600,6 @@
             "de": 0.1,
             "d": 40
           }
-        },
-        {
-          "type": "texte",
-          "texte": "🔗 grandimi.com",
-          "a": "com:commentaire",
-          "y": 400,
-          "taille": 96,
-          "couleur": "#fff",
-          "fond": "#ff5a1f",
-          "amorti": 8,
-          "son": "ding",
-          "volume": 0.25
         }
       ],
       "sons": [
