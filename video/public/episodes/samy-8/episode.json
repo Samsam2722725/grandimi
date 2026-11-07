@@ -128,14 +128,14 @@
           "type": "tape",
           "texte": "PARTIE {partie}",
           "a": 1,
-          "y": 702.0,
-          "taille": 168.0,
+          "y": 857,
+          "taille": 183,
           "couleur": "#ebf91f",
-          "police": "Montserrat",
-          "poids": 500,
-          "contour": 28,
+          "police": "Inter",
+          "poids": 800,
+          "contour": 26,
           "curseur": true,
-          "parLettre": 2,
+          "parLettre": 3,
           "son": "frappe",
           "volume": 0.25,
           "sansPop": true
@@ -228,7 +228,7 @@
           "fichier": "ballon_13.png",
           "a": "age:13",
           "fin": "age:13+30",
-          "chute": false,
+          "chute": true,
           "boite": [
             0.128,
             0.336,
@@ -240,7 +240,8 @@
         "urlDecale": 20,
         "navTraits": true,
         "pageY": 0,
-        "entete": "aucun"
+        "entete": "aucun",
+        "geometrie": "taller"
       },
       "elements": [],
       "sons": [
@@ -319,31 +320,49 @@
         {
           "type": "image",
           "ecran": true,
-          "fichier": "silhouette.png",
+          "fichier": "silhouette_orange.png",
           "a": 0,
-          "x": 324,
-          "y": 760,
-          "w": 432,
-          "h": 1170,
+          "x": 298,
+          "y": 618,
+          "w": 447,
+          "h": 1210,
           "grandit": {
-            "de": 0.4,
-            "d": 40
+            "de": 0.68,
+            "d": 38
           }
         },
         {
           "type": "tape",
           "texte": "1m93",
           "a": 3,
-          "y": 290,
-          "taille": 130,
+          "y": 106,
+          "taille": 186,
           "couleur": "#fff",
           "contour": 0,
-          "police": "Montserrat",
+          "police": "Inter",
           "poids": 800,
           "curseur": true,
-          "fond": "#8100fe",
-          "parLettre": 2,
+          "fond": "#ff5a1f",
+          "parLettre": 3,
           "son": "tick",
+          "volume": 0.25,
+          "rembourrage": [
+            0.39,
+            0.35,
+            0.54
+          ]
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "yeux.png",
+          "a": 16,
+          "x": 448,
+          "y": 618,
+          "w": 145,
+          "h": 114,
+          "effet": "pop",
+          "son": "pop",
           "volume": 0.25
         }
       ],
@@ -417,7 +436,8 @@
         "urlDecale": 20,
         "navTraits": true,
         "pageY": 0,
-        "entete": "aucun"
+        "entete": "aucun",
+        "geometrie": "taller"
       },
       "effets": [],
       "elements": [
@@ -567,18 +587,6 @@
             "d": 40
           },
           "fin": "fin"
-        },
-        {
-          "type": "texte",
-          "texte": "🔗 grandimi.com",
-          "a": "com:commentaire",
-          "y": 400,
-          "taille": 96,
-          "couleur": "#fff",
-          "fond": "#ff5a1f",
-          "amorti": 8,
-          "son": "ding",
-          "volume": 0.25
         }
       ],
       "sons": [
@@ -596,31 +604,31 @@
       {
         "de": 0,
         "a": "hook:partie-1",
-        "y": 921,
-        "taille": 76,
+        "y": 918,
+        "taille": 72,
         "motsMax": 4,
         "carMax": 17,
-        "poids": 500,
+        "poids": 700,
         "contour": 9,
         "motsCles": false,
         "pop": false,
         "majuscules": true,
-        "police": "Montserrat",
+        "police": "Inter",
         "couleur": "#ebf91f"
       },
       {
         "de": "cta",
         "a": "fin",
-        "y": 921,
-        "taille": 76,
+        "y": 918,
+        "taille": 72,
         "motsMax": 4,
         "carMax": 17,
-        "poids": 500,
+        "poids": 700,
         "contour": 9,
         "motsCles": false,
         "pop": false,
         "majuscules": true,
-        "police": "Montserrat",
+        "police": "Inter",
         "couleur": "#ebf91f"
       }
     ]

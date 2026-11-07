@@ -122,3 +122,14 @@ En cas de conflit entre deux demandes, la plus récente gagne ; les points « À
 - [ ] **Ne jamais flouter** de visage ni de photo sans que l'utilisateur le demande (05/11).
 - [ ] **grandimi.com plus bas** (05/11 soir, visible une fois posté) : `urlDecale` 80 et page décalée `pageY` 140,
       curseur y 1432 ; zooms inchangés (même cadrage que l'original sous la barre).
+
+## Retours du 07/11 (samy-8, original Taller partie 31 mesuré image par image)
+- [ ] Police : titre et sous-titres en **Inter** (800 / 700), pas Montserrat. Titre taille 183 (hauteur des majuscules 133 px à 1080 de large), `y` 857 ;
+      sous-titres taille 72, `y` 918. Frappe de « PARTIE N » 3 images par lettre, curseur visible.
+- [ ] Dashboard : `"geometrie": "taller"` (cartes à la place mesurée de Taller), `"entete": "aucun"`, barre grandimi.com `urlDecale` 20, onglets visibles.
+      Zooms mesurés sur l'original : actuelle ×1,85 (0,340 ; 0,363), prédite ×1,86 (0,661 ; 0,365), croissance ×1,81 (0,638 ; 0,599).
+- [ ] Ballon de l'âge : **chute avec rebond** (`"chute": true`), posé sur le graphique.
+- [ ] Silhouette **orange** (`silhouette_orange.png`, sans yeux) : x 298, y 618, 447 × 1210, grandit de ×0,68 en 38 images ; pastille orange 626 × 366 (`rembourrage`) ;
+      **yeux** (`yeux.png`) en pop à la fin (`a` 16).
+- [ ] **Pas de pastille « grandimi.com » à la fin** (plan appel).
+- [ ] Bruitages comme louis-20 (whoosh, pop, frappe, tick) : vérifier qu'ils sont audibles.

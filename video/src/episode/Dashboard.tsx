@@ -45,6 +45,18 @@ export const LIGNES = {
 } as const;
 export type Ligne = keyof typeof LIGNES;
 
+/** Disposition mesurée sur l'écran de Taller (partie 31, 07/11) : positions des cartes en fraction de l'écran. */
+export const LIGNES_TALLER: Record<Ligne, readonly [number, number, number, number]> = {
+	actuelle: [0.115, 0.121, 0.484, 0.245],
+	predite: [0.517, 0.122, 0.885, 0.245],
+	optimiser: [0.115, 0.265, 0.885, 0.336],
+	courbe: [0.115, 0.354, 0.885, 0.614],
+	rang: [0.115, 0.633, 0.885, 0.704],
+	chances: [0.115, 0.723, 0.484, 0.859],
+	croissance: [0.516, 0.723, 0.885, 0.859],
+};
+const LignesCtx = React.createContext<Record<Ligne, readonly [number, number, number, number]>>(LIGNES);
+
 /** lineaire : rampe à vitesse constante, comme les zooms de Taller (mesurés le 03/11 sur references/zooms-1). */
 export type DashCam = {f: number; cx: number; cy: number; z: number; d: number; courbe: 'avant' | 'arriere' | 'lineaire' | 'doux'};
 export type DashPop = {ligne: Ligne; a: number; d: number; fin: number; dFin: number; echelle: number};
@@ -93,7 +105,7 @@ const Bloc: React.FC<{ligne: Ligne; sx: number; fond?: string; children?: React.
 	children,
 	style,
 }) => {
-	const [x0, y0, x1, y1] = LIGNES[ligne];
+	const [x0, y0, x1, y1] = React.useContext(LignesCtx)[ligne];
 	return (
 		<div
 			style={{
@@ -121,7 +133,7 @@ const Jauge: React.FC<{pct: number}> = ({pct}) => (
 );
 
 const Courbe: React.FC<{d: DashData}> = ({d}) => {
-	const [x0, y0, x1, y1] = LIGNES.courbe;
+	const [x0, y0, x1, y1] = React.useContext(LignesCtx).courbe;
 	const w = (x1 - x0) * W;
 	const h = (y1 - y0) * H;
 	const gx = 70;
@@ -257,9 +269,10 @@ export const DashboardGrandimi: React.FC<{
 	pageY?: number;
 	/** Sans la barre d'état de la page (écran de téléphone : la barre Safari du dessus a déjà la sienne). */
 	sansBarreEtat?: boolean;
+	geometrie?: 'taller';
 	/** Capture d'écran du dashboard (724×1517) affichée à la place du dashboard dessiné. */
 	image?: string;
-}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, barreBas, urlDecale = 0, navTraits, pageY, sansBarreEtat, image}) => {
+}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, barreBas, urlDecale = 0, navTraits, pageY, sansBarreEtat, geometrie, image}) => {
 	const cacheEtat = Boolean(url || entete || sansBarreEtat);
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
@@ -272,6 +285,7 @@ export const DashboardGrandimi: React.FC<{
 	const chuteY = b?.chute ? interpolate(g, [0, 4, 6, 8], [-0.62 * H, 0, -0.015 * H, 0], {extrapolateRight: 'clamp', easing: Easing.in(Easing.quad)}) : 0;
 	const chuteFlou = b?.chute && g < 4 ? 14 : 0;
 	return (
+		<LignesCtx.Provider value={geometrie === 'taller' ? LIGNES_TALLER : LIGNES}>
 		<AbsoluteFill style={{background: '#000', overflow: 'hidden'}}>
 			<div
 				style={{
@@ -462,6 +476,7 @@ export const DashboardGrandimi: React.FC<{
 				</>
 			) : null}
 		</AbsoluteFill>
+		</LignesCtx.Provider>
 	);
 };
 

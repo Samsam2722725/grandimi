@@ -41,7 +41,7 @@ export type Element =
 	| (Base & {type: 'trait'; d: string; tete?: string; couleur?: string; epaisseur?: number; duree?: number; fin?: Ancre})
 	/** x : centre horizontal du texte (défaut : milieu de l'écran). */
 	| (Base & {type: 'texte'; texte: string; x?: number; y: number; taille: number; police?: string; rotation?: number; aligne?: 'left' | 'center'; couleur?: string; contour?: number; contourCouleur?: string; poids?: number; fond?: string; amorti?: number; effet?: 'pop' | 'pop-balance' | 'glitch' | 'fondu'; fin?: Ancre; lueur?: string})
-	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number; curseur?: boolean; fond?: string; police?: string; poids?: number; fin?: Ancre; sansPop?: boolean})
+	| (Base & {type: 'tape'; texte: string; y: number; taille: number; parLettre?: number; couleur?: string; contour?: number; curseur?: boolean; fond?: string; police?: string; poids?: number; fin?: Ancre; sansPop?: boolean; rembourrage?: [number, number, number]})
 	/** Compteur qui défile de `de` à `vers` et se pose sur `arrivee` (révélation avec suspense). */
 	| (Base & {type: 'compteur'; de: number; vers: number; arrivee: Ancre; fin?: Ancre; suffixe?: string; y: number; taille: number; couleur?: string; voile?: boolean})
 	/** Fausse zone de commentaire TikTok qui s'écrit toute seule. */
@@ -134,6 +134,8 @@ export type Plan = {
 		barreBas?: boolean;
 		urlDecale?: number;
 		navTraits?: boolean;
+		/** taller : cartes à la place exacte de Taller (mesuré sur l'original du 07/11). */
+		geometrie?: 'taller';
 	};
 	/** Vidéo explicative (référence p25-ref, src/episode/Explicatif.tsx) : phrases mot par mot, moments et valeurs. */
 	explicatif?: {phrases: {titre: string; de: number; a: number; mots: {w: string; f: number; gras?: boolean}[]}[]; t: Record<string, number>; v: Record<string, string>; fin?: number};

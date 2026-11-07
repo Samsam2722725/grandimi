@@ -58,7 +58,9 @@ export const Typed: React.FC<{
 	poids?: number;
 	/** Sans l'agrandissement d'entrée (×0,9 → ×1) : le texte apparaît net, comme Taller. */
 	sansPop?: boolean;
-}> = ({text, at, perLetter = 2, y, size, color, stroke, curseur, fond, police, poids, sansPop}) => {
+	/** Marges de la pastille en multiples de la taille : [haut, côtés, bas] (par défaut 0,12 / 0,3 / 0,16). */
+	rembourrage?: [number, number, number];
+}> = ({text, at, perLetter = 2, y, size, color, stroke, curseur, fond, police, poids, sansPop, rembourrage}) => {
 	const f = useCurrentFrame();
 	const n = Math.max(0, Math.min(text.length, Math.floor((f - at) / perLetter) + 1));
 	const s = sansPop ? 1 : 0.9 + 0.1 * pop(f, at);
@@ -82,7 +84,7 @@ export const Typed: React.FC<{
 			}}
 		>
 			{fond ? (
-				<span style={{background: fond, borderRadius: size * 0.28, padding: `${size * 0.12}px ${size * 0.3}px ${size * 0.16}px`, display: 'inline-block'}}>
+				<span style={{background: fond, borderRadius: size * 0.28, padding: rembourrage ? `${size * rembourrage[0]}px ${size * rembourrage[1]}px ${size * rembourrage[2]}px` : `${size * 0.12}px ${size * 0.3}px ${size * 0.16}px`, display: 'inline-block'}}>
 					{text.slice(0, n)}
 					{curseur && n < text.length && Math.floor((f - at) / 4) % 2 === 0 ? <span style={{fontWeight: 300}}>|</span> : null}
 					<span style={{opacity: 0}}>{text.slice(n)}</span>

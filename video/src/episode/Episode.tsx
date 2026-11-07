@@ -978,6 +978,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 						police={el.police}
 						poids={el.poids}
 						sansPop={el.sansPop}
+						rembourrage={el.rembourrage}
 					/>
 				</Sequence>
 			);
@@ -1011,6 +1012,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					barreBas={plan.dashboard.barreBas}
 					urlDecale={plan.dashboard.urlDecale}
 					navTraits={plan.dashboard.navTraits}
+					geometrie={plan.dashboard.geometrie}
 					pageY={plan.dashboard.pageY}
 					image={plan.dashboard.image ? file(plan.dashboard.image) : undefined}
 					sansBarreEtat={Boolean(plan.telephone)}
