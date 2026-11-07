@@ -84,15 +84,15 @@
       "camera": [
         {
           "x": 540,
-          "y": 700,
-          "z": 1.13,
+          "y": 1053,
+          "z": 0.893,
           "duree": 1
         },
         {
           "a": 1,
           "x": 540,
-          "y": 960,
-          "z": 1.0,
+          "y": 1053,
+          "z": 0.956,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -104,8 +104,16 @@
           "a": 0,
           "son": "whoosh",
           "volume": 0.2
+        },
+        {
+          "a": "hook:partie-3",
+          "son": "impact-taller",
+          "volume": 0.41
         }
-      ]
+      ],
+      "libre": true,
+      "fondFlou": true,
+      "fondCouleur": "transparent"
     },
     {
       "nom": "partie",
@@ -252,6 +260,16 @@
           "a": "predit:taille",
           "son": "whoosh",
           "volume": 0.28
+        },
+        {
+          "a": "norme",
+          "son": "impact-taller",
+          "volume": 0.41
+        },
+        {
+          "a": "predit:prédite",
+          "son": "impact-taller",
+          "volume": 0.41
         }
       ]
     },
@@ -277,8 +295,8 @@
           "w": 500,
           "h": 404,
           "effet": "pop",
-          "son": "pop",
-          "volume": 0.25
+          "son": "impact-taller",
+          "volume": 0.41
         }
       ],
       "sons": [
@@ -459,6 +477,16 @@
           "a": "fini:terminé",
           "son": "whoosh",
           "volume": 0.28
+        },
+        {
+          "a": "pct:Léo+3",
+          "son": "impact-taller",
+          "volume": 0.41
+        },
+        {
+          "a": "fini:83,1+10",
+          "son": "impact-taller",
+          "volume": 0.41
         }
       ]
     },
@@ -539,8 +567,8 @@
           "h": 380,
           "effet": "pop",
           "fin": "com",
-          "son": "pop",
-          "volume": 0.3
+          "son": "impact-taller",
+          "volume": 0.41
         },
         {
           "type": "image",
@@ -598,12 +626,12 @@
       {
         "de": 0,
         "a": "hook:partie-1",
-        "y": 822,
-        "taille": 86,
+        "y": 921,
+        "taille": 76,
         "motsMax": 4,
         "carMax": 17,
-        "poids": 600,
-        "contour": 3,
+        "poids": 500,
+        "contour": 15,
         "motsCles": false,
         "pop": false,
         "majuscules": true,
@@ -613,12 +641,12 @@
       {
         "de": "cta",
         "a": "fin",
-        "y": 822,
-        "taille": 86,
+        "y": 921,
+        "taille": 76,
         "motsMax": 4,
         "carMax": 17,
-        "poids": 600,
-        "contour": 3,
+        "poids": 500,
+        "contour": 15,
         "motsCles": false,
         "pop": false,
         "majuscules": true,
@@ -636,9 +664,9 @@
     "texte": "15 ans, 1m60, quelle est ma taille max ?",
     "de": 0,
     "a": "age:15",
-    "x": 88,
-    "y": 1045,
-    "w": 905,
+    "x": 60,
+    "y": 1203,
+    "w": 964,
     "image": "carte.png"
   }
 }
