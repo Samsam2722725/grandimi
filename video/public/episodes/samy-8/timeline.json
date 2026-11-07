@@ -1,0 +1,503 @@
+{
+  "fps": 30,
+  "totalFrames": 1000,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 8.",
+      "from": 0,
+      "duration": 64,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 14
+        },
+        {
+          "w": "tailles",
+          "f": 19
+        },
+        {
+          "w": "maximales,",
+          "f": 32
+        },
+        {
+          "w": "partie",
+          "f": 46
+        },
+        {
+          "w": "8.",
+          "f": 55
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Samy.",
+      "from": 65,
+      "duration": 54,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 65
+        },
+        {
+          "w": "on",
+          "f": 79
+        },
+        {
+          "w": "regarde",
+          "f": 84
+        },
+        {
+          "w": "les",
+          "f": 94
+        },
+        {
+          "w": "infos",
+          "f": 96
+        },
+        {
+          "w": "de",
+          "f": 103
+        },
+        {
+          "w": "Samy.",
+          "f": 106
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 13 ans, Samy mesure 1m68,",
+      "from": 120,
+      "duration": 69,
+      "words": [
+        {
+          "w": "À",
+          "f": 120
+        },
+        {
+          "w": "13",
+          "f": 125
+        },
+        {
+          "w": "ans,",
+          "f": 132
+        },
+        {
+          "w": "Samy",
+          "f": 139
+        },
+        {
+          "w": "mesure",
+          "f": 151
+        },
+        {
+          "w": "1m68,",
+          "f": 161
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est grand pour son âge.",
+      "from": 190,
+      "duration": 33,
+      "words": [
+        {
+          "w": "ce",
+          "f": 190
+        },
+        {
+          "w": "qui",
+          "f": 194
+        },
+        {
+          "w": "est",
+          "f": 199
+        },
+        {
+          "w": "grand",
+          "f": 202
+        },
+        {
+          "w": "pour",
+          "f": 209
+        },
+        {
+          "w": "son",
+          "f": 211
+        },
+        {
+          "w": "âge.",
+          "f": 216
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 1m88.",
+      "from": 223,
+      "duration": 118,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 223
+        },
+        {
+          "w": "le",
+          "f": 230
+        },
+        {
+          "w": "site",
+          "f": 233
+        },
+        {
+          "w": "Grandimi,",
+          "f": 240
+        },
+        {
+          "w": "sa",
+          "f": 263
+        },
+        {
+          "w": "taille",
+          "f": 268
+        },
+        {
+          "w": "adulte",
+          "f": 278
+        },
+        {
+          "w": "prédite",
+          "f": 290
+        },
+        {
+          "w": "est",
+          "f": 304
+        },
+        {
+          "w": "de",
+          "f": 307
+        },
+        {
+          "w": "1m88.",
+          "f": 311
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Samy pourrait atteindre 1m93,",
+      "from": 343,
+      "duration": 105,
+      "words": [
+        {
+          "w": "Et",
+          "f": 343
+        },
+        {
+          "w": "avec",
+          "f": 347
+        },
+        {
+          "w": "les",
+          "f": 352
+        },
+        {
+          "w": "bonnes",
+          "f": 355
+        },
+        {
+          "w": "habitudes,",
+          "f": 362
+        },
+        {
+          "w": "Samy",
+          "f": 379
+        },
+        {
+          "w": "pourrait",
+          "f": 393
+        },
+        {
+          "w": "atteindre",
+          "f": 400
+        },
+        {
+          "w": "1m93,",
+          "f": 410
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "donc 5 cm de croissance supplémentaire. Grâce à l'optimisation de sa croissance.",
+      "from": 448,
+      "duration": 123,
+      "words": [
+        {
+          "w": "donc",
+          "f": 448
+        },
+        {
+          "w": "5",
+          "f": 455
+        },
+        {
+          "w": "cm",
+          "f": 465
+        },
+        {
+          "w": "de",
+          "f": 479
+        },
+        {
+          "w": "croissance",
+          "f": 482
+        },
+        {
+          "w": "supplémentaire.",
+          "f": 494
+        },
+        {
+          "w": "Grâce",
+          "f": 521
+        },
+        {
+          "w": "à",
+          "f": 529
+        },
+        {
+          "w": "l'optimisation",
+          "f": 531
+        },
+        {
+          "w": "de",
+          "f": 550
+        },
+        {
+          "w": "sa",
+          "f": 553
+        },
+        {
+          "w": "croissance.",
+          "f": 557
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Samy est plus grand que 94,4% des personnes de son âge,",
+      "from": 572,
+      "duration": 133,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 572
+        },
+        {
+          "w": "Samy",
+          "f": 589
+        },
+        {
+          "w": "est",
+          "f": 605
+        },
+        {
+          "w": "plus",
+          "f": 610
+        },
+        {
+          "w": "grand",
+          "f": 615
+        },
+        {
+          "w": "que",
+          "f": 620
+        },
+        {
+          "w": "94,4%",
+          "f": 627
+        },
+        {
+          "w": "des",
+          "f": 675
+        },
+        {
+          "w": "personnes",
+          "f": 680
+        },
+        {
+          "w": "de",
+          "f": 687
+        },
+        {
+          "w": "son",
+          "f": 689
+        },
+        {
+          "w": "âge,",
+          "f": 697
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a déjà terminé 81,2% de sa croissance.",
+      "from": 706,
+      "duration": 106,
+      "words": [
+        {
+          "w": "et",
+          "f": 706
+        },
+        {
+          "w": "il",
+          "f": 711
+        },
+        {
+          "w": "a",
+          "f": 716
+        },
+        {
+          "w": "déjà",
+          "f": 718
+        },
+        {
+          "w": "terminé",
+          "f": 725
+        },
+        {
+          "w": "81,2%",
+          "f": 746
+        },
+        {
+          "w": "de",
+          "f": 789
+        },
+        {
+          "w": "sa",
+          "f": 791
+        },
+        {
+          "w": "croissance.",
+          "f": 796
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "T'es clairement pas foutu!",
+      "from": 813,
+      "duration": 40,
+      "words": [
+        {
+          "w": "T'es",
+          "f": 813
+        },
+        {
+          "w": "clairement",
+          "f": 823
+        },
+        {
+          "w": "pas",
+          "f": 832
+        },
+        {
+          "w": "foutu!",
+          "f": 837
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 854,
+      "duration": 52,
+      "words": [
+        {
+          "w": "Si",
+          "f": 854
+        },
+        {
+          "w": "tu",
+          "f": 859
+        },
+        {
+          "w": "veux",
+          "f": 861
+        },
+        {
+          "w": "connaître",
+          "f": 866
+        },
+        {
+          "w": "ton",
+          "f": 875
+        },
+        {
+          "w": "potentiel",
+          "f": 880
+        },
+        {
+          "w": "de",
+          "f": 892
+        },
+        {
+          "w": "taille,",
+          "f": 895
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écris ton âge, ta taille actuelle en commentaire.",
+      "from": 907,
+      "duration": 90,
+      "words": [
+        {
+          "w": "écris",
+          "f": 907
+        },
+        {
+          "w": "ton",
+          "f": 919
+        },
+        {
+          "w": "âge,",
+          "f": 923
+        },
+        {
+          "w": "ta",
+          "f": 935
+        },
+        {
+          "w": "taille",
+          "f": 940
+        },
+        {
+          "w": "actuelle",
+          "f": 947
+        },
+        {
+          "w": "en",
+          "f": 959
+        },
+        {
+          "w": "commentaire.",
+          "f": 964
+        }
+      ]
+    }
+  ]
+}
