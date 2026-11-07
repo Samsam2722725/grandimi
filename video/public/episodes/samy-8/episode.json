@@ -128,8 +128,8 @@
           "type": "tape",
           "texte": "PARTIE {partie}",
           "a": 1,
-          "y": 857,
-          "taille": 183,
+          "y": 869,
+          "taille": 160,
           "couleur": "#ebf91f",
           "police": "Inter",
           "poids": 800,
@@ -191,26 +191,26 @@
           {
             "a": "age:1m68+12",
             "cx": 0.341,
-            "cy": 0.363,
+            "cy": 0.331,
             "z": 1.85,
-            "d": 12,
-            "courbe": "lineaire"
+            "d": 14,
+            "courbe": "doux"
           },
           {
             "a": "norme:grand",
             "cx": 0.5,
             "cy": 0.5,
             "z": 1,
-            "d": 15,
-            "courbe": "lineaire"
+            "d": 16,
+            "courbe": "doux"
           },
           {
             "a": "predit:1m88+8",
             "cx": 0.661,
-            "cy": 0.365,
+            "cy": 0.333,
             "z": 1.87,
-            "d": 13,
-            "courbe": "lineaire"
+            "d": 14,
+            "courbe": "doux"
           }
         ],
         "pops": [
@@ -415,8 +415,8 @@
             "cx": 0.639,
             "cy": 0.599,
             "z": 1.81,
-            "d": 11,
-            "courbe": "lineaire"
+            "d": 13,
+            "courbe": "doux"
           }
         ],
         "pops": [],
