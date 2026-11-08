@@ -8,6 +8,7 @@ import {AbsoluteFill, Audio, CalculateMetadataFunction, cancelRender, continueRe
  * npx remotion render Cinetique out/x.mp4 --props='{"video":"mctominay-1"}'
  */
 const FPS = 30;
+const SAFE = 0.86; // contenu rétréci : TikTok/Instagram zooment et rognent les bords
 const COUL: Record<string, string> = {violet: '#ff5a1f', rouge: '#d4142a', blanc: '#ffffff', gris: '#555555', noir: '#0b0b0b'};
 const SANS = "'Plus Jakarta Sans', sans-serif";
 const SERIF = "'DM Serif Display', serif";
@@ -256,7 +257,8 @@ const SceneView: React.FC<{s: Scene; dir: string}> = ({s, dir}) => {
 	return (
 		<AbsoluteFill style={clip}>
 			<Fond fond={s.fond} />
-			{s.els.map((e, i) => {
+			<AbsoluteFill style={{transform: `scale(${SAFE})`, transformOrigin: '540px 940px'}}>
+			{s.els.filter((e) => e.t !== 'chevron').map((e, i) => {
 				if (e.t === 'ligne') return <LigneView key={i} e={e} f={f} />;
 				if (e.t === 'img') return <ImgView key={i} e={e} f={f} dir={dir} />;
 				if (e.t === 'phone') return <PhoneView key={i} e={e} f={f} dir={dir} />;
@@ -266,6 +268,10 @@ const SceneView: React.FC<{s: Scene; dir: string}> = ({s, dir}) => {
 				if (e.t === 'courbe') return <CourbeView key={i} e={e} f={f} />;
 				return null;
 			})}
+			</AbsoluteFill>
+			{s.els.filter((e) => e.t === 'chevron').map((e, i) => (
+				<ChevronView key={`x${i}`} e={e} f={f} />
+			))}
 		</AbsoluteFill>
 	);
 };
