@@ -1,0 +1,1399 @@
+{
+ "fps": 30,
+ "duree": 41.58,
+ "scenes": [
+  {
+   "de": 0,
+   "fin": 2.4,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "img",
+     "f": "silhouette_foot.png",
+     "a": 0.1,
+     "x": 140,
+     "y": 1100,
+     "w": 790,
+     "anim": "monte"
+    },
+    {
+     "t": "ligne",
+     "y": 215,
+     "taille": 80,
+     "al": "gauche",
+     "mots": [
+      {
+       "w": "Ce",
+       "a": 0.0,
+       "k": "sans"
+      }
+     ],
+     "x": 70
+    },
+    {
+     "t": "ligne",
+     "y": 345,
+     "taille": 150,
+     "al": "gauche",
+     "mots": [
+      {
+       "w": "footballeur",
+       "a": 0.16,
+       "k": "serif-i violet"
+      }
+     ],
+     "x": 70
+    },
+    {
+     "t": "ligne",
+     "y": 470,
+     "taille": 72,
+     "al": "gauche",
+     "mots": [
+      {
+       "w": "a",
+       "a": 0.8,
+       "k": "sans"
+      },
+      {
+       "w": "grandi",
+       "a": 0.96,
+       "k": "sans"
+      },
+      {
+       "w": "de 20 cm",
+       "a": 1.28,
+       "k": "sans",
+       "boite": true
+      }
+     ],
+     "x": 70
+    }
+   ]
+  },
+  {
+   "de": 2.4,
+   "fin": 3.6,
+   "fond": "violet",
+   "sortie": "barre",
+   "son": [
+    {
+     "a": 2.4,
+     "f": "whoosh",
+     "v": 0.2
+    }
+   ],
+   "els": [
+    {
+     "t": "ligne",
+     "y": 900,
+     "taille": 58,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "en",
+       "a": 2.4,
+       "k": "sans blanc"
+      },
+      {
+       "w": "seulement",
+       "a": 2.56,
+       "k": "sans blanc"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1010,
+     "taille": 130,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "deux",
+       "a": 2.96,
+       "k": "serif-i blanc"
+      },
+      {
+       "w": "ans",
+       "a": 3.12,
+       "k": "serif-i blanc"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 3.44,
+   "fin": 4.64,
+   "fond": "vignette",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 900,
+     "taille": 100,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "Et",
+       "a": 3.44,
+       "k": "sans rouge"
+      },
+      {
+       "w": "non,",
+       "a": 3.68,
+       "k": "sans rouge"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1030,
+     "taille": 100,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "il",
+       "a": 4.0,
+       "k": "sans rouge"
+      },
+      {
+       "w": "ne",
+       "a": 4.16,
+       "k": "sans rouge"
+      },
+      {
+       "w": "s'est",
+       "a": 4.24,
+       "k": "sans rouge"
+      },
+      {
+       "w": "pas",
+       "a": 4.48,
+       "k": "sans rouge"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 4.64,
+   "fin": 5.76,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "chevron",
+     "a": 5.52,
+     "d": 0.3
+    },
+    {
+     "t": "ligne",
+     "y": 470,
+     "taille": 60,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "injecté",
+       "a": 4.64,
+       "k": "sans"
+      },
+      {
+       "w": "d'hormones",
+       "a": 4.96,
+       "k": "sans"
+      },
+      {
+       "w": "de",
+       "a": 5.44,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 610,
+     "taille": 160,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "croissance",
+       "a": 5.52,
+       "k": "serif-i rouge"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 5.76,
+   "fin": 6.5,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 560,
+     "taille": 64,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "comme",
+       "a": 5.76,
+       "k": "sans violet"
+      },
+      {
+       "w": "Messi",
+       "a": 5.92,
+       "k": "sans violet"
+      }
+     ]
+    },
+    {
+     "t": "img",
+     "f": "messi.png",
+     "a": 5.9,
+     "x": 189,
+     "y": 640,
+     "w": 702,
+     "anim": "pop",
+     "rayon": 24,
+     "fin": 6.5,
+     "fondu": 0.15
+    }
+   ]
+  },
+  {
+   "de": 6.48,
+   "fin": 7.52,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 330,
+     "taille": 60,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "Scott",
+       "a": 6.48,
+       "k": "sans gris"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 440,
+     "taille": 115,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "McTominay",
+       "a": 6.72,
+       "k": "serif rouge"
+      }
+     ]
+    },
+    {
+     "t": "img",
+     "f": "mct.png",
+     "a": 6.56,
+     "x": 169,
+     "y": 640,
+     "w": 842,
+     "anim": "monte"
+    }
+   ]
+  },
+  {
+   "de": 7.52,
+   "fin": 9.04,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 870,
+     "taille": 62,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "mesurait",
+       "a": 7.52,
+       "k": "sans"
+      },
+      {
+       "w": "que",
+       "a": 7.92,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1010,
+     "taille": 210,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "1m68",
+       "a": 8.08,
+       "k": "serif rouge"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 9.04,
+   "fin": 9.9,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 985,
+     "taille": 80,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "à",
+       "a": 9.04,
+       "k": "sans violet"
+      },
+      {
+       "w": "18",
+       "a": 9.2,
+       "k": "sans violet"
+      },
+      {
+       "w": "ans,",
+       "a": 9.6,
+       "k": "sans violet"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 9.9,
+   "fin": 10.9,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 820,
+     "taille": 60,
+     "al": "gauche",
+     "mots": [
+      {
+       "w": "ce",
+       "a": 9.9,
+       "k": "sans"
+      },
+      {
+       "w": "qui",
+       "a": 10.14,
+       "k": "sans"
+      },
+      {
+       "w": "est",
+       "a": 10.3,
+       "k": "sans"
+      }
+     ],
+     "x": 90
+    },
+    {
+     "t": "ligne",
+     "y": 980,
+     "taille": 290,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "petit",
+       "a": 10.38,
+       "k": "serif rouge"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1160,
+     "taille": 60,
+     "al": "gauche",
+     "mots": [
+      {
+       "w": "pour",
+       "a": 10.7,
+       "k": "sans"
+      },
+      {
+       "w": "un",
+       "a": 10.86,
+       "k": "sans"
+      }
+     ],
+     "x": 560
+    }
+   ]
+  },
+  {
+   "de": 10.9,
+   "fin": 11.9,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 560,
+     "taille": 76,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "joueur",
+       "a": 10.94,
+       "k": "serif"
+      },
+      {
+       "w": "de",
+       "a": 11.18,
+       "k": "serif"
+      },
+      {
+       "w": "foot",
+       "a": 11.26,
+       "k": "serif-i violet"
+      },
+      {
+       "w": "pro",
+       "a": 11.58,
+       "k": "serif-i violet"
+      }
+     ]
+    },
+    {
+     "t": "img",
+     "f": "ron.png",
+     "a": 11.26,
+     "x": 106,
+     "y": 640,
+     "w": 868,
+     "anim": "pop"
+    }
+   ]
+  },
+  {
+   "de": 11.9,
+   "fin": 14.06,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 790,
+     "taille": 60,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "Mais",
+       "a": 11.9,
+       "k": "sans"
+      },
+      {
+       "w": "à",
+       "a": 12.06,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 940,
+     "taille": 230,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "20",
+       "a": 12.14,
+       "k": "serif-i violet"
+      },
+      {
+       "w": "ans,",
+       "a": 12.38,
+       "k": "serif-i violet"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1110,
+     "taille": 60,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "sa",
+       "a": 12.7,
+       "k": "sans"
+      },
+      {
+       "w": "taille",
+       "a": 12.86,
+       "k": "sans"
+      },
+      {
+       "w": "avait",
+       "a": 13.26,
+       "k": "sans"
+      },
+      {
+       "w": "explosé",
+       "a": 13.5,
+       "k": "sans",
+       "boite": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 14.06,
+   "fin": 16.14,
+   "fond": "violet",
+   "sortie": "iris",
+   "son": [
+    {
+     "a": 14.06,
+     "f": "whoosh",
+     "v": 0.2
+    }
+   ],
+   "els": [
+    {
+     "t": "ligne",
+     "y": 370,
+     "taille": 80,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "pour",
+       "a": 14.06,
+       "k": "serif blanc"
+      },
+      {
+       "w": "atteindre",
+       "a": 14.22,
+       "k": "serif blanc"
+      }
+     ]
+    },
+    {
+     "t": "img",
+     "f": "mct_full.png",
+     "a": 14.1,
+     "x": 108,
+     "y": 680,
+     "w": 397,
+     "anim": "pop"
+    },
+    {
+     "t": "fleche",
+     "a": 14.4,
+     "d": 0.45,
+     "x": 574,
+     "y0": 1770,
+     "y1": 710
+    },
+    {
+     "t": "ligne",
+     "y": 1190,
+     "taille": 86,
+     "al": "gauche",
+     "mots": [
+      {
+       "w": "1m93",
+       "a": 14.7,
+       "k": "sans blanc"
+      }
+     ],
+     "x": 650
+    }
+   ]
+  },
+  {
+   "de": 16.14,
+   "fin": 18.46,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 790,
+     "taille": 58,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "soit",
+       "a": 16.14,
+       "k": "sans gris"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 920,
+     "taille": 170,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "20",
+       "a": 16.46,
+       "k": "serif"
+      },
+      {
+       "w": "cm",
+       "a": 16.7,
+       "k": "serif"
+      }
+     ],
+     "pale": 17.2
+    },
+    {
+     "t": "ligne",
+     "y": 1150,
+     "taille": 58,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "en",
+       "a": 17.34,
+       "k": "sans"
+      },
+      {
+       "w": "seulement",
+       "a": 17.5,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1280,
+     "taille": 190,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "deux",
+       "a": 17.9,
+       "k": "serif-i violet"
+      },
+      {
+       "w": "ans",
+       "a": 18.14,
+       "k": "serif-i violet"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 18.46,
+   "fin": 21.18,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 190,
+     "taille": 84,
+     "al": "gauche",
+     "mots": [
+      {
+       "w": "Alors,",
+       "a": 18.46,
+       "k": "serif-i violet"
+      },
+      {
+       "w": "quel",
+       "a": 18.86,
+       "k": "sans"
+      },
+      {
+       "w": "est",
+       "a": 19.18,
+       "k": "sans"
+      }
+     ],
+     "x": 70
+    },
+    {
+     "t": "ligne",
+     "y": 300,
+     "taille": 84,
+     "al": "gauche",
+     "mots": [
+      {
+       "w": "le",
+       "a": 19.26,
+       "k": "sans"
+      },
+      {
+       "w": "secret",
+       "a": 19.34,
+       "k": "sans"
+      }
+     ],
+     "x": 70
+    },
+    {
+     "t": "ligne",
+     "y": 930,
+     "taille": 60,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "de",
+       "a": 19.66,
+       "k": "sans"
+      },
+      {
+       "w": "cette",
+       "a": 19.82,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1040,
+     "taille": 100,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "croissance",
+       "a": 20.06,
+       "k": "serif-i violet"
+      },
+      {
+       "w": "incroyable ?",
+       "a": 20.46,
+       "k": "serif-i violet"
+      }
+     ]
+    },
+    {
+     "t": "courbe",
+     "a": 19.9,
+     "d": 1.2
+    }
+   ]
+  },
+  {
+   "de": 21.18,
+   "fin": 23.1,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 880,
+     "taille": 60,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "Son",
+       "a": 21.18,
+       "k": "sans"
+      },
+      {
+       "w": "corps",
+       "a": 21.42,
+       "k": "sans"
+      },
+      {
+       "w": "a",
+       "a": 21.66,
+       "k": "sans"
+      },
+      {
+       "w": "eu",
+       "a": 21.74,
+       "k": "sans"
+      },
+      {
+       "w": "une",
+       "a": 21.9,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1000,
+     "taille": 160,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "croissance",
+       "a": 22.06,
+       "k": "serif-i violet"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1130,
+     "taille": 160,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "tardive,",
+       "a": 22.38,
+       "k": "serif-i violet"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 23.1,
+   "fin": 23.98,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 880,
+     "taille": 62,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "un",
+       "a": 23.1,
+       "k": "sans"
+      },
+      {
+       "w": "avantage",
+       "a": 23.18,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1010,
+     "taille": 220,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "rare",
+       "a": 23.66,
+       "k": "serif-i violet"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 23.98,
+   "fin": 25.5,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 920,
+     "taille": 64,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "qui",
+       "a": 23.98,
+       "k": "sans"
+      },
+      {
+       "w": "permet",
+       "a": 24.14,
+       "k": "sans"
+      },
+      {
+       "w": "à",
+       "a": 24.46,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1010,
+     "taille": 64,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "certaines",
+       "a": 24.62,
+       "k": "sans"
+      },
+      {
+       "w": "personnes",
+       "a": 25.02,
+       "k": "sans"
+      },
+      {
+       "w": "de",
+       "a": 25.34,
+       "k": "sans"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 25.5,
+   "fin": 26.54,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 880,
+     "taille": 64,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "continuer",
+       "a": 25.5,
+       "k": "sans"
+      },
+      {
+       "w": "à",
+       "a": 25.9,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1020,
+     "taille": 210,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "grandir",
+       "a": 26.06,
+       "k": "serif-i violet"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 26.54,
+   "fin": 27.72,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 880,
+     "taille": 64,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "même",
+       "a": 26.54,
+       "k": "sans"
+      },
+      {
+       "w": "après",
+       "a": 26.78,
+       "k": "sans"
+      },
+      {
+       "w": "la",
+       "a": 27.02,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1020,
+     "taille": 210,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "puberté",
+       "a": 27.1,
+       "k": "serif-i violet"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 27.72,
+   "fin": 28.04,
+   "fond": "vignette",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 960,
+     "taille": 140,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "Mais !",
+       "a": 27.72,
+       "k": "sans rouge"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 28.04,
+   "fin": 30.44,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 520,
+     "taille": 58,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "sans",
+       "a": 28.04,
+       "k": "sans"
+      },
+      {
+       "w": "une",
+       "a": 28.28,
+       "k": "sans"
+      },
+      {
+       "w": "bonne",
+       "a": 28.44,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 610,
+     "taille": 62,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "alimentation",
+       "a": 28.68,
+       "k": "serif-i violet"
+      },
+      {
+       "w": "et un bon",
+       "a": 29.24,
+       "k": "sans",
+       "petit": true
+      },
+      {
+       "w": "entraînement",
+       "a": 29.72,
+       "k": "serif-i violet"
+      }
+     ]
+    },
+    {
+     "t": "img",
+     "f": "phone1.png",
+     "a": 28.68,
+     "x": 53,
+     "y": 700,
+     "w": 462,
+     "anim": "pop"
+    },
+    {
+     "t": "img",
+     "f": "phone2.png",
+     "a": 29.72,
+     "x": 571,
+     "y": 700,
+     "w": 462,
+     "anim": "pop"
+    }
+   ]
+  },
+  {
+   "de": 30.44,
+   "fin": 32.6,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 700,
+     "taille": 70,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "même",
+       "a": 30.44,
+       "k": "sans"
+      },
+      {
+       "w": "ce",
+       "a": 30.68,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 840,
+     "taille": 130,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "don",
+       "a": 30.84,
+       "k": "serif-i violet"
+      },
+      {
+       "w": "de",
+       "a": 31.16,
+       "k": "serif-i violet"
+      },
+      {
+       "w": "Dieu",
+       "a": 31.32,
+       "k": "serif-i violet"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1000,
+     "taille": 70,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "aurait",
+       "a": 31.56,
+       "k": "sans"
+      },
+      {
+       "w": "été",
+       "a": 31.8,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1140,
+     "taille": 210,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "inutile",
+       "a": 32.04,
+       "k": "serif rouge"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 32.6,
+   "fin": 35.54,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 900,
+     "taille": 52,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "Alors,",
+       "a": 32.6,
+       "k": "sans"
+      },
+      {
+       "w": "si",
+       "a": 33.0,
+       "k": "sans"
+      },
+      {
+       "w": "tu",
+       "a": 33.16,
+       "k": "sans"
+      },
+      {
+       "w": "es",
+       "a": 33.32,
+       "k": "sans"
+      },
+      {
+       "w": "encore",
+       "a": 33.48,
+       "k": "sans"
+      },
+      {
+       "w": "jeune",
+       "a": 33.72,
+       "k": "serif-i violet",
+       "s": 2.3
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1050,
+     "taille": 56,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "ne",
+       "a": 34.12,
+       "k": "sans"
+      },
+      {
+       "w": "laisse",
+       "a": 34.28,
+       "k": "sans"
+      },
+      {
+       "w": "pas",
+       "a": 34.52,
+       "k": "sans"
+      },
+      {
+       "w": "passer",
+       "a": 34.68,
+       "k": "serif rouge",
+       "s": 2.3
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1170,
+     "taille": 56,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "ta",
+       "a": 35.0,
+       "k": "sans"
+      },
+      {
+       "w": "chance.",
+       "a": 35.16,
+       "k": "sans"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 35.54,
+   "fin": 38.58,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 610,
+     "taille": 46,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "Tes",
+       "a": 35.54,
+       "k": "sans"
+      },
+      {
+       "w": "gènes",
+       "a": 35.86,
+       "k": "sans"
+      },
+      {
+       "w": "ont",
+       "a": 36.26,
+       "k": "sans"
+      },
+      {
+       "w": "peut-être",
+       "a": 36.42,
+       "k": "sans"
+      }
+     ]
+    },
+    {
+     "t": "img",
+     "f": "dna.png",
+     "a": 35.54,
+     "x": 139,
+     "y": 690,
+     "w": 802,
+     "anim": "pop",
+     "rayon": 36
+    },
+    {
+     "t": "ligne",
+     "y": 1290,
+     "taille": 46,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "encore",
+       "a": 36.74,
+       "k": "sans"
+      },
+      {
+       "w": "quelques",
+       "a": 37.06,
+       "k": "sans"
+      },
+      {
+       "w": "centimètres",
+       "a": 37.38,
+       "k": "sans violet"
+      }
+     ]
+    },
+    {
+     "t": "ligne",
+     "y": 1355,
+     "taille": 46,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "de",
+       "a": 37.94,
+       "k": "sans"
+      },
+      {
+       "w": "croissance.",
+       "a": 38.02,
+       "k": "sans"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 38.58,
+   "fin": 41.58,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "icone",
+     "f": "icone.png",
+     "a": 39.3,
+     "cx": 540,
+     "cy": 980,
+     "w": 408
+    },
+    {
+     "t": "ligne",
+     "y": 1370,
+     "taille": 58,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "grandimi.com",
+       "a": 40.42,
+       "k": "sans"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

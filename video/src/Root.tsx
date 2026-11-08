@@ -1,5 +1,6 @@
 import {Composition} from 'remotion';
 import {calculateTexteAnimeMetadata, TexteAnime, TexteAnimeProps} from './texte-anime/TexteAnime';
+import {calculateCinetiqueMetadata, Cinetique, CinetiqueProps} from './cinetique/Cinetique';
 import {calculateEpisodeMetadata, Episode, EpisodeProps} from './episode/Episode';
 import {Video} from './Video';
 import timeline from './timeline.json';
@@ -33,6 +34,18 @@ export const Root: React.FC = () => (
 			component={TexteAnime}
 			calculateMetadata={calculateTexteAnimeMetadata}
 			defaultProps={{video: 'deux-raisons'} as TexteAnimeProps}
+			durationInFrames={1}
+			fps={30}
+			width={1080}
+			height={1920}
+		/>
+		{/* Texte cinétique (ce footballeur a grandi…) : public/textes/<video>/cine.json.
+		    npx remotion render Cinetique out/x.mp4 --props='{"video":"mctominay-1"}' */}
+		<Composition
+			id="Cinetique"
+			component={Cinetique}
+			calculateMetadata={calculateCinetiqueMetadata}
+			defaultProps={{video: 'mctominay-1'} as CinetiqueProps}
 			durationInFrames={1}
 			fps={30}
 			width={1080}
