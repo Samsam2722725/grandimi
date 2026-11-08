@@ -97,7 +97,7 @@
           "a": 1,
           "x": 540,
           "y": 960,
-          "z": 1.2,
+          "z": 1.0,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -234,10 +234,10 @@
           "fin": "age:15+30",
           "chute": true,
           "boite": [
-            0.02,
-            0.22,
-            0.96,
-            0.5
+            0.215,
+            0.37,
+            0.57,
+            0.27
           ]
         },
         "url": "grandimi.com"
@@ -291,20 +291,8 @@
           "type": "routine",
           "a": 0,
           "url": "grandimi.com",
-          "flou": 13
-        },
-        {
-          "type": "image",
-          "ecran": true,
-          "fichier": "yeux.png",
-          "a": "habitudes:bonnes",
-          "x": 290,
-          "y": 690,
-          "w": 500,
-          "h": 404,
-          "effet": "pop",
-          "son": "impact-taller",
-          "volume": 0.41
+          "flou": 13,
+          "chut": "habitudes:bonnes"
         }
       ],
       "sons": [
@@ -341,7 +329,7 @@
           "h": 1170,
           "grandit": {
             "de": 0.4,
-            "d": 40
+            "d": 30
           }
         },
         {
@@ -353,6 +341,19 @@
           "y": 200,
           "w": 640,
           "h": 298,
+          "effet": "pop",
+          "son": "pop",
+          "volume": 0.25
+        },
+        {
+          "type": "image",
+          "ecran": true,
+          "fichier": "yeux.png",
+          "a": 30,
+          "x": 480,
+          "y": 762,
+          "w": 120,
+          "h": 97,
           "effet": "pop",
           "son": "pop",
           "volume": 0.25
