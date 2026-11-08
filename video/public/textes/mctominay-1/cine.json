@@ -11,11 +11,11 @@
     {
      "t": "img",
      "f": "silhouette_foot.png",
-     "a": 0.1,
+     "a": 0.0,
      "x": 140,
      "y": 1100,
      "w": 790,
-     "anim": "monte",
+     "anim": "diag",
      "sort": 1.95
     },
     {

@@ -47,7 +47,7 @@ const pop = (f: number, at: number) => spring({frame: f - at, fps: FPS, config: 
 
 const MotView: React.FC<{m: Mot; f: number; taille: number}> = ({m, f, taille}) => {
 	const at = sec(m.a);
-	const p = interpolate(f, [at, at + 5], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+	const p = interpolate(f, [at, at + 10], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
 	const ks = (m.k ?? 'sans').split(' ');
 	const serif = ks.some((k) => k.startsWith('serif'));
 	const italic = ks.includes('serif-i');
@@ -66,6 +66,7 @@ const MotView: React.FC<{m: Mot; f: number; taille: number}> = ({m, f, taille}) 
 			})
 		: m.w;
 	return (
+		<span style={{display: 'inline-block', position: 'relative', clipPath: special ? undefined : 'inset(-45% -15% -6% -15%)'}}>
 		<span
 			style={{
 				display: 'inline-block',
@@ -76,10 +77,10 @@ const MotView: React.FC<{m: Mot; f: number; taille: number}> = ({m, f, taille}) 
 				fontSize: size,
 				lineHeight: 1.05,
 				color: couleur,
-				opacity: special ? (f >= at ? 1 : 0) : p,
-				filter: special ? undefined : `blur(${(1 - p) * 6}px)`,
+				opacity: special ? (f >= at ? 1 : 0) : Math.min(1, p * 3),
+				filter: special ? undefined : `blur(${(1 - p) * 3}px)`,
 				clipPath: m.rev ? `inset(-20% ${(1 - rev) * 100}% -20% 0)` : undefined,
-				transform: special ? undefined : `translateY(${(1 - p) * 26}px) scale(${0.92 + 0.08 * p})`,
+				transform: special ? undefined : `translateY(${(1 - p) * 125}%)`,
 				whiteSpace: 'nowrap',
 				padding: m.boite ? `${size * 0.08}px ${size * 0.22}px` : 0,
 				letterSpacing: serif ? 0 : -0.01 * size,
@@ -88,6 +89,7 @@ const MotView: React.FC<{m: Mot; f: number; taille: number}> = ({m, f, taille}) 
 		>
 			{m.boite ? <span style={{position: 'absolute', inset: 0, background: '#c3273f', transform: `scaleX(${p})`, transformOrigin: 'left', zIndex: -1}} /> : null}
 			{contenu}
+		</span>
 		</span>
 	);
 };
@@ -131,12 +133,17 @@ const ImgView: React.FC<{e: El; f: number; dir: string}> = ({e, f, dir}) => {
 		transform = `translateY(${(1 - p) * 520}px)`;
 		filter = `blur(${(1 - p) * 14}px)`;
 		opacity = Math.min(1, p * 2);
+	} else if (e.anim === 'diag') {
+		const p = interpolate(k, [0, 15], [0, 1], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+		transform = `translate(${-(1 - p) * 640}px, ${(1 - p) * 720}px)`;
+		filter = `blur(${(1 - p) * 16}px)`;
+		opacity = Math.min(1, k / 2);
 	} else if (e.anim === 'pop') {
 		const p = pop(f, at);
 		transform = `scale(${0.55 + 0.45 * p})`;
 		opacity = Math.min(1, k / 4);
 	}
-	if (e.sort) {
+	if (e.sort && f >= sec(e.sort)) {
 		const q = interpolate(f, [sec(e.sort), sec(e.sort) + 8], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.in(Easing.quad)});
 		transform = `translate(${-q * 90}px, ${q * 460}px)`;
 		filter = `blur(${q * 12}px)`;
