@@ -134,6 +134,8 @@ export type Plan = {
 		barreBas?: boolean;
 		urlDecale?: number;
 		navTraits?: boolean;
+		navHaut?: number;
+		echelleY?: number;
 	};
 	/** Vidéo explicative (référence p25-ref, src/episode/Explicatif.tsx) : phrases mot par mot, moments et valeurs. */
 	explicatif?: {phrases: {titre: string; de: number; a: number; mots: {w: string; f: number; gras?: boolean}[]}[]; t: Record<string, number>; v: Record<string, string>; fin?: number};

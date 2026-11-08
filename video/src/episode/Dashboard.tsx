@@ -254,12 +254,16 @@ export const DashboardGrandimi: React.FC<{
 	urlDecale?: number;
 	/** Barre de navigation de la page en icônes au trait (Taille, Croissance, Quotidien) comme Taller partie 30. */
 	navTraits?: boolean;
+	/** Haut de la barre d'onglets du bas (par défaut 1812) : plus haut, elle reste visible au-dessus de l'interface TikTok. */
+	navHaut?: number;
+	/** Écrase la page en hauteur (0,9 = 10 %) pour que la barre d'onglets du bas tienne dans l'image. */
+	echelleY?: number;
 	pageY?: number;
 	/** Sans la barre d'état de la page (écran de téléphone : la barre Safari du dessus a déjà la sienne). */
 	sansBarreEtat?: boolean;
 	/** Capture d'écran du dashboard (724×1517) affichée à la place du dashboard dessiné. */
 	image?: string;
-}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, barreBas, urlDecale = 0, navTraits, pageY, sansBarreEtat, image}) => {
+}> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, barreBas, urlDecale = 0, navTraits, navHaut, echelleY, pageY, sansBarreEtat, image}) => {
 	const cacheEtat = Boolean(url || entete || sansBarreEtat);
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
@@ -281,7 +285,7 @@ export const DashboardGrandimi: React.FC<{
 					width: W,
 					height: H,
 					transformOrigin: '0 0',
-					transform: `translateY(${pageY ?? (url ? 150 + urlDecale : 0) + (barre?.length && !barreBas ? HAUT_BARRE : 0)}px) translate(${W / 2}px, ${H / 2}px) scale(${c.z}) translate(${-c.cx * W}px, ${-c.cy * H}px)`,
+					transform: `translateY(${pageY ?? (url ? 150 + urlDecale : 0) + (barre?.length && !barreBas ? HAUT_BARRE : 0)}px) translate(${W / 2}px, ${H / 2}px) scale(${c.z}, ${c.z * (echelleY ?? 1)}) translate(${-c.cx * W}px, ${-c.cy * H}px)`,
 					fontFamily: FONT,
 					color: '#fff',
 				}}
@@ -454,7 +458,7 @@ export const DashboardGrandimi: React.FC<{
 			{/* Onglets fixes en bas de l'écran (hors du zoom), comme une vraie appli */}
 			{onglets?.length ? <BarreOnglets onglets={onglets} actif={0} /> : null}
 			{barre?.length ? <BarreTraits noms={barre} top={barreBas ? 1920 - HAUT_BARRE - 10 : url ? 172 : 0} bas={barreBas} /> : null}
-			{navTraits && !onglets && !barre?.length ? <NavTraits /> : null}
+			{navTraits && !onglets && !barre?.length ? <NavTraits haut={navHaut} /> : null}
 			{url ? (
 				<>
 					{urlDecale > 0 ? <div style={{position: 'absolute', left: 0, top: 0, width: W, height: urlDecale, background: '#000'}} /> : null}
@@ -575,13 +579,13 @@ export const BarreTraits: React.FC<{noms: string[]; top: number; bas?: boolean}>
 );
 
 /** Barre de navigation fixe en bas, icônes au trait comme Taller : Taille active, Croissance, Quotidien. */
-const NavTraits: React.FC = () => (
+const NavTraits: React.FC<{haut?: number}> = ({haut = 1812}) => (
 	<>
-		<div style={{position: 'absolute', left: 0, top: 1812, width: W, height: 108, background: '#0b0b0b', borderTop: '2px solid #1f1f1f'}} />
+		<div style={{position: 'absolute', left: 0, top: haut, width: W, height: 1920 - haut, background: '#0b0b0b', borderTop: '2px solid #1f1f1f'}} />
 		{(['Taille', 'Croissance', 'Routine'] as const).map((nom, i) => {
 			const c = i === 0 ? OR : '#8a8a8f';
 			return (
-				<div key={nom} style={{position: 'absolute', left: [0.21, 0.5, 0.79][i] * W - 90, top: 1826, width: 180, textAlign: 'center', color: c, fontFamily: FONT}}>
+				<div key={nom} style={{position: 'absolute', left: [0.21, 0.5, 0.79][i] * W - 90, top: haut + 14, width: 180, textAlign: 'center', color: c, fontFamily: FONT}}>
 					<svg width={52} height={52} viewBox="0 0 60 60" style={{display: 'block', margin: '0 auto'}} fill="none" stroke={c} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round">
 						{ICONE_TRAIT[nom]}
 					</svg>

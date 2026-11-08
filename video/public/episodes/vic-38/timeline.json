@@ -1,0 +1,511 @@
+{
+  "fps": 30,
+  "totalFrames": 998,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 38.",
+      "from": 0,
+      "duration": 73,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 17
+        },
+        {
+          "w": "tailles",
+          "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 31
+        },
+        {
+          "w": "partie",
+          "f": 46
+        },
+        {
+          "w": "38.",
+          "f": 58
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Vic.",
+      "from": 74,
+      "duration": 59,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 74
+        },
+        {
+          "w": "on",
+          "f": 89
+        },
+        {
+          "w": "regarde",
+          "f": 94
+        },
+        {
+          "w": "les",
+          "f": 106
+        },
+        {
+          "w": "infos",
+          "f": 110
+        },
+        {
+          "w": "de",
+          "f": 118
+        },
+        {
+          "w": "Vic.",
+          "f": 120
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 14 ans, Vic mesure 1m63.",
+      "from": 134,
+      "duration": 71,
+      "words": [
+        {
+          "w": "À",
+          "f": 134
+        },
+        {
+          "w": "14",
+          "f": 139
+        },
+        {
+          "w": "ans,",
+          "f": 146
+        },
+        {
+          "w": "Vic",
+          "f": 154
+        },
+        {
+          "w": "mesure",
+          "f": 168
+        },
+        {
+          "w": "1m63.",
+          "f": 175
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "Ce qui est normal pour son âge.",
+      "from": 206,
+      "duration": 37,
+      "words": [
+        {
+          "w": "Ce",
+          "f": 206
+        },
+        {
+          "w": "qui",
+          "f": 211
+        },
+        {
+          "w": "est",
+          "f": 216
+        },
+        {
+          "w": "normal",
+          "f": 218
+        },
+        {
+          "w": "pour",
+          "f": 228
+        },
+        {
+          "w": "son",
+          "f": 230
+        },
+        {
+          "w": "âge.",
+          "f": 235
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, il mesurera 1m76 à l'âge adulte.",
+      "from": 245,
+      "duration": 108,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 245
+        },
+        {
+          "w": "le",
+          "f": 252
+        },
+        {
+          "w": "site",
+          "f": 254
+        },
+        {
+          "w": "Grandimi,",
+          "f": 262
+        },
+        {
+          "w": "il",
+          "f": 284
+        },
+        {
+          "w": "mesurera",
+          "f": 289
+        },
+        {
+          "w": "1m76",
+          "f": 305
+        },
+        {
+          "w": "à",
+          "f": 332
+        },
+        {
+          "w": "l'âge",
+          "f": 334
+        },
+        {
+          "w": "adulte.",
+          "f": 344
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Vic pourrait atteindre 1m80,",
+      "from": 353,
+      "duration": 95,
+      "words": [
+        {
+          "w": "Et",
+          "f": 353
+        },
+        {
+          "w": "avec",
+          "f": 358
+        },
+        {
+          "w": "les",
+          "f": 363
+        },
+        {
+          "w": "bonnes",
+          "f": 368
+        },
+        {
+          "w": "habitudes,",
+          "f": 375
+        },
+        {
+          "w": "Vic",
+          "f": 389
+        },
+        {
+          "w": "pourrait",
+          "f": 404
+        },
+        {
+          "w": "atteindre",
+          "f": 411
+        },
+        {
+          "w": "1m80,",
+          "f": 421
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "soit 4 cm de plus en optimisant sa croissance.",
+      "from": 449,
+      "duration": 84,
+      "words": [
+        {
+          "w": "soit",
+          "f": 449
+        },
+        {
+          "w": "4",
+          "f": 457
+        },
+        {
+          "w": "cm",
+          "f": 464
+        },
+        {
+          "w": "de",
+          "f": 481
+        },
+        {
+          "w": "plus",
+          "f": 483
+        },
+        {
+          "w": "en",
+          "f": 493
+        },
+        {
+          "w": "optimisant",
+          "f": 497
+        },
+        {
+          "w": "sa",
+          "f": 514
+        },
+        {
+          "w": "croissance.",
+          "f": 519
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Vic est plus grand que 50,7% des jeunes de son âge",
+      "from": 534,
+      "duration": 117,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 534
+        },
+        {
+          "w": "Vic",
+          "f": 551
+        },
+        {
+          "w": "est",
+          "f": 565
+        },
+        {
+          "w": "plus",
+          "f": 570
+        },
+        {
+          "w": "grand",
+          "f": 572
+        },
+        {
+          "w": "que",
+          "f": 580
+        },
+        {
+          "w": "50,7%",
+          "f": 584
+        },
+        {
+          "w": "des",
+          "f": 620
+        },
+        {
+          "w": "jeunes",
+          "f": 625
+        },
+        {
+          "w": "de",
+          "f": 635
+        },
+        {
+          "w": "son",
+          "f": 637
+        },
+        {
+          "w": "âge",
+          "f": 642
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a déjà fait 78,7% de sa croissance.",
+      "from": 652,
+      "duration": 97,
+      "words": [
+        {
+          "w": "et",
+          "f": 652
+        },
+        {
+          "w": "il",
+          "f": 656
+        },
+        {
+          "w": "a",
+          "f": 661
+        },
+        {
+          "w": "déjà",
+          "f": 664
+        },
+        {
+          "w": "fait",
+          "f": 671
+        },
+        {
+          "w": "78,7%",
+          "f": 678
+        },
+        {
+          "w": "de",
+          "f": 726
+        },
+        {
+          "w": "sa",
+          "f": 731
+        },
+        {
+          "w": "croissance.",
+          "f": 733
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 750,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Si",
+          "f": 750
+        },
+        {
+          "w": "tu",
+          "f": 755
+        },
+        {
+          "w": "veux",
+          "f": 760
+        },
+        {
+          "w": "connaître",
+          "f": 764
+        },
+        {
+          "w": "ton",
+          "f": 774
+        },
+        {
+          "w": "potentiel",
+          "f": 779
+        },
+        {
+          "w": "de",
+          "f": 791
+        },
+        {
+          "w": "taille,",
+          "f": 796
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écris ton âge et ta taille actuelle en commentaire sous cette vidéo ou va directement sur grandimi.com pour tout avoir.",
+      "from": 808,
+      "duration": 187,
+      "words": [
+        {
+          "w": "écris",
+          "f": 808
+        },
+        {
+          "w": "ton",
+          "f": 817
+        },
+        {
+          "w": "âge",
+          "f": 822
+        },
+        {
+          "w": "et",
+          "f": 827
+        },
+        {
+          "w": "ta",
+          "f": 832
+        },
+        {
+          "w": "taille",
+          "f": 836
+        },
+        {
+          "w": "actuelle",
+          "f": 846
+        },
+        {
+          "w": "en",
+          "f": 858
+        },
+        {
+          "w": "commentaire",
+          "f": 863
+        },
+        {
+          "w": "sous",
+          "f": 875
+        },
+        {
+          "w": "cette",
+          "f": 882
+        },
+        {
+          "w": "vidéo",
+          "f": 887
+        },
+        {
+          "w": "ou",
+          "f": 896
+        },
+        {
+          "w": "va",
+          "f": 901
+        },
+        {
+          "w": "directement",
+          "f": 908
+        },
+        {
+          "w": "sur",
+          "f": 920
+        },
+        {
+          "w": "grandimi.com",
+          "f": 925
+        },
+        {
+          "w": "pour",
+          "f": 961
+        },
+        {
+          "w": "tout",
+          "f": 966
+        },
+        {
+          "w": "avoir.",
+          "f": 973
+        }
+      ]
+    }
+  ]
+}
