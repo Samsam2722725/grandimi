@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {PhoneExercice, PhoneNutrition} from './Phones';
 import {AbsoluteFill, Audio, CalculateMetadataFunction, cancelRender, continueRender, delayRender, Easing, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame} from 'remotion';
 
 /*
@@ -13,7 +14,7 @@ const SERIF = "'DM Serif Display', serif";
 
 type Mot = {w: string; a: number; k?: string; boite?: boolean; petit?: boolean; s?: number; lettres?: number; rev?: number};
 type El = {
-	t: 'ligne' | 'img' | 'fleche' | 'chevron' | 'courbe' | 'icone';
+	t: 'ligne' | 'phone' | 'img' | 'fleche' | 'chevron' | 'courbe' | 'icone';
 	[k: string]: any;
 };
 type Scene = {de: number; fin: number; fond: 'blanc' | 'violetA' | 'violetB' | 'vignette'; sortie?: 'barre' | 'iris' | 'flou'; son?: {a: number; f: string; v: number}[]; els: El[]};
@@ -152,6 +153,18 @@ const ImgView: React.FC<{e: El; f: number; dir: string}> = ({e, f, dir}) => {
 	return <Img src={staticFile(`${dir}/images/${e.f}`)} style={{position: 'absolute', left: e.x, top: e.y, width: e.w, borderRadius: e.rayon ?? 0, transform, opacity, filter, transformOrigin: '50% 60%'}} />;
 };
 
+const PhoneView: React.FC<{e: El; f: number; dir: string}> = ({e, f, dir}) => {
+	const at = sec(e.a);
+	if (f < at) return null;
+	const p = pop(f, at);
+	const sc = e.w / 445;
+	return (
+		<div style={{position: 'absolute', left: e.x, top: e.y, width: 445, height: 920, transformOrigin: '50% 60%', transform: `scale(${sc * (0.55 + 0.45 * p)})`, opacity: Math.min(1, (f - at) / 4), marginLeft: -(445 - e.w) / 2, marginTop: -(920 - 920 * sc) / 2}}>
+			{e.ecran === 'nutrition' ? <PhoneNutrition dir={dir} /> : <PhoneExercice dir={dir} />}
+		</div>
+	);
+};
+
 const IconeView: React.FC<{e: El; f: number; dir: string}> = ({e, f, dir}) => {
 	const at = sec(e.a);
 	if (f < at) return null;
@@ -245,6 +258,7 @@ const SceneView: React.FC<{s: Scene; dir: string}> = ({s, dir}) => {
 			{s.els.map((e, i) => {
 				if (e.t === 'ligne') return <LigneView key={i} e={e} f={f} />;
 				if (e.t === 'img') return <ImgView key={i} e={e} f={f} dir={dir} />;
+				if (e.t === 'phone') return <PhoneView key={i} e={e} f={f} dir={dir} />;
 				if (e.t === 'icone') return <IconeView key={i} e={e} f={f} dir={dir} />;
 				if (e.t === 'fleche') return <FlecheView key={i} e={e} f={f} />;
 				if (e.t === 'chevron') return <ChevronView key={i} e={e} f={f} />;

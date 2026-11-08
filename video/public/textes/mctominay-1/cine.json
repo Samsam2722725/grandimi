@@ -1160,22 +1160,20 @@
      ]
     },
     {
-     "t": "img",
-     "f": "phone1.png",
+     "t": "phone",
+     "ecran": "nutrition",
      "a": 28.68,
      "x": 53,
      "y": 700,
-     "w": 462,
-     "anim": "pop"
+     "w": 462
     },
     {
-     "t": "img",
-     "f": "phone2.png",
+     "t": "phone",
+     "ecran": "exercice",
      "a": 29.72,
      "x": 571,
      "y": 700,
-     "w": 462,
-     "anim": "pop"
+     "w": 462
     }
    ]
   },
