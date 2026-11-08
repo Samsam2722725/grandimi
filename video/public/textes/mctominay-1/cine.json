@@ -4,8 +4,9 @@
  "scenes": [
   {
    "de": 0,
-   "fin": 2.4,
+   "fin": 2.25,
    "fond": "blanc",
+   "sortie": "flou",
    "els": [
     {
      "t": "img",
@@ -14,7 +15,8 @@
      "x": 140,
      "y": 1100,
      "w": 790,
-     "anim": "monte"
+     "anim": "monte",
+     "sort": 1.95
     },
     {
      "t": "ligne",
@@ -72,13 +74,43 @@
    ]
   },
   {
-   "de": 2.4,
-   "fin": 3.6,
+   "de": 2.25,
+   "fin": 2.55,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 872,
+     "taille": 52,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "en",
+       "a": 0,
+       "k": "sans noir"
+      },
+      {
+       "w": "seulement",
+       "a": 0,
+       "k": "sans noir"
+      }
+     ],
+     "desde": {
+      "a": 2.25,
+      "d": 0.3,
+      "dy": 760
+     }
+    }
+   ]
+  },
+  {
+   "de": 2.55,
+   "fin": 3.44,
    "fond": "violetA",
    "sortie": "barre",
    "son": [
     {
-     "a": 2.4,
+     "a": 2.55,
      "f": "whoosh",
      "v": 0.2
     }
@@ -92,12 +124,12 @@
      "mots": [
       {
        "w": "en",
-       "a": 2.4,
+       "a": 0,
        "k": "sans blanc"
       },
       {
        "w": "seulement",
-       "a": 2.56,
+       "a": 0,
        "k": "sans blanc"
       }
      ]
@@ -111,12 +143,14 @@
       {
        "w": "deux",
        "a": 2.96,
-       "k": "serif blanc"
+       "k": "serif blanc",
+       "rev": 6
       },
       {
        "w": "ans",
        "a": 3.12,
-       "k": "serif blanc"
+       "k": "serif blanc",
+       "rev": 6
       }
      ]
     }
@@ -124,6 +158,26 @@
   },
   {
    "de": 3.44,
+   "fin": 3.6,
+   "fond": "blanc",
+   "els": [
+    {
+     "t": "ligne",
+     "y": 960,
+     "taille": 62,
+     "al": "centre",
+     "mots": [
+      {
+       "w": "Et",
+       "a": 3.44,
+       "k": "sans noir"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "de": 3.6,
    "fin": 4.64,
    "fond": "vignette",
    "els": [
@@ -135,7 +189,7 @@
      "mots": [
       {
        "w": "Et",
-       "a": 3.44,
+       "a": 3.6,
        "k": "sans rouge"
       },
       {
@@ -184,8 +238,8 @@
    "els": [
     {
      "t": "chevron",
-     "a": 5.52,
-     "d": 0.3
+     "a": 5.5,
+     "d": 0.14
     },
     {
      "t": "ligne",
@@ -201,14 +255,20 @@
       {
        "w": "d'hormones",
        "a": 4.96,
-       "k": "sans"
+       "k": "sans",
+       "lettres": 0.4
       },
       {
        "w": "de",
        "a": 5.44,
        "k": "sans"
       }
-     ]
+     ],
+     "desde": {
+      "a": 4.64,
+      "d": 0.2,
+      "dy": -70
+     }
     },
     {
      "t": "ligne",
@@ -219,7 +279,8 @@
       {
        "w": "croissance",
        "a": 5.52,
-       "k": "serif-i rouge"
+       "k": "serif-i rouge",
+       "lettres": 0.2
       }
      ]
     }

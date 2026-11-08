@@ -2,21 +2,21 @@ import React, {useEffect, useState} from 'react';
 import {AbsoluteFill, Audio, CalculateMetadataFunction, cancelRender, continueRender, delayRender, Easing, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame} from 'remotion';
 
 /*
- * Texte cinétique sur fond blanc / violet (format « ce footballeur a grandi de 8 pouces… »).
+ * Texte cinétique sur fond blanc / orange (format « ce footballeur a grandi de 8 pouces… »).
  * Une vidéo = public/textes/<id>/ : cine.json (écrans, mots datés en secondes), images/, voice/voix.wav.
  * npx remotion render Cinetique out/x.mp4 --props='{"video":"mctominay-1"}'
  */
 const FPS = 30;
-const COUL: Record<string, string> = {violet: '#5d05b6', rouge: '#c8202f', blanc: '#ffffff', gris: '#555555', noir: '#0b0b0b'};
+const COUL: Record<string, string> = {violet: '#ff5a1f', rouge: '#d4142a', blanc: '#ffffff', gris: '#555555', noir: '#0b0b0b'};
 const SANS = "'Plus Jakarta Sans', sans-serif";
 const SERIF = "'DM Serif Display', serif";
 
-type Mot = {w: string; a: number; k?: string; boite?: boolean; petit?: boolean; s?: number};
+type Mot = {w: string; a: number; k?: string; boite?: boolean; petit?: boolean; s?: number; lettres?: number; rev?: number};
 type El = {
 	t: 'ligne' | 'img' | 'fleche' | 'chevron' | 'courbe' | 'icone';
 	[k: string]: any;
 };
-type Scene = {de: number; fin: number; fond: 'blanc' | 'violetA' | 'violetB' | 'vignette'; sortie?: 'barre' | 'iris'; son?: {a: number; f: string; v: number}[]; els: El[]};
+type Scene = {de: number; fin: number; fond: 'blanc' | 'violetA' | 'violetB' | 'vignette'; sortie?: 'barre' | 'iris' | 'flou'; son?: {a: number; f: string; v: number}[]; els: El[]};
 type Cine = {fps: number; duree: number; scenes: Scene[]};
 export type CinetiqueProps = {video: string; cine?: Cine; musique?: boolean; bruitages?: boolean};
 
@@ -53,6 +53,18 @@ const MotView: React.FC<{m: Mot; f: number; taille: number}> = ({m, f, taille}) 
 	const italic = ks.includes('serif-i');
 	const couleur = COUL[ks.find((k) => COUL[k]) ?? 'noir'];
 	const size = taille * (m.s ?? 1) * (m.petit ? 0.7 : 1);
+	const rev = m.rev ? interpolate(f, [at, at + m.rev], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 1;
+	const special = !!(m.lettres || m.rev);
+	const contenu = m.lettres
+		? m.w.split('').map((c, i, tab) => {
+				const d0 = at + (i * sec(m.lettres!)) / tab.length;
+				return (
+					<span key={i} style={{opacity: interpolate(f, [d0, d0 + 3], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}}>
+						{c}
+					</span>
+				);
+			})
+		: m.w;
 	return (
 		<span
 			style={{
@@ -64,8 +76,10 @@ const MotView: React.FC<{m: Mot; f: number; taille: number}> = ({m, f, taille}) 
 				fontSize: size,
 				lineHeight: 1.05,
 				color: couleur,
-				opacity: p,
-				transform: `translateY(${(1 - p) * 26}px) scale(${0.92 + 0.08 * p})`,
+				opacity: special ? (f >= at ? 1 : 0) : p,
+				filter: special ? undefined : `blur(${(1 - p) * 6}px)`,
+				clipPath: m.rev ? `inset(-20% ${(1 - rev) * 100}% -20% 0)` : undefined,
+				transform: special ? undefined : `translateY(${(1 - p) * 26}px) scale(${0.92 + 0.08 * p})`,
 				whiteSpace: 'nowrap',
 				padding: m.boite ? `${size * 0.08}px ${size * 0.22}px` : 0,
 				letterSpacing: serif ? 0 : -0.01 * size,
@@ -73,19 +87,20 @@ const MotView: React.FC<{m: Mot; f: number; taille: number}> = ({m, f, taille}) 
 			}}
 		>
 			{m.boite ? <span style={{position: 'absolute', inset: 0, background: '#c3273f', transform: `scaleX(${p})`, transformOrigin: 'left', zIndex: -1}} /> : null}
-			{m.w}
+			{contenu}
 		</span>
 	);
 };
 
 const LigneView: React.FC<{e: El; f: number}> = ({e, f}) => {
 	const gauche = e.al === 'gauche';
+	const dy = e.desde ? (1 - interpolate(f, [sec(e.desde.a), sec(e.desde.a) + sec(e.desde.d)], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)})) * e.desde.dy : 0;
 	const pale = e.pale ? interpolate(f, [sec(e.pale), sec(e.pale) + 6], [1, 0.14], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 1;
 	return (
 		<div
 			style={{
 				position: 'absolute',
-				top: e.y,
+				top: e.y + dy,
 				left: gauche ? e.x ?? 70 : 0,
 				right: gauche ? undefined : 0,
 				transform: 'translateY(-50%)',
@@ -121,6 +136,11 @@ const ImgView: React.FC<{e: El; f: number; dir: string}> = ({e, f, dir}) => {
 		transform = `scale(${0.55 + 0.45 * p})`;
 		opacity = Math.min(1, k / 4);
 	}
+	if (e.sort) {
+		const q = interpolate(f, [sec(e.sort), sec(e.sort) + 8], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.in(Easing.quad)});
+		transform = `translate(${-q * 90}px, ${q * 460}px)`;
+		filter = `blur(${q * 12}px)`;
+	}
 	if (e.fin) opacity *= interpolate(f, [sec(e.fin) - 6, sec(e.fin) + 8], [1, e.fondu ?? 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 	return <Img src={staticFile(`${dir}/images/${e.f}`)} style={{position: 'absolute', left: e.x, top: e.y, width: e.w, borderRadius: e.rayon ?? 0, transform, opacity, filter, transformOrigin: '50% 60%'}} />;
 };
@@ -133,7 +153,7 @@ const IconeView: React.FC<{e: El; f: number; dir: string}> = ({e, f, dir}) => {
 	return (
 		<Img
 			src={staticFile(`${dir}/images/${e.f}`)}
-			style={{position: 'absolute', left: e.cx - e.w / 2, top: e.cy - e.w / 2, width: e.w, transform: `scale(${0.2 + 0.8 * p}) rotate(${rot}deg)`, filter: 'drop-shadow(0 26px 30px rgba(60,20,110,0.35))', opacity: Math.min(1, (f - at) / 3)}}
+			style={{position: 'absolute', left: e.cx - e.w / 2, top: e.cy - e.w / 2, width: e.w, transform: `scale(${0.2 + 0.8 * p}) rotate(${rot}deg)`, filter: 'drop-shadow(0 26px 30px rgba(190,70,10,0.35))', opacity: Math.min(1, (f - at) / 3)}}
 		/>
 	);
 };
@@ -152,16 +172,13 @@ const FlecheView: React.FC<{e: El; f: number}> = ({e, f}) => {
 
 const ChevronView: React.FC<{e: El; f: number}> = ({e, f}) => {
 	if (f < sec(e.a)) return null;
-	const p = interpolate(f, [sec(e.a), sec(e.a) + sec(e.d)], [0, 1], {extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
-	const ax = 560;
-	const ay = 1020;
-	const seg = (x0: number) => ({x: x0 + (ax - x0) * p, y: 1930 + (ay - 1930) * p});
-	const l = seg(30);
-	const r = seg(1080);
+	const ease = (a: number, d: number) => interpolate(f, [sec(a), sec(a + d)], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
+	const p1 = ease(e.a, e.d);
+	const p2 = ease(e.a + e.d * 0.8, e.d);
 	return (
 		<svg width={1080} height={1920} style={{position: 'absolute', left: 0, top: 0}}>
-			<line x1={30} y1={1930} x2={l.x} y2={l.y} stroke="#e8121f" strokeWidth={46} strokeLinecap="butt" />
-			<line x1={1080} y1={1930} x2={r.x} y2={r.y} stroke="#e8121f" strokeWidth={46} strokeLinecap="butt" />
+			<line x1={0} y1={1920} x2={1080 * p1} y2={1920 - 1920 * p1} stroke="#e8121f" strokeWidth={78} />
+			<line x1={0} y1={0} x2={1080 * p2} y2={1920 * p2} stroke="#e8121f" strokeWidth={78} />
 		</svg>
 	);
 };
@@ -189,11 +206,11 @@ const CourbeView: React.FC<{e: El; f: number}> = ({e, f}) => {
 const Fond: React.FC<{fond: Scene['fond']}> = ({fond}) => {
 	if (fond === 'violetA')
 		return (
-			<AbsoluteFill style={{background: '#4c00a8'}}>
-				<AbsoluteFill style={{background: 'radial-gradient(circle 260px at 50% 47%, rgba(140,90,230,0.35), rgba(76,0,168,0) 100%)'}} />
+			<AbsoluteFill style={{background: '#e8500c'}}>
+				<AbsoluteFill style={{background: 'radial-gradient(circle 260px at 50% 47%, rgba(255,190,130,0.42), rgba(232,80,12,0) 100%)'}} />
 			</AbsoluteFill>
 		);
-	if (fond === 'violetB') return <AbsoluteFill style={{background: 'radial-gradient(ellipse at 50% 50%, #6013bb 55%, #8a3fd8 100%)'}} />;
+	if (fond === 'violetB') return <AbsoluteFill style={{background: 'radial-gradient(ellipse at 50% 50%, #ff5a1f 55%, #ff8d52 100%)'}} />;
 	if (fond === 'vignette') return <AbsoluteFill style={{background: 'radial-gradient(ellipse 60% 50% at 50% 50%, #ffffff 40%, #b4b4b4 100%)'}} />;
 	return <AbsoluteFill style={{background: '#fff'}} />;
 };
@@ -210,6 +227,10 @@ const SceneView: React.FC<{s: Scene; dir: string}> = ({s, dir}) => {
 	if (s.sortie === 'iris') {
 		const p = interpolate(k, [n - 9, n], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.in(Easing.cubic)});
 		clip = {clipPath: `circle(${(1 - p) * 1400}px at 300px 1200px)`};
+	}
+	if (s.sortie === 'flou') {
+		const p = interpolate(k, [n - 7, n], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+		clip = {filter: `blur(${p * 10}px)`, opacity: 1 - p * 0.9};
 	}
 	return (
 		<AbsoluteFill style={clip}>
