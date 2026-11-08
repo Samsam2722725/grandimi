@@ -430,7 +430,7 @@ export const DashboardGrandimi: React.FC<{
 						</div>
 					))
 				)}
-				<div style={{position: 'absolute', left: W / 2 - 130, top: 1880, width: 260, height: 10, borderRadius: 5, background: '#fff'}} />
+				{navTraits ? null : <div style={{position: 'absolute', left: W / 2 - 130, top: 1880, width: 260, height: 10, borderRadius: 5, background: '#fff'}} />}
 				{image ? (
 					<div style={{position: 'absolute', left: 0, top: 0, width: W, height: H, background: '#000'}}>
 						<Img src={image} style={{position: 'absolute', left: (W - (724 * H) / 1517) / 2, top: 0, width: (724 * H) / 1517, height: H}} />
@@ -495,7 +495,7 @@ export const BarreSafari: React.FC<{url: string; decale?: number}> = ({url, deca
 					left: 36,
 					right: 36,
 					top: 66,
-					height: 86,
+					height: decale < 0 ? 70 : 86,
 					borderRadius: 28,
 					background: '#2c2c2e',
 					display: 'flex',
@@ -582,10 +582,11 @@ export const BarreTraits: React.FC<{noms: string[]; top: number; bas?: boolean}>
 const NavTraits: React.FC<{haut?: number}> = ({haut = 1812}) => (
 	<>
 		<div style={{position: 'absolute', left: 0, top: haut, width: W, height: 1920 - haut, background: '#0b0b0b', borderTop: '2px solid #1f1f1f'}} />
+		<div style={{position: 'absolute', left: W / 2 - 166, top: haut + 208, width: 332, height: 11, borderRadius: 6, background: '#fff'}} />
 		{(['Taille', 'Croissance', 'Routine'] as const).map((nom, i) => {
 			const c = i === 0 ? OR : '#8a8a8f';
 			return (
-				<div key={nom} style={{position: 'absolute', left: [0.21, 0.5, 0.79][i] * W - 90, top: haut + 14, width: 180, textAlign: 'center', color: c, fontFamily: FONT}}>
+				<div key={nom} style={{position: 'absolute', left: [0.21, 0.5, 0.79][i] * W - 90, top: haut + 56, width: 180, textAlign: 'center', color: c, fontFamily: FONT}}>
 					<svg width={52} height={52} viewBox="0 0 60 60" style={{display: 'block', margin: '0 auto'}} fill="none" stroke={c} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round">
 						{ICONE_TRAIT[nom]}
 					</svg>

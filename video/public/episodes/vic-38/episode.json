@@ -124,7 +124,7 @@
           "texte": "PARTIE {partie}",
           "a": 1,
           "y": 867,
-          "taille": 155,
+          "taille": 140,
           "couleur": "#fff200",
           "police": "Montserrat",
           "poids": 900,
@@ -232,9 +232,9 @@
         },
         "url": "grandimi.com",
         "navTraits": true,
-        "navHaut": 1556,
-        "pageY": -25,
-        "echelleY": 0.86
+        "navHaut": 1685,
+        "pageY": 0,
+        "urlDecale": -64
       },
       "elements": [],
       "sons": [
@@ -365,7 +365,6 @@
       "nom": "ecran2",
       "debut": "optim-2",
       "transition": "glitch",
-      "pousse": 0.04,
       "dashboard": {
         "donnees": {
           "actuelle": "163 cm",
@@ -427,7 +426,7 @@
           {
             "sens": "bas",
             "x": 0.5,
-            "pointe": 0.2,
+            "pointe": 0.26,
             "a": "optim",
             "d": 12,
             "fin": "optim:croissance",
@@ -436,9 +435,9 @@
         ],
         "url": "grandimi.com",
         "navTraits": true,
-        "navHaut": 1556,
-        "pageY": -25,
-        "echelleY": 0.86
+        "navHaut": 1685,
+        "pageY": 0,
+        "urlDecale": -64
       },
       "effets": [
         {
@@ -454,7 +453,7 @@
           "fichier": "curseur.png",
           "a": "pct:plus",
           "x": 404,
-          "y": 1442,
+          "y": 1250,
           "w": 192,
           "h": 204,
           "depuis": {
@@ -611,9 +610,9 @@
     "texte": "1m63 à 14 ans",
     "de": 0,
     "a": "age:14",
-    "x": 157,
-    "y": 1040,
-    "w": 757,
+    "x": 198,
+    "y": 1158,
+    "w": 679,
     "image": "carte.png"
   }
 }
