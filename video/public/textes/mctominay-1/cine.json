@@ -19,7 +19,7 @@
     {
      "t": "ligne",
      "y": 215,
-     "taille": 80,
+     "taille": 98,
      "al": "gauche",
      "mots": [
       {
@@ -28,12 +28,12 @@
        "k": "sans"
       }
      ],
-     "x": 70
+     "x": 62
     },
     {
      "t": "ligne",
-     "y": 345,
-     "taille": 150,
+     "y": 355,
+     "taille": 159,
      "al": "gauche",
      "mots": [
       {
@@ -42,12 +42,12 @@
        "k": "serif-i violet"
       }
      ],
-     "x": 70
+     "x": 58
     },
     {
      "t": "ligne",
-     "y": 470,
-     "taille": 72,
+     "y": 472,
+     "taille": 78,
      "al": "gauche",
      "mots": [
       {
@@ -67,14 +67,14 @@
        "boite": true
       }
      ],
-     "x": 70
+     "x": 62
     }
    ]
   },
   {
    "de": 2.4,
    "fin": 3.6,
-   "fond": "violet",
+   "fond": "violetA",
    "sortie": "barre",
    "son": [
     {
@@ -86,8 +86,8 @@
    "els": [
     {
      "t": "ligne",
-     "y": 900,
-     "taille": 58,
+     "y": 872,
+     "taille": 52,
      "al": "centre",
      "mots": [
       {
@@ -104,19 +104,19 @@
     },
     {
      "t": "ligne",
-     "y": 1010,
-     "taille": 130,
+     "y": 985,
+     "taille": 156,
      "al": "centre",
      "mots": [
       {
        "w": "deux",
        "a": 2.96,
-       "k": "serif-i blanc"
+       "k": "serif blanc"
       },
       {
        "w": "ans",
        "a": 3.12,
-       "k": "serif-i blanc"
+       "k": "serif blanc"
       }
      ]
     }
@@ -129,9 +129,9 @@
    "els": [
     {
      "t": "ligne",
-     "y": 900,
-     "taille": 100,
-     "al": "centre",
+     "y": 930,
+     "taille": 98,
+     "al": "gauche",
      "mots": [
       {
        "w": "Et",
@@ -143,13 +143,14 @@
        "a": 3.68,
        "k": "sans rouge"
       }
-     ]
+     ],
+     "x": 200
     },
     {
      "t": "ligne",
-     "y": 1030,
-     "taille": 100,
-     "al": "centre",
+     "y": 1045,
+     "taille": 98,
+     "al": "gauche",
      "mots": [
       {
        "w": "il",
@@ -171,7 +172,8 @@
        "a": 4.48,
        "k": "sans rouge"
       }
-     ]
+     ],
+     "x": 200
     }
    ]
   },
@@ -187,8 +189,8 @@
     },
     {
      "t": "ligne",
-     "y": 470,
-     "taille": 60,
+     "y": 840,
+     "taille": 66,
      "al": "centre",
      "mots": [
       {
@@ -210,8 +212,8 @@
     },
     {
      "t": "ligne",
-     "y": 610,
-     "taille": 160,
+     "y": 960,
+     "taille": 165,
      "al": "centre",
      "mots": [
       {
@@ -230,8 +232,8 @@
    "els": [
     {
      "t": "ligne",
-     "y": 560,
-     "taille": 64,
+     "y": 553,
+     "taille": 62,
      "al": "centre",
      "mots": [
       {
@@ -251,7 +253,7 @@
      "f": "messi.png",
      "a": 5.9,
      "x": 189,
-     "y": 640,
+     "y": 610,
      "w": 702,
      "anim": "pop",
      "rayon": 24,
@@ -267,36 +269,38 @@
    "els": [
     {
      "t": "ligne",
-     "y": 330,
-     "taille": 60,
-     "al": "centre",
+     "y": 335,
+     "taille": 66,
+     "al": "gauche",
      "mots": [
       {
        "w": "Scott",
        "a": 6.48,
-       "k": "sans gris"
+       "k": "sans"
       }
-     ]
+     ],
+     "x": 160
     },
     {
      "t": "ligne",
      "y": 440,
-     "taille": 115,
-     "al": "centre",
+     "taille": 143,
+     "al": "gauche",
      "mots": [
       {
        "w": "McTominay",
        "a": 6.72,
        "k": "serif rouge"
       }
-     ]
+     ],
+     "x": 160
     },
     {
      "t": "img",
      "f": "mct.png",
      "a": 6.56,
      "x": 169,
-     "y": 640,
+     "y": 616,
      "w": 842,
      "anim": "monte"
     }
@@ -309,9 +313,9 @@
    "els": [
     {
      "t": "ligne",
-     "y": 870,
-     "taille": 62,
-     "al": "centre",
+     "y": 845,
+     "taille": 66,
+     "al": "gauche",
      "mots": [
       {
        "w": "mesurait",
@@ -323,20 +327,22 @@
        "a": 7.92,
        "k": "sans"
       }
-     ]
+     ],
+     "x": 100
     },
     {
      "t": "ligne",
-     "y": 1010,
-     "taille": 210,
-     "al": "centre",
+     "y": 985,
+     "taille": 215,
+     "al": "gauche",
      "mots": [
       {
        "w": "1m68",
        "a": 8.08,
-       "k": "serif rouge"
+       "k": "sans rouge"
       }
-     ]
+     ],
+     "x": 95
     }
    ]
   },
@@ -347,8 +353,8 @@
    "els": [
     {
      "t": "ligne",
-     "y": 985,
-     "taille": 80,
+     "y": 961,
+     "taille": 76,
      "al": "centre",
      "mots": [
       {
@@ -377,8 +383,8 @@
    "els": [
     {
      "t": "ligne",
-     "y": 820,
-     "taille": 60,
+     "y": 447,
+     "taille": 62,
      "al": "gauche",
      "mots": [
       {
@@ -397,25 +403,26 @@
        "k": "sans"
       }
      ],
-     "x": 90
+     "x": 165
     },
     {
      "t": "ligne",
-     "y": 980,
-     "taille": 290,
-     "al": "centre",
+     "y": 590,
+     "taille": 292,
+     "al": "gauche",
      "mots": [
       {
        "w": "petit",
        "a": 10.38,
        "k": "serif rouge"
       }
-     ]
+     ],
+     "x": 165
     },
     {
      "t": "ligne",
-     "y": 1160,
-     "taille": 60,
+     "y": 760,
+     "taille": 56,
      "al": "gauche",
      "mots": [
       {
@@ -440,8 +447,8 @@
    "els": [
     {
      "t": "ligne",
-     "y": 560,
-     "taille": 76,
+     "y": 507,
+     "taille": 100,
      "al": "centre",
      "mots": [
       {
@@ -471,7 +478,7 @@
      "f": "ron.png",
      "a": 11.26,
      "x": 106,
-     "y": 640,
+     "y": 566,
      "w": 868,
      "anim": "pop"
     }
@@ -484,9 +491,9 @@
    "els": [
     {
      "t": "ligne",
-     "y": 790,
-     "taille": 60,
-     "al": "centre",
+     "y": 840,
+     "taille": 54,
+     "al": "gauche",
      "mots": [
       {
        "w": "Mais",
@@ -498,13 +505,14 @@
        "a": 12.06,
        "k": "sans"
       }
-     ]
+     ],
+     "x": 262
     },
     {
      "t": "ligne",
-     "y": 940,
-     "taille": 230,
-     "al": "centre",
+     "y": 955,
+     "taille": 212,
+     "al": "gauche",
      "mots": [
       {
        "w": "20",
@@ -516,13 +524,14 @@
        "a": 12.38,
        "k": "serif-i violet"
       }
-     ]
+     ],
+     "x": 255
     },
     {
      "t": "ligne",
-     "y": 1110,
-     "taille": 60,
-     "al": "centre",
+     "y": 1075,
+     "taille": 54,
+     "al": "gauche",
      "mots": [
       {
        "w": "sa",
@@ -545,14 +554,15 @@
        "k": "sans",
        "boite": true
       }
-     ]
+     ],
+     "x": 262
     }
    ]
   },
   {
    "de": 14.06,
    "fin": 16.14,
-   "fond": "violet",
+   "fond": "violetB",
    "sortie": "iris",
    "son": [
     {
@@ -564,8 +574,8 @@
    "els": [
     {
      "t": "ligne",
-     "y": 370,
-     "taille": 80,
+     "y": 395,
+     "taille": 108,
      "al": "centre",
      "mots": [
       {
@@ -599,8 +609,8 @@
     },
     {
      "t": "ligne",
-     "y": 1190,
-     "taille": 86,
+     "y": 1183,
+     "taille": 78,
      "al": "gauche",
      "mots": [
       {
@@ -609,7 +619,7 @@
        "k": "sans blanc"
       }
      ],
-     "x": 650
+     "x": 665
     }
    ]
   },
@@ -620,7 +630,7 @@
    "els": [
     {
      "t": "ligne",
-     "y": 790,
+     "y": 317,
      "taille": 58,
      "al": "centre",
      "mots": [
@@ -633,26 +643,25 @@
     },
     {
      "t": "ligne",
-     "y": 920,
-     "taille": 170,
+     "y": 433,
+     "taille": 195,
      "al": "centre",
      "mots": [
       {
        "w": "20",
        "a": 16.46,
-       "k": "serif"
+       "k": "serif gris"
       },
       {
        "w": "cm",
        "a": 16.7,
-       "k": "serif"
+       "k": "serif gris"
       }
-     ],
-     "pale": 17.2
+     ]
     },
     {
      "t": "ligne",
-     "y": 1150,
+     "y": 960,
      "taille": 58,
      "al": "centre",
      "mots": [
@@ -670,8 +679,8 @@
     },
     {
      "t": "ligne",
-     "y": 1280,
-     "taille": 190,
+     "y": 1150,
+     "taille": 215,
      "al": "centre",
      "mots": [
       {
@@ -819,8 +828,8 @@
     },
     {
      "t": "ligne",
-     "y": 1000,
-     "taille": 160,
+     "y": 985,
+     "taille": 150,
      "al": "centre",
      "mots": [
       {
@@ -832,8 +841,8 @@
     },
     {
      "t": "ligne",
-     "y": 1130,
-     "taille": 160,
+     "y": 1140,
+     "taille": 150,
      "al": "centre",
      "mots": [
       {
@@ -1044,8 +1053,8 @@
    "els": [
     {
      "t": "ligne",
-     "y": 520,
-     "taille": 58,
+     "y": 311,
+     "taille": 70,
      "al": "centre",
      "mots": [
       {
@@ -1067,8 +1076,8 @@
     },
     {
      "t": "ligne",
-     "y": 610,
-     "taille": 62,
+     "y": 596,
+     "taille": 66,
      "al": "centre",
      "mots": [
       {
@@ -1116,9 +1125,9 @@
    "els": [
     {
      "t": "ligne",
-     "y": 700,
+     "y": 150,
      "taille": 70,
-     "al": "centre",
+     "al": "gauche",
      "mots": [
       {
        "w": "même",
@@ -1130,13 +1139,14 @@
        "a": 30.68,
        "k": "sans"
       }
-     ]
+     ],
+     "x": 330
     },
     {
      "t": "ligne",
-     "y": 840,
-     "taille": 130,
-     "al": "centre",
+     "y": 270,
+     "taille": 125,
+     "al": "gauche",
      "mots": [
       {
        "w": "don",
@@ -1153,11 +1163,12 @@
        "a": 31.32,
        "k": "serif-i violet"
       }
-     ]
+     ],
+     "x": 250
     },
     {
      "t": "ligne",
-     "y": 1000,
+     "y": 870,
      "taille": 70,
      "al": "centre",
      "mots": [
@@ -1175,7 +1186,7 @@
     },
     {
      "t": "ligne",
-     "y": 1140,
+     "y": 990,
      "taille": 210,
      "al": "centre",
      "mots": [
@@ -1382,8 +1393,8 @@
     },
     {
      "t": "ligne",
-     "y": 1370,
-     "taille": 58,
+     "y": 1232,
+     "taille": 54,
      "al": "centre",
      "mots": [
       {

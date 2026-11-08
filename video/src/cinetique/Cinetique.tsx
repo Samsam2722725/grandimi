@@ -7,8 +7,8 @@ import {AbsoluteFill, Audio, CalculateMetadataFunction, cancelRender, continueRe
  * npx remotion render Cinetique out/x.mp4 --props='{"video":"mctominay-1"}'
  */
 const FPS = 30;
-const COUL: Record<string, string> = {violet: '#5d05b6', rouge: '#c8202f', blanc: '#ffffff', gris: '#8a8a8a', noir: '#0b0b0b'};
-const SANS = "'Poppins', sans-serif";
+const COUL: Record<string, string> = {violet: '#5d05b6', rouge: '#c8202f', blanc: '#ffffff', gris: '#555555', noir: '#0b0b0b'};
+const SANS = "'Plus Jakarta Sans', sans-serif";
 const SERIF = "'DM Serif Display', serif";
 
 type Mot = {w: string; a: number; k?: string; boite?: boolean; petit?: boolean; s?: number};
@@ -16,7 +16,7 @@ type El = {
 	t: 'ligne' | 'img' | 'fleche' | 'chevron' | 'courbe' | 'icone';
 	[k: string]: any;
 };
-type Scene = {de: number; fin: number; fond: 'blanc' | 'violet' | 'vignette'; sortie?: 'barre' | 'iris'; son?: {a: number; f: string; v: number}[]; els: El[]};
+type Scene = {de: number; fin: number; fond: 'blanc' | 'violetA' | 'violetB' | 'vignette'; sortie?: 'barre' | 'iris'; son?: {a: number; f: string; v: number}[]; els: El[]};
 type Cine = {fps: number; duree: number; scenes: Scene[]};
 export type CinetiqueProps = {video: string; cine?: Cine; musique?: boolean; bruitages?: boolean};
 
@@ -29,8 +29,7 @@ const useFonts = () => {
 	const [handle] = useState(() => delayRender('Polices'));
 	useEffect(() => {
 		const fonts = [
-			new FontFace('Poppins', `url(${staticFile('fonts/poppins-latin-700-normal.woff2')})`, {weight: '700'}),
-			new FontFace('Poppins', `url(${staticFile('fonts/poppins-latin-800-normal.woff2')})`, {weight: '800'}),
+			new FontFace('Plus Jakarta Sans', `url(${staticFile('fonts/plus-jakarta-sans-latin-800-normal.woff2')})`, {weight: '800'}),
 			new FontFace('DM Serif Display', `url(${staticFile('fonts/dm-serif-display-latin-400-normal.woff2')})`, {weight: '400', style: 'normal'}),
 			new FontFace('DM Serif Display', `url(${staticFile('fonts/dm-serif-display-latin-400-italic.woff2')})`, {weight: '400', style: 'italic'}),
 		];
@@ -69,7 +68,8 @@ const MotView: React.FC<{m: Mot; f: number; taille: number}> = ({m, f, taille}) 
 				transform: `translateY(${(1 - p) * 26}px) scale(${0.92 + 0.08 * p})`,
 				whiteSpace: 'nowrap',
 				padding: m.boite ? `${size * 0.08}px ${size * 0.22}px` : 0,
-				letterSpacing: serif ? 0 : -0.5,
+				letterSpacing: serif ? 0 : -0.01 * size,
+				WebkitTextStroke: serif ? `${size * 0.012}px ${couleur}` : undefined,
 			}}
 		>
 			{m.boite ? <span style={{position: 'absolute', inset: 0, background: '#c3273f', transform: `scaleX(${p})`, transformOrigin: 'left', zIndex: -1}} /> : null}
@@ -187,7 +187,13 @@ const CourbeView: React.FC<{e: El; f: number}> = ({e, f}) => {
 };
 
 const Fond: React.FC<{fond: Scene['fond']}> = ({fond}) => {
-	if (fond === 'violet') return <AbsoluteFill style={{background: 'radial-gradient(ellipse at 50% 50%, #6013bb 55%, #8a3fd8 100%)'}} />;
+	if (fond === 'violetA')
+		return (
+			<AbsoluteFill style={{background: '#4c00a8'}}>
+				<AbsoluteFill style={{background: 'radial-gradient(circle 260px at 50% 47%, rgba(140,90,230,0.35), rgba(76,0,168,0) 100%)'}} />
+			</AbsoluteFill>
+		);
+	if (fond === 'violetB') return <AbsoluteFill style={{background: 'radial-gradient(ellipse at 50% 50%, #6013bb 55%, #8a3fd8 100%)'}} />;
 	if (fond === 'vignette') return <AbsoluteFill style={{background: 'radial-gradient(ellipse 60% 50% at 50% 50%, #ffffff 40%, #b4b4b4 100%)'}} />;
 	return <AbsoluteFill style={{background: '#fff'}} />;
 };
