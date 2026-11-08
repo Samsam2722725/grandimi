@@ -18,7 +18,8 @@ type El = {
 	[k: string]: any;
 };
 type Scene = {de: number; fin: number; fond: 'blanc' | 'violetA' | 'violetB' | 'vignette'; sortie?: 'barre' | 'iris' | 'flou'; son?: {a: number; f: string; v: number}[]; els: El[]};
-type Cine = {fps: number; duree: number; scenes: Scene[]};
+type Son = {a: number; f: string; v: number};
+type Cine = {fps: number; duree: number; scenes: Scene[]; sons?: Son[]};
 export type CinetiqueProps = {video: string; cine?: Cine; musique?: boolean; bruitages?: boolean};
 
 export const calculateCinetiqueMetadata: CalculateMetadataFunction<CinetiqueProps> = async ({props}) => {
@@ -276,7 +277,14 @@ export const Cinetique: React.FC<CinetiqueProps> = ({video, cine, musique = true
 	return (
 		<AbsoluteFill style={{background: '#fff'}}>
 			<Audio src={staticFile(`${dir}/voice/voix.wav`)} />
-			{musique ? <Audio src={staticFile('sfx/music.wav')} volume={0.08} loop /> : null}
+			{musique ? <Audio src={staticFile('sfx/music.wav')} volume={(fr) => 0.06 * interpolate(fr, [0, 20, sec(cine.duree) - 40, sec(cine.duree)], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})} loop /> : null}
+			{bruitages
+				? (cine.sons ?? []).map((x, j) => (
+						<Sequence key={`s${j}`} from={sec(x.a)} durationInFrames={30}>
+							<Audio src={staticFile(`sfx/${x.f}.wav`)} volume={x.v} />
+						</Sequence>
+					))
+				: null}
 			{cine.scenes.map((s, i) => (
 				<Sequence key={i} from={sec(s.de)} durationInFrames={sec(s.fin) - sec(s.de) + (i + 1 === cine.scenes.length ? 6 : 0)}>
 					<SceneView s={s} dir={dir} />
