@@ -323,7 +323,7 @@
           "h": 1170,
           "grandit": {
             "de": 0.4,
-            "d": 30
+            "d": 22
           }
         },
         {
@@ -343,7 +343,7 @@
           "type": "image",
           "ecran": true,
           "fichier": "yeux.png",
-          "a": 30,
+          "a": 24,
           "x": 480,
           "y": 762,
           "w": 120,
@@ -363,7 +363,7 @@
     },
     {
       "nom": "ecran2",
-      "debut": "optim-2",
+      "debut": "optim:4",
       "transition": "glitch",
       "dashboard": {
         "donnees": {
@@ -427,7 +427,7 @@
             "sens": "bas",
             "x": 0.5,
             "pointe": 0.26,
-            "a": "optim",
+            "a": "optim:4",
             "d": 12,
             "fin": "optim:croissance",
             "dFin": 16
@@ -453,7 +453,7 @@
           "fichier": "curseur.png",
           "a": "pct:plus",
           "x": 404,
-          "y": 1250,
+          "y": 1335,
           "w": 192,
           "h": 204,
           "depuis": {
@@ -474,7 +474,7 @@
           "volume": 0.22
         },
         {
-          "a": "optim",
+          "a": "optim:4",
           "son": "pop",
           "volume": 0.38
         },
