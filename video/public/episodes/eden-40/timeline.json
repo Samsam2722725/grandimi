@@ -1,0 +1,531 @@
+{
+  "fps": 30,
+  "totalFrames": 1034,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 40.",
+      "from": 0,
+      "duration": 71,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 14
+        },
+        {
+          "w": "tailles",
+          "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 34
+        },
+        {
+          "w": "partie",
+          "f": 46
+        },
+        {
+          "w": "40.",
+          "f": 58
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos d'Eden.",
+      "from": 72,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 72
+        },
+        {
+          "w": "on",
+          "f": 84
+        },
+        {
+          "w": "regarde",
+          "f": 89
+        },
+        {
+          "w": "les",
+          "f": 101
+        },
+        {
+          "w": "infos",
+          "f": 103
+        },
+        {
+          "w": "d'Eden.",
+          "f": 110
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 13 ans, Eden mesure 1m73,",
+      "from": 130,
+      "duration": 66,
+      "words": [
+        {
+          "w": "À",
+          "f": 130
+        },
+        {
+          "w": "13",
+          "f": 134
+        },
+        {
+          "w": "ans,",
+          "f": 139
+        },
+        {
+          "w": "Eden",
+          "f": 144
+        },
+        {
+          "w": "mesure",
+          "f": 158
+        },
+        {
+          "w": "1m73,",
+          "f": 166
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est grand pour son âge.",
+      "from": 197,
+      "duration": 36,
+      "words": [
+        {
+          "w": "ce",
+          "f": 197
+        },
+        {
+          "w": "qui",
+          "f": 202
+        },
+        {
+          "w": "est",
+          "f": 206
+        },
+        {
+          "w": "grand",
+          "f": 209
+        },
+        {
+          "w": "pour",
+          "f": 216
+        },
+        {
+          "w": "son",
+          "f": 221
+        },
+        {
+          "w": "âge.",
+          "f": 226
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 1m84.",
+      "from": 233,
+      "duration": 117,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 233
+        },
+        {
+          "w": "le",
+          "f": 241
+        },
+        {
+          "w": "site",
+          "f": 243
+        },
+        {
+          "w": "Grandimi,",
+          "f": 250
+        },
+        {
+          "w": "sa",
+          "f": 274
+        },
+        {
+          "w": "taille",
+          "f": 279
+        },
+        {
+          "w": "adulte",
+          "f": 286
+        },
+        {
+          "w": "prédite",
+          "f": 296
+        },
+        {
+          "w": "est",
+          "f": 313
+        },
+        {
+          "w": "de",
+          "f": 315
+        },
+        {
+          "w": "1m84.",
+          "f": 317
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Eden pourrait atteindre 1m88,",
+      "from": 351,
+      "duration": 103,
+      "words": [
+        {
+          "w": "Et",
+          "f": 351
+        },
+        {
+          "w": "avec",
+          "f": 356
+        },
+        {
+          "w": "les",
+          "f": 361
+        },
+        {
+          "w": "bonnes",
+          "f": 363
+        },
+        {
+          "w": "habitudes,",
+          "f": 370
+        },
+        {
+          "w": "Eden",
+          "f": 382
+        },
+        {
+          "w": "pourrait",
+          "f": 399
+        },
+        {
+          "w": "atteindre",
+          "f": 406
+        },
+        {
+          "w": "1m88,",
+          "f": 416
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "donc 4 centimètres de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 455,
+      "duration": 131,
+      "words": [
+        {
+          "w": "donc",
+          "f": 455
+        },
+        {
+          "w": "4",
+          "f": 464
+        },
+        {
+          "w": "centimètres",
+          "f": 474
+        },
+        {
+          "w": "de",
+          "f": 491
+        },
+        {
+          "w": "croissance",
+          "f": 496
+        },
+        {
+          "w": "supplémentaire",
+          "f": 508
+        },
+        {
+          "w": "grâce",
+          "f": 532
+        },
+        {
+          "w": "à",
+          "f": 539
+        },
+        {
+          "w": "l'optimisation",
+          "f": 541
+        },
+        {
+          "w": "de",
+          "f": 563
+        },
+        {
+          "w": "sa",
+          "f": 568
+        },
+        {
+          "w": "croissance.",
+          "f": 572
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Eden est plus grand que 95% des personnes de son âge",
+      "from": 587,
+      "duration": 111,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 587
+        },
+        {
+          "w": "Eden",
+          "f": 601
+        },
+        {
+          "w": "est",
+          "f": 618
+        },
+        {
+          "w": "plus",
+          "f": 620
+        },
+        {
+          "w": "grand",
+          "f": 625
+        },
+        {
+          "w": "que",
+          "f": 630
+        },
+        {
+          "w": "95%",
+          "f": 637
+        },
+        {
+          "w": "des",
+          "f": 664
+        },
+        {
+          "w": "personnes",
+          "f": 666
+        },
+        {
+          "w": "de",
+          "f": 673
+        },
+        {
+          "w": "son",
+          "f": 676
+        },
+        {
+          "w": "âge",
+          "f": 683
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a déjà terminé 84% de sa croissance.",
+      "from": 698,
+      "duration": 85,
+      "words": [
+        {
+          "w": "et",
+          "f": 698
+        },
+        {
+          "w": "il",
+          "f": 703
+        },
+        {
+          "w": "a",
+          "f": 708
+        },
+        {
+          "w": "déjà",
+          "f": 710
+        },
+        {
+          "w": "terminé",
+          "f": 718
+        },
+        {
+          "w": "84%",
+          "f": 730
+        },
+        {
+          "w": "de",
+          "f": 761
+        },
+        {
+          "w": "sa",
+          "f": 763
+        },
+        {
+          "w": "croissance.",
+          "f": 768
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 785,
+      "duration": 54,
+      "words": [
+        {
+          "w": "Si",
+          "f": 785
+        },
+        {
+          "w": "tu",
+          "f": 790
+        },
+        {
+          "w": "veux",
+          "f": 792
+        },
+        {
+          "w": "connaître",
+          "f": 797
+        },
+        {
+          "w": "ton",
+          "f": 806
+        },
+        {
+          "w": "potentiel",
+          "f": 811
+        },
+        {
+          "w": "de",
+          "f": 823
+        },
+        {
+          "w": "taille,",
+          "f": 828
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écrivez votre âge et votre taille actuelle en commentaire sous cette vidéo",
+      "from": 840,
+      "duration": 96,
+      "words": [
+        {
+          "w": "écrivez",
+          "f": 840
+        },
+        {
+          "w": "votre",
+          "f": 852
+        },
+        {
+          "w": "âge",
+          "f": 859
+        },
+        {
+          "w": "et",
+          "f": 864
+        },
+        {
+          "w": "votre",
+          "f": 869
+        },
+        {
+          "w": "taille",
+          "f": 876
+        },
+        {
+          "w": "actuelle",
+          "f": 886
+        },
+        {
+          "w": "en",
+          "f": 895
+        },
+        {
+          "w": "commentaire",
+          "f": 900
+        },
+        {
+          "w": "sous",
+          "f": 912
+        },
+        {
+          "w": "cette",
+          "f": 919
+        },
+        {
+          "w": "vidéo",
+          "f": 924
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "ou va directement sur grandimi.com pour tout avoir.",
+      "from": 937,
+      "duration": 94,
+      "words": [
+        {
+          "w": "ou",
+          "f": 937
+        },
+        {
+          "w": "va",
+          "f": 944
+        },
+        {
+          "w": "directement",
+          "f": 949
+        },
+        {
+          "w": "sur",
+          "f": 959
+        },
+        {
+          "w": "grandimi.com",
+          "f": 964
+        },
+        {
+          "w": "pour",
+          "f": 997
+        },
+        {
+          "w": "tout",
+          "f": 1002
+        },
+        {
+          "w": "avoir.",
+          "f": 1009
+        }
+      ]
+    }
+  ]
+}
