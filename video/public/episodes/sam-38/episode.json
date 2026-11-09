@@ -624,7 +624,7 @@
       }
     ]
   },
-  "voix": "ElevenLabs (Lucas), blancs ramenés à 0,08 s, vitesse d'origine (comme louis-20), fin 0,6 s après la voix",
+  "voix": "Enregistrement ElevenLabs (Lucas), blancs ramenés à 0,05 s, atempo 1,08, fin 0,6 s après la voix.",
   "reference": "references/p12-steve",
   "deriveCamera": false,
   "sonsMouvements": false,

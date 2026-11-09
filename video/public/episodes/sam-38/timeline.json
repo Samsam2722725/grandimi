@@ -1,13 +1,13 @@
 {
   "fps": 30,
-  "totalFrames": 1144,
+  "totalFrames": 1034,
   "audio": "voice/voix.wav",
   "lines": [
     {
       "id": "hook",
       "text": "Je prédis vos tailles maximales, partie 38.",
       "from": 0,
-      "duration": 83,
+      "duration": 73,
       "words": [
         {
           "w": "Je",
@@ -27,507 +27,507 @@
         },
         {
           "w": "maximales,",
-          "f": 31
+          "f": 29
         },
         {
           "w": "partie",
-          "f": 50
+          "f": 46
         },
         {
           "w": "38.",
-          "f": 65
+          "f": 58
         }
       ]
     },
     {
       "id": "stats",
       "text": "Aujourd'hui, on regarde les infos du petit frère de William.",
-      "from": 84,
-      "duration": 85,
+      "from": 74,
+      "duration": 76,
       "words": [
         {
           "w": "Aujourd'hui,",
-          "f": 84
+          "f": 74
         },
         {
           "w": "on",
-          "f": 98
+          "f": 86
         },
         {
           "w": "regarde",
-          "f": 103
+          "f": 91
         },
         {
           "w": "les",
-          "f": 115
+          "f": 101
         },
         {
           "w": "infos",
-          "f": 120
+          "f": 106
         },
         {
           "w": "du",
-          "f": 127
+          "f": 115
         },
         {
           "w": "petit",
-          "f": 132
+          "f": 118
         },
         {
           "w": "frère",
-          "f": 142
+          "f": 127
         },
         {
           "w": "de",
-          "f": 149
+          "f": 134
         },
         {
           "w": "William.",
-          "f": 154
+          "f": 137
         }
       ]
     },
     {
       "id": "age",
       "text": "À 13 ans, il mesure 1m63,",
-      "from": 170,
-      "duration": 71,
+      "from": 151,
+      "duration": 59,
       "words": [
         {
           "w": "À",
-          "f": 170
+          "f": 151
         },
         {
           "w": "13",
-          "f": 175
+          "f": 156
         },
         {
           "w": "ans,",
-          "f": 182
+          "f": 163
         },
         {
           "w": "il",
-          "f": 190
+          "f": 170
         },
         {
           "w": "mesure",
-          "f": 194
+          "f": 173
         },
         {
           "w": "1m63,",
-          "f": 206
+          "f": 182
         }
       ]
     },
     {
       "id": "norme",
       "text": "ce qui est au-dessus de la norme.",
-      "from": 242,
-      "duration": 45,
+      "from": 211,
+      "duration": 44,
       "words": [
         {
           "w": "ce",
-          "f": 242
+          "f": 211
         },
         {
           "w": "qui",
-          "f": 247
+          "f": 214
         },
         {
           "w": "est",
-          "f": 252
+          "f": 218
         },
         {
           "w": "au-dessus",
-          "f": 257
+          "f": 230
         },
         {
           "w": "de",
-          "f": 271
+          "f": 244
         },
         {
           "w": "la",
-          "f": 274
+          "f": 247
         },
         {
           "w": "norme.",
-          "f": 276
+          "f": 249
         }
       ]
     },
     {
       "id": "predit",
       "text": "Selon Grandimi, sa taille adulte prévue est de 1m84,",
-      "from": 289,
-      "duration": 114,
+      "from": 256,
+      "duration": 102,
       "words": [
         {
           "w": "Selon",
-          "f": 289
+          "f": 256
         },
         {
           "w": "Grandimi,",
-          "f": 296
+          "f": 263
         },
         {
           "w": "sa",
-          "f": 320
+          "f": 285
         },
         {
           "w": "taille",
-          "f": 325
+          "f": 290
         },
         {
           "w": "adulte",
-          "f": 332
+          "f": 295
         },
         {
           "w": "prévue",
-          "f": 346
+          "f": 309
         },
         {
           "w": "est",
-          "f": 358
+          "f": 319
         },
         {
           "w": "de",
-          "f": 361
+          "f": 321
         },
         {
           "w": "1m84,",
-          "f": 365
+          "f": 326
         }
       ]
     },
     {
       "id": "habitudes",
       "text": "et avec les bonnes habitudes, Sam pourrait atteindre 1m88",
-      "from": 404,
-      "duration": 96,
+      "from": 359,
+      "duration": 100,
       "words": [
         {
           "w": "et",
-          "f": 404
+          "f": 359
         },
         {
           "w": "avec",
-          "f": 409
+          "f": 364
         },
         {
           "w": "les",
-          "f": 413
+          "f": 369
         },
         {
           "w": "bonnes",
-          "f": 418
+          "f": 374
         },
         {
           "w": "habitudes,",
-          "f": 425
+          "f": 381
         },
         {
           "w": "Sam",
-          "f": 442
+          "f": 395
         },
         {
           "w": "pourrait",
-          "f": 454
+          "f": 407
         },
         {
           "w": "atteindre",
-          "f": 464
+          "f": 417
         },
         {
           "w": "1m88",
-          "f": 476
+          "f": 427
         }
       ]
     },
     {
       "id": "optim",
       "text": "avec 4 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
-      "from": 501,
-      "duration": 158,
+      "from": 461,
+      "duration": 129,
       "words": [
         {
           "w": "avec",
-          "f": 501
+          "f": 461
         },
         {
           "w": "4",
-          "f": 526
+          "f": 470
         },
         {
           "w": "cm",
-          "f": 535
+          "f": 478
         },
         {
           "w": "de",
-          "f": 552
+          "f": 494
         },
         {
           "w": "croissance",
-          "f": 557
+          "f": 497
         },
         {
           "w": "supplémentaire",
-          "f": 569
+          "f": 509
         },
         {
           "w": "grâce",
-          "f": 593
+          "f": 533
         },
         {
           "w": "à",
-          "f": 602
+          "f": 540
         },
         {
           "w": "l'optimisation",
-          "f": 605
+          "f": 542
         },
         {
           "w": "de",
-          "f": 629
+          "f": 564
         },
         {
           "w": "sa",
-          "f": 634
+          "f": 569
         },
         {
           "w": "croissance.",
-          "f": 638
+          "f": 574
         }
       ]
     },
     {
       "id": "pct",
       "text": "Actuellement, il est plus grand 75% des garçons de son âge.",
-      "from": 660,
-      "duration": 112,
+      "from": 590,
+      "duration": 100,
       "words": [
         {
           "w": "Actuellement,",
-          "f": 660
+          "f": 590
         },
         {
           "w": "il",
-          "f": 679
+          "f": 607
         },
         {
           "w": "est",
-          "f": 684
+          "f": 612
         },
         {
           "w": "plus",
-          "f": 689
+          "f": 617
         },
         {
           "w": "grand",
-          "f": 694
+          "f": 622
         },
         {
           "w": "75%",
-          "f": 708
+          "f": 634
         },
         {
           "w": "des",
-          "f": 737
+          "f": 660
         },
         {
           "w": "garçons",
-          "f": 742
+          "f": 665
         },
         {
           "w": "de",
-          "f": 751
+          "f": 674
         },
         {
           "w": "son",
-          "f": 754
+          "f": 677
         },
         {
           "w": "âge.",
-          "f": 758
+          "f": 682
         }
       ]
     },
     {
       "id": "fini",
       "text": "Et il a déjà terminé 76% de sa croissance.",
-      "from": 773,
-      "duration": 93,
+      "from": 691,
+      "duration": 88,
       "words": [
         {
           "w": "Et",
-          "f": 773
+          "f": 691
         },
         {
           "w": "il",
-          "f": 778
+          "f": 696
         },
         {
           "w": "a",
-          "f": 783
+          "f": 701
         },
         {
           "w": "déjà",
-          "f": 785
+          "f": 703
         },
         {
           "w": "terminé",
-          "f": 795
+          "f": 710
         },
         {
           "w": "76%",
-          "f": 809
+          "f": 720
         },
         {
           "w": "de",
-          "f": 841
+          "f": 750
         },
         {
           "w": "sa",
-          "f": 843
+          "f": 750
         },
         {
           "w": "croissance.",
-          "f": 848
+          "f": 750
         }
       ]
     },
     {
       "id": "cta",
       "text": "Si tu veux connaître ton potentiel de taille,",
-      "from": 867,
-      "duration": 61,
+      "from": 780,
+      "duration": 54,
       "words": [
         {
           "w": "Si",
-          "f": 867
+          "f": 780
         },
         {
           "w": "tu",
-          "f": 872
+          "f": 785
         },
         {
           "w": "veux",
-          "f": 877
+          "f": 787
         },
         {
           "w": "connaître",
-          "f": 881
+          "f": 792
         },
         {
           "w": "ton",
-          "f": 893
+          "f": 802
         },
         {
           "w": "potentiel",
-          "f": 898
+          "f": 809
         },
         {
           "w": "de",
-          "f": 910
+          "f": 818
         },
         {
           "w": "taille,",
-          "f": 915
+          "f": 823
         }
       ]
     },
     {
       "id": "com",
       "text": "écrivez votre âge et votre taille actuelle en commentaire sous cette vidéo,",
-      "from": 929,
-      "duration": 108,
+      "from": 835,
+      "duration": 95,
       "words": [
         {
           "w": "écrivez",
-          "f": 929
+          "f": 835
         },
         {
           "w": "votre",
-          "f": 944
+          "f": 850
         },
         {
           "w": "âge",
-          "f": 949
+          "f": 854
         },
         {
           "w": "et",
-          "f": 958
+          "f": 862
         },
         {
           "w": "votre",
-          "f": 961
+          "f": 866
         },
         {
           "w": "taille",
-          "f": 968
+          "f": 871
         },
         {
           "w": "actuelle",
-          "f": 977
+          "f": 881
         },
         {
           "w": "en",
-          "f": 989
+          "f": 893
         },
         {
           "w": "commentaire",
-          "f": 994
+          "f": 898
         },
         {
           "w": "sous",
-          "f": 1009
+          "f": 910
         },
         {
           "w": "cette",
-          "f": 1016
+          "f": 917
         },
         {
           "w": "vidéo,",
-          "f": 1021
+          "f": 922
         }
       ]
     },
     {
       "id": "site",
       "text": "ou va directement sur grandimi.com pour tout avoir.",
-      "from": 1039,
-      "duration": 102,
+      "from": 931,
+      "duration": 100,
       "words": [
         {
           "w": "ou",
-          "f": 1039
+          "f": 931
         },
         {
           "w": "va",
-          "f": 1046
+          "f": 938
         },
         {
           "w": "directement",
-          "f": 1051
+          "f": 943
         },
         {
           "w": "sur",
-          "f": 1060
+          "f": 955
         },
         {
           "w": "grandimi.com",
-          "f": 1067
+          "f": 960
         },
         {
           "w": "pour",
-          "f": 1103
+          "f": 996
         },
         {
           "w": "tout",
-          "f": 1108
+          "f": 1001
         },
         {
           "w": "avoir.",
-          "f": 1118
+          "f": 1006
         }
       ]
     }
