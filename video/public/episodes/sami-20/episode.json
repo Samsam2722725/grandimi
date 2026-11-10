@@ -1,12 +1,12 @@
 {
-  "partie": 20,
+  "partie": 42,
   "voice": "ff_siwis",
   "speed": 1.2,
   "lines": [
     {
       "id": "hook",
       "pause": 0,
-      "text": "Je prédis vos tailles maximales, numéro 20."
+      "text": "Je prédis vos tailles maximales, numéro 42."
     },
     {
       "id": "stats",

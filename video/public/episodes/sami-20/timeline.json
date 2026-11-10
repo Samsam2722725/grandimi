@@ -5,7 +5,7 @@
   "lines": [
     {
       "id": "hook",
-      "text": "Je prédis vos tailles maximales, numéro 20.",
+      "text": "Je prédis vos tailles maximales, numéro 42.",
       "from": 0,
       "duration": 81,
       "words": [
@@ -34,7 +34,7 @@
           "f": 48
         },
         {
-          "w": "20.",
+          "w": "42.",
           "f": 62
         }
       ]
