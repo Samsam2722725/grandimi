@@ -1,6 +1,7 @@
 import {Composition} from 'remotion';
 import {calculateTexteAnimeMetadata, TexteAnime, TexteAnimeProps} from './texte-anime/TexteAnime';
 import {calculateEpisodeMetadata, Episode, EpisodeProps} from './episode/Episode';
+import {calculateRecopieMetadata, Recopie, RecopieProps} from './recopie/Recopie';
 import {Video} from './Video';
 import timeline from './timeline.json';
 
@@ -33,6 +34,18 @@ export const Root: React.FC = () => (
 			component={TexteAnime}
 			calculateMetadata={calculateTexteAnimeMetadata}
 			defaultProps={{video: 'deux-raisons'} as TexteAnimeProps}
+			durationInFrames={1}
+			fps={30}
+			width={1080}
+			height={1920}
+		/>
+		{/* Recopie d'une vidéo de référence : plaque sans sous-titres + sous-titres mesurés + fin Grandimi.
+		    npx remotion render Recopie out/x.mp4 --props='{"video":"grandir-dos"}' */}
+		<Composition
+			id="Recopie"
+			component={Recopie}
+			calculateMetadata={calculateRecopieMetadata}
+			defaultProps={{video: 'grandir-dos'} as RecopieProps}
 			durationInFrames={1}
 			fps={30}
 			width={1080}

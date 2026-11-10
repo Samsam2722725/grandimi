@@ -7,9 +7,31 @@
 | « Prédiction à partir de nos commentaires », partie 6 | `Episode` (`{"episode":"partie-6"}`) | `rendu/grandimi-partie6.mp4` (33 s) |
 | « Prédiction à partir de nos commentaires », partie 7 | `Episode` (`{"episode":"partie-7"}`) | `rendu/grandimi-partie7.mp4` (32 s) |
 
+| « Dormir sur le dos » (recopie, audio original provisoire) | `Recopie` (`{"video":"grandir-dos"}`) | `rendu/recopie-grandir-dos.mp4` (21 s) |
 | « 2 raisons pour lesquelles tu ne grandis plus » (texte animé) | `TexteAnime` (`{"video":"deux-raisons"}`) | `rendu/grandimi-deux-raisons.mp4` (46 s) |
 
 Format 1080×1920, 30 i/s, son normalisé à −14 LUFS.
+
+## Recopie d'une vidéo au détail près (moteur `Recopie`)
+
+Quand l'original est un dessin animé qu'on ne sait pas refaire (bonshommes, radios, 3D…), on le garde
+comme **plaque** et on reconstruit par-dessus ce qui change : sous-titres et fin. Une recopie =
+`public/recopies/<id>/` (`config.json` → `recopie.json`, `plaque.mp4`, audio, images de fin).
+
+```bash
+R=references/<id_tiktok>; S=dossier_temporaire
+ffmpeg -i $R/original.mp4 $S/f/%04d.png                                     # toutes les images
+python scripts/transcrire_ref.py $R/original.mp4 PARAKEET_DIR $R/transcription.json
+# OCR de la bande des sous-titres image par image → $R/ocr.json, puis groupes.json à la main
+python scripts/inventaire_soustitres.py $S/f $R/ocr.json $R/groupes.json $R/soustitres.json
+python scripts/plaque.py $S/f $R/soustitres.json $S/plaque                   # original sans sous-titres
+python scripts/recopie.py <id> barlow-condensed-latin-700-normal.woff       # police calée sur les largeurs
+npx remotion render Recopie out/<id>.mp4 --props='{"video":"<id>"}'
+python scripts/comparer_recopie.py $R/original.mp4 out/<id>.mp4 $S/cmp.json  # SSIM image par image
+```
+
+Réglage fin du style des sous-titres : `node scripts/regler_soustitres.mjs` (rend des variantes) puis
+`python scripts/regler_note.py` (note SSIM de la bande des sous-titres face à l'original).
 
 ## Texte animé mot par mot (« 2 raisons », « signes »…)
 

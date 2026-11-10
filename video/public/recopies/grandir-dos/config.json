@@ -1,0 +1,16 @@
+{
+ "reference": "references/7583024024171646230",
+ "plaque": "recopies/grandir-dos/plaque.mp4",
+ "audio": "recopies/grandir-dos/audio-original.wav",
+ "remplace": {
+  "TROUVE DANS L'APPLI GRANDIR.": {"texte": "TROUVE SUR GRANDIMI.COM.", "mots": [0, 1, 1, 2]}
+ },
+ "cta": {
+  "carte": {"de": 571, "x0": 30, "y0": 132, "x1": 546, "y1": 455},
+  "ecran": {"allume": 600, "fondu": 6, "logo": 621, "x0": 179, "y0": 455, "x1": 394, "y1": 768},
+  "icone": "recopies/grandir-dos/icone.png",
+  "titre": "Grandimi - Atteins ta taille max",
+  "sous_titre": "grandimi.com",
+  "infos": [["PRÉDICTION", "Taille", "adulte"], ["PLAN", "Perso", "chaque jour"], ["LANGUE", "FR", "français"], ["CRÉATION", "icone", "Grandimi"]]
+ }
+}

@@ -37,6 +37,9 @@ Transcrire par morceaux de ~9 s (un bloc unique saute des phrases).
      + composition `Episode` (`scripts/nouvel_episode.py`) ;
    - texte animé mot par mot + illustrations (« 2 raisons », « signes »…) → `public/textes/<id>/`
      + composition `TexteAnime` (`scripts/texte_anime.py <id>`) ;
+   - dessin animé qu'on ne sait pas refaire (bonshommes, radios…) et copie « au détail près » demandée →
+     original gardé comme plaque sans sous-titres + sous-titres mesurés + fin Grandimi, composition `Recopie`
+     (`public/recopies/<id>/`, voir README) ; d'abord sur l'audio original, la voix de l'utilisateur ensuite ;
    - autre chose (personne filmée, 3D…) → le dire à l'utilisateur avant de construire un nouveau moteur.
 5. **Contrôle chiffré** original / épisode (moments ±2 images, positions ±3 %, tailles ±5 %), corriger
    jusqu'à zéro écart, puis livrer : vidéo, comparaison côte à côte, kit CapCut (`scripts/kit.py`).
