@@ -26,7 +26,7 @@
     {
       "id": "predit",
       "pause": 0,
-      "text": "Selon le site Grandimi, sa taille adulte prédit est de {1m81|un mètre quatre-vingt-un}."
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de {1m81|un mètre quatre-vingt-un}."
     },
     {
       "id": "habitudes",
@@ -624,7 +624,7 @@
       }
     ]
   },
-  "voix": "ElevenLabs (Lucas), phrase parasite initiale coupée, blancs 0,08 s, vitesse d'origine, fin 0,6 s après la voix",
+  "voix": "ElevenLabs (Lucas), blancs 0,08 s, vitesse d'origine, fin 0,6 s après la voix",
   "reference": "references/p12-steve",
   "deriveCamera": false,
   "sonsMouvements": false,
