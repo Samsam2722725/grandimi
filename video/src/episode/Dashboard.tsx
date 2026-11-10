@@ -45,6 +45,18 @@ export const LIGNES = {
 } as const;
 export type Ligne = keyof typeof LIGNES;
 
+/** Disposition de Taller partie 39 (p22-ref, 21,0 s, en 1080 × 1920) : cartes plus grandes, ligne « mise à jour » en bas. */
+export const LIGNES_T39: Record<Ligne, readonly number[]> = {
+	actuelle: [99 / 1080, 168 / 1920, 524 / 1080, 398 / 1920],
+	predite: [557 / 1080, 168 / 1920, 980 / 1080, 398 / 1920],
+	optimiser: [99 / 1080, 430 / 1920, 981 / 1080, 562 / 1920],
+	courbe: [99 / 1080, 596 / 1920, 981 / 1080, 1071 / 1920],
+	rang: [99 / 1080, 1106 / 1920, 981 / 1080, 1237 / 1920],
+	chances: [99 / 1080, 1271 / 1920, 524 / 1080, 1521 / 1920],
+	croissance: [556 / 1080, 1271 / 1920, 981 / 1080, 1521 / 1920],
+};
+const LignesCtx = React.createContext<Record<Ligne, readonly number[]>>(LIGNES);
+
 /** lineaire : rampe à vitesse constante, comme les zooms de Taller (mesurés le 03/11 sur references/zooms-1). */
 export type DashCam = {f: number; cx: number; cy: number; z: number; d: number; courbe: 'avant' | 'arriere' | 'lineaire' | 'doux'};
 export type DashPop = {ligne: Ligne; a: number; d: number; fin: number; dFin: number; echelle: number};
@@ -93,7 +105,7 @@ const Bloc: React.FC<{ligne: Ligne; sx: number; fond?: string; children?: React.
 	children,
 	style,
 }) => {
-	const [x0, y0, x1, y1] = LIGNES[ligne];
+	const [x0, y0, x1, y1] = React.useContext(LignesCtx)[ligne];
 	return (
 		<div
 			style={{
@@ -121,7 +133,7 @@ const Jauge: React.FC<{pct: number}> = ({pct}) => (
 );
 
 const Courbe: React.FC<{d: DashData}> = ({d}) => {
-	const [x0, y0, x1, y1] = LIGNES.courbe;
+	const [x0, y0, x1, y1] = React.useContext(LignesCtx).courbe;
 	const w = (x1 - x0) * W;
 	const h = (y1 - y0) * H;
 	const gx = 70;
@@ -242,8 +254,10 @@ export const DashboardGrandimi: React.FC<{
 	revele?: number;
 	/** Page ouverte dans Safari : barre d'état et barre d'adresse fixes en haut, page décalée dessous. */
 	url?: string;
-	/** logo : en-tête « GRANDIMI » + icône ; aucun : ni titre ni boutons (diapos format Taller). */
-	entete?: 'logo' | 'aucun';
+	/** logo : en-tête « GRANDIMI » + icône ; aucun : ni titre ni boutons (diapos format Taller) ;
+	 *  t39 : disposition de Taller partie 39, adresse « grandimi.com » de Safari à la place du titre et des boutons,
+	 *  ligne « Mise à jour de ta taille dans 29j 20h 2m » en bas. */
+	entete?: 'logo' | 'aucun' | 't39';
 	/** Onglets du bas (le premier est l'onglet actif) ; sans eux : taille / croissance / quotidien. */
 	onglets?: string[];
 	/** Onglets au trait façon Taller (02/11) sous la barre d'adresse : icônes + libellés, le premier actif. */
@@ -259,6 +273,7 @@ export const DashboardGrandimi: React.FC<{
 	sansBarreEtat?: boolean;
 }> = ({d, cams, pops, fleches, ballon, revele, url, entete, onglets, barre, barreBas, urlDecale = 0, navTraits, pageY, sansBarreEtat}) => {
 	const cacheEtat = Boolean(url || entete || sansBarreEtat);
+	const t39 = entete === 't39';
 	const f = useCurrentFrame();
 	const c = camera(cams, f);
 	const sx = (l: Ligne) => echelleLigne(pops, l, f);
@@ -270,6 +285,7 @@ export const DashboardGrandimi: React.FC<{
 	const chuteY = b?.chute ? interpolate(g, [0, 4, 6, 8], [-0.62 * H, 0, -0.015 * H, 0], {extrapolateRight: 'clamp', easing: Easing.in(Easing.quad)}) : 0;
 	const chuteFlou = b?.chute && g < 4 ? 14 : 0;
 	return (
+		<LignesCtx.Provider value={t39 ? LIGNES_T39 : LIGNES}>
 		<AbsoluteFill style={{background: '#000', overflow: 'hidden'}}>
 			<div
 				style={{
@@ -295,7 +311,35 @@ export const DashboardGrandimi: React.FC<{
 					</div>
 				</div>
 				{/* En-tête */}
-				{entete === 'aucun' ? null : entete === 'logo' ? (
+				{t39 ? (
+					<div
+						style={{
+							position: 'absolute',
+							left: 99,
+							right: 99,
+							top: 34,
+							height: 96,
+							borderRadius: 48,
+							background: '#2c2c2e',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<div style={{position: 'absolute', left: 36, fontSize: 34, fontWeight: 600, color: '#ddd'}}>
+							<span style={{fontSize: 24}}>A</span>A
+						</div>
+						<svg width={26} height={32} viewBox="0 0 22 28" style={{marginRight: 14}}>
+							<rect x={2} y={12} width={18} height={14} rx={3} fill="#ddd" />
+							<path d="M6 12 V8 a5 5 0 0 1 10 0 V12" fill="none" stroke="#ddd" strokeWidth={3} />
+						</svg>
+						<div style={{fontSize: 44, fontWeight: 600}}>grandimi.com</div>
+						<svg width={40} height={40} viewBox="0 0 24 24" style={{position: 'absolute', right: 36}} fill="none" stroke="#ddd" strokeWidth={2.4} strokeLinecap="round">
+							<path d="M20 12a8 8 0 1 1-2.3-5.7" />
+							<path d="M20 4v5h-5" />
+						</svg>
+					</div>
+				) : entete === 'aucun' ? null : entete === 'logo' ? (
 					<div style={{position: 'absolute', left: 118, top: 84, display: 'flex', alignItems: 'center', gap: 22}}>
 						<div style={{fontSize: 76, fontWeight: 900, letterSpacing: -2}}>GRANDIMI</div>
 						<div
@@ -318,7 +362,7 @@ export const DashboardGrandimi: React.FC<{
 				) : (
 					<div style={{position: 'absolute', left: 122, top: 92, fontSize: 64, fontWeight: 800, letterSpacing: -1}}>Dernier rapport</div>
 				)}
-				{entete === 'aucun' ? null : (
+				{entete === 'aucun' || t39 ? null : (
 				<>
 				<IconeRonde x={741}>
 					<svg width={44} height={44} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
@@ -408,6 +452,27 @@ export const DashboardGrandimi: React.FC<{
 					<div style={{position: 'absolute', left: 36, top: 104, fontSize: 76, fontWeight: 800}}>{d.croissance}</div>
 					<Jauge pct={parseFloat(d.croissance.replace(',', '.'))} />
 				</Bloc>
+				{t39 ? (
+					<div style={{position: 'absolute', left: 99, width: 882, top: 1555, height: 147, borderRadius: 30, background: CARTE}}>
+						<div style={{position: 'absolute', left: 40, top: 0, lineHeight: '147px', fontSize: 38, fontWeight: 700}}>Mise à jour dans</div>
+						<div
+							style={{
+								position: 'absolute',
+								right: 22,
+								top: 26,
+								height: 95,
+								padding: '0 38px',
+								borderRadius: 48,
+								background: `linear-gradient(135deg, ${OR} 0%, ${OR2} 100%)`,
+								lineHeight: '95px',
+								fontSize: 44,
+								fontWeight: 800,
+							}}
+						>
+							29j 20h 2m
+						</div>
+					</div>
+				) : null}
 				{/* Barre de navigation */}
 				{onglets || barre?.length || navTraits ? null : (
 					[
@@ -455,6 +520,7 @@ export const DashboardGrandimi: React.FC<{
 				</>
 			) : null}
 		</AbsoluteFill>
+		</LignesCtx.Provider>
 	);
 };
 

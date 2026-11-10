@@ -42,7 +42,9 @@ export const RoutineGrandimi: React.FC<{
 	/** Zoom lent pendant les coches (défaut 1,05). */
 	avanceZ?: number;
 	urlDecale?: number;
-}> = ({at, url, flou = 13, chut, onglets, taller, coche, habitudes, verrou, urlDecale = 0, avanceZ = 1.05}) => {
+	/** Titre de l'écran (défaut « Ma routine », ou « Routine quotidienne » avec taller). */
+	titre?: string;
+}> = ({at, url, flou = 13, chut, onglets, taller, coche, habitudes, verrou, urlDecale = 0, avanceZ = 1.05, titre}) => {
 	const f = useCurrentFrame();
 	if (f < at) return null;
 	const HABITUDES = habitudes ?? HABITUDES_TALLER;
@@ -69,7 +71,7 @@ export const RoutineGrandimi: React.FC<{
 					transformOrigin: '50% 40%',
 				}}
 			>
-				<div style={{position: 'absolute', left: 90, top: 40, fontSize: 60, fontWeight: 800}}>{taller ? 'Routine quotidienne' : 'Ma routine'}</div>
+				<div style={{position: 'absolute', left: 90, top: 40, fontSize: 60, fontWeight: 800}}>{titre ?? (taller ? 'Routine quotidienne' : 'Ma routine')}</div>
 				<div style={{position: 'absolute', right: 90, top: 46, width: 64, height: 64, borderRadius: 32, background: '#1d1d1d'}} />
 				<div style={{position: 'absolute', left: 90, right: 90, top: 150, display: 'flex', justifyContent: 'space-between'}}>
 					{(taller ? JOURS_TALLER : JOURS).map((j, i) => (

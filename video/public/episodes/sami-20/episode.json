@@ -121,7 +121,6 @@
       "nom": "partie",
       "debut": "hook:numéro-1",
       "fond": "papier",
-      "sortie": "jaune",
       "papiers": [
         "papier1.jpg",
         "papier2.jpg",
@@ -161,7 +160,7 @@
     {
       "nom": "ecran",
       "debut": "stats-2",
-      "transition": "jaune-glisse",
+      "transition": "pellicule",
       "dashboard": {
         "donnees": {
           "actuelle": "160 cm",
@@ -187,16 +186,16 @@
             "21"
           ],
           "rang": "39,6 %",
-          "chances": "15 %",
+          "chances": "85 %",
           "chancesCm": "180 cm",
           "croissance": "74,6 %"
         },
         "cams": [
           {
             "a": "age:mesure",
-            "cx": 0.38,
-            "cy": 0.3085,
-            "z": 1.61,
+            "cx": 0.3,
+            "cy": 0.25,
+            "z": 1.98,
             "d": 11,
             "courbe": "avant"
           },
@@ -210,9 +209,9 @@
           },
           {
             "a": "predit:taille",
-            "cx": 0.646,
-            "cy": 0.3301,
-            "z": 1.77,
+            "cx": 0.696,
+            "cy": 0.321,
+            "z": 1.92,
             "d": 11,
             "courbe": "avant"
           }
@@ -234,7 +233,7 @@
           "fin": "age:14+30",
           "chute": true
         },
-        "url": "grandimi.com"
+        "entete": "t39"
       },
       "elements": [],
       "sons": [
@@ -275,8 +274,8 @@
           "type": "routine",
           "a": 0,
           "url": "grandimi.com",
-          "flou": 13,
-          "chut": "habitudes:bonnes"
+          "flou": 0,
+          "titre": "Routine quotidienne"
         }
       ],
       "sons": [
@@ -284,11 +283,6 @@
           "a": 0,
           "son": "whoosh",
           "volume": 0.22
-        },
-        {
-          "a": "habitudes:bonnes",
-          "son": "pop",
-          "volume": 0.3
         }
       ]
     },
@@ -299,7 +293,8 @@
       "fond": "topo",
       "topo": {
         "zoomDe": 0.6,
-        "d": 18
+        "d": 18,
+        "style": "vagues"
       },
       "elements": [
         {
@@ -372,16 +367,16 @@
             "21"
           ],
           "rang": "39,6 %",
-          "chances": "15 %",
+          "chances": "85 %",
           "chancesCm": "180 cm",
           "croissance": "74,6 %"
         },
         "cams": [
           {
             "a": "fini:terminé",
-            "cx": 0.7,
-            "cy": 0.8291,
-            "z": 2.0,
+            "cx": 0.704,
+            "cy": 0.729,
+            "z": 1.99,
             "d": 12,
             "courbe": "avant"
           }
@@ -408,14 +403,14 @@
           {
             "sens": "bas",
             "x": 0.5,
-            "pointe": 0.2,
+            "pointe": 0.22,
             "a": "optim",
             "d": 12,
             "fin": "optim:croissance",
             "dFin": 16
           }
         ],
-        "url": "grandimi.com"
+        "entete": "t39"
       },
       "effets": [
         {
@@ -431,7 +426,7 @@
           "fichier": "curseur.png",
           "a": "pct:plus",
           "x": 404,
-          "y": 1442,
+          "y": 1110,
           "w": 192,
           "h": 204,
           "depuis": {
@@ -489,14 +484,14 @@
       "elements": [
         {
           "type": "tape",
-          "texte": "UN PEU FOUTU 😬",
+          "texte": "UN PEU FOUTU",
           "a": "foutu:un",
-          "y": 800,
-          "taille": 100,
-          "couleur": "#ffb020",
-          "contour": 0,
+          "y": 905,
+          "taille": 84,
+          "couleur": "#d64f4f",
           "police": "Montserrat",
-          "poids": 800,
+          "poids": 600,
+          "contour": 10,
           "parLettre": 1,
           "son": "tick",
           "volume": 0.2
@@ -521,25 +516,25 @@
           "type": "texte",
           "texte": "ANALYSÉ",
           "a": "cta:potentiel",
-          "y": 330,
+          "fin": "com",
+          "y": 380,
           "taille": 110,
-          "couleur": "#fff200",
-          "contour": 7,
-          "poids": 800,
-          "police": "Montserrat",
-          "fin": "com"
+          "couleur": "#ecfd1f",
+          "contour": 10,
+          "poids": 600,
+          "police": "Montserrat"
         },
         {
           "type": "image",
           "ecran": true,
-          "fichier": "ordi.png",
+          "fichier": "analyse.png",
           "a": "cta:potentiel",
-          "x": 350,
-          "y": 540,
-          "w": 380,
-          "h": 380,
-          "effet": "pop",
           "fin": "com",
+          "x": 250,
+          "y": 560,
+          "w": 580,
+          "h": 620,
+          "effet": "pop",
           "son": "pop",
           "volume": 0.3
         },
@@ -548,12 +543,12 @@
           "ecran": true,
           "fichier": "papy.png",
           "a": "com:âge",
-          "x": 440,
-          "y": 1310,
-          "w": 200,
-          "h": 200,
-          "effet": "pop",
           "fin": "com:taille",
+          "x": 420,
+          "y": 1340,
+          "w": 240,
+          "h": 240,
+          "effet": "pop",
           "son": "pop",
           "volume": 0.25
         },
@@ -562,15 +557,15 @@
           "ecran": true,
           "fichier": "regle.png",
           "a": "com:taille",
-          "x": 880,
-          "y": 960,
-          "w": 150,
-          "h": 960,
+          "fin": "site",
+          "x": 470,
+          "y": 1160,
+          "w": 140,
+          "h": 760,
           "grandit": {
             "de": 0.1,
-            "d": 40
-          },
-          "fin": "site"
+            "d": 30
+          }
         },
         {
           "type": "texte",
@@ -591,7 +586,10 @@
           "son": "whoosh",
           "volume": 0.22
         }
-      ]
+      ],
+      "topo": {
+        "style": "vagues"
+      }
     }
   ],
   "sousTitres": {
@@ -601,31 +599,46 @@
         "de": 0,
         "a": "hook:numéro-1",
         "y": 822,
-        "taille": 86,
+        "taille": 74,
         "motsMax": 4,
         "carMax": 17,
         "poids": 600,
-        "contour": 3,
+        "contour": 10,
         "motsCles": false,
         "pop": false,
         "majuscules": true,
         "police": "Montserrat",
-        "couleur": "#fff200"
+        "couleur": "#ecfd1f"
       },
       {
         "de": "cta",
-        "a": "fin",
-        "y": 822,
-        "taille": 86,
+        "a": "cta:potentiel",
+        "y": 917,
+        "taille": 83,
         "motsMax": 4,
         "carMax": 17,
         "poids": 600,
-        "contour": 3,
+        "contour": 10,
         "motsCles": false,
         "pop": false,
         "majuscules": true,
         "police": "Montserrat",
-        "couleur": "#fff200"
+        "couleur": "#ecfd1f"
+      },
+      {
+        "de": "com",
+        "a": "fin",
+        "y": 917,
+        "taille": 83,
+        "motsMax": 4,
+        "carMax": 17,
+        "poids": 600,
+        "contour": 10,
+        "motsCles": false,
+        "pop": false,
+        "majuscules": true,
+        "police": "Montserrat",
+        "couleur": "#ecfd1f"
       }
     ]
   },
@@ -645,7 +658,16 @@
     "reponse": {
       "modele": "taller",
       "h": 230,
-      "rotation": 0
+      "rotation": 0,
+      "entete": {
+        "taille": 37,
+        "couleur": "#737373",
+        "dy": 4
+      },
+      "corps": {
+        "taille": 35,
+        "dy": 12
+      }
     }
   }
 }

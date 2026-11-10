@@ -30,9 +30,9 @@ import {Explicatif} from './Explicatif';
 import {HookCommentaires} from './HookCommentaires';
 import {BarreSafari, DashboardGrandimi} from './Dashboard';
 import {HookTaille} from './HookTaille';
-import {EntreeGlitch, EntreeJauneGlisse, FlashOrangeJaune, SortieGlitch, SortieJaune, SortieRadial, SortieZoomFlou} from './TransitionsSteve';
+import {EntreeGlitch, EntreeJauneGlisse, EntreePellicule, FlashOrangeJaune, SortieGlitch, SortieJaune, SortieRadial, SortieZoomFlou} from './TransitionsSteve';
 import {EntreeGlitchBlocs, EntreeWhip, EntreeZoom, SortieOnde, SortieWhip, SortieZoom} from './TransitionsTendance';
-import {TopoAnime} from './TopoAnime';
+import {TopoAnime, TopoVagues} from './TopoAnime';
 import {Cam, Shot} from './Shot';
 import {FONT} from '../theme';
 import {P5} from './style';
@@ -929,6 +929,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 					verrou={el.verrou}
 					avanceZ={el.avanceZ}
 					urlDecale={el.urlDecale}
+					titre={el.titre}
 				/>
 			);
 		if (el.type === 'calcul') return <CalculGrandimi key={i} at={loc(el.a)} fin={loc(el.fin)} url={el.url} />;
@@ -1033,7 +1034,11 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 			) : null}
 			{plan.fond === 'topo' ? (
 				<CoupFlou at={plan.topo?.coup !== undefined ? loc(plan.topo.coup) : undefined} vitesse={vite}>
-					<TopoAnime zoomDe={plan.topo?.zoomDe} d={plan.topo?.d} vitesse={plan.topo?.vitesse} fige={plan.topo?.fige !== undefined ? loc(plan.topo.fige) : undefined} />
+					{plan.topo?.style === 'vagues' ? (
+						<TopoVagues />
+					) : (
+						<TopoAnime zoomDe={plan.topo?.zoomDe} d={plan.topo?.d} vitesse={plan.topo?.vitesse} fige={plan.topo?.fige !== undefined ? loc(plan.topo.fige) : undefined} />
+					)}
 					{plan.topo?.sombre ? <AbsoluteFill style={{background: '#000', opacity: plan.topo.sombre}} /> : null}
 				</CoupFlou>
 			) : null}
@@ -1118,6 +1123,7 @@ const PlanView: React.FC<{plan: Plan; start: number; end: number; ep: EpisodeDat
 	if (plan.transition === 'zoom') return <EntreeZoom>{out}</EntreeZoom>;
 	if (plan.transition === 'whip-h') return <EntreeWhip id={plan.nom}>{out}</EntreeWhip>;
 	if (plan.transition === 'jaune-glisse') return <EntreeJauneGlisse>{out}</EntreeJauneGlisse>;
+	if (plan.transition === 'pellicule') return <EntreePellicule>{out}</EntreePellicule>;
 	if (plan.transition === 'glitch') return <EntreeGlitch>{out}</EntreeGlitch>;
 	if (plan.transition === 'whip') return <Whip vitesse={vite}>{out}</Whip>;
 	if (plan.transition === 'glisse' || plan.transition === 'lumiere')

@@ -44,6 +44,43 @@ export const EntreeJauneGlisse: React.FC<{children: React.ReactNode}> = ({childr
 	);
 };
 
+/**
+ * Entrée « pellicule » recopiée de Taller partie 39 (p22-ref, 3,15-3,75 s, 30 i/s) : brûlure de pellicule jaune avec
+ * traits rouges (images 0-3), orange (4-8) que du noir recouvre depuis la droite, une image noire (9), puis l'écran
+ * arrive penché (~16°), zoomé et flou, et se redresse en tremblant (10-19).
+ */
+export const EntreePellicule: React.FC<{children: React.ReactNode}> = ({children}) => {
+	const f = useCurrentFrame();
+	const g = f - 10;
+	const rot = kf(g, [0, 1, 2, 3, 4, 5, 6, 8, 10], [16, 9, 4.5, 1.5, -1.2, 0.8, -0.4, 0.2, 0]);
+	const s = kf(g, [0, 1, 2, 3, 5], [1.5, 1.28, 1.13, 1.05, 1]);
+	const flou = kf(g, [0, 1, 2, 3], [9, 5, 2, 0]);
+	const dx = kf(g, [0, 2, 4, 5, 6, 7, 8], [0, 0, -10, 8, -5, 3, 0]);
+	const noir = kf(f, [4, 5, 6, 7, 8, 9], [1080, 1040, 960, 820, 560, 0]);
+	return (
+		<AbsoluteFill style={{background: '#000'}}>
+			{f >= 10 ? (
+				<AbsoluteFill style={{transform: `translateX(${dx}px) rotate(${rot}deg) scale(${s})`, filter: flou > 0.3 ? `blur(${flou}px)` : undefined}}>{children}</AbsoluteFill>
+			) : null}
+			{f < 4 ? (
+				<AbsoluteFill style={{background: f === 0 ? '#ffd23c' : '#fff36e'}}>
+					<svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
+						<g fill="none" stroke="#e0461e" strokeLinecap="round" opacity={0.85}>
+							{f >= 1 ? <path d="M300 1500 C320 1250 360 1000 330 800" strokeWidth={9} /> : null}
+							{f >= 2 ? <path d="M560 1700 C620 1300 760 1150 980 1080 M520 300 C700 120 980 140 1080 420" strokeWidth={10} /> : null}
+							{f >= 3 ? <path d="M200 1800 C480 1560 600 1300 760 1220 M640 520 C760 380 900 360 1000 600" strokeWidth={12} /> : null}
+						</g>
+					</svg>
+				</AbsoluteFill>
+			) : f < 10 ? (
+				<AbsoluteFill style={{background: f < 9 ? 'linear-gradient(90deg, #ff7a20, #ff8a2a 70%, #ff6a18)' : '#000'}}>
+					{f < 9 ? <div style={{position: 'absolute', top: 0, bottom: 0, left: noir, right: 0, background: '#000', boxShadow: '-40px 0 60px 20px rgba(0,0,0,0.55)'}} /> : null}
+				</AbsoluteFill>
+			) : null}
+		</AbsoluteFill>
+	);
+};
+
 export const SortieJaune: React.FC<{dur: number}> = ({dur}) => {
 	const f = useCurrentFrame();
 	if (f < dur - 4) return null;

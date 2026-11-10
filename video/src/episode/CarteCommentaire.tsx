@@ -16,7 +16,7 @@ export const CarteCommentaire: React.FC<{
 	y?: number;
 	ligne?: boolean;
 	w?: number;
-	reponse?: {h: number; rotation: number; modele?: 'parsa' | 'taller' | 'taller30'; avatar?: string};
+	reponse?: {h: number; rotation: number; modele?: 'parsa' | 'taller' | 'taller30'; avatar?: string; entete?: {taille?: number; couleur?: string; dy?: number}; corps?: {taille?: number; dy?: number}};
 	/** Photo de profil ronde (variante haut). */
 	photo?: string;
 	/** Carte fournie par l'utilisateur en image (détourée) : affichée telle quelle à x, y, largeur w. */
@@ -66,18 +66,18 @@ export const CarteCommentaire: React.FC<{
 						position: 'absolute',
 						left: 257,
 						right: 24,
-						top: reponse.h / 2 - 66,
+						top: reponse.h / 2 - 66 + (reponse.entete?.dy ?? 0),
 						// pseudo long : la ligne rétrécit pour tenir dans la carte au lieu de dépasser
-						fontSize: Math.min(31, ((w ?? 905) - 281) / (0.56 * `Réponse au commentaire de ${nom}`.length)),
+						fontSize: Math.min(reponse.entete?.taille ?? 31, ((w ?? 905) - 281) / (0.56 * `Réponse au commentaire de ${nom}`.length)),
 						fontWeight: 700,
-						color: '#8a8a8a',
+						color: reponse.entete?.couleur ?? '#8a8a8a',
 						whiteSpace: 'nowrap',
 						letterSpacing: -0.3,
 					}}
 				>
 					Réponse au commentaire de {nom}
 				</div>
-				<div style={{position: 'absolute', left: 257, right: 24, top: reponse.h / 2 - 14, fontSize: 34, fontWeight: 800, color: '#141414', lineHeight: 1.18, letterSpacing: -0.3}}>
+				<div style={{position: 'absolute', left: 257, right: 24, top: reponse.h / 2 - 14 + (reponse.corps?.dy ?? 0), fontSize: reponse.corps?.taille ?? 34, fontWeight: 800, color: '#141414', lineHeight: 1.18, letterSpacing: -0.3}}>
 					{texte}
 				</div>
 			</div>

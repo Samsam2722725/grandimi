@@ -55,7 +55,7 @@ export type Element =
 	/** Clip vidéo muet (enregistrement d'écran du site déjà monté), lu à partir de `a`. */
 	| (Base & {type: 'video'; fichier: string; x: number; y: number; w: number; h: number; url?: string})
 	/** Écran « Ma routine » flouté façon Taller (src/episode/RoutineGrandimi.tsx) ; 🤫 à `chut`. */
-	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre; onglets?: string[]; taller?: boolean; coche?: {de: Ancre; a: Ancre}; habitudes?: string[]; verrou?: {titre: string; sous: string; nombre: number}; urlDecale?: number; taller30?: boolean; total?: number; avanceZ?: number})
+	| (Base & {type: 'routine'; url?: string; flou?: number; chut?: Ancre; onglets?: string[]; taller?: boolean; coche?: {de: Ancre; a: Ancre}; habitudes?: string[]; verrou?: {titre: string; sous: string; nombre: number}; urlDecale?: number; taller30?: boolean; total?: number; avanceZ?: number; titre?: string})
 	/** Écran de calcul du site redessiné (anneau qui se remplit, étapes cochées une à une) entre `a` et `fin`
 	    (src/episode/CalculGrandimi.tsx). */
 	| (Base & {type: 'calcul'; fin: Ancre; url?: string})
@@ -83,7 +83,7 @@ export type Plan = {
 	    bascule : entrée inclinée qui se redresse (référence 7444371749753408810). */
 	/** Fond flou de la même image derrière (cadrage plus large que l'écran, ex. accroche recalée sur l'original). */
 	fondFlou?: boolean;
-	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule' | 'etire' | 'radial' | 'lumiere-rouge' | 'jaune-glisse' | 'glitch' | 'zoom' | 'whip-h' | 'glitch-blocs';
+	transition?: 'coupe' | 'whip' | 'flash' | 'flash-blanc' | 'glisse' | 'rebond' | 'lumiere' | 'bascule' | 'etire' | 'radial' | 'lumiere-rouge' | 'jaune-glisse' | 'glitch' | 'zoom' | 'whip-h' | 'glitch-blocs' | 'pellicule';
 	/** Sortie du plan : lumiere = lumière jaune qui envahit l'image sur les dernières frames ;
 	    blanc = fondu au blanc sur les 4 dernières frames (la fin s'enchaîne avec l'accroche dessinée quand la vidéo reboucle). */
 	/** jaune / glitch / zoom-flou / radial-fin : sorties mesurées sur la référence « Steve » (src/episode/TransitionsSteve.tsx). */
@@ -96,7 +96,7 @@ export type Plan = {
 	/** papier : photos de papier froissé ; topo : courbes de niveau animées (src/episode/TopoAnime.tsx). */
 	fond?: 'papier' | 'topo';
 	/** Fond topo : zoom de départ (la caméra arrive à 1 en `d` frames) et coup de zoom flou à `coup`. */
-	topo?: {zoomDe?: number; d?: number; coup?: Ancre; vitesse?: number; sombre?: number; fige?: Ancre};
+	topo?: {style?: 'vagues'; zoomDe?: number; d?: number; coup?: Ancre; vitesse?: number; sombre?: number; fige?: Ancre};
 	/** Photos de papier qui alternent (sinon papier généré). */
 	papiers?: string[];
 	image?: string;
@@ -125,7 +125,7 @@ export type Plan = {
 		/** Page vue dans Safari : barre d'adresse avec ce lien en haut (diapos pub). */
 		url?: string;
 		/** logo : en-tête « GRANDIMI » + icône, sans barre d'état (diapos format Taller). */
-		entete?: 'logo' | 'aucun';
+		entete?: 'logo' | 'aucun' | 't39';
 		/** Onglets du bas de l'appli (Rapport, Programme, Exercices, Routine) ; le premier est actif. */
 		onglets?: string[];
 		/** Barre du bas au trait façon Taller (Taille, Programme, Exercices, Routine), dans la page (zoomée avec elle). */
@@ -166,7 +166,7 @@ export type Episode = {
 	/** ligne : ligne de commentaire TikTok pleine largeur (référence rayan.taller). */
 	carteCommentaire?: {nom: string; texte: string; de: Ancre; a: Ancre; haut?: boolean; x?: number; y?: number; ligne?: boolean; w?: number;
 		/** Carte « Réponse au commentaire » penchée des vidéos Taller : hauteur et rotation (degrés). */
-		reponse?: {h: number; rotation: number; modele?: 'parsa' | 'taller' | 'taller30'; avatar?: string};
+		reponse?: {h: number; rotation: number; modele?: 'parsa' | 'taller' | 'taller30'; avatar?: string; entete?: {taille?: number; couleur?: string; dy?: number}; corps?: {taille?: number; dy?: number}};
 		/** Deuxième passage de la même carte (appel à commenter de la fin). */
 		retour?: {de: Ancre; a: Ancre};
 		/** Photo de profil (fichier de images/) pour la variante haut. */

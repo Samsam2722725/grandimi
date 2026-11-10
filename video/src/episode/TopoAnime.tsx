@@ -168,3 +168,39 @@ export const TopoAnime: React.FC<{zoomDe?: number; d?: number; vitesse?: number;
 		</AbsoluteFill>
 	);
 };
+
+/**
+ * Fond « vagues » de Taller partie 39 (p22-ref, 16,6 s et 29,8-35 s) : lignes blanches parallèles qui ondulent et se
+ * resserrent par endroits, quelques traits plus épais, mouvement lent et continu (différent des courbes de niveau).
+ */
+export const TopoVagues: React.FC = () => {
+	const f = useCurrentFrame();
+	const t = f / 30;
+	const lignes = useMemo(() => {
+		const out: {d: string; gras: boolean}[] = [];
+		for (let i = 0; i < 36; i++) {
+			let d = '';
+			for (let y = -120; y <= 2040; y += 24) {
+				const x =
+					i * 44 -
+					380 +
+					0.32 * y +
+					150 * Math.sin(y / 430 + t * 0.55 + i * 0.16) +
+					75 * Math.sin(y / 180 - t * 0.8 + i * 0.31) +
+					45 * Math.sin(i * 0.9 + t * 0.3);
+				d += `${y === -120 ? 'M' : 'L'}${x.toFixed(1)},${y}`;
+			}
+			out.push({d, gras: i % 11 === 5});
+		}
+		return out;
+	}, [t]);
+	return (
+		<AbsoluteFill style={{background: '#121212'}}>
+			<svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
+				{lignes.map((l, i) => (
+					<path key={i} d={l.d} stroke="#ffffff" strokeOpacity={l.gras ? 1 : 0.88} strokeWidth={l.gras ? 9 : 3.4} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+				))}
+			</svg>
+		</AbsoluteFill>
+	);
+};
