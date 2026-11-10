@@ -14,11 +14,11 @@ lab = "drawtext=fontfile={f}:text='{t}':x=(w-tw)/2:y=12:fontsize=30:fontcolor=wh
 graphe = (
     f"[0:v]scale=540:960,setsar=1,{lab.format(f=font, t='ORIGINAL', c='black@0.6')}[a];"
     f"[1:v]scale=540:960,setsar=1,{lab.format(f=font, t='GRANDIMI', c='0xff5a1f@0.9')}[b];"
-    f"[a][b]hstack=inputs=2,drawtext=fontfile={font}:text='%{{pts\\:hms}}':x=(w-tw)/2:y=h-50:fontsize=28:"
+    f"[a][b]hstack=inputs=2,setparams=colorspace=bt709:color_primaries=bt709:color_trc=bt709:range=tv,drawtext=fontfile={font}:text='%{{pts\\:hms}}':x=(w-tw)/2:y=h-50:fontsize=28:"
     "fontcolor=white:box=1:boxcolor=black@0.6:boxborderw=6[v]"
 )
 for nom, piste in (("original", "0:a"), ("grandimi", "1:a")):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", ref, "-i", ep, "-filter_complex", graphe, "-map", "[v]", "-map", piste,
-                    "-c:v", "libx264", "-crf", "20", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k",
+                    "-c:v", "libx264", "-crf", "20", "-pix_fmt", "yuv420p", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv", "-c:a", "aac", "-b:a", "160k",
                     str(out / f"cote-a-cote-son-{nom}.mp4")], check=True)
     print(out / f"cote-a-cote-son-{nom}.mp4")
