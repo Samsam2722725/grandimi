@@ -1,0 +1,575 @@
+{
+  "fps": 30,
+  "totalFrames": 1217,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, numéro 20.",
+      "from": 0,
+      "duration": 81,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 17
+        },
+        {
+          "w": "tailles",
+          "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 35
+        },
+        {
+          "w": "numéro",
+          "f": 48
+        },
+        {
+          "w": "20.",
+          "f": 62
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Maintenant, on regarde les infos de Sami.",
+      "from": 82,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Maintenant,",
+          "f": 82
+        },
+        {
+          "w": "on",
+          "f": 91
+        },
+        {
+          "w": "regarde",
+          "f": 96
+        },
+        {
+          "w": "les",
+          "f": 108
+        },
+        {
+          "w": "infos",
+          "f": 110
+        },
+        {
+          "w": "de",
+          "f": 118
+        },
+        {
+          "w": "Sami.",
+          "f": 122
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 14 ans, Sami mesure 1m60,",
+      "from": 139,
+      "duration": 80,
+      "words": [
+        {
+          "w": "À",
+          "f": 139
+        },
+        {
+          "w": "14",
+          "f": 144
+        },
+        {
+          "w": "ans,",
+          "f": 154
+        },
+        {
+          "w": "Sami",
+          "f": 161
+        },
+        {
+          "w": "mesure",
+          "f": 178
+        },
+        {
+          "w": "1m60,",
+          "f": 187
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est un peu petit pour son âge.",
+      "from": 220,
+      "duration": 52,
+      "words": [
+        {
+          "w": "ce",
+          "f": 220
+        },
+        {
+          "w": "qui",
+          "f": 225
+        },
+        {
+          "w": "est",
+          "f": 230
+        },
+        {
+          "w": "un",
+          "f": 237
+        },
+        {
+          "w": "peu",
+          "f": 239
+        },
+        {
+          "w": "petit",
+          "f": 244
+        },
+        {
+          "w": "pour",
+          "f": 254
+        },
+        {
+          "w": "son",
+          "f": 259
+        },
+        {
+          "w": "âge.",
+          "f": 263
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "D'après le site Grandimi, sa taille adulte prédit est de 1m75.",
+      "from": 273,
+      "duration": 124,
+      "words": [
+        {
+          "w": "D'après",
+          "f": 273
+        },
+        {
+          "w": "le",
+          "f": 283
+        },
+        {
+          "w": "site",
+          "f": 285
+        },
+        {
+          "w": "Grandimi,",
+          "f": 295
+        },
+        {
+          "w": "sa",
+          "f": 316
+        },
+        {
+          "w": "taille",
+          "f": 321
+        },
+        {
+          "w": "adulte",
+          "f": 328
+        },
+        {
+          "w": "prédit",
+          "f": 340
+        },
+        {
+          "w": "est",
+          "f": 357
+        },
+        {
+          "w": "de",
+          "f": 359
+        },
+        {
+          "w": "1m75.",
+          "f": 364
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Sami pourrait atteindre 1m79,",
+      "from": 398,
+      "duration": 110,
+      "words": [
+        {
+          "w": "Et",
+          "f": 398
+        },
+        {
+          "w": "avec",
+          "f": 403
+        },
+        {
+          "w": "les",
+          "f": 407
+        },
+        {
+          "w": "bonnes",
+          "f": 412
+        },
+        {
+          "w": "habitudes,",
+          "f": 419
+        },
+        {
+          "w": "Sami",
+          "f": 436
+        },
+        {
+          "w": "pourrait",
+          "f": 453
+        },
+        {
+          "w": "atteindre",
+          "f": 460
+        },
+        {
+          "w": "1m79,",
+          "f": 472
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "donc 4 centimètres de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 509,
+      "duration": 145,
+      "words": [
+        {
+          "w": "donc",
+          "f": 509
+        },
+        {
+          "w": "4",
+          "f": 523
+        },
+        {
+          "w": "centimètres",
+          "f": 535
+        },
+        {
+          "w": "de",
+          "f": 554
+        },
+        {
+          "w": "croissance",
+          "f": 557
+        },
+        {
+          "w": "supplémentaire",
+          "f": 571
+        },
+        {
+          "w": "grâce",
+          "f": 593
+        },
+        {
+          "w": "à",
+          "f": 600
+        },
+        {
+          "w": "l'optimisation",
+          "f": 605
+        },
+        {
+          "w": "de",
+          "f": 629
+        },
+        {
+          "w": "sa",
+          "f": 631
+        },
+        {
+          "w": "croissance.",
+          "f": 638
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Pour l'instant, Sami est plus grand que 39,6% des personnes de son âge",
+      "from": 655,
+      "duration": 139,
+      "words": [
+        {
+          "w": "Pour",
+          "f": 655
+        },
+        {
+          "w": "l'instant,",
+          "f": 660
+        },
+        {
+          "w": "Sami",
+          "f": 672
+        },
+        {
+          "w": "est",
+          "f": 691
+        },
+        {
+          "w": "plus",
+          "f": 696
+        },
+        {
+          "w": "grand",
+          "f": 701
+        },
+        {
+          "w": "que",
+          "f": 708
+        },
+        {
+          "w": "39,6%",
+          "f": 713
+        },
+        {
+          "w": "des",
+          "f": 756
+        },
+        {
+          "w": "personnes",
+          "f": 761
+        },
+        {
+          "w": "de",
+          "f": 768
+        },
+        {
+          "w": "son",
+          "f": 770
+        },
+        {
+          "w": "âge",
+          "f": 778
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a déjà terminé 74,6% de sa croissance.",
+      "from": 796,
+      "duration": 117,
+      "words": [
+        {
+          "w": "et",
+          "f": 796
+        },
+        {
+          "w": "il",
+          "f": 800
+        },
+        {
+          "w": "a",
+          "f": 805
+        },
+        {
+          "w": "déjà",
+          "f": 810
+        },
+        {
+          "w": "terminé",
+          "f": 820
+        },
+        {
+          "w": "74,6%",
+          "f": 836
+        },
+        {
+          "w": "de",
+          "f": 889
+        },
+        {
+          "w": "sa",
+          "f": 892
+        },
+        {
+          "w": "croissance.",
+          "f": 896
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "Sami, t'es un peu foutu.",
+      "from": 913,
+      "duration": 49,
+      "words": [
+        {
+          "w": "Sami,",
+          "f": 913
+        },
+        {
+          "w": "t'es",
+          "f": 930
+        },
+        {
+          "w": "un",
+          "f": 940
+        },
+        {
+          "w": "peu",
+          "f": 942
+        },
+        {
+          "w": "foutu.",
+          "f": 944
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 964,
+      "duration": 55,
+      "words": [
+        {
+          "w": "Si",
+          "f": 964
+        },
+        {
+          "w": "tu",
+          "f": 968
+        },
+        {
+          "w": "veux",
+          "f": 971
+        },
+        {
+          "w": "connaître",
+          "f": 976
+        },
+        {
+          "w": "ton",
+          "f": 985
+        },
+        {
+          "w": "potentiel",
+          "f": 990
+        },
+        {
+          "w": "de",
+          "f": 1002
+        },
+        {
+          "w": "taille,",
+          "f": 1004
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écris ton âge et ta taille actuelle en commentaire sous cette vidéo",
+      "from": 1019,
+      "duration": 93,
+      "words": [
+        {
+          "w": "écris",
+          "f": 1019
+        },
+        {
+          "w": "ton",
+          "f": 1031
+        },
+        {
+          "w": "âge",
+          "f": 1036
+        },
+        {
+          "w": "et",
+          "f": 1041
+        },
+        {
+          "w": "ta",
+          "f": 1046
+        },
+        {
+          "w": "taille",
+          "f": 1051
+        },
+        {
+          "w": "actuelle",
+          "f": 1060
+        },
+        {
+          "w": "en",
+          "f": 1072
+        },
+        {
+          "w": "commentaire",
+          "f": 1077
+        },
+        {
+          "w": "sous",
+          "f": 1089
+        },
+        {
+          "w": "cette",
+          "f": 1096
+        },
+        {
+          "w": "vidéo",
+          "f": 1101
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "ou va directement sur grandimi.com pour tout avoir.",
+      "from": 1113,
+      "duration": 101,
+      "words": [
+        {
+          "w": "ou",
+          "f": 1113
+        },
+        {
+          "w": "va",
+          "f": 1118
+        },
+        {
+          "w": "directement",
+          "f": 1125
+        },
+        {
+          "w": "sur",
+          "f": 1137
+        },
+        {
+          "w": "grandimi.com",
+          "f": 1142
+        },
+        {
+          "w": "pour",
+          "f": 1180
+        },
+        {
+          "w": "tout",
+          "f": 1185
+        },
+        {
+          "w": "avoir.",
+          "f": 1195
+        }
+      ]
+    }
+  ]
+}
