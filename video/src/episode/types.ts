@@ -160,6 +160,8 @@ export type Plan = {
 
 export type Episode = {
 	partie: number;
+	/** Heure, réseau et batterie au-dessus de la barre d'adresse (louis-20 publiée). */
+	etatTelephone?: boolean;
 	/** Carte « Réponse au commentaire de … » affichée par-dessus les plans (src/episode/CarteCommentaire.tsx). */
 	/** Titre fixe en haut de l'écran, style texte TikTok (référence rayan.taller : « 1m60 à 13 ans 🙊💊 »). */
 	titre?: {texte: string; de?: Ancre; a?: Ancre; y?: number; taille?: number};

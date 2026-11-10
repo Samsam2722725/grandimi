@@ -486,9 +486,30 @@ export const BarreOnglets: React.FC<{onglets: string[]; actif: number}> = ({ongl
 
 /** Barre d'état + barre d'adresse Safari (« comme si on était sur le site »), 1080 × 172 px en haut de l'écran. */
 /** decale : la barre descend de N px (03/11 : « grandimi.com un peu plus bas », hors de l'en-tête TikTok). */
-export const BarreSafari: React.FC<{url: string; decale?: number}> = ({url, decale = 0}) => (
+/** Épisode.etatTelephone : affiche l'heure, le réseau et la batterie au-dessus de la barre d'adresse (comme la vidéo louis-20 publiée). */
+export const EtatTelephoneContext = React.createContext(false);
+
+const EtatTelephone: React.FC = () => (
+	<>
+		<div style={{position: 'absolute', left: 71, top: 15, fontSize: 33, fontWeight: 700, letterSpacing: -0.5}}>15:35</div>
+		<div style={{position: 'absolute', left: 852, top: 24, display: 'flex', gap: 6, alignItems: 'flex-end', height: 24}}>
+			{[10, 14, 18, 23].map((h, i) => (
+				<div key={i} style={{width: 8, height: h, borderRadius: 3, background: '#fff'}} />
+			))}
+		</div>
+		<div style={{position: 'absolute', left: 919, top: 17, fontSize: 24, fontWeight: 700}}>5G</div>
+		<div style={{position: 'absolute', left: 962, top: 25, width: 47, height: 23, borderRadius: 7, border: '3px solid #bbb', boxSizing: 'border-box'}}>
+			<div style={{width: '62%', height: '100%', background: '#fff', borderRadius: 3}} />
+		</div>
+	</>
+);
+
+export const BarreSafari: React.FC<{url: string; decale?: number}> = ({url, decale = 0}) => {
+	const etat = React.useContext(EtatTelephoneContext);
+	return (
 	<div style={{position: 'absolute', left: 0, top: decale, width: W, height: 172, background: decale < 0 ? 'transparent' : '#000', fontFamily: FONT, color: '#fff'}}>
-			{/* Pas d'heure, de réseau ni de batterie (demande du 02/11) : seulement la barre d'adresse. */}
+			{etat ? <EtatTelephone /> : null}
+			{/* Pas d'heure, de réseau ni de batterie (demande du 02/11) : seulement la barre d'adresse, sauf si l'épisode active etatTelephone. */}
 			<div
 				style={{
 					position: 'absolute',
@@ -517,7 +538,8 @@ export const BarreSafari: React.FC<{url: string; decale?: number}> = ({url, deca
 				</svg>
 			</div>
 		</div>
-);
+	);
+};
 
 /** Icônes au trait (style de la barre de Taller : pousse en pot, courbe, calendrier). */
 const ICONE_TRAIT: Record<string, React.ReactNode> = {

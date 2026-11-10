@@ -642,5 +642,6 @@
       "h": 230,
       "rotation": 0
     }
-  }
+  },
+  "etatTelephone": true
 }

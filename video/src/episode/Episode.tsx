@@ -28,7 +28,7 @@ import {CalculGrandimi} from './CalculGrandimi';
 import {RoutineGrandimi, RoutineTaller30} from './RoutineGrandimi';
 import {Explicatif} from './Explicatif';
 import {HookCommentaires} from './HookCommentaires';
-import {BarreSafari, DashboardGrandimi} from './Dashboard';
+import {BarreSafari, DashboardGrandimi, EtatTelephoneContext} from './Dashboard';
 import {HookTaille} from './HookTaille';
 import {EntreeGlitch, EntreeJauneGlisse, FlashOrangeJaune, SortieGlitch, SortieJaune, SortieRadial, SortieZoomFlou} from './TransitionsSteve';
 import {EntreeGlitchBlocs, EntreeWhip, EntreeZoom, SortieOnde, SortieWhip, SortieZoom} from './TransitionsTendance';
@@ -1450,7 +1450,7 @@ const LienFixe: React.FC<{texte: string; y: number; de: number; a: number; cache
 };
 
 /* ───────── Composition ───────── */
-export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTitres = true, voix = true, musique = true, bruitages = true}) => {
+const EpisodeInterne: React.FC<EpisodeProps> = ({episode, data, timeline, sousTitres = true, voix = true, musique = true, bruitages = true}) => {
 	usePolices();
 	if (!data || !timeline) return null;
 	const resolve = makeResolver(timeline);
@@ -1565,3 +1565,9 @@ export const Episode: React.FC<EpisodeProps> = ({episode, data, timeline, sousTi
 		</SfxOn.Provider>
 	);
 };
+
+export const Episode: React.FC<EpisodeProps> = (props) => (
+	<EtatTelephoneContext.Provider value={Boolean(props.data?.etatTelephone)}>
+		<EpisodeInterne {...props} />
+	</EtatTelephoneContext.Provider>
+);
