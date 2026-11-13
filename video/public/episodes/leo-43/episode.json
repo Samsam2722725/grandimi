@@ -269,8 +269,21 @@
           "type": "routine",
           "a": 0,
           "url": "grandimi.com",
-          "flou": 0,
+          "flou": 13,
+          "chut": "habitudes:bonnes",
           "titre": "Routine quotidienne"
+        },
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": "habitudes:léo",
+          "y": 1160,
+          "taille": 96,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 8,
+          "son": "ding",
+          "volume": 0.25
         }
       ],
       "sons": [
@@ -278,6 +291,11 @@
           "a": 0,
           "son": "whoosh",
           "volume": 0.22
+        },
+        {
+          "a": "habitudes:bonnes",
+          "son": "pop",
+          "volume": 0.3
         }
       ]
     },
