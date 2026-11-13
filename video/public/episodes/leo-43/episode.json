@@ -26,22 +26,22 @@
     {
       "id": "predit",
       "pause": 0,
-      "text": "Selon le site Grandimi, sa taille adulte prédite est de 1m93."
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 1m93,"
     },
     {
       "id": "habitudes",
       "pause": 0,
-      "text": "Et avec les bonnes habitudes, Léo pourrait atteindre un 1m97."
+      "text": "Et avec les bonnes habitudes, Léo pourrait atteindre un 1m97,"
     },
     {
       "id": "optim",
       "pause": 0,
-      "text": "4 cm de croissance supplémentaire grâce à l'optimisation de sa croissance."
+      "text": "donc 4 cm de croissance supplémentaire grâce à l'optimisation de sa croissance."
     },
     {
       "id": "pct",
       "pause": 0,
-      "text": "Actuellement, Léo est plus grand que 85 % des personnes de son âge."
+      "text": "Actuellement, Léo est plus grand que 40 % des personnes de son âge."
     },
     {
       "id": "fini",
@@ -56,12 +56,12 @@
     {
       "id": "com",
       "pause": 0,
-      "text": "écrivez votre âge, votre taille actuelle en commentaire sous cette vidéo."
+      "text": "écrivez votre âge et votre taille actuelle en commentaire sous cette vidéo."
     },
     {
       "id": "site",
       "pause": 0,
-      "text": "Ou va directement sur grandimi.com pour tout avoir."
+      "text": "Ou va directement sur {grandimi.com|grandini.com} pour tout avoir."
     }
   ],
   "musique": {
@@ -180,7 +180,7 @@
             "20,3",
             "21"
           ],
-          "rang": "85 %",
+          "rang": "40 %",
           "chances": "85 %",
           "chancesCm": "197 cm",
           "croissance": "83,4 %"
@@ -361,7 +361,7 @@
             "20,3",
             "21"
           ],
-          "rang": "85 %",
+          "rang": "40 %",
           "chances": "85 %",
           "chancesCm": "197 cm",
           "croissance": "83,4 %"
@@ -410,7 +410,7 @@
       "effets": [
         {
           "type": "flash",
-          "a": "pct:85+10",
+          "a": "pct:40+10",
           "couleur": "orange-jaune"
         }
       ],
@@ -462,15 +462,15 @@
       "camera": [
         {
           "x": 520,
-          "y": 1136,
-          "z": 1.0,
+          "y": 700,
+          "z": 1.35,
           "duree": 1
         },
         {
           "a": 1,
           "x": 520,
-          "y": 1136,
-          "z": 1.05,
+          "y": 760,
+          "z": 1.42,
           "duree": "fin",
           "lineaire": true,
           "son": null
@@ -643,7 +643,7 @@
   "sonsMouvements": false,
   "carteCommentaire": {
     "nom": "Léo",
-    "texte": "J’ai 17 ans et je fais 1m68, je suis foutu ?",
+    "texte": "Je fais 1m68 à 17 ans, je suis foutu ?",
     "de": 0,
     "a": "age:17",
     "x": 88,
