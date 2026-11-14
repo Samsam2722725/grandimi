@@ -1,0 +1,539 @@
+{
+  "fps": 30,
+  "totalFrames": 1130,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 44.",
+      "from": 0,
+      "duration": 78,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 14
+        },
+        {
+          "w": "tailles",
+          "f": 19
+        },
+        {
+          "w": "maximales,",
+          "f": 29
+        },
+        {
+          "w": "partie",
+          "f": 46
+        },
+        {
+          "w": "44.",
+          "f": 60
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Jule.",
+      "from": 79,
+      "duration": 59,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 79
+        },
+        {
+          "w": "on",
+          "f": 94
+        },
+        {
+          "w": "regarde",
+          "f": 98
+        },
+        {
+          "w": "les",
+          "f": 108
+        },
+        {
+          "w": "infos",
+          "f": 110
+        },
+        {
+          "w": "de",
+          "f": 120
+        },
+        {
+          "w": "Jule.",
+          "f": 122
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 17 ans, Jule mesure 1m98,",
+      "from": 139,
+      "duration": 90,
+      "words": [
+        {
+          "w": "À",
+          "f": 139
+        },
+        {
+          "w": "17",
+          "f": 144
+        },
+        {
+          "w": "ans,",
+          "f": 151
+        },
+        {
+          "w": "Jule",
+          "f": 158
+        },
+        {
+          "w": "mesure",
+          "f": 173
+        },
+        {
+          "w": "1m98,",
+          "f": 182
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est un peu grand pour son âge.",
+      "from": 230,
+      "duration": 42,
+      "words": [
+        {
+          "w": "ce",
+          "f": 230
+        },
+        {
+          "w": "qui",
+          "f": 235
+        },
+        {
+          "w": "est",
+          "f": 240
+        },
+        {
+          "w": "un",
+          "f": 242
+        },
+        {
+          "w": "peu",
+          "f": 247
+        },
+        {
+          "w": "grand",
+          "f": 250
+        },
+        {
+          "w": "pour",
+          "f": 257
+        },
+        {
+          "w": "son",
+          "f": 259
+        },
+        {
+          "w": "âge.",
+          "f": 264
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 2m03.",
+      "from": 274,
+      "duration": 129,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 274
+        },
+        {
+          "w": "le",
+          "f": 281
+        },
+        {
+          "w": "site",
+          "f": 283
+        },
+        {
+          "w": "Grandimi,",
+          "f": 290
+        },
+        {
+          "w": "sa",
+          "f": 314
+        },
+        {
+          "w": "taille",
+          "f": 319
+        },
+        {
+          "w": "adulte",
+          "f": 326
+        },
+        {
+          "w": "prédite",
+          "f": 338
+        },
+        {
+          "w": "est",
+          "f": 353
+        },
+        {
+          "w": "de",
+          "f": 355
+        },
+        {
+          "w": "2m03.",
+          "f": 360
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Jule pourrait atteindre un 2m05,",
+      "from": 403,
+      "duration": 107,
+      "words": [
+        {
+          "w": "Et",
+          "f": 403
+        },
+        {
+          "w": "avec",
+          "f": 408
+        },
+        {
+          "w": "les",
+          "f": 413
+        },
+        {
+          "w": "bonnes",
+          "f": 415
+        },
+        {
+          "w": "habitudes,",
+          "f": 422
+        },
+        {
+          "w": "Jule",
+          "f": 437
+        },
+        {
+          "w": "pourrait",
+          "f": 451
+        },
+        {
+          "w": "atteindre",
+          "f": 461
+        },
+        {
+          "w": "un",
+          "f": 470
+        },
+        {
+          "w": "2m05,",
+          "f": 475
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "donc 2 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 511,
+      "duration": 138,
+      "words": [
+        {
+          "w": "donc",
+          "f": 511
+        },
+        {
+          "w": "2",
+          "f": 535
+        },
+        {
+          "w": "cm",
+          "f": 542
+        },
+        {
+          "w": "de",
+          "f": 559
+        },
+        {
+          "w": "croissance",
+          "f": 561
+        },
+        {
+          "w": "supplémentaire",
+          "f": 573
+        },
+        {
+          "w": "grâce",
+          "f": 595
+        },
+        {
+          "w": "à",
+          "f": 602
+        },
+        {
+          "w": "l'optimisation",
+          "f": 604
+        },
+        {
+          "w": "de",
+          "f": 626
+        },
+        {
+          "w": "sa",
+          "f": 628
+        },
+        {
+          "w": "croissance.",
+          "f": 633
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Jule est plus grand que 99% des personnes de son âge",
+      "from": 650,
+      "duration": 118,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 650
+        },
+        {
+          "w": "Jule",
+          "f": 664
+        },
+        {
+          "w": "est",
+          "f": 683
+        },
+        {
+          "w": "plus",
+          "f": 686
+        },
+        {
+          "w": "grand",
+          "f": 688
+        },
+        {
+          "w": "que",
+          "f": 695
+        },
+        {
+          "w": "99%",
+          "f": 700
+        },
+        {
+          "w": "des",
+          "f": 731
+        },
+        {
+          "w": "personnes",
+          "f": 736
+        },
+        {
+          "w": "de",
+          "f": 743
+        },
+        {
+          "w": "son",
+          "f": 746
+        },
+        {
+          "w": "âge",
+          "f": 753
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a déjà terminé 79,5% de sa croissance.",
+      "from": 769,
+      "duration": 107,
+      "words": [
+        {
+          "w": "et",
+          "f": 769
+        },
+        {
+          "w": "il",
+          "f": 774
+        },
+        {
+          "w": "a",
+          "f": 779
+        },
+        {
+          "w": "déjà",
+          "f": 781
+        },
+        {
+          "w": "terminé",
+          "f": 788
+        },
+        {
+          "w": "79,5%",
+          "f": 803
+        },
+        {
+          "w": "de",
+          "f": 853
+        },
+        {
+          "w": "sa",
+          "f": 856
+        },
+        {
+          "w": "croissance.",
+          "f": 860
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 877,
+      "duration": 54,
+      "words": [
+        {
+          "w": "Si",
+          "f": 877
+        },
+        {
+          "w": "tu",
+          "f": 882
+        },
+        {
+          "w": "veux",
+          "f": 887
+        },
+        {
+          "w": "connaître",
+          "f": 892
+        },
+        {
+          "w": "ton",
+          "f": 901
+        },
+        {
+          "w": "potentiel",
+          "f": 906
+        },
+        {
+          "w": "de",
+          "f": 916
+        },
+        {
+          "w": "taille,",
+          "f": 920
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écrivez votre âge et votre taille actuelle en commentaire sous cette vidéo ou va directement sur grandimi.com pour tout avoir.",
+      "from": 932,
+      "duration": 195,
+      "words": [
+        {
+          "w": "écrivez",
+          "f": 932
+        },
+        {
+          "w": "votre",
+          "f": 947
+        },
+        {
+          "w": "âge",
+          "f": 952
+        },
+        {
+          "w": "et",
+          "f": 956
+        },
+        {
+          "w": "votre",
+          "f": 961
+        },
+        {
+          "w": "taille",
+          "f": 966
+        },
+        {
+          "w": "actuelle",
+          "f": 973
+        },
+        {
+          "w": "en",
+          "f": 983
+        },
+        {
+          "w": "commentaire",
+          "f": 998
+        },
+        {
+          "w": "sous",
+          "f": 1010
+        },
+        {
+          "w": "cette",
+          "f": 1015
+        },
+        {
+          "w": "vidéo",
+          "f": 1020
+        },
+        {
+          "w": "ou",
+          "f": 1032
+        },
+        {
+          "w": "va",
+          "f": 1037
+        },
+        {
+          "w": "directement",
+          "f": 1042
+        },
+        {
+          "w": "sur",
+          "f": 1051
+        },
+        {
+          "w": "grandimi.com",
+          "f": 1056
+        },
+        {
+          "w": "pour",
+          "f": 1092
+        },
+        {
+          "w": "tout",
+          "f": 1097
+        },
+        {
+          "w": "avoir.",
+          "f": 1106
+        }
+      ]
+    }
+  ]
+}

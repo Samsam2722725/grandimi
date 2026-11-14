@@ -403,9 +403,9 @@ export const DashboardGrandimi: React.FC<{
 				</Bloc>
 				<Bloc ligne="chances" sx={sx('chances')}>
 					<div style={{position: 'absolute', left: 36, top: 44, fontSize: 30, color: GRIS, fontWeight: 600}}>Chances taille de rêve</div>
-					<div style={{position: 'absolute', left: 36, top: 104, fontSize: 76, fontWeight: 800}}>
+					<div style={{position: 'absolute', left: 36, top: 104, fontSize: 76, fontWeight: 800, whiteSpace: 'nowrap'}}>
 						{d.chances}
-						<span style={{fontSize: 28, color: GRIS, fontWeight: 600, marginLeft: 12}}>({d.chancesCm})</span>
+						<span style={{fontSize: 25, color: GRIS, fontWeight: 600, marginLeft: 8, whiteSpace: "nowrap"}}>({d.chancesCm})</span>
 					</div>
 					<Jauge pct={parseFloat(d.chances.replace(',', '.'))} />
 				</Bloc>
