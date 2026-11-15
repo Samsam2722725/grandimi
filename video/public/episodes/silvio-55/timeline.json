@@ -1,0 +1,363 @@
+{
+  "fps": 30,
+  "totalFrames": 743,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 55.",
+      "from": 0,
+      "duration": 76,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 14
+        },
+        {
+          "w": "tailles",
+          "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 29
+        },
+        {
+          "w": "partie",
+          "f": 46
+        },
+        {
+          "w": "55.",
+          "f": 58
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Maintenant, on regarde les infos de Silvio.",
+      "from": 77,
+      "duration": 54,
+      "words": [
+        {
+          "w": "Maintenant,",
+          "f": 77
+        },
+        {
+          "w": "on",
+          "f": 86
+        },
+        {
+          "w": "regarde",
+          "f": 91
+        },
+        {
+          "w": "les",
+          "f": 98
+        },
+        {
+          "w": "infos",
+          "f": 103
+        },
+        {
+          "w": "de",
+          "f": 110
+        },
+        {
+          "w": "Silvio.",
+          "f": 113
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "17 ans et 183 cm.",
+      "from": 132,
+      "duration": 57,
+      "words": [
+        {
+          "w": "17",
+          "f": 132
+        },
+        {
+          "w": "ans",
+          "f": 144
+        },
+        {
+          "w": "et",
+          "f": 151
+        },
+        {
+          "w": "183",
+          "f": 156
+        },
+        {
+          "w": "cm.",
+          "f": 178
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "D'après Grandimi, sa taille adulte sera de 186 cm.",
+      "from": 190,
+      "duration": 111,
+      "words": [
+        {
+          "w": "D'après",
+          "f": 190
+        },
+        {
+          "w": "Grandimi,",
+          "f": 199
+        },
+        {
+          "w": "sa",
+          "f": 220
+        },
+        {
+          "w": "taille",
+          "f": 227
+        },
+        {
+          "w": "adulte",
+          "f": 237
+        },
+        {
+          "w": "sera",
+          "f": 249
+        },
+        {
+          "w": "de",
+          "f": 259
+        },
+        {
+          "w": "186",
+          "f": 263
+        },
+        {
+          "w": "cm.",
+          "f": 287
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Silvio pourrait atteindre 190 cm,",
+      "from": 302,
+      "duration": 119,
+      "words": [
+        {
+          "w": "Et",
+          "f": 302
+        },
+        {
+          "w": "avec",
+          "f": 307
+        },
+        {
+          "w": "les",
+          "f": 311
+        },
+        {
+          "w": "bonnes",
+          "f": 314
+        },
+        {
+          "w": "habitudes,",
+          "f": 321
+        },
+        {
+          "w": "Silvio",
+          "f": 338
+        },
+        {
+          "w": "pourrait",
+          "f": 355
+        },
+        {
+          "w": "atteindre",
+          "f": 364
+        },
+        {
+          "w": "190",
+          "f": 376
+        },
+        {
+          "w": "cm,",
+          "f": 403
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "donc 4 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 422,
+      "duration": 117,
+      "words": [
+        {
+          "w": "donc",
+          "f": 422
+        },
+        {
+          "w": "4",
+          "f": 429
+        },
+        {
+          "w": "cm",
+          "f": 436
+        },
+        {
+          "w": "de",
+          "f": 451
+        },
+        {
+          "w": "croissance",
+          "f": 453
+        },
+        {
+          "w": "supplémentaire",
+          "f": 465
+        },
+        {
+          "w": "grâce",
+          "f": 479
+        },
+        {
+          "w": "à",
+          "f": 484
+        },
+        {
+          "w": "l'optimisation",
+          "f": 487
+        },
+        {
+          "w": "de",
+          "f": 487
+        },
+        {
+          "w": "sa",
+          "f": 487
+        },
+        {
+          "w": "croissance.",
+          "f": 487
+        }
+      ]
+    },
+    {
+      "id": "foutu",
+      "text": "Silvio, t'es pas du tout foutu.",
+      "from": 539,
+      "duration": 54,
+      "words": [
+        {
+          "w": "Silvio,",
+          "f": 539
+        },
+        {
+          "w": "t'es",
+          "f": 556
+        },
+        {
+          "w": "pas",
+          "f": 568
+        },
+        {
+          "w": "du",
+          "f": 573
+        },
+        {
+          "w": "tout",
+          "f": 575
+        },
+        {
+          "w": "foutu.",
+          "f": 580
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "Écris ton âge, ta taille en commentaire,",
+      "from": 595,
+      "duration": 49,
+      "words": [
+        {
+          "w": "Écris",
+          "f": 595
+        },
+        {
+          "w": "ton",
+          "f": 602
+        },
+        {
+          "w": "âge,",
+          "f": 607
+        },
+        {
+          "w": "ta",
+          "f": 611
+        },
+        {
+          "w": "taille",
+          "f": 611
+        },
+        {
+          "w": "en",
+          "f": 631
+        },
+        {
+          "w": "commentaire,",
+          "f": 631
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "ou va directement sur grandimi.com pour tout avoir.",
+      "from": 645,
+      "duration": 95,
+      "words": [
+        {
+          "w": "ou",
+          "f": 645
+        },
+        {
+          "w": "va",
+          "f": 650
+        },
+        {
+          "w": "directement",
+          "f": 657
+        },
+        {
+          "w": "sur",
+          "f": 669
+        },
+        {
+          "w": "grandimi.com",
+          "f": 674
+        },
+        {
+          "w": "pour",
+          "f": 707
+        },
+        {
+          "w": "tout",
+          "f": 707
+        },
+        {
+          "w": "avoir.",
+          "f": 712
+        }
+      ]
+    }
+  ]
+}
