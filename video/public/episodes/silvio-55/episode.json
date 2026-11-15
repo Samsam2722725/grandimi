@@ -1,12 +1,12 @@
 {
-  "partie": 55,
+  "partie": 42,
   "voice": "ff_siwis",
   "speed": 1.2,
   "lines": [
     {
       "id": "hook",
       "pause": 0,
-      "text": "Je prédis vos tailles maximales, {partie 55|numéro 42}."
+      "text": "Je prédis vos tailles maximales, numéro 42."
     },
     {
       "id": "stats",
@@ -99,7 +99,7 @@
     },
     {
       "nom": "partie",
-      "debut": "hook:partie-1",
+      "debut": "hook:numéro-1",
       "fond": "papier",
       "papiers": [
         "papier1.jpg",
@@ -110,10 +110,10 @@
       "elements": [
         {
           "type": "tape",
-          "texte": "PARTIE {partie}",
+          "texte": "NUMÉRO {partie}",
           "a": 1,
-          "y": 704,
-          "taille": 165,
+          "y": 716,
+          "taille": 140,
           "couleur": "#ecfd1f",
           "police": "Montserrat",
           "poids": 600,
@@ -525,7 +525,7 @@
     "fenetres": [
       {
         "de": 0,
-        "a": "hook:partie-1",
+        "a": "hook:numéro-1",
         "y": 822,
         "taille": 74,
         "motsMax": 4,
