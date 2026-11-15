@@ -1,0 +1,551 @@
+{
+  "fps": 30,
+  "totalFrames": 1106,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 45.",
+      "from": 0,
+      "duration": 73,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 17
+        },
+        {
+          "w": "tailles",
+          "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 34
+        },
+        {
+          "w": "partie",
+          "f": 46
+        },
+        {
+          "w": "45.",
+          "f": 58
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Lino.",
+      "from": 74,
+      "duration": 61,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 74
+        },
+        {
+          "w": "on",
+          "f": 89
+        },
+        {
+          "w": "regarde",
+          "f": 94
+        },
+        {
+          "w": "les",
+          "f": 106
+        },
+        {
+          "w": "infos",
+          "f": 108
+        },
+        {
+          "w": "de",
+          "f": 115
+        },
+        {
+          "w": "Lino.",
+          "f": 120
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 16 ans, Lino mesure 167 cm,",
+      "from": 137,
+      "duration": 78,
+      "words": [
+        {
+          "w": "À",
+          "f": 137
+        },
+        {
+          "w": "16",
+          "f": 142
+        },
+        {
+          "w": "ans,",
+          "f": 146
+        },
+        {
+          "w": "Lino",
+          "f": 154
+        },
+        {
+          "w": "mesure",
+          "f": 168
+        },
+        {
+          "w": "167",
+          "f": 180
+        },
+        {
+          "w": "cm,",
+          "f": 202
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est un peu, peu petit pour son âge.",
+      "from": 216,
+      "duration": 52,
+      "words": [
+        {
+          "w": "ce",
+          "f": 216
+        },
+        {
+          "w": "qui",
+          "f": 221
+        },
+        {
+          "w": "est",
+          "f": 223
+        },
+        {
+          "w": "un",
+          "f": 228
+        },
+        {
+          "w": "peu,",
+          "f": 230
+        },
+        {
+          "w": "peu",
+          "f": 241
+        },
+        {
+          "w": "petit",
+          "f": 248
+        },
+        {
+          "w": "pour",
+          "f": 255
+        },
+        {
+          "w": "son",
+          "f": 257
+        },
+        {
+          "w": "âge.",
+          "f": 262
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 172 cm.",
+      "from": 269,
+      "duration": 126,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 269
+        },
+        {
+          "w": "le",
+          "f": 274
+        },
+        {
+          "w": "site",
+          "f": 277
+        },
+        {
+          "w": "Grandimi,",
+          "f": 286
+        },
+        {
+          "w": "sa",
+          "f": 310
+        },
+        {
+          "w": "taille",
+          "f": 315
+        },
+        {
+          "w": "adulte",
+          "f": 322
+        },
+        {
+          "w": "prédite",
+          "f": 334
+        },
+        {
+          "w": "est",
+          "f": 349
+        },
+        {
+          "w": "de",
+          "f": 351
+        },
+        {
+          "w": "172",
+          "f": 356
+        },
+        {
+          "w": "cm.",
+          "f": 380
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Lino pourrait atteindre 175 cm.",
+      "from": 397,
+      "duration": 129,
+      "words": [
+        {
+          "w": "Et",
+          "f": 397
+        },
+        {
+          "w": "avec",
+          "f": 401
+        },
+        {
+          "w": "les",
+          "f": 406
+        },
+        {
+          "w": "bonnes",
+          "f": 409
+        },
+        {
+          "w": "habitudes,",
+          "f": 416
+        },
+        {
+          "w": "Lino",
+          "f": 430
+        },
+        {
+          "w": "pourrait",
+          "f": 447
+        },
+        {
+          "w": "atteindre",
+          "f": 457
+        },
+        {
+          "w": "175",
+          "f": 469
+        },
+        {
+          "w": "cm.",
+          "f": 495
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "3 centimètres de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 527,
+      "duration": 114,
+      "words": [
+        {
+          "w": "3",
+          "f": 527
+        },
+        {
+          "w": "centimètres",
+          "f": 534
+        },
+        {
+          "w": "de",
+          "f": 551
+        },
+        {
+          "w": "croissance",
+          "f": 553
+        },
+        {
+          "w": "supplémentaire",
+          "f": 568
+        },
+        {
+          "w": "grâce",
+          "f": 587
+        },
+        {
+          "w": "à",
+          "f": 594
+        },
+        {
+          "w": "l'optimisation",
+          "f": 599
+        },
+        {
+          "w": "de",
+          "f": 620
+        },
+        {
+          "w": "sa",
+          "f": 623
+        },
+        {
+          "w": "croissance.",
+          "f": 628
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Lino est plus grand que 20% des personnes de son âge",
+      "from": 642,
+      "duration": 100,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 642
+        },
+        {
+          "w": "Lino",
+          "f": 659
+        },
+        {
+          "w": "est",
+          "f": 678
+        },
+        {
+          "w": "plus",
+          "f": 680
+        },
+        {
+          "w": "grand",
+          "f": 685
+        },
+        {
+          "w": "que",
+          "f": 690
+        },
+        {
+          "w": "20%",
+          "f": 697
+        },
+        {
+          "w": "des",
+          "f": 714
+        },
+        {
+          "w": "personnes",
+          "f": 719
+        },
+        {
+          "w": "de",
+          "f": 726
+        },
+        {
+          "w": "son",
+          "f": 728
+        },
+        {
+          "w": "âge",
+          "f": 733
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "et il a déjà terminé 77,1% de sa croissance.",
+      "from": 743,
+      "duration": 109,
+      "words": [
+        {
+          "w": "et",
+          "f": 743
+        },
+        {
+          "w": "il",
+          "f": 748
+        },
+        {
+          "w": "a",
+          "f": 752
+        },
+        {
+          "w": "déjà",
+          "f": 755
+        },
+        {
+          "w": "terminé",
+          "f": 762
+        },
+        {
+          "w": "77,1%",
+          "f": 776
+        },
+        {
+          "w": "de",
+          "f": 831
+        },
+        {
+          "w": "sa",
+          "f": 833
+        },
+        {
+          "w": "croissance.",
+          "f": 838
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 853,
+      "duration": 57,
+      "words": [
+        {
+          "w": "Si",
+          "f": 853
+        },
+        {
+          "w": "tu",
+          "f": 857
+        },
+        {
+          "w": "veux",
+          "f": 860
+        },
+        {
+          "w": "connaître",
+          "f": 865
+        },
+        {
+          "w": "ton",
+          "f": 874
+        },
+        {
+          "w": "potentiel",
+          "f": 881
+        },
+        {
+          "w": "de",
+          "f": 893
+        },
+        {
+          "w": "taille,",
+          "f": 896
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écrivez votre âge, votre taille actuelle en commentaire sous cette vidéo,",
+      "from": 910,
+      "duration": 97,
+      "words": [
+        {
+          "w": "écrivez",
+          "f": 910
+        },
+        {
+          "w": "votre",
+          "f": 922
+        },
+        {
+          "w": "âge,",
+          "f": 929
+        },
+        {
+          "w": "votre",
+          "f": 939
+        },
+        {
+          "w": "taille",
+          "f": 946
+        },
+        {
+          "w": "actuelle",
+          "f": 956
+        },
+        {
+          "w": "en",
+          "f": 968
+        },
+        {
+          "w": "commentaire",
+          "f": 973
+        },
+        {
+          "w": "sous",
+          "f": 985
+        },
+        {
+          "w": "cette",
+          "f": 992
+        },
+        {
+          "w": "vidéo,",
+          "f": 997
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "ou va directement sur grandimi.com. Pour tout avoir.",
+      "from": 1009,
+      "duration": 95,
+      "words": [
+        {
+          "w": "ou",
+          "f": 1009
+        },
+        {
+          "w": "va",
+          "f": 1013
+        },
+        {
+          "w": "directement",
+          "f": 1021
+        },
+        {
+          "w": "sur",
+          "f": 1030
+        },
+        {
+          "w": "grandimi.com.",
+          "f": 1037
+        },
+        {
+          "w": "Pour",
+          "f": 1071
+        },
+        {
+          "w": "tout",
+          "f": 1073
+        },
+        {
+          "w": "avoir.",
+          "f": 1081
+        }
+      ]
+    }
+  ]
+}
