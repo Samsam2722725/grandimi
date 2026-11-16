@@ -88,16 +88,16 @@
       "image": "accroche",
       "camera": [
         {
-          "x": 620,
-          "y": 760,
+          "x": 520,
+          "y": 925,
           "z": 1.15,
           "duree": 1
         },
         {
           "a": 1,
-          "x": 505,
-          "y": 800,
-          "z": 1.03,
+          "x": 520,
+          "y": 925,
+          "z": 1.0,
           "duree": "fin",
           "lineaire": true,
           "son": null
