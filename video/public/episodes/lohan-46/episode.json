@@ -104,13 +104,7 @@
         }
       ],
       "elements": [],
-      "sons": [
-        {
-          "a": 0,
-          "son": "whoosh",
-          "volume": 0.2
-        }
-      ]
+      "sons": []
     },
     {
       "nom": "partie",
@@ -134,21 +128,14 @@
           "poids": 600,
           "contour": 12,
           "curseur": true,
-          "parLettre": 1,
-          "son": "tick",
-          "volume": 0.3
+          "parLettre": 1
         }
       ],
       "sons": [
         {
           "a": 0,
           "son": "whoosh",
-          "volume": 0.2
-        },
-        {
-          "a": 3,
-          "son": "papier",
-          "volume": 0.35
+          "volume": 0.1
         }
       ]
     },
@@ -235,27 +222,22 @@
         {
           "a": 0,
           "son": "whoosh",
-          "volume": 0.22
+          "volume": 0.11
         },
         {
           "a": "age:17",
           "son": "pop",
-          "volume": 0.3
+          "volume": 0.15
         },
         {
           "a": "age:fait",
           "son": "whoosh",
-          "volume": 0.28
-        },
-        {
-          "a": "norme:grand",
-          "son": "whoosh",
-          "volume": 0.2
+          "volume": 0.14
         },
         {
           "a": "predit:taille",
           "son": "whoosh",
-          "volume": 0.28
+          "volume": 0.14
         }
       ]
     },
@@ -281,21 +263,14 @@
           "taille": 96,
           "couleur": "#fff",
           "fond": "#ff5a1f",
-          "amorti": 8,
-          "son": "ding",
-          "volume": 0.25
+          "amorti": 8
         }
       ],
       "sons": [
         {
           "a": 0,
           "son": "whoosh",
-          "volume": 0.22
-        },
-        {
-          "a": "habitudes:bonnes",
-          "son": "pop",
-          "volume": 0.3
+          "volume": 0.11
         }
       ]
     },
@@ -336,16 +311,14 @@
           "poids": 800,
           "curseur": true,
           "fond": "#8100fe",
-          "parLettre": 2,
-          "son": "tick",
-          "volume": 0.25
+          "parLettre": 2
         }
       ],
       "sons": [
         {
           "a": 0,
           "son": "whoosh",
-          "volume": 0.22
+          "volume": 0.11
         }
       ]
     },
@@ -457,17 +430,17 @@
         {
           "a": 0,
           "son": "whoosh",
-          "volume": 0.22
+          "volume": 0.11
         },
         {
           "a": "optim",
           "son": "pop",
-          "volume": 0.38
+          "volume": 0.19
         },
         {
           "a": "fini:terminé",
           "son": "whoosh",
-          "volume": 0.28
+          "volume": 0.14
         }
       ]
     },
@@ -505,16 +478,14 @@
           "police": "Montserrat",
           "poids": 600,
           "contour": 10,
-          "parLettre": 1,
-          "son": "tick",
-          "volume": 0.2
+          "parLettre": 1
         }
       ],
       "sons": [
         {
           "a": 0,
           "son": "whoosh",
-          "volume": 0.22
+          "volume": 0.11
         }
       ]
     },
@@ -549,7 +520,7 @@
           "h": 620,
           "effet": "pop",
           "son": "pop",
-          "volume": 0.3
+          "volume": 0.15
         },
         {
           "type": "image",
@@ -561,9 +532,7 @@
           "y": 1340,
           "w": 240,
           "h": 240,
-          "effet": "pop",
-          "son": "pop",
-          "volume": 0.25
+          "effet": "pop"
         },
         {
           "type": "image",
@@ -588,16 +557,14 @@
           "taille": 96,
           "couleur": "#fff",
           "fond": "#ff5a1f",
-          "amorti": 8,
-          "son": "ding",
-          "volume": 0.25
+          "amorti": 8
         }
       ],
       "sons": [
         {
           "a": 0,
           "son": "whoosh",
-          "volume": 0.22
+          "volume": 0.11
         }
       ],
       "topo": {
