@@ -1,0 +1,547 @@
+{
+  "fps": 30,
+  "totalFrames": 1103,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 46.",
+      "from": 0,
+      "duration": 78,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 17
+        },
+        {
+          "w": "tailles",
+          "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 35
+        },
+        {
+          "w": "partie",
+          "f": 48
+        },
+        {
+          "w": "46.",
+          "f": 60
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Lohan.",
+      "from": 79,
+      "duration": 59,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 79
+        },
+        {
+          "w": "on",
+          "f": 94
+        },
+        {
+          "w": "regarde",
+          "f": 98
+        },
+        {
+          "w": "les",
+          "f": 108
+        },
+        {
+          "w": "infos",
+          "f": 113
+        },
+        {
+          "w": "de",
+          "f": 120
+        },
+        {
+          "w": "Lohan.",
+          "f": 122
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 17 ans, Lohan fait 201 cm,",
+      "from": 139,
+      "duration": 71,
+      "words": [
+        {
+          "w": "À",
+          "f": 139
+        },
+        {
+          "w": "17",
+          "f": 144
+        },
+        {
+          "w": "ans,",
+          "f": 154
+        },
+        {
+          "w": "Lohan",
+          "f": 161
+        },
+        {
+          "w": "fait",
+          "f": 178
+        },
+        {
+          "w": "201",
+          "f": 182
+        },
+        {
+          "w": "cm,",
+          "f": 199
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est extrêmement grand pour son âge.",
+      "from": 211,
+      "duration": 58,
+      "words": [
+        {
+          "w": "ce",
+          "f": 211
+        },
+        {
+          "w": "qui",
+          "f": 214
+        },
+        {
+          "w": "est",
+          "f": 218
+        },
+        {
+          "w": "extrêmement",
+          "f": 232
+        },
+        {
+          "w": "grand",
+          "f": 248
+        },
+        {
+          "w": "pour",
+          "f": 253
+        },
+        {
+          "w": "son",
+          "f": 258
+        },
+        {
+          "w": "âge.",
+          "f": 263
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 205 cm.",
+      "from": 270,
+      "duration": 117,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 270
+        },
+        {
+          "w": "le",
+          "f": 277
+        },
+        {
+          "w": "site",
+          "f": 280
+        },
+        {
+          "w": "Grandimi,",
+          "f": 287
+        },
+        {
+          "w": "sa",
+          "f": 311
+        },
+        {
+          "w": "taille",
+          "f": 313
+        },
+        {
+          "w": "adulte",
+          "f": 320
+        },
+        {
+          "w": "prédite",
+          "f": 332
+        },
+        {
+          "w": "est",
+          "f": 349
+        },
+        {
+          "w": "de",
+          "f": 352
+        },
+        {
+          "w": "205",
+          "f": 356
+        },
+        {
+          "w": "cm.",
+          "f": 373
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "Et avec les bonnes habitudes, Lohan pourrait atteindre 208 cm.",
+      "from": 388,
+      "duration": 109,
+      "words": [
+        {
+          "w": "Et",
+          "f": 388
+        },
+        {
+          "w": "avec",
+          "f": 392
+        },
+        {
+          "w": "les",
+          "f": 397
+        },
+        {
+          "w": "bonnes",
+          "f": 402
+        },
+        {
+          "w": "habitudes,",
+          "f": 409
+        },
+        {
+          "w": "Lohan",
+          "f": 424
+        },
+        {
+          "w": "pourrait",
+          "f": 443
+        },
+        {
+          "w": "atteindre",
+          "f": 450
+        },
+        {
+          "w": "208",
+          "f": 462
+        },
+        {
+          "w": "cm.",
+          "f": 481
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "Donc 3 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 497,
+      "duration": 131,
+      "words": [
+        {
+          "w": "Donc",
+          "f": 497
+        },
+        {
+          "w": "3",
+          "f": 509
+        },
+        {
+          "w": "cm",
+          "f": 519
+        },
+        {
+          "w": "de",
+          "f": 536
+        },
+        {
+          "w": "croissance",
+          "f": 538
+        },
+        {
+          "w": "supplémentaire",
+          "f": 553
+        },
+        {
+          "w": "grâce",
+          "f": 574
+        },
+        {
+          "w": "à",
+          "f": 581
+        },
+        {
+          "w": "l'optimisation",
+          "f": 584
+        },
+        {
+          "w": "de",
+          "f": 608
+        },
+        {
+          "w": "sa",
+          "f": 610
+        },
+        {
+          "w": "croissance.",
+          "f": 615
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Lohan est plus grand que 99,9% des personnes de son âge.",
+      "from": 629,
+      "duration": 136,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 629
+        },
+        {
+          "w": "Lohan",
+          "f": 646
+        },
+        {
+          "w": "est",
+          "f": 663
+        },
+        {
+          "w": "plus",
+          "f": 668
+        },
+        {
+          "w": "grand",
+          "f": 673
+        },
+        {
+          "w": "que",
+          "f": 677
+        },
+        {
+          "w": "99,9%",
+          "f": 685
+        },
+        {
+          "w": "des",
+          "f": 735
+        },
+        {
+          "w": "personnes",
+          "f": 740
+        },
+        {
+          "w": "de",
+          "f": 747
+        },
+        {
+          "w": "son",
+          "f": 749
+        },
+        {
+          "w": "âge.",
+          "f": 754
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et il a déjà terminé 83% de sa croissance.",
+      "from": 766,
+      "duration": 83,
+      "words": [
+        {
+          "w": "Et",
+          "f": 766
+        },
+        {
+          "w": "il",
+          "f": 771
+        },
+        {
+          "w": "a",
+          "f": 776
+        },
+        {
+          "w": "déjà",
+          "f": 778
+        },
+        {
+          "w": "terminé",
+          "f": 788
+        },
+        {
+          "w": "83%",
+          "f": 802
+        },
+        {
+          "w": "de",
+          "f": 829
+        },
+        {
+          "w": "sa",
+          "f": 831
+        },
+        {
+          "w": "croissance.",
+          "f": 836
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 850,
+      "duration": 54,
+      "words": [
+        {
+          "w": "Si",
+          "f": 850
+        },
+        {
+          "w": "tu",
+          "f": 855
+        },
+        {
+          "w": "veux",
+          "f": 857
+        },
+        {
+          "w": "connaître",
+          "f": 862
+        },
+        {
+          "w": "ton",
+          "f": 872
+        },
+        {
+          "w": "potentiel",
+          "f": 879
+        },
+        {
+          "w": "de",
+          "f": 891
+        },
+        {
+          "w": "taille,",
+          "f": 893
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écrivez votre âge, votre taille actuelle en commentaire sous cette vidéo.",
+      "from": 905,
+      "duration": 101,
+      "words": [
+        {
+          "w": "écrivez",
+          "f": 905
+        },
+        {
+          "w": "votre",
+          "f": 920
+        },
+        {
+          "w": "âge,",
+          "f": 927
+        },
+        {
+          "w": "votre",
+          "f": 939
+        },
+        {
+          "w": "taille",
+          "f": 944
+        },
+        {
+          "w": "actuelle",
+          "f": 953
+        },
+        {
+          "w": "en",
+          "f": 965
+        },
+        {
+          "w": "commentaire",
+          "f": 970
+        },
+        {
+          "w": "sous",
+          "f": 982
+        },
+        {
+          "w": "cette",
+          "f": 989
+        },
+        {
+          "w": "vidéo.",
+          "f": 994
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "Ou va directement sur grandimi.com pour tout avoir.",
+      "from": 1007,
+      "duration": 93,
+      "words": [
+        {
+          "w": "Ou",
+          "f": 1007
+        },
+        {
+          "w": "va",
+          "f": 1012
+        },
+        {
+          "w": "directement",
+          "f": 1019
+        },
+        {
+          "w": "sur",
+          "f": 1029
+        },
+        {
+          "w": "grandimi.com",
+          "f": 1034
+        },
+        {
+          "w": "pour",
+          "f": 1070
+        },
+        {
+          "w": "tout",
+          "f": 1075
+        },
+        {
+          "w": "avoir.",
+          "f": 1082
+        }
+      ]
+    }
+  ]
+}
