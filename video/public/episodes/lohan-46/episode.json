@@ -71,13 +71,13 @@
   "images": {
     "accroche": {
       "fichier": "accroche.jpg",
-      "w": 1040,
-      "h": 1849
+      "w": 1080,
+      "h": 1920
     },
     "verdict": {
       "fichier": "verdict.jpg",
-      "w": 1040,
-      "h": 1849
+      "w": 1080,
+      "h": 1920
     }
   },
   "zones": {},
@@ -88,15 +88,15 @@
       "image": "accroche",
       "camera": [
         {
-          "x": 520,
-          "y": 925,
+          "x": 540,
+          "y": 960,
           "z": 1.15,
           "duree": 1
         },
         {
           "a": 1,
-          "x": 520,
-          "y": 925,
+          "x": 540,
+          "y": 960,
           "z": 1.0,
           "duree": "fin",
           "lineaire": true,
@@ -479,15 +479,15 @@
       "image": "verdict",
       "camera": [
         {
-          "x": 520,
-          "y": 700,
+          "x": 540,
+          "y": 727,
           "z": 1.35,
           "duree": 1
         },
         {
           "a": 1,
-          "x": 520,
-          "y": 760,
+          "x": 540,
+          "y": 790,
           "z": 1.42,
           "duree": "fin",
           "lineaire": true,
@@ -681,6 +681,7 @@
         "dy": 12
       }
     },
-    "photo": "avatar.png"
+    "photo": "avatar.png",
+    "image": "carte.png"
   }
 }
