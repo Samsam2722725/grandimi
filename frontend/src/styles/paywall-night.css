@@ -1584,6 +1584,7 @@ html:has(.pw2-feuille.is-ouverte), html:has(.pw2-feuille.is-ouverte) body { over
 .pw3-avis blockquote { margin: 0; font-size: 15px; line-height: 1.5; color: #f4efe9; }
 .pw3-avis figcaption { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 14px; font-weight: 600; color: #f4efe9; }
 .pw3-avis-etoiles { color: #fbbf24; letter-spacing: 1px; }
+.pw3-avis-cm { color: #ff6a2b; }
 .pw3-avis .pw3-preuve { justify-content: flex-start; margin: -4px 0 14px; color: #a39d97; font-weight: 600; }
 
 /* Ce qu'on achète, sous « Ce que tu obtiendras : » (31/10/2026). */

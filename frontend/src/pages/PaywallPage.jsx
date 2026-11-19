@@ -899,16 +899,18 @@ function PaywallPage({ onBackHome }) {
         {AVIS.length > 0 && (
           <section className="pw3-avis" aria-label="Avis de clients">
             <h2>Ce qu’ils en disent</h2>
-            {/* Preuve sociale vraie : 5 259 comptes dans la base le 30/10/2026,
-                chacun avec son analyse. */}
-            <p className="pw3-preuve"><span aria-hidden="true">👥</span> Plus de 5 000 ados ont déjà fait leur analyse</p>
-            {AVIS.map(({ prenom, age, texte }) => (
+            {/* Preuve sociale vraie : 11 729 personnes avec une analyse le
+                19/11/2026 (dont 9 763 de moins de 18 ans) — « jeunes » et non
+                « ados », car environ 2 000 ont 18 ans ou plus. */}
+            <p className="pw3-preuve"><span aria-hidden="true">👥</span> Plus de 11 000 jeunes ont déjà fait leur analyse</p>
+            {AVIS.map(({ prenom, age, cm, texte }) => (
               <figure key={prenom + texte.slice(0, 12)} className="pw3-avis-carte">
                 <span className="pw3-avis-initiale" aria-hidden="true">{prenom[0]}</span>
                 <div>
                   <blockquote>« {texte} »</blockquote>
                   <figcaption>
                     <span>{prenom}, {age} ans</span>
+                    {cm && <span className="pw3-avis-cm">{cm}</span>}
                     <span className="pw3-avis-etoiles" aria-label="5 étoiles sur 5">★★★★★</span>
                   </figcaption>
                 </div>

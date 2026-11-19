@@ -353,7 +353,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
           <section className="px-5 pt-10 pb-4 sm:px-8" aria-label="Avis de clients">
             <div className="mx-auto w-full max-w-2xl">
               <p className="text-center font-['Spline_Sans_Mono',monospace] text-[11px] tracking-[0.2em] text-[#8a847e] uppercase">Ce qu’ils en disent</p>
-              {AVIS.map(({ prenom, age, texte }) => (
+              {AVIS.map(({ prenom, age, cm, texte }) => (
                 <figure
                   key={prenom + texte.slice(0, 12)}
                   className="mt-5 flex gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-left"
@@ -369,6 +369,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                       {`« ${texte.replace(/ ([!?:;])/g, ' $1')} »`}</blockquote>
                     <figcaption className="mt-3 flex items-center gap-2.5 text-[14px] font-semibold text-[#f4efe9]">
                       <span>{prenom}, {age} ans</span>
+                      {cm && <span className="text-[#ff6a2b]">{cm}</span>}
                       <span className="tracking-[1px] text-[#fbbf24]" aria-label="5 étoiles sur 5">★★★★★</span>
                     </figcaption>
                   </div>
