@@ -3,12 +3,10 @@ import {
   BookOpen,
   CheckCircle2,
   Circle,
-  Dna,
   Dumbbell,
   HeartPulse,
   ListChecks,
   Lock,
-  Milk,
   Moon,
   PersonStanding,
   Smile,
@@ -246,9 +244,9 @@ export const TEXTES_ETAPE = {
     titre: 'Quelle est la précision de notre prédiction ?',
     sousTitre: 'On combine tes mesures et tes habitudes pour estimer ton potentiel.',
   },
+  // Comme « Avis d'experts » de GoTall : un titre seul, pas de sous-titre.
   'preuve-science': {
-    titre: 'Prouvé par la science',
-    sousTitre: 'Ton plan s’appuie sur des études publiées, pas sur des astuces TikTok.',
+    titre: 'Avis d’experts',
   },
   'preuve-avis': {
     titre: 'Résultats réels',
@@ -930,28 +928,33 @@ export function EcranPrecision() {
 }
 
 /* ---------- Preuves façon GoTall (20/11/2026) ----------
-   « Avis d'experts » et « Résultats réels » de GoTall, avec nos vraies
-   sources : pas de faux logos ni de citation inventée (celle « Stanford »
-   de GoTall en est une). Une pastille-icône par thème à la place du logo.
-   de Beer 2012 vérifié le 20/11/2026 (Economics & Human Biology 10(3)). */
+   « Avis d'experts » de GoTall, au plus près (demande de Samuel) : même
+   titre, 3 cartes, une vignette blanche « logo » à gauche, la phrase entre
+   guillemets, la référence en gris dessous, rien d'autre.
+   Même structure que GoTall (données de croissance / sommeil / habitudes)
+   mais avec de vraies études : leur citation « Stanford » est introuvable.
+   Les vignettes sont des sigles en texte, pas les logos officiels (l'emblème
+   de l'OMS ne s'utilise pas sans autorisation). Grandimi compare bien la
+   croissance aux tables OMS (cf. texte de l'écran « modele-prediction »). */
 const PREUVES_SCIENCE = [
   {
-    Icone: Moon,
-    couleur: '#6d8dff',
+    sigle: 'OMS',
+    couleur: '#0a7fc2',
+    texte: 'Ta croissance est comparée aux courbes de croissance de l’OMS.',
+    source: 'Organisation mondiale de la Santé. (2007). Courbes de croissance de l’OMS, 5 à 19 ans.',
+  },
+  {
+    sigle: 'JCI',
+    couleur: '#8a1c2b',
     texte: 'C’est pendant ton sommeil profond que ton corps libère le plus d’hormone de croissance.',
-    source: 'Takahashi, Kipnis et Daughaday · Journal of Clinical Investigation, 1968',
+    source: 'Journal of Clinical Investigation (1968) — « Growth hormone secretion during sleep », Takahashi et al.',
   },
   {
-    Icone: Milk,
-    couleur: '#3fcf8e',
-    texte: 'Boire du lait est associé à une croissance plus rapide, surtout chez les ados.',
-    source: 'de Beer · Economics & Human Biology, 2012 (12 essais contrôlés)',
-  },
-  {
-    Icone: Dna,
-    couleur: '#ff7a3d',
+    sigle: 'TWIN',
+    sousSigle: 'RESEARCH',
+    couleur: '#1f6b4f',
     texte: 'Ta génétique fixe l’essentiel de ta taille. Le reste dépend de ton mode de vie.',
-    source: 'Silventoinen et al. · Twin Research, 2003',
+    source: 'Twin Research (2003) — « Heritability of adult body height », Silventoinen et al.',
   },
 ]
 
@@ -959,10 +962,11 @@ export function EcranPreuveScience() {
   return (
     <div className="preuve">
       <ul className="preuve-liste">
-        {PREUVES_SCIENCE.map(({ Icone, couleur, texte, source }) => (
-          <li key={source} className="preuve-carte">
-            <span className="preuve-badge" style={{ '--c': couleur }} aria-hidden="true">
-              <Icone size={26} strokeWidth={2.2} />
+        {PREUVES_SCIENCE.map(({ sigle, sousSigle, couleur, texte, source }) => (
+          <li key={sigle} className="preuve-carte">
+            <span className="preuve-logo" style={{ '--c': couleur }} aria-hidden="true">
+              <strong>{sigle}</strong>
+              {sousSigle && <small>{sousSigle}</small>}
             </span>
             <div className="preuve-corps">
               <p className="preuve-texte">« {texte} »</p>
@@ -971,7 +975,6 @@ export function EcranPreuveScience() {
           </li>
         ))}
       </ul>
-      <p className="preuve-note">Études publiées, citées pour leurs résultats. Aucune n’a évalué Grandimi.</p>
     </div>
   )
 }

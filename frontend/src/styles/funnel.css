@@ -4352,3 +4352,25 @@ div.interstitial.citation { cursor: default; }
 .preuve-cm { font-size: 16px; font-weight: 800; color: var(--funnel-accent); }
 .preuve-texte--avis { font-size: 15.5px; font-weight: 500; font-style: italic; color: #e9e2da; }
 @media (prefers-reduced-motion: reduce) { .preuve-carte { animation: none; } }
+
+/* « Avis d'experts » au plus près de GoTall (20/11/2026) : cartes collées
+   sous le titre, vignette blanche « logo » à gauche, phrase plus grande. */
+.funnel-content:has(> .preuve) { justify-content: flex-start; }
+.preuve-carte { padding: 20px; gap: 16px; border-radius: 22px; }
+.preuve-logo {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--c);
+  line-height: 1;
+}
+.preuve-logo strong { font-size: 17px; font-weight: 900; letter-spacing: -0.02em; }
+.preuve-logo small { font-size: 7.5px; font-weight: 800; letter-spacing: 0.06em; margin-top: 2px; }
+.preuve-texte { font-size: 18px; font-weight: 500; line-height: 1.35; }
+.preuve-source { font-size: 14px; margin-top: 10px; }
