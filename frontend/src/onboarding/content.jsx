@@ -992,14 +992,52 @@ export function EcranPreuveScience() {
   )
 }
 
+/* Laurier gris dessiné à la main (pas d'image), façon GoTall. */
+function Laurier() {
+  const feuilles = []
+  for (let k = 0; k < 7; k++) {
+    const a = ((118 + k * 19) * Math.PI) / 180
+    const x = 50 + 40 * Math.cos(a)
+    const y = 52 + 40 * Math.sin(a)
+    const rot = (a * 180) / Math.PI + 90 + 35
+    feuilles.push({ x, y, rot })
+  }
+  const branche = (miroir) => (
+    <g transform={miroir ? 'translate(100 0) scale(-1 1)' : undefined}>
+      <path d="M 31 87 A 40 40 0 0 1 22 23" fill="none" stroke="currentColor" strokeWidth="1.6" />
+      {feuilles.map(({ x, y, rot }, i) => (
+        <ellipse key={i} cx={x} cy={y} rx="3.4" ry="7.5" fill="currentColor" transform={`rotate(${rot} ${x} ${y})`} />
+      ))}
+    </g>
+  )
+  return (
+    <svg className="preuve-laurier-svg" viewBox="0 0 100 100" aria-hidden="true">
+      {branche(false)}
+      {branche(true)}
+    </svg>
+  )
+}
+
 export function EcranPreuveAvis() {
   return (
     <div className="preuve preuve--temoignages">
-      {/* Seul chiffre vrai (11 857 comptes le 20/11/2026), le même que sur
-          le paywall. Pas de « note 5 étoiles » : on n'en a aucune. */}
-      <div className="preuve-stats">
-        <strong>11 000+</strong>
-        <span>jeunes ont déjà fait leur analyse</span>
+      {/* Carte à 2 colonnes comme GoTall. À gauche, chiffre vrai (11 857
+          comptes le 20/11/2026), le même que sur le paywall. À droite, à la
+          place de leur laurier « 5 stars » (on n'a aucune note) : 98 %, collé
+          à sa marge en cm comme l'exige badge-precision.jsx. */}
+      <div className="preuve-stats preuve-stats--2">
+        <div className="preuve-stats-col">
+          <strong>11 000+</strong>
+          <span>jeunes analysés</span>
+        </div>
+        <span className="preuve-stats-trait" aria-hidden="true" />
+        <div className="preuve-laurier">
+          <Laurier />
+          <div className="preuve-laurier-texte">
+            <strong>98 %</strong>
+            <small>précision<br />±4 à ±8 cm</small>
+          </div>
+        </div>
       </div>
       <ul className="preuve-liste">
         {AVIS.map(({ prenom, age, cm, texte }) => (

@@ -4454,3 +4454,39 @@ div.interstitial.citation { cursor: default; }
 .funnel-step:has(.preuve--temoignages) .funnel-subtitle {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;
 }
+
+/* GoTall exact (20/11, 2e passe) : titre fixe, seules les cartes défilent et
+   passent sous le titre ; trait au-dessus du bouton ; carte du haut à 2
+   colonnes séparées par un trait de couleur, laurier à droite. */
+.funnel-body:has(.preuve--experts),
+.funnel-body:has(.preuve--temoignages) { overflow: hidden; padding-bottom: 0; }
+.funnel-step:has(.preuve--experts),
+.funnel-step:has(.preuve--temoignages) { min-height: 0; }
+.funnel-content:has(> .preuve--experts),
+.funnel-content:has(> .preuve--temoignages) {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+  margin: 28px -24px 0;
+  padding: 0 24px 24px;
+  display: block;
+}
+.funnel-content:has(> .preuve--experts)::-webkit-scrollbar,
+.funnel-content:has(> .preuve--temoignages)::-webkit-scrollbar { display: none; }
+.funnel:has(.preuve--experts) .funnel-footer,
+.funnel:has(.preuve--temoignages) .funnel-footer { border-top: 1px solid #2a2a2c; }
+
+.preuve-stats--2 {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding: 18px 12px !important;
+}
+.preuve-stats-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.preuve-stats-trait { align-self: stretch; width: 2px; margin: 2px 0; background: var(--funnel-accent); border-radius: 2px; }
+.preuve-laurier { position: relative; flex: 1; height: 64px; display: grid; place-items: center; color: #8e8e93; }
+.preuve-laurier-svg { position: absolute; width: 72px; height: 72px; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.preuve-laurier-texte { position: relative; display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.preuve--temoignages .preuve-laurier-texte strong { font-size: 17px; font-weight: 700; color: #c7c7cc; letter-spacing: 0; }
+.preuve-laurier-texte small { font-size: 7.5px; font-weight: 600; color: #8e8e93; text-align: center; line-height: 1.25; margin-top: 2px; }
