@@ -304,6 +304,10 @@ function ProgressionAnalyse({ titre, sousTitre, pourcentage, steps, children }) 
    sans repasser par les questions précédentes. DEV UNIQUEMENT (comme le
    `?preview=` de App.jsx) : sert à vérifier un écran précis en un lien,
    pas à exposer un mode démo en production. */
+function parametreDev(nom) {
+  return new URLSearchParams(window.location.search).get(nom)
+}
+
 function indexEtapePreview(reponses) {
   if (!import.meta.env.DEV) return null
   const etape = new URLSearchParams(window.location.search).get('step')
@@ -348,10 +352,14 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   const [email, setEmail] = useState('')
   // Demandé avec l'e-mail, facultatif : il personnalise les deux écrans
   // d'avant le prix (« Samuel, on t'a fait un plan sur mesure »).
-  const [prenom, setPrenom] = useState('')
+  const [prenom, setPrenom] = useState(() => (import.meta.env.DEV ? parametreDev('prenom') ?? '' : ''))
   // Après l'e-mail et la réponse du serveur : 'plan' (plan sur mesure),
-  // puis 'investir' (investis en toi), puis le paywall.
-  const [phaseFin, setPhaseFin] = useState(null)
+  // puis 'investir' (investis en toi), puis le paywall. En local,
+  // ?step=plan-sur-mesure ou ?step=investir-en-toi ouvre directement l'écran.
+  const [phaseFin, setPhaseFin] = useState(() => {
+    if (!import.meta.env.DEV) return null
+    return { 'plan-sur-mesure': 'plan', 'investir-en-toi': 'investir' }[parametreDev('step')] ?? null
+  })
   const [resultatApi, setResultatApi] = useState(null)
   const [erreurApi, setErreurApi] = useState(null)
   // Incrémenté à chaque « Réessayer » : `emailEnvoye` ne change pas de
