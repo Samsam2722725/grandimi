@@ -156,7 +156,7 @@ export const TYPE_ETAPE = {
 export const TEXTES_ETAPE = {
   profil: {
     titre: 'Qui es-tu ?',
-    sousTitre: 'Cela nous aide à adapter ton parcours.',
+    sousTitre: 'Cela nous aide à adapter ton parcours d’onboarding.',
   },
   // Titre et réponses de Taller. Leur sous-titre (« Ceci sera utilisé pour
   // prédire ton potentiel… ») serait faux chez nous : le calcul ne s'en

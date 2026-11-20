@@ -1,23 +1,61 @@
-import { useEffect } from 'react'
-import { Lock, Sparkles } from 'lucide-react'
+import { useEffect, useMemo } from 'react'
+import { ChevronRight } from 'lucide-react'
 
-import { TailleAccueil } from '@/components/ui/taille-accueil'
 import { capture } from '../lib/analytics'
 import { pointsFaibles } from '../lib/offres'
 import '../styles/funnel.css'
-import '../styles/parcours.css'
 import '../styles/apercu.css'
 
-/* Ses résultats, entre le questionnaire et le prix.
+/* Le résultat caché, juste avant le prix : copie de l'écran de GoTall
+   (capture 40, 20/11/2026), à la demande de Samuel, mot pour mot et même
+   mise en page. Seules différences : le nom et le logo Grandimi, l'orange
+   à la place de leur vert, les centimètres à la place des pouces (le site
+   est en cm), et le nombre de problèmes, qui est le vrai (pointsFaibles).
+   Tout le reste est sous cadenas, comme chez eux. */
 
-   Avant (jusqu'au 30/10/2026), l'e-mail menait droit au paywall : il
-   payait pour un résultat qu'il n'avait jamais vu. Ici il voit que son
-   analyse existe (sa taille, sa courbe, ce qu'il peut optimiser) et ce
-   qui est réservé au plan porte un cadenas. Aucun centimètre affiché
-   ni promis : ce qu'il peut optimiser reste sous cadenas. */
+const CADENAS = '🔒'
+
+// Confettis à l'ouverture, comme GoTall : des bandes de couleur qui tombent.
+const COULEURS_CONFETTIS = ['#ff5a1f', '#e5484d', '#8e5cf7', '#3b82f6', '#f5a524', '#4ade80']
+
+function Confettis() {
+  const morceaux = useMemo(
+    () =>
+      Array.from({ length: 46 }, (_, i) => ({
+        gauche: (i * 37) % 100,
+        couleur: COULEURS_CONFETTIS[i % COULEURS_CONFETTIS.length],
+        delai: ((i * 53) % 90) / 100,
+        duree: 2.4 + ((i * 29) % 15) / 10,
+        large: i % 3 === 0,
+        rotation: (i * 47) % 360,
+      })),
+    [],
+  )
+  return (
+    <div className="gt-confettis" aria-hidden="true">
+      {morceaux.map((m, i) => (
+        <span
+          key={i}
+          className={'gt-confetti' + (m.large ? ' is-large' : '')}
+          style={{
+            left: `${m.gauche}%`,
+            background: m.couleur,
+            animationDelay: `${m.delai}s`,
+            animationDuration: `${m.duree}s`,
+            '--r': `${m.rotation}deg`,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
 function ApercuPage({ predictionData: d, onDebloquer }) {
   const faibles = pointsFaibles(d)
-  const affichable = [d.current_height_cm, d.predicted_height_cm, d.age].every((v) => Number.isFinite(Number(v)))
+  const affichable = [d.current_height_cm, d.age].every((v) => Number.isFinite(Number(v)))
+  // Le vrai nombre, jamais gonflé : sans point faible, pas de badge.
+  const nbProblemes = faibles.length
+  const age = Math.round(Number(d.age))
 
   useEffect(() => {
     // Estimation encore en attente (serveur lent) : rien à montrer, on
@@ -33,44 +71,83 @@ function ApercuPage({ predictionData: d, onDebloquer }) {
     onDebloquer()
   }
 
-  const optimiser = (
-    <button type="button" className="taille-case apercu-optimiser" onClick={() => debloquer('optimiser')}>
-      <span className="apercu-optimiser-ligne">
-        <span className="apercu-optimiser-tete">
-          <Sparkles size={16} aria-hidden="true" /> Plan personnalisé pour optimiser
-        </span>
-        <Lock size={20} aria-hidden="true" />
-      </span>
-    </button>
-  )
-
   return (
-    <div className="night apercu">
-      <header className="apercu-top">
-        <span className="apercu-logo">Grandimi</span>
+    <div className="gt-resultat">
+      <Confettis />
+
+      <header className="gt-tete">
+        <span className="gt-barre" aria-hidden="true"><span /></span>
       </header>
 
-      <main className="apercu-contenu">
-        <p className="apercu-pret">Ton analyse est terminée ✓</p>
-        <h1 className="apercu-titre">Tes résultats</h1>
+      <main className="gt-contenu">
+        <p className="gt-logo">
+          Grandimi
+          <img src="/favicon.svg" alt="" width="34" height="34" />
+        </p>
 
-        <TailleAccueil
-          predictionData={d}
-          verrouille
-          sansBarres
-          futurCache
-          apresTailles={optimiser}
-          nbPoints={faibles.length}
-          onDebloquer={() => debloquer('cadenas')}
-          onVoirCourbe={() => debloquer('courbe')}
-          onVoirPoints={() => debloquer('points')}
-        />
+        <div className="gt-tailles">
+          <div className="gt-carte gt-taille">
+            <span className="gt-taille-libelle">Taille actuelle</span>
+            <strong className="gt-taille-valeur">{Math.round(Number(d.current_height_cm))} cm</strong>
+          </div>
+          <button type="button" className="gt-carte gt-taille gt-taille--predite" onClick={() => debloquer('taille')}>
+            <span className="gt-taille-libelle">Taille prédite</span>
+            <span className="gt-cadenas gt-cadenas--grand">{CADENAS}</span>
+          </button>
+        </div>
+
+        <button type="button" className="gt-carte gt-ligne" onClick={() => debloquer('optimiser')}>
+          Optimiser jusqu’à <span className="gt-cadenas">{CADENAS}</span> cm
+        </button>
+
+        <button type="button" className="gt-carte gt-freine" onClick={() => debloquer('freine')}>
+          <span className="gt-freine-tete">
+            <strong>Ce qui te freine :</strong>
+            {nbProblemes > 0 && (
+              <span className="gt-freine-badge">
+                {nbProblemes} problème{nbProblemes > 1 ? 's' : ''} trouvé{nbProblemes > 1 ? 's' : ''}
+              </span>
+            )}
+          </span>
+          <span className="gt-freine-barres" aria-hidden="true">
+            <span /><span /><span />
+            <span className="gt-cadenas gt-freine-cadenas">{CADENAS}</span>
+          </span>
+        </button>
+
+        <div className="gt-graphique" onClick={() => debloquer('courbe')}>
+          <div className="gt-graphique-tete">
+            <span className="gt-graphique-titre"><i aria-hidden="true" />Graphique de croissance</span>
+            <span className="gt-bulle">Chance du rêve: <span className="gt-cadenas">{CADENAS}</span> %</span>
+          </div>
+          <svg className="gt-courbe" viewBox="0 0 340 190" aria-hidden="true">
+            <text x="0" y="12" className="gt-axe">100%</text>
+            <text x="0" y="168" className="gt-axe">0%</text>
+            <text x="0" y="62" className="gt-axe-cadenas">{CADENAS}</text>
+            <text x="22" y="62" className="gt-axe-pourcent">%</text>
+            <line x1="56" y1="6" x2="340" y2="6" className="gt-grille" />
+            <line x1="56" y1="164" x2="340" y2="164" className="gt-grille" />
+            <line x1="56" y1="57" x2="200" y2="57" className="gt-tirets-h" />
+            <line x1="200" y1="62" x2="200" y2="160" className="gt-tirets-v" />
+            <path d="M 56 164 C 110 132, 160 82, 200 57 S 300 12, 340 6" className="gt-trace" />
+            <circle cx="200" cy="57" r="16" className="gt-halo" />
+            <circle cx="200" cy="57" r="8" className="gt-point" />
+          </svg>
+          <div className="gt-abscisses">
+            <span className="gt-flou" />
+            <span className="gt-age">{age}</span>
+            <span className="gt-flou" />
+          </div>
+        </div>
+
+        <button type="button" className="gt-carte gt-ligne" onClick={() => debloquer('percentile')}>
+          Plus grand que <span className="gt-cadenas">{CADENAS}</span> de ton âge
+        </button>
       </main>
 
-      <div className="apercu-pied">
-        <button type="button" className="funnel-cta" onClick={() => debloquer('bouton')}>
-          {/* Texte du bouton de GoTall (20/11/2026). */}
-          Voir mon potentiel
+      <div className="gt-pied">
+        <button type="button" className="gt-cta" onClick={() => debloquer('bouton')}>
+          Voir mon potentiel <ChevronRight size={24} aria-hidden="true" />
         </button>
       </div>
     </div>
