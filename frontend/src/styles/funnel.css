@@ -4374,3 +4374,8 @@ div.interstitial.citation { cursor: default; }
 .preuve-logo small { font-size: 7.5px; font-weight: 800; letter-spacing: 0.06em; margin-top: 2px; }
 .preuve-texte { font-size: 18px; font-weight: 500; line-height: 1.35; }
 .preuve-source { font-size: 14px; margin-top: 10px; }
+
+/* Vrais logos dans les vignettes « Avis d'experts » (20/11) */
+.preuve-logo { overflow: hidden; }
+.preuve-logo img { width: 100%; height: 100%; object-fit: contain; padding: 7px; display: block; }
+.preuve-logo--plein img { object-fit: cover; padding: 0; }

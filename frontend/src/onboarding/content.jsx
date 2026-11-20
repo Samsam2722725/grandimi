@@ -933,18 +933,23 @@ export function EcranPrecision() {
    guillemets, la référence en gris dessous, rien d'autre.
    Même structure que GoTall (données de croissance / sommeil / habitudes)
    mais avec de vraies études : leur citation « Stanford » est introuvable.
-   Les vignettes sont des sigles en texte, pas les logos officiels (l'emblème
-   de l'OMS ne s'utilise pas sans autorisation). Grandimi compare bien la
+   Vignettes : vrais logos comme GoTall (choix de Samuel le 20/11, prévenu que
+   l'OMS n'autorise pas son emblème sans accord écrit). Fichiers dans
+   public/logos-science, pris sur Wikimedia Commons ; pour Twin Research,
+   le blason de Cambridge University Press, qui publie la revue. Grandimi compare bien la
    croissance aux tables OMS (cf. texte de l'écran « modele-prediction »). */
 const PREUVES_SCIENCE = [
   {
     sigle: 'OMS',
+    logo: '/logos-science/oms.svg',
     couleur: '#0a7fc2',
     texte: 'Ta croissance est comparée aux courbes de croissance de l’OMS.',
     source: 'Organisation mondiale de la Santé. (2007). Courbes de croissance de l’OMS, 5 à 19 ans.',
   },
   {
     sigle: 'JCI',
+    logo: '/logos-science/jci.png',
+    plein: true,
     couleur: '#8a1c2b',
     texte: 'C’est pendant ton sommeil profond que ton corps libère le plus d’hormone de croissance.',
     source: 'Journal of Clinical Investigation (1968) — « Growth hormone secretion during sleep », Takahashi et al.',
@@ -952,6 +957,7 @@ const PREUVES_SCIENCE = [
   {
     sigle: 'TWIN',
     sousSigle: 'RESEARCH',
+    logo: '/logos-science/cambridge.jpg',
     couleur: '#1f6b4f',
     texte: 'Ta génétique fixe l’essentiel de ta taille. Le reste dépend de ton mode de vie.',
     source: 'Twin Research (2003) — « Heritability of adult body height », Silventoinen et al.',
@@ -962,11 +968,17 @@ export function EcranPreuveScience() {
   return (
     <div className="preuve">
       <ul className="preuve-liste">
-        {PREUVES_SCIENCE.map(({ sigle, sousSigle, couleur, texte, source }) => (
+        {PREUVES_SCIENCE.map(({ sigle, sousSigle, logo, plein, couleur, texte, source }) => (
           <li key={sigle} className="preuve-carte">
-            <span className="preuve-logo" style={{ '--c': couleur }} aria-hidden="true">
-              <strong>{sigle}</strong>
-              {sousSigle && <small>{sousSigle}</small>}
+            <span className={'preuve-logo' + (plein ? ' preuve-logo--plein' : '')} style={{ '--c': couleur }} aria-hidden="true">
+              {logo ? (
+                <img src={logo} alt="" width="56" height="56" decoding="async" />
+              ) : (
+                <>
+                  <strong>{sigle}</strong>
+                  {sousSigle && <small>{sousSigle}</small>}
+                </>
+              )}
             </span>
             <div className="preuve-corps">
               <p className="preuve-texte">« {texte} »</p>
