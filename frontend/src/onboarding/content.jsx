@@ -248,9 +248,9 @@ export const TEXTES_ETAPE = {
   'preuve-science': {
     titre: 'Avis d’experts',
   },
+  // Sous-titre retiré à la demande de Samuel (20/11), comme GoTall.
   'preuve-avis': {
     titre: 'Résultats réels',
-    sousTitre: 'Ce qu’en disent ceux qui l’utilisent.',
   },
   'resultats-long-terme': {
     titre: 'Grandimi crée des résultats à long terme',
