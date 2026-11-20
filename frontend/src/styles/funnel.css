@@ -4379,3 +4379,4 @@ div.interstitial.citation { cursor: default; }
 .preuve-logo { overflow: hidden; }
 .preuve-logo img { width: 100%; height: 100%; object-fit: contain; padding: 7px; display: block; }
 .preuve-logo--plein img { object-fit: cover; padding: 0; }
+.preuve-logo img[src*="cambridge"] { padding: 3px; }
