@@ -4128,3 +4128,161 @@ div.interstitial.citation { cursor: default; }
   .funnel-choices:has(> :nth-child(5)) { gap: 7px; }
   .funnel-choices:has(> :nth-child(5)) .choice-card { min-height: 48px; padding-top: 7px; padding-bottom: 7px; }
 }
+
+/* ---------- Juste avant le prix, façon Quittr (20/11/2026) ----------
+   « Prénom, on t'a fait un plan sur mesure » (date de fin du programme,
+   5 étoiles, pastilles de bénéfices en couleur), puis « Maintenant, il est
+   temps d'investir en toi » avec une carte Grandimi à son nom. */
+.resultats-overlay-carte .pret-champ + .pret-champ { margin-top: -4px; }
+
+.interstitial.sur-mesure,
+.interstitial.investir {
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: calc(28px + env(safe-area-inset-top, 0px));
+}
+.sur-mesure-corps {
+  position: relative;
+  margin: auto 0;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: citation-arrive 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.sur-mesure .pret-badge { width: 60px; height: 60px; margin-bottom: 18px; }
+.sur-mesure-titre {
+  margin: 0;
+  font-size: clamp(26px, 7.4vw, 32px);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-wrap: balance;
+}
+.sur-mesure-label { margin: 22px 0 10px; font-size: 16px; color: var(--funnel-muted); }
+.sur-mesure-date {
+  margin: 0;
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: #fff;
+  color: #17120e;
+  font-size: 19px;
+  font-weight: 800;
+  box-shadow: 0 0 34px rgba(255, 90, 31, 0.35);
+}
+.sur-mesure-trait {
+  display: block;
+  width: 70%;
+  height: 1px;
+  margin: 26px 0 18px;
+  background: linear-gradient(90deg, transparent, rgba(255, 138, 76, 0.55), transparent);
+}
+.sur-mesure-etoiles {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: 4px;
+  color: #ffc83d;
+  text-shadow: 0 0 18px rgba(255, 200, 61, 0.45);
+}
+.sur-mesure-slogan {
+  margin: 10px 0 0;
+  font-size: clamp(21px, 5.8vw, 24px);
+  line-height: 1.2;
+  font-weight: 800;
+  color: #fff;
+  text-wrap: balance;
+}
+.sur-mesure-sous { margin: 8px 0 0; font-size: 16px; font-weight: 600; color: #e9e2da; }
+.sur-mesure-pastilles {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.sur-mesure-pastilles li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+}
+.sur-mesure-action,
+.investir-action { animation-delay: 0.5s; }
+.investir-action { animation-delay: 1.9s; }
+
+.investir .citation-texte {
+  margin: auto 0 0;
+  max-width: 16ch;
+  font-size: clamp(30px, 8.6vw, 38px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.carte-membre {
+  position: relative;
+  overflow: hidden;
+  width: min(100%, 340px);
+  aspect-ratio: 1.586;
+  margin: 0 auto auto;
+  padding: 18px 20px;
+  border-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  color: #fff;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 210, 120, 0.55) 0%, transparent 55%),
+    linear-gradient(135deg, #ff3d2e 0%, #ff5a1f 45%, #ff9a3c 100%);
+  box-shadow: 0 24px 60px rgba(255, 90, 31, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transform-origin: 50% 100%;
+  animation: carte-arrive 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 1.2s both;
+}
+@keyframes carte-arrive {
+  from { opacity: 0; transform: perspective(800px) rotateX(28deg) translateY(40px) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+.carte-membre-reflet {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.35) 45%, transparent 60%);
+  background-size: 250% 100%;
+  animation: carte-reflet 3.2s ease-in-out 2.1s infinite;
+  pointer-events: none;
+}
+@keyframes carte-reflet { from { background-position: 150% 0; } to { background-position: -100% 0; } }
+.carte-membre-haut { position: relative; display: flex; justify-content: space-between; align-items: center; }
+.carte-membre-logo { width: 38px; height: 38px; border-radius: 12px; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85); }
+.carte-membre-jours { position: relative; display: flex; flex-direction: column; }
+.carte-membre small {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+.carte-membre-jours strong { font-size: 30px; font-weight: 800; line-height: 1.1; }
+.carte-membre-bas { position: relative; display: flex; justify-content: space-between; }
+.carte-membre-bas div { display: flex; flex-direction: column; }
+.carte-membre-bas div:last-child { text-align: right; }
+.carte-membre-bas b { font-size: 16px; font-weight: 800; }
+
+@media (max-height: 700px) {
+  .sur-mesure .pret-badge { width: 48px; height: 48px; margin-bottom: 12px; }
+  .sur-mesure-label { margin-top: 14px; }
+  .sur-mesure-trait { margin: 16px 0 12px; }
+  .sur-mesure-pastilles li { padding: 6px 10px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sur-mesure-corps, .carte-membre, .carte-membre-reflet { animation: none; opacity: 1; }
+}

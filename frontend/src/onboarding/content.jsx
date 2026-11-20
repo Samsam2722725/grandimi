@@ -8,8 +8,11 @@ import {
   ListChecks,
   Lock,
   Moon,
+  PersonStanding,
+  Smile,
   TrendingUp,
   Utensils,
+  Zap,
 } from 'lucide-react'
 
 import { ChoiceCard } from '@/components/ui/choice-card'
@@ -1147,6 +1150,105 @@ export function EcranDecouvrirPotentiel({ onContinue }) {
       <div className="interstitial-action is-ready citation-action">
         <button type="button" className="funnel-cta" onClick={onContinue}>
           Analyser mes réponses
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ---------- Juste avant le prix, façon Quittr (20/11/2026) ----------
+   « Prénom, on t'a fait un plan sur mesure » avec la date de fin du
+   programme, puis « Maintenant, il est temps d'investir en toi » avec une
+   carte Grandimi à son nom. Le prénom est demandé avec l'e-mail ; s'il est
+   vide, les phrases se lisent sans. */
+
+// 16 niveaux × 7 jours : le vrai parcours de l'app.
+export const DUREE_PROGRAMME_JOURS = 112
+
+export function nettoyerPrenom(brut) {
+  const p = String(brut || '').trim().replace(/\s+/g, ' ').slice(0, 20)
+  return p ? p.charAt(0).toLocaleUpperCase('fr-FR') + p.slice(1) : ''
+}
+
+export function dateFinProgramme(debut = new Date()) {
+  const fin = new Date(debut)
+  fin.setDate(fin.getDate() + DUREE_PROGRAMME_JOURS)
+  return fin.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+}
+
+const PASTILLES_BENEFICES = [
+  { label: 'Meilleur sommeil', Icone: Moon, couleur: '#6d8dff' },
+  { label: 'Meilleure posture', Icone: PersonStanding, couleur: '#ff7a3d' },
+  { label: 'Plus d’énergie', Icone: Zap, couleur: '#f5c542' },
+  { label: 'Plus de confiance', Icone: Smile, couleur: '#ff6fa8' },
+  { label: 'Mieux manger', Icone: Utensils, couleur: '#3fcf8e' },
+]
+
+export function EcranPlanSurMesure({ prenom, onContinue }) {
+  return (
+    <div className="interstitial citation sur-mesure">
+      <span className="citation-halo" aria-hidden="true" />
+      <div className="sur-mesure-corps">
+        <span className="pret-badge" aria-hidden="true"><CheckCircle2 size={34} strokeWidth={2.4} /></span>
+        <h1 className="sur-mesure-titre">
+          {prenom ? `${prenom}, on t’a fait un plan sur mesure.` : 'On t’a fait un plan sur mesure.'}
+        </h1>
+        <p className="sur-mesure-label">Ton programme se termine le :</p>
+        <p className="sur-mesure-date">{dateFinProgramme()}</p>
+        <span className="sur-mesure-trait" aria-hidden="true" />
+        <p className="sur-mesure-etoiles" role="img" aria-label="5 étoiles">
+          <span aria-hidden="true">★★★★★</span>
+        </p>
+        <h2 className="sur-mesure-slogan">Deviens la meilleure version de toi avec Grandimi</h2>
+        <p className="sur-mesure-sous">Plus droit. Plus en forme. Plus sûr de toi.</p>
+        <ul className="sur-mesure-pastilles">
+          {PASTILLES_BENEFICES.map(({ label, Icone, couleur }) => (
+            <li key={label} style={{ '--c': couleur }}>
+              <Icone size={14} strokeWidth={2.4} aria-hidden="true" />
+              {label}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="citation-action sur-mesure-action">
+        <button type="button" className="funnel-cta" onClick={onContinue}>
+          Continuer
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export function EcranInvestirEnToi({ prenom, onContinue }) {
+  const debut = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })
+  return (
+    <div className="interstitial citation investir">
+      <span className="citation-halo" aria-hidden="true" />
+      <MotsAnimes lignes={['Maintenant, il est temps', 'd’investir en toi.']} />
+      <div className="carte-membre" aria-label={`Carte Grandimi de ${prenom || 'toi'}, jour 0`}>
+        <span className="carte-membre-reflet" aria-hidden="true" />
+        <div className="carte-membre-haut">
+          <img src="/favicon.svg" alt="" className="carte-membre-logo" />
+          <TrendingUp size={22} strokeWidth={2.4} aria-hidden="true" />
+        </div>
+        <div className="carte-membre-jours">
+          <small>Ta série</small>
+          <strong>0 jour</strong>
+        </div>
+        <div className="carte-membre-bas">
+          <div>
+            <small>Nom</small>
+            <b>{prenom || 'Toi'}</b>
+          </div>
+          <div>
+            <small>Début</small>
+            <b>{debut}</b>
+          </div>
+        </div>
+      </div>
+      <div className="citation-action investir-action">
+        <button type="button" className="funnel-cta" onClick={onContinue}>
+          Voir mon plan
         </button>
       </div>
     </div>

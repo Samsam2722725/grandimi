@@ -50,6 +50,9 @@ import {
   MoletteParents,
   MoletteDateNaissance,
   MoletteSommeil,
+  EcranPlanSurMesure,
+  EcranInvestirEnToi,
+  nettoyerPrenom,
   EcranModelePrediction,
   EcranPrecision,
   EcranResultatsLongTerme,
@@ -343,6 +346,12 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   // ce qui déclenche le vrai appel API pendant que l'anneau continue.
   const [emailEnvoye, setEmailEnvoye] = useState(false)
   const [email, setEmail] = useState('')
+  // Demandé avec l'e-mail, facultatif : il personnalise les deux écrans
+  // d'avant le prix (« Samuel, on t'a fait un plan sur mesure »).
+  const [prenom, setPrenom] = useState('')
+  // Après l'e-mail et la réponse du serveur : 'plan' (plan sur mesure),
+  // puis 'investir' (investis en toi), puis le paywall.
+  const [phaseFin, setPhaseFin] = useState(null)
   const [resultatApi, setResultatApi] = useState(null)
   const [erreurApi, setErreurApi] = useState(null)
   // Incrémenté à chaque « Réessayer » : `emailEnvoye` ne change pas de
@@ -462,6 +471,12 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
 
   function reculer() {
     clearTimeout(minuterieAvance.current)
+    // L'e-mail est envoyé : on ne revient pas dans le questionnaire.
+    if (phaseFin === 'investir') {
+      setPhaseFin('plan')
+      return
+    }
+    if (phaseFin) return
     if (index === 0) {
       tunnelAbandonne(etape, index + 1)
       onCancel()
@@ -555,6 +570,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     if (dejaLivre.current || !resultatApi) return
     dejaLivre.current = true
     const donnees = fusionnerResultatPrediction(reponses, email, resultatApi)
+    const prenomPropre = nettoyerPrenom(prenom)
+    if (prenomPropre) donnees.prenom = prenomPropre
     localStorage.removeItem(STOCKAGE)
     onPredictionComplete(donnees)
   }
@@ -562,11 +579,17 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   // L'anneau termine sa propre montée (0 → 100 %) une fois l'API répondue
   // avant qu'on quitte l'écran : `animationTerminee` porte ce délai, pas
   // `resultatApi` directement, pour ne jamais couper l'animation en plein
-  // mouvement.
+  // mouvement. Ensuite, les deux écrans façon Quittr avant le prix.
   useEffect(() => {
-    if (emailEnvoye && resultatApi) terminerAnalyse()
+    if (emailEnvoye && resultatApi && !phaseFin) setPhaseFin('plan')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emailEnvoye, resultatApi])
+
+  useEffect(() => {
+    if (phaseFin === 'plan') tunnelEtapeVue('plan-sur-mesure', etapes.length + 1, etapes.length + 2)
+    if (phaseFin === 'investir') tunnelEtapeVue('investir-en-toi', etapes.length + 2, etapes.length + 2)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phaseFin])
 
   // ---------- Validation par écran ----------
 
@@ -990,6 +1013,14 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     return <EcranDecouvrirPotentiel onContinue={avancer} />
   }
 
+  if (phaseFin === 'plan') {
+    return <EcranPlanSurMesure prenom={nettoyerPrenom(prenom)} onContinue={() => setPhaseFin('investir')} />
+  }
+
+  if (phaseFin === 'investir') {
+    return <EcranInvestirEnToi prenom={nettoyerPrenom(prenom)} onContinue={terminerAnalyse} />
+  }
+
   if (etape === 'resultats-la') {
     // L'anneau tourne dès l'affichage de l'écran (cf. useProgressionAnimee
     // plus haut) ; le formulaire e-mail s'affiche par-dessus, en overlay,
@@ -1011,6 +1042,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
                 e.preventDefault()
                 if (!emailPlausible) return
                 localStorage.setItem('userEmail', email.trim())
+                const prenomPropre = nettoyerPrenom(prenom)
+                if (prenomPropre) localStorage.setItem('userPrenom', prenomPropre)
                 lancerAnalyse()
               }}
             >
@@ -1018,6 +1051,21 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
               <h2 className="resultats-overlay-titre">Ton plan est prêt</h2>
               <p className="resultats-overlay-text">{texte.sousTitre}</p>
 
+              <label className="pret-champ">
+              <User size={18} aria-hidden="true" />
+              <input
+                type="text"
+                autoComplete="given-name"
+                autoCapitalize="words"
+                enterKeyHint="next"
+                maxLength={30}
+                className="resultats-gate-input"
+                placeholder="Ton prénom"
+                value={prenom}
+                onChange={(e) => setPrenom(e.target.value)}
+                aria-label="Ton prénom"
+              />
+              </label>
               <label className="pret-champ">
               <Mail size={18} aria-hidden="true" />
               <input
