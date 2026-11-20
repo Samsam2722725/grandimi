@@ -4490,3 +4490,10 @@ div.interstitial.citation { cursor: default; }
 .preuve-laurier-texte { position: relative; display: flex; flex-direction: column; align-items: center; line-height: 1; }
 .preuve--temoignages .preuve-laurier-texte strong { font-size: 17px; font-weight: 700; color: #c7c7cc; letter-spacing: 0; }
 .preuve-laurier-texte small { font-size: 7.5px; font-weight: 600; color: #8e8e93; text-align: center; line-height: 1.25; margin-top: 2px; }
+
+/* Laurier redessiné (20/11) : plus large que haut, comme GoTall. */
+.preuve-laurier { height: 70px; color: #8e8e93; }
+.preuve-laurier-svg { width: 116px; height: 81px; top: 50%; }
+.preuve-laurier-texte { margin-top: -2px; }
+.preuve--temoignages .preuve-laurier-texte strong { font-size: 21px; font-weight: 700; color: #d1d1d6; letter-spacing: -0.01em; }
+.preuve-laurier-texte small { font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8e8e93; margin-top: 3px; }

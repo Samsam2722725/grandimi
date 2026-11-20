@@ -992,26 +992,48 @@ export function EcranPreuveScience() {
   )
 }
 
-/* Laurier gris dessiné à la main (pas d'image), façon GoTall. */
-function Laurier() {
-  const feuilles = []
-  for (let k = 0; k < 7; k++) {
-    const a = ((118 + k * 19) * Math.PI) / 180
-    const x = 50 + 40 * Math.cos(a)
-    const y = 52 + 40 * Math.sin(a)
-    const rot = (a * 180) / Math.PI + 90 + 35
-    feuilles.push({ x, y, rot })
+/* Laurier gris dessiné à la main (pas d'image), façon GoTall : deux
+   branches en arc, des feuilles pointues par paires (une dehors, une
+   dedans), ouvert en haut. Calculé une fois au chargement. */
+const FEUILLES_LAURIER = (() => {
+  const cx = 60, cy = 42, rx = 49, ry = 35
+  const out = []
+  const pas = 7
+  for (let k = 0; k < pas; k++) {
+    const a = ((112 + k * 21) * Math.PI) / 180
+    const x = cx + rx * Math.cos(a), y = cy + ry * Math.sin(a)
+    let tx = -rx * Math.sin(a), ty = ry * Math.cos(a)
+    const lt = Math.hypot(tx, ty); tx /= lt; ty /= lt
+    let nx = (x - cx) / rx, ny = (y - cy) / ry
+    const ln = Math.hypot(nx, ny); nx /= ln; ny /= ln
+    const echelle = 1 - k * 0.045
+    const feuille = (m, taille) => {
+      const dx = tx + m * nx, dy = ty + m * ny
+      return { x, y, rot: (Math.atan2(dx, -dy) * 180) / Math.PI, taille: taille * echelle }
+    }
+    out.push(feuille(0.95, 1))
+    if (k < pas - 1) out.push(feuille(-0.5, 0.72))
   }
+  const fin = out[out.length - 1]
+  return { feuilles: out, tige: `M ${(cx + rx * Math.cos((104 * Math.PI) / 180)).toFixed(1)} ${(cy + ry * Math.sin((104 * Math.PI) / 180)).toFixed(1)} A ${rx} ${ry} 0 0 1 ${fin.x.toFixed(1)} ${fin.y.toFixed(1)}` }
+})()
+
+function Laurier() {
   const branche = (miroir) => (
-    <g transform={miroir ? 'translate(100 0) scale(-1 1)' : undefined}>
-      <path d="M 31 87 A 40 40 0 0 1 22 23" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      {feuilles.map(({ x, y, rot }, i) => (
-        <ellipse key={i} cx={x} cy={y} rx="3.4" ry="7.5" fill="currentColor" transform={`rotate(${rot} ${x} ${y})`} />
+    <g transform={miroir ? 'translate(120 0) scale(-1 1)' : undefined}>
+      <path d={FEUILLES_LAURIER.tige} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      {FEUILLES_LAURIER.feuilles.map(({ x, y, rot, taille }, i) => (
+        <path
+          key={i}
+          d="M0 0 C 4.6 -3.5 4.6 -9.5 0 -14 C -4.6 -9.5 -4.6 -3.5 0 0 Z"
+          fill="currentColor"
+          transform={`translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot.toFixed(1)}) scale(${taille.toFixed(2)})`}
+        />
       ))}
     </g>
   )
   return (
-    <svg className="preuve-laurier-svg" viewBox="0 0 100 100" aria-hidden="true">
+    <svg className="preuve-laurier-svg" viewBox="0 0 120 84" aria-hidden="true">
       {branche(false)}
       {branche(true)}
     </svg>
@@ -1023,8 +1045,8 @@ export function EcranPreuveAvis() {
     <div className="preuve preuve--temoignages">
       {/* Carte à 2 colonnes comme GoTall. À gauche, chiffre vrai (11 857
           comptes le 20/11/2026), le même que sur le paywall. À droite, à la
-          place de leur laurier « 5 stars » (on n'a aucune note) : 98 %, collé
-          à sa marge en cm comme l'exige badge-precision.jsx. */}
+          place de leur laurier « 5 stars » (on n'a aucune note) : « 98 % précision ».
+          Sans la marge en cm : demande de Samuel (20/11). */}
       <div className="preuve-stats preuve-stats--2">
         <div className="preuve-stats-col">
           <strong>11 000+</strong>
@@ -1035,7 +1057,7 @@ export function EcranPreuveAvis() {
           <Laurier />
           <div className="preuve-laurier-texte">
             <strong>98 %</strong>
-            <small>précision<br />±4 à ±8 cm</small>
+            <small>précision</small>
           </div>
         </div>
       </div>
