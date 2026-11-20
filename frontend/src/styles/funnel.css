@@ -4380,3 +4380,31 @@ div.interstitial.citation { cursor: default; }
 .preuve-logo img { width: 100%; height: 100%; object-fit: contain; padding: 7px; display: block; }
 .preuve-logo--plein img { object-fit: cover; padding: 0; }
 .preuve-logo img[src*="cambridge"] { padding: 3px; }
+
+/* « Avis d'experts » au plus près de GoTall (20/11, mesuré sur leur capture
+   iPhone) : police système (SF Pro sur iPhone), cartes en retrait du titre,
+   vignette 40 px, citation 18 px normale, référence grise 15 px. */
+.funnel-step:has(.preuve--experts) {
+  --font-gotall: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+.funnel-step:has(.preuve--experts) .funnel-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-size: 31px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.preuve--experts { font-family: var(--font-gotall); }
+.preuve--experts .preuve-liste { gap: 16px; padding: 0 8px; }
+.preuve--experts .preuve-carte {
+  padding: 16px 18px 19px 16px;
+  gap: 12px;
+  border-radius: 18px;
+  align-items: flex-start;
+  background: #1c1c1e;
+}
+.preuve--experts .preuve-logo { width: 40px; height: 40px; border-radius: 8px; }
+.preuve--experts .preuve-logo img { padding: 4px; }
+.preuve--experts .preuve-logo--plein img { padding: 0; }
+.preuve--experts .preuve-logo img[src*="cambridge"] { padding: 2px; }
+.preuve--experts .preuve-texte { font-size: 18px; font-weight: 400; line-height: 1.22; letter-spacing: -0.01em; color: #fff; }
+.preuve--experts .preuve-source { font-size: 15px; line-height: 1.2; margin-top: 10px; color: #6f6f73; }

@@ -942,6 +942,7 @@ const PREUVES_SCIENCE = [
   {
     sigle: 'OMS',
     logo: '/logos-science/oms.svg',
+    affirmation: true, // comme la carte CDC de GoTall : sans guillemets
     couleur: '#0a7fc2',
     texte: 'Ta croissance est comparée aux courbes de croissance de l’OMS.',
     source: 'Organisation mondiale de la Santé. (2007). Courbes de croissance de l’OMS, 5 à 19 ans.',
@@ -952,7 +953,7 @@ const PREUVES_SCIENCE = [
     plein: true,
     couleur: '#8a1c2b',
     texte: 'C’est pendant ton sommeil profond que ton corps libère le plus d’hormone de croissance.',
-    source: 'Journal of Clinical Investigation (1968) — « Growth hormone secretion during sleep », Takahashi et al.',
+    source: 'Journal of Clinical Investigation (1968) — “Growth hormone secretion during sleep”, Takahashi et al.',
   },
   {
     sigle: 'TWIN',
@@ -960,15 +961,15 @@ const PREUVES_SCIENCE = [
     logo: '/logos-science/cambridge.jpg',
     couleur: '#1f6b4f',
     texte: 'Ta génétique fixe l’essentiel de ta taille. Le reste dépend de ton mode de vie.',
-    source: 'Twin Research (2003) — « Heritability of adult body height », Silventoinen et al.',
+    source: 'Twin Research (2003) — “Heritability of adult body height”, Silventoinen et al.',
   },
 ]
 
 export function EcranPreuveScience() {
   return (
-    <div className="preuve">
+    <div className="preuve preuve--experts">
       <ul className="preuve-liste">
-        {PREUVES_SCIENCE.map(({ sigle, sousSigle, logo, plein, couleur, texte, source }) => (
+        {PREUVES_SCIENCE.map(({ sigle, sousSigle, logo, plein, affirmation, couleur, texte, source }) => (
           <li key={sigle} className="preuve-carte">
             <span className={'preuve-logo' + (plein ? ' preuve-logo--plein' : '')} style={{ '--c': couleur }} aria-hidden="true">
               {logo ? (
@@ -981,7 +982,7 @@ export function EcranPreuveScience() {
               )}
             </span>
             <div className="preuve-corps">
-              <p className="preuve-texte">« {texte} »</p>
+              <p className="preuve-texte">{affirmation ? texte : `“${texte}”`}</p>
               <p className="preuve-source">{source}</p>
             </div>
           </li>
