@@ -52,6 +52,8 @@ import {
   MoletteSommeil,
   EcranPlanSurMesure,
   EcranInvestirEnToi,
+  EcranPreuveScience,
+  EcranPreuveAvis,
   nettoyerPrenom,
   EcranModelePrediction,
   EcranPrecision,
@@ -975,6 +977,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         return <EcranModelePrediction />
       case 'precision':
         return <EcranPrecision />
+      case 'preuve-science':
+        return <EcranPreuveScience />
+      case 'preuve-avis':
+        return <EcranPreuveAvis />
       case 'resultats-long-terme':
         return <EcranResultatsLongTerme />
       case 'potentiel-gain':

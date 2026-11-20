@@ -3,10 +3,12 @@ import {
   BookOpen,
   CheckCircle2,
   Circle,
+  Dna,
   Dumbbell,
   HeartPulse,
   ListChecks,
   Lock,
+  Milk,
   Moon,
   PersonStanding,
   Smile,
@@ -21,6 +23,7 @@ import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ReseauNeurones } from '@/components/ui/reseau-neurones'
 import { EtudesPubliees } from '@/components/ui/ecrans-fonctions'
 import { Avis } from '@/components/ui/avis'
+import { AVIS } from '@/lib/avis-clients'
 import { TailleFinaleChart } from '@/components/ui/taille-finale-chart'
 import { JaugePotentiel } from '@/components/ui/jauge-potentiel'
 import { Lecons, SuiviSemaines, TelephoneRoutine } from '@/components/ui/resultats-visuels'
@@ -60,6 +63,9 @@ export const ORDRE_ETAPES = [
   'taille-ideale',
   'pourquoi',
   'precision',
+  // Preuves façon GoTall (« Avis d'experts », « Résultats réels »), 20/11/2026.
+  'preuve-science',
+  'preuve-avis',
   'verite-brutale',
   'plus-que-genes',
   'citation-genetique',
@@ -93,6 +99,8 @@ export const TYPE_ETAPE = {
   'croissance-lente': 'question',
   'modele-prediction': 'affichage',
   precision: 'affichage',
+  'preuve-science': 'affichage',
+  'preuve-avis': 'affichage',
   'resultats-long-terme': 'affichage',
   'potentiel-gain': 'affichage',
   'optimiser-potentiel': 'affichage',
@@ -237,6 +245,14 @@ export const TEXTES_ETAPE = {
   precision: {
     titre: 'Quelle est la précision de notre prédiction ?',
     sousTitre: 'On combine tes mesures et tes habitudes pour estimer ton potentiel.',
+  },
+  'preuve-science': {
+    titre: 'Prouvé par la science',
+    sousTitre: 'Ton plan s’appuie sur des études publiées, pas sur des astuces TikTok.',
+  },
+  'preuve-avis': {
+    titre: 'Résultats réels',
+    sousTitre: 'Ce qu’en disent ceux qui l’utilisent.',
   },
   'resultats-long-terme': {
     titre: 'Grandimi crée des résultats à long terme',
@@ -911,6 +927,81 @@ export function EcranPotentielGain() {
 
 export function EcranPrecision() {
   return <BadgePrecision />
+}
+
+/* ---------- Preuves façon GoTall (20/11/2026) ----------
+   « Avis d'experts » et « Résultats réels » de GoTall, avec nos vraies
+   sources : pas de faux logos ni de citation inventée (celle « Stanford »
+   de GoTall en est une). Une pastille-icône par thème à la place du logo.
+   de Beer 2012 vérifié le 20/11/2026 (Economics & Human Biology 10(3)). */
+const PREUVES_SCIENCE = [
+  {
+    Icone: Moon,
+    couleur: '#6d8dff',
+    texte: 'C’est pendant ton sommeil profond que ton corps libère le plus d’hormone de croissance.',
+    source: 'Takahashi, Kipnis et Daughaday · Journal of Clinical Investigation, 1968',
+  },
+  {
+    Icone: Milk,
+    couleur: '#3fcf8e',
+    texte: 'Boire du lait est associé à une croissance plus rapide, surtout chez les ados.',
+    source: 'de Beer · Economics & Human Biology, 2012 (12 essais contrôlés)',
+  },
+  {
+    Icone: Dna,
+    couleur: '#ff7a3d',
+    texte: 'Ta génétique fixe l’essentiel de ta taille. Le reste dépend de ton mode de vie.',
+    source: 'Silventoinen et al. · Twin Research, 2003',
+  },
+]
+
+export function EcranPreuveScience() {
+  return (
+    <div className="preuve">
+      <ul className="preuve-liste">
+        {PREUVES_SCIENCE.map(({ Icone, couleur, texte, source }) => (
+          <li key={source} className="preuve-carte">
+            <span className="preuve-badge" style={{ '--c': couleur }} aria-hidden="true">
+              <Icone size={26} strokeWidth={2.2} />
+            </span>
+            <div className="preuve-corps">
+              <p className="preuve-texte">« {texte} »</p>
+              <p className="preuve-source">{source}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <p className="preuve-note">Études publiées, citées pour leurs résultats. Aucune n’a évalué Grandimi.</p>
+    </div>
+  )
+}
+
+export function EcranPreuveAvis() {
+  return (
+    <div className="preuve">
+      {/* Seul chiffre vrai (11 857 comptes le 20/11/2026), le même que sur
+          le paywall. Pas de « note 5 étoiles » : on n'en a aucune. */}
+      <div className="preuve-stats">
+        <strong>11 000+</strong>
+        <span>jeunes ont déjà fait leur analyse</span>
+      </div>
+      <ul className="preuve-liste">
+        {AVIS.map(({ prenom, age, cm, texte }) => (
+          <li key={prenom} className="preuve-carte preuve-avis">
+            <div className="preuve-avis-tete">
+              <span className="preuve-avatar" aria-hidden="true">{prenom.charAt(0)}</span>
+              <div>
+                <strong>{prenom}</strong>
+                <span>{age} ans</span>
+              </div>
+              {cm && <span className="preuve-cm">{cm}</span>}
+            </div>
+            <p className="preuve-texte preuve-texte--avis">« {texte} »</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 }
 
 const LEVIERS_OPTIMISATION = [

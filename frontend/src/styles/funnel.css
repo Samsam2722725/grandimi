@@ -4286,3 +4286,69 @@ div.interstitial.citation { cursor: default; }
 @media (prefers-reduced-motion: reduce) {
   .sur-mesure-corps, .carte-membre, .carte-membre-reflet { animation: none; opacity: 1; }
 }
+
+/* ---------- Preuves façon GoTall (20/11/2026) ----------
+   « Prouvé par la science » et « Résultats réels » : cartes sombres,
+   une pastille de couleur à gauche (à la place des logos de GoTall),
+   la phrase en grand, la source en petit gris. */
+.preuve { width: 100%; display: flex; flex-direction: column; gap: 14px; }
+.preuve-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.preuve-carte {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 18px;
+  border-radius: 20px;
+  background: var(--funnel-surface-high);
+  animation: citation-arrive 0.5s ease-out both;
+}
+.preuve-carte:nth-child(2) { animation-delay: 0.12s; }
+.preuve-carte:nth-child(3) { animation-delay: 0.24s; }
+.preuve-badge {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 16%, #141414);
+  border: 1px solid color-mix(in srgb, var(--c) 40%, transparent);
+}
+.preuve-corps { min-width: 0; }
+.preuve-texte { margin: 0; font-size: 17px; line-height: 1.38; font-weight: 600; color: #fff; }
+.preuve-source { margin: 8px 0 0; font-size: 13px; line-height: 1.35; color: var(--funnel-muted); }
+.preuve-note { margin: 2px 0 0; font-size: 12px; color: var(--funnel-muted); text-align: center; }
+
+.preuve-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--funnel-surface-high);
+  text-align: center;
+}
+.preuve-stats strong { font-size: 32px; font-weight: 800; line-height: 1.1; color: #fff; }
+.preuve-stats span { font-size: 14px; font-weight: 600; color: var(--funnel-accent); }
+.preuve-avis { flex-direction: column; gap: 10px; }
+.preuve-avis-tete { width: 100%; display: flex; align-items: center; gap: 12px; }
+.preuve-avis-tete > div { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.preuve-avis-tete strong { font-size: 17px; color: #fff; }
+.preuve-avis-tete > div span { font-size: 14px; color: var(--funnel-accent); }
+.preuve-avatar {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 18px;
+  color: #fff;
+  background: radial-gradient(circle at 50% 30%, #ff9a4d 0%, #ff5a1f 70%);
+}
+.preuve-cm { font-size: 16px; font-weight: 800; color: var(--funnel-accent); }
+.preuve-texte--avis { font-size: 15.5px; font-weight: 500; font-style: italic; color: #e9e2da; }
+@media (prefers-reduced-motion: reduce) { .preuve-carte { animation: none; } }
