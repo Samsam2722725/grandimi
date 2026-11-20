@@ -28,6 +28,7 @@ import {
   OPTIONS_SPORTS,
   OPTIONS_EXERCICE_FREQ,
   OPTIONS_PROCHES,
+  OPTIONS_ORIGINE,
   OPTIONS_PILOSITE_AISSELLES,
   OPTIONS_PILOSITE_VISAGE,
   OPTIONS_EPAULES,
@@ -134,6 +135,7 @@ function reponsesInitiales() {
     odeur: null,
     acne: null,
     muscles: null,
+    origine: null,
     voix: null,
     croissanceLente: null,
     // Vide tant que la question n'est pas posée : pas de faux objectif.
@@ -607,6 +609,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     switch (etape) {
       case 'profil':
         return reponses.profil != null
+      case 'origine':
+        return reponses.origine != null
       case 'motivation':
         return reponses.motivation.length >= 1
       case 'sexe':
@@ -667,8 +671,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             valeur={reponses.profil}
             onChoisir={(v) => choisirEtAvancer('profil', v)}
             options={[
-              { valeur: 'ado', label: 'Je suis un ado', icon: <User size={22} aria-hidden="true" /> },
-              { valeur: 'parent', label: 'Je suis un parent', icon: <Users size={22} aria-hidden="true" /> },
+              { valeur: 'ado', label: 'Ado', icon: <User size={22} aria-hidden="true" /> },
+              { valeur: 'parent', label: 'Parent', icon: <Users size={22} aria-hidden="true" /> },
             ]}
           />
         )
@@ -804,6 +808,15 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             min={141}
             max={209}
             inconnuDefaut={TAILLE_MERE_INCONNUE_CM}
+          />
+        )
+      case 'origine':
+        return (
+          <ListeChoixUnique
+            label={texte.titre}
+            valeur={reponses.origine}
+            onChoisir={(v) => choisirEtAvancer('origine', v)}
+            options={OPTIONS_ORIGINE}
           />
         )
       case 'proches':

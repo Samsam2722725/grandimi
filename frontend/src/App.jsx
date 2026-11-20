@@ -409,10 +409,11 @@ function App() {
       }
     }
 
-    /* Directement le prix. L'écran « Tes résultats » (ApercuPage) est
-       retiré le 30/10/2026 : en ligne à 6 h 58, l'ouverture du paiement
-       est tombée de 16-25 % à 5-11 %. Le code reste pour un autre essai. */
-    setCurrentPage('paywall');
+    /* Le résultat caché (cadenas) avant le prix, comme GoTall et Taller :
+       remis le 20/11/2026 à la demande de Samuel. Historique : essayé le
+       30/10/2026 de 6 h 58 à 20 h, l'ouverture du paiement était tombée de
+       16-25 % à 5-11 % ; il avait été retiré. À surveiller. */
+    setCurrentPage('apercu');
   };
 
   /* Le plan ne s’ouvre qu’une fois ses horaires connus.

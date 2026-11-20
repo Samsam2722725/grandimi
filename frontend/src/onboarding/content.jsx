@@ -4,14 +4,20 @@ import {
   CheckCircle2,
   Circle,
   Dumbbell,
+  Footprints,
   HeartPulse,
   ListChecks,
   Lock,
   Moon,
   PersonStanding,
+  ThumbsDown,
+  ThumbsUp,
+  Trophy,
   Smile,
   TrendingUp,
   Utensils,
+  Volleyball,
+  Waves,
   Zap,
 } from 'lucide-react'
 
@@ -34,11 +40,19 @@ import { TAILLE_MERE_INCONNUE_CM, TAILLE_PERE_INCONNUE_CM } from './payload'
 export const ORDRE_ETAPES = [
   // Toi
   'sexe',
+  // « Qui es-tu ? » (Ado / Parent) de GoTall, remis le 20/11/2026 à la
+  // demande de Samuel. Après le sexe et pas avant : le sexe est souvent
+  // choisi dès l'accueil, et le parcours reprend juste après lui.
+  'profil',
   'age',
   'bonne-nouvelle',
+  // « Quelle est ton origine ? » de Taller, ajouté le 20/11/2026 (Samuel).
+  'origine',
   'taille-poids',
   // Famille
   'parents',
+  // GoTall, remis le 20/11/2026.
+  'proches',
   'pointure',
   // Courbe « Votre taille finale », comme Taller après la pointure (31/10/2026).
   'resultats-long-terme',
@@ -50,8 +64,14 @@ export const ORDRE_ETAPES = [
   'voix',
   'pilosite-visage',
   'pilosite-aisselles',
+  // Épaules, odeur, muscles : ordre de GoTall (épaules, odeur, acné,
+  // muscles), remis le 20/11/2026.
+  'epaules',
+  'odeur',
   'acne',
-  // Habitudes
+  'muscles',
+  // Habitudes ; « Quels sports ? » de GoTall remis le 20/11/2026.
+  'sports',
   'exercice-freq',
   'sommeil',
   // Objectif, puis les écrans qui préparent le plan. Les questions
@@ -85,6 +105,7 @@ export const TYPE_ETAPE = {
   pere: 'question',
   mere: 'question',
   proches: 'question',
+  origine: 'question',
   'pilosite-aisselles': 'question',
   regles: 'question',
   'pilosite-visage': 'question',
@@ -135,7 +156,15 @@ export const TYPE_ETAPE = {
 export const TEXTES_ETAPE = {
   profil: {
     titre: 'Qui es-tu ?',
-    sousTitre: 'Pour te poser les bonnes questions',
+    sousTitre: 'Cela nous aide à adapter ton parcours.',
+  },
+  // Titre et réponses de Taller. Leur sous-titre (« Ceci sera utilisé pour
+  // prédire ton potentiel… ») serait faux chez nous : le calcul ne s'en
+  // sert pas. La réponse est enregistrée avec les autres (choix de Samuel,
+  // 20/11/2026, prévenu que c'est une donnée sensible).
+  origine: {
+    titre: 'Quelle est ton origine ?',
+    sousTitre: 'Tu peux aussi choisir de ne pas répondre.',
   },
   motivation: {
     titre: 'Pourquoi tu es sur Grandimi ?',
@@ -173,7 +202,7 @@ export const TEXTES_ETAPE = {
   },
   sports: {
     titre: 'Quels sports pratiques-tu ?',
-    sousTitre: 'Pour savoir où tu en es',
+    sousTitre: 'Le sport peut aider ton corps à grandir.',
   },
   'exercice-freq': {
     titre: "Combien d'heures d'exercice par semaine ?",
@@ -193,7 +222,7 @@ export const TEXTES_ETAPE = {
   },
   proches: {
     titre: 'As-tu des proches plus grands que ton père ?',
-    sousTitre: 'La taille de ta famille nous renseigne sur tes gènes',
+    sousTitre: 'La taille de ta famille nous renseigne sur tes gènes.',
   },
   regles: {
     titre: 'As-tu déjà eu tes premières règles ?',
@@ -213,11 +242,11 @@ export const TEXTES_ETAPE = {
   },
   epaules: {
     titre: 'Tes épaules se sont-elles élargies ?',
-    sousTitre: 'L’élargissement des épaules peut indiquer la phase milieu de puberté',
+    sousTitre: 'L’élargissement des épaules peut indiquer la phase milieu de poussée.',
   },
   odeur: {
     titre: 'As-tu remarqué plus d’odeur corporelle ?',
-    sousTitre: 'Les changements d’odeur corporelle commencent souvent autour de la puberté',
+    sousTitre: 'Les changements d’odeur corporelle commencent souvent autour de la poussée de croissance.',
   },
   acne: {
     titre: 'As-tu de l’acné ?',
@@ -225,7 +254,7 @@ export const TEXTES_ETAPE = {
   },
   muscles: {
     titre: 'Tes muscles sont-ils plus dessinés ?',
-    sousTitre: 'Les changements musculaires peuvent indiquer que la puberté commence',
+    sousTitre: 'Les changements musculaires peuvent indiquer que la poussée commence.',
   },
   voix: {
     titre: 'Ta voix a-t-elle complètement mué ?',
@@ -366,6 +395,7 @@ const TEXTES_PARENT = {
   sommeil: { titre: 'Combien d’heures dort-il par nuit ?', sousTitre: 'Bien dormir aide à grandir et à récupérer' },
   pere: { titre: 'Combien mesure le père ?', sousTitre: 'La taille des parents influence beaucoup la sienne' },
   mere: { titre: 'Combien mesure la mère ?', sousTitre: 'La taille des parents influence beaucoup la sienne' },
+  origine: { titre: 'Quelle est l’origine de votre enfant ?', sousTitre: 'Vous pouvez aussi choisir de ne pas répondre.' },
   proches: { titre: 'A-t-il des proches plus grands que son père ?', sousTitre: 'La taille de la famille nous renseigne sur ses gènes' },
   regles: { titre: 'A-t-elle déjà eu ses premières règles ?', sousTitre: 'C’est le repère le plus fiable pour savoir où elle en est' },
   'pilosite-aisselles': { titre: 'A-t-il des poils aux aisselles ?', sousTitre: 'C’est un signe précoce de la puberté' },
@@ -399,13 +429,25 @@ export const OPTIONS_MOTIVATION = [
   { valeur: 'exercices', label: 'Exercices pour grandir' },
 ]
 
+// Les sports de GoTall, dans leur ordre, avec une icône comme chez eux.
 export const OPTIONS_SPORTS = [
-  { valeur: 'basket', label: 'Basket' },
-  { valeur: 'muscu', label: 'Musculation' },
-  { valeur: 'course', label: 'Course/Athlétisme' },
-  { valeur: 'natation', label: 'Natation' },
-  { valeur: 'foot', label: 'Football/Soccer' },
-  { valeur: 'autre', label: 'Autre' },
+  { valeur: 'basket', label: 'Basket', icon: <Trophy size={20} aria-hidden="true" /> },
+  { valeur: 'muscu', label: 'Musculation', icon: <Dumbbell size={20} aria-hidden="true" /> },
+  { valeur: 'course', label: 'Course', icon: <Footprints size={20} aria-hidden="true" /> },
+  { valeur: 'natation', label: 'Natation', icon: <Waves size={20} aria-hidden="true" /> },
+  { valeur: 'volley', label: 'Volley', icon: <Volleyball size={20} aria-hidden="true" /> },
+  { valeur: 'foot', label: 'Football', icon: <Volleyball size={20} aria-hidden="true" /> },
+  { valeur: 'autre', label: 'Autre', icon: <PersonStanding size={20} aria-hidden="true" /> },
+]
+
+// Réponses de Taller, mot pour mot.
+export const OPTIONS_ORIGINE = [
+  { valeur: 'blanc', label: 'Blanc / Caucasien' },
+  { valeur: 'noir', label: 'Noir / Afro-américain' },
+  { valeur: 'hispanique', label: 'Hispanique / Latino' },
+  { valeur: 'asiatique', label: 'Asiatique' },
+  { valeur: 'moyen-orient', label: 'Moyen-Orient / Indigène' },
+  { valeur: 'sans-reponse', label: 'Je ne veux pas répondre' },
 ]
 
 export const OPTIONS_EXERCICE_FREQ = [
@@ -461,13 +503,13 @@ export const OPTIONS_POURQUOI = [
   { valeur: 'max', label: 'Atteindre mon maximum', hint: 'Ne laisser aucun centimètre de côté' },
 ]
 
+// Réponses de GoTall, mot pour mot.
 export const OPTIONS_PROCHES = [
-  { valeur: 'frere', label: 'Frère' },
-  { valeur: 'cousin', label: 'Cousin' },
-  { valeur: 'grand-pere', label: 'Grand-père' },
-  { valeur: 'grand-mere', label: 'Grand-mère' },
-  { valeur: 'autre', label: 'Autre' },
-  { valeur: 'non', label: 'Non' },
+  { valeur: 'frere', label: 'Mon frère est plus grand que mon père' },
+  { valeur: 'cousin', label: 'Mon cousin est plus grand que mon père' },
+  { valeur: 'grands-parents', label: 'Mes grands-parents sont plus grands que mon père' },
+  { valeur: 'autre', label: 'D’autres proches sont plus grands que mon père' },
+  { valeur: 'non', label: 'Aucun' },
 ]
 
 /* Premières règles : seulement à partir de 15 ans (voir etapesPour).
@@ -494,10 +536,11 @@ const ETAPES_GARCON = new Set(['pilosite-visage', 'voix', 'epaules', 'muscles'])
    appartient au dernier chapitre, celui qui présente le plan. */
 export const CHAPITRES = ['Toi', 'Famille', 'Puberté', 'Habitudes', 'Objectif']
 const CHAPITRE_DE = {
-  sexe: 0, age: 0, 'bonne-nouvelle': 0, 'taille-poids': 0,
-  parents: 1, pointure: 1, 'resultats-long-terme': 1, genetique: 1,
-  'vitesse-croissance': 2, regles: 2, voix: 2, 'pilosite-visage': 2, 'pilosite-aisselles': 2, acne: 2,
-  'exercice-freq': 3, sommeil: 3,
+  sexe: 0, profil: 0, age: 0, 'bonne-nouvelle': 0, origine: 0, 'taille-poids': 0,
+  parents: 1, proches: 1, pointure: 1, 'resultats-long-terme': 1, genetique: 1,
+  'vitesse-croissance': 2, regles: 2, voix: 2, 'pilosite-visage': 2, 'pilosite-aisselles': 2,
+  epaules: 2, odeur: 2, acne: 2, muscles: 2,
+  sports: 3, 'exercice-freq': 3, sommeil: 3,
 }
 
 export function chapitreDe(etape) {
@@ -530,15 +573,15 @@ export const OPTIONS_PILOSITE_VISAGE = [
 
 export const OPTIONS_EPAULES = [
   { valeur: 'non', label: 'Non' },
-  { valeur: 'un-peu', label: 'Oui un peu' },
-  { valeur: 'clairement', label: 'Oui clairement' },
+  { valeur: 'un-peu', label: 'Oui, un peu' },
+  { valeur: 'clairement', label: 'Oui, clairement' },
   { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
 export const OPTIONS_ODEUR = [
   { valeur: 'non', label: 'Non' },
   { valeur: 'un-peu', label: 'Un peu' },
-  { valeur: 'beaucoup', label: 'Beaucoup' },
+  { valeur: 'beaucoup', label: 'Beaucoup plus' },
   { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
@@ -551,10 +594,11 @@ export const OPTIONS_ACNE = [
   { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
+// Libellés et pouces de GoTall.
 export const OPTIONS_MUSCLES = [
-  { valeur: 'non', label: 'Non' },
-  { valeur: 'un-peu', label: 'Un peu' },
-  { valeur: 'beaucoup', label: 'Beaucoup' },
+  { valeur: 'non', label: 'Non', icon: <ThumbsDown size={20} aria-hidden="true" /> },
+  { valeur: 'un-peu', label: 'Un peu', icon: <ThumbsUp size={20} aria-hidden="true" style={{ transform: 'rotate(-90deg)' }} /> },
+  { valeur: 'beaucoup', label: 'Beaucoup plus dessinés', icon: <ThumbsUp size={20} aria-hidden="true" /> },
   { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
@@ -621,6 +665,7 @@ export function ListeChoixMultiple({ options, valeurs, onBasculer, label, exclus
           selected={ensemble.includes(option.valeur)}
           onSelect={() => onBasculer(option.valeur, exclusif)}
           title={option.label}
+          icon={option.icon}
         />
       ))}
     </div>

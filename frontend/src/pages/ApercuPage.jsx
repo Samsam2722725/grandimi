@@ -69,7 +69,8 @@ function ApercuPage({ predictionData: d, onDebloquer }) {
 
       <div className="apercu-pied">
         <button type="button" className="funnel-cta" onClick={() => debloquer('bouton')}>
-          Débloquer mes résultats
+          {/* Texte du bouton de GoTall (20/11/2026). */}
+          Voir mon potentiel
         </button>
       </div>
     </div>
