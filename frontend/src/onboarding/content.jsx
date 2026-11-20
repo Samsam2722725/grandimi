@@ -994,7 +994,7 @@ export function EcranPreuveScience() {
 
 export function EcranPreuveAvis() {
   return (
-    <div className="preuve">
+    <div className="preuve preuve--temoignages">
       {/* Seul chiffre vrai (11 857 comptes le 20/11/2026), le même que sur
           le paywall. Pas de « note 5 étoiles » : on n'en a aucune. */}
       <div className="preuve-stats">
@@ -1012,7 +1012,7 @@ export function EcranPreuveAvis() {
               </div>
               {cm && <span className="preuve-cm">{cm}</span>}
             </div>
-            <p className="preuve-texte preuve-texte--avis">« {texte} »</p>
+            <p className="preuve-texte preuve-texte--avis">“{texte}”</p>
           </li>
         ))}
       </ul>

@@ -4408,3 +4408,49 @@ div.interstitial.citation { cursor: default; }
 .preuve--experts .preuve-logo img[src*="cambridge"] { padding: 2px; }
 .preuve--experts .preuve-texte { font-size: 18px; font-weight: 400; line-height: 1.22; letter-spacing: -0.01em; color: #fff; }
 .preuve--experts .preuve-source { font-size: 15px; line-height: 1.2; margin-top: 10px; color: #6f6f73; }
+
+/* « Résultats réels » au plus près de GoTall (20/11, mesuré sur leur capture
+   iPhone). Mêmes réglages que « Avis d'experts ». Pas de photos (avis de
+   mineurs : initiale seulement) ni de « 5 étoiles » (on n'a pas de note). */
+.funnel-step:has(.preuve--temoignages) .funnel-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-size: 31px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.preuve--temoignages {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;
+  gap: 16px;
+  padding: 0 8px;
+}
+.preuve--temoignages .preuve-liste { gap: 16px; }
+.preuve--temoignages .preuve-stats {
+  padding: 22px 16px;
+  border-radius: 18px;
+  background: #1c1c1e;
+  gap: 0;
+}
+.preuve--temoignages .preuve-stats strong { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1; }
+.preuve--temoignages .preuve-stats span { font-size: 17px; font-weight: 400; color: var(--funnel-accent); }
+.preuve--temoignages .preuve-carte {
+  padding: 16px 16px 19px;
+  gap: 14px;
+  border-radius: 18px;
+  background: #1c1c1e;
+}
+.preuve--temoignages .preuve-avis-tete { align-items: flex-start; gap: 12px; }
+.preuve--temoignages .preuve-avatar { width: 40px; height: 40px; font-size: 17px; font-weight: 700; }
+.preuve--temoignages .preuve-avis-tete strong { font-size: 18px; font-weight: 600; line-height: 1.2; }
+.preuve--temoignages .preuve-avis-tete > div span { font-size: 17px; font-weight: 400; line-height: 1.25; }
+.preuve--temoignages .preuve-cm { font-size: 17px; font-weight: 600; line-height: 1.2; }
+.preuve--temoignages .preuve-texte--avis {
+  font-size: 18px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+.funnel-step:has(.preuve--temoignages) .funnel-subtitle {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;
+}
