@@ -4693,3 +4693,49 @@ div.interstitial.citation { cursor: default; }
 .eng-plan-date { margin: 0; padding: 12px 26px; border-radius: 999px; background: #fff; color: #111; font-size: 18px; font-weight: 800; box-shadow: 0 0 30px rgba(255, 90, 31, 0.35); }
 .eng-plan-sous { margin: 18px 0 0; color: #d6d0ca; font-size: 15px; line-height: 1.45; max-width: 320px; }
 .eng-visuel--plan { margin-top: 18px; width: 100%; }
+
+/* ================================================================
+   Base commune copiée de GoTall (21/11/2026, PROPOSITION-DESIGN.md)
+   Mesures prises sur leurs captures iPhone (390 × 844). On garde
+   notre orange : le vert est la couleur de leur marque.
+   ================================================================ */
+.funnel, .interstitial, .analyse, .eng, .gt-resultat, .feuille-voile {
+  --font-dm-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+/* Barre du haut : le rond « ← » et une barre simple jusqu'au bord droit. */
+.funnel-header { grid-template-columns: 48px 1fr auto; gap: 14px; padding: 14px 16px 6px; }
+.funnel-header-spacer { display: none; }
+.funnel-progress { height: 9px; background: #161616; }
+.funnel-progress-fill { background: linear-gradient(180deg, #ff6a2b, #ff8a4a); }
+/* Titre et sous-titre */
+.funnel-body { padding: 14px 16px 8px; }
+.funnel-title { font-size: 32px; line-height: 1.19; font-weight: 700; letter-spacing: -0.01em; margin: 6px 0 0; text-wrap: pretty; }
+.funnel-subtitle { font-size: 17px; line-height: 1.32; margin-top: 12px; color: #9a9a9a; max-width: none; }
+/* Réponses : pilules rondes juste sous la question */
+.funnel-content:has(> .funnel-choices) { justify-content: flex-start; padding-top: 44px; }
+.funnel-choices { gap: 12px; }
+.choice-card {
+  min-height: 61px;
+  padding: 10px 22px;
+  border: 0;
+  border-radius: 999px;
+  background: #1c1c1c;
+  justify-content: center;
+  text-align: center;
+  box-shadow: none;
+}
+.choice-card:has(.choice-card-icon) { justify-content: flex-start; text-align: left; }
+.choice-card .choice-card-text { flex: 0 1 auto; }
+.choice-card:has(.choice-card-icon) .choice-card-text { flex: 1; }
+.choice-card-title { font-size: 17px; font-weight: 400; color: #d8d8d8; }
+.choice-card-radio { display: none; }
+.choice-card.is-selected {
+  border: 0;
+  background: linear-gradient(180deg, #ff6a2b, #ff8a4a);
+  box-shadow: none;
+}
+.choice-card.is-selected .choice-card-title,
+.choice-card.is-selected .choice-card-hint { color: #111; font-weight: 700; }
+/* Bouton du bas : pilule pleine largeur, collée en bas, fine ligne au-dessus */
+.funnel-footer { padding: 18px 24px calc(18px + env(safe-area-inset-bottom, 0px)); background: var(--funnel-bg); border-top: 1px solid #222; }
+.funnel-cta { min-height: 61px; font-size: 19px; font-weight: 700; background: linear-gradient(180deg, #ff6a2b, #ff8a4a); color: #111; box-shadow: none; gap: 6px; }

@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ChevronRight } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -56,7 +56,9 @@ export function FunnelShell({
           <ArrowLeft size={20} aria-hidden="true" />
         </button>
 
-        {chapitres ? (
+        {/* Barre simple comme GoTall (21/11/2026) : la règle graduée reste dans
+            le code mais n'est plus affichée. */}
+        {false && chapitres ? (
           /* Un segment par chapitre : on sait combien de parties il reste,
              pas seulement qu'une barre avance lentement. */
           <div
@@ -107,7 +109,8 @@ export function FunnelShell({
 
       <main className="funnel-body">
         <div className="funnel-step" key={stepKey}>
-          {chapitres && (
+          {/* « 2/5 · HABITUDES » retiré (21/11/2026) : GoTall n'a que le titre. */}
+          {false && chapitres && (
             <p className="funnel-chapitre-nom">
               {chapitres.actif + 1}/{chapitres.noms.length} · {chapitres.noms[chapitres.actif]}
             </p>
@@ -131,6 +134,8 @@ export function FunnelButton({ children, disabled, onClick, type = 'button' }) {
   return (
     <button type={type} className="funnel-cta" disabled={disabled} onClick={onClick}>
       {children}
+      {/* « Continuer › » comme GoTall. */}
+      {children === 'Continuer' && <ChevronRight size={22} strokeWidth={2.4} aria-hidden="true" />}
     </button>
   )
 }
