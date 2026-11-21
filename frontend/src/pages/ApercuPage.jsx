@@ -76,14 +76,14 @@ export function EcranTesResultats({ onContinue }) {
         <span className="gt-barre" aria-hidden="true"><span /></span>
       </header>
       <main className="gt-contenu gt-intro">
-        <h1 className="gt-intro-titre">Tes résultats sont là !</h1>
+        <h1 className="gt-intro-titre">Ton plan personnalisé est prêt.</h1>
         <p className="gt-intro-sous">Il s’avère que… Tu ne grandis pas à ton potentiel.</p>
         <p className="gt-intro-surligne"><span>Corrigeons ça !</span></p>
         <TuileFleche />
       </main>
       <div className="gt-pied">
         <button type="button" className="gt-cta" onClick={() => { capture('apercu_reveler'); onContinue() }}>
-          Révéler mes résultats <ChevronRight size={24} aria-hidden="true" />
+          Continuer <ChevronRight size={24} aria-hidden="true" />
         </button>
       </div>
     </div>
@@ -119,7 +119,7 @@ function ApercuPage({ predictionData: d, onDebloquer }) {
           <span className="gt-barre" aria-hidden="true"><span /></span>
         </header>
         <main className="gt-contenu gt-intro">
-          <h1 className="gt-intro-titre">Tes résultats sont là !</h1>
+          <h1 className="gt-intro-titre">Ton plan personnalisé est prêt.</h1>
           <p className="gt-intro-sous">Il s’avère que… Tu ne grandis pas à ton potentiel.</p>
           <p className="gt-intro-surligne"><span>Corrigeons ça !</span></p>
           <TuileFleche />

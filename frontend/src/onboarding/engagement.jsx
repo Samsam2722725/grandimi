@@ -75,7 +75,7 @@ export function EcranEngagement({ prenom, onContinue }) {
           </h1>
         </main>
         <footer className="eng-pied">
-          <button type="button" className="funnel-cta" onClick={() => setEtape(1)}>Continuer <ChevronRight size={20} aria-hidden="true" /></button>
+          <button type="button" className="funnel-cta" onClick={() => setEtape(2)}>Continuer <ChevronRight size={20} aria-hidden="true" /></button>
         </footer>
       </div>
     )
