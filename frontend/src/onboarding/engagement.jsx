@@ -70,6 +70,7 @@ export function EcranEngagement({ prenom, onContinue }) {
     return (
       <div className="eng eng--centre">
         <main className="eng-corps">
+          <p className="eng-surtitre eng-surtitre--centre">Ton cap</p>
           <h1 className="eng-realiste">
             {prenom ? `${prenom}, c’est tout à fait réaliste.` : 'C’est tout à fait réaliste.'}
             <span>Et on va le faire avec toi.</span>

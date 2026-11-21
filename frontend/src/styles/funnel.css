@@ -4790,3 +4790,27 @@ div.interstitial.citation { cursor: default; }
 .regle-colonne-valeur { color: #fff; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
 .regle-solo { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 8px 0 18px; }
 .regle-solo-valeur { color: #fff; font-size: 56px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
+
+/* ---------- Lot 3 du design (21/11/2026) ---------- */
+/* Précision : pastille lumineuse et toise en filigrane (GoTall 25) */
+.precision-gotall { position: relative; display: grid; place-items: center; min-height: 380px; width: 100%; }
+.precision-toise { position: absolute; top: 0; bottom: 0; left: 50%; width: 120px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 30px 0 10px; background: linear-gradient(rgba(255,255,255,0.025), rgba(255,255,255,0.04), rgba(255,255,255,0.025)); -webkit-mask-image: linear-gradient(transparent, #000 25%, #000 75%, transparent); mask-image: linear-gradient(transparent, #000 25%, #000 75%, transparent); }
+.precision-toise-cent { position: absolute; top: 4px; color: rgba(255,255,255,0.14); font-size: 24px; font-weight: 700; }
+.precision-toise-trait { width: 14px; height: 2px; background: rgba(255,255,255,0.18); }
+.precision-toise-trait.is-grand { width: 30px; }
+.precision-pilule { position: relative; display: flex; align-items: center; justify-content: center; gap: 22px; width: 100%; padding: 26px 24px; border-radius: 999px; background: #181818; border: 1.5px solid rgba(255, 106, 43, 0.35); box-shadow: 0 0 70px rgba(255, 90, 31, 0.32); }
+.precision-pilule-chiffre { font-size: 76px; font-weight: 800; line-height: 1; letter-spacing: -0.03em; background: linear-gradient(180deg, #ff6a2b, #ff9a5a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.precision-pilule-mot { font-size: 26px; font-weight: 600; color: #ff7a3d; }
+
+/* Jauge : « de ta taille » */
+.jauge-sous { fill: #fff; font-size: 15px; font-weight: 500; }
+
+/* E-mail : plein écran, sans carte, enveloppe dans un carré (TrendSaaS 24) */
+.resultats-overlay { background: #0a0a0a; backdrop-filter: none; align-items: flex-start; padding-top: 72px; }
+.resultats-overlay-carte { background: transparent; border: 0; box-shadow: none; padding: 0 4px; align-items: stretch; text-align: center; }
+.email-icone { align-self: center; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 18px; border: 1.5px solid #333; background: #141414; color: #d8d8d8; margin-bottom: 8px; }
+.resultats-overlay-titre { font-size: 30px; line-height: 1.15; letter-spacing: -0.02em; text-align: center; margin-bottom: 10px; }
+
+/* Réaliste : « TON CAP » espacé au-dessus, titre plus grand (TrendSaaS 37) */
+.eng-surtitre--centre { text-align: center; color: #a39d97; letter-spacing: 0.24em; margin-bottom: 14px; }
+.eng .eng-realiste { font-size: 29px; text-wrap: wrap; }

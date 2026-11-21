@@ -90,9 +90,11 @@ export function JaugePotentiel() {
 
         <circle cx={bouton.x} cy={bouton.y} r="10" className="jauge-bouton" />
 
-        <text x={C.x} y={C.y + 13} textAnchor="middle" className="jauge-valeur">
+        <text x={C.x} y={C.y + 6} textAnchor="middle" className="jauge-valeur">
           {valeur}%
         </text>
+        {/* « of your height » de GoTall (21/11/2026) */}
+        <text x={C.x} y={C.y + 30} textAnchor="middle" className="jauge-sous">de ta taille</text>
         <text x={zero.x} y={zero.y} textAnchor="middle" className="jauge-borne">0%</text>
         <text x={cent.x} y={cent.y} textAnchor="middle" className="jauge-borne">100%</text>
       </svg>

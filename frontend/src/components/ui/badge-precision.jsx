@@ -72,7 +72,31 @@ function useCompteur(cible) {
   return valeur
 }
 
+/* Comme GoTall 25 (21/11/2026) : le chiffre dans une pastille qui brille,
+   « Précision » à côté, une toise en filigrane derrière. Sans leurs logos
+   CDC / Harvard / NIH : ces organismes ne nous ont jamais validés. */
 export function BadgePrecision({ className }) {
+  const compte = useCompteur(CIBLE)
+  const valeurAffichee = CIBLE === null ? PRECISION_AFFICHEE.valeur : `${compte}${SUFFIXE}`
+  return (
+    <div className={`precision-gotall ${className || ''}`}>
+      <div className="precision-toise" aria-hidden="true">
+        <span className="precision-toise-cent">100%</span>
+        {Array.from({ length: 23 }, (_, i) => (
+          <span key={i} className={'precision-toise-trait' + (i % 5 === 0 ? ' is-grand' : '')} />
+        ))}
+      </div>
+      <div className="precision-pilule">
+        <span className="precision-pilule-chiffre" aria-hidden="true">{valeurAffichee}</span>
+        <span className="precision-pilule-mot" aria-hidden="true">Précision</span>
+        <span className="sr-only">{PRECISION_AFFICHEE.valeur} de précision</span>
+      </div>
+    </div>
+  )
+}
+
+// Ancienne version (grand chiffre et flèche manuscrite), gardée.
+export function BadgePrecisionManuscrit({ className }) {
   const compte = useCompteur(CIBLE)
   const valeurAffichee = CIBLE === null ? PRECISION_AFFICHEE.valeur : `${compte}${SUFFIXE}`
 

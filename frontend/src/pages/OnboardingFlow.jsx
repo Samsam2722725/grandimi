@@ -1139,7 +1139,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
                 lancerAnalyse()
               }}
             >
-              <span className="pret-badge" aria-hidden="true"><Check size={30} strokeWidth={3} /></span>
+              {/* Comme TrendSaaS 24 (21/11/2026) : une enveloppe dans un carré arrondi. */}
+              <span className="email-icone" aria-hidden="true"><Mail size={30} strokeWidth={1.8} /></span>
               <h2 className="resultats-overlay-titre">Entre ton email pour débloquer tes résultats.</h2>
 
               <label className="pret-champ">
