@@ -112,7 +112,8 @@ export const ORDRE_ETAPES = [
   // TrendSaaS : « Qu'est-ce qui t'empêche d'atteindre ce rêve ? » puis
   // « combien d'heures par semaine », avec une phrase sous la réponse (21/11/2026).
   'blocage',
-  'temps',
+  // « Heures par semaine » retiré le 21/11/2026 (Samuel) : le temps est déjà
+  // demandé pendant la création du plan. Son code reste.
   // Citation (Taller) avec le bouton « Analyser mes réponses » de l'ancien
   // écran « Il est temps de découvrir » (fusionnés le 21/11/2026).
   'citation-genetique',

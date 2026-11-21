@@ -4847,3 +4847,8 @@ div.interstitial.citation { cursor: default; }
 .gt-pg-fleche-sombre { stroke: #ff8a4a; stroke-width: 5; }
 .gt-poussee-graphe { margin-top: 30px; }
 .gt-poussee-texte { margin: 40px 6px 0; font-size: 19px; line-height: 1.45; color: #a1a1a6; }
+
+/* Slides : texte plus lisible, avantages en vert (Samuel, 21/11/2026) */
+.qs--benefice { background: linear-gradient(180deg, #16a34a 0%, #0f7a36 100%); }
+.qs .qs-texte { color: #fff; font-size: 17px; font-weight: 500; line-height: 1.45; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18); }
+.qs .qs-titre { font-size: 26px; }
