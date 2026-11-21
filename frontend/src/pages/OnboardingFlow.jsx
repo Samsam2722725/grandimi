@@ -155,6 +155,7 @@ function reponsesInitiales() {
     symptomes: [],
     objectifs: [],
     blocage: null,
+    blocageAutre: '',
     // DEV : ?calcul=fait saute les 2 questions du calcul (captures du parcours).
     minutesJour: import.meta.env.DEV && parametreDev('calcul') ? '15' : null,
     joursSemaine: import.meta.env.DEV && parametreDev('calcul') ? '5' : null,
@@ -843,7 +844,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
           />
         )
       case 'blocage':
-        return <ChoixAvecPhrase label={texte.titre} options={OPTIONS_BLOCAGE} valeur={reponses.blocage} onChoisir={(v) => definir('blocage', v)} />
+        return <ChoixAvecPhrase label={texte.titre} options={OPTIONS_BLOCAGE} valeur={reponses.blocage} onChoisir={(v) => definir('blocage', v)} texteLibre={reponses.blocageAutre || ''} onTexteLibre={(t) => definir('blocageAutre', t)} />
       case 'temps':
         return <ChoixAvecPhrase label={texte.titre} options={OPTIONS_TEMPS} valeur={reponses.temps} onChoisir={(v) => definir('temps', v)} />
       case 'objectifs':

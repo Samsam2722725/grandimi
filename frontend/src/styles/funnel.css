@@ -4872,3 +4872,8 @@ div.interstitial.citation { cursor: default; }
 .eng-corps--plan .gt-intro-surligne span { font-size: 18px; font-weight: 600; }
 .eng-corps--plan .eng-tuile { margin: auto 0; padding-bottom: 40px; }
 .eng-tuile .gt-tuile { width: 82%; max-width: 320px; }
+
+/* « Autre » à écrire (21/11/2026) */
+.choix-libre { width: 100%; margin-top: 10px; padding: 14px 18px; border-radius: 18px; border: 1.5px solid #2c2c2c; background: #141414; color: #fff; font: inherit; font-size: 16px; line-height: 1.4; resize: none; outline: none; }
+.choix-libre:focus { border-color: #ff6a2b; }
+.choix-libre::placeholder { color: #6e6e73; }

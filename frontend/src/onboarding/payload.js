@@ -216,6 +216,7 @@ export function fusionnerResultatPrediction(reponses, email, resultatApi) {
       symptomes: reponses.symptomes,
       objectifs: reponses.objectifs,
       blocage: reponses.blocage,
+      blocage_autre: reponses.blocage === 'autre' ? (reponses.blocageAutre || '').trim().slice(0, 200) : undefined,
       temps_semaine: reponses.temps,
       minutes_jour: reponses.minutesJour,
       jours_semaine: reponses.joursSemaine,

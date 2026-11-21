@@ -1933,11 +1933,14 @@ export function EcranObjectifs({ options = OPTIONS_MOTIVATION, valeurs, onBascul
    Une question, puis une phrase qui répond juste sous la réponse choisie,
    comme TrendSaaS. Les mots en « » viennent de TrendSaaS ; les autres
    phrases sont écrites pour Grandimi. */
+/* Les raisons d'un ado qui veut grandir, avec ses mots (Samuel, 21/11/2026),
+   au lieu de celles de TrendSaaS ; « Autre » ouvre un champ à écrire. */
 export const OPTIONS_BLOCAGE = [
-  { valeur: 'methode', label: 'Le manque de méthode', phrase: 'C’est précisément ce qu’on est là pour te donner. Une méthode s’apprend en quelques jours, la motivation, elle, ne s’achète pas.' },
-  { valeur: 'habitudes', label: 'J’ai du mal à tenir mes habitudes', phrase: 'Normal : sans plan clair, on lâche vite. Ton plan te dit quoi faire chaque jour, en quelques minutes.' },
-  { valeur: 'essaie', label: 'J’essaie, mais je n’y arrive pas', phrase: 'Tu n’avais pas les bons leviers. On va cibler ce qui compte vraiment pour ta croissance.' },
-  { valeur: 'debut', label: 'Je commence tout juste', phrase: 'Tu démarres au bon moment : plus tu commences tôt, plus tu as de temps pendant que tu grandis.' },
+  { valeur: 'quoi-faire', label: 'Je ne sais pas quoi faire', phrase: 'C’est pour ça qu’on est là. Chaque jour, ton plan te dit exactement quoi faire : sommeil, alimentation, exercices.' },
+  { valeur: 'habitudes', label: 'Je n’arrive pas à tenir mes habitudes', phrase: 'Normal : sans plan clair, on lâche vite. Le tien tient en quelques minutes par jour, et tu vois tes progrès chaque semaine.' },
+  { valeur: 'trop-tard', label: 'Je pense que c’est trop tard pour moi', phrase: 'Tant que tu grandis, il n’est pas trop tard. Ce que tu fais maintenant compte encore.' },
+  { valeur: 'doute', label: 'Je ne sais pas si ça marche vraiment', phrase: 'On repère les mauvaises habitudes qui freinent ta croissance, et tu suis ta taille chaque semaine pour le voir toi-même.' },
+  { valeur: 'autre', label: 'Autre', libre: true, phrase: 'Merci de nous le dire. Ton plan part de tes réponses, pas d’un modèle tout fait.' },
 ]
 
 const PHRASE_TEMPS = 'Une heure ou plusieurs, ce n’est pas la quantité qui décide. C’est ce que tu fais pendant ce temps. Et c’est exactement là-dessus qu’on va t’aider.'
@@ -1947,12 +1950,24 @@ export const OPTIONS_TEMPS = [
   { valeur: 'plus-3h', label: 'Plus de 3 h', phrase: PHRASE_TEMPS },
 ]
 
-export function ChoixAvecPhrase({ options, valeur, onChoisir, label }) {
+export function ChoixAvecPhrase({ options, valeur, onChoisir, label, texteLibre = '', onTexteLibre }) {
   return (
     <div className="funnel-choices" role="radiogroup" aria-label={label}>
       {options.map((o) => (
         <div key={o.valeur} className="choix-phrase">
           <ChoiceCard role="radio" selected={valeur === o.valeur} onSelect={() => onChoisir(o.valeur)} title={o.label} />
+          {/* « Autre » : un champ à écrire, comme TrendSaaS (21/11/2026). */}
+          {valeur === o.valeur && o.libre && onTexteLibre && (
+            <textarea
+              className="choix-libre"
+              rows={2}
+              maxLength={200}
+              placeholder="Écris ta raison"
+              value={texteLibre}
+              onChange={(e) => onTexteLibre(e.target.value)}
+              aria-label="Ta raison"
+            />
+          )}
           {valeur === o.valeur && o.phrase && <p className="phrase-reponse">{o.phrase}</p>}
         </div>
       ))}
