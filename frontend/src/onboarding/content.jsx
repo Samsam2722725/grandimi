@@ -33,6 +33,7 @@ import { ChoiceCard } from '@/components/ui/choice-card'
 import { WheelPicker } from '@/components/ui/wheel-picker'
 import { RegleVerticale } from '@/components/ui/regle-verticale'
 import { Mascotte } from '@/components/ui/mascotte'
+import { ChargePotentiel, CielSommeil } from '@/components/ui/ecrans-uniques'
 import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ReseauNeurones } from '@/components/ui/reseau-neurones'
 import { EtudesPubliees } from '@/components/ui/ecrans-fonctions'
@@ -991,8 +992,14 @@ export function MoletteSommeilRoue({ valeur, onChange }) {
   )
 }
 
-// Le cadran de Taller, remis le 21/11/2026 : Samuel le trouve mieux et plus amusant.
+/* Le ciel du sommeil (21/11/2026, idée n° 26) : une lune qu'on fait glisser
+   du soir à la nuit. Le cadran de Taller reste en dessous. */
 export function MoletteSommeil({ valeur, onChange }) {
+  return <CielSommeil valeur={valeur} onChange={onChange} />
+}
+
+// Le cadran de Taller (remis le 21/11/2026, remplacé le même jour par le ciel).
+export function MoletteSommeilCadran({ valeur, onChange }) {
   const heures = valeur ?? 8
   const allumes = Math.round((heures / SOMMEIL_MAX) * TRAITS_CADRAN)
   const pourcent = ((heures - SOMMEIL_MIN) / (SOMMEIL_MAX - SOMMEIL_MIN)) * 100
@@ -1109,7 +1116,8 @@ export function EcranResultatsLongTerme() {
 export function EcranPotentielGain() {
   return (
     <div className="onb-preuve">
-      <JaugePotentiel />
+      {/* « Charge ton potentiel » (21/11/2026) ; la jauge de GoTall reste dans JaugePotentiel. */}
+      <ChargePotentiel />
     </div>
   )
 }

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { CheckCircle2, ChevronRight } from 'lucide-react'
 
 import { capture } from '../lib/analytics'
+import { CartePlan } from '@/components/ui/ecrans-uniques'
 import { pointsFaibles } from '../lib/offres'
 import '../styles/funnel.css'
 import '../styles/apercu.css'
@@ -82,7 +83,8 @@ export function EcranTesResultats({ prenom, onContinue }) {
         <h1 className="gt39-titre">{prenom ? `${prenom}, ton plan personnalisé est prêt.` : 'Ton plan personnalisé est prêt.'}</h1>
         <p className="gt39-sous">Il s’avère que… Tu ne grandis pas à ton potentiel.</p>
         <p className="gt-intro-surligne gt39-surligne"><span>Corrigeons ça !</span></p>
-        <div className="gt39-tuile"><TuileFleche /></div>
+        {/* La carte qui se retourne (21/11/2026, idée n° 33) ; la tuile flèche reste dans TuileFleche. */}
+        <div className="gt39-carte"><CartePlan prenom={prenom} /></div>
       </main>
       <footer className="eng-pied">
         <button type="button" className="funnel-cta" onClick={() => { capture('apercu_reveler'); onContinue() }}>

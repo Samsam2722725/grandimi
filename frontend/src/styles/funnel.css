@@ -5014,3 +5014,62 @@ div.interstitial.citation { cursor: default; }
 .calcul-question { align-items: center; padding: 24px; background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(3px); }
 .calcul-question-carte { border-radius: 26px; padding: 26px 22px 22px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6); animation: question-arrive 0.4s cubic-bezier(0.3, 1.4, 0.5, 1) both; }
 @keyframes question-arrive { from { opacity: 0; transform: translateY(24px) scale(0.96); } to { opacity: 1; transform: none; } }
+
+/* ================================================================
+   Écrans uniques (21/11/2026) : charge, ciel, carte
+   ================================================================ */
+/* Charge ton potentiel */
+.charge { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; }
+.charge-zone { position: relative; width: 100%; max-width: 340px; padding: 8px 0; border: 0; background: none; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; display: grid; place-items: center; }
+.charge-svg { width: 150px; height: auto; overflow: visible; transition: transform 0.2s ease; }
+.charge-zone:active .charge-svg { transform: scale(0.97); }
+.charge-contour { fill: #161616; stroke: #3a3a3a; stroke-width: 2; }
+.charge-gris { fill: #3a3a3a; }
+.charge-ligne { stroke: #ff6a2b; stroke-width: 1.4; stroke-dasharray: 4 4; }
+.charge-cadenas { stroke: #8a8a8a; fill: #8a8a8a; }
+.is-plein .charge-svg { filter: drop-shadow(0 0 18px rgba(255, 106, 43, 0.7)); animation: charge-flash 0.6s ease; }
+@keyframes charge-flash { 30% { transform: scale(1.06); } }
+.charge-etiquette { position: absolute; font-size: 14px; font-weight: 700; white-space: nowrap; }
+.charge-etiquette--toi { top: 30px; left: calc(50% + 70px); color: #ff8a4a; }
+.charge-etiquette--gen { top: 150px; left: calc(50% + 70px); color: #8a8a8a; }
+.charge-consigne { margin: 0; color: #d8d8d8; font-size: 16px; font-weight: 600; text-align: center; }
+.is-plein .charge-consigne { color: #ff8a4a; }
+
+/* Ciel du sommeil */
+.ciel-bloc { display: flex; flex-direction: column; gap: 22px; width: 100%; }
+.ciel { position: relative; width: 100%; height: 300px; border-radius: 28px; overflow: hidden; touch-action: none; cursor: grab; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06); transition: background 0.25s ease; }
+.ciel-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ciel-etoile { fill: #fff; transition: opacity 0.5s ease; animation: scintille 2.8s ease-in-out infinite; }
+@keyframes scintille { 50% { fill-opacity: 0.35; } }
+.ciel-arc { fill: none; stroke: rgba(255, 255, 255, 0.25); stroke-width: 0.5; stroke-dasharray: 1.5 1.5; vector-effect: non-scaling-stroke; }
+.ciel-lune { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fffbe8, #f5e6b8 60%, #d9c58c); box-shadow: 0 0 24px rgba(255, 244, 200, 0.75), 0 0 60px rgba(255, 244, 200, 0.35); pointer-events: none; }
+.ciel-lune::after { content: ''; position: absolute; width: 9px; height: 9px; top: 12px; left: 22px; border-radius: 50%; background: rgba(180, 160, 110, 0.35); }
+.ciel-heures { position: absolute; left: 0; right: 0; bottom: 34px; text-align: center; color: #fff; font-size: 54px; font-weight: 800; letter-spacing: -0.02em; text-shadow: 0 4px 20px rgba(0, 0, 0, 0.35); pointer-events: none; }
+.ciel-legende { position: absolute; bottom: 14px; color: rgba(255, 255, 255, 0.6); font-size: 13px; font-weight: 600; pointer-events: none; }
+.ciel-legende--g { left: 18px; }
+.ciel-legende--d { right: 18px; }
+.ciel-curseur { width: 100%; accent-color: #ff6a2b; }
+
+/* Carte qui se retourne */
+.gt39-carte { width: 100%; margin: auto 0; padding: 20px 0 30px; display: grid; place-items: center; }
+.carte-plan-scene { position: relative; width: 240px; height: 300px; perspective: 1000px; }
+.carte-plan { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; animation: carte-retourne 1s cubic-bezier(0.5, 0, 0.2, 1) 0.4s both, carte-flotte 3.4s ease-in-out 1.6s infinite; }
+@keyframes carte-retourne { from { transform: rotateY(180deg) scale(0.9); } to { transform: rotateY(360deg); } }
+@keyframes carte-flotte { 50% { transform: rotateY(360deg) translateY(-8px); } }
+.carte-plan-face { position: absolute; inset: 0; border-radius: 26px; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; flex-direction: column; padding: 24px 22px; }
+.carte-plan-dos { transform: rotateY(180deg); background: linear-gradient(145deg, #ff8a4a, #ff5a1f 60%, #c2410c); align-items: center; justify-content: center; gap: 14px; box-shadow: 0 20px 50px rgba(255, 90, 31, 0.4); }
+.carte-plan-logo { color: #fff; font-size: 20px; font-weight: 900; letter-spacing: 0.2em; }
+.carte-plan-point { color: rgba(255, 255, 255, 0.85); font-size: 64px; font-weight: 800; }
+.carte-plan-avant { background: linear-gradient(160deg, #26201c, #141210 70%); border: 1px solid rgba(255, 106, 43, 0.45); box-shadow: 0 20px 60px rgba(255, 90, 31, 0.35); }
+.carte-plan-marque { color: #ff8a4a; font-size: 12px; font-weight: 800; letter-spacing: 0.24em; }
+.carte-plan-titre { margin-top: 18px; color: #fff; font-size: 34px; font-weight: 800; letter-spacing: -0.02em; }
+.carte-plan-nom { color: #a39d97; font-size: 16px; margin-top: 2px; }
+.carte-plan-liste { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; color: #e9e2da; font-size: 16px; font-weight: 600; }
+.carte-plan-puce { margin-top: auto; align-self: flex-start; padding: 6px 14px; border-radius: 999px; background: #ff6a2b; color: #111; font-size: 13px; font-weight: 800; }
+.carte-plan-confettis { position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: 2; pointer-events: none; }
+.carte-plan-confettis span { position: absolute; width: 8px; height: 12px; border-radius: 2px; opacity: 0; animation: confetti 1.3s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+@keyframes confetti { 0% { opacity: 1; transform: translate(0, 0) rotate(0); } 70% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--x), calc(var(--y) + 90px)) rotate(var(--r)); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .carte-plan, .carte-plan-confettis span, .ciel-etoile, .is-plein .charge-svg { animation: none !important; }
+}
