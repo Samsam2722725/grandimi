@@ -5009,3 +5009,8 @@ div.interstitial.citation { cursor: default; }
   .gt-hab-trace { stroke-dashoffset: 0; }
   .gt-hab-ecart, .gt-hab-bulle { opacity: 1; }
 }
+
+/* Questions du calcul au milieu de l'écran, comme TrendSaaS 16 (21/11/2026) */
+.calcul-question { align-items: center; padding: 24px; background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(3px); }
+.calcul-question-carte { border-radius: 26px; padding: 26px 22px 22px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6); animation: question-arrive 0.4s cubic-bezier(0.3, 1.4, 0.5, 1) both; }
+@keyframes question-arrive { from { opacity: 0; transform: translateY(24px) scale(0.96); } to { opacity: 1; transform: none; } }

@@ -214,14 +214,17 @@ const DUREE_MONTEE_MS = 11000
 const PLAFOND_ATTENTE = 96
 const DUREE_FINALE_MS = 550
 // Animation complète « on assemble ton plan », jouée avant l'e-mail.
-const DUREE_INTRO_MS = 6000
+// 16 s (21/11/2026, Samuel) : le temps de lire les étapes et les avis.
+const DUREE_INTRO_MS = 16000
 
 /* L'anneau monte tout seul dès que l'écran s'affiche — pas besoin d'avoir
    soumis l'e-mail pour ça — et plafonne à 96 % tant que le serveur n'a pas
    répondu. `pretALivrer` (resultatApi non nul) relance une seconde montée,
    courte, de la valeur courante jusqu'à 100 % : l'anneau termine toujours
    sa course au lieu d'être coupé net par le changement d'écran. */
-function useProgressionAnimee(actif, pretALivrer) {
+/* `arret` (21/11/2026) : l'anneau s'arrête à ce pourcentage tant que la
+   question du calcul n'a pas de réponse, puis repart. */
+function useProgressionAnimee(actif, pretALivrer, arret = null) {
   const [pourcentage, setPourcentage] = useState(0)
   const [complet, setComplet] = useState(false)
   const pourcentageRef = useRef(0)
@@ -232,7 +235,7 @@ function useProgressionAnimee(actif, pretALivrer) {
     const reduit =
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-    const cible = pretALivrer ? 100 : PLAFOND_ATTENTE
+    const cible = Math.min(pretALivrer ? 100 : PLAFOND_ATTENTE, arret ?? 100)
 
     if (reduit) {
       pourcentageRef.current = cible
@@ -242,7 +245,9 @@ function useProgressionAnimee(actif, pretALivrer) {
     }
 
     const depart0 = pourcentageRef.current
-    const duree = pretALivrer ? (depart0 > 0 ? DUREE_FINALE_MS : DUREE_INTRO_MS) : DUREE_MONTEE_MS
+    // Durée au prorata de ce qui reste : l'anneau garde la même vitesse
+    // quand il repart après une question.
+    const duree = pretALivrer ? Math.max(DUREE_FINALE_MS, DUREE_INTRO_MS * Math.max(0, cible - depart0) / 100) : DUREE_MONTEE_MS
     const depart = pourcentageRef.current
     let debut
     let frame
@@ -256,13 +261,13 @@ function useProgressionAnimee(actif, pretALivrer) {
       setPourcentage(valeur)
       if (p < 1) {
         frame = requestAnimationFrame(etape)
-      } else if (pretALivrer) {
+      } else if (pretALivrer && cible >= 100) {
         setComplet(true)
       }
     }
     frame = requestAnimationFrame(etape)
     return () => cancelAnimationFrame(frame)
-  }, [actif, pretALivrer])
+  }, [actif, pretALivrer, arret])
 
   return [pourcentage, complet]
 }
@@ -422,9 +427,12 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   /* L'animation « on assemble ton plan » se joue EN ENTIER d'abord ;
      l'e-mail n'est demandé qu'ensuite, sur « Ton plan est prêt ».
      Avant, le formulaire la recouvrait dès la première seconde. */
+  // Arrêt à 25 % puis à 60 % tant que les deux questions du calcul n'ont pas de réponse.
+  const arretCalcul = reponses.minutesJour == null ? 25 : reponses.joursSemaine == null ? 60 : null
   const [pourcentageAnalyse, animationTerminee] = useProgressionAnimee(
     etape === 'resultats-la',
     true,
+    arretCalcul,
   )
 
   useEffect(() => {
