@@ -61,7 +61,8 @@ function BoutonEmpreinte({ onFini }) {
 }
 
 export function EcranEngagement({ prenom, onContinue }) {
-  const [etape, setEtape] = useState(0)
+  // ?eng=1 ou 2 (local seulement) ouvre directement le 2e ou 3e écran, pour les captures.
+  const [etape, setEtape] = useState(() => (import.meta.env.DEV ? Number(new URLSearchParams(window.location.search).get('eng')) || 0 : 0))
 
   if (etape === 0) {
     return (
