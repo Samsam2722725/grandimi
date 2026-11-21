@@ -1739,72 +1739,50 @@ export function EcranDouleursBenefices({ onContinue, onRetour }) {
     else onContinue()
   }
   const precedent = () => (i > 0 ? setI(i - 1) : onRetour())
-  const signe = { douleur: '!', benefice: '✓', action: '⚡' }[slide.ton]
 
-  /* Design (21/11/2026, 2e version) : le noir du questionnaire, comme
-     GoTall et Taller, avec une lueur rouge pour les douleurs et orange pour
-     les avantages ; barres de progression en haut, façon stories ; le
-     80/20 en deux colonnes comme l'écran de Taller. */
+  /* Design de Quittr (21/11/2026, 3e version, demande de Samuel) : fond
+     plein rouge pour les douleurs et bleu pour les avantages, le logo en
+     haut, l'illustration posée sur le fond, une phrase courte en titre, le
+     reste en petit paragraphe centré, des points et un petit bouton blanc.
+     Plus de « Ce qui peut te freiner » : Quittr n'a rien au-dessus du titre. */
+  const [titre, ...suite] = slide.titre
   return (
-    <div className={'dbs dbs--' + slide.ton}>
-      <div className="dbs-lueur" aria-hidden="true" />
-      <header className="dbs-tete">
-        <button type="button" className="dbs-retour" onClick={precedent} aria-label="Retour">
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <div className={'qs qs--' + slide.ton}>
+      <header className="qs-tete">
+        <button type="button" className="qs-retour" onClick={precedent} aria-label="Retour">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
             <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
-        <div className="dbs-barres" aria-hidden="true">
-          {SLIDES_DOULEURS.map((s, k) => (
-            <span key={k} className={(k < i ? 'is-fait ' : '') + (k === i ? 'is-actif ' : '') + 'dbs-barre--' + s.ton} />
-          ))}
-        </div>
+        <span className="qs-logo">GRANDIMI</span>
+        <span className="qs-retour qs-retour--vide" aria-hidden="true" />
       </header>
 
-      <main className="dbs-corps" key={i}>
-        <p className="dbs-surtitre">
-          <span className="dbs-signe" aria-hidden="true">{signe}</span>
-          {SURTITRE_SLIDE[slide.ton]}
-        </p>
-
-        {slide.ton === 'action' ? (
-          <div className="dbs-colonnes" aria-hidden="true">
-            <div className="dbs-colonne">
-              <span className="dbs-colonne-barre"><span style={{ height: '80%' }} /></span>
-              <strong>80 %</strong>
-              <small>Génétique</small>
-            </div>
-            <div className="dbs-colonne dbs-colonne--toi">
-              <span className="dbs-colonne-barre"><span style={{ height: '20%' }} /></span>
-              <strong>20 %</strong>
-              <small>Toi</small>
-            </div>
-          </div>
-        ) : (
-          <div className="dbs-visuel" aria-hidden="true">
-            <span className="dbs-emoji">{slide.emoji}</span>
-          </div>
-        )}
-
-        <h1 className="dbs-titre">
-          {slide.titre.map((ligne) => (
-            <span key={ligne}>{ligne}</span>
-          ))}
-        </h1>
-        <p className="dbs-texte">{slide.texte}</p>
+      <main className="qs-corps" key={i}>
+        <span className="qs-illustration" aria-hidden="true">{slide.emoji}</span>
+        <h1 className="qs-titre">{titre}</h1>
+        <p className="qs-texte">{[...suite, slide.texte].join(' ')}</p>
       </main>
 
-      <footer className="dbs-pied">
-        <button type="button" className="dbs-bouton" onClick={suivant}>
+      <footer className="qs-pied">
+        <div className="qs-points" aria-hidden="true">
+          {SLIDES_DOULEURS.map((s, k) => (
+            <span key={k} className={k === i ? 'is-actif' : ''} />
+          ))}
+        </div>
+        <button type="button" className="qs-bouton" onClick={suivant}>
           {slide.bouton || 'Continuer'}
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-            <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
       </footer>
     </div>
   )
 }
+
+/* L'ancienne mise en page (noir + lueur, barres en haut, « Ce qui peut te
+   freiner ») reste dans funnel.css sous les classes .dbs-*. */
 
 /* ---------- Écrans GoTall ajoutés le 21/11/2026 (demande de Samuel) ----------
    « Ta poussée de croissance compte » (GoTall 14) et « GoTall crée des
