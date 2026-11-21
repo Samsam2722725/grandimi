@@ -4625,3 +4625,14 @@ div.interstitial.citation { cursor: default; }
 .objectif-label { flex: 1; font-size: 17px; font-weight: 600; }
 .objectif-case { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; border: 2px solid rgba(255, 255, 255, 0.35); color: #111; }
 .objectif.is-coche .objectif-case { background: #fff; border-color: #fff; }
+
+/* ---------- Phrase sous la réponse (TrendSaaS, 21/11) ---------- */
+.choix-phrase { display: flex; flex-direction: column; gap: 10px; }
+.phrase-reponse {
+  margin: 0; padding: 14px 16px; border-radius: 14px;
+  background: #161616; border: 1px solid #262626; border-left: 3px solid #ff5a1f;
+  color: #e9e2da; font-size: 15px; line-height: 1.45;
+  animation: phrase-arrive 0.3s ease-out both;
+}
+@keyframes phrase-arrive { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .phrase-reponse { animation: none; } }

@@ -33,6 +33,9 @@ import {
   EcranDouleursBenefices,
   EcranSymptomes,
   EcranObjectifs,
+  ChoixAvecPhrase,
+  OPTIONS_BLOCAGE,
+  OPTIONS_TEMPS,
   EcranPousseeCompte,
   EcranCreeHabitudes,
   OPTIONS_PILOSITE_AISSELLES,
@@ -144,6 +147,8 @@ function reponsesInitiales() {
     origine: null,
     symptomes: [],
     objectifs: [],
+    blocage: null,
+    temps: null,
     voix: null,
     croissanceLente: null,
     // Vide tant que la question n'est pas posée : pas de faux objectif.
@@ -623,6 +628,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         return reponses.origine != null
       case 'objectifs':
         return (reponses.objectifs || []).length >= 1
+      case 'blocage':
+        return reponses.blocage != null
+      case 'temps':
+        return reponses.temps != null
       case 'motivation':
         return reponses.motivation.length >= 1
       case 'sexe':
@@ -816,6 +825,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             inconnuDefaut={TAILLE_MERE_INCONNUE_CM}
           />
         )
+      case 'blocage':
+        return <ChoixAvecPhrase label={texte.titre} options={OPTIONS_BLOCAGE} valeur={reponses.blocage} onChoisir={(v) => definir('blocage', v)} />
+      case 'temps':
+        return <ChoixAvecPhrase label={texte.titre} options={OPTIONS_TEMPS} valeur={reponses.temps} onChoisir={(v) => definir('temps', v)} />
       case 'objectifs':
         return <EcranObjectifs valeurs={reponses.objectifs} onBasculer={(v) => basculer('objectifs', v)} />
       case 'symptomes':

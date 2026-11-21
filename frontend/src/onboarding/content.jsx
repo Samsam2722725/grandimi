@@ -100,6 +100,10 @@ export const ORDRE_ETAPES = [
   'preuve-avis',
   // Taille de rêve : chez GoTall, juste après les preuves.
   'taille-ideale',
+  // TrendSaaS : « Qu'est-ce qui t'empêche d'atteindre ce rêve ? » puis
+  // « combien d'heures par semaine », avec une phrase sous la réponse (21/11/2026).
+  'blocage',
+  'temps',
   'citation-genetique',
   'decouvrir-potentiel',
   'resultats-la',
@@ -122,6 +126,8 @@ export const TYPE_ETAPE = {
   origine: 'question',
   symptomes: 'question',
   objectifs: 'question',
+  blocage: 'question',
+  temps: 'question',
   'pilosite-aisselles': 'question',
   regles: 'question',
   'pilosite-visage': 'question',
@@ -195,6 +201,14 @@ export const TEXTES_ETAPE = {
   },
   symptomes: {
     titre: 'Symptômes',
+  },
+  // TrendSaaS 9, mot pour mot.
+  blocage: {
+    titre: 'Qu’est-ce qui t’empêche d’atteindre ce rêve ?',
+  },
+  // TrendSaaS 12.
+  temps: {
+    titre: 'Tu peux y consacrer combien d’heures par semaine ?',
   },
   // Quittr : « Choose your goals ».
   objectifs: {
@@ -1849,6 +1863,37 @@ export function EcranObjectifs({ options = OPTIONS_MOTIVATION, valeurs, onBascul
           </button>
         )
       })}
+    </div>
+  )
+}
+
+/* ---------- TrendSaaS 9 et 12 (21/11/2026, validés par Samuel) ----------
+   Une question, puis une phrase qui répond juste sous la réponse choisie,
+   comme TrendSaaS. Les mots en « » viennent de TrendSaaS ; les autres
+   phrases sont écrites pour Grandimi. */
+export const OPTIONS_BLOCAGE = [
+  { valeur: 'methode', label: 'Le manque de méthode', phrase: 'C’est précisément ce qu’on est là pour te donner. Une méthode s’apprend en quelques jours, la motivation, elle, ne s’achète pas.' },
+  { valeur: 'habitudes', label: 'J’ai du mal à tenir mes habitudes', phrase: 'Normal : sans plan clair, on lâche vite. Ton plan te dit quoi faire chaque jour, en quelques minutes.' },
+  { valeur: 'essaie', label: 'J’essaie, mais je n’y arrive pas', phrase: 'Tu n’avais pas les bons leviers. On va cibler ce qui compte vraiment pour ta croissance.' },
+  { valeur: 'debut', label: 'Je commence tout juste', phrase: 'Tu démarres au bon moment : plus tu commences tôt, plus tu as de temps pendant que tu grandis.' },
+]
+
+const PHRASE_TEMPS = 'Une heure ou plusieurs, ce n’est pas la quantité qui décide. C’est ce que tu fais pendant ce temps. Et c’est exactement là-dessus qu’on va t’aider.'
+export const OPTIONS_TEMPS = [
+  { valeur: 'moins-1h', label: 'Moins d’1 h', phrase: PHRASE_TEMPS },
+  { valeur: '1-3h', label: '1 à 3 h', phrase: PHRASE_TEMPS },
+  { valeur: 'plus-3h', label: 'Plus de 3 h', phrase: PHRASE_TEMPS },
+]
+
+export function ChoixAvecPhrase({ options, valeur, onChoisir, label }) {
+  return (
+    <div className="funnel-choices" role="radiogroup" aria-label={label}>
+      {options.map((o) => (
+        <div key={o.valeur} className="choix-phrase">
+          <ChoiceCard role="radio" selected={valeur === o.valeur} onSelect={() => onChoisir(o.valeur)} title={o.label} />
+          {valeur === o.valeur && o.phrase && <p className="phrase-reponse">{o.phrase}</p>}
+        </div>
+      ))}
     </div>
   )
 }
