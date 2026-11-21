@@ -84,9 +84,8 @@ export const ORDRE_ETAPES = [
   // grandis plus lentement ? ») restent dans le code.
   // « Pourquoi tu veux grandir » et « Choisis tes objectifs » retirés le
   // 21/11/2026 : « Pourquoi es-tu sur Grandimi ? » (plus haut) fait les deux.
-  // « Symptômes » (Quittr), après « Pourquoi grandir » comme sur la carte
-  // de « Tes idées » (21/11/2026).
-  'symptomes',
+  // « Symptômes » (Quittr) retiré du parcours le 21/11/2026 : Samuel veut
+  // le reprendre un autre jour. Le code de l'écran reste (étape 'symptomes').
   'precision',
   // Douleur avant les preuves, comme GoTall : slides douleurs → avantages
   // → 80/20 (format Menu IQ / Quittr), à la place de « Le coût d'être petit »
