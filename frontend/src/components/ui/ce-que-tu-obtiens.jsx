@@ -99,32 +99,10 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
   const perso = age > 0 && poids > 0
 
   const cartes = [
-    {
-      titre: 'Optimise ta taille',
-      visuel: (
-        <>
-        {perso && <p className="cqo-perso">Calculée pour toi · {age} ans · {poids} kg</p>}
-        <ul className="cqo-actions">
-          {ACTIONS.map(([action, icone], i) => (
-            <li key={action} className={i === 0 ? 'is-faite' : ''}>
-              <span className="cqo-case" aria-hidden="true">{i === 0 ? '✓' : ''}</span>
-              <span className="cqo-action">
-                <strong>{action} {icone}</strong>
-              </span>
-            </li>
-          ))}
-          {/* Un extrait, pas la réponse : la routine de l'app compte 9 actions
-              adaptées à lui, dont 2 montrées ici (lait + miel, noix), plus
-              les séances (30/10/2026). */}
-          <li className="cqo-actions-suite">
-            <span className="cqo-case" aria-hidden="true">🔒</span>
-            <span className="cqo-action"><strong>+ 7 autres actions chaque jour</strong></span>
-          </li>
-        </ul>
-        </>
-      ),
-    },
+    // « Optimise ta taille » retirée le 21/11/2026 (Samuel) ; VisuelActions la garde en code.
     { titre: 'Programme optimal', visuel: <TelephonePlan /> },
+    // Juste après le programme, avec un cadenas à la place de la taille (21/11/2026).
+    { titre: 'Prédis ta taille', visuel: <CourbeTaille cadenas /> },
     {
       titre: 'Guide pour grandir',
       visuel: (
@@ -141,9 +119,6 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
         </ul>
       ),
     },
-    // Le même graphe que la page d'accueil. Titre court : « Prédis ta
-    // taille adulte » touchait le bord de la carte sur téléphone.
-    { titre: 'Prédis ta taille', visuel: <CourbeTaille /> },
   ]
 
   const liste = useRef(null)
