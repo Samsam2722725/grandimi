@@ -138,9 +138,9 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
   useEffect(() => {
     capture('app_ouverte', { etape: 'accueil' });
   }, []);
-  /* L'offre du client : la taille estimée est réservée aux offres 3 mois
-     et À vie. Tant qu'on ne sait pas (erreur, ancienne offre), on montre :
-     mieux vaut donner trop que bloquer quelqu'un qui a payé. */
+  /* L'offre du client. Depuis le 21/11/2026, la taille estimée est dans
+     toutes les offres, 1 mois compris : plus rien n'est verrouillé.
+     (Avant : réservée aux offres 3 mois et À vie.) */
   const [planKey, setPlanKey] = useState(() =>
     APERCU_PLAN && new URLSearchParams(window.location.search).get('offre') ? new URLSearchParams(window.location.search).get('offre') : null,
   );
@@ -148,7 +148,7 @@ function GrowthPlanPage({ predictionData, onBackHome, onGoToAccount, onMiseAJour
     if (APERCU_PLAN) return;
     apiClient.getSubscription().then((s) => setPlanKey(s?.plan_key || null)).catch(() => {});
   }, []);
-  const tailleVerrouillee = planKey === 'm1' || planKey === 'm1_normal';
+  const tailleVerrouillee = false;
   const [monteeOuverte, setMonteeOuverte] = useState(false);
   const [visite, setVisite] = useState(() => !visiteDejaVue() || new URLSearchParams(window.location.search).get('visite') === '1');
 

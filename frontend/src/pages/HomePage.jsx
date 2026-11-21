@@ -7,6 +7,7 @@ import '../styles/theme-night.css'
 
 import { tunnelDemarre } from '../lib/analytics'
 import { AVIS } from '../lib/avis-clients'
+import { CourbeTaille } from '@/components/ui/courbe-taille'
 
 /* Les questions que les ados tapent dans Google, avec des réponses vraies
    qui donnent envie de commencer (01/11/2026). Retirées : « J'ai pas de
@@ -28,7 +29,7 @@ const FAQ = [
   {
     question: 'Qu’est-ce que je reçois ?',
     answer:
-      'Un programme fait pour toi, jour après jour sur 16 niveaux : ta routine, tes exercices (posture, étirements, sport), quoi manger et à quelle heure te coucher. Avec les offres 3 mois et À vie, tu as aussi ta taille adulte estimée.',
+      'Un programme fait pour toi, jour après jour sur 16 niveaux : ta routine, tes exercices (posture, étirements, sport), quoi manger et à quelle heure te coucher. Tu as aussi ta taille adulte estimée.',
   },
   {
     question: 'Pourquoi pas juste des vidéos TikTok ?',
@@ -107,39 +108,6 @@ function CheminProgramme() {
       <div className="mt-3 flex items-center justify-between border-t border-white/[0.06] pt-3 text-[13px] font-semibold text-[#8a847e]">
         <span>Niveau 2 🌶️🌶️</span>
         <span>16 niveaux · 112 jours</span>
-      </div>
-    </div>
-  )
-}
-
-/* La courbe de Taller (« Predict your future height ») : la taille qui
-   monte de 15 à 21 ans et se tasse, un point à 18 ans. Une illustration,
-   pas la taille de quelqu'un : le chiffre est un exemple. */
-function CourbeTaille() {
-  const ages = [15, 16, 17, 18, 19, 20, 21]
-  const x = (age) => 20 + ((age - 15) / 6) * 280
-  const courbe = 'M20,150 C90,104 150,72 180,63 S260,40 300,36'
-  return (
-    <div>
-      <svg viewBox="0 0 320 170" className="w-full" role="img" aria-label="Exemple de courbe de taille de 15 à 21 ans">
-        <defs>
-          <linearGradient id="courbe-aire" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#ff6a2b" stopOpacity="0.32" />
-            <stop offset="1" stopColor="#ff6a2b" stopOpacity="0.04" />
-          </linearGradient>
-        </defs>
-        {[36, 74, 112, 150].map((y) => (
-          <line key={y} x1="20" x2="300" y1={y} y2={y} stroke="rgba(255,255,255,0.08)" strokeDasharray="3 4" />
-        ))}
-        <path d={`${courbe} L300,150 L20,150 Z`} fill="url(#courbe-aire)" />
-        <path d={courbe} fill="none" stroke="#ff6a2b" strokeWidth="3" strokeLinecap="round" />
-        <line x1={x(18)} x2={x(18)} y1="30" y2="150" stroke="rgba(255,255,255,0.18)" strokeDasharray="3 4" />
-        <circle cx={x(18)} cy="63" r="9" fill="#ff6a2b" stroke="#f4efe9" strokeWidth="4" />
-        <rect x={x(18) - 32} y="2" width="64" height="24" rx="7" fill="#ff6a2b" />
-        <text x={x(18)} y="18.5" textAnchor="middle" fontSize="13" fontWeight="700" fill="#fff">178 cm</text>
-      </svg>
-      <div className="mt-2 flex justify-between px-[4%] text-[13px] text-[#8a847e]">
-        {ages.map((age) => <span key={age}>{age}</span>)}
       </div>
     </div>
   )

@@ -3,7 +3,7 @@ import { Check, CreditCard, ShieldCheck, Wallet, X } from 'lucide-react'
 
 import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
-import { OFFRES, finReduction, euros } from '../lib/offres'
+import { OFFRES, OFFRE_PAR_DEFAUT, finReduction, euros } from '../lib/offres'
 import { AVIS } from '../lib/avis-clients'
 import { CeQueTuObtiens } from '@/components/ui/ce-que-tu-obtiens'
 import '../styles/funnel.css'
@@ -185,7 +185,11 @@ function PaywallPage({ onBackHome }) {
      qu'un parent accepte volontiers, un paiement par an plutôt qu'un
      prélèvement mensuel sur le compte de son enfant. */
   const [paiementRepris] = useState(lirePaiementEnCours)
-  const [planChoisi, setPlanChoisi] = useState(() => paiementRepris?.plan || 'm3')
+  /* Un paiement repris peut porter une ancienne offre (3 mois, À vie)
+     qui n'est plus proposée : on retombe alors sur l'année. */
+  const [planChoisi, setPlanChoisi] = useState(() =>
+    OFFRES.some((o) => o.duree === paiementRepris?.plan) ? paiementRepris.plan : OFFRE_PAR_DEFAUT,
+  )
   const [repriseVisible, setRepriseVisible] = useState(Boolean(paiementRepris))
   useEffect(() => {
     if (paiementRepris) capture('paiement_repris_apres_rechargement', { etape: paiementRepris.plan })
@@ -687,7 +691,9 @@ function PaywallPage({ onBackHome }) {
               mesurerPlanChoisi(o.duree)
             }}
           >
-            {o.populaire && <span className="pw3-offre-bandeau">Le plus choisi</span>}
+            {/* « Meilleure offre » et non « Le plus choisi » : l'année est
+                nouvelle (21/11/2026), personne ne l'a encore choisie. */}
+            {o.populaire && <span className="pw3-offre-bandeau">Meilleure offre</span>}
             <span className="pw3-offre-coche" aria-hidden="true">{choisie && <Check size={14} strokeWidth={3} />}</span>
             <span className="pw3-offre-gauche">
               <span className="pw3-offre-nom">{o.nom}{reductionActive && <span className="pw3-offre-remise">-{Math.round((1 - o.reduit / o.normal) * 100)} %</span>}</span>
@@ -695,14 +701,13 @@ function PaywallPage({ onBackHome }) {
                 {reductionActive && <s>{euros(o.normal)}</s>} {euros(prixOffre(o))} {o.facture}
               </span>
               {o.jours && <span className="pw3-offre-renouv">Se renouvelle automatiquement</span>}
-              {(o.duree === 'm3' || o.taille) && (
+              {/* Même contenu dans les deux offres (taille prédite comprise) :
+                  la seule différence affichée est l'économie de l'année. */}
+              {o.duree === 'an' && (
                 <span className="pw3-offre-atouts">
-                  {o.duree === 'm3' && (
-                    <span className="pw3-atout-eco">
-                      {Math.round((1 - prixOffre(o) / (3 * prixOffre(OFFRES[0]))) * 100)} % moins cher que le 1 mois
-                    </span>
-                  )}
-                  {o.taille && <span className="pw3-atout-taille">🔓 Ta taille prédite</span>}
+                  <span className="pw3-atout-eco">
+                    {Math.round((1 - prixOffre(o) / (12 * prixOffre(OFFRES[0]))) * 100)} % moins cher que le 1 mois
+                  </span>
                 </span>
               )}
               {o.avantages.length > 0 && (

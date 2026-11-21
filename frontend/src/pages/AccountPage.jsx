@@ -27,7 +27,7 @@ function formatPrix(valeur) {
 function rythme(planKey) {
   if (planKey === 'm3' || planKey === 'm3_normal') return ' tous les 3 mois';
   if (planKey === 'vie' || planKey === 'vie_normal') return ' une seule fois';
-  if (planKey === 'annual') return ' par an';
+  if (planKey === 'annual' || planKey === 'an' || planKey === 'an_normal') return ' par an';
   return ' par mois';
 }
 const estAVie = (planKey) => planKey === 'vie' || planKey === 'vie_normal';

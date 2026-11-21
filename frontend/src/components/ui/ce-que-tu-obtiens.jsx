@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { Settings } from 'lucide-react'
 
+import { CourbeTaille } from '@/components/ui/courbe-taille'
+
 /* « Avec toutes les offres : », copié du paywall de Taller : une seule
    carte à la fois, qui défile toute seule, avec un titre et un seul visuel
    repris de leurs images (la liste d'actions, le chemin de jours, les
-   leçons). Leur carte « Prédis ta taille » n'est pas reprise : chez nous,
-   la taille prédite n'est que dans 3 mois et À vie, elle est dite dans ces
-   offres. Leurs cartes « Communauté exclusive » et « Coach IA » non plus :
-   Grandimi ne les a pas (22/10/2026). */
+   leçons, la courbe de taille). La carte « Prédis ta taille adulte » est
+   ajoutée le 21/11/2026 : depuis, la taille prédite est dans toutes les
+   offres (1 mois et 1 an). Leurs cartes « Communauté exclusive » et
+   « Coach IA » ne sont pas reprises : Grandimi ne les a pas (22/10/2026). */
 const DUREE_CARTE_MS = 3200
 
 // « Optimise ta taille » : comme la carte « Optimise-la » de Taller, quatre
@@ -139,6 +141,9 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
         </ul>
       ),
     },
+    // Le même graphe que la page d'accueil. Titre court : « Prédis ta
+    // taille adulte » touchait le bord de la carte sur téléphone.
+    { titre: 'Prédis ta taille', visuel: <CourbeTaille /> },
   ]
 
   const liste = useRef(null)

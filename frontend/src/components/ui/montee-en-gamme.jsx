@@ -11,10 +11,12 @@ import { capture } from '@/lib/analytics';
    s'arrête tout de suite chez Whop (internal/api/montee_en_gamme.go), et
    les jours restants ne sont pas remboursés. On le lui dit AVANT qu'il
    paie, en clair. Prix : le tarif réduit du paywall. */
-const CHOIX = ['m3', 'vie'];
+// Depuis le 21/11/2026, la taille est dans toutes les offres : cet écran
+// n'est plus ouvert (GrowthPlanPage). Gardé sur l'offre 1 an pour ne pas planter.
+const CHOIX = ['an'];
 
 export function MonteeEnGamme({ predictionData, onFermer }) {
-  const [choix, setChoix] = useState('m3');
+  const [choix, setChoix] = useState('an');
   const [chargement, setChargement] = useState(false);
   const [erreur, setErreur] = useState(null);
   const offre = OFFRES.find((o) => o.duree === choix);
@@ -62,7 +64,7 @@ export function MonteeEnGamme({ predictionData, onFermer }) {
         <div className="montee-explication">
           <p className="montee-explication-titre">Ce qui se passe</p>
           <ul>
-            <li><Check size={16} aria-hidden="true" /> Tu paies {euros(offre.reduit)} maintenant, {offre.jours ? 'pour 3 mois' : 'une seule fois, pour toujours'}.</li>
+            <li><Check size={16} aria-hidden="true" /> Tu paies {euros(offre.reduit)} maintenant, pour 1 an.</li>
             <li><Check size={16} aria-hidden="true" /> Ton abonnement 1 mois s’arrête tout de suite : plus aucun prélèvement de 14,99 €.</li>
             <li><Check size={16} aria-hidden="true" /> Les jours qui restaient sur ton mois en cours ne sont pas remboursés.</li>
             <li><Check size={16} aria-hidden="true" /> Ta taille estimée et ta courbe s’affichent dès que le paiement est validé. Tu gardes tout ton plan.</li>
@@ -72,7 +74,7 @@ export function MonteeEnGamme({ predictionData, onFermer }) {
         {erreur && <p className="funnel-error" role="alert">{erreur}</p>}
 
         <button type="button" className="funnel-cta montee-cta" onClick={payer} disabled={chargement}>
-          {chargement ? 'Ouverture du paiement…' : `Passer à ${offre.nom === 'À vie' ? 'l’offre À vie' : '3 mois'} — ${euros(offre.reduit)}`}
+          {chargement ? 'Ouverture du paiement…' : `Passer à 1 an — ${euros(offre.reduit)}`}
         </button>
         <p className="montee-securite">Paiement sécurisé par Whop</p>
       </div>
