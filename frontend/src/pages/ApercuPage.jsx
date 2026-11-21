@@ -65,8 +65,33 @@ function TuileFleche() {
   )
 }
 
+/* Depuis le 21/11/2026, « Tes résultats sont là ! » s'affiche juste après
+   l'animation de calcul, avant l'e-mail (demande de Samuel) : il est rendu
+   par OnboardingFlow avec ce composant, et ApercuPage ouvre directement le
+   résultat caché. */
+export function EcranTesResultats({ onContinue }) {
+  return (
+    <div className="gt-resultat">
+      <header className="gt-tete">
+        <span className="gt-barre" aria-hidden="true"><span /></span>
+      </header>
+      <main className="gt-contenu gt-intro">
+        <h1 className="gt-intro-titre">Tes résultats sont là !</h1>
+        <p className="gt-intro-sous">Il s’avère que… Tu ne grandis pas à ton potentiel.</p>
+        <p className="gt-intro-surligne"><span>Corrigeons ça !</span></p>
+        <TuileFleche />
+      </main>
+      <div className="gt-pied">
+        <button type="button" className="gt-cta" onClick={() => { capture('apercu_reveler'); onContinue() }}>
+          Révéler mes résultats <ChevronRight size={24} aria-hidden="true" />
+        </button>
+      </div>
+    </div>
+  )
+}
+
 function ApercuPage({ predictionData: d, onDebloquer }) {
-  const [revele, setRevele] = useState(false)
+  const [revele, setRevele] = useState(true)
   const faibles = pointsFaibles(d)
   const affichable = [d.current_height_cm, d.age].every((v) => Number.isFinite(Number(v)))
   // Le vrai nombre, jamais gonflé : sans point faible, pas de badge.

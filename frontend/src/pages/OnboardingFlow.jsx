@@ -3,6 +3,7 @@ import { BarChart3, Check, Dna, Hourglass, ListChecks, Mail, ShieldCheck, User, 
 
 import { FunnelShell, FunnelButton } from '@/components/ui/funnel-shell'
 import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
+import { EcranTesResultats } from './ApercuPage'
 import '../styles/funnel.css'
 
 import apiClient from '../lib/api'
@@ -30,6 +31,8 @@ import {
   OPTIONS_PROCHES,
   OPTIONS_ORIGINE,
   EcranDouleursBenefices,
+  EcranPousseeCompte,
+  EcranCreeHabitudes,
   OPTIONS_PILOSITE_AISSELLES,
   OPTIONS_PILOSITE_VISAGE,
   OPTIONS_EPAULES,
@@ -354,6 +357,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   // formulaire e-mail par-dessus ; `emailEnvoye` bascule une fois soumis,
   // ce qui déclenche le vrai appel API pendant que l'anneau continue.
   const [emailEnvoye, setEmailEnvoye] = useState(false)
+  // « Tes résultats sont là ! » entre l'animation de calcul et l'e-mail (21/11/2026).
+  const [introResultatsVue, setIntroResultatsVue] = useState(false)
   const [email, setEmail] = useState('')
   // Demandé avec l'e-mail, facultatif : il personnalise les deux écrans
   // d'avant le prix (« Samuel, on t'a fait un plan sur mesure »).
@@ -707,7 +712,6 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
               annee={reponses.naissance.annee}
               onChange={definirNaissance}
             />
-            <p className="verdict-age">{verdictAge(reponses.age, reponses.sexe)}</p>
           </>
         )
       case 'taille':
@@ -999,6 +1003,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         return <EcranResultatsLongTerme />
       case 'potentiel-gain':
         return <EcranPotentielGain />
+      case 'poussee':
+        return <EcranPousseeCompte />
+      case 'cree-habitudes':
+        return <EcranCreeHabitudes />
       case 'optimiser-potentiel':
         return <EcranOptimiserPotentiel />
       case 'grandimi-aide':
@@ -1062,6 +1070,9 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     // retrouver le compte ensuite (même adresse que le checkout Whop, cf.
     // PaywallPage.jsx qui relit `localStorage.userEmail`).
     const emailPlausible = EMAIL_VALIDE.test(email.trim())
+    if (animationTerminee && !emailEnvoye && !introResultatsVue) {
+      return <EcranTesResultats onContinue={() => setIntroResultatsVue(true)} />
+    }
     return (
       <ProgressionAnalyse titre="Création de ton plan…" pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
         {!animationTerminee ? null : !emailEnvoye ? (

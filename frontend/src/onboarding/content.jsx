@@ -53,6 +53,9 @@ export const ORDRE_ETAPES = [
   // « Quelle est ton origine ? » de Taller.
   'origine',
   'taille-poids',
+  // « Pourquoi es-tu sur Grandimi ? » : GoTall le demande ici (« Pourquoi
+  // as-tu téléchargé GoTall ? »), remis le 21/11/2026.
+  'motivation',
   // Habitudes : chez GoTall, juste après la taille et le poids, avant la famille.
   'sports',
   'exercice-freq',
@@ -63,7 +66,9 @@ export const ORDRE_ETAPES = [
   'pointure',
   // Courbe « Votre taille finale », comme Taller après la pointure.
   'resultats-long-terme',
-  // Puberté
+  // Puberté. « Ta poussée de croissance compte » (75 %) de GoTall, juste
+  // avant les questions de puberté comme chez eux (21/11/2026).
+  'poussee',
   'vitesse-croissance',
   'regles',
   'voix',
@@ -82,6 +87,10 @@ export const ORDRE_ETAPES = [
   // → 80/20 (format Menu IQ / Quittr), à la place de « Le coût d'être petit »
   // et de « Tu perds peut-être déjà des centimètres » (leur code reste).
   'douleurs',
+  // Puis, comme GoTall : « Grandimi crée des habitudes » et « Tu peux
+  // grandir » (20 %), à la place de la slide 80/20 (21/11/2026).
+  'cree-habitudes',
+  'potentiel-gain',
   // Preuves façon GoTall.
   'preuve-science',
   'preuve-avis',
@@ -131,6 +140,8 @@ export const TYPE_ETAPE = {
   'height-tracker': 'affichage',
   'verite-brutale': 'affichage',
   douleurs: 'affichage',
+  poussee: 'affichage',
+  'cree-habitudes': 'affichage',
   'etudes-publiees': 'affichage',
   'avis-utilisateurs': 'affichage',
   'taille-ideale': 'question',
@@ -168,9 +179,20 @@ export const TEXTES_ETAPE = {
     titre: 'Quelle est ton origine ?',
     sousTitre: 'Tu peux aussi choisir de ne pas répondre.',
   },
+  // Comme GoTall (« Pourquoi as-tu téléchargé GoTall ? »), 21/11/2026.
   motivation: {
-    titre: 'Pourquoi tu es sur Grandimi ?',
-    sousTitre: 'Tu peux choisir plusieurs',
+    titre: 'Pourquoi es-tu sur Grandimi ?',
+    sousTitre: 'Tu peux choisir plusieurs options.',
+  },
+  // GoTall 14, mot pour mot.
+  poussee: {
+    titre: 'Ta poussée de croissance compte',
+    sousTitre: 'On va poser quelques questions pour voir si tu es passé par la puberté.',
+  },
+  // GoTall 26, mot pour mot.
+  'cree-habitudes': {
+    titre: 'Grandimi crée des habitudes',
+    sousTitre: 'Jusqu’à 20 % de ta taille finale dépend de tes habitudes quotidiennes.',
   },
   sexe: {
     titre: 'Sélectionne ton sexe',
@@ -539,10 +561,10 @@ const ETAPES_GARCON = new Set(['pilosite-visage', 'voix', 'epaules', 'muscles'])
 // Ordre des chapitres = ordre du parcours (habitudes avant la famille, comme GoTall).
 export const CHAPITRES = ['Toi', 'Habitudes', 'Famille', 'Puberté', 'Objectif']
 const CHAPITRE_DE = {
-  sexe: 0, profil: 0, age: 0, 'bonne-nouvelle': 0, origine: 0, 'taille-poids': 0,
+  sexe: 0, profil: 0, age: 0, 'bonne-nouvelle': 0, origine: 0, 'taille-poids': 0, motivation: 0,
   sports: 1, 'exercice-freq': 1, sommeil: 1,
   parents: 2, proches: 2, pointure: 2, 'resultats-long-terme': 2, genetique: 2,
-  'vitesse-croissance': 3, regles: 3, voix: 3, 'croissance-lente': 3, 'pilosite-visage': 3, 'pilosite-aisselles': 3,
+  poussee: 3, 'vitesse-croissance': 3, regles: 3, voix: 3, 'croissance-lente': 3, 'pilosite-visage': 3, 'pilosite-aisselles': 3,
   epaules: 3, odeur: 3, acne: 3, muscles: 3,
 }
 
@@ -1586,12 +1608,6 @@ const SLIDES_DOULEURS = [
     titre: ['Plus de respect.', 'Plus d’opportunités.'],
     texte: 'On écoute les grands et on leur fait confiance, à l’école comme au travail.',
   },
-  {
-    ton: 'action',
-    emoji: '🧬',
-    titre: ['80 %, c’est tes gènes.', '20 %, c’est toi.'],
-    texte: 'Ces 20 %, tu peux encore aller les chercher.',
-  },
 ]
 
 const SURTITRE_SLIDE = {
@@ -1601,7 +1617,7 @@ const SURTITRE_SLIDE = {
 }
 
 export function EcranDouleursBenefices({ onContinue, onRetour }) {
-  const [i, setI] = useState(0)
+  const [i, setI] = useState(() => (import.meta.env.DEV ? Number(new URLSearchParams(window.location.search).get('slide')) || 0 : 0))
   const slide = SLIDES_DOULEURS[i]
 
   const suivant = () => {
@@ -1672,6 +1688,57 @@ export function EcranDouleursBenefices({ onContinue, onRetour }) {
           </svg>
         </button>
       </footer>
+    </div>
+  )
+}
+
+/* ---------- Écrans GoTall ajoutés le 21/11/2026 (demande de Samuel) ----------
+   « Ta poussée de croissance compte » (GoTall 14) et « GoTall crée des
+   habitudes » (GoTall 26), mêmes mots et même graphique, en orange. */
+export function EcranPousseeCompte() {
+  return (
+    <div className="gt-poussee">
+      <svg viewBox="0 0 320 210" className="gt-poussee-graphe" aria-hidden="true">
+        <text x="0" y="14" className="gt-pg-axe">100%</text>
+        <text x="0" y="66" className="gt-pg-axe gt-pg-axe--fort">75%</text>
+        <text x="0" y="196" className="gt-pg-axe">0%</text>
+        <line x1="40" y1="62" x2="150" y2="62" className="gt-pg-tirets" />
+        <rect x="150" y="10" width="96" height="44" rx="10" className="gt-pg-apres" />
+        <path d="M198 40 L198 24 M191 31 L198 24 L205 31" className="gt-pg-fleche-sombre" />
+        <rect x="150" y="62" width="96" height="130" rx="10" className="gt-pg-poussee" />
+        <path d="M176 172 L176 140 M169 147 L176 140 L183 147" className="gt-pg-fleche" />
+        <path d="M200 160 L200 116 M193 123 L200 116 L207 123" className="gt-pg-fleche" />
+        <path d="M224 140 L224 86 M217 93 L224 86 L231 93" className="gt-pg-fleche" />
+        <text x="258" y="36" className="gt-pg-legende">Après la</text>
+        <text x="258" y="50" className="gt-pg-legende">puberté</text>
+        <text x="258" y="130" className="gt-pg-legende gt-pg-legende--fort">Poussée de</text>
+        <text x="258" y="144" className="gt-pg-legende gt-pg-legende--fort">croissance</text>
+      </svg>
+      <p className="gt-poussee-texte">
+        Environ 75 % de ta croissance totale se fait pendant la puberté, et seulement 25 % après.
+      </p>
+    </div>
+  )
+}
+
+export function EcranCreeHabitudes() {
+  return (
+    <div className="gt-habitudes">
+      <p className="gt-habitudes-surligne"><span>Ne le gaspille pas.</span></p>
+      <div className="gt-habitudes-carte">
+        <div className="gt-habitudes-tete">
+          <span>Taille / Âge</span>
+          <span className="gt-habitudes-marque">avec Grandimi <img src="/favicon.svg" alt="" width="16" height="16" /></span>
+        </div>
+        <svg viewBox="0 0 300 120" className="gt-habitudes-graphe" aria-hidden="true">
+          <path d="M8 104 C 70 98, 110 84, 160 70 S 250 30, 292 14" className="gt-hab-bonne" />
+          <path d="M8 108 C 90 104, 150 94, 200 88 S 270 80, 292 78" className="gt-hab-mauvaise" />
+        </svg>
+        <div className="gt-habitudes-legende">
+          <span><i className="is-bonne" />Planning efficace</span>
+          <span><i />Mauvaises habitudes</span>
+        </div>
+      </div>
     </div>
   )
 }

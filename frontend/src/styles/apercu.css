@@ -109,3 +109,5 @@
 .gt-tuile-cote { fill: #b9481a; stroke: #b9481a; stroke-width: 14; stroke-linejoin: round; }
 .gt-tuile-dessus { fill: #ff8a52; stroke: #fff; stroke-width: 3; stroke-linejoin: round; paint-order: stroke; }
 .gt-tuile-fleche { fill: none; stroke: #111; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+
+.gt-resultat .gt-intro-titre { color: #fff !important; }

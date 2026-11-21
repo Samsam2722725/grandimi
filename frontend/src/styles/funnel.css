@@ -4571,3 +4571,34 @@ div.interstitial.citation { cursor: default; }
 @keyframes dbs-flotte { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 @media (prefers-reduced-motion: reduce) { .dbs-corps, .dbs-emoji { animation: none; } }
 @media (max-height: 680px) { .dbs-visuel { width: 150px; } .dbs-emoji { font-size: 72px; } .dbs-colonne-barre { height: 110px; } }
+
+/* ---------- « Ta poussée compte » et « Grandimi crée des habitudes » (GoTall 14 et 26, 21/11) ---------- */
+.gt-poussee, .gt-habitudes { width: 100%; display: flex; flex-direction: column; }
+.funnel-content:has(> .gt-poussee), .funnel-content:has(> .gt-habitudes) { justify-content: flex-start; }
+.gt-poussee-graphe { width: 100%; height: auto; margin-top: 18px; overflow: visible; }
+.gt-pg-axe { fill: #6e6e73; font-size: 12px; font-family: inherit; }
+.gt-pg-axe--fort { fill: #ff5a1f; font-weight: 700; }
+.gt-pg-tirets { stroke: #ff5a1f; stroke-width: 1.4; stroke-dasharray: 5 5; }
+.gt-pg-apres { fill: #1c1c1e; stroke: #2c2c2e; }
+.gt-pg-poussee { fill: #ff5a1f; filter: drop-shadow(0 0 16px rgba(255, 90, 31, 0.45)); }
+.gt-pg-fleche { fill: none; stroke: #17120e; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.gt-pg-fleche-sombre { fill: none; stroke: #ff5a1f; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.gt-pg-legende { fill: #8e8e93; font-size: 11.5px; font-family: inherit; }
+.gt-pg-legende--fort { fill: #ff5a1f; font-weight: 700; }
+.gt-poussee-texte { margin: 26px 0 0; color: #a1a1a6; font-size: 15px; line-height: 1.45; }
+.gt-habitudes-surligne { margin: -6px 0 0; }
+.gt-habitudes-surligne span { position: relative; display: inline-block; padding: 3px 7px; background: #2b2c4f; color: #fff; font-size: 14px; font-weight: 600; }
+.gt-habitudes-surligne span::before, .gt-habitudes-surligne span::after { content: ''; position: absolute; top: -5px; bottom: -3px; width: 3px; background: #7c7cf0; }
+.gt-habitudes-surligne span::before { left: -2px; }
+.gt-habitudes-surligne span::after { right: -2px; }
+.gt-habitudes-carte { margin-top: 60px; padding: 18px 16px 16px; border-radius: 20px; background: #141416; border: 1px solid #2c2c2e; box-shadow: 0 0 40px rgba(255, 90, 31, 0.08); }
+.gt-habitudes-tete { display: flex; justify-content: space-between; align-items: center; color: #d1d1d6; font-size: 14px; }
+.gt-habitudes-marque { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; color: #fff; }
+.gt-habitudes-marque img { border-radius: 4px; }
+.gt-habitudes-graphe { width: 100%; height: auto; margin: 14px 0 10px; overflow: visible; }
+.gt-hab-bonne { fill: none; stroke: #ff5a1f; stroke-width: 3; stroke-linecap: round; filter: drop-shadow(0 0 6px rgba(255, 90, 31, 0.5)); }
+.gt-hab-mauvaise { fill: none; stroke: #636366; stroke-width: 2.5; stroke-linecap: round; }
+.gt-habitudes-legende { display: flex; gap: 16px; color: #8e8e93; font-size: 12px; }
+.gt-habitudes-legende span { display: inline-flex; align-items: center; gap: 6px; }
+.gt-habitudes-legende i { width: 7px; height: 7px; border-radius: 50%; background: #636366; }
+.gt-habitudes-legende i.is-bonne { background: #ff5a1f; }
