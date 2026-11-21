@@ -54,6 +54,8 @@ export const ORDRE_ETAPES = [
   // « Quelle est ton origine ? » de Taller.
   'origine',
   'taille-poids',
+  // Pointure : chez GoTall, juste après la taille et le poids (21/11/2026).
+  'pointure',
   // « Pourquoi es-tu sur Grandimi ? » : GoTall le demande ici (« Pourquoi
   // as-tu téléchargé GoTall ? »), remis le 21/11/2026.
   'motivation',
@@ -64,21 +66,23 @@ export const ORDRE_ETAPES = [
   // Famille
   'parents',
   'proches',
-  'pointure',
-  // Courbe « Votre taille finale », comme Taller après la pointure.
+  // Courbe « Votre taille finale » (Taller).
   'resultats-long-terme',
   // Puberté. « Ta poussée de croissance compte » (75 %) de GoTall, juste
   // avant les questions de puberté comme chez eux (21/11/2026).
+  // Ordre exact de GoTall (21/11/2026) : aisselles, visage, grandi l'an
+  // dernier, épaules, odeur, acné, muscles, voix. Règles (filles) après
+  // « grandi l'an dernier ».
   'poussee',
+  'pilosite-aisselles',
+  'pilosite-visage',
   'vitesse-croissance',
   'regles',
-  'voix',
-  'pilosite-visage',
-  'pilosite-aisselles',
   'epaules',
   'odeur',
   'acne',
   'muscles',
+  'voix',
   // Les écrans retirés le 31/10/2026 (coucher, téléphone, assis, posture,
   // protéines, laitages, profil de croissance) et le 21/11/2026 (« Tu
   // grandis plus lentement ? ») restent dans le code.
@@ -597,7 +601,7 @@ export const CHAPITRES = ['Toi', 'Habitudes', 'Famille', 'Puberté', 'Objectif']
 const CHAPITRE_DE = {
   sexe: 0, profil: 0, age: 0, 'bonne-nouvelle': 0, origine: 0, 'taille-poids': 0, motivation: 0,
   sports: 1, 'exercice-freq': 1, sommeil: 1,
-  parents: 2, proches: 2, pointure: 2, 'resultats-long-terme': 2, genetique: 2,
+  parents: 2, proches: 2, pointure: 0, 'resultats-long-terme': 2, genetique: 2,
   poussee: 3, 'vitesse-croissance': 3, regles: 3, voix: 3, 'croissance-lente': 3, 'pilosite-visage': 3, 'pilosite-aisselles': 3,
   epaules: 3, odeur: 3, acne: 3, muscles: 3,
 }
