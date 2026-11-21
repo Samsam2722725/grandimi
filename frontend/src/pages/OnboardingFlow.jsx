@@ -31,6 +31,7 @@ import {
   OPTIONS_PROCHES,
   OPTIONS_ORIGINE,
   EcranDouleursBenefices,
+  EcranSymptomes,
   EcranPousseeCompte,
   EcranCreeHabitudes,
   OPTIONS_PILOSITE_AISSELLES,
@@ -140,6 +141,7 @@ function reponsesInitiales() {
     acne: null,
     muscles: null,
     origine: null,
+    symptomes: [],
     voix: null,
     croissanceLente: null,
     // Vide tant que la question n'est pas posée : pas de faux objectif.
@@ -814,6 +816,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             max={209}
             inconnuDefaut={TAILLE_MERE_INCONNUE_CM}
           />
+        )
+      case 'symptomes':
+        return (
+          <EcranSymptomes sexe={reponses.sexe} valeurs={reponses.symptomes} onBasculer={(v) => basculer('symptomes', v)} />
         )
       case 'origine':
         return (

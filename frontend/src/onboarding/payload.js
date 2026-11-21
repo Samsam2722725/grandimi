@@ -213,6 +213,7 @@ export function fusionnerResultatPrediction(reponses, email, resultatApi) {
       laitages: reponses.laitages,
       pourquoi: reponses.pourquoi,
       motivation: reponses.motivation,
+      symptomes: reponses.symptomes,
       exercice_freq: reponses.exerciceFreq,
       sports: reponses.sports,
       proches: reponses.proches,

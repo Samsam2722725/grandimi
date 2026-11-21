@@ -82,6 +82,9 @@ export const ORDRE_ETAPES = [
   // protéines, laitages, profil de croissance) et le 21/11/2026 (« Tu
   // grandis plus lentement ? ») restent dans le code.
   'pourquoi',
+  // « Symptômes » (Quittr), après « Pourquoi grandir » comme sur la carte
+  // de « Tes idées » (21/11/2026).
+  'symptomes',
   'precision',
   // Douleur avant les preuves, comme GoTall : slides douleurs → avantages
   // → 80/20 (format Menu IQ / Quittr), à la place de « Le coût d'être petit »
@@ -116,6 +119,7 @@ export const TYPE_ETAPE = {
   mere: 'question',
   proches: 'question',
   origine: 'question',
+  symptomes: 'question',
   'pilosite-aisselles': 'question',
   regles: 'question',
   'pilosite-visage': 'question',
@@ -183,6 +187,9 @@ export const TEXTES_ETAPE = {
   motivation: {
     titre: 'Pourquoi es-tu sur Grandimi ?',
     sousTitre: 'Tu peux choisir plusieurs options.',
+  },
+  symptomes: {
+    titre: 'Symptômes',
   },
   // GoTall 14, mot pour mot.
   poussee: {
@@ -1739,6 +1746,65 @@ export function EcranCreeHabitudes() {
           <span><i />Mauvaises habitudes</span>
         </div>
       </div>
+    </div>
+  )
+}
+
+/* ---------- Écran « Symptômes » de Quittr (21/11/2026) ----------
+   Demandé par Samuel (carte « Symptômes » de « Tes idées ») : bandeau rouge,
+   « coche ce que tu vis », des catégories à cocher. Mots simples, reprenant
+   les douleurs de GoTall et Taller. Les réponses partent avec les autres
+   (habitudes.symptomes). */
+const SYMPTOMES = {
+  moral: [
+    { valeur: 'petit', label: 'Je me sens petit à côté des autres' },
+    { valeur: 'compare', label: 'Je me compare tout le temps' },
+    { valeur: 'confiance', label: 'Je manque de confiance en moi' },
+  ],
+  autres_garcon: [
+    { valeur: 'invisible', label: 'On ne me remarque pas' },
+    { valeur: 'serieux', label: 'On me prend moins au sérieux' },
+    { valeur: 'filles', label: 'Les filles me regardent moins' },
+  ],
+  autres_fille: [
+    { valeur: 'invisible', label: 'On ne me remarque pas' },
+    { valeur: 'serieux', label: 'On me prend moins au sérieux' },
+    { valeur: 'jeune', label: 'On me donne moins que mon âge' },
+  ],
+  corps: [
+    { valeur: 'voute', label: 'Je me tiens voûté' },
+    { valeur: 'sommeil', label: 'Je dors mal' },
+    { valeur: 'fini', label: 'Je ne sais pas si j’ai fini de grandir' },
+  ],
+}
+
+export function EcranSymptomes({ sexe, valeurs, onBasculer }) {
+  const ensemble = valeurs || []
+  const groupes = [
+    ['Moral', SYMPTOMES.moral],
+    ['Avec les autres', sexe === 'F' ? SYMPTOMES.autres_fille : SYMPTOMES.autres_garcon],
+    ['Corps', SYMPTOMES.corps],
+  ]
+  return (
+    <div className="symptomes">
+      <p className="symptomes-bandeau">Être petit peut peser sur ton moral et sur ta vie de tous les jours.</p>
+      <p className="symptomes-consigne">Coche tout ce que tu vis :</p>
+      {groupes.map(([nom, options]) => (
+        <div key={nom} className="symptomes-groupe">
+          <p className="symptomes-titre">{nom}</p>
+          <div className="funnel-choices" role="group" aria-label={nom}>
+            {options.map((o) => (
+              <ChoiceCard
+                key={o.valeur}
+                role="checkbox"
+                selected={ensemble.includes(o.valeur)}
+                onSelect={() => onBasculer(o.valeur)}
+                title={o.label}
+              />
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   )
 }

@@ -4602,3 +4602,11 @@ div.interstitial.citation { cursor: default; }
 .gt-habitudes-legende span { display: inline-flex; align-items: center; gap: 6px; }
 .gt-habitudes-legende i { width: 7px; height: 7px; border-radius: 50%; background: #636366; }
 .gt-habitudes-legende i.is-bonne { background: #ff5a1f; }
+
+/* ---------- « Symptômes » (Quittr, 21/11) ---------- */
+.funnel-content:has(> .symptomes) { justify-content: flex-start; }
+.symptomes { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+.symptomes-bandeau { margin: 0; padding: 18px 20px; border-radius: 22px; background: #ff2d1f; color: #fff; font-size: 18px; font-weight: 700; line-height: 1.25; }
+.symptomes-consigne { margin: 12px 0 0; font-size: 18px; font-weight: 700; }
+.symptomes-groupe { margin-top: 8px; }
+.symptomes-titre { margin: 0 0 8px; color: #a1a1a6; font-size: 14px; font-weight: 700; }
