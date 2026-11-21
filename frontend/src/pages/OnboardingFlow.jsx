@@ -1054,7 +1054,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   }
 
   if (phaseFin === 'plan') {
-    return <EcranPlanSurMesure prenom={nettoyerPrenom(prenom)} onContinue={() => setPhaseFin('investir')} />
+    // « Investis en toi » est fusionné dans le résultat caché (21/11/2026) : après le plan sur mesure, on y va directement.
+    return <EcranPlanSurMesure prenom={nettoyerPrenom(prenom)} onContinue={terminerAnalyse} />
   }
 
   if (phaseFin === 'investir') {

@@ -146,6 +146,8 @@ function ApercuPage({ predictionData: d, onDebloquer }) {
           Grandimi
           <img src="/favicon.svg" alt="" width="34" height="34" />
         </p>
+        {/* « Investis en toi » fusionné ici, à la demande de Samuel (21/11/2026). */}
+        <h1 className="gt-investir">Maintenant, il est temps d’investir en toi.</h1>
 
         <div className="gt-tailles">
           <div className="gt-carte gt-taille">
