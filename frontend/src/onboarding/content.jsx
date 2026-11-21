@@ -82,9 +82,8 @@ export const ORDRE_ETAPES = [
   // Les écrans retirés le 31/10/2026 (coucher, téléphone, assis, posture,
   // protéines, laitages, profil de croissance) et le 21/11/2026 (« Tu
   // grandis plus lentement ? ») restent dans le code.
-  // « Choisis tes objectifs » (Quittr) à la place de « Pourquoi tu veux
-  // grandir » (21/11/2026) ; l'ancien écran reste dans le code.
-  'objectifs',
+  // « Pourquoi tu veux grandir » et « Choisis tes objectifs » retirés le
+  // 21/11/2026 : « Pourquoi es-tu sur Grandimi ? » (plus haut) fait les deux.
   // « Symptômes » (Quittr), après « Pourquoi grandir » comme sur la carte
   // de « Tes idées » (21/11/2026).
   'symptomes',
@@ -190,7 +189,7 @@ export const TEXTES_ETAPE = {
   // Comme GoTall (« Pourquoi as-tu téléchargé GoTall ? »), 21/11/2026.
   motivation: {
     titre: 'Pourquoi es-tu sur Grandimi ?',
-    sousTitre: 'Tu peux choisir plusieurs options.',
+    sousTitre: 'Choisis tout ce que tu veux. On adapte ton plan.',
   },
   symptomes: {
     titre: 'Symptômes',
@@ -462,11 +461,16 @@ export function texteEtape(etape, profil, sexe) {
 /* ============================================================
    OPTIONS DES ÉCRANS À CHOIX
    ============================================================ */
+/* « Pourquoi es-tu sur Grandimi ? » = les objectifs (Quittr « Choose your
+   goals », cartes de couleur). Les deux premiers sont ceux que Samuel a
+   demandés (taille maximale, taille qu'il va faire : en lien avec la taille de
+   rêve) ; les autres viennent de GoTall (21/11/2026). */
 export const OPTIONS_MOTIVATION = [
-  { valeur: 'taille-finale', label: 'Prédire ma taille finale' },
-  { valeur: 'nutrition', label: 'Savoir quoi manger pour grandir' },
-  { valeur: 'posture', label: 'Corriger ma posture' },
-  { valeur: 'exercices', label: 'Exercices pour grandir' },
+  { valeur: 'taille-max', label: 'Atteindre ma taille maximale', Icone: TrendingUp, couleur: '#ff7a3d' },
+  { valeur: 'taille-finale', label: 'Savoir quelle taille je vais faire', Icone: Gauge, couleur: '#6d8dff' },
+  { valeur: 'nutrition', label: 'Savoir quoi manger pour grandir', Icone: Utensils, couleur: '#3fcf8e' },
+  { valeur: 'posture', label: 'Corriger ma posture', Icone: PersonStanding, couleur: '#f5c542' },
+  { valeur: 'exercices', label: 'Exercices pour grandir', Icone: Dumbbell, couleur: '#ff6fa8' },
 ]
 
 // Les sports de GoTall, dans leur ordre, avec une icône comme chez eux.
@@ -1443,11 +1447,8 @@ const PASTILLES_BENEFICES = [
   { label: 'Mieux manger', Icone: Utensils, couleur: '#3fcf8e' },
 ]
 
-export function EcranPlanSurMesure({ prenom, objectifs, onContinue }) {
-  // Reprend les objectifs cochés ; sans choix, les 5 (21/11/2026).
-  const pastilles = objectifs && objectifs.length
-    ? PASTILLES_BENEFICES.filter((p) => objectifs.includes(p.label))
-    : PASTILLES_BENEFICES
+export function EcranPlanSurMesure({ prenom, onContinue }) {
+  const pastilles = PASTILLES_BENEFICES
   return (
     <div className="interstitial citation sur-mesure">
       <span className="citation-halo" aria-hidden="true" />
@@ -1826,21 +1827,21 @@ export function EcranSymptomes({ sexe, valeurs, onBasculer }) {
    Cartes de couleur à cocher, plusieurs choix, comme Quittr ; à la place de
    « Pourquoi tu veux grandir » (qui reste dans le code). Les 5 objectifs sont
    ceux du « Plan sur mesure », qui reprend ensuite ce qu'il a coché. */
-export function EcranObjectifs({ valeurs, onBasculer }) {
+export function EcranObjectifs({ options = OPTIONS_MOTIVATION, valeurs, onBasculer }) {
   const ensemble = valeurs || []
   return (
     <div className="objectifs" role="group" aria-label="Tes objectifs">
-      {PASTILLES_BENEFICES.map(({ label, Icone, couleur }) => {
-        const coche = ensemble.includes(label)
+      {options.map(({ valeur, label, Icone, couleur }) => {
+        const coche = ensemble.includes(valeur)
         return (
           <button
-            key={label}
+            key={valeur}
             type="button"
             role="checkbox"
             aria-checked={coche}
             className={'objectif' + (coche ? ' is-coche' : '')}
             style={{ '--c': couleur }}
-            onClick={() => onBasculer(label)}
+            onClick={() => onBasculer(valeur)}
           >
             <span className="objectif-icone"><Icone size={20} strokeWidth={2.4} aria-hidden="true" /></span>
             <span className="objectif-label">{label}</span>

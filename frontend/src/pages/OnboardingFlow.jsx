@@ -690,12 +690,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         )
       case 'motivation':
         return (
-          <ListeChoixMultiple
-            label={texte.titre}
-            valeurs={reponses.motivation}
-            onBasculer={(v) => basculer('motivation', v)}
-            options={OPTIONS_MOTIVATION.map((o) => ({ valeur: o.valeur, label: o.label }))}
-          />
+          <EcranObjectifs valeurs={reponses.motivation} onBasculer={(v) => basculer('motivation', v)} />
         )
       case 'sexe':
         return (
@@ -1067,7 +1062,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
 
   if (phaseFin === 'plan') {
     // « Investis en toi » est fusionné dans le résultat caché (21/11/2026) : après le plan sur mesure, on y va directement.
-    return <EcranPlanSurMesure prenom={nettoyerPrenom(prenom)} objectifs={reponses.objectifs} onContinue={terminerAnalyse} />
+    return <EcranPlanSurMesure prenom={nettoyerPrenom(prenom)} onContinue={terminerAnalyse} />
   }
 
   if (phaseFin === 'investir') {
