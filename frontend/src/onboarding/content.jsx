@@ -1790,21 +1790,25 @@ export function EcranDouleursBenefices({ onContinue, onRetour }) {
 export function EcranPousseeCompte() {
   return (
     <div className="gt-poussee">
-      <svg viewBox="0 0 320 210" className="gt-poussee-graphe" aria-hidden="true">
-        <text x="0" y="14" className="gt-pg-axe">100%</text>
-        <text x="0" y="66" className="gt-pg-axe gt-pg-axe--fort">75%</text>
-        <text x="0" y="196" className="gt-pg-axe">0%</text>
-        <line x1="40" y1="62" x2="150" y2="62" className="gt-pg-tirets" />
-        <rect x="150" y="10" width="96" height="44" rx="10" className="gt-pg-apres" />
-        <path d="M198 40 L198 24 M191 31 L198 24 L205 31" className="gt-pg-fleche-sombre" />
-        <rect x="150" y="62" width="96" height="130" rx="10" className="gt-pg-poussee" />
-        <path d="M176 172 L176 140 M169 147 L176 140 L183 147" className="gt-pg-fleche" />
-        <path d="M200 160 L200 116 M193 123 L200 116 L207 123" className="gt-pg-fleche" />
-        <path d="M224 140 L224 86 M217 93 L224 86 L231 93" className="gt-pg-fleche" />
-        <text x="258" y="36" className="gt-pg-legende">Après la</text>
-        <text x="258" y="50" className="gt-pg-legende">puberté</text>
-        <text x="258" y="130" className="gt-pg-legende gt-pg-legende--fort">Poussée de</text>
-        <text x="258" y="144" className="gt-pg-legende gt-pg-legende--fort">croissance</text>
+      {/* Mise en page de GoTall 14 (21/11/2026) : lignes fines à 100 / 75 / 50 / 0 %,
+          étiquettes petites et fines sur une ligne. */}
+      <svg viewBox="0 0 320 230" className="gt-poussee-graphe" aria-hidden="true">
+        <line x1="40" y1="10" x2="310" y2="10" className="gt-pg-grille" />
+        <line x1="40" y1="77" x2="310" y2="77" className="gt-pg-grille" />
+        <line x1="40" y1="144" x2="310" y2="144" className="gt-pg-grille" />
+        <line x1="40" y1="210" x2="310" y2="210" className="gt-pg-grille" />
+        <text x="34" y="14" textAnchor="end" className="gt-pg-axe">100%</text>
+        <text x="34" y="82" textAnchor="end" className="gt-pg-axe gt-pg-axe--fort">75%</text>
+        <text x="34" y="214" textAnchor="end" className="gt-pg-axe">0%</text>
+        <line x1="38" y1="77" x2="84" y2="77" className="gt-pg-tirets" />
+        <rect x="84" y="12" width="100" height="61" rx="12" className="gt-pg-apres" />
+        <path d="M134 56 L134 32 M125 41 L134 32 L143 41" className="gt-pg-fleche-sombre" />
+        <rect x="84" y="80" width="100" height="130" rx="12" className="gt-pg-poussee" />
+        <path d="M108 194 L108 162 M100 170 L108 162 L116 170" className="gt-pg-fleche" />
+        <path d="M134 178 L134 140 M126 148 L134 140 L142 148" className="gt-pg-fleche" />
+        <path d="M160 160 L160 118 M152 126 L160 118 L168 126" className="gt-pg-fleche" />
+        <text x="196" y="46" className="gt-pg-legende">Après la puberté</text>
+        <text x="196" y="140" className="gt-pg-legende">Poussée</text>
       </svg>
       <p className="gt-poussee-texte">
         Environ 75 % de ta croissance totale se fait pendant la puberté, et seulement 25 % après.
