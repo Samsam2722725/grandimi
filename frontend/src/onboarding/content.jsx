@@ -819,7 +819,19 @@ function ColonneMolette({ titre, children, cadre = false }) {
   )
 }
 
+/* Comme les parents (21/11/2026) : chez GoTall, tout ce qui se mesure en cm
+   ou en kg se choisit sur une règle. L'ancienne version à molettes (Taller)
+   reste en dessous. */
 export function MoletteTaillePoids({ tailleCm, poidsKg, onTaille, onPoids }) {
+  return (
+    <div className="regle-duo">
+      <ColonneRegle titre="Taille" valeur={tailleCm} onChange={onTaille} min={120} max={209} label="Ta taille en centimètres" />
+      <ColonneRegle titre="Poids" valeur={poidsKg} onChange={onPoids} min={30} max={150} label="Ton poids en kilogrammes" format={formatKg} />
+    </div>
+  )
+}
+
+export function MoletteTaillePoidsMolettes({ tailleCm, poidsKg, onTaille, onPoids }) {
   return (
     <div className="onb-mesure">
       <div className="onb-wheel-row">
@@ -853,12 +865,12 @@ function ParentInconnu({ inconnu, onInconnu }) {
 /* Comme GoTall (21/11/2026) : « Papa » et « Maman », le chiffre en gros
    au-dessus d'une règle verticale. L'ancienne version à molettes reste en
    dessous (MoletteParentsMolettes). */
-function ColonneRegle({ titre, valeur, onChange, min, max, label, children }) {
+function ColonneRegle({ titre, valeur, onChange, min, max, label, children, format = formatCm }) {
   return (
     <div className="regle-colonne">
       <span className="regle-colonne-titre">{titre}</span>
-      <span className="regle-colonne-valeur">{formatCm(valeur)}</span>
-      <RegleVerticale value={valeur} onChange={onChange} min={min} max={max} label={label} format={formatCm} hauteur={300} />
+      <span className="regle-colonne-valeur">{format(valeur)}</span>
+      <RegleVerticale value={valeur} onChange={onChange} min={min} max={max} label={label} format={format} hauteur={300} />
       {children}
     </div>
   )
@@ -964,6 +976,16 @@ function couleurTrait(t) {
 }
 
 export function MoletteSommeil({ valeur, onChange }) {
+  return (
+    <div className="onb-mesure">
+      <ColonneMolette titre="Heures" cadre>
+        <WheelPicker label="Heures de sommeil par nuit" value={valeur ?? 8} onChange={onChange} min={SOMMEIL_MIN} max={SOMMEIL_MAX} step={0.5} format={formatDuree} />
+      </ColonneMolette>
+    </div>
+  )
+}
+
+export function MoletteSommeilCadran({ valeur, onChange }) {
   const heures = valeur ?? 8
   const allumes = Math.round((heures / SOMMEIL_MAX) * TRAITS_CADRAN)
   const pourcent = ((heures - SOMMEIL_MIN) / (SOMMEIL_MAX - SOMMEIL_MIN)) * 100

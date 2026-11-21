@@ -4814,3 +4814,6 @@ div.interstitial.citation { cursor: default; }
 /* Réaliste : « TON CAP » espacé au-dessus, titre plus grand (TrendSaaS 37) */
 .eng-surtitre--centre { text-align: center; color: #a39d97; letter-spacing: 0.24em; margin-bottom: 14px; }
 .eng .eng-realiste { font-size: 29px; text-wrap: wrap; }
+
+/* Sommeil : la roue encadrée prend la largeur, comme la pointure (21/11/2026) */
+.onb-mesure > .onb-colonne--cadre { width: 100%; }
