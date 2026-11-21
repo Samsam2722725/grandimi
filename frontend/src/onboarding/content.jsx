@@ -66,8 +66,8 @@ export const ORDRE_ETAPES = [
   // Famille
   'parents',
   'proches',
-  // Courbe « Votre taille finale » (Taller).
-  'resultats-long-terme',
+  // « Courbe long terme » (Taller) retirée le 21/11/2026 : même message que
+  // « Grandimi crée des habitudes ». Son code reste.
   // Puberté. « Ta poussée de croissance compte » (75 %) de GoTall, juste
   // avant les questions de puberté comme chez eux (21/11/2026).
   // Ordre exact de GoTall (21/11/2026) : aisselles, visage, grandi l'an
@@ -108,8 +108,9 @@ export const ORDRE_ETAPES = [
   // « combien d'heures par semaine », avec une phrase sous la réponse (21/11/2026).
   'blocage',
   'temps',
+  // Citation (Taller) avec le bouton « Analyser mes réponses » de l'ancien
+  // écran « Il est temps de découvrir » (fusionnés le 21/11/2026).
   'citation-genetique',
-  'decouvrir-potentiel',
   'resultats-la',
 ]
 
@@ -1898,6 +1899,61 @@ export function ChoixAvecPhrase({ options, valeur, onChoisir, label }) {
           {valeur === o.valeur && o.phrase && <p className="phrase-reponse">{o.phrase}</p>}
         </div>
       ))}
+    </div>
+  )
+}
+
+/* ---------- Citation + « Analyser mes réponses » (fusion du 21/11/2026) ---------- */
+export function EcranCitationAnalyser({ onContinue }) {
+  return (
+    <div className="interstitial citation">
+      <span className="citation-halo" aria-hidden="true" />
+      <MotsAnimes lignes={['Tu n’as pas choisi ta génétique.', 'Mais tu peux choisir ce que tu en fais.']} />
+      <div className="interstitial-action is-ready citation-action">
+        <button type="button" className="funnel-cta" onClick={onContinue}>
+          Analyser mes réponses
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ---------- Questions pendant « Création de ton plan » (TrendSaaS 16-17, 21/11/2026) ---------- */
+export const QUESTIONS_CALCUL = [
+  {
+    champ: 'minutesJour',
+    titre: 'Combien de temps veux-tu y consacrer par jour ?',
+    options: [
+      { valeur: '5', label: '5 minutes' },
+      { valeur: '15', label: '15 minutes' },
+      { valeur: '30', label: '30 minutes ou plus' },
+    ],
+  },
+  {
+    champ: 'joursSemaine',
+    titre: 'Combien de jours par semaine ?',
+    options: [
+      { valeur: '3', label: '3 jours' },
+      { valeur: '5', label: '5 jours' },
+      { valeur: '7', label: 'Tous les jours' },
+    ],
+  },
+]
+
+export function QuestionCalcul({ question, onChoisir }) {
+  return (
+    <div className="calcul-question" role="dialog" aria-label={question.titre}>
+      <div className="calcul-question-carte">
+        <p className="calcul-question-sur">Encore une question pendant que ça tourne</p>
+        <p className="calcul-question-titre">{question.titre}</p>
+        <div className="calcul-question-choix">
+          {question.options.map((o) => (
+            <button key={o.valeur} type="button" className="calcul-question-bouton" onClick={() => onChoisir(question.champ, o.valeur)}>
+              {o.label}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

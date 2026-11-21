@@ -4676,3 +4676,12 @@ div.interstitial.citation { cursor: default; }
 .eng .funnel-cta { width: 100%; min-height: 60px; border: 0; border-radius: 999px; background: #ff5a1f; color: #17120e; font: inherit; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 30px rgba(255, 90, 31, 0.3); }
 .eng-corps { position: relative; z-index: 0; isolation: isolate; }
 .eng-pied { z-index: 5; }
+
+/* ---------- Questions pendant le calcul (TrendSaaS, 21/11) ---------- */
+.calcul-question { position: absolute; inset: 0; z-index: 6; display: flex; align-items: flex-end; justify-content: center; padding: 16px 16px max(20px, env(safe-area-inset-bottom)); background: rgba(10, 10, 10, 0.55); animation: interstitial-in 0.35s ease-out both; }
+.calcul-question-carte { width: 100%; max-width: 440px; padding: 22px 18px 18px; border-radius: 24px; background: #161514; border: 1px solid #2a2725; box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5); }
+.calcul-question-sur { margin: 0 0 6px; color: #ff5a1f; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.calcul-question-titre { margin: 0 0 14px; color: #fff; font-size: 20px; font-weight: 800; line-height: 1.25; }
+.calcul-question-choix { display: flex; flex-direction: column; gap: 10px; }
+.calcul-question-bouton { min-height: 52px; border-radius: 16px; border: 1px solid #2f2b28; background: #1f1d1b; color: #fff; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; }
+.calcul-question-bouton:active { background: #ff5a1f; color: #17120e; }

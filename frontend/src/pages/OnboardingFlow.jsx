@@ -33,6 +33,9 @@ import {
   OPTIONS_ORIGINE,
   EcranDouleursBenefices,
   EcranSymptomes,
+  EcranCitationAnalyser,
+  QuestionCalcul,
+  QUESTIONS_CALCUL,
   EcranObjectifs,
   ChoixAvecPhrase,
   OPTIONS_BLOCAGE,
@@ -149,6 +152,8 @@ function reponsesInitiales() {
     symptomes: [],
     objectifs: [],
     blocage: null,
+    minutesJour: null,
+    joursSemaine: null,
     temps: null,
     voix: null,
     croissanceLente: null,
@@ -1063,7 +1068,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   // ---------- Rendu global ----------
 
   if (etape === 'citation-genetique') {
-    return <EcranCitationGenetique key={etape} onContinue={avancer} />
+    return <EcranCitationAnalyser key={etape} onContinue={avancer} />
   }
 
   if (etape === 'douleurs') {
@@ -1097,12 +1102,18 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     // retrouver le compte ensuite (même adresse que le checkout Whop, cf.
     // PaywallPage.jsx qui relit `localStorage.userEmail`).
     const emailPlausible = EMAIL_VALIDE.test(email.trim())
-    if (animationTerminee && !emailEnvoye && !introResultatsVue) {
+    // Deux questions pendant que le calcul tourne (TrendSaaS) : la 1re vers
+    // 25 %, la 2e vers 60 % ; la suite attend qu'il ait répondu aux deux.
+    const questionEnCours = QUESTIONS_CALCUL.find((q, i) => reponses[q.champ] == null && pourcentageAnalyse >= (i === 0 ? 25 : 60) && (i === 0 || reponses[QUESTIONS_CALCUL[0].champ] != null))
+    const questionsFaites = QUESTIONS_CALCUL.every((q) => reponses[q.champ] != null)
+    if (animationTerminee && questionsFaites && !emailEnvoye && !introResultatsVue) {
       return <EcranTesResultats onContinue={() => setIntroResultatsVue(true)} />
     }
     return (
       <ProgressionAnalyse titre="Création de ton plan…" pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
-        {!animationTerminee ? null : !emailEnvoye ? (
+        {questionEnCours ? (
+          <QuestionCalcul question={questionEnCours} onChoisir={(champ, v) => definir(champ, v)} />
+        ) : !animationTerminee || !questionsFaites ? null : !emailEnvoye ? (
           <div className="resultats-overlay">
             {/* Un vrai formulaire : la touche « OK » du clavier du téléphone
                 valide, sans aller chercher le bouton sous le clavier. */}
