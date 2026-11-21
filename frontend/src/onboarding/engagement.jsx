@@ -3,6 +3,7 @@ import { CheckCircle2, Fingerprint, ChevronRight } from 'lucide-react'
 import { dateFinProgramme } from './content'
 import { TelephonePlan } from '@/components/ui/ce-que-tu-obtiens'
 import '../styles/paywall-night.css'
+import { EcranTesResultats } from '../pages/ApercuPage'
 
 /* « C'est tout à fait réaliste », « Voilà comment on t'amène à ta taille
    maximale » et la promesse (TrendSaaS 37, 38 et 40), entre le plan sur mesure
@@ -75,13 +76,19 @@ export function EcranEngagement({ prenom, onContinue }) {
           </h1>
         </main>
         <footer className="eng-pied">
-          <button type="button" className="funnel-cta" onClick={() => setEtape(2)}>Continuer <ChevronRight size={20} aria-hidden="true" /></button>
+          <button type="button" className="funnel-cta" onClick={() => setEtape(1)}>Continuer <ChevronRight size={20} aria-hidden="true" /></button>
         </footer>
       </div>
     )
   }
 
   if (etape === 1) {
+    // « Ton plan personnalisé est prêt » (tuile flèche), à la place de
+    // l'ancien plan sur mesure, entre « réaliste » et la promesse (21/11/2026).
+    return <EcranTesResultats prenom={prenom} onContinue={() => setEtape(2)} />
+  }
+
+  if (etape === 99) {
     /* « Plan sur mesure » et « Comment on t'amène » fusionnés (choix B de
        Samuel, 21/11/2026) : son prénom, la date de fin du programme et
        l'image « Ton plan ». Plus de taille prédite ici : elle est sur le

@@ -3,7 +3,6 @@ import { BarChart3, Check, Dna, Hourglass, ListChecks, Mail, ShieldCheck, User, 
 
 import { FunnelShell, FunnelButton } from '@/components/ui/funnel-shell'
 import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
-import { EcranTesResultats } from './ApercuPage'
 import { EcranEngagement } from '../onboarding/engagement'
 import '../styles/funnel.css'
 
@@ -374,7 +373,6 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   // ce qui déclenche le vrai appel API pendant que l'anneau continue.
   const [emailEnvoye, setEmailEnvoye] = useState(false)
   // « Tes résultats sont là ! » entre l'animation de calcul et l'e-mail (21/11/2026).
-  const [introResultatsVue, setIntroResultatsVue] = useState(false)
   const [email, setEmail] = useState('')
   // Demandé avec l'e-mail, facultatif : il personnalise les deux écrans
   // d'avant le prix (« Samuel, on t'a fait un plan sur mesure »).
@@ -1108,9 +1106,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     // 25 %, la 2e vers 60 % ; la suite attend qu'il ait répondu aux deux.
     const questionEnCours = QUESTIONS_CALCUL.find((q, i) => reponses[q.champ] == null && pourcentageAnalyse >= (i === 0 ? 25 : 60) && (i === 0 || reponses[QUESTIONS_CALCUL[0].champ] != null))
     const questionsFaites = QUESTIONS_CALCUL.every((q) => reponses[q.champ] != null)
-    if (animationTerminee && questionsFaites && !emailEnvoye && !introResultatsVue) {
-      return <EcranTesResultats onContinue={() => setIntroResultatsVue(true)} />
-    }
+    // « Ton plan personnalisé est prêt » est passé après l'e-mail, entre
+    // « C'est réaliste » et la promesse (engagement.jsx, 21/11/2026).
     return (
       <ProgressionAnalyse titre="Création de ton plan…" pourcentage={pourcentageAnalyse} steps={ETAPES_ANALYSE}>
         {questionEnCours ? (
