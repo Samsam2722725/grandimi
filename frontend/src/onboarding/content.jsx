@@ -65,8 +65,8 @@ export const ORDRE_ETAPES = [
   'vitesse-croissance',
   'regles',
   'voix',
-  // GoTall, remis le 21/11/2026 (sa place chez eux : juste après la voix).
-  'croissance-lente',
+  // « Tu grandis plus lentement ? » (GoTall) : ajouté puis retiré le 21/11/2026,
+  // Samuel n'en veut pas. Le code de l'écran reste.
   'pilosite-visage',
   'pilosite-aisselles',
   // Épaules, odeur, muscles : ordre de GoTall (épaules, odeur, acné,
