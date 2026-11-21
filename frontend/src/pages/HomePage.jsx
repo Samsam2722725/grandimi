@@ -28,7 +28,7 @@ const FAQ = [
   {
     question: 'Qu’est-ce que je reçois ?',
     answer:
-      'Un programme fait pour toi, jour après jour sur 16 niveaux : ta routine, tes exercices (posture, étirements, sport), quoi manger et à quelle heure te coucher. Avec les offres 3 mois et À vie, tu as aussi ta taille adulte estimée.',
+      'Un programme fait pour toi, jour après jour sur 16 niveaux : ta routine, tes exercices (posture, étirements, sport), quoi manger et à quelle heure te coucher. Tu as aussi ta taille adulte estimée.',
   },
   {
     question: 'Pourquoi pas juste des vidéos TikTok ?',

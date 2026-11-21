@@ -25,7 +25,7 @@ import (
    et le nouveau l est. */
 func estOffreSuperieure(typePlan string) bool {
 	switch typePlan {
-	case "m3", "m3_normal", "vie", "vie_normal":
+	case "m3", "m3_normal", "vie", "vie_normal", "an", "an_normal":
 		return true
 	}
 	return false

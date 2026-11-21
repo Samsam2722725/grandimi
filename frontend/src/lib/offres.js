@@ -1,11 +1,16 @@
 /* Les offres du paywall « comment grandir ».
 
    Chaque durée existe à deux prix, deux vrais plans Whop :
-   - le prix réduit (clé `m1`, `m3`, `vie`), proposé pendant les 15 minutes
+   - le prix réduit (clé `m1`, `an`), proposé pendant les 15 minutes
      qui suivent l'arrivée sur le paywall ;
    - le prix normal (clé `…_normal`), appliqué ensuite et affiché barré
      pendant la réduction. La réduction est donc réelle : une fois le
-     minuteur à zéro, c'est bien le prix normal qui est prélevé. */
+     minuteur à zéro, c'est bien le prix normal qui est prélevé.
+
+   Depuis le 21/11/2026 : deux offres seulement, 1 mois et 1 an, avec
+   exactement le même contenu (taille prédite comprise). Les offres
+   3 mois et À vie ne sont plus proposées ; leurs abonnés les gardent
+   (clés m3 / vie côté serveur). */
 export const OFFRES = [
   {
     duree: 'm1',
@@ -14,34 +19,22 @@ export const OFFRES = [
     reduit: 14.99,
     normal: 19.99,
     facture: 'par mois',
-    // Comme Taller : pas de liste dans la carte, la carte « Voici ce que tu
-    // obtiendras » montre le contenu. Seul ce que les autres offres ajoutent
-    // est écrit (18/10/2026).
     avantages: [],
   },
   {
-    duree: 'm3',
-    nom: '3 mois',
-    jours: 91,
+    duree: 'an',
+    nom: '1 an',
+    jours: 365,
     reduit: 29.99,
     normal: 39.99,
-    facture: 'tous les 3 mois',
-    // Une seule raison de monter en gamme, affichée seule dans la carte (20/10/2026).
-    taille: true,
+    facture: 'par an',
     avantages: [],
     populaire: true,
   },
-  {
-    duree: 'vie',
-    nom: 'À vie',
-    jours: null,
-    reduit: 59.99,
-    normal: 79.99,
-    facture: 'une seule fois',
-    taille: true,
-    avantages: [],
-  },
 ]
+
+/** Offre par défaut du paywall : l'année. */
+export const OFFRE_PAR_DEFAUT = 'an'
 
 export const DUREE_REDUCTION_MS = 15 * 60 * 1000
 const CLE_FIN = 'grandimi:fin-reduction'

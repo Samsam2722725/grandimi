@@ -28,6 +28,11 @@ const (
 	Mois1Normal PlanKey = "m1_normal"
 	Mois3Normal PlanKey = "m3_normal"
 	AVieNormal  PlanKey = "vie_normal"
+
+	// Offre 1 an (21/11/2026) : avec le 1 mois, ce sont les deux seules
+	// offres du paywall. 3 mois et À vie restent ici pour leurs abonnés.
+	An       PlanKey = "an"
+	AnNormal PlanKey = "an_normal"
 )
 
 type Plan struct {
@@ -64,6 +69,8 @@ var plans = map[PlanKey]Plan{
 	Mois1Normal: {Key: Mois1Normal, Label: "1 mois", PriceEUR: 19.99, Interval: "month", WhopPlanIDEnv: "WHOP_PLAN_ID_M1_NORMAL"},
 	Mois3Normal: {Key: Mois3Normal, Label: "3 mois", PriceEUR: 39.99, Interval: "quarter", WhopPlanIDEnv: "WHOP_PLAN_ID_M3_NORMAL"},
 	AVieNormal:  {Key: AVieNormal, Label: "À vie", PriceEUR: 79.99, Interval: "lifetime", WhopPlanIDEnv: "WHOP_PLAN_ID_VIE_NORMAL"},
+	An:          {Key: An, Label: "1 an", PriceEUR: 29.99, Interval: "year", WhopPlanIDEnv: "WHOP_PLAN_ID_AN"},
+	AnNormal:    {Key: AnNormal, Label: "1 an", PriceEUR: 39.99, Interval: "year", WhopPlanIDEnv: "WHOP_PLAN_ID_AN_NORMAL"},
 }
 
 // ParIDWhop retrouve l'offre à partir de l'id de plan Whop reçu par le
@@ -96,5 +103,6 @@ func All() []Plan {
 		plans[Monthly], plans[Annual],
 		plans[Mois1], plans[Mois3], plans[AVie],
 		plans[Mois1Normal], plans[Mois3Normal], plans[AVieNormal],
+		plans[An], plans[AnNormal],
 	}
 }

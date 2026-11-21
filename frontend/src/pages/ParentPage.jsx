@@ -62,7 +62,7 @@ function ParentPage({ childUserId }) {
   const parametres = new URLSearchParams(window.location.search);
   const [planChoisi, setPlanChoisi] = useState(() => {
     const offre = parametres.get('offre');
-    return OFFRES.some((o) => o.duree === offre) ? offre : 'm3';
+    return OFFRES.some((o) => o.duree === offre) ? offre : 'an';
   });
   const finReductionEnfant = Number(parametres.get('fin')) || 0;
   const [maintenant, setMaintenant] = useState(() => Date.now());
