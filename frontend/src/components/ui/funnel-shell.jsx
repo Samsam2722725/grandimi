@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ArrowLeft, ChevronRight } from 'lucide-react'
 
-import { Mascotte } from '@/components/ui/mascotte'
 
 import { cn } from '@/lib/utils'
 
@@ -21,7 +20,37 @@ import { cn } from '@/lib/utils'
    terminée » doit quand même savoir d'où l'on vient. */
 let dernierePartie = null
 
-/* Titre en mots qui sortent d'un léger flou, l'un après l'autre (n° 5). */
+/* Titre en machine à écrire, comme TrendSaaS (21/11/2026, demande de
+   Samuel) : les lettres s'écrivent une à une derrière un curseur. Le reste du
+   texte est déjà là, invisible, pour que rien ne saute pendant l'écriture.
+   L'état est local : seul le titre se redessine, pas l'écran. */
+function TitreMachine({ texte }) {
+  const [n, setN] = useState(0)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      setN(texte.length)
+      return undefined
+    }
+    setN(0)
+    let i = 0
+    const t = setInterval(() => {
+      i += 1
+      setN(i)
+      if (i >= texte.length) clearInterval(t)
+    }, 24)
+    return () => clearInterval(t)
+  }, [texte])
+  const fini = n >= texte.length
+  return (
+    <>
+      <span aria-hidden="true">{texte.slice(0, n)}</span>
+      <span className={'machine-curseur' + (fini ? ' is-fini' : '')} aria-hidden="true" />
+      <span className="machine-reste" aria-hidden="true">{texte.slice(n)}</span>
+    </>
+  )
+}
+
+/* Ancienne version : les mots sortent d'un léger flou (gardée). */
 function TitreAnime({ children }) {
   if (typeof children !== 'string') return children
   return children.split(' ').map((mot, i) => (
@@ -125,13 +154,6 @@ export function FunnelShell({
               className="funnel-progress-fill"
               style={{ width: `${pourcent}%` }}
             />
-            {/* La mascotte au bout de la barre grandit à chaque réponse (n° 1). */}
-            <Mascotte
-              hauteur={Math.round(18 + progress * 16)}
-              humeur={bandeau ? 'saut' : 'normal'}
-              className="funnel-progress-mascotte"
-              style={{ left: `${pourcent}%` }}
-            />
           </div>
         )}
 
@@ -154,7 +176,7 @@ export function FunnelShell({
               {chapitres.actif + 1}/{chapitres.noms.length} · {chapitres.noms[chapitres.actif]}
             </p>
           )}
-          {title && <h1 className="funnel-title" aria-label={typeof title === 'string' ? title : undefined}><TitreAnime>{title}</TitreAnime></h1>}
+          {title && <h1 className="funnel-title" aria-label={typeof title === 'string' ? title : undefined}>{typeof title === 'string' ? <TitreMachine texte={title} /> : title}</h1>}
           {subtitle && <p className="funnel-subtitle">{subtitle}</p>}
           <div className="funnel-content">{children}</div>
         </div>
@@ -164,7 +186,6 @@ export function FunnelShell({
 
       {bandeau && (
         <div className="partie-bandeau" role="status">
-          <Mascotte hauteur={34} humeur="saut" />
           <span>{bandeau} ✓</span>
         </div>
       )}

@@ -4932,3 +4932,80 @@ div.interstitial.citation { cursor: default; }
 @media (prefers-reduced-motion: reduce) {
   .mascotte-tout, .mot-anime, .funnel-choices > *, .funnel-step, .partie-bandeau { animation: none !important; }
 }
+
+/* ================================================================
+   2e tour d'animations (21/11/2026, retours de Samuel)
+   ================================================================ */
+/* Titres en machine à écrire */
+.machine-reste { color: transparent; }
+.machine-curseur { display: inline-block; width: 3px; height: 0.9em; margin: 0 1px -0.08em; border-radius: 2px; background: #ff6a2b; animation: curseur 0.8s steps(1) infinite; }
+.machine-curseur.is-fini { animation: curseur-fin 0.6s ease 0.6s forwards; }
+@keyframes curseur { 50% { opacity: 0; } }
+@keyframes curseur-fin { to { opacity: 0; width: 0; margin: 0; } }
+
+/* Graphique des habitudes : tracé, écart rempli, point lumineux */
+.gt-hab-grille { stroke: #232326; stroke-width: 1; stroke-dasharray: 3 4; }
+.gt-hab-trace { stroke-dasharray: 1; stroke-dashoffset: 1; animation: trace 1.6s cubic-bezier(0.3, 0, 0.2, 1) 0.35s forwards; }
+.gt-hab-trace--bonne { animation-duration: 1.6s; }
+@keyframes trace { to { stroke-dashoffset: 0; } }
+.gt-hab-ecart { opacity: 0; animation: apparait 0.8s ease 1.6s forwards; }
+.gt-hab-point { fill: #fff; filter: drop-shadow(0 0 6px #ff6a2b) drop-shadow(0 0 12px #ff6a2b); }
+.gt-hab-bulle { opacity: 0; animation: bulle 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) 2s forwards; transform-box: fill-box; transform-origin: 50% 100%; }
+.gt-hab-bulle rect { fill: #ff6a2b; }
+.gt-hab-bulle text { fill: #111; font-size: 10px; font-weight: 700; }
+@keyframes apparait { to { opacity: 1; } }
+@keyframes bulle { from { opacity: 0; transform: scale(0.6) translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Jauge : le disque respire, les graduations s'allument l'une après l'autre */
+.jauge-disque { animation: jauge-respire 2.4s ease-in-out 1.2s infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes jauge-respire { 50% { transform: scale(1.04); filter: brightness(1.25); } }
+.jauge-graduation.is-active { animation: graduation 0.4s ease both; }
+.jauge-graduation.is-active:nth-of-type(9) { animation-delay: 0.6s; }
+.jauge-graduation.is-active:nth-of-type(10) { animation-delay: 0.8s; }
+.jauge-graduation.is-active:nth-of-type(11) { animation-delay: 1s; }
+@keyframes graduation { from { opacity: 0.2; } to { opacity: 1; } }
+
+/* « Plan prêt » comme GoTall 39 */
+.eng-corps.gt39 { align-items: flex-start; text-align: left; justify-content: flex-start; padding-top: max(56px, env(safe-area-inset-top)); flex: 1; }
+.gt39-titre { margin: 0; color: #fff; font-size: 32px; font-weight: 700; line-height: 1.19; letter-spacing: -0.01em; }
+.gt39-sous { margin: 18px 0 0; color: #9a9a9a; font-size: 17px; line-height: 1.35; }
+.gt39-surligne { margin-top: 12px; }
+.gt39-surligne span { font-size: 18px; font-weight: 500; }
+.gt39-tuile { width: 100%; margin: auto 0; padding-bottom: 30px; animation: tuile-arrive 0.7s cubic-bezier(0.3, 1.5, 0.5, 1) 0.3s both; }
+.gt39-tuile .gt-tuile { margin: 0 auto; width: 74%; max-width: 300px; animation: tuile-flotte 3.2s ease-in-out 1s infinite; }
+@keyframes tuile-arrive { from { opacity: 0; transform: translateY(40px) scale(0.85); } to { opacity: 1; transform: none; } }
+@keyframes tuile-flotte { 50% { transform: translateY(-10px); } }
+
+/* « Création de ton plan » façon TrendSaaS 15 */
+.interstitial.calc { justify-content: flex-start; align-items: center; text-align: center; gap: 0; padding: max(40px, env(safe-area-inset-top)) 20px 24px; overflow-y: auto; background: radial-gradient(circle at 50% 30%, rgba(255, 90, 31, 0.10), transparent 55%), #0a0a0a; }
+.calc-surtitre { margin: 0; color: #a39d97; font-size: 13px; letter-spacing: 0.28em; text-transform: uppercase; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+.interstitial .calc-titre { margin: 14px 0 0; color: #fff; font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+.calc-sous-titre { margin: 10px 0 0; color: #b9b4ae; font-size: 16px; }
+.calc-preuve { display: inline-flex; align-items: center; gap: 10px; margin: 14px 0 0; padding: 9px 18px; border-radius: 999px; border: 1px solid #2c2c2c; color: #d8d8d8; font-size: 14px; }
+.calc-preuve span { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 10px #22c55e; animation: jauge-respire 1.6s ease-in-out infinite; }
+.calc-anneau { position: relative; width: 190px; height: 190px; margin: 26px 0 8px; }
+.calc-anneau svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.calc-piste { fill: none; stroke: #1c1c1c; stroke-width: 12; }
+.calc-arc { fill: none; stroke-width: 12; stroke-linecap: round; transition: stroke-dashoffset 0.3s linear; filter: drop-shadow(0 0 8px rgba(255, 90, 31, 0.55)); }
+.calc-chiffre { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-size: 48px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.calc-chiffre small { margin-top: 4px; color: #a39d97; font-size: 20px; font-weight: 700; }
+.calc-etapes { list-style: none; margin: 14px 0 0; padding: 0; width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 14px; text-align: left; }
+.calc-etape { display: flex; align-items: center; gap: 14px; color: #6e6e73; font-size: 17px; transition: color 0.3s ease; }
+.calc-etape-rond { flex: none; width: 26px; height: 26px; border-radius: 50%; border: 2px solid #2c2c2c; display: grid; place-items: center; color: #111; transition: background 0.3s ease, border-color 0.3s ease; }
+.calc-etape.is-en-cours { color: #fff; }
+.calc-etape.is-en-cours .calc-etape-rond { border-color: #2c2c2c; border-top-color: #ff6a2b; animation: tourne 0.8s linear infinite; }
+.calc-etape.is-fait { color: #d8d8d8; }
+.calc-etape.is-fait .calc-etape-rond { background: #ff6a2b; border-color: #ff6a2b; animation: coche 0.35s cubic-bezier(0.3, 1.6, 0.5, 1); }
+@keyframes tourne { to { transform: rotate(360deg); } }
+@keyframes coche { from { transform: scale(0.5); } to { transform: none; } }
+.calc-avis { margin: 22px 0 0; width: 100%; max-width: 360px; padding: 16px 18px; border-radius: 20px; background: #141414; border: 1px solid #262626; text-align: left; animation: avis-glisse 0.5s ease both; }
+.calc-avis figcaption { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 15px; }
+.calc-avis figcaption span { color: #fbbf24; letter-spacing: 1px; }
+.calc-avis blockquote { margin: 8px 0 0; color: #b9b4ae; font-size: 14px; line-height: 1.45; }
+@keyframes avis-glisse { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .machine-curseur, .gt-hab-trace, .gt-hab-ecart, .gt-hab-bulle, .jauge-disque, .gt39-tuile, .gt39-tuile .gt-tuile, .calc-avis, .calc-etape-rond { animation: none !important; }
+  .gt-hab-trace { stroke-dashoffset: 0; }
+  .gt-hab-ecart, .gt-hab-bulle { opacity: 1; }
+}

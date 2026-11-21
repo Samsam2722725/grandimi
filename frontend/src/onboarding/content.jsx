@@ -981,7 +981,7 @@ function couleurTrait(t) {
   return `rgb(${c.join(',')})`
 }
 
-export function MoletteSommeil({ valeur, onChange }) {
+export function MoletteSommeilRoue({ valeur, onChange }) {
   return (
     <div className="onb-mesure">
       <ColonneMolette titre="Heures" cadre>
@@ -991,7 +991,8 @@ export function MoletteSommeil({ valeur, onChange }) {
   )
 }
 
-export function MoletteSommeilCadran({ valeur, onChange }) {
+// Le cadran de Taller, remis le 21/11/2026 : Samuel le trouve mieux et plus amusant.
+export function MoletteSommeil({ valeur, onChange }) {
   const heures = valeur ?? 8
   const allumes = Math.round((heures / SOMMEIL_MAX) * TRAITS_CADRAN)
   const pourcent = ((heures - SOMMEIL_MIN) / (SOMMEIL_MAX - SOMMEIL_MIN)) * 100
@@ -1108,8 +1109,6 @@ export function EcranResultatsLongTerme() {
 export function EcranPotentielGain() {
   return (
     <div className="onb-preuve">
-      {/* La mascotte s'étire au-dessus de la jauge (n° 14). */}
-      <Mascotte hauteur={64} humeur="etire" className="jauge-mascotte" />
       <JaugePotentiel />
     </div>
   )
@@ -1834,9 +1833,29 @@ export function EcranCreeHabitudes() {
           <span>Taille / Âge</span>
           <span className="gt-habitudes-marque">avec Grandimi <img src="/favicon.svg" alt="" width="16" height="16" /></span>
         </div>
+        {/* Animé (21/11/2026) : les deux courbes se tracent, l'écart se remplit
+            d'orange, et un point lumineux file au bout de la courbe orange. */}
         <svg viewBox="0 0 300 120" className="gt-habitudes-graphe" aria-hidden="true">
-          <path d="M8 104 C 70 98, 110 84, 160 70 S 250 30, 292 14" className="gt-hab-bonne" />
-          <path d="M8 108 C 90 104, 150 94, 200 88 S 270 80, 292 78" className="gt-hab-mauvaise" />
+          <defs>
+            <linearGradient id="gt-hab-ecart" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ff6a2b" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#ff6a2b" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <line x1="8" y1="40" x2="292" y2="40" className="gt-hab-grille" />
+          <line x1="8" y1="76" x2="292" y2="76" className="gt-hab-grille" />
+          <path d="M8 104 C 70 98, 110 84, 160 70 S 250 30, 292 14 L292 78 C 250 82, 150 96, 8 108 Z" className="gt-hab-ecart" fill="url(#gt-hab-ecart)" />
+          <path d="M8 108 C 90 104, 150 94, 200 88 S 270 80, 292 78" className="gt-hab-mauvaise gt-hab-trace" pathLength="1" />
+          <path id="gt-hab-chemin" d="M8 104 C 70 98, 110 84, 160 70 S 250 30, 292 14" className="gt-hab-bonne gt-hab-trace gt-hab-trace--bonne" pathLength="1" />
+          <circle r="5" className="gt-hab-point">
+            <animateMotion dur="1.6s" begin="0.35s" fill="freeze" calcMode="spline" keySplines="0.3 0 0.2 1" keyTimes="0;1" keyPoints="0;1">
+              <mpath href="#gt-hab-chemin" />
+            </animateMotion>
+          </circle>
+          <g className="gt-hab-bulle">
+            <rect x="214" y="0" width="70" height="20" rx="10" />
+            <text x="249" y="14" textAnchor="middle">Ton potentiel</text>
+          </g>
         </svg>
         <div className="gt-habitudes-legende">
           <span><i className="is-bonne" />Planning efficace</span>
