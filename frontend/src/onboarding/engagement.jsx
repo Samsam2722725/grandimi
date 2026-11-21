@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { Fingerprint, ChevronRight } from 'lucide-react'
+import { CheckCircle2, Fingerprint, ChevronRight } from 'lucide-react'
+import { dateFinProgramme } from './content'
 import { TelephonePlan } from '@/components/ui/ce-que-tu-obtiens'
 import '../styles/paywall-night.css'
 
@@ -81,33 +82,21 @@ export function EcranEngagement({ prenom, onContinue }) {
   }
 
   if (etape === 1) {
-    const ETAPES = [
-      { n: '01', titre: 'On prédit ta taille finale', texte: 'Avec ta croissance, ta famille et tes habitudes.', visuel: (
-        <div className="eng-prediction" aria-hidden="true">
-          <div><span>Aujourd’hui</span><strong>Ta taille</strong></div>
-          <div className="eng-prediction-cible"><span>Ta taille finale</span><strong>🔒</strong></div>
-        </div>
-      ) },
-      // 21/11/2026 (Samuel) : 2 étapes seulement ; la 2e montre « Ton plan » et dit « plan personnalisé ».
-      { n: '02', titre: 'Ton plan personnalisé pour atteindre ta taille maximale', texte: 'Chaque jour, il te dit quoi faire.', visuel: <TelephonePlan /> },
-    ]
+    /* « Plan sur mesure » et « Comment on t'amène » fusionnés (choix B de
+       Samuel, 21/11/2026) : son prénom, la date de fin du programme et
+       l'image « Ton plan ». Plus de taille prédite ici : elle est sur le
+       résultat caché. */
     return (
       <div className="eng">
-        <main className="eng-corps eng-corps--liste">
-          <p className="eng-surtitre">Ce qu’on fait maintenant</p>
-          <h1 className="eng-titre">Voilà comment on t’amène à ta taille maximale.</h1>
-          <ol className="eng-etapes">
-            {ETAPES.map((e) => (
-              <li key={e.n} className="eng-etape">
-                <span className="eng-num">{e.n}</span>
-                <div className="eng-etape-texte">
-                  <strong>{e.titre}</strong>
-                  <span>{e.texte}</span>
-                </div>
-                <div className="eng-visuel">{e.visuel}</div>
-              </li>
-            ))}
-          </ol>
+        <main className="eng-corps eng-corps--plan">
+          <span className="pret-badge" aria-hidden="true"><CheckCircle2 size={34} strokeWidth={2.4} /></span>
+          <h1 className="eng-titre eng-titre--centre">
+            {prenom ? `${prenom}, ton plan sur mesure est prêt.` : 'Ton plan sur mesure est prêt.'}
+          </h1>
+          <p className="eng-plan-label">Ton programme se termine le :</p>
+          <p className="eng-plan-date">{dateFinProgramme()}</p>
+          <p className="eng-plan-sous">Ton plan personnalisé pour atteindre ta taille maximale. Chaque jour, il te dit quoi faire.</p>
+          <div className="eng-visuel eng-visuel--plan"><TelephonePlan /></div>
         </main>
         <footer className="eng-pied">
           <button type="button" className="funnel-cta" onClick={() => setEtape(2)}>Continuer <ChevronRight size={20} aria-hidden="true" /></button>

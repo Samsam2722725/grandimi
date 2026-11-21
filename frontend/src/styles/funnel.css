@@ -4685,3 +4685,11 @@ div.interstitial.citation { cursor: default; }
 .calcul-question-choix { display: flex; flex-direction: column; gap: 10px; }
 .calcul-question-bouton { min-height: 52px; border-radius: 16px; border: 1px solid #2f2b28; background: #1f1d1b; color: #fff; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; }
 .calcul-question-bouton:active { background: #ff5a1f; color: #17120e; }
+
+/* ---------- « Ton plan sur mesure est prêt » (fusion, 21/11) ---------- */
+.eng-corps--plan { align-items: center; text-align: center; gap: 0; }
+.eng-corps--plan .pret-badge { margin: 8px 0 14px; }
+.eng-plan-label { margin: 16px 0 8px; color: #a39d97; font-size: 15px; }
+.eng-plan-date { margin: 0; padding: 12px 26px; border-radius: 999px; background: #fff; color: #111; font-size: 18px; font-weight: 800; box-shadow: 0 0 30px rgba(255, 90, 31, 0.35); }
+.eng-plan-sous { margin: 18px 0 0; color: #d6d0ca; font-size: 15px; line-height: 1.45; max-width: 320px; }
+.eng-visuel--plan { margin-top: 18px; width: 100%; }

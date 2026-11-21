@@ -506,7 +506,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     clearTimeout(minuterieAvance.current)
     // L'e-mail est envoyé : on ne revient pas dans le questionnaire.
     if (phaseFin === 'investir') {
-      setPhaseFin('plan')
+      setPhaseFin('engagement')
       return
     }
     if (phaseFin) return
@@ -614,7 +614,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   // `resultatApi` directement, pour ne jamais couper l'animation en plein
   // mouvement. Ensuite, les deux écrans façon Quittr avant le prix.
   useEffect(() => {
-    if (emailEnvoye && resultatApi && !phaseFin) setPhaseFin('plan')
+    // Après l'e-mail : « C'est réaliste » → « Ton plan sur mesure est prêt » → promesse (21/11/2026).
+    if (emailEnvoye && resultatApi && !phaseFin) setPhaseFin('engagement')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emailEnvoye, resultatApi])
 
