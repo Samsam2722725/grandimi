@@ -1172,10 +1172,9 @@
 /* ---------- Ecran « la verite brutale » ----------
 
    Liste de consequences, une par ligne, chacune precedee d un signe d alerte.
-   Forme reprise de l ecran equivalent de Taller ; le contenu, lui, ne doit
-   comporter NI pourcentage NI montant NI allusion a la seduction — c est la
-   difference entre une liste verifiable et une liste qui vise l estime de soi
-   d un mineur.
+   Forme reprise de l ecran equivalent de Taller. Depuis le 21/11/2026, la
+   liste garcon reprend mot pour mot celle de GoTall, chiffres compris :
+   decision de Samuel (voir VERITE_GARCON dans content.jsx).
    ------------------------------------------------------------------ */
 
 .funnel-verite {

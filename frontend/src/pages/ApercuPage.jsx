@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ChevronRight } from 'lucide-react'
 
 import { capture } from '../lib/analytics'
@@ -50,7 +50,23 @@ function Confettis() {
   )
 }
 
+/* « Tes résultats sont là ! » : l'écran 39 de GoTall, juste avant le
+   résultat caché, mot pour mot (21/11/2026, demande de Samuel). La tuile
+   en relief avec sa flèche est redessinée en orange. */
+function TuileFleche() {
+  return (
+    <svg className="gt-tuile" viewBox="0 0 300 200" aria-hidden="true">
+      <polygon points="150,44 292,124 150,204 8,124" className="gt-tuile-ombre" />
+      <polygon points="14,96 150,174 286,96 286,116 150,194 14,116" className="gt-tuile-cote" />
+      <polygon points="150,18 286,96 150,174 14,96" className="gt-tuile-dessus" />
+      <path d="M 212 98 C 180 106, 130 106, 86 92" className="gt-tuile-fleche" />
+      <path d="M 106 74 L 82 90 L 96 114" className="gt-tuile-fleche" />
+    </svg>
+  )
+}
+
 function ApercuPage({ predictionData: d, onDebloquer }) {
+  const [revele, setRevele] = useState(false)
   const faibles = pointsFaibles(d)
   const affichable = [d.current_height_cm, d.age].every((v) => Number.isFinite(Number(v)))
   // Le vrai nombre, jamais gonflé : sans point faible, pas de badge.
@@ -69,6 +85,27 @@ function ApercuPage({ predictionData: d, onDebloquer }) {
   const debloquer = (ou) => {
     capture('apercu_debloquer', { ou })
     onDebloquer()
+  }
+
+  if (!revele) {
+    return (
+      <div className="gt-resultat">
+        <header className="gt-tete">
+          <span className="gt-barre" aria-hidden="true"><span /></span>
+        </header>
+        <main className="gt-contenu gt-intro">
+          <h1 className="gt-intro-titre">Tes résultats sont là !</h1>
+          <p className="gt-intro-sous">Il s’avère que… Tu ne grandis pas à ton potentiel.</p>
+          <p className="gt-intro-surligne"><span>Corrigeons ça !</span></p>
+          <TuileFleche />
+        </main>
+        <div className="gt-pied">
+          <button type="button" className="gt-cta" onClick={() => { capture('apercu_reveler'); setRevele(true) }}>
+            Révéler mes résultats <ChevronRight size={24} aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (

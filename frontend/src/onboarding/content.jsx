@@ -3,8 +3,10 @@ import {
   BookOpen,
   CheckCircle2,
   Circle,
+  CircleDot,
   Dumbbell,
   Footprints,
+  Gauge,
   HeartPulse,
   ListChecks,
   Lock,
@@ -12,6 +14,7 @@ import {
   PersonStanding,
   ThumbsDown,
   ThumbsUp,
+  Timer,
   Trophy,
   Smile,
   TrendingUp,
@@ -62,6 +65,8 @@ export const ORDRE_ETAPES = [
   'vitesse-croissance',
   'regles',
   'voix',
+  // GoTall, remis le 21/11/2026 (sa place chez eux : juste après la voix).
+  'croissance-lente',
   'pilosite-visage',
   'pilosite-aisselles',
   // Épaules, odeur, muscles : ordre de GoTall (épaules, odeur, acné,
@@ -262,7 +267,7 @@ export const TEXTES_ETAPE = {
   },
   'croissance-lente': {
     titre: 'Tu grandis encore, mais plus lentement que l’an dernier ?',
-    sousTitre: 'Une croissance plus lente peut signifier que ta puberté se termine',
+    sousTitre: 'Une croissance plus lente peut signifier que ta poussée se termine.',
   },
   'modele-prediction': {
     titre: 'Un modèle basé sur la science',
@@ -317,9 +322,9 @@ export const TEXTES_ETAPE = {
   'plus-que-genes': {
     titre: 'Tu perds peut-être déjà des centimètres',
   },
+  // Comme GoTall : le titre seul, sans sous-titre (21/11/2026).
   'verite-brutale': {
     titre: 'Le coût d’être petit',
-    sousTitre: 'Pas des statistiques. Juste ce que tu vis déjà',
   },
   'etudes-publiees': {
     titre: 'Avis expert',
@@ -538,7 +543,7 @@ export const CHAPITRES = ['Toi', 'Famille', 'Puberté', 'Habitudes', 'Objectif']
 const CHAPITRE_DE = {
   sexe: 0, profil: 0, age: 0, 'bonne-nouvelle': 0, origine: 0, 'taille-poids': 0,
   parents: 1, proches: 1, pointure: 1, 'resultats-long-terme': 1, genetique: 1,
-  'vitesse-croissance': 2, regles: 2, voix: 2, 'pilosite-visage': 2, 'pilosite-aisselles': 2,
+  'vitesse-croissance': 2, regles: 2, voix: 2, 'croissance-lente': 2, 'pilosite-visage': 2, 'pilosite-aisselles': 2,
   epaules: 2, odeur: 2, acne: 2, muscles: 2,
   sports: 3, 'exercice-freq': 3, sommeil: 3,
 }
@@ -609,12 +614,13 @@ export const OPTIONS_VOIX = [
   { valeur: 'ne-sais-pas', label: 'Je ne sais pas', hint: 'Pas grave, on s’en sert pour affiner' },
 ]
 
+// Réponses et icônes de GoTall, mot pour mot (21/11/2026).
 export const OPTIONS_CROISSANCE_LENTE = [
-  { valeur: "pas-grandi", label: "N'ai pas grandi" },
-  { valeur: "plus-lentement", label: "Plus lentement" },
-  { valeur: "meme-rythme", label: "Même rythme" },
-  { valeur: "plus-vite", label: "Plus vite" },
-  { valeur: "ne-sais-pas", label: "Je ne sais pas" },
+  { valeur: 'pas-grandi', label: 'Je n’ai pas grandi', icon: <CircleDot size={20} aria-hidden="true" /> },
+  { valeur: 'plus-lentement', label: 'Je grandis plus lentement', icon: <Timer size={20} aria-hidden="true" /> },
+  { valeur: 'meme-rythme', label: 'Je grandis au même rythme', icon: <Gauge size={20} aria-hidden="true" /> },
+  { valeur: 'plus-vite', label: 'Je grandis plus vite', icon: <Footprints size={20} aria-hidden="true" /> },
+  { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
 export const OPTIONS_VITESSE_CROISSANCE = [
@@ -1198,12 +1204,17 @@ export function EcranPlanQuotidien() {
  * reformulées sans chiffre fabriqué ni ressort romantique. La liste
  * « fille » n'avait rien à corriger.
  */
+/* 21/11/2026 : Samuel veut les 6 lignes de GoTall mot pour mot, chiffres
+   compris (prévenu que ces chiffres ne sont pas vérifiables et que les
+   applis de rencontre sont interdites aux mineurs ; il a choisi). Seul
+   changement : 5'9" écrit 1m75. */
 const VERITE_GARCON = [
+  '40 % de matchs en moins sur les applis de rencontre',
   'Ignoré dans les moments importants',
   'Moins pris au sérieux par les autres',
-  'Sous 1m75, on te voit moins comme un leader',
-  'Chaque centimètre peut influencer le salaire et la confiance qu’on te donne',
-  'Ça peut créer plus d’anxiété sociale',
+  '59 % moins de chances d’être CEO en dessous de 1m75',
+  'Chaque pouce coûte 600 $/an',
+  'Plus d’anxiété sociale',
 ]
 
 const VERITE_FILLE = [

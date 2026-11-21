@@ -93,3 +93,19 @@
 }
 @media (prefers-reduced-motion: reduce) { .gt-confettis { display: none; } }
 .gt-logo { color: #fff !important; }
+
+/* « Tes résultats sont là ! » (GoTall 39) */
+.gt-intro { gap: 0; padding-top: 28px; }
+.gt-intro-titre { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; font-size: 31px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; }
+.gt-intro-sous { margin: 18px 0 0; color: #a1a1a6; font-size: 16px; line-height: 1.35; }
+.gt-intro-surligne { margin: 10px 0 0; }
+.gt-intro-surligne span { position: relative; display: inline-block; padding: 4px 8px; background: #2b2c4f; color: #fff; font-size: 16px; font-weight: 500; }
+.gt-intro-surligne span::before,
+.gt-intro-surligne span::after { content: ''; position: absolute; top: -6px; bottom: -4px; width: 3px; background: #7c7cf0; }
+.gt-intro-surligne span::before { left: -2px; }
+.gt-intro-surligne span::after { right: -2px; }
+.gt-tuile { display: block; width: 78%; max-width: 300px; margin: 140px auto 0; overflow: visible; }
+.gt-tuile-ombre { fill: #1c1c1e; stroke: #1c1c1e; stroke-width: 18; stroke-linejoin: round; }
+.gt-tuile-cote { fill: #b9481a; stroke: #b9481a; stroke-width: 14; stroke-linejoin: round; }
+.gt-tuile-dessus { fill: #ff8a52; stroke: #fff; stroke-width: 3; stroke-linejoin: round; paint-order: stroke; }
+.gt-tuile-fleche { fill: none; stroke: #111; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }

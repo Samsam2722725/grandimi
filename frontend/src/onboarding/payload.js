@@ -219,6 +219,7 @@ export function fusionnerResultatPrediction(reponses, email, resultatApi) {
       odeur: reponses.odeur,
       muscles: reponses.muscles,
       vitesse_croissance: reponses.vitesseCroissance,
+      croissance_lente: reponses.croissanceLente,
       voix: reponses.voix,
       pere_cm: reponses.pere,
       mere_cm: reponses.mere,
