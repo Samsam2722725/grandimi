@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ChevronRight } from 'lucide-react'
+import { CheckCircle2, ChevronRight } from 'lucide-react'
 
 import { capture } from '../lib/analytics'
 import { pointsFaibles } from '../lib/offres'
@@ -70,22 +70,24 @@ function TuileFleche() {
    par OnboardingFlow avec ce composant, et ApercuPage ouvre directement le
    résultat caché. */
 export function EcranTesResultats({ onContinue }) {
+  /* 21/11/2026 (Samuel) : la mise en page de l'ancien « Ton plan sur mesure
+     est prêt » (pastille, titre centré), son titre « Ton plan personnalisé
+     est prêt », la phrase « tu ne grandis pas à ton potentiel » et la tuile
+     flèche de « Tes résultats sont là ». Ni date ni téléphone. */
   return (
-    <div className="gt-resultat">
-      <header className="gt-tete">
-        <span className="gt-barre" aria-hidden="true"><span /></span>
-      </header>
-      <main className="gt-contenu gt-intro">
-        <h1 className="gt-intro-titre">Ton plan personnalisé est prêt.</h1>
-        <p className="gt-intro-sous">Il s’avère que… Tu ne grandis pas à ton potentiel.</p>
+    <div className="eng">
+      <main className="eng-corps eng-corps--plan">
+        <span className="pret-badge" aria-hidden="true"><CheckCircle2 size={34} strokeWidth={2.4} /></span>
+        <h1 className="eng-titre eng-titre--centre">Ton plan personnalisé est prêt.</h1>
+        <p className="eng-plan-sous">Il s’avère que… tu ne grandis pas à ton potentiel.</p>
         <p className="gt-intro-surligne"><span>Corrigeons ça !</span></p>
-        <TuileFleche />
+        <div className="eng-tuile"><TuileFleche /></div>
       </main>
-      <div className="gt-pied">
-        <button type="button" className="gt-cta" onClick={() => { capture('apercu_reveler'); onContinue() }}>
-          Continuer <ChevronRight size={24} aria-hidden="true" />
+      <footer className="eng-pied">
+        <button type="button" className="funnel-cta" onClick={() => { capture('apercu_reveler'); onContinue() }}>
+          Continuer <ChevronRight size={20} aria-hidden="true" />
         </button>
-      </div>
+      </footer>
     </div>
   )
 }

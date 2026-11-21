@@ -113,3 +113,8 @@
 .gt-resultat .gt-intro-titre { color: #fff !important; }
 
 .gt-resultat .gt-investir { margin: -4px 0 6px; text-align: center; color: #fff !important; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif; font-size: 22px; font-weight: 800; line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
+
+/* Tuile flèche sur l'écran « Ton plan personnalisé est prêt » (21/11). */
+.eng-tuile { width: 100%; margin-top: 28px; }
+.eng-tuile .gt-tuile { margin: 0 auto; width: 70%; }
+.eng-corps--plan .gt-intro-surligne { margin-top: 16px; }
