@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import {
+  Blend,
+  CircleArrowDown,
+  ShieldCheck,
+  Users,
   BookOpen,
   Check,
   CheckCircle2,
@@ -27,6 +31,7 @@ import {
 
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { WheelPicker } from '@/components/ui/wheel-picker'
+import { RegleVerticale } from '@/components/ui/regle-verticale'
 import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ReseauNeurones } from '@/components/ui/reseau-neurones'
 import { EtudesPubliees } from '@/components/ui/ecrans-fonctions'
@@ -623,10 +628,11 @@ export function etapesPour(reponses) {
   })
 }
 
+// Pouces de GoTall (21/11/2026).
 export const OPTIONS_PILOSITE_AISSELLES = [
-  { valeur: 'non', label: 'Non' },
-  { valeur: 'un-peu', label: 'Un peu' },
-  { valeur: 'oui', label: 'Oui' },
+  { valeur: 'non', label: 'Non', icon: <ThumbsDown size={20} aria-hidden="true" /> },
+  { valeur: 'un-peu', label: 'Un peu', icon: <ThumbsUp size={20} aria-hidden="true" style={{ transform: 'rotate(-90deg)' }} /> },
+  { valeur: 'oui', label: 'Oui', icon: <ThumbsUp size={20} aria-hidden="true" /> },
   { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
@@ -668,11 +674,12 @@ export const OPTIONS_MUSCLES = [
   { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
+// Icônes de GoTall (21/11/2026) ; « Je ne sais pas » sans phrase dessous, comme eux.
 export const OPTIONS_VOIX = [
-  { valeur: 'non', label: 'Pas de changement' },
-  { valeur: 'un-peu', label: 'Un peu plus grave' },
-  { valeur: 'complet', label: 'Complètement plus grave' },
-  { valeur: 'ne-sais-pas', label: 'Je ne sais pas', hint: 'Pas grave, on s’en sert pour affiner' },
+  { valeur: 'non', label: 'Pas de changement', icon: <ShieldCheck size={20} aria-hidden="true" /> },
+  { valeur: 'un-peu', label: 'Un peu plus grave', icon: <CircleArrowDown size={20} aria-hidden="true" /> },
+  { valeur: 'complet', label: 'Complètement plus grave', icon: <Blend size={20} aria-hidden="true" /> },
+  { valeur: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
 // Réponses et icônes de GoTall, mot pour mot (21/11/2026).
@@ -696,9 +703,9 @@ export const OPTIONS_VITESSE_CROISSANCE = [
    PETITS COMPOSANTS PARTAGÉS
    ============================================================ */
 
-export function ListeChoixUnique({ options, valeur, onChoisir, label }) {
+export function ListeChoixUnique({ options, valeur, onChoisir, label, avecRonds = false }) {
   return (
-    <div className="funnel-choices" role="radiogroup" aria-label={label}>
+    <div className={'funnel-choices' + (avecRonds ? ' funnel-choices--ronds' : '')} role="radiogroup" aria-label={label}>
       {options.map((option) => (
         <ChoiceCard
           key={option.valeur}
@@ -803,9 +810,9 @@ export function MolettePoidsKg({ valeurKg, onChange }) {
 
 /* Deux mesures sur un écran, comme Taller : un titre au-dessus de chaque
    molette (31/10/2026). */
-function ColonneMolette({ titre, children }) {
+function ColonneMolette({ titre, children, cadre = false }) {
   return (
-    <div className="onb-colonne">
+    <div className={'onb-colonne' + (cadre ? ' onb-colonne--cadre' : '')}>
       <span className="onb-colonne-titre">{titre}</span>
       {children}
     </div>
@@ -843,7 +850,34 @@ function ParentInconnu({ inconnu, onInconnu }) {
   )
 }
 
+/* Comme GoTall (21/11/2026) : « Papa » et « Maman », le chiffre en gros
+   au-dessus d'une règle verticale. L'ancienne version à molettes reste en
+   dessous (MoletteParentsMolettes). */
+function ColonneRegle({ titre, valeur, onChange, min, max, label, children }) {
+  return (
+    <div className="regle-colonne">
+      <span className="regle-colonne-titre">{titre}</span>
+      <span className="regle-colonne-valeur">{formatCm(valeur)}</span>
+      <RegleVerticale value={valeur} onChange={onChange} min={min} max={max} label={label} format={formatCm} hauteur={300} />
+      {children}
+    </div>
+  )
+}
+
 export function MoletteParents({ pere, mere, pereInconnu, mereInconnu, onPere, onMere, onPereInconnu, onMereInconnu }) {
+  return (
+    <div className="regle-duo">
+      <ColonneRegle titre="Papa" valeur={pere ?? TAILLE_PERE_INCONNUE_CM} onChange={onPere} min={141} max={219} label="Taille de ton père en centimètres">
+        <ParentInconnu inconnu={pereInconnu} onInconnu={onPereInconnu} />
+      </ColonneRegle>
+      <ColonneRegle titre="Maman" valeur={mere ?? TAILLE_MERE_INCONNUE_CM} onChange={onMere} min={141} max={209} label="Taille de ta mère en centimètres">
+        <ParentInconnu inconnu={mereInconnu} onInconnu={onMereInconnu} />
+      </ColonneRegle>
+    </div>
+  )
+}
+
+export function MoletteParentsMolettes({ pere, mere, pereInconnu, mereInconnu, onPere, onMere, onPereInconnu, onMereInconnu }) {
   return (
     <div className="onb-mesure">
       <div className="onb-wheel-row">
@@ -870,7 +904,7 @@ export function pointureParDefaut(sexe) {
 export function MolettePointure({ valeurEu, onChange, sexe }) {
   return (
     <div className="onb-mesure">
-      <ColonneMolette titre="Sélectionne ta pointure">
+      <ColonneMolette titre="Pointure EU" cadre>
         <WheelPicker
           label="Pointure"
           value={valeurEu ?? pointureParDefaut(sexe)}
@@ -892,6 +926,16 @@ export function tailleReveParDefaut(tailleCm) {
 }
 
 export function MoletteTailleReve({ valeurCm, onChange }) {
+  return (
+    <div className="regle-solo">
+      <span className="regle-solo-valeur">{formatCm(valeurCm)}</span>
+      <RegleVerticale value={valeurCm} onChange={onChange} min={140} max={220} label="Taille de rêve en centimètres" format={formatCm} hauteur={360} />
+    </div>
+  )
+}
+
+// Ancienne version à molette (Taller), gardée.
+export function MoletteTailleReveMolette({ valeurCm, onChange }) {
   return (
     <div className="onb-mesure">
       <ColonneMolette titre="Taille de rêve">
@@ -972,7 +1016,8 @@ const MOIS = [
 export function MoletteDateNaissance({ jour, mois, annee, onChange }) {
   const anneeCourante = new Date().getFullYear()
   return (
-    <div className="onb-wheel-row">
+    <div className="onb-wheel-row onb-wheel-row--date">
+      <ColonneMolette titre="Jour" cadre>
       <WheelPicker
         label="Jour"
         value={jour}
@@ -982,6 +1027,8 @@ export function MoletteDateNaissance({ jour, mois, annee, onChange }) {
         step={1}
         format={(v) => String(v)}
       />
+      </ColonneMolette>
+      <ColonneMolette titre="Mois" cadre>
       <WheelPicker
         label="Mois"
         value={mois}
@@ -991,6 +1038,8 @@ export function MoletteDateNaissance({ jour, mois, annee, onChange }) {
         step={1}
         format={(v) => MOIS[v - 1]}
       />
+      </ColonneMolette>
+      <ColonneMolette titre="Année" cadre>
       <WheelPicker
         label="Année"
         value={annee}
@@ -1000,6 +1049,7 @@ export function MoletteDateNaissance({ jour, mois, annee, onChange }) {
         step={1}
         format={(v) => String(v)}
       />
+      </ColonneMolette>
     </div>
   )
 }
@@ -1958,3 +2008,62 @@ export function QuestionCalcul({ question, onChoisir }) {
     </div>
   )
 }
+
+/* ---------- Deux grandes cartes sous un symbole (GoTall 01 et 03, 21/11/2026) ---------- */
+function SymboleSexes() {
+  return (
+    <svg viewBox="0 0 100 110" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="44" cy="50" r="24" />
+      <path d="M61 33 L82 12 M64 12 H82 V30" />
+      <path d="M44 74 V102 M31 90 H57" />
+    </svg>
+  )
+}
+
+function PictoGarcon() {
+  return (
+    <svg viewBox="0 0 24 40" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="5" r="3.2" />
+      <path d="M7 12 h10 a2 2 0 0 1 2 2 v9 h-3 v14 h-8 v-14 h-3 v-9 a2 2 0 0 1 2 -2 z M12 23 v14" />
+    </svg>
+  )
+}
+
+function PictoFille() {
+  return (
+    <svg viewBox="0 0 24 40" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="5" r="3.2" />
+      <path d="M8.5 12 h7 l5 14 h-4.5 v11 h-8 v-11 h-4.5 z M12 26 v11" />
+    </svg>
+  )
+}
+
+export function CartesDuo({ options, valeur, onChoisir, label, symbole }) {
+  return (
+    <div className="duo">
+      {symbole && <span className="duo-symbole" aria-hidden="true">{symbole}</span>}
+      <div className="duo-cartes" role="radiogroup" aria-label={label}>
+        {options.map((o) => (
+          <button
+            key={o.valeur}
+            type="button"
+            role="radio"
+            aria-checked={valeur === o.valeur}
+            className={'duo-carte' + (valeur === o.valeur ? ' is-selected' : '')}
+            onClick={() => onChoisir(o.valeur)}
+          >
+            <span className="duo-carte-icone" aria-hidden="true">{o.icon}</span>
+            <span>{o.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export const SYMBOLE_SEXES = <SymboleSexes />
+export const SYMBOLE_PROFIL = <Users size={76} strokeWidth={2.2} />
+export const OPTIONS_SEXE_CARTES = [
+  { valeur: 'M', label: 'Garçon', icon: <PictoGarcon /> },
+  { valeur: 'F', label: 'Fille', icon: <PictoFille /> },
+]

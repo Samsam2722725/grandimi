@@ -33,6 +33,10 @@ import {
   EcranDouleursBenefices,
   EcranSymptomes,
   EcranCitationAnalyser,
+  CartesDuo,
+  SYMBOLE_SEXES,
+  SYMBOLE_PROFIL,
+  OPTIONS_SEXE_CARTES,
   QuestionCalcul,
   QUESTIONS_CALCUL,
   EcranObjectifs,
@@ -691,32 +695,39 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
 
   function contenu() {
     switch (etape) {
+      // GoTall 01 : un grand pictogramme, deux cartes Ado / Parent (21/11/2026).
       case 'profil':
         return (
-          <ListeChoixUnique
+          <CartesDuo
             label={texte.titre}
+            symbole={SYMBOLE_PROFIL}
             valeur={reponses.profil}
             onChoisir={(v) => choisirEtAvancer('profil', v)}
             options={[
-              { valeur: 'ado', label: 'Ado', icon: <User size={22} aria-hidden="true" /> },
-              { valeur: 'parent', label: 'Parent', icon: <Users size={22} aria-hidden="true" /> },
+              { valeur: 'ado', label: 'Ado', icon: <User size={34} strokeWidth={2.2} /> },
+              { valeur: 'parent', label: 'Parent', icon: <Users size={34} strokeWidth={2.2} /> },
             ]}
           />
         )
+      // GoTall 08 : des pilules simples (les cartes en couleur restent dans EcranObjectifs).
       case 'motivation':
         return (
-          <EcranObjectifs valeurs={reponses.motivation} onBasculer={(v) => basculer('motivation', v)} />
+          <ListeChoixMultiple
+            label={texte.titre}
+            valeurs={reponses.motivation}
+            onBasculer={(v) => basculer('motivation', v)}
+            options={OPTIONS_MOTIVATION.map(({ valeur, label }) => ({ valeur, label }))}
+          />
         )
+      // GoTall 03 : le symbole des deux sexes, deux cartes Garçon / Fille.
       case 'sexe':
         return (
-          <ListeChoixUnique
+          <CartesDuo
             label={texte.titre}
+            symbole={SYMBOLE_SEXES}
             valeur={reponses.sexe}
             onChoisir={(v) => choisirEtAvancer('sexe', v)}
-            options={[
-              { valeur: 'M', label: 'Garçon' },
-              { valeur: 'F', label: 'Fille' },
-            ]}
+            options={OPTIONS_SEXE_CARTES}
           />
         )
       case 'age':
@@ -848,6 +859,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             valeur={reponses.origine}
             onChoisir={(v) => choisirEtAvancer('origine', v)}
             options={OPTIONS_ORIGINE}
+            avecRonds
           />
         )
       case 'proches':

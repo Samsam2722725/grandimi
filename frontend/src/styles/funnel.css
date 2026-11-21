@@ -4739,3 +4739,54 @@ div.interstitial.citation { cursor: default; }
 /* Bouton du bas : pilule pleine largeur, collée en bas, fine ligne au-dessus */
 .funnel-footer { padding: 18px 24px calc(18px + env(safe-area-inset-bottom, 0px)); background: var(--funnel-bg); border-top: 1px solid #222; }
 .funnel-cta { min-height: 61px; font-size: 19px; font-weight: 700; background: linear-gradient(180deg, #ff6a2b, #ff8a4a); color: #111; box-shadow: none; gap: 6px; }
+
+/* ---------- Lot 2 du design GoTall (21/11/2026) ---------- */
+/* Sexe, « Qui es-tu ? » : grand symbole + deux cartes */
+.funnel-content:has(> .duo) { justify-content: flex-start; padding-top: 36px; }
+.duo { display: flex; flex-direction: column; align-items: center; gap: 46px; }
+.duo-symbole { color: #ff7a3d; display: grid; place-items: center; }
+.duo-symbole svg { width: 76px; height: 76px; }
+.duo-cartes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; }
+.duo-carte {
+  height: 120px; border-radius: 22px; border: 2px solid #2c2c2c; background: #111;
+  color: #ff7a3d; font: inherit; font-size: 20px; font-weight: 600;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; cursor: pointer;
+}
+.duo-carte-icone svg { width: 34px; height: 34px; display: block; }
+.duo-carte.is-selected { background: linear-gradient(180deg, #ff6a2b, #ff8a4a); border-color: transparent; color: #111; }
+
+/* Origine : la liste de Taller, avec un rond à droite */
+.funnel-choices--ronds .choice-card { border-radius: 18px; justify-content: flex-start; text-align: left; }
+.funnel-choices--ronds .choice-card-text { flex: 1; }
+.funnel-choices--ronds .choice-card-radio { display: block; width: 26px; height: 26px; border: 2px solid #5a5a5a; }
+.funnel-choices--ronds .choice-card.is-selected .choice-card-radio { border-color: #111; box-shadow: inset 0 0 0 6px #111; }
+
+/* Date et pointure : molettes encadrées, titre orange au-dessus */
+.onb-wheel-row--date { gap: 10px; width: 100%; }
+.onb-wheel-row--date > .onb-colonne { flex: 1; min-width: 0; }
+.onb-colonne--cadre { gap: 12px; width: 100%; }
+.onb-colonne--cadre .onb-colonne-titre { color: #ff7a3d; font-size: 20px; font-weight: 600; }
+.onb-colonne--cadre .wheel { background: #111; border: 1.5px solid #2c2c2c; border-radius: 18px; }
+.onb-wheel-row--date .wheel-item { font-size: 18px; }
+.onb-wheel-row--date .wheel-item.is-active { font-size: 20px; }
+
+/* Règles verticales (parents, taille de rêve) */
+.regle { position: relative; width: 110px; }
+.regle-defil {
+  height: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; outline: none;
+  -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
+  mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
+}
+.regle-defil::-webkit-scrollbar { display: none; }
+.regle-trait { display: block; position: relative; scroll-snap-align: center; }
+.regle-trait::after { content: ''; position: absolute; right: 0; top: 50%; width: 22px; height: 1.5px; background: #6a6a6a; }
+.regle-trait.is-demi::after { display: none; }
+.regle-trait.is-grand::after { width: 52px; background: #c8c8c8; }
+.regle-curseur { position: absolute; right: 0; top: 50%; width: 90px; height: 3px; margin-top: -1.5px; border-radius: 2px; background: #ff6a2b; pointer-events: none; }
+.funnel-content:has(> .regle-duo), .funnel-content:has(> .regle-solo) { justify-content: flex-start; padding-top: 28px; }
+.regle-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.regle-colonne { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.regle-colonne-titre { color: #c8c8c8; font-size: 17px; }
+.regle-colonne-valeur { color: #fff; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+.regle-solo { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 8px 0 18px; }
+.regle-solo-valeur { color: #fff; font-size: 56px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
