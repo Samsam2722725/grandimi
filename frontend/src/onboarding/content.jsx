@@ -187,9 +187,12 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Tu peux aussi choisir de ne pas répondre.',
   },
   // Comme GoTall (« Pourquoi as-tu téléchargé GoTall ? »), 21/11/2026.
+  // Même forme que « Pourquoi as-tu téléchargé GoTall ? » de GoTall, mais
+  // titré « Quels sont tes objectifs ? » (Samuel, 21/11/2026) ; « quoi manger »
+  // et « exercices » retirés, il les trouve inutiles ici.
   motivation: {
-    titre: 'Pourquoi es-tu sur Grandimi ?',
-    sousTitre: 'Choisis tout ce que tu veux. On adapte ton plan.',
+    titre: 'Quels sont tes objectifs ?',
+    sousTitre: 'Tu peux choisir plusieurs options.',
   },
   symptomes: {
     titre: 'Symptômes',
@@ -468,9 +471,7 @@ export function texteEtape(etape, profil, sexe) {
 export const OPTIONS_MOTIVATION = [
   { valeur: 'taille-max', label: 'Atteindre ma taille maximale', Icone: TrendingUp, couleur: '#ff7a3d' },
   { valeur: 'taille-finale', label: 'Savoir quelle taille je vais faire', Icone: Gauge, couleur: '#6d8dff' },
-  { valeur: 'nutrition', label: 'Savoir quoi manger pour grandir', Icone: Utensils, couleur: '#3fcf8e' },
   { valeur: 'posture', label: 'Corriger ma posture', Icone: PersonStanding, couleur: '#f5c542' },
-  { valeur: 'exercices', label: 'Exercices pour grandir', Icone: Dumbbell, couleur: '#ff6fa8' },
 ]
 
 // Les sports de GoTall, dans leur ordre, avec une icône comme chez eux.
