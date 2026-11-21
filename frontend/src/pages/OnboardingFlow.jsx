@@ -29,6 +29,7 @@ import {
   OPTIONS_EXERCICE_FREQ,
   OPTIONS_PROCHES,
   OPTIONS_ORIGINE,
+  EcranDouleursBenefices,
   OPTIONS_PILOSITE_AISSELLES,
   OPTIONS_PILOSITE_VISAGE,
   OPTIONS_EPAULES,
@@ -1034,6 +1035,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
 
   if (etape === 'citation-genetique') {
     return <EcranCitationGenetique key={etape} onContinue={avancer} />
+  }
+
+  if (etape === 'douleurs') {
+    return <EcranDouleursBenefices key={etape} onContinue={avancer} onRetour={reculer} />
   }
 
   if (etape === 'decouvrir-potentiel') {

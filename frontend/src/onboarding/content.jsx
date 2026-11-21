@@ -89,8 +89,10 @@ export const ORDRE_ETAPES = [
   // Preuves façon GoTall (« Avis d'experts », « Résultats réels »), 20/11/2026.
   'preuve-science',
   'preuve-avis',
-  'verite-brutale',
-  'plus-que-genes',
+  // Slides douleurs → bénéfices → 80/20 (format Menu IQ / Quittr), 21/11/2026.
+  // Remplacent « Le coût d'être petit » et « Tu perds peut-être déjà des
+  // centimètres » (à la demande de Samuel ; leur code reste).
+  'douleurs',
   'citation-genetique',
   'decouvrir-potentiel',
   'resultats-la',
@@ -134,6 +136,7 @@ export const TYPE_ETAPE = {
   'guide-grandir': 'affichage',
   'height-tracker': 'affichage',
   'verite-brutale': 'affichage',
+  douleurs: 'affichage',
   'etudes-publiees': 'affichage',
   'avis-utilisateurs': 'affichage',
   'taille-ideale': 'question',
@@ -1543,3 +1546,117 @@ export function verdictAge(age, sexe) {
     : 'Chez les garçons, ça peut encore bouger. Et ta posture se travaille'
 }
 
+
+/* ---------- Douleurs → bénéfices → 80/20 (21/11/2026) ----------
+   Format des slides de Quittr / Menu IQ, à la demande de Samuel : écrans
+   rouges « ce qui peut te freiner » (les mots de Taller), puis écrans blancs
+   « les avantages d'être grand » en miroir, puis le 80/20. Textes validés
+   par Samuel mot pour mot. Remplace dans le parcours « Le coût d'être
+   petit » et « Tu perds peut-être déjà des centimètres » (leur code reste). */
+const SLIDES_DOULEURS = [
+  {
+    ton: 'douleur',
+    emoji: '💔',
+    titre: ['Les femmes te négligent.', '40 % de matchs en moins.'],
+    texte: 'Psychologiquement, les femmes préfèrent les hommes plus grands : ils les rassurent, elles se sentent en sécurité.',
+  },
+  {
+    ton: 'douleur',
+    emoji: '👻',
+    titre: ['Invisible aux moments clés.', 'Plus d’anxiété sociale.'],
+    texte: 'En groupe, on parle par-dessus toi. Tu te compares, tu doutes de toi.',
+  },
+  {
+    ton: 'douleur',
+    emoji: '💸',
+    titre: ['Chaque cm coûte 600 $ par an.'],
+    texte: 'Les plus grands inspirent davantage confiance : on les écoute plus, on leur confie plus de responsabilités.',
+    bouton: 'Il y a une meilleure façon',
+  },
+  {
+    ton: 'benefice',
+    emoji: '💘',
+    titre: ['Elles te remarquent.', 'Plus de matchs.'],
+    texte: 'Une grande taille rassure : tu dégages de la sécurité et de l’assurance.',
+  },
+  {
+    ton: 'benefice',
+    emoji: '😎',
+    titre: ['On te voit.', 'Tu es sûr de toi.'],
+    texte: 'En groupe, tu prends ta place. Plus besoin de te comparer.',
+  },
+  {
+    ton: 'benefice',
+    emoji: '💰',
+    titre: ['Plus de respect.', 'Plus d’opportunités.'],
+    texte: 'On écoute les grands et on leur fait confiance, à l’école comme au travail.',
+  },
+  {
+    ton: 'action',
+    emoji: '🧬',
+    titre: ['80 %, c’est tes gènes.', '20 %, c’est toi.'],
+    texte: 'Ces 20 %, tu peux encore aller les chercher.',
+  },
+]
+
+const SURTITRE_SLIDE = {
+  douleur: 'Ce qui peut te freiner',
+  benefice: 'Les avantages d’être grand',
+  action: 'Maintenant, tu peux agir',
+}
+
+export function EcranDouleursBenefices({ onContinue, onRetour }) {
+  const [i, setI] = useState(0)
+  const slide = SLIDES_DOULEURS[i]
+  const groupe = SLIDES_DOULEURS.filter((s) => s.ton === slide.ton)
+  const rang = groupe.indexOf(slide)
+
+  const suivant = () => {
+    if (i < SLIDES_DOULEURS.length - 1) setI(i + 1)
+    else onContinue()
+  }
+  const precedent = () => (i > 0 ? setI(i - 1) : onRetour())
+
+  return (
+    <div className={'dbs dbs--' + slide.ton}>
+      <header className="dbs-tete">
+        <button type="button" className="dbs-retour" onClick={precedent} aria-label="Retour">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <span className="dbs-logo">Grandimi</span>
+        <span aria-hidden="true" />
+      </header>
+
+      <main className="dbs-corps" key={i}>
+        <p className="dbs-surtitre">{SURTITRE_SLIDE[slide.ton]}</p>
+        <div className="dbs-visuel" aria-hidden="true">
+          <span className="dbs-etincelle dbs-etincelle--1">✦</span>
+          <span className="dbs-etincelle dbs-etincelle--2" />
+          <span className="dbs-rond"><span className="dbs-emoji">{slide.emoji}</span></span>
+        </div>
+        <h1 className="dbs-titre">
+          {slide.titre.map((ligne) => (
+            <span key={ligne}>{ligne}</span>
+          ))}
+        </h1>
+        <p className="dbs-texte">{slide.texte}</p>
+        <p className="dbs-petit">Les petits choix deviennent des habitudes.</p>
+      </main>
+
+      <footer className="dbs-pied">
+        {groupe.length > 1 && (
+          <div className="dbs-points" aria-hidden="true">
+            {groupe.map((s, k) => (
+              <span key={k} className={k === rang ? 'is-actif' : ''} />
+            ))}
+          </div>
+        )}
+        <button type="button" className="dbs-bouton" onClick={suivant}>
+          {slide.bouton || 'Continuer'}
+        </button>
+      </footer>
+    </div>
+  )
+}

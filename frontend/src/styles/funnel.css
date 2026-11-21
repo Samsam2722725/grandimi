@@ -4496,3 +4496,39 @@ div.interstitial.citation { cursor: default; }
 .preuve-laurier-texte { margin-top: -2px; }
 .preuve--temoignages .preuve-laurier-texte strong { font-size: 21px; font-weight: 700; color: #d1d1d6; letter-spacing: -0.01em; }
 .preuve-laurier-texte small { font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8e8e93; margin-top: 3px; }
+
+/* ---------- Slides douleurs → bénéfices (format Menu IQ / Quittr, 21/11) ---------- */
+.dbs {
+  position: fixed; inset: 0; z-index: 40;
+  display: flex; flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+.dbs--douleur { background: #ff1f4b; color: #fff; }
+.dbs--benefice, .dbs--action { background: #fff; color: #111; }
+.dbs-tete { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; padding: max(14px, env(safe-area-inset-top)) 20px 0; }
+.dbs-retour { width: 40px; height: 40px; border: 0; border-radius: 50%; display: grid; place-items: center; cursor: pointer; color: inherit; background: rgba(255, 255, 255, 0.16); }
+.dbs--benefice .dbs-retour, .dbs--action .dbs-retour { background: #f1f1f3; }
+.dbs-logo { text-align: center; font-family: 'Syne', -apple-system, sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.02em; }
+.dbs-corps { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 26px 28px 0; max-width: 460px; width: 100%; margin: 0 auto; animation: dbs-entree 0.45s ease-out both; }
+.dbs-surtitre { margin: 0; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.85; }
+.dbs-visuel { position: relative; width: 190px; height: 190px; margin: 34px 0 30px; display: grid; place-items: center; }
+.dbs-rond { width: 150px; height: 150px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, 0.14); box-shadow: 0 0 0 18px rgba(255, 255, 255, 0.06); }
+.dbs--benefice .dbs-rond, .dbs--action .dbs-rond { background: #f1f1f3; box-shadow: 0 0 0 18px #f8f8f9, 0 0 0 19px #ececee; }
+.dbs-emoji { font-size: 76px; line-height: 1; filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.18)); animation: dbs-flotte 3.2s ease-in-out infinite; }
+.dbs-etincelle { position: absolute; }
+.dbs-etincelle--1 { left: 6px; top: 34px; font-size: 18px; opacity: 0.8; }
+.dbs-etincelle--2 { right: 18px; top: 10px; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.6; }
+.dbs-titre { margin: 0; display: flex; flex-direction: column; font-size: 30px; font-weight: 800; line-height: 1.12; letter-spacing: -0.02em; }
+.dbs-texte { margin: 16px 0 0; font-size: 15px; line-height: 1.45; opacity: 0.92; max-width: 330px; }
+.dbs-petit { margin: 22px 0 0; font-size: 12px; opacity: 0.7; }
+.dbs-pied { padding: 0 24px max(22px, env(safe-area-inset-bottom)); max-width: 460px; width: 100%; margin: 0 auto; }
+.dbs-points { display: flex; justify-content: center; gap: 6px; margin-bottom: 18px; }
+.dbs-points span { width: 6px; height: 6px; border-radius: 6px; background: currentColor; opacity: 0.35; transition: width 0.25s ease, opacity 0.25s ease; }
+.dbs-points span.is-actif { width: 22px; opacity: 1; }
+.dbs-bouton { width: 100%; height: 58px; border: 0; border-radius: 999px; background: #111; color: #fff; font: inherit; font-size: 17px; font-weight: 600; cursor: pointer; }
+@keyframes dbs-entree { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes dbs-flotte { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .dbs-corps, .dbs-emoji { animation: none; } }
+.dbs .dbs-titre, .dbs .dbs-texte, .dbs .dbs-surtitre, .dbs .dbs-petit { color: inherit !important; font-family: inherit !important; }
+.dbs .dbs-titre { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, "Segoe UI", Roboto, sans-serif !important; }
