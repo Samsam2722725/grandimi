@@ -5,6 +5,19 @@ import App from './App.jsx'
 import FiletErreur from './components/FiletErreur.jsx'
 import { initAnalytics } from './lib/analytics'
 
+/* Local seulement : `?neuf` efface tout ce que le site a gardé (réponses,
+   résultat, compte) pour refaire le parcours depuis le début, comme un
+   nouveau visiteur. Ne fait rien en ligne. */
+if (import.meta.env.DEV && typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('neuf')) {
+  try {
+    localStorage.clear()
+    sessionStorage.clear()
+  } catch {
+    /* navigation privée : rien à effacer */
+  }
+  window.history.replaceState(null, '', window.location.pathname)
+}
+
 /* POSTHOG APRES L AFFICHAGE, PAS PENDANT.
 
    posthog-js voyage dans le paquet d'entree et s'initialise avant le
