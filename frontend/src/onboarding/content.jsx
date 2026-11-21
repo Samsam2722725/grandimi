@@ -1608,53 +1608,73 @@ const SURTITRE_SLIDE = {
 export function EcranDouleursBenefices({ onContinue, onRetour }) {
   const [i, setI] = useState(0)
   const slide = SLIDES_DOULEURS[i]
-  const groupe = SLIDES_DOULEURS.filter((s) => s.ton === slide.ton)
-  const rang = groupe.indexOf(slide)
 
   const suivant = () => {
     if (i < SLIDES_DOULEURS.length - 1) setI(i + 1)
     else onContinue()
   }
   const precedent = () => (i > 0 ? setI(i - 1) : onRetour())
+  const signe = { douleur: '!', benefice: '✓', action: '⚡' }[slide.ton]
 
+  /* Design (21/11/2026, 2e version) : le noir du questionnaire, comme
+     GoTall et Taller, avec une lueur rouge pour les douleurs et orange pour
+     les avantages ; barres de progression en haut, façon stories ; le
+     80/20 en deux colonnes comme l'écran de Taller. */
   return (
     <div className={'dbs dbs--' + slide.ton}>
+      <div className="dbs-lueur" aria-hidden="true" />
       <header className="dbs-tete">
         <button type="button" className="dbs-retour" onClick={precedent} aria-label="Retour">
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
             <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
-        <span className="dbs-logo">Grandimi</span>
-        <span aria-hidden="true" />
+        <div className="dbs-barres" aria-hidden="true">
+          {SLIDES_DOULEURS.map((s, k) => (
+            <span key={k} className={(k < i ? 'is-fait ' : '') + (k === i ? 'is-actif ' : '') + 'dbs-barre--' + s.ton} />
+          ))}
+        </div>
       </header>
 
       <main className="dbs-corps" key={i}>
-        <p className="dbs-surtitre">{SURTITRE_SLIDE[slide.ton]}</p>
-        <div className="dbs-visuel" aria-hidden="true">
-          <span className="dbs-etincelle dbs-etincelle--1">✦</span>
-          <span className="dbs-etincelle dbs-etincelle--2" />
-          <span className="dbs-rond"><span className="dbs-emoji">{slide.emoji}</span></span>
-        </div>
+        <p className="dbs-surtitre">
+          <span className="dbs-signe" aria-hidden="true">{signe}</span>
+          {SURTITRE_SLIDE[slide.ton]}
+        </p>
+
+        {slide.ton === 'action' ? (
+          <div className="dbs-colonnes" aria-hidden="true">
+            <div className="dbs-colonne">
+              <span className="dbs-colonne-barre"><span style={{ height: '80%' }} /></span>
+              <strong>80 %</strong>
+              <small>Génétique</small>
+            </div>
+            <div className="dbs-colonne dbs-colonne--toi">
+              <span className="dbs-colonne-barre"><span style={{ height: '20%' }} /></span>
+              <strong>20 %</strong>
+              <small>Toi</small>
+            </div>
+          </div>
+        ) : (
+          <div className="dbs-visuel" aria-hidden="true">
+            <span className="dbs-emoji">{slide.emoji}</span>
+          </div>
+        )}
+
         <h1 className="dbs-titre">
           {slide.titre.map((ligne) => (
             <span key={ligne}>{ligne}</span>
           ))}
         </h1>
         <p className="dbs-texte">{slide.texte}</p>
-        <p className="dbs-petit">Les petits choix deviennent des habitudes.</p>
       </main>
 
       <footer className="dbs-pied">
-        {groupe.length > 1 && (
-          <div className="dbs-points" aria-hidden="true">
-            {groupe.map((s, k) => (
-              <span key={k} className={k === rang ? 'is-actif' : ''} />
-            ))}
-          </div>
-        )}
         <button type="button" className="dbs-bouton" onClick={suivant}>
           {slide.bouton || 'Continuer'}
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </button>
       </footer>
     </div>
