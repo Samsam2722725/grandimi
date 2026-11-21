@@ -32,6 +32,7 @@ import {
 import { ChoiceCard } from '@/components/ui/choice-card'
 import { WheelPicker } from '@/components/ui/wheel-picker'
 import { RegleVerticale } from '@/components/ui/regle-verticale'
+import { Mascotte } from '@/components/ui/mascotte'
 import { BadgePrecision } from '@/components/ui/badge-precision'
 import { ReseauNeurones } from '@/components/ui/reseau-neurones'
 import { EtudesPubliees } from '@/components/ui/ecrans-fonctions'
@@ -941,7 +942,11 @@ export function tailleReveParDefaut(tailleCm) {
 export function MoletteTailleReve({ valeurCm, onChange }) {
   return (
     <div className="regle-solo">
-      <span className="regle-solo-valeur">{formatCm(valeurCm)}</span>
+      {/* La mascotte grandit ou rapetisse avec la taille choisie (n° 2). */}
+      <div className="regle-solo-gauche">
+        <span className="regle-solo-valeur">{formatCm(valeurCm)}</span>
+        <Mascotte hauteur={Math.round(90 + ((Math.min(220, Math.max(140, valeurCm)) - 140) / 80) * 130)} humeur="fete" className="regle-solo-mascotte" />
+      </div>
       <RegleVerticale value={valeurCm} onChange={onChange} min={140} max={220} label="Taille de rêve en centimètres" format={formatCm} hauteur={360} />
     </div>
   )
@@ -1103,6 +1108,8 @@ export function EcranResultatsLongTerme() {
 export function EcranPotentielGain() {
   return (
     <div className="onb-preuve">
+      {/* La mascotte s'étire au-dessus de la jauge (n° 14). */}
+      <Mascotte hauteur={64} humeur="etire" className="jauge-mascotte" />
       <JaugePotentiel />
     </div>
   )

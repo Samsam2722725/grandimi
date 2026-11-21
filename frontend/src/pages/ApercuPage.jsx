@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { CheckCircle2, ChevronRight } from 'lucide-react'
 
 import { capture } from '../lib/analytics'
+import { Mascotte } from '@/components/ui/mascotte'
 import { pointsFaibles } from '../lib/offres'
 import '../styles/funnel.css'
 import '../styles/apercu.css'
@@ -81,7 +82,11 @@ export function EcranTesResultats({ prenom, onContinue }) {
         <h1 className="eng-titre eng-titre--centre">{prenom ? `${prenom}, ton plan personnalisé est prêt.` : 'Ton plan personnalisé est prêt.'}</h1>
         <p className="eng-plan-sous">Il s’avère que… tu ne grandis pas à ton potentiel.</p>
         <p className="gt-intro-surligne"><span>Corrigeons ça !</span></p>
-        <div className="eng-tuile"><TuileFleche /></div>
+        <div className="eng-tuile">
+          {/* La mascotte fait la fête sur la tuile (n° 14). */}
+          <Mascotte hauteur={84} humeur="fete" className="tuile-mascotte" />
+          <TuileFleche />
+        </div>
       </main>
       <footer className="eng-pied">
         <button type="button" className="funnel-cta" onClick={() => { capture('apercu_reveler'); onContinue() }}>

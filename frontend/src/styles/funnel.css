@@ -4877,3 +4877,58 @@ div.interstitial.citation { cursor: default; }
 .choix-libre { width: 100%; margin-top: 10px; padding: 14px 18px; border-radius: 18px; border: 1.5px solid #2c2c2c; background: #141414; color: #fff; font: inherit; font-size: 16px; line-height: 1.4; resize: none; outline: none; }
 .choix-libre:focus { border-color: #ff6a2b; }
 .choix-libre::placeholder { color: #6e6e73; }
+
+/* ================================================================
+   Animations Grandimi (21/11/2026, PROPOSITION-ANIMATIONS.md)
+   ================================================================ */
+/* Mascotte */
+.mascotte { display: block; overflow: visible; }
+.mascotte-tout { transform-box: fill-box; transform-origin: 50% 100%; }
+.mascotte--saut .mascotte-tout { animation: masc-saut 0.6s cubic-bezier(0.3, 1.6, 0.5, 1) 2; }
+.mascotte--fete .mascotte-tout { animation: masc-fete 1.1s ease-in-out infinite; }
+.mascotte--etire .mascotte-tout { animation: masc-etire 1.8s ease-in-out infinite; }
+@keyframes masc-saut { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(-30%); } }
+@keyframes masc-fete { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-8%) rotate(-5deg); } 75% { transform: translateY(-8%) rotate(5deg); } }
+@keyframes masc-etire { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.08); } }
+
+/* n° 1 : la mascotte au bout de la barre */
+.funnel-progress { position: relative; overflow: visible; }
+.funnel-progress-fill { overflow: hidden; }
+.funnel-progress-mascotte { position: absolute; bottom: 4px; transform: translateX(-50%); transition: left 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), height 0.35s ease, width 0.35s ease; pointer-events: none; }
+.funnel-header { padding-top: 22px; }
+
+/* n° 15 : bandeau « Partie terminée » */
+.partie-bandeau { position: fixed; top: max(14px, env(safe-area-inset-top)); left: 50%; z-index: 60; display: flex; align-items: center; gap: 10px; padding: 8px 18px 8px 10px; border-radius: 999px; background: #1c1c1c; border: 1px solid rgba(255, 106, 43, 0.45); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); color: #fff; font-size: 15px; font-weight: 700; white-space: nowrap; animation: bandeau 2.4s ease both; }
+@keyframes bandeau { 0% { opacity: 0; transform: translate(-50%, -20px); } 12%, 85% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -20px); } }
+
+/* n° 2 : taille de rêve */
+.regle-solo-gauche { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.regle-solo-mascotte { transition: height 0.2s ease, width 0.2s ease; }
+
+/* jauge et plan prêt */
+.jauge-mascotte { margin: 0 auto -6px; }
+.eng-tuile { position: relative; }
+.tuile-mascotte { position: absolute; left: 50%; top: -58px; transform: translateX(-50%); z-index: 1; }
+
+/* n° 5 : titre mot par mot */
+.mot-anime { display: inline-block; white-space: pre; animation: mot-flou 0.42s ease-out both; }
+@keyframes mot-flou { from { opacity: 0; filter: blur(6px); transform: translateY(5px); } to { opacity: 1; filter: none; transform: none; } }
+
+/* n° 7 : réponses en cascade */
+.funnel-choices > * { animation: pilule-in 0.38s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+.funnel-choices > :nth-child(1) { animation-delay: 0.12s; }
+.funnel-choices > :nth-child(2) { animation-delay: 0.17s; }
+.funnel-choices > :nth-child(3) { animation-delay: 0.22s; }
+.funnel-choices > :nth-child(4) { animation-delay: 0.27s; }
+.funnel-choices > :nth-child(5) { animation-delay: 0.32s; }
+.funnel-choices > :nth-child(6) { animation-delay: 0.37s; }
+.funnel-choices > :nth-child(n + 7) { animation-delay: 0.42s; }
+@keyframes pilule-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* n° 9 : glissement entre les écrans, comme une appli iPhone */
+.funnel-step { animation: ecran-glisse 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+@keyframes ecran-glisse { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mascotte-tout, .mot-anime, .funnel-choices > *, .funnel-step, .partie-bandeau { animation: none !important; }
+}

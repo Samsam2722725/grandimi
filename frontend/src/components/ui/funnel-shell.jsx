@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react'
 import { ArrowLeft, ChevronRight } from 'lucide-react'
+
+import { Mascotte } from '@/components/ui/mascotte'
 
 import { cn } from '@/lib/utils'
 
@@ -13,6 +16,21 @@ import { cn } from '@/lib/utils'
  * La zone de contenu défile seule. Le CTA reste visible même clavier ouvert,
  * ce qui évite le classique « je ne trouve pas le bouton » sur petit écran.
  */
+/* Dernière partie vue, gardée hors du composant : la coque est démontée sur
+   les écrans plein écran (slides, citation…), et le bandeau « Partie
+   terminée » doit quand même savoir d'où l'on vient. */
+let dernierePartie = null
+
+/* Titre en mots qui sortent d'un léger flou, l'un après l'autre (n° 5). */
+function TitreAnime({ children }) {
+  if (typeof children !== 'string') return children
+  return children.split(' ').map((mot, i) => (
+    <span key={i} className="mot-anime" style={{ animationDelay: `${i * 45}ms` }}>
+      {mot}{' '}
+    </span>
+  ))
+}
+
 export function FunnelShell({
   onBack,
   progress = 0,
@@ -40,6 +58,20 @@ export function FunnelShell({
      par chapitre, et affiche le chapitre courant au-dessus du titre. */
   chapitres,
 }) {
+  /* Bandeau « Partie 2/5 terminée ✓ » quand on passe à la partie suivante (n° 15). */
+  const [bandeau, setBandeau] = useState(null)
+  const actif = chapitres?.actif
+  useEffect(() => {
+    if (actif == null) return undefined
+    const avant = dernierePartie
+    dernierePartie = actif
+    if (avant == null || actif <= avant) return undefined
+    setBandeau(`Partie ${avant + 1}/${chapitres.noms.length} terminée`)
+    const t = setTimeout(() => setBandeau(null), 2400)
+    return () => clearTimeout(t)
+  }, [actif]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const pourcent = Math.max(4, Math.min(100, progress * 100))
   return (
     <div className={cn('funnel', className)}>
       <header className="funnel-header">
@@ -91,7 +123,14 @@ export function FunnelShell({
           >
             <div
               className="funnel-progress-fill"
-              style={{ width: `${Math.max(4, Math.min(100, progress * 100))}%` }}
+              style={{ width: `${pourcent}%` }}
+            />
+            {/* La mascotte au bout de la barre grandit à chaque réponse (n° 1). */}
+            <Mascotte
+              hauteur={Math.round(18 + progress * 16)}
+              humeur={bandeau ? 'saut' : 'normal'}
+              className="funnel-progress-mascotte"
+              style={{ left: `${pourcent}%` }}
             />
           </div>
         )}
@@ -115,13 +154,20 @@ export function FunnelShell({
               {chapitres.actif + 1}/{chapitres.noms.length} · {chapitres.noms[chapitres.actif]}
             </p>
           )}
-          {title && <h1 className="funnel-title">{title}</h1>}
+          {title && <h1 className="funnel-title" aria-label={typeof title === 'string' ? title : undefined}><TitreAnime>{title}</TitreAnime></h1>}
           {subtitle && <p className="funnel-subtitle">{subtitle}</p>}
           <div className="funnel-content">{children}</div>
         </div>
       </main>
 
       {footer && <footer className="funnel-footer">{footer}</footer>}
+
+      {bandeau && (
+        <div className="partie-bandeau" role="status">
+          <Mascotte hauteur={34} humeur="saut" />
+          <span>{bandeau} ✓</span>
+        </div>
+      )}
     </div>
   )
 }
