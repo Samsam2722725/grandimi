@@ -231,12 +231,12 @@ export const TEXTES_ETAPE = {
     sousTitre: 'Jusqu’à 20 % de ta taille finale dépend de tes habitudes quotidiennes.',
   },
   sexe: {
-    titre: 'Sélectionne ton sexe',
-    sousTitre: 'Ceci sera utilisé pour prédire ton potentiel de taille et créer ton plan personnalisé.',
+    titre: 'Quel est ton sexe ?',
+    sousTitre: 'Le sexe influence ta taille à l’âge adulte.',
   },
   age: {
-    titre: 'Quand es-tu né(e) ?',
-    sousTitre: 'Ceci sera utilisé pour prédire ton potentiel de taille et créer ton plan personnalisé.',
+    titre: 'Quand es-tu né ?',
+    sousTitre: 'Ton âge nous aide à prédire quand tu vas grandir.',
   },
   taille: {
     titre: 'Quelle est ta taille ?',
@@ -250,15 +250,15 @@ export const TEXTES_ETAPE = {
   // Taller, deux molettes côte à côte (31/10/2026).
   'taille-poids': {
     titre: 'Taille et poids',
-    sousTitre: 'Ceci sera utilisé pour prédire ton potentiel de taille et créer ton plan personnalisé.',
+    sousTitre: 'Fais glisser pour choisir ta taille et ton poids actuels.',
   },
   parents: {
-    titre: 'Taille des parents',
-    sousTitre: 'Ceci sera utilisé pour prédire ton potentiel de taille et créer ton plan personnalisé.',
+    titre: 'Quelle est la taille de tes parents ?',
+    sousTitre: 'La taille des parents influence beaucoup ta taille.',
   },
   pointure: {
-    titre: 'Pointure',
-    sousTitre: 'Ceci sera utilisé pour prédire ton potentiel de taille et créer ton plan personnalisé.',
+    titre: 'Quelle est ta pointure ?',
+    sousTitre: 'La taille des pieds montre où tu en es dans ta croissance.',
   },
   sports: {
     titre: 'Quels sports pratiques-tu ?',
@@ -266,11 +266,11 @@ export const TEXTES_ETAPE = {
   },
   'exercice-freq': {
     titre: "Combien d'heures d'exercice par semaine ?",
-    sousTitre: 'Pour savoir où tu en es',
+    sousTitre: 'L’exercice influence l’hormone de croissance et la récupération.',
   },
   sommeil: {
     titre: 'Combien d’heures dors-tu par nuit ?',
-    sousTitre: 'Ton sommeil compte plus que tu ne crois pour ta taille',
+    sousTitre: 'Bien dormir aide à grandir et à récupérer.',
   },
   pere: {
     titre: 'Combien mesure ton père ?',
@@ -290,7 +290,7 @@ export const TEXTES_ETAPE = {
   },
   'pilosite-aisselles': {
     titre: 'As-tu des poils aux aisselles ?',
-    sousTitre: 'Les poils aux aisselles sont un signe précoce de la puberté',
+    sousTitre: 'Les poils aux aisselles sont un signe précoce de la poussée de croissance.',
   },
   'pilosite-visage': {
     titre: 'As-tu des poils au visage ?',
@@ -298,7 +298,7 @@ export const TEXTES_ETAPE = {
   },
   'vitesse-croissance': {
     titre: 'Combien as-tu grandi l’année dernière ?',
-    sousTitre: 'Si tu as grandi récemment, ta croissance n’est pas finie',
+    sousTitre: 'Ta croissance l’année dernière montre le rythme de la poussée.',
   },
   epaules: {
     titre: 'Tes épaules se sont-elles élargies ?',
@@ -310,7 +310,7 @@ export const TEXTES_ETAPE = {
   },
   acne: {
     titre: 'As-tu de l’acné ?',
-    sousTitre: 'Les boutons peuvent augmenter quand les hormones de la puberté arrivent',
+    sousTitre: 'Les boutons peuvent augmenter quand les hormones de la poussée arrivent.',
   },
   muscles: {
     titre: 'Tes muscles sont-ils plus dessinés ?',
@@ -318,7 +318,7 @@ export const TEXTES_ETAPE = {
   },
   voix: {
     titre: 'Ta voix a-t-elle complètement mué ?',
-    sousTitre: 'Le changement de voix est un signe tardif que la puberté avance',
+    sousTitre: 'Le changement de voix est un signe tardif que la poussée avance.',
   },
   'croissance-lente': {
     titre: 'Tu grandis encore, mais plus lentement que l’an dernier ?',
@@ -330,7 +330,7 @@ export const TEXTES_ETAPE = {
       'Construit à partir des tables de croissance OMS et du modèle Khamis-Roche, pas d\'une formule maison.',
   },
   precision: {
-    titre: 'Quelle est la précision de notre prédiction ?',
+    titre: 'Quelle est la précision de notre prédiction de taille ?',
     sousTitre: 'On combine tes mesures et tes habitudes pour estimer ton potentiel.',
   },
   // Comme « Avis d'experts » de GoTall : un titre seul, pas de sous-titre.
@@ -391,7 +391,7 @@ export const TEXTES_ETAPE = {
   },
   'taille-ideale': {
     titre: 'Quelle est ta taille de rêve ?',
-    sousTitre: 'En fonction de tes données, nous calculerons la probabilité d’atteindre cette taille.',
+    sousTitre: 'Choisis la taille que tu veux atteindre.',
   },
   'resultats-la': {
     titre: 'Ton plan est prêt ✓',
@@ -399,7 +399,7 @@ export const TEXTES_ETAPE = {
   },
   'bonne-nouvelle': {
     titre: 'Bonne nouvelle',
-    sousTitre: 'Tu grandis sans doute encore.',
+    sousTitre: 'Tu peux encore grandir.',
   },
   genetique: {
     titre: 'Ton analyse génétique',
@@ -474,6 +474,8 @@ const auFeminin = (texte) => texte.replace(/-il\b/g, '-elle').replace(/\bil\b/g,
 
 export function texteEtape(etape, profil, sexe) {
   const parent = profil === 'parent' && TEXTES_PARENT[etape]
+  // « Quand es-tu né ? » (GoTall) : « née » pour une fille, son sexe est déjà connu.
+  if (!parent && etape === 'age' && sexe === 'F') return { ...TEXTES_ETAPE.age, titre: 'Quand es-tu née ?' }
   if (!parent) return TEXTES_ETAPE[etape]
   if (sexe !== 'F') return parent
   return { titre: auFeminin(parent.titre), sousTitre: auFeminin(parent.sousTitre) }
@@ -1620,7 +1622,7 @@ const SLIDES_DOULEURS = [
   {
     ton: 'douleur',
     emoji: '👻',
-    titre: ['Invisible aux moments clés.', 'Plus d’anxiété sociale.'],
+    titre: ['Ignoré dans les moments importants.', 'Plus d’anxiété sociale.'],
     texte: 'En groupe, on parle par-dessus toi. Tu te compares, tu doutes de toi.',
   },
   {
@@ -1944,7 +1946,6 @@ export function QuestionCalcul({ question, onChoisir }) {
   return (
     <div className="calcul-question" role="dialog" aria-label={question.titre}>
       <div className="calcul-question-carte">
-        <p className="calcul-question-sur">Encore une question pendant que ça tourne</p>
         <p className="calcul-question-titre">{question.titre}</p>
         <div className="calcul-question-choix">
           {question.options.map((o) => (

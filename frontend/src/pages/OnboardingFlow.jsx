@@ -1128,8 +1128,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
               }}
             >
               <span className="pret-badge" aria-hidden="true"><Check size={30} strokeWidth={3} /></span>
-              <h2 className="resultats-overlay-titre">Ton plan est prêt</h2>
-              <p className="resultats-overlay-text">{texte.sousTitre}</p>
+              <h2 className="resultats-overlay-titre">Entre ton email pour débloquer tes résultats.</h2>
 
               <label className="pret-champ">
               <User size={18} aria-hidden="true" />
@@ -1173,7 +1172,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
               </p>
 
               <FunnelButton type="submit" disabled={!emailPlausible}>
-                Voir mon plan
+                Continuer
               </FunnelButton>
             </form>
           </div>
