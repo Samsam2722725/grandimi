@@ -75,7 +75,7 @@ export function ChargePotentiel() {
 
   const hauteurOrange = (LIGNE - HAUT) * charge
   return (
-    <div className={'charge' + (plein ? ' is-plein' : '') + (appui.current ? ' is-appui' : '')}>
+    <div className={'charge' + (plein ? ' is-plein' : '')}>
       <button
         type="button"
         className="charge-zone"

@@ -228,6 +228,7 @@ function useProgressionAnimee(actif, pretALivrer, arret = null) {
   const [pourcentage, setPourcentage] = useState(0)
   const [complet, setComplet] = useState(false)
   const pourcentageRef = useRef(0)
+  const dernierAffiche = useRef(-1)
 
   useEffect(() => {
     if (!actif) return undefined
@@ -258,7 +259,13 @@ function useProgressionAnimee(actif, pretALivrer, arret = null) {
       const progression = 1 - (1 - p) ** 2
       const valeur = depart + (cible - depart) * progression
       pourcentageRef.current = valeur
-      setPourcentage(valeur)
+      // Un rendu par point de pourcentage, pas à chaque image : tout le
+      // questionnaire se redessinait 60 fois par seconde (21/11/2026).
+      // L'anneau reste fluide grâce à sa transition CSS.
+      if (Math.floor(valeur) !== Math.floor(dernierAffiche.current) || p >= 1) {
+        dernierAffiche.current = valeur
+        setPourcentage(valeur)
+      }
       if (p < 1) {
         frame = requestAnimationFrame(etape)
       } else if (pretALivrer && cible >= 100) {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CheckCircle2, ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 
 import { capture } from '../lib/analytics'
 import { CartePlan } from '@/components/ui/ecrans-uniques'

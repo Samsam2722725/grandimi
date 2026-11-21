@@ -90,13 +90,8 @@ export function TelephonePlan() {
 }
 
 export function CeQueTuObtiens({ prediction = {} } = {}) {
-  /* Ses chiffres du questionnaire : la carte 1 dit qu'elle est calculée
-     pour lui (le plan payé part de son âge et de son poids). Sans l'un des
-     deux, pas de puce. Pas de « 88 g de protéines » : Grandimi dit quoi
-     manger, pas des grammes (30/10/2026). */
-  const age = Math.floor(Number(prediction.age))
-  const poids = Math.round(Number(prediction.weight_kg))
-  const perso = age > 0 && poids > 0
+  // La puce « Calculée pour toi » partait avec la carte « Optimise ta taille » (retirée le 21/11/2026).
+  void prediction
 
   const cartes = [
     // « Optimise ta taille » retirée le 21/11/2026 (Samuel) ; VisuelActions la garde en code.

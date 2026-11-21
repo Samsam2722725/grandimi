@@ -5073,3 +5073,8 @@ div.interstitial.citation { cursor: default; }
 @media (prefers-reduced-motion: reduce) {
   .carte-plan, .carte-plan-confettis span, .ciel-etoile, .is-plein .charge-svg { animation: none !important; }
 }
+
+/* Vitesse (21/11/2026) : pas de filtre qui se recalcule à chaque image */
+.calc-arc { filter: none; transition: stroke-dashoffset 0.6s linear; }
+.calc-anneau::before { content: ''; position: absolute; inset: 14px; border-radius: 50%; box-shadow: 0 0 40px rgba(255, 90, 31, 0.28); pointer-events: none; }
+.calcul-question { backdrop-filter: none; background: rgba(10, 10, 10, 0.72); }
