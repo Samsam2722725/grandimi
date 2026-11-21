@@ -41,58 +41,52 @@ import { TAILLE_MERE_INCONNUE_CM, TAILLE_PERE_INCONNUE_CM } from './payload'
    ORDRE DES 38 ÉCRANS
    ============================================================ */
 export const ORDRE_ETAPES = [
+  // 21/11/2026 : habitudes, taille de rêve et douleur remises au même
+  // moment que chez GoTall, à la demande de Samuel (voir ORDRE-ONBOARDING.md).
   // Toi
   'sexe',
-  // « Qui es-tu ? » (Ado / Parent) de GoTall, remis le 20/11/2026 à la
-  // demande de Samuel. Après le sexe et pas avant : le sexe est souvent
-  // choisi dès l'accueil, et le parcours reprend juste après lui.
+  // « Qui es-tu ? » (Ado / Parent) de GoTall. Après le sexe : le sexe est
+  // souvent choisi dès l'accueil, et le parcours reprend juste après lui.
   'profil',
   'age',
   'bonne-nouvelle',
-  // « Quelle est ton origine ? » de Taller, ajouté le 20/11/2026 (Samuel).
+  // « Quelle est ton origine ? » de Taller.
   'origine',
   'taille-poids',
+  // Habitudes : chez GoTall, juste après la taille et le poids, avant la famille.
+  'sports',
+  'exercice-freq',
+  'sommeil',
   // Famille
   'parents',
-  // GoTall, remis le 20/11/2026.
   'proches',
   'pointure',
-  // Courbe « Votre taille finale », comme Taller après la pointure (31/10/2026).
+  // Courbe « Votre taille finale », comme Taller après la pointure.
   'resultats-long-terme',
-  // Puberté : l'ordre de Taller (31/10/2026), des questions qui servent à
-  // la prédiction. L'acné est demandée comme chez Taller, même si le calcul
-  // ne s'en sert pas.
+  // Puberté
   'vitesse-croissance',
   'regles',
   'voix',
-  // « Tu grandis plus lentement ? » (GoTall) : ajouté puis retiré le 21/11/2026,
-  // Samuel n'en veut pas. Le code de l'écran reste.
   'pilosite-visage',
   'pilosite-aisselles',
-  // Épaules, odeur, muscles : ordre de GoTall (épaules, odeur, acné,
-  // muscles), remis le 20/11/2026.
   'epaules',
   'odeur',
   'acne',
   'muscles',
-  // Habitudes ; « Quels sports ? » de GoTall remis le 20/11/2026.
-  'sports',
-  'exercice-freq',
-  'sommeil',
-  // Objectif, puis les écrans qui préparent le plan. Les questions
-  // d'habitudes (coucher, téléphone, sports, assis, posture, protéines,
-  // laitages) et « Ton profil de croissance » sont retirées du parcours le
-  // 31/10/2026 ; leurs écrans restent dans le code.
-  'taille-ideale',
+  // Les écrans retirés le 31/10/2026 (coucher, téléphone, assis, posture,
+  // protéines, laitages, profil de croissance) et le 21/11/2026 (« Tu
+  // grandis plus lentement ? ») restent dans le code.
   'pourquoi',
   'precision',
-  // Preuves façon GoTall (« Avis d'experts », « Résultats réels »), 20/11/2026.
+  // Douleur avant les preuves, comme GoTall : slides douleurs → avantages
+  // → 80/20 (format Menu IQ / Quittr), à la place de « Le coût d'être petit »
+  // et de « Tu perds peut-être déjà des centimètres » (leur code reste).
+  'douleurs',
+  // Preuves façon GoTall.
   'preuve-science',
   'preuve-avis',
-  // Slides douleurs → bénéfices → 80/20 (format Menu IQ / Quittr), 21/11/2026.
-  // Remplacent « Le coût d'être petit » et « Tu perds peut-être déjà des
-  // centimètres » (à la demande de Samuel ; leur code reste).
-  'douleurs',
+  // Taille de rêve : chez GoTall, juste après les preuves.
+  'taille-ideale',
   'citation-genetique',
   'decouvrir-potentiel',
   'resultats-la',
@@ -542,13 +536,14 @@ const ETAPES_GARCON = new Set(['pilosite-visage', 'voix', 'epaules', 'muscles'])
 /* Les quatre chapitres du parcours, affichés en tête d'écran (segments +
    libellé). Tout ce qui n'est ni « toi », ni « famille », ni « puberté »
    appartient au dernier chapitre, celui qui présente le plan. */
-export const CHAPITRES = ['Toi', 'Famille', 'Puberté', 'Habitudes', 'Objectif']
+// Ordre des chapitres = ordre du parcours (habitudes avant la famille, comme GoTall).
+export const CHAPITRES = ['Toi', 'Habitudes', 'Famille', 'Puberté', 'Objectif']
 const CHAPITRE_DE = {
   sexe: 0, profil: 0, age: 0, 'bonne-nouvelle': 0, origine: 0, 'taille-poids': 0,
-  parents: 1, proches: 1, pointure: 1, 'resultats-long-terme': 1, genetique: 1,
-  'vitesse-croissance': 2, regles: 2, voix: 2, 'croissance-lente': 2, 'pilosite-visage': 2, 'pilosite-aisselles': 2,
-  epaules: 2, odeur: 2, acne: 2, muscles: 2,
-  sports: 3, 'exercice-freq': 3, sommeil: 3,
+  sports: 1, 'exercice-freq': 1, sommeil: 1,
+  parents: 2, proches: 2, pointure: 2, 'resultats-long-terme': 2, genetique: 2,
+  'vitesse-croissance': 3, regles: 3, voix: 3, 'croissance-lente': 3, 'pilosite-visage': 3, 'pilosite-aisselles': 3,
+  epaules: 3, odeur: 3, acne: 3, muscles: 3,
 }
 
 export function chapitreDe(etape) {
