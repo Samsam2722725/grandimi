@@ -4,6 +4,7 @@ import { BarChart3, Check, Dna, Hourglass, ListChecks, Mail, ShieldCheck, User, 
 import { FunnelShell, FunnelButton } from '@/components/ui/funnel-shell'
 import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
 import { EcranTesResultats } from './ApercuPage'
+import { EcranEngagement } from '../onboarding/engagement'
 import '../styles/funnel.css'
 
 import apiClient from '../lib/api'
@@ -377,7 +378,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
   // ?step=plan-sur-mesure ou ?step=investir-en-toi ouvre directement l'écran.
   const [phaseFin, setPhaseFin] = useState(() => {
     if (!import.meta.env.DEV) return null
-    return { 'plan-sur-mesure': 'plan', 'investir-en-toi': 'investir' }[parametreDev('step')] ?? null
+    return { 'plan-sur-mesure': 'plan', 'investir-en-toi': 'investir', engagement: 'engagement' }[parametreDev('step')] ?? null
   })
   const [resultatApi, setResultatApi] = useState(null)
   const [erreurApi, setErreurApi] = useState(null)
@@ -1075,7 +1076,12 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
 
   if (phaseFin === 'plan') {
     // « Investis en toi » est fusionné dans le résultat caché (21/11/2026) : après le plan sur mesure, on y va directement.
-    return <EcranPlanSurMesure prenom={nettoyerPrenom(prenom)} onContinue={terminerAnalyse} />
+    return <EcranPlanSurMesure prenom={nettoyerPrenom(prenom)} onContinue={() => setPhaseFin('engagement')} />
+  }
+
+  // « C'est tout à fait réaliste », « comment on t'amène », la promesse (TrendSaaS), 21/11/2026.
+  if (phaseFin === 'engagement') {
+    return <EcranEngagement prenom={nettoyerPrenom(prenom)} onContinue={terminerAnalyse} />
   }
 
   if (phaseFin === 'investir') {

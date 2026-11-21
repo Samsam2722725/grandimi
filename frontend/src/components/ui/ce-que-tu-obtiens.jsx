@@ -41,7 +41,7 @@ const LECONS = [
 const CHEMIN_HAUT = ['🔥', 'Jour 2', 'Jour 3', 'Jour 4']
 const CHEMIN_BAS = ['🏆', 'Jour 7', 'Jour 6', 'Jour 5']
 
-function TelephonePlan() {
+export function TelephonePlan() {
   return (
     <div className="cqo-tel-zone">
       <span className="cqo-tel-etiquette">Routine quotidienne 📅</span>
@@ -190,5 +190,20 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
           seulement que c'est basé sur la science, sans logo (22/10/2026). */}
       <p className="cqo-science">🔬 Basé sur la science de la croissance</p>
     </section>
+  )
+}
+
+/* La liste d'actions de la carte « Optimise ta taille », réutilisée dans le
+   questionnaire (« Voilà comment on t'amène à ta taille maximale »). */
+export function VisuelActions() {
+  return (
+    <ul className="cqo-actions">
+      {ACTIONS.map(([action, icone], i) => (
+        <li key={action} className={i === 0 ? 'is-faite' : ''}>
+          <span className="cqo-case" aria-hidden="true">{i === 0 ? '✓' : ''}</span>
+          <span className="cqo-action"><strong>{action} {icone}</strong></span>
+        </li>
+      ))}
+    </ul>
   )
 }
