@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   BookOpen,
+  Check,
   CheckCircle2,
   Circle,
   CircleDot,
@@ -81,7 +82,9 @@ export const ORDRE_ETAPES = [
   // Les écrans retirés le 31/10/2026 (coucher, téléphone, assis, posture,
   // protéines, laitages, profil de croissance) et le 21/11/2026 (« Tu
   // grandis plus lentement ? ») restent dans le code.
-  'pourquoi',
+  // « Choisis tes objectifs » (Quittr) à la place de « Pourquoi tu veux
+  // grandir » (21/11/2026) ; l'ancien écran reste dans le code.
+  'objectifs',
   // « Symptômes » (Quittr), après « Pourquoi grandir » comme sur la carte
   // de « Tes idées » (21/11/2026).
   'symptomes',
@@ -120,6 +123,7 @@ export const TYPE_ETAPE = {
   proches: 'question',
   origine: 'question',
   symptomes: 'question',
+  objectifs: 'question',
   'pilosite-aisselles': 'question',
   regles: 'question',
   'pilosite-visage': 'question',
@@ -190,6 +194,11 @@ export const TEXTES_ETAPE = {
   },
   symptomes: {
     titre: 'Symptômes',
+  },
+  // Quittr : « Choose your goals ».
+  objectifs: {
+    titre: 'Choisis tes objectifs',
+    sousTitre: 'Choisis ce que tu veux améliorer avec Grandimi.',
   },
   // GoTall 14, mot pour mot.
   poussee: {
@@ -1434,7 +1443,11 @@ const PASTILLES_BENEFICES = [
   { label: 'Mieux manger', Icone: Utensils, couleur: '#3fcf8e' },
 ]
 
-export function EcranPlanSurMesure({ prenom, onContinue }) {
+export function EcranPlanSurMesure({ prenom, objectifs, onContinue }) {
+  // Reprend les objectifs cochés ; sans choix, les 5 (21/11/2026).
+  const pastilles = objectifs && objectifs.length
+    ? PASTILLES_BENEFICES.filter((p) => objectifs.includes(p.label))
+    : PASTILLES_BENEFICES
   return (
     <div className="interstitial citation sur-mesure">
       <span className="citation-halo" aria-hidden="true" />
@@ -1452,7 +1465,7 @@ export function EcranPlanSurMesure({ prenom, onContinue }) {
         <h2 className="sur-mesure-slogan">Deviens la meilleure version de toi avec Grandimi</h2>
         <p className="sur-mesure-sous">Plus droit. Plus en forme. Plus sûr de toi.</p>
         <ul className="sur-mesure-pastilles">
-          {PASTILLES_BENEFICES.map(({ label, Icone, couleur }) => (
+          {pastilles.map(({ label, Icone, couleur }) => (
             <li key={label} style={{ '--c': couleur }}>
               <Icone size={14} strokeWidth={2.4} aria-hidden="true" />
               {label}
@@ -1805,6 +1818,36 @@ export function EcranSymptomes({ sexe, valeurs, onBasculer }) {
           </div>
         </div>
       ))}
+    </div>
+  )
+}
+
+/* ---------- « Choisis tes objectifs » (Quittr « Choose your goals »), 21/11/2026 ----------
+   Cartes de couleur à cocher, plusieurs choix, comme Quittr ; à la place de
+   « Pourquoi tu veux grandir » (qui reste dans le code). Les 5 objectifs sont
+   ceux du « Plan sur mesure », qui reprend ensuite ce qu'il a coché. */
+export function EcranObjectifs({ valeurs, onBasculer }) {
+  const ensemble = valeurs || []
+  return (
+    <div className="objectifs" role="group" aria-label="Tes objectifs">
+      {PASTILLES_BENEFICES.map(({ label, Icone, couleur }) => {
+        const coche = ensemble.includes(label)
+        return (
+          <button
+            key={label}
+            type="button"
+            role="checkbox"
+            aria-checked={coche}
+            className={'objectif' + (coche ? ' is-coche' : '')}
+            style={{ '--c': couleur }}
+            onClick={() => onBasculer(label)}
+          >
+            <span className="objectif-icone"><Icone size={20} strokeWidth={2.4} aria-hidden="true" /></span>
+            <span className="objectif-label">{label}</span>
+            <span className="objectif-case" aria-hidden="true">{coche && <Check size={15} strokeWidth={3.4} />}</span>
+          </button>
+        )
+      })}
     </div>
   )
 }

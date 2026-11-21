@@ -32,6 +32,7 @@ import {
   OPTIONS_ORIGINE,
   EcranDouleursBenefices,
   EcranSymptomes,
+  EcranObjectifs,
   EcranPousseeCompte,
   EcranCreeHabitudes,
   OPTIONS_PILOSITE_AISSELLES,
@@ -142,6 +143,7 @@ function reponsesInitiales() {
     muscles: null,
     origine: null,
     symptomes: [],
+    objectifs: [],
     voix: null,
     croissanceLente: null,
     // Vide tant que la question n'est pas posée : pas de faux objectif.
@@ -619,6 +621,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
         return reponses.profil != null
       case 'origine':
         return reponses.origine != null
+      case 'objectifs':
+        return (reponses.objectifs || []).length >= 1
       case 'motivation':
         return reponses.motivation.length >= 1
       case 'sexe':
@@ -817,6 +821,8 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             inconnuDefaut={TAILLE_MERE_INCONNUE_CM}
           />
         )
+      case 'objectifs':
+        return <EcranObjectifs valeurs={reponses.objectifs} onBasculer={(v) => basculer('objectifs', v)} />
       case 'symptomes':
         return (
           <EcranSymptomes sexe={reponses.sexe} valeurs={reponses.symptomes} onBasculer={(v) => basculer('symptomes', v)} />
@@ -1061,7 +1067,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
 
   if (phaseFin === 'plan') {
     // « Investis en toi » est fusionné dans le résultat caché (21/11/2026) : après le plan sur mesure, on y va directement.
-    return <EcranPlanSurMesure prenom={nettoyerPrenom(prenom)} onContinue={terminerAnalyse} />
+    return <EcranPlanSurMesure prenom={nettoyerPrenom(prenom)} objectifs={reponses.objectifs} onContinue={terminerAnalyse} />
   }
 
   if (phaseFin === 'investir') {

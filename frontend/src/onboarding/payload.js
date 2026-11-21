@@ -214,6 +214,7 @@ export function fusionnerResultatPrediction(reponses, email, resultatApi) {
       pourquoi: reponses.pourquoi,
       motivation: reponses.motivation,
       symptomes: reponses.symptomes,
+      objectifs: reponses.objectifs,
       exercice_freq: reponses.exerciceFreq,
       sports: reponses.sports,
       proches: reponses.proches,
