@@ -152,8 +152,9 @@ function reponsesInitiales() {
     symptomes: [],
     objectifs: [],
     blocage: null,
-    minutesJour: null,
-    joursSemaine: null,
+    // DEV : ?calcul=fait saute les 2 questions du calcul (captures du parcours).
+    minutesJour: import.meta.env.DEV && parametreDev('calcul') ? '15' : null,
+    joursSemaine: import.meta.env.DEV && parametreDev('calcul') ? '5' : null,
     temps: null,
     voix: null,
     croissanceLente: null,
