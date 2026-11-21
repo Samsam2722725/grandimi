@@ -116,10 +116,12 @@ export function EcranEngagement({ prenom, onContinue }) {
   return (
     <div className="eng eng--centre">
       <main className="eng-corps">
-        <p className="eng-surtitre">Ta promesse</p>
-        <h1 className="eng-titre eng-titre--centre">Avant d’aller plus loin, fais-toi une promesse.</h1>
+        {/* Mise en page de TrendSaaS 40 (21/11/2026) : la 2e ligne du titre en
+            gris clair, « à toi-même » en gras, l'empreinte grise dans un cercle. */}
+        <p className="eng-surtitre eng-surtitre--centre">Ta promesse</p>
+        <h1 className="eng-titre eng-titre--centre eng-titre--deux">Avant d’aller plus loin, <span>fais-toi une promesse.</span></h1>
         <p className="eng-promesse">« Je me promets de suivre mon plan et de donner le maximum pendant que je grandis. »</p>
-        <p className="eng-note">Tu ne t’engages envers personne : c’est une promesse que tu te fais à toi-même.</p>
+        <p className="eng-note">Tu ne t’engages envers personne : c’est une promesse que tu te fais <strong>à toi-même</strong>. Ni contrat, ni signature, ni obligation.</p>
         <BoutonEmpreinte onFini={onContinue} />
       </main>
     </div>

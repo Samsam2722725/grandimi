@@ -4852,3 +4852,23 @@ div.interstitial.citation { cursor: default; }
 .qs--benefice { background: linear-gradient(180deg, #16a34a 0%, #0f7a36 100%); }
 .qs .qs-texte { color: #fff; font-size: 17px; font-weight: 500; line-height: 1.45; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18); }
 .qs .qs-titre { font-size: 26px; }
+
+/* ---------- Promesse comme TrendSaaS 40 (21/11/2026) ---------- */
+.eng .eng-titre--deux { font-size: 30px; font-weight: 700; line-height: 1.15; }
+.eng .eng-titre--deux span { display: block; color: #b9b4c9; }
+.eng-promesse { font-size: 19px; font-weight: 500; color: #d2cfdc; margin-top: 24px; }
+.eng-note { font-size: 14px; color: #8f8c99; margin-top: 16px; }
+.eng-note strong { color: #fff; font-weight: 700; }
+.eng-empreinte { margin-top: 36px; gap: 22px; }
+.eng-empreinte-bouton { width: 140px; height: 140px; background: transparent; color: #8a8fa3; }
+.eng-anneau-fond { stroke: #2f2f36; stroke-width: 3; }
+.eng-anneau { stroke: #ff6a2b; stroke-width: 3; }
+.eng-empreinte-texte { color: #8f8c99; font-size: 12px; font-weight: 500; letter-spacing: 0.24em; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+
+/* ---------- « Ton plan personnalisé est prêt » : tailles de GoTall 39 (21/11/2026) ---------- */
+.eng-corps--plan { flex: 1; }
+.eng-corps--plan .eng-titre { font-size: 32px; font-weight: 700; line-height: 1.19; letter-spacing: -0.01em; }
+.eng-corps--plan .eng-plan-sous { font-size: 17px; color: #9a9a9a; margin-top: 14px; max-width: none; }
+.eng-corps--plan .gt-intro-surligne span { font-size: 18px; font-weight: 600; }
+.eng-corps--plan .eng-tuile { margin: auto 0; padding-bottom: 40px; }
+.eng-tuile .gt-tuile { width: 82%; max-width: 320px; }
