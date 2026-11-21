@@ -4674,3 +4674,5 @@ div.interstitial.citation { cursor: default; }
 .eng { font-family: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
 .eng h1, .eng p, .eng strong, .eng span { font-family: inherit; }
 .eng .funnel-cta { width: 100%; min-height: 60px; border: 0; border-radius: 999px; background: #ff5a1f; color: #17120e; font: inherit; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 30px rgba(255, 90, 31, 0.3); }
+.eng-corps { position: relative; z-index: 0; isolation: isolate; }
+.eng-pied { z-index: 5; }

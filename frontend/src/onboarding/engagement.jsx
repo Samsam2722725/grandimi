@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Fingerprint, ChevronRight } from 'lucide-react'
-import { VisuelActions, TelephonePlan } from '@/components/ui/ce-que-tu-obtiens'
+import { TelephonePlan } from '@/components/ui/ce-que-tu-obtiens'
 import '../styles/paywall-night.css'
 
 /* « C'est tout à fait réaliste », « Voilà comment on t'amène à ta taille
@@ -87,8 +87,8 @@ export function EcranEngagement({ prenom, onContinue }) {
           <div className="eng-prediction-cible"><span>Ta taille finale</span><strong>🔒</strong></div>
         </div>
       ) },
-      { n: '02', titre: 'Chaque jour, ton plan te dit quoi faire', texte: 'Des actions simples pour optimiser ta croissance.', visuel: <VisuelActions /> },
-      { n: '03', titre: 'Chaque mois, on suit ta taille et on ajuste', texte: 'Ton programme avance par niveaux, jusqu’à ta taille maximale.', visuel: <TelephonePlan /> },
+      // 21/11/2026 (Samuel) : 2 étapes seulement ; la 2e montre « Ton plan » et dit « plan personnalisé ».
+      { n: '02', titre: 'Ton plan personnalisé pour atteindre ta taille maximale', texte: 'Chaque jour, il te dit quoi faire.', visuel: <TelephonePlan /> },
     ]
     return (
       <div className="eng">
