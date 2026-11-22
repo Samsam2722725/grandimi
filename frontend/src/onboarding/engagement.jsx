@@ -51,11 +51,12 @@ function BoutonEmpreinte({ onFini }) {
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { fini.current = true; onFini() } }}
         aria-label="Reste appuyé pour faire ta promesse"
       >
-        <svg viewBox="0 0 120 120" aria-hidden="true">
+        <svg viewBox="0 0 120 120" className="eng-anneau-svg" aria-hidden="true">
           <circle cx="60" cy="60" r={R} className="eng-anneau-fond" />
           <circle cx="60" cy="60" r={R} className="eng-anneau" style={{ strokeDasharray: C, strokeDashoffset: C * (1 - progres) }} />
         </svg>
-        <Fingerprint size={54} strokeWidth={1.4} aria-hidden="true" />
+        {/* Elle s'éclaircit du gris au blanc pendant l'appui (22/11/2026). */}
+        <Fingerprint className="eng-doigt" size={66} strokeWidth={1.7} style={{ color: `rgb(${Math.round(122 + 133 * progres)}, ${Math.round(125 + 130 * progres)}, ${Math.round(143 + 112 * progres)})` }} aria-hidden="true" />
       </button>
       <p className="eng-empreinte-texte">Reste appuyé pour continuer</p>
     </div>
@@ -114,13 +115,16 @@ export function EcranEngagement({ prenom, onContinue }) {
   }
 
   return (
-    <div className="eng eng--centre">
+    <div className="eng eng--centre eng--promesse">
+      {/* Comme TrendSaaS 40 : la barre de progression pleine, puis le lien de retour. */}
+      <div className="eng-barre" aria-hidden="true" />
+      <button type="button" className="eng-retour" onClick={() => setEtape(1)}>← Retour</button>
       <main className="eng-corps">
         {/* Mise en page de TrendSaaS 40 (21/11/2026) : la 2e ligne du titre en
             gris clair, « à toi-même » en gras, l'empreinte grise dans un cercle. */}
         <p className="eng-surtitre eng-surtitre--centre">Ta promesse</p>
         <h1 className="eng-titre eng-titre--centre eng-titre--deux">Avant d’aller plus loin, <span>fais-toi une promesse.</span></h1>
-        <p className="eng-promesse">« Je me promets de suivre mon plan et de donner le maximum pendant que je grandis. »</p>
+        <p className="eng-promesse">« Je me promets de suivre mon plan jusqu’au bout. De donner le maximum pendant que je grandis. Et de me donner les moyens de réussir. »</p>
         <p className="eng-note">Tu ne t’engages envers personne : c’est une promesse que tu te fais <strong>à toi-même</strong>. Ni contrat, ni signature, ni obligation.</p>
         <BoutonEmpreinte onFini={onContinue} />
       </main>

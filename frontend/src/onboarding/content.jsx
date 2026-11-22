@@ -1739,6 +1739,13 @@ const SLIDES_DOULEURS = [
   },
 ]
 
+/* 22/11/2026 (Samuel, idée B) : un vrai titre, bien visible, au-dessus de l'emoji.
+   Rouge = le titre de Taller ; vert = le miroir, déjà validé (« Les avantages d'être grand »). */
+const TITRE_SECTION = {
+  douleur: 'La vérité brutale sur la petite taille',
+  benefice: 'Les avantages d’être grand',
+}
+
 const SURTITRE_SLIDE = {
   douleur: 'Ce qui peut te freiner',
   benefice: 'Les avantages d’être grand',
@@ -1774,6 +1781,7 @@ export function EcranDouleursBenefices({ onContinue, onRetour }) {
       </header>
 
       <main className="qs-corps" key={i}>
+        {TITRE_SECTION[slide.ton] && <p className="qs-section">{TITRE_SECTION[slide.ton]}</p>}
         <span className="qs-illustration" aria-hidden="true">{slide.emoji}</span>
         <h1 className="qs-titre">{titre}</h1>
         <p className="qs-texte">{[...suite, slide.texte].join(' ')}</p>
