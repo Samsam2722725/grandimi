@@ -87,6 +87,7 @@ export function ChargePotentiel() {
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { chargeRef.current = 1; setCharge(1) } }}
         aria-label="Garde le doigt appuyé pour charger tes 20 %"
       >
+        <span className="charge-groupe">
         <svg viewBox="0 0 120 262" className="charge-svg" aria-hidden="true">
           <defs>
             <clipPath id="charge-forme"><FormeSilhouette nu /></clipPath>
@@ -107,8 +108,11 @@ export function ChargePotentiel() {
             <rect x="0" y="8" width="18" height="14" rx="3.5" />
           </g>
         </svg>
-        <span className="charge-etiquette charge-etiquette--toi">20 % : toi</span>
-        <span className="charge-etiquette charge-etiquette--gen">80 % : génétique</span>
+        <span className="charge-etiquettes" aria-hidden="true">
+          <span className="charge-etiquette charge-etiquette--toi">20 % : toi</span>
+          <span className="charge-etiquette charge-etiquette--gen">80 % : génétique</span>
+        </span>
+        </span>
       </button>
       <p className="charge-consigne" aria-live="polite">
         {plein ? 'Ton potentiel est chargé ⚡' : 'Garde le doigt appuyé pour charger tes 20 %'}

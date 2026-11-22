@@ -137,10 +137,11 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
     <section className="cqo" aria-label="Ce que tu obtiendras">
       <p className="cqo-intro">Ce que tu obtiendras :</p>
       {/* Ce qu'on achète, en une phrase, comme la ligne de Taller
-          (31/10/2026). Ni « communauté » (on n'en a pas) ni « prédiction »
-          (seulement dans 3 mois et À vie). */}
+          (31/10/2026). Ni « communauté » (on n'en a pas). 22/11/2026, demande
+          de Samuel : dire que le plan est personnalisé et que la taille
+          adulte prédite est incluse (elle l'est dans le 1 mois et le 1 an). */}
       <p className="cqo-acces">
-        Routine quotidienne, exercices et repas pour optimiser ta croissance, <em>adaptés à toi</em>.
+        Un plan <em>personnalisé</em> : routine quotidienne, exercices et repas pour optimiser ta croissance, adaptés à toi. Et ta <em>taille adulte prédite</em>.
       </p>
       <ul
         ref={liste}

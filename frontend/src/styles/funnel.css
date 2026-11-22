@@ -4798,9 +4798,9 @@ div.interstitial.citation { cursor: default; }
 .precision-toise-cent { position: absolute; top: 4px; color: rgba(255,255,255,0.14); font-size: 24px; font-weight: 700; }
 .precision-toise-trait { width: 14px; height: 2px; background: rgba(255,255,255,0.18); }
 .precision-toise-trait.is-grand { width: 30px; }
-.precision-pilule { position: relative; display: flex; align-items: center; justify-content: center; gap: 22px; width: 100%; padding: 26px 24px; border-radius: 999px; background: #181818; border: 1.5px solid rgba(255, 106, 43, 0.35); box-shadow: 0 0 70px rgba(255, 90, 31, 0.32); }
-.precision-pilule-chiffre { font-size: 76px; font-weight: 800; line-height: 1; letter-spacing: -0.03em; background: linear-gradient(180deg, #ff6a2b, #ff9a5a); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.precision-pilule-mot { font-size: 26px; font-weight: 600; color: #ff7a3d; }
+.precision-pilule { position: relative; display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; gap: clamp(10px, 3.4vw, 22px); width: 100%; padding: 26px clamp(14px, 4.5vw, 24px); border-radius: 999px; background: #181818; border: 1.5px solid rgba(255, 106, 43, 0.35); box-shadow: 0 0 70px rgba(255, 90, 31, 0.32); }
+.precision-pilule-chiffre { white-space: nowrap; flex: none; font-size: clamp(52px, 17vw, 76px); font-weight: 800; line-height: 1; letter-spacing: -0.03em; background: linear-gradient(180deg, #ff6a2b, #ff9a5a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.precision-pilule-mot { white-space: nowrap; flex: none; font-size: clamp(19px, 5.8vw, 26px); font-weight: 600; color: #ff7a3d; }
 
 /* Jauge : « de ta taille » */
 .jauge-sous { fill: #fff; font-size: 15px; font-weight: 500; }
@@ -5019,9 +5019,12 @@ div.interstitial.citation { cursor: default; }
    Écrans uniques (21/11/2026) : charge, ciel, carte
    ================================================================ */
 /* Charge ton potentiel */
-.charge { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; }
+.charge { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
 .charge-zone { position: relative; width: 100%; max-width: 340px; padding: 8px 0; border: 0; background: none; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; display: grid; place-items: center; }
-.charge-svg { width: 150px; height: auto; overflow: visible; transition: transform 0.2s ease; }
+/* La silhouette prend la hauteur qui reste sous le titre : le texte « Garde le doigt appuyé » ne passe plus sous le bouton Continuer, plus besoin de défiler (iPhone, 22/11/2026). */
+.charge-groupe { position: relative; display: inline-flex; align-items: stretch; gap: 10px; }
+.charge-svg { width: auto; height: clamp(150px, calc(100dvh - 600px), 300px); max-width: 40vw; overflow: visible; transition: transform 0.2s ease; }
+.charge-etiquettes { position: relative; width: 116px; }
 .charge-zone:active .charge-svg { transform: scale(0.97); }
 .charge-contour { fill: #161616; stroke: #3a3a3a; stroke-width: 2; }
 .charge-gris { fill: #3a3a3a; }
@@ -5030,8 +5033,8 @@ div.interstitial.citation { cursor: default; }
 .is-plein .charge-svg { filter: drop-shadow(0 0 18px rgba(255, 106, 43, 0.7)); animation: charge-flash 0.6s ease; }
 @keyframes charge-flash { 30% { transform: scale(1.06); } }
 .charge-etiquette { position: absolute; font-size: 14px; font-weight: 700; white-space: nowrap; }
-.charge-etiquette--toi { top: 30px; left: calc(50% + 70px); color: #ff8a4a; }
-.charge-etiquette--gen { top: 150px; left: calc(50% + 70px); color: #8a8a8a; }
+.charge-etiquette--toi { top: 4%; left: 0; color: #ff8a4a; }
+.charge-etiquette--gen { top: 52%; left: 0; color: #8a8a8a; }
 .charge-consigne { margin: 0; color: #d8d8d8; font-size: 16px; font-weight: 600; text-align: center; }
 .is-plein .charge-consigne { color: #ff8a4a; }
 

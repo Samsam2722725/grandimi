@@ -77,7 +77,8 @@ function useCompteur(cible) {
    CDC / Harvard / NIH : ces organismes ne nous ont jamais validés. */
 export function BadgePrecision({ className }) {
   const compte = useCompteur(CIBLE)
-  const valeurAffichee = CIBLE === null ? PRECISION_AFFICHEE.valeur : `${compte}${SUFFIXE}`
+  // Espace insécable : « 98 » et « % » ne se séparent jamais (iPhone, 22/11/2026).
+  const valeurAffichee = (CIBLE === null ? PRECISION_AFFICHEE.valeur : `${compte}${SUFFIXE}`).replace(/ /g, " ")
   return (
     <div className={`precision-gotall ${className || ''}`}>
       <div className="precision-toise" aria-hidden="true">
