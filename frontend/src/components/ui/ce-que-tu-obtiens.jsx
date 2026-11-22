@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Settings } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Settings } from 'lucide-react'
 
 import { CourbeTaille } from '@/components/ui/courbe-taille'
 
@@ -97,7 +97,7 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
     // « Optimise ta taille » retirée le 21/11/2026 (Samuel) ; VisuelActions la garde en code.
     { titre: 'Programme optimal', visuel: <TelephonePlan /> },
     // Juste après le programme, avec un cadenas à la place de la taille (21/11/2026).
-    { titre: 'Prédis ta taille', visuel: <CourbeTaille cadenas /> },
+    { titre: 'Prédis ta taille', visuel: <CourbeTaille cadenas grand /> },
     {
       titre: 'Guide pour grandir',
       visuel: (
@@ -119,6 +119,11 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
   const liste = useRef(null)
   const [actif, setActif] = useState(0)
   const touche = useRef(false)
+  const aller = (i) => {
+    if (!liste.current || i < 0 || i >= cartes.length) return
+    touche.current = true
+    liste.current.scrollTo({ left: i * liste.current.clientWidth, behavior: 'smooth' })
+  }
 
   // Défile tout seul, comme chez Taller, sauf si on a touché la carte ou si
   // l'appareil demande moins d'animations.
@@ -135,14 +140,28 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
 
   return (
     <section className="cqo" aria-label="Ce que tu obtiendras">
-      <p className="cqo-intro">Ce que tu obtiendras :</p>
-      {/* Ce qu'on achète, en une phrase, comme la ligne de Taller
-          (31/10/2026). Ni « communauté » (on n'en a pas). 22/11/2026, demande
-          de Samuel : dire que le plan est personnalisé et que la taille
-          adulte prédite est incluse (elle l'est dans le 1 mois et le 1 an). */}
-      <p className="cqo-acces">
-        Un plan <em>personnalisé</em> : routine quotidienne, exercices et repas pour optimiser ta croissance, adaptés à toi. Et ta <em>taille adulte prédite</em>.
-      </p>
+      {/* 22/11/2026 (Samuel) : « ça donne pas envie de lire » → une carte avec un fond,
+          deux lignes cochées. Même contenu : le plan personnalisé, et la taille
+          adulte prédite (incluse dans le 1 mois et le 1 an). */}
+      <div className="cqo-bloc">
+        <p className="cqo-intro">Ce que tu obtiendras</p>
+        <ul className="cqo-coches">
+          <li>
+            <span className="cqo-coche" aria-hidden="true">✓</span>
+            <span>
+              <strong>Un plan personnalisé</strong>
+              <small>Routine quotidienne, exercices et repas pour optimiser ta croissance, adaptés à toi.</small>
+            </span>
+          </li>
+          <li>
+            <span className="cqo-coche" aria-hidden="true">✓</span>
+            <span>
+              <strong>Ta taille adulte prédite</strong>
+              <small>On combine tes mesures et tes habitudes pour estimer ton potentiel.</small>
+            </span>
+          </li>
+        </ul>
+      </div>
       <ul
         ref={liste}
         className="cqo-liste"
@@ -156,10 +175,15 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
           </li>
         ))}
       </ul>
-      <div className="cqo-points" aria-hidden="true">
-        {cartes.map(({ titre }, i) => (
-          <span key={titre} className={i === actif ? 'is-actif' : ''} />
-        ))}
+      {/* Flèches visibles : on ne devine pas toujours qu'il faut glisser (22/11/2026). */}
+      <div className="cqo-nav">
+        <button type="button" className="cqo-fleche" onClick={() => aller(actif - 1)} disabled={actif <= 0} aria-label="Carte précédente"><ChevronLeft size={20} aria-hidden="true" /></button>
+        <div className="cqo-points" aria-hidden="true">
+          {cartes.map(({ titre }, i) => (
+            <span key={titre} className={i === actif ? 'is-actif' : ''} />
+          ))}
+        </div>
+        <button type="button" className="cqo-fleche" onClick={() => aller(actif + 1)} disabled={actif >= cartes.length - 1} aria-label="Carte suivante"><ChevronRight size={20} aria-hidden="true" /></button>
       </div>
       {/* Vrai : l'estimation utilise les courbes OMS et Khamis-Roche
           (onboarding/content.jsx). Ces noms ne parlent à personne : on dit

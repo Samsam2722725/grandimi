@@ -821,6 +821,7 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
             valeurs={reponses.sports}
             onBasculer={(v) => basculer('sports', v)}
             options={OPTIONS_SPORTS}
+            deuxColonnes
           />
         )
       case 'exercice-freq':
