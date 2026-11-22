@@ -731,10 +731,10 @@ export function ListeChoixUnique({ options, valeur, onChoisir, label, avecRonds 
  * autres passent `exclusif` à `undefined` et se comportent en simple
  * ensemble de cases à cocher.
  */
-export function ListeChoixMultiple({ options, valeurs, onBasculer, label, exclusif, deuxColonnes = false }) {
+export function ListeChoixMultiple({ options, valeurs, onBasculer, label, exclusif }) {
   const ensemble = valeurs || []
   return (
-    <div className={'funnel-choices' + (deuxColonnes ? ' funnel-choices--deux' : '')} role="group" aria-label={label}>
+    <div className="funnel-choices" role="group" aria-label={label}>
       {options.map((option) => (
         <ChoiceCard
           key={option.valeur}
@@ -868,18 +868,12 @@ function ParentInconnu({ inconnu, onInconnu }) {
 /* Comme GoTall (21/11/2026) : « Papa » et « Maman », le chiffre en gros
    au-dessus d'une règle verticale. L'ancienne version à molettes reste en
    dessous (MoletteParentsMolettes). */
-// Hauteur des règles de « Papa » et « Maman » : 300 px au plus, moins quand l'écran est bas (22/11/2026).
-function hauteurRegleParents() {
-  if (typeof window === 'undefined') return 300
-  return Math.max(200, Math.min(300, Math.round(window.innerHeight - 620)))
-}
-
-function ColonneRegle({ titre, valeur, onChange, min, max, label, children, format = formatCm, hauteur = 300 }) {
+function ColonneRegle({ titre, valeur, onChange, min, max, label, children, format = formatCm }) {
   return (
     <div className="regle-colonne">
       <span className="regle-colonne-titre">{titre}</span>
       <span className="regle-colonne-valeur">{format(valeur)}</span>
-      <RegleVerticale value={valeur} onChange={onChange} min={min} max={max} label={label} format={format} hauteur={hauteur} />
+      <RegleVerticale value={valeur} onChange={onChange} min={min} max={max} label={label} format={format} hauteur={300} />
       {children}
     </div>
   )
@@ -888,10 +882,10 @@ function ColonneRegle({ titre, valeur, onChange, min, max, label, children, form
 export function MoletteParents({ pere, mere, pereInconnu, mereInconnu, onPere, onMere, onPereInconnu, onMereInconnu }) {
   return (
     <div className="regle-duo">
-      <ColonneRegle titre="Papa" hauteur={hauteurRegleParents()} valeur={pere ?? TAILLE_PERE_INCONNUE_CM} onChange={onPere} min={141} max={219} label="Taille de ton père en centimètres">
+      <ColonneRegle titre="Papa" valeur={pere ?? TAILLE_PERE_INCONNUE_CM} onChange={onPere} min={141} max={219} label="Taille de ton père en centimètres">
         <ParentInconnu inconnu={pereInconnu} onInconnu={onPereInconnu} />
       </ColonneRegle>
-      <ColonneRegle titre="Maman" hauteur={hauteurRegleParents()} valeur={mere ?? TAILLE_MERE_INCONNUE_CM} onChange={onMere} min={141} max={209} label="Taille de ta mère en centimètres">
+      <ColonneRegle titre="Maman" valeur={mere ?? TAILLE_MERE_INCONNUE_CM} onChange={onMere} min={141} max={209} label="Taille de ta mère en centimètres">
         <ParentInconnu inconnu={mereInconnu} onInconnu={onMereInconnu} />
       </ColonneRegle>
     </div>
@@ -1765,9 +1759,7 @@ export function EcranDouleursBenefices({ onContinue, onRetour }) {
      plein rouge pour les douleurs et bleu pour les avantages, le logo en
      haut, l'illustration posée sur le fond, une phrase courte en titre, le
      reste en petit paragraphe centré, des points et un petit bouton blanc.
-     22/11/2026 (Samuel) : en haut, au lieu de « GRANDIMI », le sujet de l'écran
-     (« Ce qui peut te freiner » / « Les avantages d'être grand »), sinon on
-     ne comprend pas pourquoi l'écran est rouge. */
+     Plus de « Ce qui peut te freiner » : Quittr n'a rien au-dessus du titre. */
   const [titre, ...suite] = slide.titre
   return (
     <div className={'qs qs--' + slide.ton}>
@@ -1777,7 +1769,7 @@ export function EcranDouleursBenefices({ onContinue, onRetour }) {
             <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
-        <span className="qs-logo">{SURTITRE_SLIDE[slide.ton] || 'GRANDIMI'}</span>
+        <span className="qs-logo">GRANDIMI</span>
         <span className="qs-retour qs-retour--vide" aria-hidden="true" />
       </header>
 
