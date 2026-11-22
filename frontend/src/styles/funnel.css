@@ -5081,3 +5081,17 @@ div.interstitial.citation { cursor: default; }
 .calc-arc { filter: none; transition: stroke-dashoffset 0.6s linear; }
 .calc-anneau::before { content: ''; position: absolute; inset: 14px; border-radius: 50%; box-shadow: 0 0 40px rgba(255, 90, 31, 0.28); pointer-events: none; }
 .calcul-question { backdrop-filter: none; background: rgba(10, 10, 10, 0.72); }
+
+/* « Ta poussée de croissance compte » : les proportions de GoTall (22/11/2026, Samuel) —
+   graphique ≈ 230 px de haut, phrase du bas de 17 px sur 2 lignes, espaces serrés — pour tenir sans défiler. */
+.gt-poussee-graphe { height: 232px; margin-top: 22px; }
+.gt-poussee-texte { margin: 26px 6px 0; font-size: 17px; line-height: 1.45; }
+.funnel-content:has(> .gt-poussee) { padding-bottom: 24px; }
+/* Petits écrans bas (iPhone SE 667 px, Android 640 px) : le graphique rapetisse pour ne pas défiler. */
+@media (max-height: 700px) {
+  .gt-poussee-graphe { height: 172px; margin-top: 10px; }
+  .gt-poussee-texte { margin-top: 12px; font-size: 16px; }
+}
+@media (max-height: 660px) {
+  .gt-poussee-graphe { height: 150px; }
+}

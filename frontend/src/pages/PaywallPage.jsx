@@ -5,7 +5,7 @@ import Spinner from '../components/Spinner'
 import apiClient from '../lib/api'
 import { OFFRES, OFFRE_PAR_DEFAUT, finReduction, euros } from '../lib/offres'
 import { AVIS } from '../lib/avis-clients'
-import { CeQueTuObtiens } from '@/components/ui/ce-que-tu-obtiens'
+import { CeQueTuObtiens, PhraseAcces } from '@/components/ui/ce-que-tu-obtiens'
 import '../styles/funnel.css'
 /* Feuille dédiée, et non paywall.css : cette dernière habille encore
    ParentPage (page claire, destinée à un adulte arrivé par lien partagé) et
@@ -853,6 +853,8 @@ function PaywallPage({ onBackHome }) {
         <h1 className="pw3-titre">
           Atteins ta <span>taille maximale</span>
         </h1>
+
+        <PhraseAcces />
 
         <CeQueTuObtiens prediction={prediction} />
 

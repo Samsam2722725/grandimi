@@ -97,7 +97,7 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
     // « Optimise ta taille » retirée le 21/11/2026 (Samuel) ; VisuelActions la garde en code.
     { titre: 'Programme optimal', visuel: <TelephonePlan /> },
     // Juste après le programme, avec un cadenas à la place de la taille (21/11/2026).
-    { titre: 'Prédis ta taille', visuel: <CourbeTaille cadenas /> },
+    { titre: 'Prédis ta taille', visuel: <CourbeTaille cadenas grand /> },
     {
       titre: 'Guide pour grandir',
       visuel: (
@@ -136,13 +136,6 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
   return (
     <section className="cqo" aria-label="Ce que tu obtiendras">
       <p className="cqo-intro">Ce que tu obtiendras :</p>
-      {/* Ce qu'on achète, en une phrase, comme la ligne de Taller
-          (31/10/2026). Ni « communauté » (on n'en a pas). 22/11/2026, demande
-          de Samuel : dire que le plan est personnalisé et que la taille
-          adulte prédite est incluse (elle l'est dans le 1 mois et le 1 an). */}
-      <p className="cqo-acces">
-        Un plan <em>personnalisé</em> : routine quotidienne, exercices et repas pour optimiser ta croissance, adaptés à toi. Et ta <em>taille adulte prédite</em>.
-      </p>
       <ul
         ref={liste}
         className="cqo-liste"
@@ -181,5 +174,18 @@ export function VisuelActions() {
         </li>
       ))}
     </ul>
+  )
+}
+
+/* La phrase qui résume ce qu'on obtient, sous le titre du paywall, comme chez
+   Taller (« Accès illimité à Taller : routine quotidienne… ») : grise, centrée,
+   sans fond ni carte. 22/11/2026, demande de Samuel : dire que le plan est
+   personnalisé et que la taille adulte prédite est incluse (dans le 1 mois et
+   le 1 an). La ligne « Ce que tu obtiendras : » reste juste au-dessus des cartes. */
+export function PhraseAcces() {
+  return (
+    <p className="cqo-acces">
+        Un plan <em>personnalisé</em> : routine quotidienne, exercices et repas pour optimiser ta croissance, adaptés à toi. Et ta <em>taille adulte prédite</em>.
+      </p>
   )
 }

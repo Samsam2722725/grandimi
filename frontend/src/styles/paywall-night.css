@@ -1590,13 +1590,13 @@ html:has(.pw2-feuille.is-ouverte), html:has(.pw2-feuille.is-ouverte) body { over
 /* Ce qu'on achète, sous « Ce que tu obtiendras : » (31/10/2026). */
 .cqo-intro { margin-bottom: 4px; }
 .cqo-acces {
-  margin: 0 auto 18px;
-  max-width: 31ch;
+  margin: 14px auto 4px;
+  max-width: 32ch;
   text-align: center;
-  font-size: 15.5px;
+  font-size: 17px;
   line-height: 1.5;
   font-weight: 500;
-  color: #a39d97;
+  color: #cdc6bf;
   text-wrap: balance;
 }
 .cqo-acces strong { color: #fff; font-weight: 700; }
