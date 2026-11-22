@@ -200,8 +200,6 @@ export function fusionnerResultatPrediction(reponses, email, resultatApi) {
     sleep_hours_per_night: reponses.sommeil ?? 0,
     exercise_min_per_day: minutesExerciceParJour(reponses.exerciceFreq),
     taille_reve: reponses.tailleIdeale,
-    // Origine : demandée comme Taller (20/11/2026), enregistrée à la demande de Samuel.
-    origine: reponses.origine,
     /* Réponses « comment grandir » : servent au diagnostic (ce qui te
        freine) et au paywall, qui les reprend mot pour mot. */
     habitudes: {

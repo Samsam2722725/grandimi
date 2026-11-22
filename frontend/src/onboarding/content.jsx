@@ -198,8 +198,8 @@ export const TEXTES_ETAPE = {
   },
   // Titre et réponses de Taller. Leur sous-titre (« Ceci sera utilisé pour
   // prédire ton potentiel… ») serait faux chez nous : le calcul ne s'en
-  // sert pas. La réponse est enregistrée avec les autres (choix de Samuel,
-  // 20/11/2026, prévenu que c'est une donnée sensible).
+  // sert pas. La réponse n'est PAS enregistrée (RGPD : donnée sensible ; décidé avec Samuel,
+  // 22/11/2026) : elle reste dans le navigateur le temps du questionnaire.
   origine: {
     titre: 'Quelle est ton origine ?',
     sousTitre: 'Tu peux aussi choisir de ne pas répondre.',
