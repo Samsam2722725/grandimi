@@ -39,6 +39,11 @@ const (
 	// abonnés.
 	Sem       PlanKey = "sem"
 	SemNormal PlanKey = "sem_normal"
+
+	// Offre de sortie (23/11/2026, façon Taller) : moitié prix, proposée une
+	// seule fois quand le visiteur ferme le paiement ou le paywall.
+	SemPromo PlanKey = "sem_promo"
+	AnPromo  PlanKey = "an_promo"
 )
 
 type Plan struct {
@@ -79,6 +84,8 @@ var plans = map[PlanKey]Plan{
 	AnNormal:    {Key: AnNormal, Label: "1 an", PriceEUR: 39.99, Interval: "year", WhopPlanIDEnv: "WHOP_PLAN_ID_AN_NORMAL"},
 	Sem:         {Key: Sem, Label: "1 semaine", PriceEUR: 5.00, Interval: "week", WhopPlanIDEnv: "WHOP_PLAN_ID_SEM"},
 	SemNormal:   {Key: SemNormal, Label: "1 semaine", PriceEUR: 7.00, Interval: "week", WhopPlanIDEnv: "WHOP_PLAN_ID_SEM_NORMAL"},
+	SemPromo:    {Key: SemPromo, Label: "1 semaine", PriceEUR: 2.50, Interval: "week", WhopPlanIDEnv: "WHOP_PLAN_ID_SEM_PROMO"},
+	AnPromo:     {Key: AnPromo, Label: "1 an", PriceEUR: 14.99, Interval: "year", WhopPlanIDEnv: "WHOP_PLAN_ID_AN_PROMO"},
 }
 
 // ParIDWhop retrouve l'offre à partir de l'id de plan Whop reçu par le
@@ -113,5 +120,6 @@ func All() []Plan {
 		plans[Mois1Normal], plans[Mois3Normal], plans[AVieNormal],
 		plans[An], plans[AnNormal],
 		plans[Sem], plans[SemNormal],
+		plans[SemPromo], plans[AnPromo],
 	}
 }

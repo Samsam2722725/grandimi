@@ -67,6 +67,10 @@ var evenementsTunnel = map[string]bool{
 	"refus_vers_parent":                    true,
 	"paiement_repris_apres_rechargement":   true,
 	"paiement_reessaye_apres_rechargement": true,
+	// Offre de sortie à la croix (23/11/2026, PaywallPage.jsx).
+	"promo_sortie_vue":      true,
+	"promo_sortie_reclamee": true,
+	"promo_sortie_fermee":   true,
 	// L'app après paiement (GrowthPlanPage.jsx et ses composants).
 	"app_ouverte":      true,
 	"app_coche":        true,
