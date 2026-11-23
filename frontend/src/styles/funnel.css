@@ -5117,26 +5117,3 @@ div.interstitial.citation { cursor: default; }
 .eng--promesse .eng-anneau-fond { stroke: #2a2a34; stroke-width: 3; }
 .eng--promesse .eng-anneau { stroke: #c9c9ea; stroke-width: 3; }
 .eng--promesse .eng-empreinte-texte { font-size: 13px; color: #7d7e90; letter-spacing: 0.2em; }
-
-/* ---------- 22/11/2026 : message qui défile pendant le calcul (Samuel) ---------- */
-.creation-message { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 64px; margin: 12px 0 0; padding: 12px 16px; box-sizing: border-box; border-radius: 18px; border: 1px solid rgba(255, 106, 43, 0.4); background: radial-gradient(120% 160% at 0% 0%, rgba(255, 106, 43, 0.2), transparent 60%), rgba(255, 255, 255, 0.03); box-shadow: 0 10px 30px rgba(255, 90, 31, 0.12); text-align: left; }
-.creation-message svg { flex: none; color: #ff8a4a; }
-.creation-message p { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.35; color: #f4efe9; animation: creation-message-in 0.45s ease both; }
-@keyframes creation-message-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) { .creation-message p { animation: none; } }
-
-/* iPhone de 800 à 960 px de haut (la barre Safari cache ≈ 110 px du bas) : le message en plus
-   ne doit pas pousser la dernière étape sous la barre. 22/11/2026. */
-@media (min-height: 721px) and (max-height: 960px) {
-  .interstitial.creation { gap: 14px; padding-top: 20px; }
-  .creation-etapes { gap: 7px; }
-  .creation-etape { min-height: 46px; padding: 6px 12px; }
-  .creation-etape-icone { width: 32px; height: 32px; }
-  .creation-etape-label { font-size: 15px; }
-  .creation-message { min-height: 56px; margin-top: 0; padding: 10px 14px; }
-  .creation-message p { font-size: 15px; }
-}
-@media (max-height: 720px) {
-  .creation-message { min-height: 50px; margin-top: 0; padding: 8px 12px; }
-  .creation-message p { font-size: 14.5px; }
-}

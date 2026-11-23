@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { BarChart3, Check, Dna, Hourglass, ListChecks, Mail, ShieldCheck, User, Users, Sparkles } from 'lucide-react'
+import { BarChart3, Check, Dna, Hourglass, ListChecks, Mail, ShieldCheck, User, Users } from 'lucide-react'
 
 import { FunnelShell, FunnelButton } from '@/components/ui/funnel-shell'
 import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
 import { EcranEngagement } from '../onboarding/engagement'
+import { AVIS } from '../lib/avis-clients'
 import '../styles/funnel.css'
 
 import apiClient from '../lib/api'
@@ -201,32 +202,13 @@ const EMAIL_VALIDE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 /* Les mots de Taller (31/10/2026), sauf « Scan des données ADN » : on ne
    lit aucun ADN, on part de la taille des parents. */
-// Les étapes de Taller, remises le 22/11/2026 (demande de Samuel : « la même chose que tout à l'heure »).
+// Étapes dans la forme de TrendSaaS (21/11/2026), avec nos mots.
 const ETAPES_ANALYSE = [
-  { label: 'Analyse des facteurs', seuil: 20, Icone: BarChart3 },
-  { label: 'Analyse de ta génétique', seuil: 40, Icone: Dna },
-  { label: 'Fenêtre de croissance', seuil: 60, Icone: Hourglass },
-  { label: 'Construction du plan', seuil: 80, Icone: ListChecks },
-  { label: 'Création de routine', seuil: 100, Icone: ShieldCheck },
+  { label: 'Analyse de tes réponses', seuil: 25, Icone: BarChart3 },
+  { label: 'Calcul de ta fenêtre de croissance', seuil: 50, Icone: Hourglass },
+  { label: 'Croisement avec tes habitudes', seuil: 75, Icone: Dna },
+  { label: 'Assemblage de ton plan', seuil: 100, Icone: ListChecks },
 ]
-
-/* Les messages qui défilent pendant le calcul : en mots simples, pour qu'il
-   sente que ce plan est fait pour lui. Le premier reprend ses vraies réponses. */
-function messagesCalcul(r) {
-  const age = Math.floor(Number(r.age))
-  const taille = Math.round(Number(r.taille))
-  const poids = Math.round(Number(r.poids))
-  const qui = r.sexe === 'F' ? 'fille' : r.sexe === 'M' ? 'garçon' : null
-  const morceaux = [qui, age > 0 ? age + ' ans' : null, taille > 0 ? taille + ' cm' : null, poids > 0 ? poids + ' kg' : null].filter(Boolean)
-  const premier = morceaux.length >= 2 ? 'On calcule pour toi : ' + morceaux.join(', ') + '.' : 'On calcule ton plan avec tes vraies réponses.'
-  return [
-    premier,
-    'Ton plan est fait pour toi, pas pour tout le monde.',
-    'On part de ta taille, de ton sommeil et de tes habitudes.',
-    'Chaque jour, tu sauras quoi faire pour grandir au maximum.',
-    'Un plan simple, à suivre jour après jour.',
-  ]
-}
 
 const DUREE_MONTEE_MS = 11000
 const PLAFOND_ATTENTE = 96
@@ -302,75 +284,63 @@ function useProgressionAnimee(actif, pretALivrer, arret = null) {
    barre « progression » avec le pourcentage, puis les étapes avec leur
    icône, cochées une à une. `children` (le formulaire e-mail, puis le
    bouton d'erreur/retry) s'affiche par-dessus. */
-/* « Création de ton plan… » façon Taller, comme hier soir (22/11/2026, Samuel :
-   « mets la même chose que tout à l'heure », sans l'anneau TrendSaaS ni l'avis en
-   bas). Ajout : un message en mots simples qui change toutes les 3 s, pour qu'il
-   comprenne que ce plan est personnalisé pendant que ça calcule. */
-function ProgressionAnalyse({ titre, sousTitre, pourcentage, steps, messages = [], children }) {
+/* Façon TrendSaaS 15 (21/11/2026, demande de Samuel) : « CALCUL EN COURS »,
+   un titre court, la preuve sociale du paywall, un grand anneau avec le
+   pourcentage, les étapes qui se cochent, et les vrais avis qui défilent.
+   L'ancienne version (disque et silhouette) est dans l'historique git. */
+function ProgressionAnalyse({ titre, sousTitre, pourcentage, steps, children }) {
   const indexCourant = steps.findIndex((s) => pourcentage < s.seuil)
   const p = Math.min(100, Math.max(0, pourcentage))
-  const [msg, setMsg] = useState(0)
+  const [avis, setAvis] = useState(0)
   useEffect(() => {
-    if (messages.length < 2) return undefined
-    const t = setInterval(() => setMsg((i) => (i + 1) % messages.length), 3200)
+    if (!AVIS.length) return undefined
+    const t = setInterval(() => setAvis((i) => (i + 1) % AVIS.length), 3800)
     return () => clearInterval(t)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages.length])
+  }, [])
+  const R = 78
+  const C = 2 * Math.PI * R
+  const unAvis = AVIS[avis]
 
   return (
-    <div className="interstitial plan-creation creation">
-      <div className="creation-tete">
-        <h1 className="creation-titre">{titre}</h1>
-        {sousTitre && <p className="creation-sous-titre">{sousTitre}</p>}
+    <div className="interstitial calc">
+      <p className="calc-surtitre">Calcul en cours</p>
+      <h1 className="calc-titre">{titre}</h1>
+      {sousTitre && <p className="calc-sous-titre">{sousTitre}</p>}
+      <p className="calc-preuve"><span aria-hidden="true" />Plus de 11 000 jeunes ont déjà fait leur analyse</p>
+
+      <div className="calc-anneau" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(p)} aria-label="Progression">
+        <svg viewBox="0 0 180 180" aria-hidden="true">
+          <defs>
+            <linearGradient id="calc-degrade" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#ffb36b" />
+              <stop offset="100%" stopColor="#ff5a1f" />
+            </linearGradient>
+          </defs>
+          <circle cx="90" cy="90" r={R} className="calc-piste" />
+          <circle cx="90" cy="90" r={R} className="calc-arc" stroke="url(#calc-degrade)" style={{ strokeDasharray: C, strokeDashoffset: C * (1 - p / 100) }} />
+        </svg>
+        <span className="calc-chiffre">{Math.round(p)}<small>%</small></span>
       </div>
 
-      <div className="creation-disque" aria-hidden="true">
-        <span className="creation-onde" />
-        <span className="creation-onde creation-onde--2" />
-        <div className="creation-coeur">
-          <svg viewBox="0 0 64 128" className="creation-silhouette" style={{ '--grandit': 0.8 + (p / 100) * 0.2 }}>
-            <circle cx="32" cy="13" r="11" />
-            <rect x="17" y="28" width="30" height="48" rx="9" />
-            <rect x="6" y="30" width="9" height="42" rx="4.5" />
-            <rect x="49" y="30" width="9" height="42" rx="4.5" />
-            <rect x="19" y="68" width="12" height="58" rx="6" />
-            <rect x="33" y="68" width="12" height="58" rx="6" />
-          </svg>
-        </div>
-      </div>
-
-      <div className="creation-barre" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(p)} aria-label="Progression">
-        <div className="creation-barre-ligne">
-          <span>progression</span>
-          <strong>{Math.round(p)}%</strong>
-        </div>
-        <div className="creation-barre-piste">
-          <span style={{ width: p + '%' }} />
-        </div>
-      </div>
-
-      {messages.length > 0 && (
-        <div className="creation-message" aria-live="polite">
-          <Sparkles size={20} aria-hidden="true" />
-          <p key={msg}>{messages[msg % messages.length]}</p>
-        </div>
-      )}
-
-      <ul className="creation-etapes">
-        {steps.map(({ label, seuil, Icone }, idx) => {
+      <ul className="calc-etapes">
+        {steps.map(({ label, seuil }, idx) => {
           const fait = p >= seuil
           const enCours = idx === indexCourant
           return (
-            <li key={label} className={'creation-etape' + (fait ? ' is-fait' : '') + (enCours ? ' is-en-cours' : '')}>
-              <span className="creation-etape-icone" aria-hidden="true"><Icone size={18} /></span>
-              <span className="creation-etape-label">{label}</span>
-              <span className="creation-etape-etat" aria-hidden="true">
-                {fait ? <Check size={14} strokeWidth={3} /> : enCours ? <span className="creation-spinner" /> : null}
-              </span>
+            <li key={label} className={`calc-etape${fait ? ' is-fait' : ''}${enCours ? ' is-en-cours' : ''}`}>
+              <span className="calc-etape-rond" aria-hidden="true">{fait ? <Check size={14} strokeWidth={3} /> : null}</span>
+              <span>{label}</span>
             </li>
           )
         })}
       </ul>
+
+      {unAvis && (
+        <figure className="calc-avis" key={avis}>
+          <figcaption><strong>{unAvis.prenom}, {unAvis.age} ans</strong> <span aria-label="5 étoiles">★★★★★</span></figcaption>
+          <blockquote>« {unAvis.texte} »</blockquote>
+        </figure>
+      )}
 
       {children}
     </div>
@@ -1175,11 +1145,10 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     // « C'est réaliste » et la promesse (engagement.jsx, 21/11/2026).
     return (
       <ProgressionAnalyse
-        titre="Création de ton plan…"
+        titre="On assemble ton plan."
         sousTitre={questionsFaites ? null : 'Encore deux questions pendant que ça tourne.'}
         pourcentage={pourcentageAnalyse}
         steps={ETAPES_ANALYSE}
-        messages={messagesCalcul(reponses)}
       >
         {questionEnCours ? (
           <QuestionCalcul question={questionEnCours} onChoisir={(champ, v) => definir(champ, v)} />
