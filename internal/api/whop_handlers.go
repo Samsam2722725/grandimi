@@ -108,6 +108,8 @@ func resoudrePeriodeFin(renewalPeriodEnd, planType string) time.Time {
 	}
 	if p, ok := billing.Get(planType); ok {
 		switch p.Interval {
+		case "week":
+			return time.Now().AddDate(0, 0, 7)
 		case "year":
 			return time.Now().AddDate(1, 0, 0)
 		case "quarter":

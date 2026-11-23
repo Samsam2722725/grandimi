@@ -1,24 +1,26 @@
 /* Les offres du paywall « comment grandir ».
 
    Chaque durée existe à deux prix, deux vrais plans Whop :
-   - le prix réduit (clé `m1`, `an`), proposé pendant les 15 minutes
+   - le prix réduit (clé `sem`, `an`), proposé pendant les 15 minutes
      qui suivent l'arrivée sur le paywall ;
    - le prix normal (clé `…_normal`), appliqué ensuite et affiché barré
      pendant la réduction. La réduction est donc réelle : une fois le
      minuteur à zéro, c'est bien le prix normal qui est prélevé.
 
-   Depuis le 21/11/2026 : deux offres seulement, 1 mois et 1 an, avec
+   Depuis le 23/11/2026 : 1 semaine (5 €, 7 € au prix normal) remplace le
+   1 mois (14,99 € / 19,99 €, clés m1 / m1_normal, gardées pour leurs
+   abonnés). Depuis le 21/11/2026 : deux offres seulement, avec
    exactement le même contenu (taille prédite comprise). Les offres
    3 mois et À vie ne sont plus proposées ; leurs abonnés les gardent
    (clés m3 / vie côté serveur). */
 export const OFFRES = [
   {
-    duree: 'm1',
-    nom: '1 mois',
-    jours: 30,
-    reduit: 14.99,
-    normal: 19.99,
-    facture: 'par mois',
+    duree: 'sem',
+    nom: '1 semaine',
+    jours: 7,
+    reduit: 5,
+    normal: 7,
+    facture: 'par semaine',
     avantages: [],
   },
   {

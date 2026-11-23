@@ -706,7 +706,7 @@ function PaywallPage({ onBackHome }) {
               {o.duree === 'an' && (
                 <span className="pw3-offre-atouts">
                   <span className="pw3-atout-eco">
-                    {Math.round((1 - prixOffre(o) / (12 * prixOffre(OFFRES[0]))) * 100)} % moins cher que le 1 mois
+                    {Math.round((1 - prixOffre(o) / ((o.jours / OFFRES[0].jours) * prixOffre(OFFRES[0]))) * 100)} % moins cher que payer à la semaine
                   </span>
                 </span>
               )}

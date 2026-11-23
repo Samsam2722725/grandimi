@@ -33,13 +33,19 @@ const (
 	// offres du paywall. 3 mois et À vie restent ici pour leurs abonnés.
 	An       PlanKey = "an"
 	AnNormal PlanKey = "an_normal"
+
+	// Offre 1 semaine (23/11/2026) : 5 € par semaine (7 € au prix normal),
+	// qui remplace le 1 mois dans le paywall. Le 1 mois reste ici pour ses
+	// abonnés.
+	Sem       PlanKey = "sem"
+	SemNormal PlanKey = "sem_normal"
 )
 
 type Plan struct {
 	Key      PlanKey `json:"key"`
 	Label    string  `json:"label"`
 	PriceEUR float64 `json:"price_eur"`
-	// "month" ou "year" : sert au calcul de la prochaine date de
+	// "week", "month" ou "year" : sert au calcul de la prochaine date de
 	// facturation quand le webhook ne fournit pas renewal_period_end.
 	Interval string `json:"interval"`
 	// Nom de la variable d'environnement portant l'id du plan Whop
@@ -71,6 +77,8 @@ var plans = map[PlanKey]Plan{
 	AVieNormal:  {Key: AVieNormal, Label: "À vie", PriceEUR: 79.99, Interval: "lifetime", WhopPlanIDEnv: "WHOP_PLAN_ID_VIE_NORMAL"},
 	An:          {Key: An, Label: "1 an", PriceEUR: 29.99, Interval: "year", WhopPlanIDEnv: "WHOP_PLAN_ID_AN"},
 	AnNormal:    {Key: AnNormal, Label: "1 an", PriceEUR: 39.99, Interval: "year", WhopPlanIDEnv: "WHOP_PLAN_ID_AN_NORMAL"},
+	Sem:         {Key: Sem, Label: "1 semaine", PriceEUR: 5.00, Interval: "week", WhopPlanIDEnv: "WHOP_PLAN_ID_SEM"},
+	SemNormal:   {Key: SemNormal, Label: "1 semaine", PriceEUR: 7.00, Interval: "week", WhopPlanIDEnv: "WHOP_PLAN_ID_SEM_NORMAL"},
 }
 
 // ParIDWhop retrouve l'offre à partir de l'id de plan Whop reçu par le
@@ -104,5 +112,6 @@ func All() []Plan {
 		plans[Mois1], plans[Mois3], plans[AVie],
 		plans[Mois1Normal], plans[Mois3Normal], plans[AVieNormal],
 		plans[An], plans[AnNormal],
+		plans[Sem], plans[SemNormal],
 	}
 }

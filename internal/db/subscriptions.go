@@ -188,7 +188,7 @@ func AbonnementsMensuelsActifs(userID, saufWhopID string) ([]string, error) {
 		   FROM subscriptions
 		  WHERE user_id = $1
 		    AND status = 'active'
-		    AND plan_type IN ('m1', 'm1_normal')
+		    AND plan_type IN ('m1', 'm1_normal', 'sem', 'sem_normal')
 		    AND whop_subscription_id <> $2
 		    AND whop_subscription_id <> ''`,
 		userID, saufWhopID)
