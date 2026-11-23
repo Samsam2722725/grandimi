@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { BarChart3, Check, Dna, Hourglass, ListChecks, Mail, ShieldCheck, User, Users } from 'lucide-react'
+import { BarChart3, Check, Dna, Hourglass, ListChecks, Lock, Mail, ShieldCheck, User, Users } from 'lucide-react'
 
 import { FunnelShell, FunnelButton } from '@/components/ui/funnel-shell'
 import { AnalyseEnCours } from '@/components/ui/analyse-en-cours'
@@ -202,13 +202,36 @@ const EMAIL_VALIDE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 /* Les mots de Taller (31/10/2026), sauf « Scan des données ADN » : on ne
    lit aucun ADN, on part de la taille des parents. */
-// Étapes dans la forme de TrendSaaS (21/11/2026), avec nos mots.
+/* Étapes du calcul, refaites le 23/11/2026 (Samuel : « on dirait pas que ça
+   va vraiment le faire grandir, ni que c'est personnalisé, ni qu'il y a une
+   prédiction »). Des mots simples qui disent ce qu'il y gagne ; chaque étape
+   terminée montre une ligne tirée de SES réponses (voir detailsCalcul). */
 const ETAPES_ANALYSE = [
-  { label: 'Analyse de tes réponses', seuil: 25, Icone: BarChart3 },
-  { label: 'Calcul de ta fenêtre de croissance', seuil: 50, Icone: Hourglass },
-  { label: 'Croisement avec tes habitudes', seuil: 75, Icone: Dna },
-  { label: 'Assemblage de ton plan', seuil: 100, Icone: ListChecks },
+  { label: 'On regarde ta taille et ta famille', seuil: 25, Icone: BarChart3 },
+  { label: 'On trace ta courbe de croissance', seuil: 50, Icone: Hourglass },
+  { label: 'On calcule ta taille adulte', seuil: 75, Icone: Dna },
+  { label: 'On construit ton plan pour grandir plus', seuil: 100, Icone: ListChecks },
 ]
+
+/* Une ligne par étape, uniquement avec ce qu'il a répondu : rien d'inventé.
+   La 3e est la prédiction, floutée avec un cadenas : on ne montre jamais de
+   centimètres avant le paywall. */
+function detailsCalcul(r) {
+  const age = Math.floor(Number(r.age))
+  const taille = Math.round(Number(r.taille))
+  const poids = Math.round(Number(r.poids))
+  const pere = Math.round(Number(r.pere))
+  const mere = Math.round(Number(r.mere))
+  const sommeil = Number(r.sommeil)
+  const moi = [age > 0 ? age + ' ans' : null, taille > 0 ? taille + ' cm' : null, poids > 0 ? poids + ' kg' : null].filter(Boolean).join(' · ')
+  const parents = pere > 0 && mere > 0 ? 'Parents : ' + pere + ' et ' + mere + ' cm' : null
+  return [
+    [moi, parents].filter(Boolean).join(' · ') || 'Ton âge, ta taille, ta famille',
+    'Une courbe rien que pour toi',
+    'cadenas',
+    sommeil > 0 ? 'Ton sommeil (' + String(sommeil).replace('.', ',') + ' h), ton sport, tes repas' : 'Ton sommeil, ton sport, tes repas',
+  ]
+}
 
 const DUREE_MONTEE_MS = 11000
 const PLAFOND_ATTENTE = 96
@@ -288,7 +311,7 @@ function useProgressionAnimee(actif, pretALivrer, arret = null) {
    un titre court, la preuve sociale du paywall, un grand anneau avec le
    pourcentage, les étapes qui se cochent, et les vrais avis qui défilent.
    L'ancienne version (disque et silhouette) est dans l'historique git. */
-function ProgressionAnalyse({ titre, sousTitre, pourcentage, steps, children }) {
+function ProgressionAnalyse({ titre, sousTitre, pourcentage, steps, details = [], children }) {
   const indexCourant = steps.findIndex((s) => pourcentage < s.seuil)
   const p = Math.min(100, Math.max(0, pourcentage))
   const [avis, setAvis] = useState(0)
@@ -326,10 +349,17 @@ function ProgressionAnalyse({ titre, sousTitre, pourcentage, steps, children }) 
         {steps.map(({ label, seuil }, idx) => {
           const fait = p >= seuil
           const enCours = idx === indexCourant
+          const detail = details[idx]
           return (
             <li key={label} className={`calc-etape${fait ? ' is-fait' : ''}${enCours ? ' is-en-cours' : ''}`}>
               <span className="calc-etape-rond" aria-hidden="true">{fait ? <Check size={14} strokeWidth={3} /> : null}</span>
-              <span>{label}</span>
+              <span className="calc-etape-texte">
+                <span>{label}</span>
+                {fait && detail === 'cadenas' && (
+                  <span className="calc-etape-detail calc-etape-cache"><Lock size={13} aria-hidden="true" /> Ta taille adulte : <b aria-label="cachée">··· cm</b></span>
+                )}
+                {fait && detail && detail !== 'cadenas' && <span className="calc-etape-detail">{detail}</span>}
+              </span>
             </li>
           )
         })}
@@ -1145,10 +1175,11 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
     // « C'est réaliste » et la promesse (engagement.jsx, 21/11/2026).
     return (
       <ProgressionAnalyse
-        titre="On assemble ton plan."
+        titre="Ton plan pour grandir se crée."
         sousTitre={questionsFaites ? null : 'Encore deux questions pendant que ça tourne.'}
         pourcentage={pourcentageAnalyse}
         steps={ETAPES_ANALYSE}
+        details={detailsCalcul(reponses)}
       >
         {questionEnCours ? (
           <QuestionCalcul question={questionEnCours} onChoisir={(champ, v) => definir(champ, v)} />

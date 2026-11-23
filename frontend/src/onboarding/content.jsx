@@ -2058,6 +2058,7 @@ export function QuestionCalcul({ question, onChoisir }) {
   return (
     <div className="calcul-question" role="dialog" aria-label={question.titre}>
       <div className="calcul-question-carte">
+        <p className="calcul-question-intro">Pour adapter ton plan à ton rythme</p>
         <p className="calcul-question-titre">{question.titre}</p>
         <div className="calcul-question-choix">
           {question.options.map((o) => (
