@@ -1,5 +1,7 @@
 import { Star } from 'lucide-react'
 
+import { AVIS as AVIS_CLIENTS } from '@/lib/avis-clients'
+
 /* ============================================================
    LES AVIS
    ============================================================
@@ -36,39 +38,11 @@ const NOTE_BOUTIQUES = null
 //   ou: 'sur l’App Store et Google Play',
 // }
 
-/* Les trois avis sont ceux fournis par le client le 19/09/2026. Ils sont
-   reproduits mot pour mot : un témoignage retouché n'est plus un
-   témoignage, et c'est le seul endroit du tunnel où la parole n'est pas
-   celle de la marque.
-
-   Le `suivi` n'est pas un résultat promis. C'est ce que la personne a
-   MESURÉ dans l'application — d'où le mot « suivis », qui est celui du
-   client, et la mention sous les cartes qui le redit en clair. La
-   nuance est ce qui sépare un témoignage d'une promesse de résultat,
-   et la seconde serait, elle, une allégation à étayer. */
-export const AVIS = [
-  {
-    prenom: 'Adam',
-    age: 15,
-    suivi: '+5,1 cm suivis',
-    texte:
-      'Ce que je voulais surtout savoir, c’était combien je pouvais encore grandir. J’ai eu mon estimation directement et maintenant je suis mon évolution chaque mois.',
-  },
-  {
-    prenom: 'Lucas',
-    age: 16,
-    suivi: '+4,2 cm suivis',
-    texte:
-      'Je pensais que j’avais presque fini de grandir. Grandimi m’a surtout aidé à suivre mon évolution et à comprendre où j’en étais.',
-  },
-  {
-    prenom: 'Nolan',
-    age: 17,
-    suivi: '6 mois de suivi',
-    texte:
-      'Avant je mesurais ma taille au hasard. Maintenant je peux voir mon évolution et garder toutes mes mesures au même endroit.',
-  },
-]
+/* Les avis viennent de lib/avis-clients.js, la seule liste (23/11/2026 :
+   Samuel a remplacé tous les avis, Adam, Lucas et Nolan ne sont plus là).
+   Textes mot pour mot ; les centimètres sont ceux déclarés par chacun, pas
+   un résultat promis. */
+const AVIS = AVIS_CLIENTS.map(({ prenom, age, cm, texte }) => ({ prenom, age, suivi: cm, texte }))
 
 /* Les lauriers de Flo, redessinés : une tige courbe et des feuilles
    pleines DE PART ET D'AUTRE de la tige, comme une vraie branche.
@@ -154,7 +128,7 @@ export function Avis({ className, limit }) {
               </span>
               <span className="avis-identite">
                 <strong>
-                  {avis.prenom} — {avis.age} ans
+                  {avis.prenom}{avis.age ? ` — ${avis.age} ans` : ''}
                 </strong>
                 <span className="avis-suivi">{avis.suivi}</span>
               </span>
@@ -166,7 +140,7 @@ export function Avis({ className, limit }) {
 
       <p className="avis-mention">
         Témoignages d’utilisateurs de Grandimi. Les centimètres indiqués sont ceux
-        qu’ils ont mesurés dans l’application, pas un résultat garanti.
+        qu’ils ont déclarés, pas un résultat garanti.
       </p>
     </div>
   )

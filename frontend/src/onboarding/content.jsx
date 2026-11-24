@@ -53,9 +53,9 @@ export const ORDRE_ETAPES = [
   // moment que chez GoTall, à la demande de Samuel (voir ORDRE-ONBOARDING.md).
   // Toi
   'sexe',
-  // « Qui es-tu ? » (Ado / Parent) de GoTall. Après le sexe : le sexe est
-  // souvent choisi dès l'accueil, et le parcours reprend juste après lui.
-  'profil',
+  // « Qui es-tu ? » (Ado / Parent) retiré le 23/11/2026 (Samuel : « enlève ce
+  // moment de l'onboarding »). Le profil reste « ado » par défaut
+  // (reponsesInitiales) ; le code de l'écran reste (étape 'profil').
   'age',
   'bonne-nouvelle',
   // « Quelle est ton origine ? » de Taller.
@@ -868,12 +868,20 @@ function ParentInconnu({ inconnu, onInconnu }) {
 /* Comme GoTall (21/11/2026) : « Papa » et « Maman », le chiffre en gros
    au-dessus d'une règle verticale. L'ancienne version à molettes reste en
    dessous (MoletteParentsMolettes). */
+/* La règle des parents se raccourcit sur un écran de moins de 900 px pour que
+   « Je ne sais pas » reste visible sans défiler (23/11/2026) : 262 px sur un
+   iPhone de 852 px de haut, 300 px au maximum, 220 px au minimum. */
+function hauteurRegleParents() {
+  if (typeof window === 'undefined') return 300
+  return Math.max(220, Math.min(300, window.innerHeight - 590))
+}
+
 function ColonneRegle({ titre, valeur, onChange, min, max, label, children, format = formatCm }) {
   return (
     <div className="regle-colonne">
       <span className="regle-colonne-titre">{titre}</span>
       <span className="regle-colonne-valeur">{format(valeur)}</span>
-      <RegleVerticale value={valeur} onChange={onChange} min={min} max={max} label={label} format={format} hauteur={300} />
+      <RegleVerticale value={valeur} onChange={onChange} min={min} max={max} label={label} format={format} hauteur={hauteurRegleParents()} />
       {children}
     </div>
   )
@@ -1267,7 +1275,7 @@ export function EcranPreuveAvis() {
               <span className="preuve-avatar" aria-hidden="true">{prenom.charAt(0)}</span>
               <div>
                 <strong>{prenom}</strong>
-                <span>{age} ans</span>
+                {age && <span>{age} ans</span>}
               </div>
               {cm && <span className="preuve-cm">{cm}</span>}
             </div>
@@ -1410,11 +1418,8 @@ export function EcranEtudesPubliees() {
 }
 
 /**
- * Écran 35. Mêmes trois prénoms (Adam, Lucas, Nolan) que dans le script,
- * mais avec les centimètres réellement fournis par le client et déjà
- * publiés dans `avis.jsx` — le script en proposait d'autres (+2.3 cm,
- * +2.1 cm, +1.9 cm) qu'aucun client n'a mesurés. Un témoignage avec un
- * chiffre inventé n'est plus un témoignage.
+ * Écran 35 : les avis de lib/avis-clients.js (23/11/2026, Samuel les a tous
+ * remplacés par Luc, Louis et Silvio).
  */
 export function EcranAvisUtilisateurs() {
   return <Avis />
@@ -1752,6 +1757,14 @@ const SURTITRE_SLIDE = {
   action: 'Maintenant, tu peux agir',
 }
 
+/* 23/11/2026 (Samuel : « toujours moche, donne pas envie de lire ») : les
+   chiffres (« 40 % », « 600 $ ») sautent aux yeux, en couleur et plus gros. */
+function valoriser(texte) {
+  return texte.split(/(\d+(?:[.,]\d+)?(?:\s?[%$])?)/).map((morceau, k) =>
+    k % 2 === 1 ? <span key={k} className="qs-chiffre">{morceau}</span> : morceau,
+  )
+}
+
 export function EcranDouleursBenefices({ onContinue, onRetour }) {
   const [i, setI] = useState(() => (import.meta.env.DEV ? Number(new URLSearchParams(window.location.search).get('slide')) || 0 : 0))
   const slide = SLIDES_DOULEURS[i]
@@ -1783,8 +1796,9 @@ export function EcranDouleursBenefices({ onContinue, onRetour }) {
       <main className="qs-corps" key={i}>
         {TITRE_SECTION[slide.ton] && <p className="qs-section">{TITRE_SECTION[slide.ton]}</p>}
         <span className="qs-illustration" aria-hidden="true">{slide.emoji}</span>
-        <h1 className="qs-titre">{titre}</h1>
-        <p className="qs-texte">{[...suite, slide.texte].join(' ')}</p>
+        <h1 className="qs-titre">{valoriser(titre)}</h1>
+        {suite.length > 0 && <p className="qs-accent">{valoriser(suite.join(' '))}</p>}
+        <p className="qs-texte">{slide.texte}</p>
       </main>
 
       <footer className="qs-pied">

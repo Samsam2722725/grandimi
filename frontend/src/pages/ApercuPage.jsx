@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronRight } from 'lucide-react'
 
 import { capture } from '../lib/analytics'
-import { CartePlan } from '@/components/ui/ecrans-uniques'
+import { FunnelShell, FunnelButton } from '@/components/ui/funnel-shell'
 import { pointsFaibles } from '../lib/offres'
 import '../styles/funnel.css'
 import '../styles/apercu.css'
@@ -19,7 +19,7 @@ const CADENAS = '🔒'
 // Confettis à l'ouverture, comme GoTall : des bandes de couleur qui tombent.
 const COULEURS_CONFETTIS = ['#ff5a1f', '#e5484d', '#8e5cf7', '#3b82f6', '#f5a524', '#4ade80']
 
-function Confettis() {
+export function Confettis() {
   const morceaux = useMemo(
     () =>
       Array.from({ length: 46 }, (_, i) => ({
@@ -66,32 +66,73 @@ function TuileFleche() {
   )
 }
 
-/* Depuis le 21/11/2026, « Tes résultats sont là ! » s'affiche juste après
-   l'animation de calcul, avant l'e-mail (demande de Samuel) : il est rendu
-   par OnboardingFlow avec ce composant, et ApercuPage ouvre directement le
-   résultat caché. */
-export function EcranTesResultats({ prenom, onContinue }) {
-  /* 21/11/2026 (Samuel) : la mise en page de l'ancien « Ton plan sur mesure
-     est prêt » (pastille, titre centré), son titre « Ton plan personnalisé
-     est prêt », la phrase « tu ne grandis pas à ton potentiel » et la tuile
-     flèche de « Tes résultats sont là ». Ni date ni téléphone. */
+/* « Tes résultats sont là ! », copie exacte de GoTall 39 (23/11/2026, Samuel :
+   « là je veux exactement comme GoTall, j'aime pas l'image que tu as mise »,
+   et « c'est le sous-titre qui a l'animation d'écriture, pas le titre ») :
+   le titre est fixe ; c'est la phrase en dessous qui s'écrit lettre par
+   lettre ; ensuite « Corrigeons ça ! » apparaît en clair, sans surlignage (le violet de leur capture était la sélection de texte iPhone) ; le bouton « Révéler
+   mes résultats » reste grisé tant que ce n'est pas fini. La tuile flèche
+   arrive dès l'ouverture, en orange. Ce composant est rendu par
+   OnboardingFlow / EcranEngagement, avant l'e-mail. */
+const PHRASE_GOTALL = "Il s'avère que... Tu ne grandis pas à ton potentiel."
+
+function SousTitreEcrit({ onFini }) {
+  const [n, setN] = useState(0)
+  const [surligne, setSurligne] = useState(false)
+  const finiRef = useRef(onFini)
+  finiRef.current = onFini
+  useEffect(() => {
+    const reduit = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    if (reduit) {
+      setN(PHRASE_GOTALL.length)
+      setSurligne(true)
+      finiRef.current()
+      return undefined
+    }
+    let i = 0
+    const minuteurs = []
+    const t = setInterval(() => {
+      i += 1
+      setN(i)
+      if (i >= PHRASE_GOTALL.length) {
+        clearInterval(t)
+        minuteurs.push(setTimeout(() => setSurligne(true), 350))
+        minuteurs.push(setTimeout(() => finiRef.current(), 1000))
+      }
+    }, 32)
+    return () => {
+      clearInterval(t)
+      minuteurs.forEach(clearTimeout)
+    }
+  }, [])
   return (
-    <div className="eng">
-      {/* Mise en page de GoTall 39 (21/11/2026) : titre à gauche, même police et
-          même taille, la tuile flèche qui arrive en rebondissant puis flotte. */}
-      <main className="eng-corps gt39">
-        <h1 className="gt39-titre">{prenom ? `${prenom}, ton plan personnalisé est prêt.` : 'Ton plan personnalisé est prêt.'}</h1>
-        <p className="gt39-sous">Il s’avère que… Tu ne grandis pas à ton potentiel.</p>
-        <p className="gt-intro-surligne gt39-surligne"><span>Corrigeons ça !</span></p>
-        {/* La carte qui se retourne (21/11/2026, idée n° 33) ; la tuile flèche reste dans TuileFleche. */}
-        <div className="gt39-carte"><CartePlan prenom={prenom} /></div>
-      </main>
-      <footer className="eng-pied">
-        <button type="button" className="funnel-cta" onClick={() => { capture('apercu_reveler'); onContinue() }}>
-          Continuer <ChevronRight size={20} aria-hidden="true" />
-        </button>
-      </footer>
-    </div>
+    <>
+      <span aria-label={PHRASE_GOTALL}>
+        <span aria-hidden="true">{PHRASE_GOTALL.slice(0, n)}</span>
+        <span className="machine-reste" aria-hidden="true">{PHRASE_GOTALL.slice(n)}</span>
+      </span>
+      <span className={'gt39-ligne' + (surligne ? ' is-visible' : '')}>Corrigeons ça !</span>
+    </>
+  )
+}
+
+export function EcranTesResultats({ prenom, onContinue, onRetour }) {
+  const [fini, setFini] = useState(false)
+  return (
+    <FunnelShell
+      progress={1}
+      onBack={onRetour}
+      stepKey="tes-resultats"
+      title={<>{prenom ? `${prenom}, tes résultats sont là !` : 'Tes résultats sont là !'}</>}
+      subtitle={<SousTitreEcrit onFini={() => setFini(true)} />}
+      footer={
+        <FunnelButton disabled={!fini} onClick={() => { capture('apercu_reveler'); onContinue() }}>
+          Révéler mes résultats <ChevronRight size={22} strokeWidth={2.4} aria-hidden="true" />
+        </FunnelButton>
+      }
+    >
+      <div className="gt39-tuile"><TuileFleche /></div>
+    </FunnelShell>
   )
 }
 

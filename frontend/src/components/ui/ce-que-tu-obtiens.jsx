@@ -135,7 +135,7 @@ export function CeQueTuObtiens({ prediction = {} } = {}) {
 
   return (
     <section className="cqo" aria-label="Ce que tu obtiendras">
-      <p className="cqo-intro">Ce que tu obtiendras :</p>
+      <p className="cqo-intro">Voici ce que tu obtiendras :</p>
       <ul
         ref={liste}
         className="cqo-liste"
@@ -183,9 +183,12 @@ export function VisuelActions() {
    personnalisé et que la taille adulte prédite est incluse (dans le 1 mois et
    le 1 an). La ligne « Ce que tu obtiendras : » reste juste au-dessus des cartes. */
 export function PhraseAcces() {
+  /* 24/11/2026 (Samuel) : même construction que Taller (« Accès illimité à
+     Taller : routine quotidienne, communauté privée… »), tout en gris, avec
+     seulement ce que Grandimi donne vraiment, la taille adulte prédite en tête. */
   return (
     <p className="cqo-acces">
-        Un plan <em>personnalisé</em> : routine quotidienne, exercices et repas pour optimiser ta croissance, adaptés à toi. Et ta <em>taille adulte prédite</em>.
-      </p>
+      Accès illimité à Grandimi : prédiction de ta taille adulte, routine quotidienne, nutrition et exercices personnalisés pour optimiser ta croissance.
+    </p>
   )
 }

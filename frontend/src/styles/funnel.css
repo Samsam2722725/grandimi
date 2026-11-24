@@ -5128,3 +5128,110 @@ div.interstitial.citation { cursor: default; }
 .calc-etape-cache b { font-weight: 800; letter-spacing: 0.06em; filter: blur(3.5px); user-select: none; color: #fff; }
 .calcul-question-intro { margin: 0 0 8px; color: #ff9a62; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
 @media (prefers-reduced-motion: reduce) { .calc-etape-detail { animation: none; } }
+
+/* ---------- 23/11/2026 : plus besoin de défiler sur un iPhone (Samuel) ----------
+   Mesuré sur 852 px de haut avec la vraie zone du bas (barre Safari + bouton) :
+   sports +140 px, parents +65, précision +65, proches +34, origine +29.
+   On ne resserre que les espaces, seulement sous 900 px de haut ; un grand
+   écran ne change pas. Avis d'experts et Résultats réels : laissés comme ils
+   sont, à sa demande. */
+@media (max-height: 900px) {
+  /* 5 réponses ou plus : moins d'espace au-dessus et en dessous du groupe. */
+  .funnel-content:has(> .funnel-choices > :nth-child(5)) { padding-top: 20px; padding-bottom: 8px; }
+  /* 7 réponses ou plus (sports) : pilules un peu plus basses. */
+  .funnel-content:has(> .funnel-choices > :nth-child(7)) .funnel-choices { gap: 8px; }
+  .funnel-content:has(> .funnel-choices > :nth-child(7)) .choice-card { min-height: 50px; padding-top: 8px; padding-bottom: 8px; }
+  /* Taille des parents : la réserve du bas est réduite (la règle est raccourcie dans content.jsx). */
+  .funnel-content:has(> .regle-duo) { padding-bottom: 12px; }
+  /* Précision : la toise est un peu moins haute. */
+  .funnel-content:has(> .precision-gotall) { padding-bottom: 8px; }
+  .precision-gotall { min-height: 345px; }
+}
+
+/* ---------- 23/11/2026 : slides rouges et vertes dans le même noir que le reste ----------
+   Samuel : « c'est pas cohérent visuellement, le style change brutalement ».
+   Option B : fond noir du parcours, avec une lueur rouge (douleurs) ou verte
+   (avantages) derrière l'emoji ; le titre devient un petit texte espacé,
+   comme « CALCUL EN COURS ». Textes, points, bouton et retour inchangés. */
+.qs--douleur { background: radial-gradient(110% 52% at 50% 40%, rgba(227, 6, 44, 0.40), rgba(227, 6, 44, 0.10) 55%, transparent 75%), #0a0a0a; }
+.qs--benefice { background: radial-gradient(110% 52% at 50% 40%, rgba(22, 163, 74, 0.38), rgba(22, 163, 74, 0.10) 55%, transparent 75%), #0a0a0a; }
+.qs--douleur .qs-illustration { filter: drop-shadow(0 0 34px rgba(227, 6, 44, 0.55)); }
+.qs--benefice .qs-illustration { filter: drop-shadow(0 0 34px rgba(34, 197, 94, 0.5)); }
+.qs .qs-section { margin: 0 0 26px; max-width: 280px; padding: 0; border-radius: 0; background: none; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 13px; font-weight: 600; line-height: 1.6; letter-spacing: 0.22em; text-transform: uppercase; text-wrap: balance; }
+.qs--douleur .qs-section { color: #ff8d9c; }
+.qs--benefice .qs-section { color: #7ee6a4; }
+.qs .qs-texte { color: #d8d3ce; text-shadow: none; }
+@media (max-height: 700px) { .qs .qs-section { margin-bottom: 14px; } }
+
+/* ---------- 23/11/2026 : slides plus lisibles (option B de Samuel) ----------
+   Titre gros et blanc, la 2e ligne et les chiffres en couleur et plus gros,
+   paragraphe plus grand et plus clair, emoji plus petit. */
+.qs { --qs-accent: #ff8d9c; }
+.qs--benefice { --qs-accent: #7ee6a4; }
+.qs-illustration { font-size: 84px; margin-bottom: 22px; }
+.qs .qs-titre { font-size: clamp(30px, 9.2vw, 38px); font-weight: 900; line-height: 1.1; letter-spacing: -0.02em; }
+.qs .qs-accent { margin: 12px 0 0; color: var(--qs-accent); font-size: clamp(24px, 7.2vw, 30px); font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; text-wrap: balance; }
+.qs .qs-chiffre { color: var(--qs-accent); font-size: 1.28em; font-variant-numeric: tabular-nums; }
+.qs .qs-accent .qs-chiffre { font-size: 1.35em; }
+.qs .qs-texte { margin-top: 20px; max-width: 330px; font-size: 19px; line-height: 1.45; color: #ece8e3; }
+.qs-corps { padding-bottom: 5vh; }
+@media (max-height: 700px) {
+  .qs-illustration { font-size: 64px; margin-bottom: 14px; }
+  .qs .qs-texte { font-size: 17px; margin-top: 14px; }
+}
+
+/* ---------- 23/11/2026 : avis du calcul (Samuel) ----------
+   « Les avis changent trop vite, on n'a pas le temps de lire » : 9 s au lieu
+   de 3,8 s (voir OnboardingFlow). Et sur un iPhone de moins de 900 px de
+   haut la carte passait sous la barre Safari : l'anneau et les espaces sont
+   un peu resserrés pour qu'elle reste entièrement au-dessus. */
+@media (max-height: 900px) {
+  .calc-anneau { width: 160px; height: 160px; margin: 18px 0 4px; }
+  .calc-chiffre { font-size: 40px; }
+  .calc-chiffre small { font-size: 17px; }
+  .calc-etapes { gap: 11px; margin-top: 10px; }
+  .calc-avis { margin-top: 14px; }
+}
+
+/* ---------- 23/11/2026 : « Tes résultats sont là ! » exactement comme GoTall ---------- */
+.gt39-ligne { display: block; width: fit-content; margin-top: 14px; opacity: 0; transform: translateY(4px); transition: opacity 0.35s ease, transform 0.35s ease; }
+.gt39-ligne.is-visible { opacity: 1; transform: none; }
+.gt39-ligne { color: #fff; font-size: 18px; font-weight: 500; line-height: 1.35; }
+.funnel-step .gt39-tuile { margin: 0 auto; padding-bottom: 0; }
+
+/* ---------- 23/11/2026 : « Ta promesse » aux couleurs de Grandimi ----------
+   Samuel : « c'est trop stylé Taller/TrendSaaS, incohérent visuellement ».
+   Le fond bleuté et le lavande sont remplacés par le noir et l'orange du
+   reste du parcours ; la mise en page (barre, retour, empreinte) ne change pas. */
+.eng--promesse { background: #0a0a0a; }
+.eng-barre { background: linear-gradient(90deg, #ff6a2b, #ff8a4a); }
+.eng-retour { color: #8e8a85; }
+.eng--promesse .eng-surtitre { color: #a39d97; }
+.eng--promesse .eng-titre--deux span { color: #a39d97; }
+.eng--promesse .eng-promesse { color: #e9e2da; }
+.eng--promesse .eng-note { color: #8e8a85; }
+.eng--promesse .eng-note strong { color: #fff; }
+.eng--promesse .eng-anneau-fond { stroke: #2a2725; }
+.eng--promesse .eng-anneau { stroke: #ff6a2b; }
+.eng--promesse .eng-empreinte-texte { color: #8e8a85; }
+
+/* ---------- 23/11/2026 : offre de sortie (Taller 23) ---------- */
+.promo { position: fixed; inset: 0; z-index: 90; display: flex; flex-direction: column; color: #fff; overflow: hidden; background: radial-gradient(120% 60% at 50% 22%, rgba(255, 90, 31, 0.32), rgba(255, 90, 31, 0.08) 55%, transparent 75%), #0a0a0a; font-family: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+.promo-fermer { position: absolute; top: max(16px, env(safe-area-inset-top)); right: 16px; z-index: 3; width: 44px; height: 44px; border: 0; background: transparent; color: #fff; display: grid; place-items: center; cursor: pointer; }
+.promo-corps { position: relative; z-index: 2; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 56px 24px 0; }
+.promo-pastille { padding: 12px 26px; border-radius: 999px; border: 1px solid rgba(255, 138, 74, 0.45); background: rgba(255, 255, 255, 0.06); font-size: 18px; font-weight: 600; }
+.promo-titre { margin: 22px 0 0; font-size: clamp(46px, 15vw, 64px); font-weight: 900; letter-spacing: -0.02em; line-height: 1; }
+.promo-cadeau { margin: 18px 0 8px; font-size: clamp(96px, 28vw, 132px); line-height: 1; filter: drop-shadow(0 0 36px rgba(255, 106, 43, 0.55)); animation: tuile-flotte 3.2s ease-in-out infinite; }
+.promo-expire { margin: 10px 0 14px; font-size: 18px; color: #f1ece6; }
+.promo-minuteur { display: flex; gap: 14px; }
+.promo-minuteur > div { min-width: 104px; padding: 14px 10px 12px; border-radius: 20px; background: rgba(255, 255, 255, 0.07); display: flex; flex-direction: column; gap: 2px; }
+.promo-minuteur strong { font-size: 36px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.promo-minuteur span { font-size: 14px; color: #d8d3ce; }
+.promo-prix { margin: 22px 0 0; font-size: clamp(22px, 6.2vw, 26px); font-weight: 700; }
+.promo-prix strong { color: #ff8a4a; }
+.promo-avant { margin: 6px 0 0; font-size: 15px; color: #8e8a85; }
+.promo-pied { position: relative; z-index: 2; padding: 16px 24px max(24px, env(safe-area-inset-bottom)); }
+.promo-pied .funnel-cta { width: 100%; }
+.promo-mention { margin: 10px 0 0; text-align: center; font-size: 12px; line-height: 1.35; color: #8e8a85; }
+@media (max-height: 760px) { .promo-cadeau { font-size: 84px; margin: 8px 0 0; } .promo-titre { margin-top: 12px; } .promo-minuteur strong { font-size: 30px; } }
+@media (prefers-reduced-motion: reduce) { .promo-cadeau { animation: none; } }

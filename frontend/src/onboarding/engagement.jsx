@@ -56,7 +56,7 @@ function BoutonEmpreinte({ onFini }) {
           <circle cx="60" cy="60" r={R} className="eng-anneau" style={{ strokeDasharray: C, strokeDashoffset: C * (1 - progres) }} />
         </svg>
         {/* Elle s'éclaircit du gris au blanc pendant l'appui (22/11/2026). */}
-        <Fingerprint className="eng-doigt" size={66} strokeWidth={1.7} style={{ color: `rgb(${Math.round(122 + 133 * progres)}, ${Math.round(125 + 130 * progres)}, ${Math.round(143 + 112 * progres)})` }} aria-hidden="true" />
+        <Fingerprint className="eng-doigt" size={66} strokeWidth={1.7} style={{ color: `rgb(${Math.round(128 + 127 * progres)}, ${Math.round(122 + 133 * progres)}, ${Math.round(116 + 139 * progres)})` }} aria-hidden="true" />
       </button>
       <p className="eng-empreinte-texte">Reste appuyé pour continuer</p>
     </div>
@@ -87,7 +87,7 @@ export function EcranEngagement({ prenom, onContinue }) {
   if (etape === 1) {
     // « Ton plan personnalisé est prêt » (tuile flèche), à la place de
     // l'ancien plan sur mesure, entre « réaliste » et la promesse (21/11/2026).
-    return <EcranTesResultats prenom={prenom} onContinue={() => setEtape(2)} />
+    return <EcranTesResultats prenom={prenom} onContinue={() => setEtape(2)} onRetour={() => setEtape(0)} />
   }
 
   if (etape === 99) {

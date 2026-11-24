@@ -336,7 +336,7 @@ function HomePage({ onStartQuestionnaire, onLogin, onReprendre, analyseEnCours, 
                     <blockquote className="text-[15px] leading-[1.55] text-[#f4efe9]">{/* Espaces insécables du français : « ! » et « » » ne partent pas seuls à la ligne. */}
                       {`« ${texte.replace(/ ([!?:;])/g, ' $1')} »`}</blockquote>
                     <figcaption className="mt-3 flex items-center gap-2.5 text-[14px] font-semibold text-[#f4efe9]">
-                      <span>{prenom}, {age} ans</span>
+                      <span>{prenom}{age ? `, ${age} ans` : ''}</span>
                       {cm && <span className="text-[#ff6a2b]">{cm}</span>}
                       <span className="tracking-[1px] text-[#fbbf24]" aria-label="5 étoiles sur 5">★★★★★</span>
                     </figcaption>

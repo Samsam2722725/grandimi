@@ -110,7 +110,11 @@ import {
 
 const STOCKAGE = 'grandimi:onboarding-v2'
 // Change à chaque fois que l'ordre des écrans change (cf. index sauvegardé).
-const ORDRE_VERSION = 'taller-2026-10-31'
+const ORDRE_VERSION = 'taller-2026-11-23'
+// Ordre d'avant le retrait de « Qui es-tu ? » (23/11/2026) : tout écran après
+// le 2e (numéro 1, le profil) recule d'un cran, pour que celui qui avait
+// commencé reprenne au bon écran et pas un de plus loin.
+const ORDRE_AVANT_SANS_PROFIL = 'taller-2026-10-31'
 
 function anneeParDefaut() {
   return new Date().getFullYear() - 18
@@ -317,7 +321,7 @@ function ProgressionAnalyse({ titre, sousTitre, pourcentage, steps, details = []
   const [avis, setAvis] = useState(0)
   useEffect(() => {
     if (!AVIS.length) return undefined
-    const t = setInterval(() => setAvis((i) => (i + 1) % AVIS.length), 3800)
+    const t = setInterval(() => setAvis((i) => (i + 1) % AVIS.length), 9000)
     return () => clearInterval(t)
   }, [])
   const R = 78
@@ -367,7 +371,7 @@ function ProgressionAnalyse({ titre, sousTitre, pourcentage, steps, details = []
 
       {unAvis && (
         <figure className="calc-avis" key={avis}>
-          <figcaption><strong>{unAvis.prenom}, {unAvis.age} ans</strong> <span aria-label="5 étoiles">★★★★★</span></figcaption>
+          <figcaption><strong>{unAvis.prenom}{unAvis.age ? `, ${unAvis.age} ans` : ''}</strong> <span aria-label="5 étoiles">★★★★★</span></figcaption>
           <blockquote>« {unAvis.texte} »</blockquote>
         </figure>
       )}
@@ -416,7 +420,11 @@ function OnboardingFlow({ onPredictionComplete, onCancel, sexeDepart = null }) {
       /* Un questionnaire commencé avant le nouvel ordre (31/10/2026) n'a pas
          `ordre` : son numéro d'écran pointerait ailleurs. Il reprend au
          début, ses réponses déjà remplies. */
-      (etatSauvegarde?.ordre === ORDRE_VERSION ? etatSauvegarde.index : null) ??
+      (etatSauvegarde?.ordre === ORDRE_VERSION
+        ? etatSauvegarde.index
+        : etatSauvegarde?.ordre === ORDRE_AVANT_SANS_PROFIL
+          ? Math.max(0, etatSauvegarde.index > 1 ? etatSauvegarde.index - 1 : etatSauvegarde.index)
+          : null) ??
       (sexeDepart ? etapesPour(reponses).indexOf('sexe') + 1 : 0),
   )
   const [unites, setUnites] = useState(etatSauvegarde?.unites ?? unitesInitiales())

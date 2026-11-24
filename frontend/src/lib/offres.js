@@ -1,4 +1,10 @@
-/* Les offres du paywall « comment grandir ».
+/* 23/11/2026 (Samuel, « comme Taller ») : à l'arrivée, un seul prix par offre,
+   la colonne `reduit` (5 € la semaine, 29,99 € l'année), sans réduction ni
+   minuteur. `normal` ne sert plus que sur la page parent (en pause). La
+   réduction `promo` (l'année à 20 €, comme Taller) n'est proposée qu'une fois,
+   à la fermeture du paiement ou du paywall (offre-sortie.jsx).
+
+   Les offres du paywall « comment grandir ».
 
    Chaque durée existe à deux prix, deux vrais plans Whop :
    - le prix réduit (clé `sem`, `an`), proposé pendant les 15 minutes
@@ -29,6 +35,7 @@ export const OFFRES = [
     jours: 365,
     reduit: 29.99,
     normal: 39.99,
+    promo: 20,
     facture: 'par an',
     avantages: [],
     populaire: true,

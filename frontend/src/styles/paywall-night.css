@@ -1606,3 +1606,68 @@ html:has(.pw2-feuille.is-ouverte), html:has(.pw2-feuille.is-ouverte) body { over
   color: #ff6a2b;
   white-space: nowrap;
 }
+
+/* ---------- 23/11/2026 : paywall « comme Taller » (Samuel) ----------
+   Plus de réduction à l'arrivée, plus de prix par jour, plus de rabais barré :
+   chaque offre dit son nom et son prix. La réduction vient à la fermeture
+   (voir offre-sortie.jsx). */
+.pw3 .pw3-offre-nom, .pw3 .pw3-offre-total { padding-right: 0; }
+.pw3 .pw3-offre-nom { font-size: 18px; }
+.pw3 .pw3-offre-total { font-size: 22px; font-weight: 800; color: #f4efe9; letter-spacing: -0.01em; }
+.pw3 .pw3-offre-total small { font-size: 13px; font-weight: 500; color: #a39d97; letter-spacing: 0; }
+
+/* ---------- 23/11/2026 : fenêtre « paiement refusé » ---------- */
+.refus { position: fixed; inset: 0; z-index: 95; display: grid; place-items: center; padding: 24px; background: rgba(0, 0, 0, 0.72); }
+.refus-carte { position: relative; width: 100%; max-width: 380px; padding: 30px 24px 24px; border-radius: 26px; background: #161412; border: 1px solid rgba(255, 138, 74, 0.35); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6); text-align: center; color: #fff; }
+.refus-fermer { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; background: transparent; color: #cfc8c0; display: grid; place-items: center; cursor: pointer; }
+.refus-icone { width: 52px; height: 52px; margin: 0 auto 14px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 90, 31, 0.16); color: #ff8a4a; font-size: 28px; font-weight: 800; }
+.refus-titre { margin: 0; font-size: 21px; font-weight: 800; line-height: 1.25; }
+.refus-texte { margin: 12px 0 0; font-size: 16px; line-height: 1.45; color: #d8d3ce; }
+.refus-ado { margin: 14px 0 0; padding: 12px 14px; border-radius: 14px; background: rgba(255, 255, 255, 0.06); font-size: 14px; line-height: 1.4; color: #cfc8c0; text-align: left; }
+.refus-ado strong { color: #fff; }
+.refus-carte .funnel-cta { width: 100%; margin-top: 20px; }
+
+/* ---------- 24/11/2026 : première page « comme Taller » (Samuel) ----------
+   Titre « Grandimi premium » avec la croix, phrase grise, deux prix côte à
+   côte tout de suite, « Voici ce que tu obtiendras : », puis le bouton
+   « Continuer » collé en bas de l'écran. */
+.paywall:has(.pw3) .pw2-top { padding: 12px 16px 2px; }
+.pw3-titre-haut {
+  margin: 0; font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(25px, 7.2vw, 32px); line-height: 1.1; letter-spacing: -0.03em; color: #fff;
+}
+.pw3 .cqo-acces { margin: 8px auto 0; max-width: 34ch; font-size: 15px; line-height: 1.45; font-weight: 500; color: #8e8a85; }
+.pw3 .pw3-offres { flex-direction: row; gap: 12px; margin-top: 22px; }
+.pw3 .pw3-offre {
+  flex: 1 1 0; min-width: 0; display: grid; grid-template-columns: 1fr auto; align-items: center;
+  row-gap: 8px; padding: 16px 14px 14px; border-radius: 20px;
+}
+.pw3 .pw3-offre-nom { grid-column: 1; font-size: 16px; font-weight: 700; padding-right: 0; }
+.pw3 .pw3-offre-coche { grid-column: 2; grid-row: 1; }
+.pw3 .pw3-offre-total { grid-column: 1 / -1; font-size: 21px; line-height: 1.15; padding-right: 0; }
+.pw3 .pw3-offre-total small { display: block; margin-top: 3px; font-size: 12px; }
+.pw3 .pw3-offre-bandeau {
+  left: 16px; transform: none; top: -12px; padding: 3px 12px;
+  font-size: 12.5px; font-weight: 700; letter-spacing: 0; text-transform: none;
+}
+.pw3 .cqo { margin-top: 18px; }
+.pw3 .cqo-intro { margin: 0 0 10px; font-size: 15px; font-weight: 500; color: #8e8a85; }
+
+.pw3-pied {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  padding: 30px 20px calc(10px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--funnel-bg) 70%, rgba(11, 11, 12, 0));
+  pointer-events: none;
+}
+.pw3-pied .pw3-action { margin: 0 auto; max-width: 560px; pointer-events: auto; }
+.pw3-pied .pw2-facture { font-size: 11px; line-height: 1.35; }
+.paywall .paywall-scroll.pw3 { padding-bottom: calc(150px + env(safe-area-inset-bottom)); }
+.pw3 .pw3-offre-coche { width: 22px; min-width: 22px; justify-self: end; }
+.pw3-titre-haut { padding: 0 44px; }
+.pw3 .pw3-offre-nom { white-space: nowrap; }
+@media (max-width: 340px) {
+  .pw3-titre-haut { font-size: 21px; padding: 0 40px; white-space: nowrap; }
+  .pw3 .pw3-offre { padding: 14px 10px 12px; }
+  .pw3 .pw3-offre-nom { font-size: 14px; }
+  .pw3 .pw3-offre-total { font-size: 19px; }
+}

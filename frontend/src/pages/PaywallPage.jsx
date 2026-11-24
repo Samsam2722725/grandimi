@@ -6,6 +6,8 @@ import apiClient from '../lib/api'
 import { OFFRES, OFFRE_PAR_DEFAUT, finReduction, euros } from '../lib/offres'
 import { AVIS } from '../lib/avis-clients'
 import { CeQueTuObtiens, PhraseAcces } from '@/components/ui/ce-que-tu-obtiens'
+import { OffreSortie } from '@/components/ui/offre-sortie'
+import { RefusPaiement } from '@/components/ui/refus-paiement'
 import '../styles/funnel.css'
 /* Feuille dédiée, et non paywall.css : cette dernière habille encore
    ParentPage (page claire, destinée à un adulte arrivé par lien partagé) et
@@ -155,6 +157,23 @@ function lirePaiementEnCours() {
   return null
 }
 
+/* Offre de sortie : proposée une seule fois par téléphone. */
+const CLE_PROMO_SORTIE = 'grandimi:promo-sortie-vue'
+function promoDejaVue() {
+  try {
+    return localStorage.getItem(CLE_PROMO_SORTIE) === '1'
+  } catch {
+    return false
+  }
+}
+function marquerPromoVue() {
+  try {
+    localStorage.setItem(CLE_PROMO_SORTIE, '1')
+  } catch {
+    /* stockage refusé */
+  }
+}
+
 function PaywallPage({ onBackHome }) {
   // Repli sur l'adresse du compte connecté : un ancien abonné qui se
   // reconnecte sur un nouveau téléphone n'a pas d'adresse de questionnaire
@@ -196,18 +215,16 @@ function PaywallPage({ onBackHome }) {
   }, [paiementRepris])
   const [, setPlans] = useState(PLANS_PAR_DEFAUT)
 
-  /* Minuteur de la réduction : 15 minutes réelles, fixées au premier
-     affichage. À zéro, on bascule sur les plans Whop au prix normal. */
+  /* Plus de réduction ni de minuteur à l'arrivée (23/11/2026, Samuel :
+     « comme Taller »). `fin` ne sert plus qu'au lien parent (en pause). La
+     réduction n'existe qu'à la fermeture : voir OffreSortie. */
   const [fin] = useState(finReduction)
-  const [maintenant, setMaintenant] = useState(() => Date.now())
-  useEffect(() => {
-    const t = setInterval(() => setMaintenant(Date.now()), 1000)
-    return () => clearInterval(t)
-  }, [])
-  const resteMs = Math.max(0, fin - maintenant)
-  const reductionActive = resteMs > 0
-  const minuteur = `${String(Math.floor(resteMs / 60000)).padStart(2, '0')}:${String(Math.floor((resteMs % 60000) / 1000)).padStart(2, '0')}`
-  const cleWhop = reductionActive ? planChoisi : `${planChoisi}_normal`
+  const [promoAcceptee, setPromoAcceptee] = useState(false)
+  const [promoVisible, setPromoVisible] = useState(null) // null | 'paiement' | 'paywall'
+  const [ouvrirApresPromo, setOuvrirApresPromo] = useState(false)
+  /* L'offre de sortie ne concerne que l'année (20 €, comme Taller) : la semaine
+     reste à son prix, même après « Réclamer ». */
+  const cleWhop = promoAcceptee && planChoisi === 'an' ? 'an_promo' : planChoisi
 
   /* Les montants par défaut sont déjà corrects ; cet appel ne fait que
      les confirmer. S'il échoue (réseau, backend pas encore redéployé),
@@ -316,7 +333,7 @@ function PaywallPage({ onBackHome }) {
   }, [])
 
   const offre = OFFRES.find((o) => o.duree === planChoisi) || OFFRES[1]
-  const prixOffre = (o) => (reductionActive ? o.reduit : o.normal)
+  const prixOffre = (o) => (promoAcceptee && o.duree === 'an' ? o.promo : o.reduit)
 
 
   /* Lien à transmettre au parent. Il porte l'id du compte enfant pour que le
@@ -375,12 +392,43 @@ function PaywallPage({ onBackHome }) {
   /* Carte refusée par la banque : Whop affiche le message de la banque, en
      anglais, puis plus rien. On ajoute au-dessus une sortie en français. */
   const [carteRefusee, setCarteRefusee] = useState(false)
+  /* Le refus s'affiche dans une fenêtre au milieu de l'écran, avec une croix
+     (23/11/2026, Samuel : « un truc qui apparaît et qui dit pourquoi »). */
+  const [refusVisible, setRefusVisible] = useState(false)
   const carteRefuseeRef = useRef(false)
   carteRefuseeRef.current = carteRefusee
   /* Fermer le paiement sans payer : mesuré, pour savoir combien partent
      avant même d'essayer une carte et combien après un refus. */
   // Moment d'ouverture, pour mesurer le temps passé avant de fermer.
   const ouvertLeRef = useRef(0)
+  /* Offre de sortie (Taller, 23/11/2026) : une seule fois, à la première
+     fermeture du paiement ou du paywall, tant qu'on n'a pas déjà pris l'offre. */
+  const proposerPromo = (origine) => {
+    if (promoAcceptee || promoDejaVue()) return false
+    marquerPromoVue()
+    capture('promo_sortie_vue', { etape: planChoisi, origine })
+    setPromoVisible(origine)
+    return true
+  }
+  const quitter = () => {
+    if (!proposerPromo('paywall')) onBackHome()
+  }
+  const fermerPromo = () => {
+    capture('promo_sortie_fermee', { etape: planChoisi, origine: promoVisible })
+    const origine = promoVisible
+    setPromoVisible(null)
+    if (origine === 'paywall') onBackHome()
+  }
+  const reclamerPromo = () => {
+    capture('promo_sortie_reclamee', { etape: planChoisi, origine: promoVisible })
+    setPlanChoisi('an') // l'offre de sortie est l'année
+    /* On oublie le lien préchargé de l'ancien plan : sinon le paiement
+       s'ouvrirait un instant sur le prix plein avant de basculer. */
+    setUrlPrechargee(null)
+    setPromoAcceptee(true)
+    setPromoVisible(null)
+    setOuvrirApresPromo(true)
+  }
   const fermerPaiement = () => {
     oublierPaiementEnCours()
     capture('paiement_ferme_sans_payer', {
@@ -389,6 +437,7 @@ function PaywallPage({ onBackHome }) {
       formulaire_affiche: formulairePretRef.current,
     })
     setFeuilleOuverte(false)
+    proposerPromo('paiement')
   }
   useEffect(() => () => clearTimeout(repliRef.current), [])
   useEffect(() => {
@@ -539,6 +588,7 @@ function PaywallPage({ onBackHome }) {
       const code = args.map((a) => (a && typeof a === 'object' ? a.code || a.message || '' : a)).filter(Boolean).join(' ')
       capture('whop_erreur_paiement', { etape: String(code || 'inconnue').slice(0, 80) })
       setCarteRefusee(classerRefus(code))
+      setRefusVisible(true)
     }
     window.grandimiPaiementEtat = (...args) => {
       const etat = args.map((a) => (a && typeof a === 'object' ? a.state || a.step || '' : a)).filter(Boolean).join(' ')
@@ -585,6 +635,15 @@ function PaywallPage({ onBackHome }) {
     window.addEventListener('pageshow', auRetour)
     return () => window.removeEventListener('pageshow', auRetour)
   }, [])
+
+  /* Après « Réclamer l'offre limitée » : le plan promo est en place au rendu
+     suivant, on ouvre alors le paiement sur CE plan. */
+  useEffect(() => {
+    if (!ouvrirApresPromo) return
+    setOuvrirApresPromo(false)
+    lancerPaiement()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ouvrirApresPromo])
 
   const lancerPaiement = async () => {
     if (planWhop) {
@@ -691,36 +750,12 @@ function PaywallPage({ onBackHome }) {
               mesurerPlanChoisi(o.duree)
             }}
           >
-            {/* « Meilleure offre » et non « Le plus choisi » : l'année est
-                nouvelle (21/11/2026), personne ne l'a encore choisie. */}
+            {/* Comme Taller (23/11/2026) : le nom et le prix, rien d'autre. */}
             {o.populaire && <span className="pw3-offre-bandeau">Meilleure offre</span>}
+            <span className="pw3-offre-nom">{o.nom}</span>
             <span className="pw3-offre-coche" aria-hidden="true">{choisie && <Check size={14} strokeWidth={3} />}</span>
-            <span className="pw3-offre-gauche">
-              <span className="pw3-offre-nom">{o.nom}{reductionActive && <span className="pw3-offre-remise">-{Math.round((1 - o.reduit / o.normal) * 100)} %</span>}</span>
-              <span className="pw3-offre-total">
-                {reductionActive && <s>{euros(o.normal)}</s>} {euros(prixOffre(o))} {o.facture}
-              </span>
-              {o.jours && <span className="pw3-offre-renouv">Se renouvelle automatiquement</span>}
-              {/* Même contenu dans les deux offres (taille prédite comprise) :
-                  la seule différence affichée est l'économie de l'année. */}
-              {o.duree === 'an' && (
-                <span className="pw3-offre-atouts">
-                  <span className="pw3-atout-eco">
-                    {Math.round((1 - prixOffre(o) / ((o.jours / OFFRES[0].jours) * prixOffre(OFFRES[0]))) * 100)} % moins cher que payer à la semaine
-                  </span>
-                </span>
-              )}
-              {o.avantages.length > 0 && (
-                <span className="pw3-offre-avantages">
-                  {o.avantages.map((a) => (
-                    <span key={a}>{a}</span>
-                  ))}
-                </span>
-              )}
-            </span>
-            <span className="pw3-offre-droite">
-              <span className="pw3-offre-jour">{o.jours ? euros(prixOffre(o) / o.jours) : euros(prixOffre(o))}</span>
-              <span className="pw3-offre-par">{o.jours ? '/ jour' : 'pour toujours'}</span>
+            <span className="pw3-offre-total">
+              {euros(prixOffre(o))} <small>{o.facture}</small>
             </span>
           </button>
         )
@@ -728,8 +763,8 @@ function PaywallPage({ onBackHome }) {
     </section>
   )
 
-  /* Comme TrendSaaS : le bouton vit dans la page, sous chaque bloc
-     d'offres, et non dans une barre fixe qui mange le bas de l'écran. */
+  /* Comme Taller (24/11/2026, Samuel : « oui comme Taller ») : un seul bouton
+     « Continuer », fixé en bas de l'écran, qui sert aux deux blocs d'offres. */
   const blocAction = (
     <div className="pw3-action">
         <button
@@ -749,10 +784,11 @@ function PaywallPage({ onBackHome }) {
         </button>
 
         <p className="pw2-facture">
-          {`Facturé ${euros(prixOffre(offre))} ${offre.facture}`}
+          {`Facturé ${euros(prixOffre(offre))} ${offre.facture}, renouvelé automatiquement`}
           {' · '}
           <a href="/cgv.html">Conditions</a> · Résiliable à tout moment
         </p>
+
 
         {/* `role="status"` et non un paragraphe muet : le message apparaît
             plusieurs secondes après le clic, donc un lecteur d'écran doit
@@ -795,31 +831,13 @@ function PaywallPage({ onBackHome }) {
           compte à rebours ni de « X personnes aujourd’hui » : ce seraient
           des chiffres inventés. */}
       <header className="pw2-top">
-        <button type="button" className="pw2-fermer" onClick={onBackHome} aria-label="Fermer">
+        <button type="button" className="pw2-fermer" onClick={quitter} aria-label="Fermer">
           <X size={24} aria-hidden="true" />
         </button>
-        <span className="pw2-logo">Grandimi</span>
+        <h1 className="pw3-titre-haut">Grandimi premium</h1>
       </header>
 
       <main className="paywall-scroll pw2 pw3">
-        {/* Copié de TrendSaaS : bandeau du minuteur, puis « Choisis ton plan »,
-            trois offres, le prix par jour en gros, les avantages en étiquettes.
-            Le minuteur est réel : à zéro, le prix normal s'applique. */}
-        <div className={`pw3-minuteur ${reductionActive ? '' : 'is-fini'}`} role="timer">
-          {reductionActive ? (
-            /* Disposition du concurrent (capture du 30/10/2026), couleurs de
-               Grandimi : la remise, la phrase, le minuteur. La remise est la
-               vraie (normal → réduit de l'offre choisie), jamais inventée. */
-            <>
-              <span className="pw3-minuteur-remise">-{Math.round((1 - offre.reduit / offre.normal) * 100)} %</span>
-              <span className="pw3-minuteur-texte">Ta réduction est réservée</span>
-              <strong>{minuteur}</strong>
-            </>
-          ) : (
-            <>Réduction expirée — tarif normal appliqué</>
-          )}
-        </div>
-
         {repriseVisible && (
           <div className="pw3-reprise" role="status">
             <p className="pw3-reprise-titre">Tu étais en train de payer</p>
@@ -850,17 +868,11 @@ function PaywallPage({ onBackHome }) {
           </div>
         )}
 
-        <h1 className="pw3-titre">
-          Atteins ta <span>taille maximale</span>
-        </h1>
-
         <PhraseAcces />
 
-        <CeQueTuObtiens prediction={prediction} />
-
-        <h2 className="pw3-choisis">Choisis ton plan.</h2>
         {blocOffres}
-        {blocAction}
+
+        <CeQueTuObtiens prediction={prediction} />
 
         <div className="paywall-paiement">
           <p className="paywall-paiement-titre">
@@ -883,21 +895,7 @@ function PaywallPage({ onBackHome }) {
         {/* « Ton plan contient » est remplacé par les cartes « Ce que tu
             obtiendras » en haut de page (30/10/2026). */}
 
-        {/* FAQ dans le style TrendSaaS : les objections, avec ses mots à lui. */}
-        <section className="pw3-faq">
-          <h2>Les questions qu’on nous pose</h2>
-          {[
-            ['J’ai 17 ans, ça peut encore marcher ?', 'Oui. Chez les garçons, la croissance continue souvent jusqu’à 18-21 ans. Et ta posture, elle, se travaille à tout âge.'],
-            ['En quoi c’est différent des conseils trouvés sur TikTok ?', 'TikTok, c’est pour tout le monde. Ton plan est fait pour toi, et basé sur la science.'],
-            ['Je peux arrêter quand je veux ?', 'Oui. Tu résilies en un clic depuis ton compte, sans justification.'],
-          ].map(([q, r]) => (
-            <details key={q} className="pw3-faq-item">
-              <summary>{q}</summary>
-              <p>{r}</p>
-            </details>
-          ))}
-        </section>
-
+        {/* Ordre voulu par Samuel (24/11/2026) : valeur, prix, avis, questions, puis les prix. */}
         {/* Avis clients, disposition de TrendSaaS. UNIQUEMENT de vrais avis,
             reçus de vrais clients (jamais inventés : pratique commerciale
             trompeuse). Prénom et âge seulement, pas de photo de mineur :
@@ -916,7 +914,7 @@ function PaywallPage({ onBackHome }) {
                 <div>
                   <blockquote>« {texte} »</blockquote>
                   <figcaption>
-                    <span>{prenom}, {age} ans</span>
+                    <span>{prenom}{age ? `, ${age} ans` : ''}</span>
                     {cm && <span className="pw3-avis-cm">{cm}</span>}
                     <span className="pw3-avis-etoiles" aria-label="5 étoiles sur 5">★★★★★</span>
                   </figcaption>
@@ -926,10 +924,24 @@ function PaywallPage({ onBackHome }) {
           </section>
         )}
 
+        {/* FAQ dans le style TrendSaaS : les objections, avec ses mots à lui. */}
+        <section className="pw3-faq">
+          <h2>Les questions qu’on nous pose</h2>
+          {[
+            ['J’ai 17 ans, ça peut encore marcher ?', 'Oui. Chez les garçons, la croissance continue souvent jusqu’à 18-21 ans. Et ta posture, elle, se travaille à tout âge.'],
+            ['En quoi c’est différent des conseils trouvés sur TikTok ?', 'TikTok, c’est pour tout le monde. Ton plan est fait pour toi, et basé sur la science.'],
+            ['Je peux arrêter quand je veux ?', 'Oui. Tu résilies en un clic depuis ton compte, sans justification.'],
+          ].map(([q, r]) => (
+            <details key={q} className="pw3-faq-item">
+              <summary>{q}</summary>
+              <p>{r}</p>
+            </details>
+          ))}
+        </section>
+
         {/* Comme TrendSaaS : les offres reviennent en bas de page. */}
         <h2 className="pw3-choisis">Reprends là où tu en étais</h2>
         {blocOffres}
-        {blocAction}
 
         {lienParent && proposerLeParent && (
           <section className="paywall-parent" ref={blocParentRef}>
@@ -956,6 +968,8 @@ function PaywallPage({ onBackHome }) {
         )}
       </main>
 
+      <div className="pw3-pied">{blocAction}</div>
+
       {planWhop && (
         <div
           className={`pw2-feuille ${feuilleOuverte ? 'is-ouverte' : ''}`}
@@ -980,32 +994,6 @@ function PaywallPage({ onBackHome }) {
               <p className="pw2-avertissement">
                 Tu es dans {NAVIGATEUR_INTEGRE} : si la page se recharge, ouvre grandimi.com dans Safari ou Chrome.
               </p>
-            )}
-            {carteRefusee && (
-              <div className="pw2-refus" role="alert">
-                <p className="pw2-refus-titre">{(MESSAGES_REFUS[carteRefusee] || MESSAGES_REFUS.autre)[0]}</p>
-                <p>{(MESSAGES_REFUS[carteRefusee] || MESSAGES_REFUS.autre)[1]}</p>
-                {REFUS_CARTE_ADO.includes(carteRefusee) && (
-                  <p className="pw2-refus-ado">
-                    <strong>Carte ado (Pixpay, Kard, Xaalys…) ?</strong> Active « paiements en ligne » et « paiements à l’étranger » dans son appli, ou demande à un parent de les autoriser.
-                  </p>
-                )}
-                {lienParent && proposerLeParent && (
-                  <button
-                    type="button"
-                    className="pw2-refus-parent"
-                    onClick={() => {
-                      capture('refus_vers_parent', { etape: planChoisi })
-                      setFeuilleOuverte(false)
-                      lienParentOuvert()
-                      setLienParentVisible(true)
-                      setTimeout(() => blocParentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)
-                    }}
-                  >
-                    Pas de carte qui passe ? Fais payer un parent →
-                  </button>
-                )}
-              </div>
             )}
             <div className="pw2-feuille-carte">
               {!formulairePret && (
@@ -1062,6 +1050,15 @@ function PaywallPage({ onBackHome }) {
         </div>
       )}
 
+      {promoVisible && <OffreSortie onReclamer={reclamerPromo} onFermer={fermerPromo} />}
+      {carteRefusee && refusVisible && (
+        <RefusPaiement
+          titre={(MESSAGES_REFUS[carteRefusee] || MESSAGES_REFUS.autre)[0]}
+          texte={(MESSAGES_REFUS[carteRefusee] || MESSAGES_REFUS.autre)[1]}
+          carteAdo={REFUS_CARTE_ADO.includes(carteRefusee)}
+          onFermer={() => setRefusVisible(false)}
+        />
+      )}
     </div>
   )
 }
