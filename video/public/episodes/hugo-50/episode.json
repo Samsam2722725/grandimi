@@ -123,12 +123,12 @@
           "type": "tape",
           "texte": "PARTIE {partie}",
           "a": 1,
-          "y": 867,
+          "y": 700,
           "taille": 140,
           "couleur": "#fff200",
           "police": "Montserrat",
           "poids": 900,
-          "contour": 15,
+          "contour": 9,
           "curseur": true,
           "parLettre": 1,
           "son": "tick",
@@ -606,13 +606,18 @@
   "deriveCamera": false,
   "sonsMouvements": false,
   "carteCommentaire": {
-    "nom": "Hugo",
+    "nom": "hugo",
     "texte": "15 ans, 1m65, c'est quoi ma taille max ?",
     "de": 0,
     "a": "age:15",
-    "x": 198,
-    "y": 1158,
-    "w": 679,
-    "image": "carte.png"
+    "x": 88,
+    "y": 1045,
+    "w": 905,
+    "photo": "avatar.png",
+    "reponse": {
+      "modele": "taller",
+      "h": 230,
+      "rotation": 0
+    }
   }
 }
