@@ -5235,3 +5235,17 @@ div.interstitial.citation { cursor: default; }
 .promo-mention { margin: 10px 0 0; text-align: center; font-size: 12px; line-height: 1.35; color: #8e8a85; }
 @media (max-height: 760px) { .promo-cadeau { font-size: 84px; margin: 8px 0 0; } .promo-titre { margin-top: 12px; } .promo-minuteur strong { font-size: 30px; } }
 @media (prefers-reduced-motion: reduce) { .promo-cadeau { animation: none; } }
+
+/* ---------- 24/11/2026 : « Le coût d'être petit » aussi fidèle que possible à GoTall (Samuel) ----------
+   La liste commence juste sous le titre, chaque ligne est une carte gris foncé
+   au texte blanc, avec un petit rond d'accent. */
+.funnel-content:has(.funnel-verite) { justify-content: flex-start; padding-top: 30px; }
+.funnel-verite .verite-liste { gap: 10px; }
+.funnel-verite .verite-ligne { grid-template-columns: 26px 1fr; gap: 14px; padding: 14px 16px; border-radius: 20px; background: #131313; color: #f4f4f4; font-size: clamp(15px, 4.1vw, 17px); font-weight: 500; line-height: 1.3; }
+.funnel-verite .verite-signe { color: var(--funnel-accent-text); }
+/* Mesures prises sur la capture GoTall (924 px = 393 px) : cartes rentrées de 16 px de chaque côté, 13 px entre les cartes, rond de 22 px. */
+.funnel-verite .verite-liste { gap: 13px; padding: 0 16px; }
+.funnel-verite .verite-ligne { grid-template-columns: 22px 1fr; gap: 12px; }
+.funnel-verite .verite-signe { width: 22px; height: 22px; font-size: 14px; }
+.funnel-verite .verite-ligne { min-height: 56px; }
+@media (max-height: 740px) { .funnel-verite .verite-liste { gap: 9px; } .funnel-verite .verite-ligne { min-height: 48px; padding: 10px 16px; } .funnel-content:has(.funnel-verite) { padding-top: 18px; } }

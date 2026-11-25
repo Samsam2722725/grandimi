@@ -98,10 +98,11 @@ export const ORDRE_ETAPES = [
   // « Symptômes » (Quittr) retiré du parcours le 21/11/2026 : Samuel veut
   // le reprendre un autre jour. Le code de l'écran reste (étape 'symptomes').
   'precision',
-  // Douleur avant les preuves, comme GoTall : slides douleurs → avantages
-  // → 80/20 (format Menu IQ / Quittr), à la place de « Le coût d'être petit »
-  // et de « Tu perds peut-être déjà des centimètres » (leur code reste).
-  'douleurs',
+  // Douleur avant les preuves, comme GoTall : « Le coût d'être petit », un
+  // titre et la liste des lignes, sans description. 24/11/2026 (Samuel : « met
+  // la même chose que GoTall exactement ») : remplace les slides douleurs →
+  // avantages du 22/11 (étape 'douleurs', leur code reste).
+  'verite-brutale',
   // Puis, comme GoTall : « Grandimi crée des habitudes » et « Tu peux
   // grandir » (20 %), à la place de la slide 80/20 (21/11/2026).
   'cree-habitudes',
