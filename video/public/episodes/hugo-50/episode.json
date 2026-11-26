@@ -6,7 +6,7 @@
     {
       "id": "hook",
       "pause": 0,
-      "text": "Je prédis vos tailles, partie 50."
+      "text": "Je prédis vos tailles maximales, partie 50."
     },
     {
       "id": "stats",
@@ -56,7 +56,12 @@
     {
       "id": "com",
       "pause": 0,
-      "text": "écrivez votre âge et votre taille actuelle en commentaire sous cette vidéo, ou va directement sur grandimi.com pour tout avoir."
+      "text": "écrivez votre âge et votre taille actuelle en commentaire sous cette vidéo,"
+    },
+    {
+      "id": "site",
+      "pause": 0,
+      "text": "ou va directement sur grandimi.com pour tout avoir."
     }
   ],
   "musique": {
@@ -66,6 +71,11 @@
   "images": {
     "accroche": {
       "fichier": "accroche.jpg",
+      "w": 1080,
+      "h": 1920
+    },
+    "verdict": {
+      "fichier": "verdict.jpg",
       "w": 1080,
       "h": 1920
     }
@@ -99,11 +109,6 @@
           "a": 0,
           "son": "whoosh",
           "volume": 0.2
-        },
-        {
-          "a": "hook:partie-3",
-          "son": "impact-taller",
-          "volume": 0.41
         }
       ]
     },
@@ -262,16 +267,6 @@
           "a": "predit:prédite",
           "son": "whoosh",
           "volume": 0.28
-        },
-        {
-          "a": "norme",
-          "son": "impact-taller",
-          "volume": 0.41
-        },
-        {
-          "a": "predit:adulte",
-          "son": "impact-taller",
-          "volume": 0.41
         }
       ]
     },
@@ -482,16 +477,54 @@
           "a": "fini:terminé",
           "son": "whoosh",
           "volume": 0.28
+        }
+      ],
+      "sortie": "glitch"
+    },
+    {
+      "nom": "verdict",
+      "debut": "fini:sa",
+      "transition": "glitch",
+      "sortie": "zoom-flou",
+      "image": "verdict",
+      "camera": [
+        {
+          "x": 520,
+          "y": 1136,
+          "z": 1.0,
+          "duree": 1
         },
         {
-          "a": "pct:Hugo+3",
-          "son": "impact-taller",
-          "volume": 0.41
-        },
+          "a": 1,
+          "x": 520,
+          "y": 1136,
+          "z": 1.05,
+          "duree": "fin",
+          "lineaire": true,
+          "son": null
+        }
+      ],
+      "elements": [
         {
-          "a": "fini:92,7+10",
-          "son": "impact-taller",
-          "volume": 0.41
+          "type": "tape",
+          "texte": "PAS FOUTU ✅",
+          "a": 2,
+          "y": 800,
+          "taille": 100,
+          "couleur": "#24ef3c",
+          "contour": 0,
+          "police": "Montserrat",
+          "poids": 800,
+          "parLettre": 1,
+          "son": "tick",
+          "volume": 0.2
+        }
+      ],
+      "sons": [
+        {
+          "a": 0,
+          "son": "whoosh",
+          "volume": 0.22
         }
       ]
     },
@@ -525,8 +558,8 @@
           "h": 380,
           "effet": "pop",
           "fin": "com",
-          "son": "impact-taller",
-          "volume": 0.41
+          "son": "pop",
+          "volume": 0.3
         },
         {
           "type": "image",
@@ -554,7 +587,20 @@
           "grandit": {
             "de": 0.1,
             "d": 40
-          }
+          },
+          "fin": "site"
+        },
+        {
+          "type": "texte",
+          "texte": "🔗 grandimi.com",
+          "a": "site:grandimi.com",
+          "y": 400,
+          "taille": 96,
+          "couleur": "#fff",
+          "fond": "#ff5a1f",
+          "amorti": 8,
+          "son": "ding",
+          "volume": 0.25
         }
       ],
       "sons": [
@@ -572,12 +618,12 @@
       {
         "de": 0,
         "a": "hook:partie-1",
-        "y": 921,
-        "taille": 76,
+        "y": 822,
+        "taille": 86,
         "motsMax": 4,
         "carMax": 17,
-        "poids": 500,
-        "contour": 15,
+        "poids": 600,
+        "contour": 3,
         "motsCles": false,
         "pop": false,
         "majuscules": true,
@@ -587,12 +633,12 @@
       {
         "de": "cta",
         "a": "fin",
-        "y": 921,
-        "taille": 76,
+        "y": 822,
+        "taille": 86,
         "motsMax": 4,
         "carMax": 17,
-        "poids": 500,
-        "contour": 15,
+        "poids": 600,
+        "contour": 3,
         "motsCles": false,
         "pop": false,
         "majuscules": true,

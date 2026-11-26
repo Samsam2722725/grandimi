@@ -5,7 +5,7 @@
   "lines": [
     {
       "id": "hook",
-      "text": "Je prédis vos tailles, partie 50.",
+      "text": "Je prédis vos tailles maximales, partie 50.",
       "from": 0,
       "duration": 73,
       "words": [
@@ -22,8 +22,12 @@
           "f": 14
         },
         {
-          "w": "tailles,",
+          "w": "tailles",
           "f": 22
+        },
+        {
+          "w": "maximales,",
+          "f": 29
         },
         {
           "w": "partie",
@@ -441,9 +445,9 @@
     },
     {
       "id": "com",
-      "text": "écrivez votre âge et votre taille actuelle en commentaire sous cette vidéo, ou va directement sur grandimi.com pour tout avoir.",
+      "text": "écrivez votre âge et votre taille actuelle en commentaire sous cette vidéo,",
       "from": 876,
-      "duration": 187,
+      "duration": 88,
       "words": [
         {
           "w": "écrivez",
@@ -492,7 +496,15 @@
         {
           "w": "vidéo,",
           "f": 958
-        },
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "ou va directement sur grandimi.com pour tout avoir.",
+      "from": 965,
+      "duration": 98,
+      "words": [
         {
           "w": "ou",
           "f": 965
