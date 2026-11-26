@@ -1,0 +1,543 @@
+{
+  "fps": 30,
+  "totalFrames": 1071,
+  "audio": "voice/voix.wav",
+  "lines": [
+    {
+      "id": "hook",
+      "text": "Je prédis vos tailles maximales, partie 20.",
+      "from": 0,
+      "duration": 64,
+      "words": [
+        {
+          "w": "Je",
+          "f": 0
+        },
+        {
+          "w": "prédis",
+          "f": 5
+        },
+        {
+          "w": "vos",
+          "f": 14
+        },
+        {
+          "w": "tailles",
+          "f": 19
+        },
+        {
+          "w": "maximales,",
+          "f": 29
+        },
+        {
+          "w": "partie",
+          "f": 43
+        },
+        {
+          "w": "20.",
+          "f": 55
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "text": "Aujourd'hui, on regarde les infos de Louis.",
+      "from": 65,
+      "duration": 54,
+      "words": [
+        {
+          "w": "Aujourd'hui,",
+          "f": 65
+        },
+        {
+          "w": "on",
+          "f": 79
+        },
+        {
+          "w": "regarde",
+          "f": 84
+        },
+        {
+          "w": "les",
+          "f": 94
+        },
+        {
+          "w": "infos",
+          "f": 96
+        },
+        {
+          "w": "de",
+          "f": 103
+        },
+        {
+          "w": "Louis.",
+          "f": 106
+        }
+      ]
+    },
+    {
+      "id": "age",
+      "text": "À 15 ans, Louis mesure 1m70,",
+      "from": 120,
+      "duration": 76,
+      "words": [
+        {
+          "w": "À",
+          "f": 120
+        },
+        {
+          "w": "15",
+          "f": 125
+        },
+        {
+          "w": "ans,",
+          "f": 132
+        },
+        {
+          "w": "Louis",
+          "f": 139
+        },
+        {
+          "w": "mesure",
+          "f": 151
+        },
+        {
+          "w": "1m70,",
+          "f": 161
+        }
+      ]
+    },
+    {
+      "id": "norme",
+      "text": "ce qui est un peu petit pour son âge.",
+      "from": 197,
+      "duration": 48,
+      "words": [
+        {
+          "w": "ce",
+          "f": 197
+        },
+        {
+          "w": "qui",
+          "f": 202
+        },
+        {
+          "w": "est",
+          "f": 206
+        },
+        {
+          "w": "un",
+          "f": 211
+        },
+        {
+          "w": "peu",
+          "f": 214
+        },
+        {
+          "w": "petit",
+          "f": 218
+        },
+        {
+          "w": "pour",
+          "f": 228
+        },
+        {
+          "w": "son",
+          "f": 233
+        },
+        {
+          "w": "âge.",
+          "f": 238
+        }
+      ]
+    },
+    {
+      "id": "predit",
+      "text": "Selon le site Grandimi, sa taille adulte prédite est de 1m82,",
+      "from": 245,
+      "duration": 112,
+      "words": [
+        {
+          "w": "Selon",
+          "f": 245
+        },
+        {
+          "w": "le",
+          "f": 253
+        },
+        {
+          "w": "site",
+          "f": 255
+        },
+        {
+          "w": "Grandimi,",
+          "f": 262
+        },
+        {
+          "w": "sa",
+          "f": 284
+        },
+        {
+          "w": "taille",
+          "f": 289
+        },
+        {
+          "w": "adulte",
+          "f": 296
+        },
+        {
+          "w": "prédite",
+          "f": 308
+        },
+        {
+          "w": "est",
+          "f": 322
+        },
+        {
+          "w": "de",
+          "f": 325
+        },
+        {
+          "w": "1m82,",
+          "f": 327
+        }
+      ]
+    },
+    {
+      "id": "habitudes",
+      "text": "et avec les bonnes habitudes, Louis pourrait atteindre 1m85.",
+      "from": 358,
+      "duration": 92,
+      "words": [
+        {
+          "w": "et",
+          "f": 358
+        },
+        {
+          "w": "avec",
+          "f": 363
+        },
+        {
+          "w": "les",
+          "f": 368
+        },
+        {
+          "w": "bonnes",
+          "f": 370
+        },
+        {
+          "w": "habitudes,",
+          "f": 377
+        },
+        {
+          "w": "Louis",
+          "f": 394
+        },
+        {
+          "w": "pourrait",
+          "f": 406
+        },
+        {
+          "w": "atteindre",
+          "f": 416
+        },
+        {
+          "w": "1m85.",
+          "f": 428
+        }
+      ]
+    },
+    {
+      "id": "optim",
+      "text": "Donc 3 cm de croissance supplémentaire grâce à l'optimisation de sa croissance.",
+      "from": 451,
+      "duration": 140,
+      "words": [
+        {
+          "w": "Donc",
+          "f": 451
+        },
+        {
+          "w": "3",
+          "f": 475
+        },
+        {
+          "w": "cm",
+          "f": 482
+        },
+        {
+          "w": "de",
+          "f": 499
+        },
+        {
+          "w": "croissance",
+          "f": 501
+        },
+        {
+          "w": "supplémentaire",
+          "f": 513
+        },
+        {
+          "w": "grâce",
+          "f": 535
+        },
+        {
+          "w": "à",
+          "f": 542
+        },
+        {
+          "w": "l'optimisation",
+          "f": 544
+        },
+        {
+          "w": "de",
+          "f": 566
+        },
+        {
+          "w": "sa",
+          "f": 571
+        },
+        {
+          "w": "croissance.",
+          "f": 575
+        }
+      ]
+    },
+    {
+      "id": "pct",
+      "text": "Actuellement, Louis est plus grand que 38,5% des personnes de son âge.",
+      "from": 592,
+      "duration": 117,
+      "words": [
+        {
+          "w": "Actuellement,",
+          "f": 592
+        },
+        {
+          "w": "Louis",
+          "f": 609
+        },
+        {
+          "w": "est",
+          "f": 621
+        },
+        {
+          "w": "plus",
+          "f": 626
+        },
+        {
+          "w": "grand",
+          "f": 631
+        },
+        {
+          "w": "que",
+          "f": 638
+        },
+        {
+          "w": "38,5%",
+          "f": 643
+        },
+        {
+          "w": "des",
+          "f": 683
+        },
+        {
+          "w": "personnes",
+          "f": 688
+        },
+        {
+          "w": "de",
+          "f": 695
+        },
+        {
+          "w": "son",
+          "f": 698
+        },
+        {
+          "w": "âge.",
+          "f": 703
+        }
+      ]
+    },
+    {
+      "id": "fini",
+      "text": "Et il a déjà terminé 93,4% de sa croissance.",
+      "from": 710,
+      "duration": 109,
+      "words": [
+        {
+          "w": "Et",
+          "f": 710
+        },
+        {
+          "w": "il",
+          "f": 715
+        },
+        {
+          "w": "a",
+          "f": 719
+        },
+        {
+          "w": "déjà",
+          "f": 722
+        },
+        {
+          "w": "terminé",
+          "f": 727
+        },
+        {
+          "w": "93,4%",
+          "f": 748
+        },
+        {
+          "w": "de",
+          "f": 794
+        },
+        {
+          "w": "sa",
+          "f": 799
+        },
+        {
+          "w": "croissance.",
+          "f": 803
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "text": "Si tu veux connaître ton potentiel de taille,",
+      "from": 820,
+      "duration": 54,
+      "words": [
+        {
+          "w": "Si",
+          "f": 820
+        },
+        {
+          "w": "tu",
+          "f": 825
+        },
+        {
+          "w": "veux",
+          "f": 827
+        },
+        {
+          "w": "connaître",
+          "f": 832
+        },
+        {
+          "w": "ton",
+          "f": 842
+        },
+        {
+          "w": "potentiel",
+          "f": 847
+        },
+        {
+          "w": "de",
+          "f": 859
+        },
+        {
+          "w": "taille,",
+          "f": 863
+        }
+      ]
+    },
+    {
+      "id": "com",
+      "text": "écrivez votre âge et votre taille actuelle en commentaire sous cette vidéo,",
+      "from": 875,
+      "duration": 95,
+      "words": [
+        {
+          "w": "écrivez",
+          "f": 875
+        },
+        {
+          "w": "votre",
+          "f": 890
+        },
+        {
+          "w": "âge",
+          "f": 895
+        },
+        {
+          "w": "et",
+          "f": 902
+        },
+        {
+          "w": "votre",
+          "f": 907
+        },
+        {
+          "w": "taille",
+          "f": 914
+        },
+        {
+          "w": "actuelle",
+          "f": 921
+        },
+        {
+          "w": "en",
+          "f": 933
+        },
+        {
+          "w": "commentaire",
+          "f": 938
+        },
+        {
+          "w": "sous",
+          "f": 952
+        },
+        {
+          "w": "cette",
+          "f": 957
+        },
+        {
+          "w": "vidéo,",
+          "f": 962
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "text": "ou va directement sur grandimi.com pour tout avoir.",
+      "from": 971,
+      "duration": 97,
+      "words": [
+        {
+          "w": "ou",
+          "f": 971
+        },
+        {
+          "w": "va",
+          "f": 979
+        },
+        {
+          "w": "directement",
+          "f": 983
+        },
+        {
+          "w": "sur",
+          "f": 993
+        },
+        {
+          "w": "grandimi.com",
+          "f": 998
+        },
+        {
+          "w": "pour",
+          "f": 1033
+        },
+        {
+          "w": "tout",
+          "f": 1040
+        },
+        {
+          "w": "avoir.",
+          "f": 1048
+        }
+      ]
+    }
+  ]
+}
