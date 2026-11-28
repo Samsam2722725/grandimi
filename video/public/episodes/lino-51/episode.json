@@ -227,9 +227,19 @@
           "fichier": "ballon_15.png",
           "a": "age:14",
           "fin": "age:14+30",
-          "chute": true
+          "chute": true,
+          "boite": [
+            0.215,
+            0.37,
+            0.57,
+            0.27
+          ]
         },
-        "url": "grandimi.com"
+        "url": "grandimi.com",
+        "navTraits": true,
+        "navHaut": 1685,
+        "pageY": 0,
+        "urlDecale": -64
       },
       "elements": [],
       "sons": [
@@ -341,7 +351,6 @@
       "debut": "optim-2",
       "transition": "glitch",
       "sortie": "glitch",
-      "pousse": 0.04,
       "dashboard": {
         "donnees": {
           "actuelle": "158 cm",
@@ -403,14 +412,18 @@
           {
             "sens": "bas",
             "x": 0.5,
-            "pointe": 0.2,
+            "pointe": 0.26,
             "a": "optim",
             "d": 12,
             "fin": "optim:croissance",
             "dFin": 16
           }
         ],
-        "url": "grandimi.com"
+        "url": "grandimi.com",
+        "navTraits": true,
+        "navHaut": 1685,
+        "pageY": 0,
+        "urlDecale": -64
       },
       "effets": [
         {
@@ -426,7 +439,7 @@
           "fichier": "curseur.png",
           "a": "pct:plus",
           "x": 404,
-          "y": 1442,
+          "y": 1335,
           "w": 192,
           "h": 204,
           "depuis": {
